@@ -35,13 +35,17 @@ def torch_var_mi() -> bool:
         return False
 
 
-def _bilesen_token(bilesen: str) -> int:
+def bilesen_token(bilesen: str) -> int:
     """Bir deneyim bileşenini (entity_id/relation_id) token id'sine indirger.
 
     entity_id'ler tokenizer token ID'lerinden AYRI olduğu için (rapor §4) burada
     deterministik bir kavramsal kimlik → tamsayı eşlemesi kullanılır.
     """
     return parmak_izi([bilesen]) & 0xFFFF   # 0..65535
+
+
+# Geriye dönük uyumluluk takma adı
+_bilesen_token = bilesen_token
 
 
 class TorchKoprusu:
@@ -62,7 +66,7 @@ class TorchKoprusu:
     # ── Üçlü → tensor ────────────────────────────────────────────────────
     def uclu_tensoru(self, uclusu: Tuple[str, str, str]):
         """(özne_id, ilişki_id, nesne_id) → (1, 3) int64 tensor."""
-        ids = [_bilesen_token(b) for b in uclusu]
+        ids = [bilesen_token(b) for b in uclusu]
         return self.torch.tensor([ids], dtype=self.torch.long)
 
     def anahtar(self, uclusu: Tuple[str, str, str]):

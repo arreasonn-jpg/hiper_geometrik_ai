@@ -217,8 +217,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
 - **Tek yüz** (`hga/engine.py` + `python -m hga`) — tüm katmanı yapılandırılabilir
   tek motor + komut satırı arayüzü.
 - **Memory** (`hga/memory/`) — seyrek deneyim slotları, experience replay ve
-  bunları birleştiren entegrasyon + torch seyrek tabloya köprü (v0.6, torch
-  kuruluysa).
+  bunları birleştiren entegrasyon + torch seyrek tabloya köprü (v0.6) ve
+  doğrulanmış deneyimleri MODELİN kendi seyrek belleğine bağlayan `NeuralKopru`
+  (torch kuruluysa; `gen_kopru` "ölü-yol → canlı-yol" geçişi ölçülür).
 
 **En kritik güvenlik kuralı:** `MODEL_GENERATED` kaynaklı bir deneyim hiçbir
 zaman otomatik `VERIFIED` kabul edilmez — en fazla `VALID` (bellek adayı) olur.

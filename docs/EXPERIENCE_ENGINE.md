@@ -61,7 +61,8 @@ hiper_geometrik_ai/
 │   │   ├── sparse_memory.py       # DeneyimSlotlari — seyrek deneyim slotları (§22 commit 6)
 │   │   ├── replay.py              # DeneyimTekrari — experience replay (§19 v0.4)
 │   │   ├── entegrasyon.py         # BellekEntegrasyonu — replay + consolidation ↔ seyrek bellek
-│   │   └── kopru.py               # TorchKoprusu — deneyim ↔ torch seyrek tablo köprüsü (§19 v0.6)
+│   │   ├── kopru.py               # TorchKoprusu — deneyim ↔ torch seyrek tablo köprüsü (§19 v0.6)
+│   │   └── neural_kopru.py        # NeuralKopru — deneyim ↔ MODELİN seyrek belleği + gen_kopru
 │   └── config/
 │       ├── __init__.py
 │       ├── config.py              # bağımlılıksız YAML yükleyici (PyYAML varsa onu kullanır)
@@ -83,6 +84,7 @@ hiper_geometrik_ai/
 │   ├── test_benchmark.py          # ground-truth'a karşı ölçüm
 │   ├── test_dogrulama.py          # kapalı doğrulama hattı (false accept 24→0)
 │   ├── test_engine.py             # ExperienceEngine entegrasyonu
+│   ├── test_neural_kopru.py       # deneyim ↔ model seyrek belleği (torch gerekir)
 │   └── test_arastirma.py          # araştırma kuyruğu (CONFLICT → kanıt → kesin durum)
 ├── experiments/
 │   └── experience_loop/
@@ -90,7 +92,8 @@ hiper_geometrik_ai/
 │       ├── run_full.py            # v0.1 → v1.0 tam yol haritası demosu
 │       ├── run_gercek_veri.py     # gerçek veri → temsil → deneyim → doğrulama
 │       ├── run_benchmark.py       # kontrollü benchmark + kapalı doğrulama
-│       └── run_kopru.py           # deneyim ↔ torch seyrek bellek köprüsü (v0.6)
+│       ├── run_kopru.py           # deneyim ↔ torch seyrek bellek köprüsü (v0.6)
+│       └── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -115,6 +118,7 @@ python tests/test_persistence.py
 python tests/test_benchmark.py
 python tests/test_dogrulama.py
 python tests/test_engine.py
+python tests/test_neural_kopru.py   # torch gerekir
 python tests/test_arastirma.py
 
 # Uçtan uca döngü demoları
@@ -123,6 +127,7 @@ python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam yol ha
 python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
 python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
 python experiments/experience_loop/run_kopru.py       # deneyim ↔ torch seyrek bellek (torch gerekir)
+python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN seyrek belleği (torch)
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
@@ -132,7 +137,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 107 test: 23 çekirdek + 84 Experience Engine
+python -m pytest -q            # 112 test: 23 çekirdek + 89 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -147,7 +152,11 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
 - **v0.6 köprüsü gerçek tabloya yazıyor:** `run_kopru.py` doğrulanmış 6 üçlüyü
   `HashlenmisKureselTablo`'ya adresler; gradyan adımı sonrası doluluk 0 → 6
   (boş küme → dolu küme). Aynı üçlü her zaman aynı satıra düşer.
-- **Toplam:** `pytest` ile 107 test tek seferde geçti.
+- **NeuralKopru (v0.6+):** doğrulanmış deneyimler MODELİN kendi seyrek
+  belleğine yazılır; `gen_kopru` köprüsü "ölü-yol"dan (yazmadan önce gradyan 0)
+  "canlı-yol"a (yazdıktan sonra gradyan > 0) geçer; token eğitimiyle birlikte
+  paylaşımlı bellekte loss düşer.
+- **Toplam:** `pytest` ile 112 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -196,6 +205,7 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §19 v0.4 | `memory/replay.py` + `memory/entegrasyon.py` — replay + konsolidasyon ↔ seyrek bellek |
 | §19 v0.5 | `mini_env.py` — `AritmetikOrtam` (güvenli `ast` ile, eval yok) |
 | §19 v0.6 | `memory/kopru.py` — `TorchKoprusu` (torch kurulu ortamda aktif) |
+| §19 v0.6+ / EK-B | `memory/neural_kopru.py` — deneyim ↔ modelin seyrek belleği + `gen_kopru` |
 | §19 v1.0 | `loop.py` — `DeneyimDongusu` + kontrollü metrikler |
 | §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` + `corpus.py` — cümle/dosya → üçlü + REAL_DATA aktarımı |
 | §11 ölçekleme | `arastirma.py` — CONFLICT kuyruğunu deterministik kanıtla toplu çözme |
@@ -244,16 +254,17 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 - **Tam morfoloji:** `turkce.py`'ye ünlü düşmesi (burun→burna), iyelik
   zincirleri, çekimli fiil üretimi ve daha geniş istisna listeleri eklemek
   (mevcut sınırlar docstring'te belgeli).
-- **Köprüyü eğitim döngüsüne bağlamak:** `memory/kopru.py` zaten doğrulanmış
-  deneyimleri `HashlenmisKureselTablo`'ya adresliyor (doluluk 0→6 kanıtlandı);
-  bir sonraki adım, deneyim "gen" vektörlerini modelin `gen_kopru` yoluna
-  enjekte edip eğitim sırasında gradyanla dolmasını ölçmek.
+- **Deneyim "gen" vektörünü gerçek görev sinyaline bağlamak:** `NeuralKopru`
+  zaten doğrulanmış deneyimleri modelin seyrek belleğine yazıp `gen_kopru`'yu
+  canlandırıyor (ölü-yol → canlı-yol ölçüldü); sıradaki adım, deneyim
+  vektörlerini belirli bir görevin (ör. soru-cevap) öğrenme sinyaliyle
+  birlikte eğitip katkıyı ablasyonla ölçmek.
 - **Dış korpus ölçeği:** `egitim/veri_toplayici.py` çıktısını `corpus.py`
   üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak — sözlük, gerçek
   korpustan çıkarılan desenlerle büyütülmeli.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
-  zaten kuruldu — `dogrulama.py`).
+  `dogrulama.py` + sinirsel köprü `neural_kopru.py` kuruldu).
 
 ## 9. Dürüst kapasite notu (rapor §17)
 
