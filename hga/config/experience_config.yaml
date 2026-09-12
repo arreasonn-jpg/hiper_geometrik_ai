@@ -1,0 +1,34 @@
+# ============================================================================
+# HGA Experience Engine — v0.1 Yapılandırması (rapor §13, §16, EK-A.8)
+# ============================================================================
+# Notlar:
+#   * Puan = w1*özellik + w2*ilişki + w3*bağlam + w4*bellek + w5*yenilik
+#            + w6*kaynak - w7*çelişki   (EK-A.8)
+#   * Toplam puan TEK BAŞINA doğruluk kanıtı DEĞİLDİR (rapor §16); kısıt
+#     ihlalleri (INVALID) ve çelişkiler (CONFLICT) puan düşse de karar
+#     mekanizmasında ayrıca ele alınır.
+#   * MODEL_GENERATED deneyimler ASLA otomatik VERIFIED edilmez (rapor §9/§21).
+# ============================================================================
+
+# ── Sinyal ağırlıkları (toplam 1.0 hedeflenir; w7 ceza olarak çıkarılır) ──
+agirliklar:
+  w1_property: 0.25
+  w2_relation: 0.20
+  w3_context: 0.15
+  w4_memory: 0.15
+  w5_novelty: 0.10
+  w6_source: 0.15
+  w7_contradiction: 0.30
+
+# ── Karar eşikleri ────────────────────────────────────────────────────────
+esikler:
+  valid_esik: 0.5            # bu puanın üstü → VALID (harici kaynak için)
+  verify_esik: 0.7           # bu puanın üstü + harici kaynak → VERIFIED
+  belirsiz_guven_esik: 0.5   # özellik güveni bunun altındaysa "yetersiz kanıt"
+  celiski_kanit_esik: 0.6    # kayıtlı kanıt bu güvenin üstündeyse çelişkiye bakılır
+  celiski_skor_ayrimi: 0.4   # kanıt skoru ile yapısal tahmin arasındaki açıklık
+
+# ── Üretici ────────────────────────────────────────────────────────────────
+generator:
+  source_confidence: 0.5     # MODEL_GENERATED adayların varsayılan güveni
+  tip_filtresi: true         # kontrollü kombinasyon (rapor §7)
