@@ -212,7 +212,8 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
   sürekli öğrenme döngüsü (v1.0), ground-truth benchmark ve dış korpus borusu
   (`veri_toplayici.py` çıktısını sözlük büyütüp `REAL_DATA` olarak akıtır;
-  ilişki asla uydurulmaz) ile çevrimdışı belirleyici korpus üretici
+  ilişki asla uydurulmaz; elle küratörlü 7 ilişkili sözlük + yumuşama geri
+  çevirmeli kök çıkarma) ile çevrimdışı belirleyici korpus üretici
   (`korpus_uretici.py` — ağsız sentetik ölçek provası).
 - **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
   olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).

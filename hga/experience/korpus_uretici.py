@@ -28,7 +28,7 @@ cümleleri de KASITLI olarak net (ünsüzle biten) biçimde kurulur.
 import random
 from typing import Dict, List
 
-from .turkce import yonelme_eki
+from .turkce import yonelme_eki, belirtme_eki
 
 # ── Küratörlü varlık listeleri ────────────────────────────────────────────
 # Yaygın Türkçe özel adlar (büyük harfle başlar → "insan" tipiyle özne olur).
@@ -59,6 +59,30 @@ BAKILACAK_NESNELER = [
     "merdiven", "cadde",
 ]
 
+# Gidilebilir/gelinebilir mekânlar (yönelme; güvenli kökler — "y" ile biten
+# kökler BİLEREK yok: köye→"kö" gibi yanlış soyulur; belgeli sınır).
+MEKANLAR = [
+    "okul", "ev", "sinema", "park", "bahçe", "market", "kütüphane",
+    "hastane", "müze", "çarşı", "otel", "cadde",
+]
+
+# Okunabilir nesneler (belirtme; yumuşama geri-çevrilebilir güvenli kökler —
+# k→ğ yumuşayan sözcükler BİLEREK dışarıda, çünkü ğ geri çevrilemez).
+OKUNACAK_NESNELER = [
+    "kitap", "gazete", "mektup", "roman", "dergi", "şiir",
+    "hikaye", "makale", "ödev",
+]
+
+# Yazılabilir nesneler (belirtme; güvenli kökler).
+YAZILACAK_NESNELER = [
+    "mektup", "şiir", "roman", "hikaye", "yazı", "not", "defter",
+]
+
+# Sevilebilir nesneler (belirtme; k→ğ yumuşayanlar BİLEREK dışarıda).
+SEVILECEK_NESNELER = [
+    "kedi", "deniz", "bahçe", "kuş", "orman", "yıldız",
+]
+
 # ── İlişki kalıpları (bilinen fiil desenleri; ilişki İCAT EDİLMEZ) ────────
 # yuklemler: `VARSAYILAN_SOZLUK`'un o ilişki için tanıdığı fiil yüzey biçimleri.
 _KALIPLAR: List[Dict] = [
@@ -66,6 +90,16 @@ _KALIPLAR: List[Dict] = [
      "yuklemler": ["bindi", "biniyor", "binecek", "biner"]},
     {"iliski": "Bakmak", "durum": "yonelme", "nesneler": BAKILACAK_NESNELER,
      "yuklemler": ["bakti", "bakiyor", "bakar"]},
+    {"iliski": "Gitmek", "durum": "yonelme", "nesneler": MEKANLAR,
+     "yuklemler": ["gitti", "gidiyor", "gidecek", "gider"]},
+    {"iliski": "Gelmek", "durum": "yonelme", "nesneler": MEKANLAR,
+     "yuklemler": ["geldi", "geliyor", "gelecek", "gelir"]},
+    {"iliski": "Okumak", "durum": "belirtme", "nesneler": OKUNACAK_NESNELER,
+     "yuklemler": ["okudu", "okuyor", "okuyacak", "okur"]},
+    {"iliski": "Yazmak", "durum": "belirtme", "nesneler": YAZILACAK_NESNELER,
+     "yuklemler": ["yazdi", "yaziyor", "yazacak", "yazar"]},
+    {"iliski": "Sevmek", "durum": "belirtme", "nesneler": SEVILECEK_NESNELER,
+     "yuklemler": ["sevdi", "seviyor", "sevecek", "sever"]},
 ]
 
 # Kasıtlı gürültü: eşleşmemesi GEREKEN kalıplar (dürüst atlama sınaması).
@@ -77,9 +111,11 @@ _SOZLUK_DISI = "kuantum bilgisayar nedir?"    # hiçbir kalıba uymaz
 
 
 def _durumla(nesne: str, durum: str) -> str:
-    """Nesneyi ilişkinin beklediği durum ekine göre çekimle (şimdilik yönelme)."""
+    """Nesneyi ilişkinin beklediği durum ekine göre çekimle (yönelme/belirtme)."""
     if durum == "yonelme":
         return yonelme_eki(nesne)
+    if durum == "belirtme":
+        return belirtme_eki(nesne)
     raise ValueError(f"desteklenmeyen durum: {durum!r}")
 
 

@@ -24,7 +24,7 @@ if KOK not in sys.path:
 from hga.knowledge import KnowledgeStore  # noqa: E402
 from hga.experience import (sentetik_korpus_uret, korpus_borusu,  # noqa: E402
                             sozlugu_buyut, VARSAYILAN_SOZLUK)
-from hga.experience.korpus_uretici import TURKCE_ADLAR  # noqa: E402
+from hga.experience.korpus_uretici import TURKCE_ADLAR, _KALIPLAR  # noqa: E402
 
 CIZGI = "=" * 74
 
@@ -68,7 +68,8 @@ def main():
     cumleler = sentetik_korpus_uret(ozne_sayisi=ozne, nesne_sayisi=nesne,
                                     gurultu_orani=gurultu, tohum=0)
     print(f"\n1) Üretilen korpus: {len(cumleler)} cümle "
-          f"({ozne} özne × {nesne} nesne × 2 ilişki + %{gurultu * 100:.0f} gürültü)")
+          f"({ozne} özne × {nesne} nesne × {len(_KALIPLAR)} ilişki "
+          f"+ %{gurultu * 100:.0f} gürültü)")
     print(f"   örnek: {cumleler[0]}")
     gurultu_ornek = next((c for c in cumleler
                           if "kuantum" in c or c.endswith("kamyon bindi.")

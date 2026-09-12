@@ -90,6 +90,78 @@ VARSAYILAN_SOZLUK: Dict[str, Dict] = {
             "yildiz": {"token": "Yıldız", "tip": "mekan", "ozellikler": {}},
         },
     },
+    # ── Genişletilmiş sözlük (v1.0+): elle küratörlü yeni ilişkiler ──────
+    # İlişkiler ASLA çalışma anında uydurulmaz; bunlar BİLİNEN, elle doğrulanmış
+    # fiil desenleridir. Yüklem biçimleri `turkce.py`'nin testli `fiil_cekimi`
+    # çıktısıyla birebir uyumludur (3. tekil, dört zaman).
+    "gitmek": {
+        "iliski": "Gitmek",
+        "nesne_durumu": "yonelme",
+        "yuklemler": ["gitti", "gidiyor", "gidecek", "gider"],
+        "ozneler": {
+            "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
+        },
+        "nesneler": {
+            "okula": {"token": "Okul", "tip": "mekan", "ozellikler": {}},
+            "eve": {"token": "Ev", "tip": "mekan", "ozellikler": {}},
+            "sinemaya": {"token": "Sinema", "tip": "mekan", "ozellikler": {}},
+            "parka": {"token": "Park", "tip": "mekan", "ozellikler": {}},
+        },
+    },
+    "gelmek": {
+        "iliski": "Gelmek",
+        "nesne_durumu": "yonelme",
+        "yuklemler": ["geldi", "geliyor", "gelecek", "gelir"],
+        "ozneler": {
+            "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
+        },
+        "nesneler": {
+            "okula": {"token": "Okul", "tip": "mekan", "ozellikler": {}},
+            "eve": {"token": "Ev", "tip": "mekan", "ozellikler": {}},
+        },
+    },
+    "okumak": {
+        "iliski": "Okumak",
+        "nesne_durumu": "belirtme",
+        "yuklemler": ["okudu", "okuyor", "okuyacak", "okur"],
+        "ozneler": {
+            "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
+        },
+        "nesneler": {
+            "kitabi": {"token": "Kitap", "tip": "esya", "ozellikler": {}},
+            "gazeteyi": {"token": "Gazete", "tip": "esya", "ozellikler": {}},
+            "mektubu": {"token": "Mektup", "tip": "esya", "ozellikler": {}},
+        },
+    },
+    "yazmak": {
+        "iliski": "Yazmak",
+        "nesne_durumu": "belirtme",
+        "yuklemler": ["yazdi", "yaziyor", "yazacak", "yazar"],
+        "ozneler": {
+            "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
+        },
+        "nesneler": {
+            "mektubu": {"token": "Mektup", "tip": "esya", "ozellikler": {}},
+            "siiri": {"token": "Şiir", "tip": "esya", "ozellikler": {}},
+        },
+    },
+    "sevmek": {
+        "iliski": "Sevmek",
+        "nesne_durumu": "belirtme",
+        "yuklemler": ["sevdi", "seviyor", "sevecek", "sever"],
+        "ozneler": {
+            "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
+        },
+        "nesneler": {
+            "kediyi": {"token": "Kedi", "tip": "hayvan", "ozellikler": {"canli": 1}},
+            "denizi": {"token": "Deniz", "tip": "mekan", "ozellikler": {}},
+        },
+    },
 }
 
 

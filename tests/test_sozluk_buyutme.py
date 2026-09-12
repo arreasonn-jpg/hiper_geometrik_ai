@@ -74,6 +74,33 @@ def test_buyutme_orijinal_sozluk_degismez():
     assert "mehmet" not in VARSAYILAN_SOZLUK["binmek"]["ozneler"]
 
 
+def test_buyutme_genis_sozluk_yeni_iliski_var():
+    """Genişletilmiş sözlük yeni ilişkileri zaten TANIR (çalışma anında uydurulmaz)."""
+    sozluk, rapor, ucluler = sozlugu_buyut(
+        VARSAYILAN_SOZLUK,
+        ["Ali okula gitti.", "Ali kitabı okudu.", "Ali kediyi sevdi."])
+    assert set(sozluk.keys()) == set(VARSAYILAN_SOZLUK.keys())  # ilişki uydurulmadı
+    assert rapor.yeni_iliski == 0
+    iliskiler = {i for _, i, _ in ucluler}
+    assert {"Gitmek", "Okumak", "Sevmek"} <= iliskiler
+
+
+def test_buyutme_yumusama_tersi():
+    """Yumuşamış belirtme nesnesi köküne SERT ünsüzle çıkarılır (kitabı→Kitap)."""
+    from hga.experience.sozluk_buyutme import _kok_bul
+    assert _kok_bul("kitabı", "belirtme") == "kitap"
+    assert _kok_bul("ağacı", "belirtme") == "ağaç"
+    assert _kok_bul("kanadı", "belirtme") == "kanat"
+    # ğ ambigua: dağ (asıl kök) değişmez
+    assert _kok_bul("dağa", "yonelme") == "dağ"
+    # yeni belirtme nesnesi doğru kökle sözlüğe girer
+    sozluk, rapor, ucluler = sozlugu_buyut(
+        VARSAYILAN_SOZLUK, ["Ali ağacı sevdi."])
+    assert "agaci" in sozluk["sevmek"]["nesneler"]
+    assert sozluk["sevmek"]["nesneler"]["agaci"]["token"] == "Ağaç"
+    assert ("Ali", "Sevmek", "Ağaç") in set(ucluler)
+
+
 if __name__ == "__main__":
     testler = [(ad, fn) for ad, fn in sorted(globals().items())
                if ad.startswith("test_") and callable(fn)]

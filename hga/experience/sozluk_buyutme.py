@@ -32,6 +32,7 @@ from dataclasses import dataclass, asdict
 from typing import Dict, List, Tuple
 
 from .cumle_ayiklayici import ascii_norm
+from .turkce import hece_sayisi
 
 # İlişkinin beklediği nesne durumu → kabul edilen ek sonları (en uzun eşleşme önce).
 _DURUM_SONLARI = {
@@ -39,6 +40,19 @@ _DURUM_SONLARI = {
     "belirtme": ["yı", "yi", "yu", "yü", "ı", "i", "u", "ü"],
     "bulunma": ["da", "de", "ta", "te"],
     "ayrilma": ["dan", "den", "tan", "ten"],
+}
+
+# Ünsüz yumuşamasının TERSİ (kök çıkarma, en-iyi-çaba; belgeli):
+# sesliyle başlayan bir durum eki soyulduğunda kökün sonundaki yumuşamış ünsüz
+# (p→b, ç→c, t→d, k→g) sert biçimine çevrilir. Türkçe öz sözcükler sözcük
+# sonunda b/c/d/g taşımaz; bu yüzden bu dört geri-çevirme yüksek güvenlidir.
+# "ğ" AMBİGU olduğu için DOKUNULMAZ (dağ = asıl kök; bebek→bebeğ = yumuşama).
+# Borçlanma sözcüklerin (psikolog, katalog…) sonundaki g/ğ bu yüzden yanlış
+# çevrilebilir — dar, yalın Türkçe korpuslar için belgeli bir sınırdır.
+_YUMUSAMA_GERI = {"b": "p", "c": "ç", "d": "t", "g": "k"}
+# Tek heceli olup yumuşayan (düzensiz) sözcüklerin yumuşamış gövdesi → kök.
+_YUMUSAMA_GERI_TEK_HECELI = {
+    "kab": "kap", "reng": "renk", "gög": "gök", "cog": "çok", "yurd": "yurt",
 }
 
 
@@ -74,11 +88,23 @@ def _baslik(kelime: str) -> str:
 
 
 def _kok_bul(yuzey: str, durum: str) -> str:
-    """Yüzey biçiminden durum ekini soyar (en-iyi-çaba kök; özgün harfler korunur)."""
+    """Yüzey biçiminden durum ekini soyar (en-iyi-çaba kök; özgün harfler korunur).
+
+    Sesliyle başlayan ek soyulduktan sonra kalan kök yumuşamış bir ünsüzle
+    bitiyorsa (b/c/d/g) sert biçime çevrilir (`_YUMUSAMA_GERI`); "ğ" ambigua
+    olduğu için dokunulmaz. Tek heceli gövdeler yalnızca bilinen yumuşayan
+    sözcüklerse çevrilir. Ünlü düşmesi (resim→resmi→"resm") geri alınmaz —
+    bu da belgeli bir sınırdır.
+    """
     k = (yuzey or "").lower()
     for son in _DURUM_SONLARI.get(durum or "", []):
         if len(k) > len(son) + 1 and k.endswith(son):
-            return yuzey[:len(yuzey) - len(son)]
+            kok = yuzey[:len(yuzey) - len(son)]
+            if kok and kok[-1] in _YUMUSAMA_GERI:
+                anahtar = kok.lower()
+                if hece_sayisi(anahtar) >= 2 or anahtar in _YUMUSAMA_GERI_TEK_HECELI:
+                    kok = kok[:-1] + _YUMUSAMA_GERI[kok[-1]]
+            return kok
     return yuzey
 
 

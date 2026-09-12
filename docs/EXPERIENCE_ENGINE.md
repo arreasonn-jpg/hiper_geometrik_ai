@@ -169,7 +169,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 160 test: 23 çekirdek + 137 Experience Engine
+python -m pytest -q            # 164 test: 23 çekirdek + 141 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -218,11 +218,19 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   yazılır. 8 cümlelik örnekte 7 üçlü aktarıldı, 4 yeni özne + 3 yeni nesne
   eklendi, kuşkulu cümle atlandı. (Ağ/requests/pyarrow gerekmez: yalnız dosya
   sözleşmesi; canlı korpus çekimi `egitim/veri_toplayici.py`'nin işidir.)
+- **Genişletilmiş sözlük (v1.0+):** `VARSAYILAN_SOZLUK` elle küratörlü 7
+  ilişkiye genişletildi — binmek/bakmak (yönelme) + gitmek/gelmek (yönelme)
+  + okumak/yazmak/sevmek (belirtme); fiil yüzey biçimleri `fiil_cekimi` (4
+  zaman) ile birebir uyumlu. Kök çıkarma (`_kok_bul`) artık ünsüz yumuşamasını
+  GERİ çevirir (kitabı→Kitap, ağacı→Ağaç; ğ ambigua → dokunulmaz, tek heceli
+  gövde yalnızca bilinen istisnalarda çevrilir). İlişki yine ASLA çalışma
+  anında uydurulmaz.
 - **Çevrimdışı korpus ölçeği (v1.0+):** `korpus_uretici.py` belirleyici
-  (tohumlu) ve dilbilgisel olarak doğru SOV cümleleri üretir; aynı boru
-  ~1.400 cümleyi <0,03 saniyede (~50.000 cümle/sn) REAL_DATA olarak akıtır,
-  kasıtlı gürültüyü atlar, ilişki icat etmez. Bu bir SENTETİK stres testidir
-  (belgeli); gerçek Wikipedia/OSCAR ölçeği ağ gerektirir.
+  (tohumlu) ve dilbilgisel olarak doğru SOV cümleleri üretir (7 ilişki ×
+  yönelme/belirtme); aynı boru ~4.000 cümleyi <0,1 saniyede (~40.000
+  cümle/sn) REAL_DATA olarak akıtır, kasıtlı gürültüyü atlar, ilişki icat
+  etmez. Bu bir SENTETİK stres testidir (belgeli); gerçek Wikipedia/OSCAR
+  ölçeği ağ gerektirir.
 - **Genelleme ablasyonu (v1.0+):** bellek, KANONİK (paylaşılan) nesne
   kodları taşıyorsa; bellek donukken yalnızca `gen_kopru` köprüsü + küçük
   kafa eğitilen okuyucu, EĞİTİMDE HİÇ GÖRMEDİĞİ öznelerde de doğru nesneyi
@@ -231,7 +239,7 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
   model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
   belgeli; bu yüzden gövde donuk tutulur.)
-- **Toplam:** `pytest` ile 160 test tek seferde geçti.
+- **Toplam:** `pytest` ile 164 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -349,11 +357,13 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 - **Dış korpus ölçeği (tamamlandı):** `egitim/veri_toplayici.py` çıktısı
   (`turkce_metin.txt`) `korpus_boru.py` üzerinden `REAL_DATA` olarak akıtılıyor;
   sözlük bilinen fiil desenleriyle büyütülüyor (yeni özne/nesne varlıkları;
-  ilişki asla uydurulmaz). Ağsız ölçek provası `korpus_uretici.py` +
-  `run_korpus_olcegi.py` ile eklendi (~50k cümle/sn, belirleyici sentetik
-  korpus). Kalan ölçek adımı: canlı korpusu (Wikipedia dökümü, OSCAR/CC-100/
-  mC4 "tr") gerçekten çekip milyon-kelime seviyesinde bu borudan geçirmek —
-  bu ağ gerektirir ve `egitim/veri_toplayici.py`'nin görevidir.
+  ilişki asla uydurulmaz). Elle küratörlü sözlük 7 ilişkiye genişletildi
+  (yönelme + belirtme); kök çıkarma ünsüz yumuşamasını geri çeviriyor. Ağsız
+  ölçek provası `korpus_uretici.py` + `run_korpus_olcegi.py` ile eklendi
+  (~40k cümle/sn, belirleyici sentetik korpus). Kalan ölçek adımı: canlı
+  korpusu (Wikipedia dökümü, OSCAR/CC-100/mC4 "tr") gerçekten çekip
+  milyon-kelime seviyesinde bu borudan geçirmek — bu ağ gerektirir ve
+  `egitim/veri_toplayici.py`'nin görevidir.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
   `dogrulama.py` + sinirsel köprü `neural_kopru.py` + ablasyon `ablation.py`

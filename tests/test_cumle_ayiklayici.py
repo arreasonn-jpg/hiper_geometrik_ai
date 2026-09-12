@@ -38,6 +38,32 @@ def test_ayikla_eslesmezse_none():
     assert ay.ayikla("") is None
 
 
+def test_ayikla_genis_sozluk():
+    """Genişletilmiş sözlük: gitmek/gelmek (yönelme) + okumak/yazmak/sevmek (belirtme)."""
+    ay = CumleAyiklayici()
+    beklenen = [
+        ("Ali okula gitti.", "Gitmek", "Okul"),
+        ("Ayşe eve geldi.", "Gelmek", "Ev"),
+        ("Ali kitabı okudu.", "Okumak", "Kitap"),
+        ("Ayşe mektubu yazdı.", "Yazmak", "Mektup"),
+        ("Ali kediyi sevdi.", "Sevmek", "Kedi"),
+    ]
+    for cumle, iliski, nesne in beklenen:
+        u = ay.ayikla(cumle)
+        assert u is not None, cumle
+        assert u.iliski == iliski, cumle
+        assert u.nesne == nesne, cumle
+
+
+def test_ayikla_genis_sozluk_belirtme_ekli():
+    """Belirtme ekli (yumuşamalı) nesneler doğru kökle çıkarılır."""
+    ay = CumleAyiklayici()
+    u = ay.ayikla("Ali gazeteyi okudu.")
+    assert u is not None and u.nesne == "Gazete"
+    u = ay.ayikla("Ali şiiri yazdı.")
+    assert u is not None and u.nesne == "Şiir"
+
+
 def test_bilgi_aktar_real_data():
     """Cümleler → REAL_DATA varlık + kanıt (döngünün 'Gerçek veri' aşaması)."""
     k = KnowledgeStore()

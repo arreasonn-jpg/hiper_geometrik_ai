@@ -15,11 +15,20 @@ if KOK not in sys.path:
 
 from hga.experience import (sentetik_korpus_uret, korpus_borusu,  # noqa: E402
                             sozlugu_buyut, VARSAYILAN_SOZLUK,
-                            yonelme_eki)
-from hga.experience.korpus_uretici import (BINILECEK_NESNELER,  # noqa: E402
-                                           BAKILACAK_NESNELER)
+                            yonelme_eki, belirtme_eki)
+from hga.experience.korpus_uretici import _KALIPLAR  # noqa: E402
 from hga.experience.sozluk_buyutme import _kok_bul  # noqa: E402
 from hga.knowledge import KnowledgeStore  # noqa: E402
+
+
+def _gercek_sayisi(ozne_sayisi, nesne_sayisi):
+    """Gürültüsüz üretilen gerçek cümle sayısı (kalıplardan hesaplanır)."""
+    return sum(ozne_sayisi * min(nesne_sayisi, len(k["nesneler"]))
+               for k in _KALIPLAR)
+
+
+def _tum_fiiller():
+    return {y for k in _KALIPLAR for y in k["yuklemler"]}
 
 
 def test_determinizm():
@@ -31,36 +40,44 @@ def test_determinizm():
 
 
 def test_gercek_cumle_sayisi():
-    # gürültüsüz: özne_sayısı × (binmek + bakmak nesneleri)
-    c = sentetik_korpus_uret(ozne_sayisi=7, nesne_sayisi=5,
+    # gürültüsüz: özne_sayısı × her kalıbın seçtiği nesne sayısı
+    ozne, nesne = 7, 5
+    c = sentetik_korpus_uret(ozne_sayisi=ozne, nesne_sayisi=nesne,
                              gurultu_orani=0.0, tohum=0)
-    assert len(c) == 7 * (5 + 5)
-    # her cümle noktayla biter ve bir fiil yüzey biçimi taşır
-    fiiller = {"bindi", "biniyor", "binecek", "biner",
-               "bakti", "bakiyor", "bakar"}
+    assert len(c) == _gercek_sayisi(ozne, nesne)
+    # her cümle noktayla biter ve bilinen bir fiil yüzey biçimi taşır
+    fiiller = _tum_fiiller()
     for cumle in c:
         assert cumle.endswith(".")
         assert cumle.split()[-1][:-1] in fiiller
 
 
 def test_nesneler_guvenli_kok():
-    # üreticinin nesne listeleri yönelme hâline geçince TEMİZ kök verir
-    # (yumuşama/ünlü düşmesi/sesli-belirsizliği içermez).
-    for n in BINILECEK_NESNELER + BAKILACAK_NESNELER:
-        cekim = yonelme_eki(n)
-        kok = _kok_bul(cekim, "yonelme")
-        assert kok.lower() == n, f"{n!r} → {cekim!r} → kök {kok!r}"
+    # üreticinin nesne listeleri durum hâline geçince TEMİZ kök verir
+    # (yumuşama geri çevrilir; ğ-ambigua/ünlü düşmesi/sesli-belirsizliği dışlanır).
+    for kalip in _KALIPLAR:
+        durum = kalip["durum"]
+        cekimle = yonelme_eki if durum == "yonelme" else belirtme_eki
+        for n in kalip["nesneler"]:
+            cekim = cekimle(n)
+            kok = _kok_bul(cekim, durum)
+            assert kok.lower() == n, f"{n!r} → {cekim!r} → kök {kok!r}"
 
 
 def test_aktarim_ve_atlama():
-    # 6 özne × 3 nesne × 2 ilişki = 36 gerçek cümle; gerisi kasıtlı gürültü.
-    c = sentetik_korpus_uret(ozne_sayisi=6, nesne_sayisi=3,
+    # 6 özne × kalıpların seçtiği nesneler; gerisi kasıtlı gürültü.
+    ozne, nesne = 6, 3
+    c = sentetik_korpus_uret(ozne_sayisi=ozne, nesne_sayisi=nesne,
                              gurultu_orani=0.1, tohum=0)
     k = KnowledgeStore()
     rapor = korpus_borusu(k, "\n".join(c))
-    assert rapor.aktarilan_uclu == 6 * (3 + 3)   # her gerçek cümle bir üçlü
+    assert rapor.aktarilan_uclu == _gercek_sayisi(ozne, nesne)  # her gerçek cümle bir üçlü
     assert rapor.cumle_sayisi > rapor.aktarilan_uclu  # gürültü atlandı
     assert rapor.buyutme.yeni_iliski == 0          # ilişki asla uydurulmaz
+    # genişletilmiş sözlük: üretilen her ilişki bilgi tabanında tanımlı
+    iliskiler = {k["iliski"] for k in _KALIPLAR}
+    taban_iliskileri = {r.token for r in k.relations.iliskiler()}
+    assert iliskiler <= taban_iliskileri
 
 
 def test_gurultu_dogrulanabilir():
@@ -71,7 +88,7 @@ def test_gurultu_dogrulanabilir():
     gurultu = [x for x in c
                if "kuantum" in x or "kamyon denize" in x or x.endswith("kamyon bindi.")]
     assert rapor.atlanan_cumle >= len(gurultu) - 1
-    # hiçbir gürültü cümlesi üçlü ÜRETMEMELİ (kuantum hariç hepsi kalıpla çakışmaz)
+    # hiçbir gürültü cümlesi üçlü ÜRETMEMELİ
     assert rapor.eslesen_cumle == rapor.taranan_cumle - rapor.atlanan_cumle
 
 
