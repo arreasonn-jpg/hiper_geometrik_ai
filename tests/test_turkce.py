@@ -18,7 +18,7 @@ from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E40
                             unlu_dusmesi, iyelik_eki, iyelik_li_durum,
                             gecmis_zaman_3tekil,
                             simdiki_zaman_3tekil, gelecek_zaman_3tekil,
-                            genis_zaman_3tekil,
+                            genis_zaman_3tekil, fiil_cekimi,
                             hece_sayisi, son_unlu, kucult)
 
 
@@ -269,6 +269,66 @@ def test_genis_zaman_3tekil():
     assert genis_zaman_3tekil("de") == "der"
     assert genis_zaman_3tekil("bakmak") == "bakar"
     assert genis_zaman_3tekil("") == ""
+
+
+# ── Kişi ekli fiil çekimi (6 kişi × 4 zaman) ────────────────────────────────
+def test_fiil_cekimi_gecmis():
+    # Grup B (iyelik kökenli kişi ekleri): -m/-n/∅/-k/-nız/-lar
+    assert [fiil_cekimi("bin", "gecmis", k)
+            for k in ("1t", "2t", "3t", "1c", "2c", "3c")] == \
+        ["bindim", "bindin", "bindi", "bindik", "bindiniz", "bindiler"]
+    assert fiil_cekimi("gör", "gecmis", "1t") == "gördüm"      # yuvarlak uyumu
+    assert fiil_cekimi("gör", "gecmis", "2c") == "gördünüz"
+    assert fiil_cekimi("bak", "gecmis", "3c") == "baktılar"    # ötümsüz + çoğul
+    assert fiil_cekimi("git", "gecmis", "1c") == "gittik"      # yumuşama YOK
+
+
+def test_fiil_cekimi_simdiki():
+    # Grup A: -yor'dan sonra kişi eki hep -um/-sun/-uz/-sunuz/-lar
+    assert [fiil_cekimi("bin", "simdiki", k)
+            for k in ("1t", "2t", "3t", "1c", "2c", "3c")] == \
+        ["biniyorum", "biniyorsun", "biniyor", "biniyoruz",
+         "biniyorsunuz", "biniyorlar"]
+    assert fiil_cekimi("oku", "simdiki", "1t") == "okuyorum"
+    assert fiil_cekimi("oku", "simdiki", "2c") == "okuyorsunuz"
+    assert fiil_cekimi("git", "simdiki", "3t") == "gidiyor"    # ünsüz yumuşaması
+
+
+def test_fiil_cekimi_gelecek():
+    # -acak/-ecek, 1t/1c kişi eklerinden önce yumuşar (k→ğ)
+    assert fiil_cekimi("bin", "gelecek", "1t") == "bineceğim"
+    assert fiil_cekimi("bin", "gelecek", "1c") == "bineceğiz"
+    assert fiil_cekimi("bin", "gelecek", "2t") == "bineceksin"  # yumuşama YOK
+    assert fiil_cekimi("bak", "gelecek", "1t") == "bakacağım"
+    assert fiil_cekimi("oku", "gelecek", "1t") == "okuyacağım"  # y kaynaştırma
+    assert fiil_cekimi("ye", "gelecek", "3t") == "yiyecek"      # düzensiz kök
+    assert fiil_cekimi("ye", "gelecek", "1t") == "yiyeceğim"
+
+
+def test_fiil_cekimi_genis():
+    assert [fiil_cekimi("bak", "genis", k)
+            for k in ("1t", "2t", "3t", "1c", "2c", "3c")] == \
+        ["bakarım", "bakarsın", "bakar", "bakarız", "bakarsınız", "bakarlar"]
+    assert fiil_cekimi("oku", "genis", "1t") == "okurum"        # sesli kök -r
+    assert fiil_cekimi("gel", "genis", "2c") == "gelirsiniz"    # -ır düzensiz
+    assert fiil_cekimi("git", "genis", "3t") == "gider"
+
+
+def test_fiil_cekimi_mastar_ve_hata():
+    assert fiil_cekimi("bakmak", "gecmis", "1c") == "baktık"   # mastar düşer
+    assert fiil_cekimi("") == ""
+    hata = None
+    try:
+        fiil_cekimi("bin", "şimdiki")        # yanlış zaman adı
+    except ValueError as e:
+        hata = e
+    assert hata is not None
+    hata = None
+    try:
+        fiil_cekimi("bin", "simdiki", "4t")  # yanlış kişi kodu
+    except ValueError as e:
+        hata = e
+    assert hata is not None
 
 
 if __name__ == "__main__":

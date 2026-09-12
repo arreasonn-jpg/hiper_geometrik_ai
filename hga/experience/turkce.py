@@ -29,6 +29,10 @@ morfoloji parçasını doğru uygular:
       bak→bakacak, gör→görecek, oku→okuyacak, ye→yiyecek.
     * geniş zaman 3. tekil (aorist; düzensizlikler küratörlü): bak→bakar,
       gel→gelir, gör→görür, oku→okur, git→gider, ye→yer.
+    * kişi ekli fiil çekimi (6 kişi): geçmiş (bindim/bindin/bindi/bindik/
+      bindiniz/bindiler), şimdiki (biniyorum/biniyorsun/biniyor/biniyoruz/
+      biniyorsunuz/biniyorlar), gelecek (bineceğim/bineceksin/…), geniş
+      (bakarım/bakarsın/…) — `fiil_cekimi(koku, zaman, kisi)`.
     * özel isimlerde kesme işareti (').
 
 KAPSAM VE DÜRÜST SINIRLAR (bilinçli):
@@ -36,12 +40,14 @@ KAPSAM VE DÜRÜST SINIRLAR (bilinçli):
       istisna listeleriyle sınırlı bir yaklaşımdır; Türkçede tek heceli
       sözcükler (top→topa, at→ata, ama kap→kaba, renk→renge) ve alıntılar
       (saat→saate) düzensizdir.
-    * Fiil çekimleri yalnızca 3. tekil kişiyledir; kişi ekli çekimler
-      (biniyorum/biniyorsun/…) ve isim tamlamaları (belirtili/belirtisiz)
-      uygulanmaz. Şimdiki/gelecek/geniş zamanda fiil kökü ünsüz yumuşaması
-      (git→gid-, et→ed-) yalnızca küratörlü tek heceli istisnalar + çok heceli
-      kuralıyla sınırlıdır; aorist'in -ar/-er ↔ -ır/-ir dağılımı düzensizdir
-      ve küratörlü listeyle taşınır.
+    * Fiil çekimleri geçmiş/şimdiki/gelecek/geniş zamanla sınırlıdır; emir,
+      istek, şart, gereklilik kipleri ve birleşik zamanlar uygulanmaz. İsim
+      tamlamaları (belirtili/belirtisiz) uygulanmaz. Şimdiki/gelecek/geniş
+      zamanda fiil kökü ünsüz yumuşaması (git→gid-, et→ed-) yalnızca
+      küratörlü tek heceli istisnalar + çok heceli kuralıyla sınırlıdır;
+      aorist'in -ar/-er ↔ -ır/-ir dağılımı düzensizdir ve küratörlü listeyle
+      taşınır. Gelecek zamanın -acak/-ecek eki, sesliyle başlayan kişi ekleri
+      öncesinde yumuşar (binecek→bineceğim).
     * Fonksiyonlar büyük/küçük harfi DEĞİŞTİRMEZ; cümle içinde cins isimler
       çağıran tarafından küçük harfe çevrilerek verilir.
 """
@@ -96,6 +102,9 @@ UNLU_DUSMESI = {
 # İyelik (sahiplik) kişi kodları → ek kuralı açıklaması.
 #   1t/2t/3t: benim/senin/onun (tekil)  1c/2c/3c: bizim/sizin/onların (çoğul)
 IYELIK_KISILER = ("1t", "2t", "3t", "1c", "2c", "3c")
+
+# Fiil çekimi zamanları (fiil_cekimi için).
+FIIL_ZAMANLARI = ("gecmis", "simdiki", "gelecek", "genis")
 
 # ── Fiil çekimi (şimdiki/gelecek/geniş zaman) için küratörlü düzensizlikler ──
 # Tek heceli olup sesliyle başlayan ekten önce YUMUŞAYAN fiil kökleri
@@ -497,3 +506,86 @@ def genis_zaman_3tekil(koku: str) -> str:
         return f"{govde}{_dortlu(u)}r"        # -ır/-ir/-ur/-ür
     ek = "ar" if u in KALIN else "er"          # tek heceli → -ar/-er
     return f"{govde}{ek}"
+
+
+# ── Kişi ekli fiil çekimi (6 kişi) ───────────────────────────────────────────
+def _zaman_3tekil(koku: str, zaman: str) -> str:
+    """Zamana göre 3. tekil taban formu üretir (diğer kişiler bunun üzerine)."""
+    if zaman == "gecmis":
+        return gecmis_zaman_3tekil(koku)
+    if zaman == "simdiki":
+        return simdiki_zaman_3tekil(koku)
+    if zaman == "gelecek":
+        return gelecek_zaman_3tekil(koku)
+    if zaman == "genis":
+        return genis_zaman_3tekil(koku)
+    raise ValueError(f"zaman {zaman!r} tanınmadı; beklenen: {FIIL_ZAMANLARI}")
+
+
+def _kisi_eki(taban: str, zaman: str, kisi: str) -> str:
+    """3. tekil tabana kişi ekini ekle.
+
+    İki grup vardır (Türkçe kişi eklerinin kaynağına göre):
+      * Grup A (zamir kökenli — şimdiki/gelecek/geniş): -ım/-im/-um/-üm,
+        -sın/-sin/-sun/-sün, -ız/-iz/-uz/-üz, -sınız/-siniz/-sunuz/-sünüz.
+      * Grup B (iyelik kökenli — geçmiş): -m, -n, -k, -nız/-niz/-nuz/-nüz.
+    Çoğul 3. kişi her iki grupta -lar/-ler'dir. Ünlü uyumu 3. tekil tabanın
+    SON ünlüsüne göredir; gelecek zamanın -acak/-ecek eki, sesliyle başlayan
+    kişi eklerinden (1t/1c) önce yumuşar (binecek→bineceğim).
+    """
+    if kisi == "3t":
+        return taban
+    u = son_unlu(taban)
+    if zaman == "gecmis":                      # Grup B (iyelik kökenli)
+        if kisi == "1t":
+            return taban + "m"
+        if kisi == "2t":
+            return taban + "n"
+        if kisi == "1c":
+            return taban + "k"
+        if kisi == "2c":
+            return f"{taban}n{_dortlu(u)}z"
+        if kisi == "3c":
+            return taban + ("lar" if u in KALIN else "ler")
+        raise ValueError(f"kisi {kisi!r} tanınmadı; beklenen: {IYELIK_KISILER}")
+
+    # Grup A (zamir kökenli)
+    d = _dortlu(u)
+    if kisi == "1t":
+        if zaman == "gelecek":
+            taban = taban[:-1] + "ğ"           # -acak/-ecek → -acağ-/-eceğ-
+        return f"{taban}{d}m"
+    if kisi == "2t":
+        return f"{taban}s{d}n"
+    if kisi == "1c":
+        if zaman == "gelecek":
+            taban = taban[:-1] + "ğ"
+        return f"{taban}{d}z"
+    if kisi == "2c":
+        return f"{taban}s{d}n{d}z"
+    if kisi == "3c":
+        return taban + ("lar" if u in KALIN else "ler")
+    raise ValueError(f"kisi {kisi!r} tanınmadı; beklenen: {IYELIK_KISILER}")
+
+
+def fiil_cekimi(koku: str, zaman: str = "simdiki", kisi: str = "3t") -> str:
+    """Fiil kökünü istenen zaman + kişiyle çekimle (6 kişi × 4 zaman).
+
+    zaman: 'gecmis' | 'simdiki' | 'gelecek' | 'genis'
+    kisi : '1t'(ben) | '2t'(sen) | '3t'(o) | '1c'(biz) | '2c'(siz) | '3c'(onlar)
+
+    Örnekler:
+        fiil_cekimi('bin', 'gecmis')      → 'bindi'
+        fiil_cekimi('bin', 'simdiki','1t')→ 'biniyorum'
+        fiil_cekimi('bin', 'gelecek','1t')→ 'bineceğim'  (-ecek yumuşar)
+        fiil_cekimi('bak', 'genis','2c')  → 'bakarsınız'
+    Kök '-mak/-mek' mastarıyla verilirse düşürülür.
+    """
+    if kisi not in IYELIK_KISILER:
+        raise ValueError(f"kisi {kisi!r} tanınmadı; beklenen: {IYELIK_KISILER}")
+    if zaman not in FIIL_ZAMANLARI:
+        raise ValueError(f"zaman {zaman!r} tanınmadı; beklenen: {FIIL_ZAMANLARI}")
+    k = (koku or "").strip()
+    if not k:
+        return ""
+    return _kisi_eki(_zaman_3tekil(k, zaman), zaman, kisi)

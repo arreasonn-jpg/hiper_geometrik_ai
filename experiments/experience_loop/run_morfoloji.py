@@ -22,7 +22,8 @@ if KOK not in sys.path:
 from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E402
                             ayrilma_eki, iyelik_eki, iyelik_li_durum,
                             gecmis_zaman_3tekil, simdiki_zaman_3tekil,
-                            gelecek_zaman_3tekil, genis_zaman_3tekil)
+                            gelecek_zaman_3tekil, genis_zaman_3tekil,
+                            fiil_cekimi)
 
 CIZGI = "=" * 74
 
@@ -66,11 +67,18 @@ def main():
               f"{simdiki_zaman_3tekil(k):<10} {gelecek_zaman_3tekil(k):<10} "
               f"{genis_zaman_3tekil(k):<10}")
 
+    print("\n5) Kişi ekli fiil çekimi (6 kişi — 'binmek' örneği):")
+    kisiler = [("1t", "ben"), ("2t", "sen"), ("3t", "o"),
+               ("1c", "biz"), ("2c", "siz"), ("3c", "onlar")]
+    print(f"   {'zaman':<10} " + " ".join(f"{k:<13}" for k, _ in kisiler))
+    for z in ["gecmis", "simdiki", "gelecek", "genis"]:
+        print(f"   {z:<10} " + " ".join(f"{fiil_cekimi('bin', z, k):<13}"
+                                        for k, _ in kisiler))
+
     print("\n" + CIZGI)
     print("NOT: Ünsüz yumuşaması, ünlü düşmesi ve aorist düzensizlikleri")
     print("küratörlü listelerle sınırlıdır (kural-genelleme değil). İsim tamlaması")
-    print("ve kişi ekli çekimler (biniyorum/biniyorsun/…) bilinçli olarak kapsam")
-    print("dışıdır.")
+    print("ve emir/istek/şart kipleri bilinçli olarak kapsam dışıdır.")
     print(CIZGI)
 
 

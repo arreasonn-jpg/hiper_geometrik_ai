@@ -206,8 +206,8 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   7+1 bağımsız sinyalle puanlama, VALID/CONFLICT/INVALID durum makinesi,
   Conflict→Exploration çözücüsü, konsolidasyon, metin/olay üretimi (v0.2,
   Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması +
-  ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + 3. tekil fiil
-  çekimleri: geçmiş/şimdiki/gelecek/geniş zaman),
+  ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + fiil çekimi
+  (6 kişi × geçmiş/şimdiki/gelecek/geniş zaman),
   cümle/dosya→üçlü ayıklayıcı + `REAL_DATA` aktarımı, information-gain (v0.3),
   deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
   sürekli öğrenme döngüsü (v1.0), ground-truth benchmark ve dış korpus borusu
@@ -241,7 +241,7 @@ python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + k
 python experiments/experience_loop/run_ablation.py    # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
 python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → görülmeyen olguya genelleme (torch)
-python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + fiil çekimleri
+python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + fiil çekimi (6 kişi)
 python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sözlük büyütme → REAL_DATA
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
