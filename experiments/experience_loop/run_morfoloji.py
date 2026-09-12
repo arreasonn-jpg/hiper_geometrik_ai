@@ -7,7 +7,7 @@ HGA Experience Engine — Türkçe Morfoloji Demosu (v1.0+)
     1. Ünlü düşmesi        — burun→burna, şehir→şehri (sesliyle başlayan ekte)
     2. İyelik ekleri        — 6 kişi (benim/senin/onun/bizim/sizin/onların)
     3. İyelik + durum       — evi→evine (3. tekil sonrası 'n' ara harfi)
-    4. Geçmiş zaman 3. t.   — bin→bindi, bak→baktı, gör→gördü
+    4. Fiil çekimleri       — geçmiş/şimdiki/gelecek/geniş zaman 3. tekil
 
 Çalıştırma (torch gerekmez):
     python experiments/experience_loop/run_morfoloji.py
@@ -21,7 +21,8 @@ if KOK not in sys.path:
 
 from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E402
                             ayrilma_eki, iyelik_eki, iyelik_li_durum,
-                            gecmis_zaman_3tekil)
+                            gecmis_zaman_3tekil, simdiki_zaman_3tekil,
+                            gelecek_zaman_3tekil, genis_zaman_3tekil)
 
 CIZGI = "=" * 74
 
@@ -56,15 +57,20 @@ def main():
               f"{iyelik_li_durum(w, '3t', 'bulunma'):<14} "
               f"{iyelik_li_durum(w, '3t', 'ayrilma'):<14}")
 
-    print("\n4) Görülen geçmiş zaman 3. tekil çekimi:")
+    print("\n4) Fiil çekimleri (geçmiş/şimdiki/gelecek/geniş zaman 3. tekil):")
     kokler = ["bin", "bak", "git", "sev", "gel", "gör", "dur", "oku",
-              "bakmak", "gelmek", "yapmak"]
-    print("   " + "  ".join(f"{k}→{gecmis_zaman_3tekil(k)}" for k in kokler))
+              "bekle", "ye", "et", "otur"]
+    print(f"   {'kök':<8} {'geçmiş':<10} {'şimdiki':<10} {'gelecek':<10} {'geniş':<10}")
+    for k in kokler:
+        print(f"   {k:<8} {gecmis_zaman_3tekil(k):<10} "
+              f"{simdiki_zaman_3tekil(k):<10} {gelecek_zaman_3tekil(k):<10} "
+              f"{genis_zaman_3tekil(k):<10}")
 
     print("\n" + CIZGI)
-    print("NOT: Ünsüz yumuşaması ve ünlü düşmesi küratörlü listelerle sınırlıdır")
-    print("(kural-genelleme değil). İsim tamlaması ve geniş/şimdiki/gelecek zaman")
-    print("çekimleri bilinçli olarak kapsam dışıdır.")
+    print("NOT: Ünsüz yumuşaması, ünlü düşmesi ve aorist düzensizlikleri")
+    print("küratörlü listelerle sınırlıdır (kural-genelleme değil). İsim tamlaması")
+    print("ve kişi ekli çekimler (biniyorum/biniyorsun/…) bilinçli olarak kapsam")
+    print("dışıdır.")
     print(CIZGI)
 
 

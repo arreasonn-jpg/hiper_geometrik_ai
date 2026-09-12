@@ -17,6 +17,8 @@ from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E40
                             ayrilma_eki, cogul_eki, unsuz_yumusat,
                             unlu_dusmesi, iyelik_eki, iyelik_li_durum,
                             gecmis_zaman_3tekil,
+                            simdiki_zaman_3tekil, gelecek_zaman_3tekil,
+                            genis_zaman_3tekil,
                             hece_sayisi, son_unlu, kucult)
 
 
@@ -199,6 +201,74 @@ def test_gecmis_zaman_3tekil():
     assert gecmis_zaman_3tekil("bakmak") == "baktı"
     assert gecmis_zaman_3tekil("gelmek") == "geldi"
     assert gecmis_zaman_3tekil("") == ""
+
+
+# ── Şimdiki zaman 3. tekil ───────────────────────────────────────────────────
+def test_simdiki_zaman_3tekil():
+    assert simdiki_zaman_3tekil("bin") == "biniyor"
+    assert simdiki_zaman_3tekil("bak") == "bakıyor"      # kalın düz → -ıyor
+    assert simdiki_zaman_3tekil("gör") == "görüyor"      # ince yuvarlak → -üyor
+    assert simdiki_zaman_3tekil("dur") == "duruyor"      # kalın yuvarlak → -uyor
+    assert simdiki_zaman_3tekil("gel") == "geliyor"
+    # sesliyle biten kök: son ünlü düşer, uyum onunla belirlenir
+    assert simdiki_zaman_3tekil("oku") == "okuyor"
+    assert simdiki_zaman_3tekil("bekle") == "bekliyor"
+    assert simdiki_zaman_3tekil("başla") == "başlıyor"
+    assert simdiki_zaman_3tekil("yürü") == "yürüyor"
+    assert simdiki_zaman_3tekil("ye") == "yiyor"
+    # ünsüz yumuşaması (git→gid-, et→ed-)
+    assert simdiki_zaman_3tekil("git") == "gidiyor"
+    assert simdiki_zaman_3tekil("et") == "ediyor"
+    assert simdiki_zaman_3tekil("yazmak") == "yazıyor"   # mastar düşer
+    assert simdiki_zaman_3tekil("") == ""
+
+
+# ── Gelecek zaman 3. tekil ───────────────────────────────────────────────────
+def test_gelecek_zaman_3tekil():
+    assert gelecek_zaman_3tekil("bin") == "binecek"
+    assert gelecek_zaman_3tekil("bak") == "bakacak"      # kalın → -acak
+    assert gelecek_zaman_3tekil("gör") == "görecek"
+    assert gelecek_zaman_3tekil("gel") == "gelecek"
+    # sesliyle biten kökte 'y' kaynaştırma
+    assert gelecek_zaman_3tekil("oku") == "okuyacak"
+    assert gelecek_zaman_3tekil("bekle") == "bekleyecek"
+    # de-/ye- düzensiz kökleri (kaynaştırma öncesi gövde değişir)
+    assert gelecek_zaman_3tekil("ye") == "yiyecek"
+    assert gelecek_zaman_3tekil("de") == "diyecek"
+    # ünsüz yumuşaması
+    assert gelecek_zaman_3tekil("git") == "gidecek"
+    assert gelecek_zaman_3tekil("et") == "edecek"
+    assert gelecek_zaman_3tekil("yazmak") == "yazacak"
+    assert gelecek_zaman_3tekil("") == ""
+
+
+# ── Geniş zaman (aorist) 3. tekil ────────────────────────────────────────────
+def test_genis_zaman_3tekil():
+    # tek heceli → -ar/-er
+    assert genis_zaman_3tekil("bak") == "bakar"
+    assert genis_zaman_3tekil("yaz") == "yazar"
+    assert genis_zaman_3tekil("koş") == "koşar"
+    assert genis_zaman_3tekil("gül") == "güler"
+    # tek heceli -ır/-ir/-ur/-ür düzensiz kümesi
+    assert genis_zaman_3tekil("gel") == "gelir"
+    assert genis_zaman_3tekil("gör") == "görür"
+    assert genis_zaman_3tekil("al") == "alır"
+    assert genis_zaman_3tekil("dur") == "durur"
+    # sesliyle biten kök → -r
+    assert genis_zaman_3tekil("oku") == "okur"
+    assert genis_zaman_3tekil("bekle") == "bekler"
+    assert genis_zaman_3tekil("başla") == "başlar"
+    # çok heceli ünsüzle biten → -ır/-ir/-ur/-ür
+    assert genis_zaman_3tekil("otur") == "oturur"
+    assert genis_zaman_3tekil("çalış") == "çalışır"
+    assert genis_zaman_3tekil("konuş") == "konuşur"
+    # tam biçimli düzensizler
+    assert genis_zaman_3tekil("git") == "gider"
+    assert genis_zaman_3tekil("et") == "eder"
+    assert genis_zaman_3tekil("ye") == "yer"
+    assert genis_zaman_3tekil("de") == "der"
+    assert genis_zaman_3tekil("bakmak") == "bakar"
+    assert genis_zaman_3tekil("") == ""
 
 
 if __name__ == "__main__":

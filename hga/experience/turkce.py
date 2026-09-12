@@ -22,6 +22,13 @@ morfoloji parçasını doğru uygular:
       arabasına).
     * görülen geçmiş zaman 3. tekil fiil çekimi (-dı/-di/-du/-dü; ötümsüzden
       sonra -tı/-ti/-tu/-tü): bin→bindi, bak→baktı, gör→gördü.
+    * şimdiki zaman 3. tekil (-ıyor/-iyor/-uyor/-üyor; sesliyle biten kökte son
+      ünlü düşer): bin→biniyor, bak→bakıyor, gör→görüyor, oku→okuyor,
+      bekle→bekliyor, ye→yiyor.
+    * gelecek zaman 3. tekil (-acak/-ecek + kaynaştırma y): bin→binecek,
+      bak→bakacak, gör→görecek, oku→okuyacak, ye→yiyecek.
+    * geniş zaman 3. tekil (aorist; düzensizlikler küratörlü): bak→bakar,
+      gel→gelir, gör→görür, oku→okur, git→gider, ye→yer.
     * özel isimlerde kesme işareti (').
 
 KAPSAM VE DÜRÜST SINIRLAR (bilinçli):
@@ -29,8 +36,12 @@ KAPSAM VE DÜRÜST SINIRLAR (bilinçli):
       istisna listeleriyle sınırlı bir yaklaşımdır; Türkçede tek heceli
       sözcükler (top→topa, at→ata, ama kap→kaba, renk→renge) ve alıntılar
       (saat→saate) düzensizdir.
-    * İsim tamlamaları (belirtili/belirtisiz), geniş zaman/şimdiki zaman/
-      gelecek zaman çekimleri ve kişi ekli fiil çekimleri uygulanmaz.
+    * Fiil çekimleri yalnızca 3. tekil kişiyledir; kişi ekli çekimler
+      (biniyorum/biniyorsun/…) ve isim tamlamaları (belirtili/belirtisiz)
+      uygulanmaz. Şimdiki/gelecek/geniş zamanda fiil kökü ünsüz yumuşaması
+      (git→gid-, et→ed-) yalnızca küratörlü tek heceli istisnalar + çok heceli
+      kuralıyla sınırlıdır; aorist'in -ar/-er ↔ -ır/-ir dağılımı düzensizdir
+      ve küratörlü listeyle taşınır.
     * Fonksiyonlar büyük/küçük harfi DEĞİŞTİRMEZ; cümle içinde cins isimler
       çağıran tarafından küçük harfe çevrilerek verilir.
 """
@@ -85,6 +96,26 @@ UNLU_DUSMESI = {
 # İyelik (sahiplik) kişi kodları → ek kuralı açıklaması.
 #   1t/2t/3t: benim/senin/onun (tekil)  1c/2c/3c: bizim/sizin/onların (çoğul)
 IYELIK_KISILER = ("1t", "2t", "3t", "1c", "2c", "3c")
+
+# ── Fiil çekimi (şimdiki/gelecek/geniş zaman) için küratörlü düzensizlikler ──
+# Tek heceli olup sesliyle başlayan ekten önce YUMUŞAYAN fiil kökleri
+# (git→gid-, et→ed-, tat→tad-, güt→güd-; düzensiz — küratörlü liste).
+FIIL_YUMUSAMA_TEK_HECELI = {
+    "git": "gid", "et": "ed", "tat": "tad", "güt": "güd",
+}
+# Şimdiki/gelecek zamanın kaynaştırma-y'si öncesinde kökü değişen düzensiz
+# fiiller (demek→diyecek, yemek→yiyecek).
+GELECEK_DUZENSIZ = {"de": "di", "ye": "yi"}
+# Aorist (geniş zaman) 3. tekil tam biçimleri: düzensiz tek heceli fiiller.
+GENIS_DUZENSIZ = {
+    "de": "der", "ye": "yer", "git": "gider", "et": "eder", "tat": "tadar",
+}
+# Aorist'te -ar/-er yerine -ır/-ir/-ur/-ür alan tek heceli fiil kökleri
+# (al→alır, gel→gelir, gör→görür, … — Türkçenin düzensiz aorist kümesi).
+GENIS_IR_ISTISNALARI = {
+    "al", "bil", "bul", "dur", "gel", "gör", "kal", "ol", "öl",
+    "san", "var", "ver", "vur", "yen",
+}
 
 
 def son_unlu(kelime: str) -> str:
@@ -350,3 +381,119 @@ def gecmis_zaman_3tekil(koku: str) -> str:
     if u in KALIN:
         return f"{k}{once}{'u' if u in YUVARLAK else 'ı'}"
     return f"{k}{once}{'ü' if u in YUVARLAK else 'i'}"
+
+
+# ── Fiil çekimi (şimdiki / gelecek / geniş zaman 3. tekil) ──────────────────
+def _mastar_dusur(koku: str) -> str:
+    """'-mak/-mek' mastarını düşürür (yoksa kök aynen döner)."""
+    k = (koku or "").strip()
+    if len(k) > 3 and k.lower().endswith(("mak", "mek")):
+        return k[:-3]
+    return k
+
+
+def _fiil_yumusat(kok: str) -> str:
+    """Sesliyle başlayan ek öncesinde fiil kökünü hazırla (ünsüz yumuşaması).
+
+    Tek heceli fiiller genelde yumuşamaz; yalnızca küratörlü istisnalar
+    (git→gid, et→ed, tat→tad, güt→güd) yumuşar. Çok heceli köklerde p/ç/t/k
+    → b/c/d/ğ kuralı uygulanır (bahset→bahsed).
+    """
+    k = (kok or "").strip()
+    if not k:
+        return k
+    anahtar = k.lower()
+    if anahtar in FIIL_YUMUSAMA_TEK_HECELI:
+        return k[:-1] + FIIL_YUMUSAMA_TEK_HECELI[anahtar][-1]
+    if hece_sayisi(anahtar) >= 2 and anahtar[-1] in YUMUSAMA:
+        return k[:-1] + YUMUSAMA[anahtar[-1]]
+    return k
+
+
+def _dortlu(u: str) -> str:
+    """4-yönlü ünlü uyumu: a/ı→ı, e/i→i, o/u→u, ö/ü→ü."""
+    if u in YUVARLAK:
+        return "ü" if u in INCE else "u"
+    return "i" if u in INCE else "ı"
+
+
+def _bas_harf_koru(kaynak: str, hedef: str) -> str:
+    """`hedef`i `kaynak`ın ilk harfinin büyüklüğüne uydur (küratörlü dönüşümlerde)."""
+    if not kaynak or not hedef:
+        return hedef
+    if kaynak[0].isupper():
+        return hedef[0].upper() + hedef[1:]
+    return hedef[0].lower() + hedef[1:]
+
+
+def simdiki_zaman_3tekil(koku: str) -> str:
+    """Fiil köküne şimdiki zaman 3. tekil eki ekle (-ıyor/-iyor/-uyor/-üyor).
+
+    Sesliyle biten kökte son ünlü DÜŞER ve uyum o ünlüyle belirlenir
+    (oku→okuyor, bekle→bekliyor, ye→yiyor); ünsüzle biten kökte ünsüz
+    yumuşaması uygulanır (git→gidiyor, et→ediyor). Kök '-mak/-mek' mastarıyla
+    verilirse düşürülür.
+    """
+    k = _mastar_dusur(koku)
+    if not k:
+        return ""
+    anahtar = k.lower()
+    if _sesliyle_bitiyor(k):
+        govde = k[:-1]
+        u = anahtar[-1]          # düşen ünlü uyumu belirler
+    else:
+        govde = _fiil_yumusat(k)
+        u = son_unlu(govde)
+    return f"{govde}{_dortlu(u)}yor"
+
+
+def gelecek_zaman_3tekil(koku: str) -> str:
+    """Fiil köküne gelecek zaman 3. tekil eki ekle (-acak/-ecek).
+
+    Sesliyle biten kökte 'y' kaynaştırma (oku→okuyacak, bekle→bekleyecek);
+    de-/ye- düzensiz köklerinde kaynaştırma öncesi gövde değişir
+    (ye→yiyecek, de→diyecek). Ünsüzle biten kökte ünsüz yumuşaması uygulanır
+    (git→gidecek, et→edecek). 2-yönlü uyum: kalın→-acak, ince→-ecek.
+    """
+    k = _mastar_dusur(koku)
+    if not k:
+        return ""
+    anahtar = k.lower()
+    if _sesliyle_bitiyor(k):
+        if anahtar in GELECEK_DUZENSIZ:
+            govde = _bas_harf_koru(k, GELECEK_DUZENSIZ[anahtar])
+        else:
+            govde = k
+        u = anahtar[-1]
+        y = "y"
+    else:
+        govde = _fiil_yumusat(k)
+        u = son_unlu(govde)
+        y = ""
+    ek = "acak" if u in KALIN else "ecek"
+    return f"{govde}{y}{ek}"
+
+
+def genis_zaman_3tekil(koku: str) -> str:
+    """Fiil köküne geniş zaman (aorist) 3. tekil eki ekle.
+
+    Düzenli kural: çok heceli kökler -ır/-ir/-ur/-ür (otur→oturur,
+    çalış→çalışır), tek heceli kökler -ar/-er (bak→bakar, yaz→yazar),
+    sesliyle biten kökler -r (oku→okur, bekle→bekler). DÜZENSİZLİKLER
+    küratörlüdür: tek heceli -ır kümesi (al→alır, gel→gelir, gör→görür),
+    tam biçimli düzensizler (git→gider, et→eder, ye→yer, de→der).
+    """
+    k = _mastar_dusur(koku)
+    if not k:
+        return ""
+    anahtar = k.lower()
+    if anahtar in GENIS_DUZENSIZ:
+        return _bas_harf_koru(k, GENIS_DUZENSIZ[anahtar])
+    if _sesliyle_bitiyor(k):
+        return f"{k}r"                        # sesli kök → -r (oku→okur)
+    govde = _fiil_yumusat(k)
+    u = son_unlu(govde)
+    if hece_sayisi(anahtar) >= 2 or anahtar in GENIS_IR_ISTISNALARI:
+        return f"{govde}{_dortlu(u)}r"        # -ır/-ir/-ur/-ür
+    ek = "ar" if u in KALIN else "er"          # tek heceli → -ar/-er
+    return f"{govde}{ek}"

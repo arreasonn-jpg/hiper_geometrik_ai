@@ -6,6 +6,8 @@ from .text_generator import TextGenerator
 from .turkce import (yonelme_eki, belirtme_eki, bulunma_eki, ayrilma_eki,
                      cogul_eki, unsuz_yumusat, unlu_dusmesi, iyelik_eki,
                      iyelik_li_durum, gecmis_zaman_3tekil,
+                     simdiki_zaman_3tekil, gelecek_zaman_3tekil,
+                     genis_zaman_3tekil,
                      hece_sayisi, son_unlu, kucult)
 from .mini_env import AritmetikOrtam
 from .evaluator import ExperienceEvaluator, VARSAYILAN_ESIKLER
@@ -40,6 +42,9 @@ __all__ = [
     "iyelik_eki",
     "iyelik_li_durum",
     "gecmis_zaman_3tekil",
+    "simdiki_zaman_3tekil",
+    "gelecek_zaman_3tekil",
+    "genis_zaman_3tekil",
     "hece_sayisi",
     "son_unlu",
     "kucult",

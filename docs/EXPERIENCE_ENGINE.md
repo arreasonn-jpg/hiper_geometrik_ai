@@ -43,7 +43,8 @@ hiper_geometrik_ai/
 │   │   ├── text_generator.py      # TextGenerator — üçlüden metin/olay üretimi (§19 v0.2)
 │   │   ├── turkce.py              # Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma/çoğul
 │   │   │                          #   + ünsüz yumuşaması + ünlü düşmesi + iyelik (6 kişi)
-│   │   │                          #   + iyelik+durum zinciri + geçmiş zaman 3. tekil
+│   │   │                          #   + iyelik+durum zinciri + fiil çekimi (3. tekil:
+│   │   │                          #   geçmiş/şimdiki/gelecek/geniş zaman)
 │   │   ├── cumle_ayiklayici.py    # Cümle → üçlü + REAL_DATA aktarımı (döngünün "gerçek veri" aşaması)
 │   │   ├── corpus.py              # metin dosyasından cümle → üçlü → REAL_DATA
 │   │   ├── sozluk_buyutme.py      # gerçek korpustan yeni VARLIK desenleri (ilişki uydurmaz)
@@ -108,7 +109,7 @@ hiper_geometrik_ai/
 │       ├── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
 │       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
 │       ├── run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
-│       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + geçmiş zaman demosu
+│       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + fiil çekimleri demosu
 │       └── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
@@ -152,7 +153,7 @@ python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN se
 python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
 python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
-python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + geçmiş zaman
+python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + fiil çekimleri
 python experiments/experience_loop/run_korpus_boru.py  # veri toplayıcı → sözlük büyütme → REAL_DATA
 
 # Komut satırı (tek yüz)
@@ -163,7 +164,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 144 test: 23 çekirdek + 121 Experience Engine
+python -m pytest -q            # 147 test: 23 çekirdek + 124 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -193,8 +194,11 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
 - **Tam morfoloji (v1.0+):** `turkce.py`'ye ünlü düşmesi (burun→burna,
   şehir→şehri; ünsüzle başlayan eklerde YOK: burunda), 6 kişilik iyelik ekleri
   (kitabım…kitapları), iyelik+durum zinciri (evi→evine 'n' ara harfi) ve
-  görülen geçmiş zaman 3. tekil çekimi (bin→bindi, bak→baktı, gör→gördü)
-  eklendi; ünsüz yumuşaması/ünlü düşmesi küratörlü listelerle sınırlı.
+  3. tekil fiil çekimleri — geçmiş (bin→bindi), şimdiki (bin→biniyor,
+  git→gidiyor, oku→okuyor), gelecek (bin→binecek, ye→yiyecek) ve geniş
+  zaman/aorist (bak→bakar, gel→gelir, gör→görür, git→gider, ye→yer)
+  eklendi; ünsüz yumuşaması/ünlü düşmesi/aorist düzensizlikleri küratörlü
+  listelerle sınırlı.
 - **Dış korpus borusu (v1.0+):** `veri_toplayici.py`'nin `metni_kaydet` çıktısı
   (`turkce_metin.txt`) `korpus_boru.py` üzerinden okunur: cümlelere bölünür,
   sözlük bilinen fiil desenleriyle büyütülür (yeni özne=insan, yeni nesne=
@@ -210,7 +214,7 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
   model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
   belgeli; bu yüzden gövde donuk tutulur.)
-- **Toplam:** `pytest` ile 144 test tek seferde geçti.
+- **Toplam:** `pytest` ile 147 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -309,10 +313,10 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 (`benchmark.py`) eklendi. Kalan gerçekçi adımlar:
 
 - **Tam morfoloji (tamamlandı):** `turkce.py`'ye ünlü düşmesi, 6 kişilik
-  iyelik ekleri + iyelik+durum zinciri ve görülen geçmiş zaman 3. tekil
-  çekimi eklendi. Kalan (bilinçli kapsam dışı): isim tamlamaları, geniş/
-  şimdiki/gelecek zaman ve kişi ekli fiil çekimleri, daha geniş istisna
-  listeleri (docstring'te belgeli).
+  iyelik ekleri + iyelik+durum zinciri ve 3. tekil fiil çekimleri
+  (geçmiş/şimdiki/gelecek/geniş zaman) eklendi. Kalan (bilinçli kapsam
+  dışı): isim tamlamaları ve kişi ekli fiil çekimleri (biniyorum/
+  biniyorsun/…), daha geniş istisna listeleri (docstring'te belgeli).
 - **Gerçek görev sinyali + ablasyon ölçekleme:** `GorevAblasyonu` aynı
   protokolü modelin `gen_kopru` çıktı yolu üzerinde, GERÇEK bir görevin
   (dizisel tamamlama) çapraz-entropi sinyaliyle birleştirdi: yoğun gövde
