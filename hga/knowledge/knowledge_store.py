@@ -36,14 +36,15 @@ class KnowledgeStore:
     def varlik_ekle(self, token: str, entity_type: str = "kavram",
                     properties: Optional[Dict[str, float]] = None,
                     entity_id: Optional[str] = None,
+                    ozel_isim: bool = False,
                     source: KaynakTuru = KaynakTuru.REAL_DATA,
                     confidence: float = 1.0,
                     context_tags: Optional[List[str]] = None) -> Entity:
         """Varlık ekle; `properties` tohum değerlerini PropertyIndex'e yaz."""
         v = self.entities.ekle(
             token=token, entity_type=entity_type, entity_id=entity_id,
-            properties=properties, source=source, confidence=confidence,
-            context_tags=context_tags)
+            is_ozel=ozel_isim, properties=properties, source=source,
+            confidence=confidence, context_tags=context_tags)
         for ad, deger in (properties or {}).items():
             self.properties.koy(v.entity_id, ad, deger, source=source,
                                 confidence=confidence)

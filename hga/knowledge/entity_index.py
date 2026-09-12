@@ -39,6 +39,7 @@ class EntityIndex:
     # ── Ekleme ───────────────────────────────────────────────────────────
     def ekle(self, token: str, entity_type: str = "kavram",
              entity_id: Optional[str] = None,
+             is_ozel: bool = False,
              properties: Optional[Dict[str, float]] = None,
              relations: Optional[List[str]] = None,
              source: KaynakTuru = KaynakTuru.REAL_DATA,
@@ -63,6 +64,7 @@ class EntityIndex:
             entity_id=entity_id,
             token=token.strip(),
             entity_type=entity_type,
+            is_ozel=bool(is_ozel),
             properties=dict(properties or {}),
             relations=list(relations or []),
             confidence=float(confidence),

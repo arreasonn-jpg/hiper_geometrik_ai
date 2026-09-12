@@ -35,7 +35,7 @@ def test_text_generator_binmek():
     from hga.knowledge import ExperienceCandidate
     a = ExperienceCandidate(experience_id="X", subject_id="E_001",
                             relation_id="R_001", object_id="E_002")
-    assert tg.cumle(k, a) == "Ali, Ata ile bindi."
+    assert tg.cumle(k, a) == "Ali ataya bindi."
 
 
 def test_text_generator_olay():
@@ -48,7 +48,20 @@ def test_text_generator_olay():
     assert olay["ozne"] == "Ali"
     assert olay["iliski"] == "Binmek"
     assert olay["nesne"] == "Araba"
-    assert olay["cumle"] == "Ali, Araba ile bindi."
+    assert olay["cumle"] == "Ali arabaya bindi."
+
+
+def test_text_generator_ozel_isim_kesme_isareti():
+    """Özel isim nesne → kesme işareti (Ata'ya) ve virgül."""
+    k = KnowledgeStore()
+    k.varlik_ekle("Ali", entity_type="insan", entity_id="E_001", ozel_isim=True)
+    k.varlik_ekle("Ata", entity_type="insan", entity_id="E_002", ozel_isim=True)
+    k.iliski_tanimla("Binmek", relation_id="R_001")
+    tg = TextGenerator()
+    from hga.knowledge import ExperienceCandidate
+    a = ExperienceCandidate(experience_id="X", subject_id="E_001",
+                            relation_id="R_001", object_id="E_002")
+    assert tg.cumle(k, a) == "Ali, Ata'ya bindi."
 
 
 def test_text_generator_ozel_uretec():

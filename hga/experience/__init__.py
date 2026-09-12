@@ -3,10 +3,14 @@
 from .scoring import Scoring, ScoreBreakdown, VARSAYILAN_AGIRLIKLAR
 from .generator import ExperienceGenerator
 from .text_generator import TextGenerator
+from .turkce import yonelme_eki, son_unlu, kucult
 from .mini_env import AritmetikOrtam
 from .evaluator import ExperienceEvaluator, VARSAYILAN_ESIKLER
 from .conflict import ConflictResolver, ConflictResolution
 from .consolidation import Consolidator, ConsolidationReport
+from .arastirma import ArastirmaKuyrugu, ArastirmaRaporu
+from .cumle_ayiklayici import (CumleAyiklayici, AyiklananUclu,
+                               cumlelerden_bilgi_aktar, ascii_norm)
 from .loop import DeneyimDongusu, AdimRaporu
 
 __all__ = [
@@ -15,6 +19,9 @@ __all__ = [
     "VARSAYILAN_AGIRLIKLAR",
     "ExperienceGenerator",
     "TextGenerator",
+    "yonelme_eki",
+    "son_unlu",
+    "kucult",
     "AritmetikOrtam",
     "ExperienceEvaluator",
     "VARSAYILAN_ESIKLER",
@@ -22,6 +29,12 @@ __all__ = [
     "ConflictResolution",
     "Consolidator",
     "ConsolidationReport",
+    "ArastirmaKuyrugu",
+    "ArastirmaRaporu",
+    "CumleAyiklayici",
+    "AyiklananUclu",
+    "cumlelerden_bilgi_aktar",
+    "ascii_norm",
     "DeneyimDongusu",
     "AdimRaporu",
 ]

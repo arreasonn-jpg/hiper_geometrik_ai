@@ -65,6 +65,7 @@ class Entity:
     entity_id: str                       # benzersiz kavram kimliği (E_001, ...)
     token: str                           # canonical_name (normalize edilmiş ad)
     entity_type: str = "kavram"          # kavram tipi: insan, hayvan, tasit, mekan, ...
+    is_ozel: bool = False                # özel isim mi? (morfoloji: Ali → Ali'ye)
     properties: Dict[str, float] = field(default_factory=dict)  # TOHUM değerler (PropertyIndex yetkili)
     relations: List[str] = field(default_factory=list)          # ilişkili relation_id'ler (tohum)
     confidence: float = 1.0              # varlığın kendisine duyulan güven [0,1]
