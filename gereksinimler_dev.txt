@@ -1,0 +1,3 @@
+# Geliştirici bağımlılıkları (test vb.)
+-r gereksinimler.txt
+pytest>=8.0

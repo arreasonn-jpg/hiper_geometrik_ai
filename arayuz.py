@@ -1,15 +1,46 @@
 # -*- coding: utf-8 -*-
-import sys, os, re, json, time, inspect, torch
+"""Hiper-Geometrik AI — Gradio sohbet arayüzü.
+
+Değişiklik geçmişi (önemli):
+- N_GEN dropdown artık GERÇEKTEN çalışıyor: seçim değişince model o boyutta
+  yeniden kurulur ve varsa ağırlığı yüklenir (eski sürümde dropdown değeri
+  hiçbir yerde kullanılmıyordu).
+- Sinir ağı üretiminden elle kelime yasağı listesi ('üç', 'bir', 've', ...)
+  kaldırıldı; bunun yerine ortak.metin_uret top-k örnekleme + genel tekrar
+  cezası kullanır.
+- Talimat verisi dosyası yoksa gömülü ZENGIN setine düşülür.
+"""
+import json
+import os
+import re
+import sys
+import time
 
 KOK = os.path.abspath(os.path.dirname(__file__))
-for p in [KOK, os.path.join(KOK, "mimari"), os.path.join(KOK, "egitim")]:
-    if p not in sys.path: sys.path.insert(0, p)
+if KOK not in sys.path:
+    sys.path.insert(0, KOK)
 
 import gradio as gr
-from kuresel_model import HiperGeometrikAI
-from tokenizer import GeometrikTokenizer
 
-SISTEM = {"model": None, "tok": None, "n_gen": 1000, "talimatlar": [], "loglar": []}
+import ortak
+from egitim.talimat_toplayici import ZENGIN
+from mimari.kuresel_model import HiperGeometrikAI  # noqa: F401  (referans/tutarlılık)
+from mimari.tokenizer import GeometrikTokenizer
+
+
+def _gradio_major():
+    """Gradio ana sürümü (css parametresinin yeri 6.0'da launch()'a taşındı)."""
+    try:
+        return int(gr.__version__.split(".")[0])
+    except (AttributeError, ValueError):
+        return 0
+
+
+SISTEM = {"model": None, "tok": None, "n_gen": 1000, "talimatlar": [], "loglar": [], "modeller": {}}
+
+# Jaccard benzerliğiyle talimat eşleştirmede kabul eşiği (elle ayarlanabilir).
+BENZERLIK_ESIGI = 0.40
+
 
 def log(m):
     s = f"[{time.strftime('%H:%M:%S')}] {m}"
@@ -17,18 +48,18 @@ def log(m):
     SISTEM["loglar"] = SISTEM["loglar"][-40:]
     return "\n".join(SISTEM["loglar"])
 
+
 def norm(t):
     """Türkçe metni eşleştirme için sadeleştir — güvenli replace ile."""
     t = (t or "").lower().strip()
     t = t.replace("'", " ").replace("\u2019", " ").replace("\u2018", " ")
-    # Tek tek replace (maketrans bozulmasın diye)
     repl = {
         "\u0131": "i",  # ı
-        "\u0130": "i",  # 
+        "\u0130": "i",  # İ
         "\u015f": "s",  # ş
         "\u015e": "s",  # Ş
         "\u011f": "g",  # ğ
-        "\u011e": "g",  # 
+        "\u011e": "g",  # Ğ
         "\u00fc": "u",  # ü
         "\u00dc": "u",  # Ü
         "\u00f6": "o",  # ö
@@ -43,24 +74,41 @@ def norm(t):
     t = t.replace("neresidir", "neresi")
     return t
 
-def model_olustur(vocab_size, n_gen=1000, baglam=8):
-    names = list(inspect.signature(HiperGeometrikAI.__init__).parameters.keys())
-    kw = {}
-    for k in ["sozluk_boyutu", "vocab_size", "sozluk_boyut"]:
-        if k in names: kw[k] = vocab_size; break
-    for k in ["n_gen", "gen_sayisi", "boyut"]:
-        if k in names: kw[k] = n_gen; break
-    for k in ["baglam_penceresi", "baglam", "context_length"]:
-        if k in names: kw[k] = baglam; break
-    for k in ["emb_dim", "embedding_dim"]:
-        if k in names: kw[k] = 64; break
-    for k in ["num_heads", "kafa_sayisi"]:
-        if k in names: kw[k] = 4; break
-    return HiperGeometrikAI(**kw)
+
+def model_yukle(n):
+    """Verilen boyut için model kurar (önbellekli), varsa ağırlığını yükler."""
+    if n in SISTEM["modeller"]:
+        SISTEM["model"] = SISTEM["modeller"][n]
+        SISTEM["n_gen"] = n
+        return SISTEM["model"]
+
+    model = ortak.model_olustur(len(SISTEM["tok"].sozluk), n, 8)
+    for yol in [ortak.model_yolu(n, talimat=True), ortak.model_yolu(n)]:
+        if os.path.exists(yol):
+            try:
+                ortak.agirlik_yukle(model, yol)
+                log(f"Model yüklendi: {os.path.basename(yol)}")
+                break
+            except Exception as e:
+                log(f"Uyarı {os.path.basename(yol)}: {e}")
+        else:
+            log(f"Ağırlık yok: {os.path.basename(yol)}")
+    model.eval()
+    SISTEM["modeller"][n] = model
+    SISTEM["model"] = model
+    SISTEM["n_gen"] = n
+    return model
+
+
+def model_degistir(n):
+    """N_GEN dropdown değişince çağrılır; modeli yeniden kurar/yükler."""
+    model_yukle(int(n))
+    log(f"Mimari değişti: n={n}")
+    return durum()
+
 
 def intent_cevap(mesaj):
     """Kural tabanlı + benzerlik: bilinen sorulara net cevap."""
-    q_raw = (mesaj or "").lower().strip()
     q = norm(mesaj)
 
     # Başkent
@@ -105,7 +153,7 @@ def intent_cevap(mesaj):
     if "gorusuruz" in q or "hosca" in q:
         return "Görüşmek üzere, kendinize iyi bakın.", 1.0
 
-    # Veri seti benzerliği
+    # Veri seti benzerliği (talimat_verisi.json'dan; dosya yoksa ZENGIN)
     best, best_score = None, 0.0
     q_set = set(q.split())
     for it in SISTEM["talimatlar"]:
@@ -120,7 +168,7 @@ def intent_cevap(mesaj):
             score += 0.55
         if score > best_score:
             best_score, best = score, it
-    if best and best_score >= 0.40:
+    if best and best_score >= BENZERLIK_ESIGI:
         cevap = (best.get("cevap") or "").strip()
         if not cevap:
             return None, best_score
@@ -130,75 +178,48 @@ def intent_cevap(mesaj):
         return guzel, best_score
     return None, best_score
 
+
 def baslat():
+    ortak.log_kur()
     tok = GeometrikTokenizer(8000)
-    sozluk = os.path.join(KOK, "sozluk.json")
-    korpus = os.path.join(KOK, "turkce_metin.txt")
+
+    sozluk = ortak.sozluk_yolu()
+    korpus = ortak.korpus_yolu()
     if os.path.exists(sozluk):
         tok.yukle(sozluk)
-        log(f"Kilitli sozluk yuklendi: {len(tok.sozluk)}")
+        log(f"Kilitli sözlük yüklendi: {len(tok.sozluk)}")
     elif os.path.exists(korpus):
         with open(korpus, "r", encoding="utf-8") as f:
             tok.fit(f.read(800000))
         tok.kaydet(sozluk)
-        log(f"Sozluk olusturuldu: {len(tok.sozluk)}")
+        log(f"Sözlük oluşturuldu: {len(tok.sozluk)}")
+    else:
+        tok.fit(" ".join(f"{it['soru']} {it['cevap']}" for it in ZENGIN))
+        log(f"⚠️ Veri yok; gömülü talimat setinden minik sözlük: {len(tok.sozluk)}")
     SISTEM["tok"] = tok
 
     talimat_yol = os.path.join(KOK, "talimat_verisi.json")
     if os.path.exists(talimat_yol):
         with open(talimat_yol, "r", encoding="utf-8") as f:
             SISTEM["talimatlar"] = json.load(f)
-    log(f"Talimat: {len(SISTEM['talimatlar'])} ornek")
+    else:
+        SISTEM["talimatlar"] = list(ZENGIN)  # dosya yoksa gömülü sete düş
+    log(f"Talimat: {len(SISTEM['talimatlar'])} örnek")
 
-    model = model_olustur(len(tok.sozluk), 1000, 8)
-    for ad in ["hiper_model_1000_talimat.pt", "hiper_model_1000.pt"]:
-        yol = os.path.join(KOK, ad)
-        if os.path.exists(yol):
-            try:
-                model.load_state_dict(torch.load(yol, map_location="cpu", weights_only=True), strict=False)
-                log(f"Model: {ad}")
-                break
-            except Exception as e:
-                log(f"Uyari {ad}: {e}")
-    model.eval()
-    SISTEM["model"] = model
+    model_yukle(1000)
+
 
 def sinir_agi_uret(prompt, max_token=24):
+    """Sinir ağı üretimi — ortak.metin_uret üzerinden (kelime yasağı yok)."""
     tok = SISTEM["tok"]
     model = SISTEM["model"]
     ids = tok.encode(prompt) or [2]
-    out = list(ids)
-    kelimeler = []
-    ban = set()
-    for w in ["üç", "bir", "ve", "için", "ile", "bu", "da", "de", "en", "her", "çok", "tck", "yil", "yıl"]:
-        if w in tok.sozluk:
-            ban.add(tok.sozluk[w])
-
-    with torch.inference_mode():
-        for step in range(max_token):
-            pencere = out[-8:]
-            pencere = [0] * (8 - len(pencere)) + pencere
-            logits = model(torch.tensor([pencere], dtype=torch.long))[0]
-            logits[:4] = -1e9
-            if step >= 2:
-                for b in ban:
-                    logits[b] -= 4.0
-            if len(out) >= 1:
-                logits[out[-1]] -= 6.0
-            nxt = int(torch.argmax(logits).item())
-            out.append(nxt)
-            w = tok.id_to_kelime.get(nxt, "")
-            if w in ("son", "soru", "cevap", "<eos>"):
-                break
-            if w and w not in ("<unk>", "<pad>", "<bos>"):
-                if kelimeler and kelimeler[-1] == w:
-                    continue
-                kelimeler.append(w)
-            if len(kelimeler) >= 16:
-                break
+    kelimeler = ortak.metin_uret(model, tok, ids, baglam=8, max_token=int(max_token),
+                                 sicaklik=0.7, top_k=40)
     return " ".join(kelimeler).strip()
 
-def chat(mesaj, history, n_gen, max_token, talimat_modu):
+
+def chat(mesaj, history, max_token, talimat_modu):
     history = history or []
     if not mesaj or not mesaj.strip():
         yield history, ""
@@ -229,15 +250,19 @@ def chat(mesaj, history, n_gen, max_token, talimat_modu):
     log(f"Neural: {mesaj[:40]}")
     yield history, ""
 
+
 def durum():
     n = len(SISTEM["tok"].sozluk) if SISTEM["tok"] else 0
+    model = SISTEM["model"]
+    param = f"{sum(p.numel() for p in model.parameters()):,}" if model else "-"
     return (
-        f"Mimari: {SISTEM['n_gen']}-Gen\n"
-        f"Sozluk: {n} kelime (KILITLI)\n"
-        f"Talimat: {len(SISTEM['talimatlar'])} ornek\n"
+        f"Mimari: {SISTEM['n_gen']}-Gen (~{param} parametre)\n"
+        f"Sözlük: {n} kelime (kilitli)\n"
+        f"Talimat: {len(SISTEM['talimatlar'])} örnek\n"
         f"Motor: Intent Match + Neural\n"
-        f"Surum: v13.1.1"
+        f"Sürüm: v14.0.0"
     )
+
 
 baslat()
 
@@ -247,50 +272,78 @@ body{background:#0a0a0f!important;color:#f3f4f6!important;font-family:Inter,sans
 .accent-title{background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
 """
 
-with gr.Blocks(title="Hiper-Geometrik AI v13.1.1") as demo:
+
+def _chatbot(**kwargs):
+    """Gradio 4/5 ('messages' tipi gerekli) ve 6+ (tek format) uyumlu Chatbot."""
+    try:
+        return gr.Chatbot(type="messages", **kwargs)
+    except TypeError:
+        return gr.Chatbot(**kwargs)
+
+
+# Gradio 6.0+ css'i launch()'a taşımıştır; 4/5'te yalnızca Blocks kurucusunda geçerlidir.
+_CSS_IN_LAUNCH = _gradio_major() >= 6
+_blocks_kwargs = dict(title="Hiper-Geometrik AI v14.0.0")
+if not _CSS_IN_LAUNCH:
+    _blocks_kwargs["css"] = CSS
+
+with gr.Blocks(**_blocks_kwargs) as demo:
     gr.HTML(
         "<div style='text-align:center'>"
-        "<h1 class='accent-title'>Hiper-Geometrik AI — v13.1.1</h1>"
-        "<p style='color:#9ca3af'>Kilitli Sozluk • Intent Match • Net Asistan Cevaplari</p>"
+        "<h1 class='accent-title'>Hiper-Geometrik AI — v14.0.0</h1>"
+        "<p style='color:#9ca3af'>Kilitli Sözlük • Intent Match • Net Asistan Cevapları</p>"
         "</div>"
     )
     with gr.Row():
         with gr.Column(scale=1):
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Model")
-                gen = gr.Dropdown([500, 1000, 2000], value=1000, label="N_GEN")
-                talimat = gr.Checkbox(True, label="Sohbet Asistani Modu")
+                gen = gr.Dropdown(
+                    [500, 1000, 2000], value=1000, label="N_GEN (model boyutu)",
+                    info="Değiştirince model yeniden kurulur ve ağırlığı yüklenir (varsa).",
+                )
+                talimat = gr.Checkbox(True, label="Sohbet Asistanı Modu")
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Durum")
                 st = gr.Textbox(value=durum(), lines=6, interactive=False)
                 gr.Button("Yenile", size="sm").click(durum, None, st)
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Log")
-                gr.Textbox(value=log("Hazir"), lines=7, interactive=False)
+                gr.Textbox(value=log("Hazır"), lines=7, interactive=False)
         with gr.Column(scale=3):
-            chatbox = gr.Chatbot(label="Canli Sohbet", height=520)
+            chatbox = _chatbot(label="Canlı Sohbet", height=520)
             with gr.Row():
                 msg = gr.Textbox(
-                    placeholder="Orn: Turkiye'nin baskenti neresidir?",
+                    placeholder="Örn: Türkiye'nin başkenti neresidir?",
                     scale=8,
                     show_label=False,
                     container=False,
                 )
-                btn = gr.Button("Gonder", scale=2, variant="primary")
+                btn = gr.Button("Gönder", scale=2, variant="primary")
             with gr.Row():
                 gr.Button("Temizle", size="sm").click(lambda: ([], ""), None, [chatbox, msg])
-                b1 = gr.Button("Merhaba, nasilsin?", size="sm")
-                b2 = gr.Button("Turkiye'nin baskenti neresidir?", size="sm")
+                b1 = gr.Button("Merhaba, nasılsın?", size="sm")
+                b2 = gr.Button("Türkiye'nin başkenti neresidir?", size="sm")
                 b3 = gr.Button("Duygu nedir?", size="sm")
                 b4 = gr.Button("Yapay zeka nedir?", size="sm")
             with gr.Accordion("Parametreler", open=False):
                 max_tok = gr.Slider(8, 60, value=24, step=1, label="Max Kelime")
-            b1.click(lambda: "Merhaba, nasilsin?", None, msg)
-            b2.click(lambda: "Turkiye'nin baskenti neresidir?", None, msg)
+            b1.click(lambda: "Merhaba, nasılsın?", None, msg)
+            b2.click(lambda: "Türkiye'nin başkenti neresidir?", None, msg)
             b3.click(lambda: "Duygu nedir?", None, msg)
             b4.click(lambda: "Yapay zeka nedir?", None, msg)
-            btn.click(chat, [msg, chatbox, gen, max_tok, talimat], [chatbox, msg])
-            msg.submit(chat, [msg, chatbox, gen, max_tok, talimat], [chatbox, msg])
+            # N_GEN dropdown artık gerçek: değişim → model_degistir
+            gen.change(model_degistir, gen, st)
+            btn.click(chat, [msg, chatbox, max_tok, talimat], [chatbox, msg])
+            msg.submit(chat, [msg, chatbox, max_tok, talimat], [chatbox, msg])
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, inbrowser=True, css=CSS)
+    launch_kwargs = dict(
+        server_name=os.environ.get("GRADIO_SERVER_NAME", "127.0.0.1"),
+        server_port=int(os.environ.get("GRADIO_SERVER_PORT", "7860")),
+        inbrowser=True,
+        show_error=True,
+    )
+    if _CSS_IN_LAUNCH:
+        launch_kwargs["css"] = CSS
+    demo.launch(**launch_kwargs)

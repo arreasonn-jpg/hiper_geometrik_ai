@@ -1,5 +1,10 @@
-﻿# -*- coding: utf-8 -*-
-import json, os
+# -*- coding: utf-8 -*-
+"""Gömülü talimat (soru–cevap) veri seti ve toplayıcı."""
+import json
+import logging
+import os
+
+log = logging.getLogger("hiper.talimat")
 
 ZENGIN = [
     {"soru": "merhaba", "cevap": "merhaba ben hiper geometrik yapay zekayım size nasıl yardımcı olabilirim"},
@@ -31,14 +36,43 @@ ZENGIN = [
     {"soru": "su kaç derecede kaynar", "cevap": "su deniz seviyesinde yüz derecede kaynar"},
     {"soru": "beş ile yedinin çarpımı", "cevap": "beş ile yedinin çarpımı otuz beştir"},
     {"soru": "nasıl çalışırsın", "cevap": "hiper küresel fraktal mimari ve çok kafalı dikkat ile türkçe metin işlerim"},
-    {"soru": "ne yapıyorsun", "cevap": "sizinle sohbet ediyorum ve sorularınızı cevaplıyorum"}
+    {"soru": "ne yapıyorsun", "cevap": "sizinle sohbet ediyorum ve sorularınızı cevaplıyorum"},
 ]
 
+
 class TalimatToplayici:
+    """Talimat (soru–cevap) veri setini yönetir.
+
+    Dürüst davranış: ``hazirla_veya_yukle()`` dosya VARSA onu yükler ve asla
+    ezmez; dosya yoksa (veya bozuksa) gömülü ``ZENGIN`` setiyle oluşturur.
+    Eski sürüm, dosyanın varlığını hiç kontrol etmediği için kullanıcının
+    ``talimat_verisi.json`` dosyasına elle eklediği örnekler her eğitimde
+    sessizce siliniyordu.
+    """
+
     def __init__(self, dosya_yolu="talimat_verisi.json"):
         self.dosya_yolu = dosya_yolu
-    def hazirla_veya_yukle(self):
+
+    def hazirla_veya_yukle(self, sifirla=False):
+        """Mevcut dosyayı yükler; yoksa varsayılan setle oluşturur.
+
+        ``sifirla=True`` verilirse dosya var olsa bile varsayılan ``ZENGIN``
+        setiyle yeniden yazılır (fabrika ayarlarına dönüş).
+        """
+        if not sifirla and os.path.exists(self.dosya_yolu):
+            try:
+                with open(self.dosya_yolu, "r", encoding="utf-8") as f:
+                    veri = json.load(f)
+                if isinstance(veri, list) and veri:
+                    log.info("Mevcut talimat seti yüklendi: %d örnek (%s)",
+                             len(veri), self.dosya_yolu)
+                    return veri
+                log.warning("talimat_verisi.json boş/geçersiz; varsayılanla yeniden oluşturuluyor.")
+            except (json.JSONDecodeError, OSError) as e:
+                log.warning("talimat_verisi.json okunamadı (%s); varsayılanla yeniden oluşturuluyor.", e)
+
         with open(self.dosya_yolu, "w", encoding="utf-8") as f:
             json.dump(ZENGIN, f, ensure_ascii=False, indent=2)
-        print(f"✅ Talimat seti: {len(ZENGIN)} örnek")
+        log.info("Varsayılan talimat seti oluşturuldu: %d örnek → %s",
+                 len(ZENGIN), self.dosya_yolu)
         return ZENGIN

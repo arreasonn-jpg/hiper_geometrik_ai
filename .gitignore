@@ -1,5 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Büyük model ağırlıkları ve yedekler
 *.pt
 *.zip
-__pycache__/
-*.json
-*.txt
+
+# Eğitim/üretilmiş veri dosyaları (README'deki "Eğitim Akışı" ile yeniden üretilir).
+# DİKKAT: Burada kasıtlı olarak '*.txt' / '*.json' gibi genel kurallar YOKTUR;
+# eski '*.txt' kuralı gereksinimler.txt'yi de repodan dışlıyordu.
+turkce_metin.txt
+sozluk.json
+talimat_verisi.json
+yama_durumu.json
+bpe_tokenizer.json
+
+# Sanal ortamlar
+.venv/
+venv/

@@ -1,0 +1,9 @@
+# hiper_geometrik_ai — çalışma zamanı bağımlılıkları
+#
+# Not: numpy doğrudan hiçbir modülde kullanılmadığı için listelenmemiştir
+# (torch/pandas tarafından gerektiğinde dolaylı olarak kurulur).
+torch>=2.0
+gradio>=4.44
+requests>=2.28
+pyarrow>=14.0
+pandas>=2.0

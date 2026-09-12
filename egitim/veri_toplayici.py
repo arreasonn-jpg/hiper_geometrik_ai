@@ -1,14 +1,35 @@
-import requests
-import os
-import re
-import json
+# -*- coding: utf-8 -*-
+"""Türkçe korpus toplayıcı: Hugging Face veri setleri + Wikipedia.
+
+DÜRÜST NOT — üçüncü taraf bağımlılık: Varsayılan veri kaynağı, kişisel bir
+Hugging Face veri seti reposudur (``VARSAYILAN_REPO``). Bu repo silinir,
+gizlenir veya yapısı değişirse veri toplama akışı kırılabilir. Farklı bir
+kaynak için ``--repo`` argümanını veya ``--konu`` (Wikipedia) seçeneğini
+kullanın:
+
+    python -m egitim.veri_toplayici --repo baska/bir_dataset --kelime 40000
+    python -m egitim.veri_toplayici --konu "Türkiye" --konu "Ankara"
+"""
+import argparse
 import csv
 import io
-import pyarrow.parquet as pq
+import json
+import logging
+import os
+import re
+
 import pyarrow as pa
+import pyarrow.parquet as pq
+import requests
+
+log = logging.getLogger("hiper.veri")
+
+# Varsayılan üçüncü taraf veri kaynağı (bkz. README "Veri Kaynağı" bölümü).
+VARSAYILAN_REPO = "ShigeoKageyama/NLP_SUITE"
+
 
 class OtomatikVeriToplayici:
-    def __init__(self, proje_kok):
+    def __init__(self, proje_kok, repo_id=VARSAYILAN_REPO):
         self.proje_kok = proje_kok
         self.wiki_api = "https://tr.wikipedia.org/w/api.php"
         self.hf_api = "https://huggingface.co/api/datasets"
@@ -21,6 +42,7 @@ class OtomatikVeriToplayici:
         )
         self.durum_dosyasi = os.path.join(proje_kok, "yama_durumu.json")
         self.durum = self._durum_yukle()
+        self.durum["repo"] = self.durum.get("repo", repo_id)
 
     # ==========================================
     # YAMA DURUM YÖNETİMİ
@@ -33,7 +55,7 @@ class OtomatikVeriToplayici:
             except Exception:
                 pass
         return {
-            "repo": "ShigeoKageyama/NLP_SUITE",
+            "repo": VARSAYILAN_REPO,
             "islenen_dosyalar": [],
             "son_patch": 0,
             "toplam_cekilen_kelime": 0
@@ -45,16 +67,15 @@ class OtomatikVeriToplayici:
 
     def yama_raporu(self):
         islenen = self.durum.get("islenen_dosyalar", [])
-        print(f"\n[SİSTEM] 📦 YAMA DURUM RAPORU")
-        print(f"  Repo: {self.durum.get('repo')}")
-        print(f"  Son işlenen patch no: {self.durum.get('son_patch', 0)}")
-        print(f"  İşlenen dosya sayısı: {len(islenen)}")
-        print(f"  Toplam çekilen kelime: {self.durum.get('toplam_cekilen_kelime', 0)}")
+        log.info(f"\n[SİSTEM] 📦 YAMA DURUM RAPORU")
+        log.info(f"  Repo: {self.durum.get('repo')}")
+        log.info(f"  Son işlenen patch no: {self.durum.get('son_patch', 0)}")
+        log.info(f"  İşlenen dosya sayısı: {len(islenen)}")
+        log.info(f"  Toplam çekilen kelime: {self.durum.get('toplam_cekilen_kelime', 0)}")
         if islenen:
-            print(f"  Son 3 dosya:")
+            log.info(f"  Son 3 dosya:")
             for d in islenen[-3:]:
-                print(f"    - {d}")
-        print()
+                log.info(f"    - {d}")
 
     # ==========================================
     # KALİTE SÜZGECİ
@@ -129,9 +150,6 @@ class OtomatikVeriToplayici:
             return ""
 
     # ==========================================
-    # HF DOSYA LİSTELEME
-    # ==========================================
-    # ==========================================
     # HF DOSYA LİSTELEME (SAYFALAMA + RECURSIVE)
     # ==========================================
     def _hf_dosyalari_listele(self, repo_id):
@@ -161,7 +179,7 @@ class OtomatikVeriToplayici:
                 try:
                     yanit = requests.get(url, headers=self.headers, timeout=45)
                 except Exception as e:
-                    print(f"  [⚠️ HF TREE] {e}")
+                    log.warning(f"  [⚠️ HF TREE] {e}")
                     break
 
                 if yanit.status_code != 200:
@@ -176,7 +194,7 @@ class OtomatikVeriToplayici:
                             break
                     if yanit.status_code != 200:
                         if sayfa == 1 and not path_prefix:
-                            print(f"  [⚠️ HF TREE HTTP {yanit.status_code}] fallback siblings...")
+                            log.warning(f"  [⚠️ HF TREE HTTP {yanit.status_code}] fallback siblings...")
                         break
 
                 try:
@@ -216,13 +234,13 @@ class OtomatikVeriToplayici:
                         break
 
                 if sayfa > 200:  # güvenlik freni
-                    print("  [⚠️ HF TREE] 200 sayfa limitine ulaşıldı")
+                    log.warning("  [⚠️ HF TREE] 200 sayfa limitine ulaşıldı")
                     break
 
             return alt_klasorler
 
         # 1) Kök recursive tarama
-        print("  [📂 HF] Dosya ağacı taranıyor (recursive + sayfalama)...")
+        log.info("  [📂 HF] Dosya ağacı taranıyor (recursive + sayfalama)...")
         alt = _tree_sayfalari("")
 
         # 2) Fallback: siblings API
@@ -237,7 +255,7 @@ class OtomatikVeriToplayici:
                             if p:
                                 dosyalar.append(p)
             except Exception as e:
-                print(f"  [⚠️ siblings] {e}")
+                log.warning(f"  [⚠️ siblings] {e}")
 
         # 3) Hâlâ az dosya / sadece üst dizin: patch-8 tarzı iç içe klasörleri elle gez
         #    Özellikle AI-Training-Patch-N/data/<alt>/*.parquet
@@ -256,16 +274,15 @@ class OtomatikVeriToplayici:
         for pk in sorted(patch_kokleri):
             # data ve alt klasörler
             for prefix in (pk, f"{pk}/data"):
-                if prefix in gorulen_path or True:
-                    alt2 = _tree_sayfalari(prefix)
-                    # data altındaki her alt klasör (aym_bb, yargitay, ...)
-                    for klasor in alt2:
-                        if klasor.count("/") >= 2:  # Patch-x/data/yargitay
-                            _tree_sayfalari(klasor)
+                alt2 = _tree_sayfalari(prefix)
+                # data altındaki her alt klasör (aym_bb, yargitay, ...)
+                for klasor in alt2:
+                    if klasor.count("/") >= 2:  # Patch-x/data/yargitay
+                        _tree_sayfalari(klasor)
 
         # Sadece desteklenen uzantıları ayıklama ana fonksiyonda yapılıyor
         dosyalar = sorted(set(dosyalar))
-        print(f"  [📂 HF] Toplam listelenen dosya: {len(dosyalar)}")
+        log.info(f"  [📂 HF] Toplam listelenen dosya: {len(dosyalar)}")
         return dosyalar
 
     def _patch_no_bul(self, dosya_yolu):
@@ -326,7 +343,7 @@ class OtomatikVeriToplayici:
                     self.indirilen_toplam_bayt += len(resp.content)
                     return resp.content
             except Exception as e:
-                print(f"    [⚠️ RANGE READ] {e}")
+                log.warning(f"    [⚠️ RANGE READ] {e}")
             return b""
 
         def close(self):
@@ -398,7 +415,7 @@ class OtomatikVeriToplayici:
                 total_size = 500 * 1024 * 1024
 
             size_mb = total_size / (1024 * 1024)
-            print(f"    [📏 BOYUT] {size_mb:.1f} MB")
+            log.info(f"    [📏 BOYUT] {size_mb:.1f} MB")
 
             # 1. Footer'dan Şemayı Çek
             footer_boyut = 4 * 1024 * 1024  # 4 MB footer yeterlidir
@@ -406,11 +423,11 @@ class OtomatikVeriToplayici:
             headers_range = dict(self.headers)
             headers_range["Range"] = f"bytes={range_start}-{total_size - 1}"
 
-            print(f"    [📥 METADATA] Footer okunuyor...")
+            log.info(f"    [📥 METADATA] Footer okunuyor...")
             r = requests.get(raw_url, headers=headers_range, timeout=25)
 
             if r.status_code not in (200, 206):
-                print(f"    [⚠️] Range request desteklenmiyor (HTTP {r.status_code})")
+                log.warning(f"    [⚠️] Range request desteklenmiyor (HTTP {r.status_code})")
                 return "", 0
 
             footer_data = r.content
@@ -422,11 +439,11 @@ class OtomatikVeriToplayici:
                 pa_file = pa.PythonFile(reader, mode="r")
                 pf = pq.ParquetFile(pa_file)
 
-                print(f"    [📦 METADATA] Toplam: {pf.metadata.num_rows:,} satır")
+                log.info(f"    [📦 METADATA] Toplam: {pf.metadata.num_rows:,} satır")
 
                 hedef_sutunlar = self._en_iyi_metin_sutunlarini_sec(pf)
-                print(f"    [📋 SÜTUNLAR] Seçilen Türkçe Metin Sütunları: {hedef_sutunlar}")
-                print(f"    [⚡ CANLI AKIŞ] Satırlar taranıyor (Hedef: +{hedef_kelime - mevcut_kelime} kelime)...")
+                log.info(f"    [📋 SÜTUNLAR] Seçilen Türkçe Metin Sütunları: {hedef_sutunlar}")
+                log.info(f"    [⚡ CANLI AKIŞ] Satırlar taranıyor (Hedef: +{hedef_kelime - mevcut_kelime} kelime)...")
 
                 toplam_islenen_satir = 0
 
@@ -448,18 +465,18 @@ class OtomatikVeriToplayici:
                         if mevcut_kelime + ek_kelime >= hedef_kelime:
                             break
 
-                    print(f"      ↳ {toplam_islenen_satir:,} satır işlendi | +{ek_kelime:,} kaliteli kelime süzüldü")
+                    log.info(f"      ↳ {toplam_islenen_satir:,} satır işlendi | +{ek_kelime:,} kaliteli kelime süzüldü")
 
                     if mevcut_kelime + ek_kelime >= hedef_kelime:
-                        print(f"    [🎯 HEDEF TAMAMLANDI] Yeterli kelimeye ulaşıldı, akış durduruldu.")
+                        log.info(f"    [🎯 HEDEF TAMAMLANDI] Yeterli kelimeye ulaşıldı, akış durduruldu.")
                         break
 
                 indirilen_mb = reader.indirilen_toplam_bayt / (1024 * 1024)
                 tasarruf_orani = max(0.0, 100 * (1 - indirilen_mb / size_mb))
-                print(f"    [💾 TASARRUF] {size_mb:.1f} MB dosyadan sadece {indirilen_mb:.2f} MB veri çekildi! (%{tasarruf_orani:.2f} tasarruf)")
+                log.info(f"    [💾 TASARRUF] {size_mb:.1f} MB dosyadan sadece {indirilen_mb:.2f} MB veri çekildi! (%{tasarruf_orani:.2f} tasarruf)")
 
             except Exception as e:
-                print(f"    [⚠️ AKIŞ OKUMA HATASI] {e}")
+                log.warning(f"    [⚠️ AKIŞ OKUMA HATASI] {e}")
                 return "", 0
             finally:
                 try:
@@ -470,7 +487,7 @@ class OtomatikVeriToplayici:
             return " ".join(toplanan), ek_kelime
 
         except Exception as e:
-            print(f"    [⚠️ PARQUET GENEL HATASI] {e}")
+            log.warning(f"    [⚠️ PARQUET GENEL HATASI] {e}")
             return "", 0
 
     # ==========================================
@@ -504,7 +521,7 @@ class OtomatikVeriToplayici:
                             if mevcut_kelime + ek_kelime >= hedef_kelime:
                                 break
             except Exception as e:
-                print(f"    [⚠️ JSONL HATASI] {dosya_yolu}: {e}")
+                log.warning(f"    [⚠️ JSONL HATASI] {dosya_yolu}: {e}")
                 return "", 0
             return (" ".join(toplanan), ek_kelime)
 
@@ -524,48 +541,48 @@ class OtomatikVeriToplayici:
                             if mevcut_kelime + ek_kelime >= hedef_kelime:
                                 break
             except Exception as e:
-                print(f"    [⚠️ DOKÜMAN HATASI] {dosya_yolu}: {e}")
+                log.warning(f"    [⚠️ DOKÜMAN HATASI] {dosya_yolu}: {e}")
                 return "", 0
             return (" ".join(toplanan), ek_kelime)
 
     # ==========================================
     # YAMA ÇEKME VE İŞLEME
     # ==========================================
-    def huggingface_patch_cek(self, repo_id="ShigeoKageyama/NLP_SUITE", patch_secim="next",
+    def huggingface_patch_cek(self, repo_id=VARSAYILAN_REPO, patch_secim="next",
                                mevcut_metin="", hedef_kelime_limiti=40000):
         repo_id = repo_id.strip().rstrip("/")
         repo_id = re.sub(r"^https?://huggingface\.co/datasets/", "", repo_id)
         self.durum["repo"] = repo_id
 
-        print(f"\n  [🤗 MULTI-PATCH ENGINE] Repo: '{repo_id}' | Seçim: {patch_secim}")
-        print(f"  [🛡️ AKILLI MOTOR] Range Request + Streaming Batch Aktif")
+        log.info(f"\n  [🤗 MULTI-PATCH ENGINE] Repo: '{repo_id}' | Seçim: {patch_secim}")
+        log.info(f"  [🛡️ AKILLI MOTOR] Range Request + Streaming Batch Aktif")
 
         try:
             tum_dosyalar = self._hf_dosyalari_listele(repo_id)
         except Exception as e:
-            print(f"  [❌ LİSTE HATASI] {e}")
+            log.error(f"  [❌ LİSTE HATASI] {e}")
             return mevcut_metin
 
         uygun = [p for p in tum_dosyalar if os.path.splitext(p)[1].lower() in self.desteklenen_uzantilar]
 
         if not uygun:
-            print("  [⚠️] Desteklenen dosya bulunamadı.")
+            log.warning("  [⚠️] Desteklenen dosya bulunamadı.")
             return mevcut_metin
 
         if patch_secim not in ("next", "all"):
             try:
                 istenen = int(str(patch_secim).strip())
                 uygun = [p for p in uygun if self._patch_no_bul(p) == istenen]
-                print(f"  [🎯 FİLTRE] Sadece AI-Training-Patch-{istenen} → {len(uygun)} dosya")
+                log.info(f"  [🎯 FİLTRE] Sadece AI-Training-Patch-{istenen} → {len(uygun)} dosya")
                 if not uygun:
                     ipucu = [p for p in tum_dosyalar if self._patch_no_bul(p) == istenen
                              or f"Training-Patch-{istenen}" in p]
                     # uzantısız path'ler de (klasör)
-                    print(f"  [🔍] Ham tree'de Patch-{istenen} ile eşleşen path: {len(ipucu)}")
+                    log.info(f"  [🔍] Ham tree'de Patch-{istenen} ile eşleşen path: {len(ipucu)}")
                     for x in ipucu[:10]:
-                        print(f"      • {x}")
+                        log.info(f"      • {x}")
             except ValueError:
-                print("  [❌] Geçersiz patch no.")
+                log.error("  [❌] Geçersiz patch no.")
                 return mevcut_metin
 
         islenen_set = set(self.durum.get("islenen_dosyalar", []))
@@ -574,7 +591,7 @@ class OtomatikVeriToplayici:
         if patch_secim == "next":
             uygun = [p for p in uygun if p not in islenen_set]
             if not uygun:
-                print("  [✅] Tüm bilinen yama dosyaları daha önce işlenmiş!")
+                log.info("  [✅] Tüm bilinen yama dosyaları daha önce işlenmiş!")
                 self.yama_raporu()
                 return mevcut_metin
 
@@ -587,7 +604,7 @@ class OtomatikVeriToplayici:
                 continue
 
             patch_no = self._patch_no_bul(dosya_yolu)
-            print(f"  [⬇️ Patch-{patch_no}] {dosya_yolu}")
+            log.info(f"  [⬇️ Patch-{patch_no}] {dosya_yolu}")
 
             metin_parca, ek = self._dosya_oku_ve_ayikla(
                 repo_id, dosya_yolu, hedef_kelime_limiti, toplam_kelime
@@ -598,13 +615,13 @@ class OtomatikVeriToplayici:
                 toplam_kelime += ek
                 yeni_islenen.append(dosya_yolu)
                 self.durum["son_patch"] = max(self.durum.get("son_patch", 0), patch_no)
-                print(f"    [✅ KALİTELİ] +{ek} kelime (süzgeçten geçti)")
+                log.info(f"    [✅ KALİTELİ] +{ek} kelime (süzgeçten geçti)")
             else:
                 yeni_islenen.append(dosya_yolu)
-                print(f"    [⏭️ ATLANDI] Kaliteli metin yok veya pas geçildi")
+                log.info(f"    [⏭️ ATLANDI] Kaliteli metin yok veya pas geçildi")
 
             if toplam_kelime >= hedef_kelime_limiti:
-                print(f"\n  [🛡️ RAM FRENO] {toplam_kelime} kelimelik kaliteli dilim hazır.")
+                log.info(f"\n  [🛡️ RAM FRENO] {toplam_kelime} kelimelik kaliteli dilim hazır.")
                 break
 
             if patch_secim == "next" and toplam_kelime >= max(5000, hedef_kelime_limiti // 3):
@@ -617,34 +634,13 @@ class OtomatikVeriToplayici:
         self._durum_kaydet()
 
         if not indirilen:
-            print("  [⚠️] Bu turda yeni metin eklenemedi.")
+            log.warning("  [⚠️] Bu turda yeni metin eklenemedi.")
             return mevcut_metin
 
         yeni_metin = (mevcut_metin + "\n\n" + "\n\n".join(indirilen)).strip()
-        print(f"\n  [🎉 PATCH AKTARIMI OK] +{toplam_kelime} kaliteli kelime eklendi")
+        log.info(f"\n  [🎉 PATCH AKTARIMI OK] +{toplam_kelime} kaliteli kelime eklendi")
         self.yama_raporu()
         return yeni_metin
-
-        if patch_secim not in ("next", "all"):
-            try:
-                istenen = int(str(patch_secim).strip())
-                uygun = [p for p in uygun if self._patch_no_bul(p) == istenen]
-                print(f"  [🎯 FİLTRE] Sadece AI-Training-Patch-{istenen} → {len(uygun)} dosya")
-                if not uygun:
-                    # Teşhis: tree'de bu patch'e ait herhangi path var mı?
-                    tum = self._hf_dosyalari_listele(repo_id)  # cache yoksa tekrar; isterseniz atlayın
-                    ipucu = [p for p in tum if f"Patch-{istenen}" in p or f"Patch-{istenen}/" in p]
-                    print(f"  [🔍 TEŞHİS] Patch-{istenen} path izi: {len(ipucu)} adet")
-                    for x in ipucu[:8]:
-                        print(f"      • {x}")
-                    if not ipucu:
-                        print(
-                            "  [💡] HF tree bu patch'i görmüyor olabilir. "
-                            "Repo güncel mi / private mı kontrol edin."
-                        )
-            except ValueError:
-                print("  [❌] Geçersiz patch no.")
-                return mevcut_metin
 
     def huggingface_dataset_cek(self, repo_id, mevcut_metin="", hedef_kelime_limiti=40000):
         return self.huggingface_patch_cek(repo_id, "all", mevcut_metin, hedef_kelime_limiti)
@@ -678,7 +674,7 @@ class OtomatikVeriToplayici:
         dosya_yolu = os.path.join(self.proje_kok, dosya_adi)
         with open(dosya_yolu, "w", encoding="utf-8") as f:
             f.write(metin)
-        print(f"  [💾 KAYIT] Aktif Bilgi Havuzu: {len(metin.split())} kelime")
+        log.info(f"  [💾 KAYIT] Aktif Bilgi Havuzu: {len(metin.split())} kelime")
         return dosya_yolu
 
     def metni_yukle(self, dosya_adi="turkce_metin.txt"):
@@ -687,3 +683,53 @@ class OtomatikVeriToplayici:
             with open(dosya_yolu, "r", encoding="utf-8") as f:
                 return f.read()
         return ""
+
+
+def main():
+    """Komut satırından korpus toplama.
+
+    Örnekler:
+        python -m egitim.veri_toplayici                        # sonraki yama
+        python -m egitim.veri_toplayici --kelime 60000         # hedef kelime sayısı
+        python -m egitim.veri_toplayici --patch all            # tüm dosyalar
+        python -m egitim.veri_toplayici --patch 3              # belirli yama no
+        python -m egitim.veri_toplayici --repo baska/dataset   # farklı HF kaynağı
+        python -m egitim.veri_toplayici --konu "Türkiye"       # Wikipedia makalesi
+    """
+    kok = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+    # Not: logging burada yerel kurulur; veri toplayıcı torch'a bağımlı olmasın.
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)-7s [%(name)s] %(message)s",
+        level=logging.INFO, datefmt="%H:%M:%S",
+    )
+
+    parser = argparse.ArgumentParser(description="Türkçe korpus toplayıcı")
+    parser.add_argument("--repo", default=VARSAYILAN_REPO,
+                        help=f"Hugging Face veri seti reposu (varsayılan: {VARSAYILAN_REPO})")
+    parser.add_argument("--kelime", type=int, default=40000,
+                        help="Hedef kelime sayısı (varsayılan 40000)")
+    parser.add_argument("--patch", default="next",
+                        help="'next' (sonraki yama), 'all' (tümü) veya yama numarası")
+    parser.add_argument("--konu", action="append", default=[],
+                        help="Wikipedia makalesi başlığı (tekrarlanabilir: --konu a --konu b)")
+    parser.add_argument("--cikti", default="turkce_metin.txt", help="Çıktı dosyası adı")
+    args = parser.parse_args()
+
+    log_kur()
+    vt = OtomatikVeriToplayici(kok, repo_id=args.repo)
+
+    mevcut = vt.metni_yukle(args.cikti)
+    if mevcut:
+        log.info("Mevcut korpus yüklendi: %s kelime", len(mevcut.split()))
+
+    if args.konu:
+        mevcut = vt.konulari_ogren(args.konu, mevcut)
+        log.info("Wikipedia konuları eklendi: %s", ", ".join(args.konu))
+
+    yeni = vt.huggingface_patch_cek(args.repo, args.patch, mevcut, args.kelime)
+    vt.metni_kaydet(yeni if yeni.strip() else mevcut, args.cikti)
+
+
+if __name__ == "__main__":
+    main()
