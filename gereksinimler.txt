@@ -1,8 +1,15 @@
 # ── Çekirdek bağımlılık ──────────────────────────────────────────────────────
+# Esnek geliştirme kurulumu. Tekrarlanabilir referans için requirements-lock.txt kullanın.
 # torch>=2.0.0 (SDPA/Flash Attention ve use_reentrant=False checkpointing için)
-torch>=2.0.0
+torch>=2.0.0,<3
 
-# NOT: numpy KALDIRILDI — kodun hiçbir yerinde kullanılmıyordu (rapor 7.4).
+# PyTorch bazı başlatma/değerlendirme yollarında NumPy köprüsünü yoklar;
+# numpy yoksa testleri bozmasa da uyarı üretir. 1.x aralığı torch 2.3 ile güvenlidir.
+numpy>=1.26,<2
+
+# ── Opsiyonel: test ve logging ───────────────────────────────────────────────
+# pytest>=8.0
+# tensorboard>=2.16
 
 # ── Opsiyonel: arayuz.py (Gradio sohbet arayüzü) ─────────────────────────────
 # gradio>=4.0

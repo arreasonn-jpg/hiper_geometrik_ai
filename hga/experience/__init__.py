@@ -9,7 +9,7 @@ from .turkce import (yonelme_eki, belirtme_eki, bulunma_eki, ayrilma_eki,
                      simdiki_zaman_3tekil, gelecek_zaman_3tekil,
                      genis_zaman_3tekil, fiil_cekimi,
                      hece_sayisi, son_unlu, kucult)
-from .mini_env import AritmetikOrtam
+from .mini_env import AritmetikOrtam, MantikOrtam, TutarlilikOrtam
 from .evaluator import ExperienceEvaluator, VARSAYILAN_ESIKLER
 from .conflict import ConflictResolver, ConflictResolution
 from .consolidation import Consolidator, ConsolidationReport
@@ -26,6 +26,7 @@ from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
                         karsilastirma)
 from .dogrulama import DogrulamaHatti, DogrulamaRaporu
 from .loop import DeneyimDongusu, AdimRaporu
+from .state_machine import GECISLER, StateTransition, DeneyimDurumMakinesi
 
 __all__ = [
     "Scoring",
@@ -51,6 +52,8 @@ __all__ = [
     "son_unlu",
     "kucult",
     "AritmetikOrtam",
+    "MantikOrtam",
+    "TutarlilikOrtam",
     "ExperienceEvaluator",
     "VARSAYILAN_ESIKLER",
     "ConflictResolver",
@@ -83,4 +86,7 @@ __all__ = [
     "DogrulamaRaporu",
     "DeneyimDongusu",
     "AdimRaporu",
+    "GECISLER",
+    "StateTransition",
+    "DeneyimDurumMakinesi",
 ]

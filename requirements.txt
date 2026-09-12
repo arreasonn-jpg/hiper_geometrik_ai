@@ -1,0 +1,3 @@
+# English alias for tooling that expects requirements.txt.
+# The canonical Turkish dependency file remains gereksinimler.txt.
+-r gereksinimler.txt

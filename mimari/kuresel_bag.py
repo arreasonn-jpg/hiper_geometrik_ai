@@ -29,6 +29,7 @@ içermeyen o sürüm, projenin geometrik iddiasını taşımıyordu (rapor 8.2).
 """
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint as _grad_checkpoint
 
 
@@ -86,13 +87,14 @@ class KureselZincir(nn.Module):
     """
 
     def __init__(self, n: int, katman_sayisi: int = 4, dropout: float = 0.0,
-                 checkpoint_kullan: bool = False):
+                 checkpoint_kullan: bool = False, aktivasyon: str = "silu"):
         super().__init__()
         if katman_sayisi < 1:
             raise ValueError("katman_sayisi en az 1 olmalı")
         self.n = n
         self.katman_sayisi = katman_sayisi
         self.checkpoint_kullan = checkpoint_kullan
+        self.aktivasyon_adi = aktivasyon
 
         self.katmanlar = nn.ModuleList(
             [KureselBagKatmani(n) for _ in range(katman_sayisi)]
@@ -100,8 +102,20 @@ class KureselZincir(nn.Module):
         self.normlar = nn.ModuleList(
             [nn.LayerNorm(n) for _ in range(katman_sayisi)]
         )
-        self.aktivasyon = nn.SiLU()
         self.dropout = nn.Dropout(dropout)
+
+    @staticmethod
+    def _aktivasyon(x: torch.Tensor, ad: str) -> torch.Tensor:
+        ad = (ad or "silu").lower()
+        if ad == "silu":
+            return F.silu(x)
+        if ad == "gelu":
+            return F.gelu(x)
+        if ad == "tanh":
+            return torch.tanh(x)
+        if ad in ("identity", "none", "yok"):
+            return x
+        raise ValueError(f"bilinmeyen zincir aktivasyonu: {ad}")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         for katman, norm in zip(self.katmanlar, self.normlar):
@@ -110,7 +124,7 @@ class KureselZincir(nn.Module):
                 h = _grad_checkpoint(katman, h, use_reentrant=False)
             else:
                 h = katman(h)
-            x = x + self.dropout(self.aktivasyon(h))
+            x = x + self.dropout(self._aktivasyon(h, self.aktivasyon_adi))
         return x
 
     def kapasite(self) -> dict:

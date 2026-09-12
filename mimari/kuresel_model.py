@@ -34,25 +34,29 @@ from encoder import GeometrikVeriEncoder
 from decoder import FraktalDecoder
 from hiper_attention import HiperGeometrikAttention
 from seyrek_tablo import HashlenmisKureselTablo
+from model_config import ModelConfig, VARSAYILAN_MODEL_CONFIG
 
 # ── Tek doğruluk kaynağı: varsayılan mimari ayarları (rapor 8.3 / 9.6.4) ──
-VARSAYILAN_N = 256              # küresel bağ boyutu (öneri: 128–256)
-VARSAYILAN_KATMAN = 4           # bilinear katman sayısı K (öneri: 4–8)
-VARSAYILAN_BAGLAM = 16          # bağlam penceresi (token)
-VARSAYILAN_EMB = 128            # gömme boyutu
-VARSAYILAN_KAFA = 4             # dikkat kafası sayısı
-VARSAYILAN_SOZLUK = 8000        # BPE sözlük üst sınırı
-VARSAYILAN_SEYREK_SATIR = 1_048_576   # seyrek tablo satırı (128 MB @ 32 boyut)
-VARSAYILAN_SEYREK_BOYUT = 32          # her "küme"nin vektör boyutu
+# Değerlerin asıl kaynağı mimari/model_config.py + hga/config/model_config.yaml.
+VARSAYILAN_N = VARSAYILAN_MODEL_CONFIG.n              # küresel bağ boyutu
+VARSAYILAN_KATMAN = VARSAYILAN_MODEL_CONFIG.katman_sayisi
+VARSAYILAN_BAGLAM = VARSAYILAN_MODEL_CONFIG.baglam_penceresi
+VARSAYILAN_EMB = VARSAYILAN_MODEL_CONFIG.emb_dim
+VARSAYILAN_KAFA = VARSAYILAN_MODEL_CONFIG.num_heads
+VARSAYILAN_SOZLUK = VARSAYILAN_MODEL_CONFIG.sozluk_boyutu
+VARSAYILAN_SEYREK_SATIR = VARSAYILAN_MODEL_CONFIG.seyrek_tablo_boyutu
+VARSAYILAN_SEYREK_BOYUT = VARSAYILAN_MODEL_CONFIG.seyrek_boyut
 
 
 class HiperGeometrikAI(nn.Module):
     def __init__(self, n=VARSAYILAN_N, baglam_penceresi=VARSAYILAN_BAGLAM,
                  sozluk_boyutu=VARSAYILAN_SOZLUK, emb_dim=VARSAYILAN_EMB,
                  num_heads=VARSAYILAN_KAFA, katman_sayisi=VARSAYILAN_KATMAN,
-                 dropout=0.1, checkpoint_kullan=False, bilgilendir=True,
+                 dropout=0.1, encoder_aktivasyon="tanh", zincir_aktivasyon="silu",
+                 checkpoint_kullan=False, bilgilendir=True,
                  seyrek_tablo_boyutu=VARSAYILAN_SEYREK_SATIR,
-                 seyrek_boyut=VARSAYILAN_SEYREK_BOYUT, seyrek_tablo_sayisi=1):
+                 seyrek_boyut=VARSAYILAN_SEYREK_BOYUT, seyrek_tablo_sayisi=1,
+                 seyrek_erisim_izleme=False):
         """
         seyrek_tablo_boyutu : 0 → seyrek bellek kapalı; >0 → fiziksel satır sayısı
         seyrek_tablo_sayisi : 1 (tek hash) veya 2 (Bloom tarzı çift hash, rapor 9.4.1)
@@ -76,7 +80,8 @@ class HiperGeometrikAI(nn.Module):
         if seyrek_tablo_boyutu and seyrek_tablo_boyutu > 0:
             self.seyrek_tablo = HashlenmisKureselTablo(
                 tablo_boyutu=seyrek_tablo_boyutu, boyut=seyrek_boyut,
-                tablo_sayisi=seyrek_tablo_sayisi)
+                tablo_sayisi=seyrek_tablo_sayisi,
+                erisim_izleme=seyrek_erisim_izleme)
             # Köprü: gen vektörünü bağlam vektörüne enjekte eder.
             # DİKKAT (ölü-yol tuzağı): köprüyü SIFIR başlatmak yanlış olurdu —
             # tablo da sıfırken gradyan hiçbir tarafa akamazdı (0×0). Köprü
@@ -86,10 +91,12 @@ class HiperGeometrikAI(nn.Module):
             nn.init.zeros_(self.gen_kopru.bias)
 
         # 0→1 katmanı: dış çarpım köprüsü (rapor 5.3)
-        self.encoder = GeometrikVeriEncoder(baglam_penceresi * emb_dim, n)
+        self.encoder = GeometrikVeriEncoder(baglam_penceresi * emb_dim, n,
+                                             aktivasyon=encoder_aktivasyon)
 
         # 1→2+ katmanları: K adet bilinear (A@X@B) sandviç zinciri (rapor 8.2/8.3)
-        self.kuresel_bag = KureselZincir(n, katman_sayisi, dropout, checkpoint_kullan)
+        self.kuresel_bag = KureselZincir(n, katman_sayisi, dropout, checkpoint_kullan,
+                                         aktivasyon=zincir_aktivasyon)
 
         self.norm_cikis = nn.LayerNorm(n)
         self.decoder = FraktalDecoder(n, sozluk_boyutu)
@@ -105,15 +112,21 @@ class HiperGeometrikAI(nn.Module):
                   f"katman başına ~{r['katman_basi_sanal_operator']:.2e} sanal operatör "
                   f"(Kronecker) | zincir etkileşim üst sınırı ~{r['etkilesim_uzayi_ust_siniri']:.2e}")
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, attention_mask: torch.Tensor | None = None) -> torch.Tensor:
         # x: (B, S) token id'leri → (B, sozluk_boyutu) ham logit
         if x.dim() != 2:
             raise ValueError(f"Beklenen girdi (B, S), gelen: {tuple(x.shape)}")
-        x = self._pencereye_sigdir(x)
+        x, attention_mask = self._pencereye_sigdir(x, attention_mask)
         seq_len = x.size(1)
 
+        if attention_mask is None:
+            attention_mask = x.ne(0)  # PAD_ID=0; değişken uzunluklu batch güvenliği
+        else:
+            attention_mask = attention_mask.to(device=x.device, dtype=torch.bool)
+
         emb = self.kelime_gomme(x) + self.pos_encoder[:, :seq_len, :]
-        emb = self.dikkat(emb)                    # nedensel dikkat
+        emb = emb * attention_mask.unsqueeze(-1).to(dtype=emb.dtype)
+        emb = self.dikkat(emb, attention_mask=attention_mask)  # nedensel + PAD maskeli dikkat
         duz = emb.reshape(emb.size(0), -1)        # (B, S·emb)
 
         # Seyrek bellek enjeksiyonu: pencerenin 'gen' vektörü (boş küme → 0)
@@ -126,16 +139,116 @@ class HiperGeometrikAI(nn.Module):
         matris = self.norm_cikis(matris)
         return self.decoder(matris)               # (B, sozluk) — softmax YOK
 
-    def _pencereye_sigdir(self, x: torch.Tensor) -> torch.Tensor:
-        """Girdiyi tam bağlam penceresine getir: uzunsa SON pencereyi al,
-        kısaysa BAŞINA PAD (id=0) ekle (sağa hizalı bağlam)."""
+    def forward_cacheli_pencere(self, x: torch.Tensor, cache: dict | None = None,
+                                attention_mask: torch.Tensor | None = None):
+        """Üretim için model seviyesinde KV-cache'li pencere ileri geçişi.
+
+        HGA decoder tüm bağlamı düzleştirdiği için yalnız son token çıktısı
+        yetmez; bu yöntem attention çıktılarının prefix'ini de cache'ler. Yeni
+        pencere önceki pencereyle aynı prefix'i paylaşıyorsa o kısmın K/V ve
+        attention çıktıları yeniden hesaplanmaz, kalan suffix ``forward_cacheli``
+        ile işlenir. Sliding-window nedeniyle prefix bozulursa güvenli şekilde
+        tam pencereyi cache yolundan yeniden hesaplar; semantik olarak
+        ``forward(x, attention_mask)`` ile eşdeğer kalır.
+
+        Dönüş: ``(logits, yeni_cache)``. ``yeni_cache['prefix_reused']`` yeniden
+        kullanılan token sayısını raporlar.
+        """
+        if x.dim() != 2:
+            raise ValueError(f"Beklenen girdi (B, S), gelen: {tuple(x.shape)}")
+        x, attention_mask = self._pencereye_sigdir(x, attention_mask)
+        B, seq_len = x.shape
+        if attention_mask is None:
+            attention_mask = x.ne(0)
+        else:
+            attention_mask = attention_mask.to(device=x.device, dtype=torch.bool)
+
+        emb = self.kelime_gomme(x) + self.pos_encoder[:, :seq_len, :]
+        emb = emb * attention_mask.unsqueeze(-1).to(dtype=emb.dtype)
+
+        reuse = 0
+        dikkat_cache = None
+        eski_out = None
+        if cache and not self.training:
+            old_x = cache.get("token_ids")
+            old_mask = cache.get("attention_mask")
+            old_dikkat = cache.get("dikkat")
+            old_out = cache.get("attention_out")
+            if (old_x is not None and old_mask is not None and old_dikkat is not None
+                    and old_out is not None and old_x.shape[0] == B):
+                old_x = old_x.to(device=x.device)
+                old_mask = old_mask.to(device=x.device, dtype=torch.bool)
+                max_len = min(int(old_x.size(1)), seq_len)
+                ortak = 0
+                for i in range(max_len):
+                    if torch.equal(old_x[:, i], x[:, i]) and torch.equal(old_mask[:, i], attention_mask[:, i]):
+                        ortak += 1
+                    else:
+                        break
+                if ortak > 0:
+                    k_old = old_dikkat.get("k")
+                    v_old = old_dikkat.get("v")
+                    if k_old is not None and v_old is not None and int(k_old.size(2)) >= ortak:
+                        dikkat_cache = {
+                            "k": k_old[:, :, :ortak, :].to(device=x.device),
+                            "v": v_old[:, :, :ortak, :].to(device=x.device),
+                            "mask": old_mask[:, :ortak],
+                        }
+                        eski_out = old_out[:, :ortak, :].to(device=x.device)
+                        reuse = ortak
+
+        if reuse < seq_len:
+            yeni_out, yeni_dikkat_cache = self.dikkat.forward_cacheli(
+                emb[:, reuse:, :], cache=dikkat_cache,
+                attention_mask=attention_mask[:, reuse:])
+            emb_att = yeni_out if eski_out is None else torch.cat([eski_out, yeni_out], dim=1)
+        else:
+            emb_att = eski_out
+            yeni_dikkat_cache = dikkat_cache
+
+        duz = emb_att.reshape(emb_att.size(0), -1)
+        if self.seyrek_tablo is not None:
+            gen = self.seyrek_tablo(x)
+            duz = duz + self.gen_kopru(gen)
+        matris = self.encoder(duz)
+        matris = self.kuresel_bag(matris)
+        matris = self.norm_cikis(matris)
+        logits = self.decoder(matris)
+        yeni_cache = {
+            "token_ids": x.detach(),
+            "attention_mask": attention_mask.detach(),
+            "dikkat": yeni_dikkat_cache,
+            "attention_out": emb_att.detach(),
+            "prefix_reused": int(reuse),
+        }
+        return logits, yeni_cache
+
+    def _pencereye_sigdir(self, x: torch.Tensor,
+                          attention_mask: torch.Tensor | None = None):
+        """Girdiyi tam bağlam penceresine getir.
+
+        Uzunsa SON pencereyi alır; kısaysa BAŞINA PAD (id=0) ekler (sağa
+        hizalı bağlam). ``attention_mask`` de aynı kırpma/doldurma işleminden
+        geçirilir; böylece padding attention tarafından gerçekten engellenir.
+        """
         S = self.baglam_penceresi
+        if attention_mask is not None and attention_mask.shape != x.shape:
+            raise ValueError(f"attention_mask şekli girdiyle aynı olmalı: {tuple(x.shape)}; gelen {tuple(attention_mask.shape)}")
         if x.size(1) > S:
-            return x[:, -S:]
+            x2 = x[:, -S:]
+            m2 = attention_mask[:, -S:] if attention_mask is not None else None
+            return x2, m2
         if x.size(1) < S:
             pad = torch.zeros(x.size(0), S - x.size(1), dtype=x.dtype, device=x.device)
-            return torch.cat([pad, x], dim=1)
-        return x
+            x2 = torch.cat([pad, x], dim=1)
+            if attention_mask is None:
+                m2 = torch.cat([pad.to(dtype=torch.bool), x.ne(0)], dim=1)
+            else:
+                mpad = torch.zeros(x.size(0), S - x.size(1), dtype=attention_mask.dtype,
+                                   device=attention_mask.device)
+                m2 = torch.cat([mpad, attention_mask], dim=1)
+            return x2, m2
+        return x, attention_mask
 
     # ── Kapasite muhasebesi (dürüst sayılar) ──────────────────────────
     def gercek_parametre_sayisi(self) -> int:
@@ -198,11 +311,13 @@ class HiperGeometrikAI(nn.Module):
 def model_olustur(sozluk_boyutu=VARSAYILAN_SOZLUK, n=VARSAYILAN_N,
                   baglam_penceresi=VARSAYILAN_BAGLAM, emb_dim=VARSAYILAN_EMB,
                   num_heads=VARSAYILAN_KAFA, katman_sayisi=VARSAYILAN_KATMAN,
-                  dropout=0.1, checkpoint_kullan=False, aygit="cpu",
+                  dropout=0.1, encoder_aktivasyon="tanh", zincir_aktivasyon="silu",
+                  checkpoint_kullan=False, aygit="cpu",
                   bilgilendir=True,
                   seyrek_tablo_boyutu=VARSAYILAN_SEYREK_SATIR,
                   seyrek_boyut=VARSAYILAN_SEYREK_BOYUT,
-                  seyrek_tablo_sayisi=1):
+                  seyrek_tablo_sayisi=1,
+                  seyrek_erisim_izleme=False):
     """HiperGeometrikAI'ı TEK YERDEN kurar.
 
     Önceki sürümde bu fonksiyon calistir.py, arayuz.py ve
@@ -217,12 +332,36 @@ def model_olustur(sozluk_boyutu=VARSAYILAN_SOZLUK, n=VARSAYILAN_N,
     model = HiperGeometrikAI(
         n=n, baglam_penceresi=baglam_penceresi, sozluk_boyutu=sozluk_boyutu,
         emb_dim=emb_dim, num_heads=num_heads, katman_sayisi=katman_sayisi,
-        dropout=dropout, checkpoint_kullan=checkpoint_kullan,
+        dropout=dropout, encoder_aktivasyon=encoder_aktivasyon,
+        zincir_aktivasyon=zincir_aktivasyon, checkpoint_kullan=checkpoint_kullan,
         bilgilendir=bilgilendir,
         seyrek_tablo_boyutu=seyrek_tablo_boyutu, seyrek_boyut=seyrek_boyut,
         seyrek_tablo_sayisi=seyrek_tablo_sayisi,
+        seyrek_erisim_izleme=seyrek_erisim_izleme,
     )
     return model.to(aygit)
+
+
+def model_olustur_config(cfg: ModelConfig, aygit="cpu", bilgilendir=True):
+    """ModelConfig nesnesinden model kur (hardcoded değerleri azaltan yol)."""
+    return model_olustur(
+        sozluk_boyutu=cfg.sozluk_boyutu,
+        n=cfg.n,
+        baglam_penceresi=cfg.baglam_penceresi,
+        emb_dim=cfg.emb_dim,
+        num_heads=cfg.num_heads,
+        katman_sayisi=cfg.katman_sayisi,
+        dropout=cfg.dropout,
+        encoder_aktivasyon=cfg.encoder_aktivasyon,
+        zincir_aktivasyon=cfg.zincir_aktivasyon,
+        checkpoint_kullan=cfg.checkpoint_kullan,
+        aygit=aygit,
+        bilgilendir=bilgilendir,
+        seyrek_tablo_boyutu=cfg.seyrek_tablo_boyutu,
+        seyrek_boyut=cfg.seyrek_boyut,
+        seyrek_tablo_sayisi=cfg.seyrek_tablo_sayisi,
+        seyrek_erisim_izleme=cfg.seyrek_erisim_izleme,
+    )
 
 
 def agirlik_yukle(model: nn.Module, yol: str, strict: bool = True):

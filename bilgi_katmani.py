@@ -27,7 +27,17 @@ hem terminal (calistir.py) hem Gradio (arayuz.py) aynı katmanı kullanır.
 """
 import re
 
-import torch
+try:  # Bilgi arama saf Python çalışır; beyaz liste maskesi için torch gerekir.
+    import torch  # type: ignore
+except Exception:  # pragma: no cover
+    torch = None  # type: ignore
+
+
+def _torch_gerekli():
+    if torch is None:
+        raise ImportError("Beyaz liste maskesi oluşturmak için torch gerekli.")
+    return torch
+
 
 KATMAN_TAM = "tam"
 KATMAN_KISMI = "kismi"
@@ -168,7 +178,8 @@ def beyaz_liste_olustur(tokenizer, eslesme, vocab_boyutu):
     parçaları serbest bırakılır; model bilinmeyen kelimelerle üretim
     yapamaz (rapor 10.5.2: "sadece bildiğin parçaları kullan").
     """
-    maske = torch.zeros(int(vocab_boyutu), dtype=torch.bool)
+    torch_mod = _torch_gerekli()
+    maske = torch_mod.zeros(int(vocab_boyutu), dtype=torch_mod.bool)
     metin = f"{eslesme['soru']} {eslesme['cevap']} son"
     if hasattr(tokenizer, "encode"):
         ids = tokenizer.encode(metin)

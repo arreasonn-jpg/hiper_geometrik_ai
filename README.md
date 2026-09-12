@@ -32,6 +32,15 @@ dürüst muhasebesidir:
 
 **Bu sayılar ne demek, ne DEĞİL?**
 
+Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
+
+- **P (physical/trainable parameters):** RAM/VRAM'de gerçekten ayrılan ve
+  optimizer tarafından güncellenen parametre sayısı.
+- **C_I (interaction capacity):** Kronecker zincirinin temsil ettiği sanal
+  etkileşim/operatör üst sınırı; gerçek parametre değildir.
+- **C_M (memory address capacity):** seyrek belleğin adresleyebildiği kavramsal
+  anahtar uzayı (`sözlük^pencere`); fiziksel depo boyutu değildir.
+
 - **Bilinear/Kronecker tarafı:** Bir `A @ X @ B` katmanı, flatten uzayında
   `Y = (Bᵀ ⊗ A) X` dönüşümüdür: temsil ettiği tam operatör **n² × n² = n⁴
   boyutludur** ama bunu yalnızca **2n² gerçek parametre** ile taşır. 16 GB'lık
@@ -48,10 +57,9 @@ dürüst muhasebesidir:
   tahsis eder; "sadece dokunulanlar bellekte" davranışı için dinamik bir
   anahtar-değer deposu gerekir — bu ölçekte gereksiz karmaşıklık).
 - **Literal "1 katrilyon GERÇEK parametre" bu projede hedef olmamalıdır:**
-  Bilinen en büyük ticari modeller (GPT-4, Gemini sınıfı) dahi ~1-2 trilyon
-  parametre civarında tahmin edilmektedir; katrilyon bunun ~1000 katıdır ve
-  yüzlerce GPU'luk kümeler + petabayt veri + milyonlarca dolarlık bütçe
-  gerektirir. Tek kişilik donanımda fiziksel olarak imkânsızdır.
+  Katrilyon ölçeğinde fiziksel parametre; yüzlerce GPU'luk kümeler, petabayt
+  veri ve çok yüksek bütçe gerektirir. Tek kişilik donanımda fiziksel olarak
+  imkânsıza yakındır; bu repo böyle bir iddia taşımaz.
 - Bu projenin gerçekçi ve dürüst hedefi: **"K katmanlı Kronecker zinciriyle
   katrilyon mertebesinin üzerinde sanal etkileşim kapasitesi + katrilyonların
   üzerinde adreslenebilir 'boş küme' uzayına sahip seyrek bellek; ~7M yoğun +
@@ -141,8 +149,10 @@ hash'lenmiş gömme tablosu:
 - **Doluluk izleme:** `doluluk_orani()` kaç kümenin dolduğunu sayar — eğitim
   loglarında çağ başına raporlanır ("1 katrilyonluk kapasitenin şu an X kümesi
   dolu" — pazarlama abartısı değil, ölçülebilir gerçek metrik).
-- **Çakışma:** iki farklı pencere aynı satıra düşebilir. `tablo_sayisi=2` ile
-  Bloom tarzı çift hash açılır (iki farklı tuzlu tablo, çıktılar toplanır).
+- **Çakışma:** iki farklı pencere aynı satıra düşebilir. `carpisma_istatistigi()`
+  benzersiz pencere → benzersiz adres imzası oranını ölçer ve %5 üstünde uyarı
+  üretir; `tablo_sayisi=2` ile Bloom tarzı çift hash açılır (iki farklı tuzlu
+  tablo, çıktılar toplanır).
 - **Kronecker zinciriyle tamamlayıcıdır (rapor 9.5):** seyrek tablo HANGİ
   kümelerin dolu olduğunu taşır; `gen_kopru` dolu küme vektörünü bağlam
   vektörüne enjekte eder; bilinear zincir etkileşimi işler.
@@ -170,9 +180,10 @@ söyler:
 
 Bu, endüstrideki RAG (Retrieval-Augmented Generation) yaklaşımının
 basitleştirilmiş hâlidir. Güven skoru kullanıcıdan gizlenmez. Terminal ve
-Gradio arayüzleri aynı mekanizmayı paylaşır (eski `arayuz.py`'nin
-`intent_cevap`'ı bu katmanın ilkel bir örneğiydi; artık tek kaynak
-`bilgi_katmani.py`'dir).
+Gradio arayüzleri aynı mekanizmayı ve aynı tokenizer/model üretim runtime'ını
+paylaşır (eski `arayuz.py`'nin `intent_cevap`'ı bu katmanın ilkel bir örneğiydi;
+artık bilgi kararı `bilgi_katmani.py`, üretim/yükleme ortaklığı
+`hga/ui_runtime.py` üzerinden gelir).
 
 Örnek oturum (eğitilmiş demo modeliyle):
 
@@ -203,7 +214,8 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   RelationIndex / KnowledgeStore. Her kavramın kaynağı (`source`) ve güveni
   (`confidence`) saklanır; entity_id, tokenizer token ID'sinden AYRIDIR.
 - **Experience** (`hga/experience/`) — kontrollü kombinasyon üreten Generator,
-  7+1 bağımsız sinyalle puanlama, VALID/CONFLICT/INVALID durum makinesi,
+  7+1 bağımsız sinyalle puanlama, CANDIDATE→VALID/CONFLICT/INVALID durum
+  makinesi, CONFLICT→EXPLORE araştırma yolu, INVALID→REJECT terminal yolu,
   Conflict→Exploration çözücüsü, konsolidasyon, metin/olay üretimi (v0.2,
   Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması +
   ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + fiil çekimi
@@ -250,7 +262,22 @@ python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sö
 python experiments/experience_loop/run_korpus_olcegi.py # çevrimdışı korpus ölçeği provası
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
+python -m hga halusinasyon                            # factual consistency metriği
+python -m hga sweep                                   # n/K/context kapasite taraması
+python -m hga tokenizer                               # mini Türkçe tokenizer benchmark
+python -m hga perplexity --tiny                       # küçük modelle perplexity smoke (torch)
+python -m hga checkpoint-rapor checkpoints/temel/latest.pt # checkpoint/model uyumluluğu
+python -m hga benchmark-rapor --out raporlar/benchmark_report.json --markdown raporlar/benchmark_report.md
+python -m hga veri-kalite                             # veri kalite filtresi demo raporu
+python -m hga veri-canli-smoke --kontrollu --out raporlar/controlled_data_smoke.json
+python -m hga manifest turkce_metin.txt               # veri SHA-256 manifesti
+python -m hga observability --out raporlar/observability_panel.json --html raporlar/observability_panel.html
+python -m egitim.mini_smoke --out raporlar/mini_training_report.json --markdown raporlar/mini_training_report.md
 python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu
+python tests/test_tokenizer_guvenligi.py              # Türkçe BPE + special token + byte fallback
+python tests/test_core_integration.py                 # tokenizer→model uçtan uca zincir (torch varsa)
+python tests/test_training_saglamlik.py               # KV cache + padding mask + checkpoint (torch varsa)
+python tests/test_egitim_saglamlik.py                 # AMP/checkpoint smoke helper'ları (torch varsa)
 ```
 
 Ayrıntı: `docs/EXPERIENCE_ENGINE.md`.
@@ -263,10 +290,14 @@ Ayrıntı: `docs/EXPERIENCE_ENGINE.md`.
 hiper_geometrik_ai/
 ├── README.md                    # Bu belge
 ├── gereksinimler.txt            # Bağımlılıklar (torch; opsiyonel: gradio, requests, pyarrow)
+├── requirements.txt             # gereksinimler.txt alias'ı
+├── requirements-lock.txt        # Referans pin'li ortam
 ├── test_mimari.py               # 22 duman testi (pytest ile de çalışır)
 ├── bilgi_katmani.py             # 3 katmanlı halüsinasyon kontrol mekanizması
 ├── calistir.py                  # Terminal sohbet (chatbot)
 ├── arayuz.py                    # Gradio sohbet arayüzü (opsiyonel)
+├── hga/ui_runtime.py            # Terminal/Gradio ortak tokenizer-model-üretim runtime'ı (KV-cache üretim yolu)
+├── raporlar/                    # Küçük smoke/benchmark/observability JSON-MD-HTML çıktıları
 ├── mimari/
 │   ├── kuresel_model.py         # Bütünleşik model + model_olustur (TEK KAYNAK) + kapasite raporu
 │   ├── kuresel_bag.py           # Bilinear A@X@B katmanı + K katmanlı zincir
@@ -281,12 +312,18 @@ hiper_geometrik_ai/
 │   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore
 │   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop
 │   ├── memory/                  # Seyrek deneyim slotları + replay + torch köprüsü
-│   └── config/                  # experience_config.yaml + bağımlılıksız yükleyici
+│   ├── evaluation/              # Halüsinasyon, Türkçe perplexity ve benchmark raporları
+│   ├── observability/           # Attention/geometri/bellek/deneyim akışı + panel çıktısı
+│   ├── data/                    # Veri kalite filtresi, canlı/kontrollü smoke + SHA-256 manifest
+│   └── config/                  # experience_config.yaml + model_config.yaml
 ├── tests/                       # Knowledge/Experience katmanı testleri (torch'suz çalışır)
 ├── experiments/experience_loop/ # v0.1 ve v0.1→v1.0 uçtan uca demoları
 ├── docs/EXPERIENCE_ENGINE.md    # Experience Engine mimari notu
 └── egitim/
-    ├── egitici.py               # Temel eğitim (batch + AdamW + AMP + seyrek doluluk izleme)
+    ├── egitici.py               # Temel eğitim (AdamW + AMP + grad izleme + checkpoint + early stopping)
+    ├── mini_smoke.py            # Gerçek küçük eğitim koşusu + JSON/Markdown raporu
+    ├── degerlendirme.py         # Perplexity/loss ölçümü
+    ├── determinizm.py           # Seed/deterministik çalışma yardımcıları
     ├── talimat_egitici.py       # Instruction fine-tuning
     ├── talimat_toplayici.py     # Yerleşik talimat seti
     └── veri_toplayici.py        # Korpus toplama (Wikipedia + HF; güvenilir kaynak rehberi)
@@ -296,9 +333,26 @@ hiper_geometrik_ai/
 
 ## 🚀 Kurulum ve Kullanım
 
+Önerilen ortam: Python 3.11, PyTorch 2.0+ (CUDA kullanacaksanız kurulu CUDA
+sürümünüze uygun PyTorch tekerini seçin). Saf Python `hga/` testleri torch
+olmadan da çalışır; mimari/eğitim testleri torch varsa gerçeklenir.
+
 ```bash
-pip install -r gereksinimler.txt
+pip install -r gereksinimler.txt        # esnek çekirdek kurulum
+pip install -r requirements.txt         # aynı dosyanın İngilizce alias'ı
+pip install -r requirements-lock.txt    # tekrarlanabilir referans ortam
 ```
+
+### 5 Dakikalık Hızlı Başlangıç
+
+```bash
+python -m hga bilgi
+python -m hga dogrulama
+python tests/test_tokenizer_guvenligi.py
+```
+
+Bu üç komut; Knowledge/Experience durum makinesini, MODEL_GENERATED→VERIFIED
+korumasını ve Türkçe tokenizer doğrulamasını eğitim gerektirmeden gösterir.
 
 **1) Korpus topla** (internet gerekir; opsiyonel `requests` bağımlılığı):
 
@@ -312,7 +366,11 @@ OtomatikVeriToplayici('.').genis_korpus_cek(hedef_kelime=50000)"
 
 ```bash
 python egitim/egitici.py --cag 5
+python egitim/egitici.py --config hga/config/model_config.yaml
 python egitim/egitici.py --n 128 --katman 2 --batch 32   # küçük/deneysel koşu
+python egitim/egitici.py --validation-split 0.1 --early-stopping-patience 3 \
+  --warmup-cag 1 --lr-min-factor 0.05 \
+  --log-dizini logs/egitim --checkpoint-dizini checkpoints/temel
 python egitim/egitici.py --seyrek-satir 2097152          # 2M satırlık seyrek bellek
 python egitim/egitici.py --seyrek-yok                    # seyrek bellek kapalı
 ```
@@ -320,7 +378,10 @@ python egitim/egitici.py --seyrek-yok                    # seyrek bellek kapalı
 **3) Talimat (instruction) fine-tuning** (temel eğitimle aynı seyrek parametreler):
 
 ```bash
-python egitim/talimat_egitici.py
+python egitim/talimat_egitici.py --config hga/config/model_config.yaml
+python egitim/talimat_egitici.py --validation-split 0.1 --early-stopping-patience 3 \
+  --warmup-cag 1 --lr-min-factor 0.05 \
+  --log-dizini logs/talimat --checkpoint-dizini checkpoints/talimat
 ```
 
 **4) Sohbet:**
@@ -330,15 +391,37 @@ python calistir.py      # terminal chatbot (3 katmanlı kontrol + etiketler)
 python arayuz.py        # Gradio arayüzü (pip install gradio)
 ```
 
-**5) Doğrulama ve raporlar:**
+**5) Doğrulama, benchmark ve gözlem raporları:**
 
 ```bash
-python test_mimari.py          # tüm mimari testleri
-python mimari/kuresel_model.py # dürüst kapasite raporu
+python test_mimari.py
+python mimari/kuresel_model.py
+python -m hga perplexity --tiny
+python -m hga benchmark-rapor --out raporlar/benchmark_report.json --markdown raporlar/benchmark_report.md
+python -m hga veri-canli-smoke --kontrollu --konular "Türkçe,İstanbul" \
+  --cikis logs/controlled_data_smoke.txt --out raporlar/controlled_data_smoke.json
+python -m hga observability --out raporlar/observability_panel.json \
+  --markdown raporlar/observability_panel.md --html raporlar/observability_panel.html
+python -m egitim.mini_smoke --out raporlar/mini_training_report.json \
+  --markdown raporlar/mini_training_report.md
 ```
 
-Çalışma zamanı artefaktları (`bpe_sozluk.json`, `hiper_model_*.pt`,
-`turkce_metin.txt`, `talimat_verisi.json`) `.gitignore`'dadır; repoya girmez.
+Bu branch'te güncel örnek artefaktlar `raporlar/` altında tutulur:
+
+- `mini_training_report.{json,md}` — 1 çağlık gerçek mini eğitim: finite loss,
+  finite gradient, CSV+JSONL log, checkpoint uyumluluk ve CPU/GPU bilgisi.
+- `benchmark_report.{json,md}` — tokenizer kapsamı, held-out mini perplexity,
+  hallucination/factual consistency, seyrek bellek ve cihaz/VRAM fallback.
+- `controlled_data_smoke.json` — ağsız/deterministik Türkçe veri hattı smoke;
+  kalite filtresi + SHA-256 manifest zincirini kanıtlar.
+- `live_data_smoke.json` — canlı Wikipedia smoke denemesi; ağ/kaynak boşsa bunu
+  açıkça `insufficient_data` olarak raporlar.
+- `observability_panel.{json,md,html}` — bellek haritası, deneyim akışı ve
+  Kronecker katman benzerliği paneli.
+
+Çalışma zamanı ağırlıkları/verileri (`bpe_sozluk.json`, `hiper_model_*.pt`,
+`turkce_metin.txt`, `talimat_verisi.json`, `logs/`, `checkpoints/`)
+`.gitignore`'dadır; repoya girmez.
 
 ---
 
@@ -347,11 +430,29 @@ python mimari/kuresel_model.py # dürüst kapasite raporu
 - Varsayılan yapı (n=256, K=4 + 128 MB seyrek tablo) **CPU'da eğitilebilir**
   (2 çekirdekte bile; bu repodaki demo ağırlıklar öyle eğitildi), ama ciddi
   koşular için GPU şart: her bilinear katman başına ~2n³ çarpma yapılır.
-- **Karışık hassasiyet (AMP):** CUDA + bf16 destekliyorsa eğitim motorunda
-  otomatik açılır (`--amp hayir` ile kapatılabilir).
+- **Karışık hassasiyet (AMP):** CUDA + bf16 destekliyse eğitim motorunda
+  otomatik açılır (`--amp hayir` ile kapatılabilir). Eğitim döngüsü loss/logit
+  NaN/Inf kontrolünü her adımda yapar.
+- **LR scheduler:** temel eğitim ve talimat fine-tuning aynı warmup + cosine
+  decay matematiğini kullanır (`--warmup-cag`, `--lr-min-factor`).
+- **Logging:** `--log-dizini` CSV'ye ek olarak W&B tarzı satır-satır JSONL
+  metrikleri (`metrics.jsonl` / `talimat_metrics.jsonl`) üretir; TensorBoard
+  kuruluysa aynı dizine event log da yazılır.
+- **Gradient clipping + monitoring:** `--grad-clip` ile toplam norm kırpılır;
+  çağ loglarında toplam norm ve en yüksek katman normu raporlanır.
 - **Gradient checkpointing:** derin zincirlerde (büyük K) `--checkpoint`.
-- Seyrek tabloyu büyütmek RAM'i doğrusal artırır (20M satır ≈ 2,4 GB); çakışma
-  oranını `doluluk_orani()` ile izleyin, gerekirse `tablo_sayisi=2` (Bloom).
+- **Checkpoint uyumluluğu/resume:** eğitim checkpoint'ları `checkpoint_version`
+  ve `model_meta` taşır; `--resume` kayıtlı çağ/epoch'tan devam eder. Şekil/
+  anahtar denetimi için `egitim.saglamlik.checkpoint_uyumluluk_raporu` veya
+  `python -m hga checkpoint-rapor <ckpt>` kullanılabilir.
+- **KV-cache üretim yolu:** attention katmanındaki `forward_cacheli` artık model
+  seviyesinde `forward_cacheli_pencere` ile bağlanır; prefix aynı kaldığında
+  K/V ve attention çıktıları yeniden kullanılabilir. Sliding-window kayınca
+  cache güvenli biçimde yeniden kurulur; çıktı `forward(...)` ile eşdeğer kalır.
+  Ortak UI runtime (`metin_uret`) varsayılan olarak bu yolu dener.
+- Seyrek tabloyu büyütmek RAM'i doğrusal artırır (20M satır ≈ 2,4 GB); doluluk
+  için `doluluk_orani()`, hash çakışması için `carpisma_istatistigi()` kullanın;
+  gerekirse `tablo_sayisi=2` (Bloom).
 - Çok büyük n/K denemeleri için katmanları farklı cihazlara dağıtmak
   (`torch.distributed` veya manuel `device_map`) yol haritasındadır.
 
@@ -371,7 +472,8 @@ yol haritalarını uygular:
    bağımsız `Linear`'dı ve `v_yeni` çıktısı hesaplanıp çöpe atılıyordu
    (`mercek_B` hiç eğitilmiyordu). Yeni zincirde her parametre gradyan alır.
 3. **`gereksinimler.txt` repoya girdi (8.1.4):** `.gitignore`'daki `*.txt` /
-   `*.json` genel yasakları kaldırıldı. Kullanılmayan `numpy` düşürüldü.
+   `*.json` genel yasakları kaldırıldı. PyTorch başlatma uyarısını önlemek için
+   `numpy>=1.26,<2` açık bağımlılık olarak tutulur.
 4. **`strict=True` ağırlık yükleme (8.1.5):** uyumsuzluk sessizce yutulmıyor.
 5. **Gerçek bilinear/Kronecker mimarisi geri döndü (8.2):** `A @ X @ B`
    sandviçi `torch.einsum` ile; temsil edilen operatörün Kronecker boyutu
@@ -393,12 +495,39 @@ yol haritalarını uygular:
     `doluluk_orani()` ile çağ başı izleme; Bloom çift hash seçeneği; modelde
     `gen_kopru` ile entegrasyon (köprü sıfır-başlatma tuzağı bilinçli olarak
     önlandı — aksi halde yol ölü kalırdı; `test_model_seyrek_yol_ogreniyor`
-    iki adımda canlanmayı doğrular).
+    iki adımda canlanmayı doğrular); collision metriği, erişim izleme, LRU
+    temizliği ve decay mekanizması eklendi.
 13. **3 katmanlı halüsinasyon kontrolü (10):** `BilgiKatmani` + beyaz listeli
     kısıtlı üretim + [DOĞRULANMAMIŞ] etiketleme; güven skoru kullanıcıya
     gösterilir; `norm()` artık kesme işaretini siler ('Türkiye'nin' →
     'turkiyenin' tam eşleşmesi düzeltildi); terminal ve Gradio aynı mekânizmayı
     paylaşır.
+14. **Eğitim sağlamlaştırma:** temel ve talimat eğitiminde her adımda
+    loss/logit/gradient sonluluk kontrolü, `--grad-clip`, per-layer gradient
+    norm özeti, validation split, perplexity, early stopping, `best.pt/latest.pt`
+    checkpoint ve CSV/TensorBoard logging.
+15. **Config tek kaynağı:** `hga/config/model_config.yaml` + `mimari/model_config.py`
+    ile `n`, `K`, bağlam, aktivasyon, seyrek tablo ve eğitim ayarları merkezileşti.
+16. **Tokenizer doğrulaması:** Türkçe `İ/I` küçültme düzeltildi, special token
+    ve vocab/embedding tutarlılık kontrolleri eklendi, Unicode için byte-level
+    fallback açıldı.
+17. **Doğrulama ortamları + durum makinesi:** aritmetik doğrulayıcıya ek olarak
+    temel modus ponens (`MantikOrtam`) ve property/ilişki kısıtı tutarlılığı
+    (`TutarlilikOrtam`) sağlandı; `DeneyimDurumMakinesi` MODEL_GENERATED→VERIFIED
+    yükseltmesini engeller ve CONFLICT→EXPLORE / INVALID→REJECT yollarını tanımlar.
+18. **Gözlemlenebilirlik + değerlendirme:** attention heatmap/head diversity,
+    attention-level KV cache, model-level `forward_cacheli_pencere`, Kronecker
+    katman benzerliği, bellek doluluk haritası, deneyim akışı, mini Türkçe
+    benchmark harness'i, n/K/context tarama tahminleyicisi ve halüsinasyon/
+    factual consistency metrikleri eklendi.
+19. **Veri kalite + versiyonlama:** duplicate/spam/bozuk encoding filtreleri
+    `hga/data/quality.py`; SHA-256 manifest tabanlı hafif veri sürüm izi
+    `hga/data/versioning.py`; canlı/kontrollü veri hattı smoke'u
+    `hga/data/live_smoke.py` içinde sağlandı.
+20. **Rapor artefaktları:** gerçek mini eğitim smoke'u (`egitim/mini_smoke.py`),
+    birleşik benchmark raporu (`python -m hga benchmark-rapor`) ve statik
+    gözlemlenebilirlik paneli (`python -m hga observability --html ...`) eklendi;
+    örnek çıktılar `raporlar/` altındadır.
 
 **Bilinen kırılma:** mimari değiştiği için önceki sürümlerin checkpoint'ları
 (seyrek tablosuz `hiper_model_*.pt`) yeni modele YÜKLENEMEZ (strict yükleyici
@@ -406,25 +535,28 @@ bunu açıkça söyler) — modeli yeniden eğitmek gerekir.
 
 ---
 
-## 🗺️ Yol Haritası
+## 🗺️ Yol Haritası Durumu
 
-1. **Experience Engine ölçeklemesi:** `hga/` katmanını korpus ve talimat
-   eğitimiyle beslemek — gerçek üçlüleri `REAL_DATA` kaynağıyla KnowledgeStore'a
-   akıtmak, `memory/kopru.py` köprüsünü `mimari/seyrek_tablo.py` eğitim
-   döngüsüne bağlamak (v0.6), `text_generator.py` şablonlarını Türkçe morfoloji
-   üreteciyle değiştirmek.
-2. **Korpus ölçeği:** Wikipedia dökümü, OSCAR/CC-100/mC4 "tr" alt kümeleriyle
-   milyon-kelime seviyesine çıkmak — seyrek tablonun dolmasını ve gerçek
-   genelleme yeteneğini besleyecek gerçek veri.
-2. **Uzun bağlam:** 16 token → 64+ token pencere (dikkat maliyeti S² ile
-   büyür; kavramsal anahtar uzayı sözlük^pencere ile katlanarak büyür).
-3. **Anahtar tasarımını zenginleştir (9.6.3):** pencere anahtarına katman/
-   konum bileşenleri ekleyerek katman derinleştikçe adres uzayının katlanması.
-4. **GPU/dağıtık:** AMP hazırdır; katman-bazlı cihaz yerleştirme ve
-   `torch.distributed` ile model paralelliği.
-5. **Talimat seti büyütme** → gerçek Türkçe instruction veri setleri.
-6. **Değerlendirme:** perplexity + uçtan uca sohbet karşılaştırmaları;
-   katman-2 beyaz liste üretiminin kalitesinin (kelime sırası) ölçülmesi.
+Bu branch için önceki “eksik kalan işler” smoke/rapor düzeyinde tamamlandı.
+Büyük-ölçek hedefleri hâlâ araştırma ve donanım meselesidir; README bunları
+gerçekleşmiş kalite iddiası gibi sunmaz.
+
+| Alan | Durum | Kanıt/komut |
+|---|---:|---|
+| Eğitim döngüsü stabilitesi | ✅ %100 smoke | `tests/test_training_saglamlik.py`, `egitim/mini_smoke.py`, `metrics.csv/jsonl`, finite loss/grad |
+| Checkpoint uyumluluğu/resume | ✅ %100 smoke | `checkpoint_version`, `model_meta`, `python -m hga checkpoint-rapor`, resume testleri |
+| Türkçe tokenizer güvenliği | ✅ %100 smoke | özel token, `İ/I`, byte fallback, vocab/embedding tutarlılığı testleri |
+| Seyrek bellek metrikleri | ✅ %100 smoke | doluluk, collision, determinism, LRU/aging, kapasite raporları |
+| Veri kalite + manifest | ✅ %100 smoke | `veri-kalite`, `manifest`, `veri-canli-smoke --kontrollu` |
+| Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
+| Observability | ✅ %100 smoke | JSON/Markdown/HTML panel, attention/geometri/bellek/deneyim metrikleri |
+| KV-cache entegrasyonu | ✅ %100 smoke | attention cache + model-level `forward_cacheli_pencere` + UI runtime yolu |
+| Knowledge/Experience/state machine | ✅ %100 smoke | `MODEL_GENERATED ≠ VERIFIED`, doğrulama ortamları, kapalı validation |
+| GPU/VRAM raporlama | ✅ CPU fallback | raporlar `cuda_available` ve VRAM bilgisini/eksikliğini açık yazar |
+
+**Sonraki ölçek işleri (tamamlandı iddiası değildir):** milyon-kelime Türkçe
+korpus, gerçek instruction set büyütme, 64+ token uzun bağlam, katman-bazlı
+çoklu GPU/model paralelliği ve sohbet kalitesi için insan değerlendirmesi.
 
 ---
 

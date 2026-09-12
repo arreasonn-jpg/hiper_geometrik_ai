@@ -27,6 +27,7 @@ from .corpus import cumlelere_bol
 from .cumle_ayiklayici import (CumleAyiklayici, VARSAYILAN_SOZLUK,
                                cumlelerden_bilgi_aktar)
 from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
+from ..data.quality import VeriKaliteRaporu, temizle_cumleler
 
 VARSAYILAN_KORPUS_DOSYASI = "turkce_metin.txt"
 
@@ -35,6 +36,7 @@ VARSAYILAN_KORPUS_DOSYASI = "turkce_metin.txt"
 class KorpusRaporu:
     cumle_sayisi: int = 0
     buyutme: Optional[SozlukBuyutmeRaporu] = None
+    kalite: Optional[VeriKaliteRaporu] = None
     aktarilan_uclu: int = 0
     son_varlik: int = 0
     son_kanit: int = 0
@@ -43,18 +45,25 @@ class KorpusRaporu:
         d = asdict(self)
         if self.buyutme is not None:
             d["buyutme"] = self.buyutme.to_dict()
+        if self.kalite is not None:
+            d["kalite"] = self.kalite.to_dict()
         return d
 
 
 def korpus_borusu(store, metin: str, sozluk: Optional[Dict] = None,
-                  iliski_kisitlari: Optional[Dict] = None) -> KorpusRaporu:
+                  iliski_kisitlari: Optional[Dict] = None,
+                  kalite_filtresi: bool = False) -> KorpusRaporu:
     """Metni sözlük büyütme + üçlü ayıklama + REAL_DATA aktarımından geçirir.
 
     Sözlük verilmezse `VARSAYILAN_SOZLUK`'tan başlanır (derin kopya alınır;
     global sözlük asla değişmez). `iliski_kisitlari`, `cumlelerden_bilgi_aktar`'a
-    aktarılır (örn. binmek→öznesi insan + nesnesi binilebilir).
+    aktarılır (örn. binmek→öznesi insan + nesnesi binilebilir). ``kalite_filtresi``
+    açılırsa duplicate/spam/bozuk encoding cümleleri atılır ve raporlanır.
     """
     cumleler = cumlelere_bol(metin)
+    kalite_raporu = None
+    if kalite_filtresi:
+        cumleler, kalite_raporu = temizle_cumleler(cumleler)
     buyumus, buyutme_raporu, _ = sozlugu_buyut(sozluk or VARSAYILAN_SOZLUK,
                                                cumleler)
     ayiklayici = CumleAyiklayici(buyumus)
@@ -64,6 +73,7 @@ def korpus_borusu(store, metin: str, sozluk: Optional[Dict] = None,
     return KorpusRaporu(
         cumle_sayisi=len(cumleler),
         buyutme=buyutme_raporu,
+        kalite=kalite_raporu,
         aktarilan_uclu=len(aktarilan),
         son_varlik=ozet.get("varlik", 0),
         son_kanit=ozet.get("kanit", 0),
@@ -71,17 +81,20 @@ def korpus_borusu(store, metin: str, sozluk: Optional[Dict] = None,
 
 
 def korpus_dosyasindan(store, yol: str, sozluk: Optional[Dict] = None,
-                       iliski_kisitlari: Optional[Dict] = None) -> KorpusRaporu:
+                       iliski_kisitlari: Optional[Dict] = None,
+                       kalite_filtresi: bool = False) -> KorpusRaporu:
     """Bir metin dosyasını okuyup REAL_DATA olarak akıtır."""
     with open(yol, "r", encoding="utf-8") as f:
         return korpus_borusu(store, f.read(), sozluk=sozluk,
-                             iliski_kisitlari=iliski_kisitlari)
+                             iliski_kisitlari=iliski_kisitlari,
+                             kalite_filtresi=kalite_filtresi)
 
 
 def veri_toplayici_ciktisindan(store, proje_kok: str,
                                dosya_adi: str = VARSAYILAN_KORPUS_DOSYASI,
                                sozluk: Optional[Dict] = None,
-                               iliski_kisitlari: Optional[Dict] = None
+                               iliski_kisitlari: Optional[Dict] = None,
+                               kalite_filtresi: bool = False
                                ) -> KorpusRaporu:
     """`OtomatikVeriToplayici.metni_kaydet` çıktısı `turkce_metin.txt`'i akıtır.
 
@@ -95,4 +108,5 @@ def veri_toplayici_ciktisindan(store, proje_kok: str,
             f"veri toplayıcı çıktısı bulunamadı: {yol} — önce "
             f"OtomatikVeriToplayici(proje_kok).metni_kaydet(metin) çalıştırın.")
     return korpus_dosyasindan(store, yol, sozluk=sozluk,
-                              iliski_kisitlari=iliski_kisitlari)
+                              iliski_kisitlari=iliski_kisitlari,
+                              kalite_filtresi=kalite_filtresi)

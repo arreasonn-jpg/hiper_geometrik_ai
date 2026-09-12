@@ -1,23 +1,33 @@
 # -*- coding: utf-8 -*-
-import sys, os, re, json, time, torch
+import sys, os, time
 
 KOK = os.path.abspath(os.path.dirname(__file__))
 for p in [KOK, os.path.join(KOK, "mimari"), os.path.join(KOK, "egitim")]:
     if p not in sys.path: sys.path.insert(0, p)
 
 import gradio as gr
-from kuresel_model import (model_olustur, agirlik_yukle,
-                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
-from bpe_tokenizer import BPETokenizer
-from bilgi_katmani import (BilgiKatmani, KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
-                           beyaz_liste_olustur)
+from model_config import VARSAYILAN_MODEL_CONFIG
+from bilgi_katmani import KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK, beyaz_liste_olustur
+from hga.ui_runtime import (
+    SORU_ETIKETI, CEVAP_ETIKETI,
+    config_yukle,
+    tokenizer_hazirla as ortak_tokenizer_hazirla,
+    bilgi_katmani_hazirla as ortak_bilgi_katmani_hazirla,
+    model_ve_agirlik_yukle,
+    metin_uret,
+)
 
-# Tek doğruluk kaynağı: mimari/kuresel_model.py + bilgi_katmani.py
-# (eski yerel model_olustur kopyası ve intent_cevap/norm buraya indirgendi —
-#  artık terminal (calistir.py) ile AYNI 3 katmanlı karar mekanizması)
+# Tek doğruluk kaynağı: model_config.yaml + hga.ui_runtime + bilgi_katmani.py.
+# Terminal (calistir.py) ile aynı tokenizer/model yükleme ve üretim döngüsü kullanılır.
+def n_secenekleri():
+    return sorted({128, 256, 512, SISTEM["n_gen"]})
+
+
 SISTEM = {"model": None, "tok": None, "bilgi": None,
-          "n_gen": VARSAYILAN_N, "katman": VARSAYILAN_KATMAN,
-          "baglam": VARSAYILAN_BAGLAM, "talimatlar": [], "loglar": []}
+          "n_gen": VARSAYILAN_MODEL_CONFIG.n,
+          "katman": VARSAYILAN_MODEL_CONFIG.katman_sayisi,
+          "baglam": VARSAYILAN_MODEL_CONFIG.baglam_penceresi,
+          "talimatlar": [], "loglar": []}
 
 def log(m):
     s = f"[{time.strftime('%H:%M:%S')}] {m}"
@@ -25,97 +35,61 @@ def log(m):
     SISTEM["loglar"] = SISTEM["loglar"][-40:]
     return "\n".join(SISTEM["loglar"])
 
+def modeli_yukle(n_gen=None):
+    """Seçili n için config uyumlu modeli ortak runtime üzerinden yükle."""
+    n = int(n_gen if n_gen is not None else SISTEM["n_gen"])
+    model, _, _ = model_ve_agirlik_yukle(
+        KOK, SISTEM["tok"], n=n, katman=SISTEM["katman"],
+        baglam=SISTEM["baglam"], logger=log,
+    )
+    SISTEM["model"] = model
+    SISTEM["n_gen"] = n
+
+
+def modeli_gerekirse_yenile(n_gen):
+    try:
+        n = int(n_gen)
+    except Exception:
+        n = SISTEM["n_gen"]
+    if n != SISTEM["n_gen"] or SISTEM["model"] is None:
+        modeli_yukle(n)
+
+
 def baslat():
-    # BPE tokenizer (rapor 8.4.6): kilitli sözlük varsa yükle, yoksa kur
-    tok = BPETokenizer(baglam_penceresi=VARSAYILAN_BAGLAM, max_vocab_size=8000)
-    sozluk = os.path.join(KOK, "bpe_sozluk.json")
-    korpus = os.path.join(KOK, "turkce_metin.txt")
-    if os.path.exists(sozluk):
-        tok.yukle(sozluk)
-        log(f"Kilitli BPE sozlugu yuklendi: {tok.sozluk_boyutu} parca")
-    elif os.path.exists(korpus):
-        with open(korpus, "r", encoding="utf-8") as f:
-            tok.fit_on_text(f.read(800000))
-        tok.kaydet(sozluk)
-        log(f"BPE sozlugu kurulup kilitlendi: {tok.sozluk_boyutu} parca")
+    cfg = config_yukle(KOK)
+    mcfg = cfg["model"]
+    SISTEM["n_gen"] = mcfg.n
+    SISTEM["katman"] = mcfg.katman_sayisi
+    SISTEM["baglam"] = mcfg.baglam_penceresi
+
+    # BPE tokenizer (rapor 8.4.6): config'ten gelen varsayılanlarla hazırlanır.
+    tok = ortak_tokenizer_hazirla(
+        KOK, baglam=SISTEM["baglam"], sozluk_boyutu=mcfg.sozluk_boyutu,
+        logger=log,
+    )
     SISTEM["tok"] = tok
 
-    talimat_yol = os.path.join(KOK, "talimat_verisi.json")
-    if os.path.exists(talimat_yol):
-        with open(talimat_yol, "r", encoding="utf-8") as f:
-            SISTEM["talimatlar"] = json.load(f)
-    log(f"Talimat: {len(SISTEM['talimatlar'])} ornek")
+    # 3 katmanlı halüsinasyon kontrolü (rapor 10.5) — calistir.py ile ortak.
+    bilgi, talimatlar = ortak_bilgi_katmani_hazirla(KOK, logger=log)
+    SISTEM["bilgi"] = bilgi
+    SISTEM["talimatlar"] = talimatlar
 
-    # 3 katmanlı halüsinasyon kontrolü (rapor 10.5) — calistir.py ile ortak
-    SISTEM["bilgi"] = BilgiKatmani(SISTEM["talimatlar"])
-
-    # Model: TEK doğruluk kaynağından (mimari/kuresel_model.py)
-    n = SISTEM["n_gen"]
-    model = model_olustur(max(len(tok.sozluk), 100), n=n,
-                          baglam_penceresi=SISTEM["baglam"],
-                          katman_sayisi=SISTEM["katman"])
-    for ad in [f"hiper_model_{n}_talimat.pt", f"hiper_model_{n}.pt"]:
-        yol = os.path.join(KOK, ad)
-        if os.path.exists(yol):
-            try:
-                agirlik_yukle(model, yol, strict=True)  # rapor 8.1.5
-                log(f"Model (strict=True): {ad}")
-                break
-            except Exception as e:
-                log(f"UYARI {ad} yuklenemedi: {str(e)[:140]}")
-    model.eval()
-    SISTEM["model"] = model
+    modeli_yukle(SISTEM["n_gen"])
 
 def sinir_agi_uret(prompt, max_token=24, izinli=None):
-    """BPE parçalarını kelimelere DOĞRU biçimde birleştirerek üretim yapar.
-
-    izinli (bool maske) verilirse yalnız beyaz listedeki token'lar seçilebilir
-    (KATMAN_KISMI kısıtlı üretimi, rapor 10.5.2).
-    """
-    tok = SISTEM["tok"]   # BPETokenizer
+    """Gradio üretimi; gerçek BPE döngüsü hga.ui_runtime.metin_uret'tedir."""
+    tok = SISTEM["tok"]
     model = SISTEM["model"]
     baglam = getattr(model, "baglam_penceresi", SISTEM["baglam"])
-    out = list(tok.encode(prompt) or [2])
-    kelimeler, parca = [], ""
-    ban = set()
-    for w in ["üç", "bir", "ve", "için", "ile", "bu", "da", "de", "en", "her", "çok", "tck", "yil", "yıl"]:
-        if w in tok.sozluk:
-            ban.add(tok.sozluk[w])
-
-    with torch.inference_mode():
-        for step in range(max_token):
-            pencere = out[-baglam:]
-            pencere = [0] * (baglam - len(pencere)) + pencere
-            logits = model(torch.tensor([pencere], dtype=torch.long))[0]
-            logits[:4] = -1e9
-            if izinli is not None:
-                logits[~izinli] = -1e9            # beyaz liste dışını engelle
-            if step >= 2:
-                for b in ban:
-                    logits[b] -= 4.0
-            if len(out) >= 1:
-                logits[out[-1]] -= 6.0
-            nxt = int(torch.argmax(logits).item())
-            out.append(nxt)
-            if nxt == tok.EOS_ID:
-                break
-            ham = tok.id_to_kelime.get(nxt, "")
-            if not ham or ham in ("<pad>", "<unk>", "<bos>"):
-                continue
-            if ham.endswith("</w>"):
-                parca += ham[:-4]
-                if parca in ("son", "soru", "cevap"):
-                    break
-                if parca and not (kelimeler and kelimeler[-1] == parca):
-                    kelimeler.append(parca)
-                parca = ""
-            else:
-                parca += ham
-            if len(kelimeler) >= 16:
-                break
-    return " ".join(kelimeler).strip()
+    ban = ["üç", "bir", "ve", "için", "ile", "bu", "da", "de", "en", "her", "çok", "tck", "yil", "yıl"]
+    return metin_uret(
+        model, tok, prompt, baglam, izinli=izinli, max_token=max_token,
+        strateji="greedy", special_token_siniri=4, ban_kelimeler=ban,
+        tekrar_cezasi=True, max_kelime=16,
+    )
 
 def chat(mesaj, history, n_gen, max_token, talimat_modu):
+    modeli_gerekirse_yenile(n_gen)
     history = history or []
     if not mesaj or not mesaj.strip():
         yield history, ""
@@ -149,7 +123,7 @@ def chat(mesaj, history, n_gen, max_token, talimat_modu):
     else:
         onek = ""
 
-    prompt = f"soru {mesaj.strip()} cevap" if talimat_modu else mesaj.strip()
+    prompt = f"{SORU_ETIKETI} {mesaj.strip()} {CEVAP_ETIKETI}" if talimat_modu else mesaj.strip()
     metin = sinir_agi_uret(prompt, int(max_token), izinli=izinli)
     if not metin:
         metin = "Anladım. Lütfen soruyu biraz daha açık yazar mısınız?"
@@ -196,7 +170,7 @@ with gr.Blocks(title="Hiper-Geometrik AI v15.0") as demo:
         with gr.Column(scale=1):
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Model")
-                gen = gr.Dropdown([128, 256, 512], value=VARSAYILAN_N, label="n (kuresel bag boyutu)")
+                gen = gr.Dropdown(n_secenekleri(), value=SISTEM["n_gen"], label="n (kuresel bag boyutu)")
                 talimat = gr.Checkbox(True, label="Sohbet Asistani Modu")
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Durum")
@@ -231,4 +205,4 @@ with gr.Blocks(title="Hiper-Geometrik AI v15.0") as demo:
             msg.submit(chat, [msg, chatbox, gen, max_tok, talimat], [chatbox, msg])
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7860, inbrowser=True, css=CSS)
+    demo.launch(server_name="0.0.0.0", server_port=7860, inbrowser=False, css=CSS)

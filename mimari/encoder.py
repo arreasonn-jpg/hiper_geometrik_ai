@@ -22,23 +22,38 @@ kısıtı KIRAR ve zincire tam ranklı bir başlangıç matrisi verir.
 """
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class GeometrikVeriEncoder(nn.Module):
-    """Düz vektör → (u, v) → tanh(u ⊗ v) → (B, n, n) sanal geometri matrisi."""
+    """Düz vektör → (u, v) → aktivasyon(u ⊗ v) → (B, n, n)."""
 
-    def __init__(self, giris_boyutu: int, n: int):
+    def __init__(self, giris_boyutu: int, n: int, aktivasyon: str = "tanh"):
         super().__init__()
         self.n = n
+        self.aktivasyon_adi = aktivasyon
         self.proj_u = nn.Linear(giris_boyutu, n)
         self.proj_v = nn.Linear(giris_boyutu, n)
+
+    @staticmethod
+    def _aktivasyon(x: torch.Tensor, ad: str) -> torch.Tensor:
+        ad = (ad or "tanh").lower()
+        if ad == "tanh":
+            return torch.tanh(x)
+        if ad == "gelu":
+            return F.gelu(x)
+        if ad == "silu":
+            return F.silu(x)
+        if ad in ("identity", "none", "yok"):
+            return x
+        raise ValueError(f"bilinmeyen encoder aktivasyonu: {ad}")
 
     def forward(self, duz: torch.Tensor) -> torch.Tensor:
         # duz: (B, giris_boyutu) → (B, n, n)
         u = self.proj_u(duz)
         v = self.proj_v(duz)
         # Dış çarpım: X[b, i, j] = u[b, i] * v[b, j]  → n² sanal köşe
-        return torch.tanh(torch.einsum("bi,bj->bij", u, v))
+        return self._aktivasyon(torch.einsum("bi,bj->bij", u, v), self.aktivasyon_adi)
 
     def kapasite(self) -> dict:
         return {
