@@ -23,30 +23,60 @@ import inspect
 from typing import Callable, Dict, Optional
 
 from ..knowledge.schemas import ExperienceCandidate
-from .turkce import kucult, yonelme_eki
+from .turkce import (kucult, yonelme_eki, belirtme_eki, bulunma_eki,
+                     ayrilma_eki)
 
 
 def _norm(token: str) -> str:
     return (token or "").strip().lower()
 
 
-def _binmek_ureteci(ozne: str, nesne: str, baglam: Optional[Dict] = None) -> str:
-    """"binmek" için ek uyumlu Türkçe cümle.
+def _ozel_mi(baglam) -> bool:
+    return bool(baglam and getattr(baglam.get("object"), "is_ozel", False))
 
-    Özel isim nesne → kesme işaretli (Ata → Ata'ya), cins isim → küçük harf
-    (ata → ataya). Öznenin özel isim olması cümlenin öznesini değiştirmez.
-    """
-    ozel = bool(baglam and getattr(baglam.get("object"), "is_ozel", False))
+
+def _binmek_ureteci(ozne: str, nesne: str, baglam: Optional[Dict] = None) -> str:
+    """"binmek" için ek uyumlu Türkçe cümle (yönelme)."""
+    ozel = _ozel_mi(baglam)
     if ozel:
         cekilmis = yonelme_eki(nesne, ozel_isim=True)
         return f"{ozne}, {cekilmis} bindi."
-    cekilmis = yonelme_eki(kucult(nesne), ozel_isim=False)
+    cekilmis = yonelme_eki(kucult(nesne))
     return f"{ozne} {cekilmis} bindi."
+
+
+def _sevmek_ureteci(ozne: str, nesne: str, baglam: Optional[Dict] = None) -> str:
+    """"sevmek" için ek uyumlu Türkçe cümle (belirtme)."""
+    ozel = _ozel_mi(baglam)
+    if ozel:
+        cekilmis = belirtme_eki(nesne, ozel_isim=True)
+        return f"{ozne}, {cekilmis} seviyor."
+    cekilmis = belirtme_eki(kucult(nesne))
+    return f"{ozne} {cekilmis} seviyor."
+
+
+def _durmak_ureteci(ozne: str, nesne: str, baglam: Optional[Dict] = None) -> str:
+    """"durmak" için ek uyumlu Türkçe cümle (bulunma)."""
+    ozel = _ozel_mi(baglam)
+    cekilmis = bulunma_eki(nesne, ozel_isim=ozel) if ozel else bulunma_eki(kucult(nesne))
+    return f"{ozne} {cekilmis} duruyor."
+
+
+def _gelmek_ureteci(ozne: str, nesne: str, baglam: Optional[Dict] = None) -> str:
+    """"gelmek" için ek uyumlu Türkçe cümle (ayrılma)."""
+    ozel = _ozel_mi(baglam)
+    cekilmis = ayrilma_eki(nesne, ozel_isim=ozel) if ozel else ayrilma_eki(kucult(nesne))
+    return f"{ozne} {cekilmis} geliyor."
 
 
 def _varsayilan_uretecler() -> Dict[str, Callable]:
     """İlişki adına göre Türkçe şablon üreteçleri."""
-    return {"binmek": _binmek_ureteci}
+    return {
+        "binmek": _binmek_ureteci,
+        "sevmek": _sevmek_ureteci,
+        "durmak": _durmak_ureteci,
+        "gelmek": _gelmek_ureteci,
+    }
 
 
 def _cagir(ureteci: Callable, ozne: str, nesne: str, baglam: Dict) -> str:

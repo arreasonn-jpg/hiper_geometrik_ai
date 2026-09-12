@@ -3,7 +3,8 @@
 from .scoring import Scoring, ScoreBreakdown, VARSAYILAN_AGIRLIKLAR
 from .generator import ExperienceGenerator
 from .text_generator import TextGenerator
-from .turkce import yonelme_eki, son_unlu, kucult
+from .turkce import (yonelme_eki, belirtme_eki, bulunma_eki, ayrilma_eki,
+                     cogul_eki, unsuz_yumusat, hece_sayisi, son_unlu, kucult)
 from .mini_env import AritmetikOrtam
 from .evaluator import ExperienceEvaluator, VARSAYILAN_ESIKLER
 from .conflict import ConflictResolver, ConflictResolution
@@ -11,6 +12,9 @@ from .consolidation import Consolidator, ConsolidationReport
 from .arastirma import ArastirmaKuyrugu, ArastirmaRaporu
 from .cumle_ayiklayici import (CumleAyiklayici, AyiklananUclu,
                                cumlelerden_bilgi_aktar, ascii_norm)
+from .corpus import cumlelere_bol, dosyadan_cumleler, dosyadan_bilgi_aktar
+from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
+                        karsilastirma)
 from .loop import DeneyimDongusu, AdimRaporu
 
 __all__ = [
@@ -20,6 +24,12 @@ __all__ = [
     "ExperienceGenerator",
     "TextGenerator",
     "yonelme_eki",
+    "belirtme_eki",
+    "bulunma_eki",
+    "ayrilma_eki",
+    "cogul_eki",
+    "unsuz_yumusat",
+    "hece_sayisi",
     "son_unlu",
     "kucult",
     "AritmetikOrtam",
@@ -35,6 +45,14 @@ __all__ = [
     "AyiklananUclu",
     "cumlelerden_bilgi_aktar",
     "ascii_norm",
+    "cumlelere_bol",
+    "dosyadan_cumleler",
+    "dosyadan_bilgi_aktar",
+    "BenchmarkOzeti",
+    "aritmetik_etki_alani",
+    "kos",
+    "ozetle",
+    "karsilastirma",
     "DeneyimDongusu",
     "AdimRaporu",
 ]

@@ -75,6 +75,28 @@ def test_text_generator_ozel_uretec():
     assert tg.cumle(k, a) == "Ali Ata üzerinde deneyim yaşadı."
 
 
+def test_text_generator_durum_ekleri():
+    """sevmek (belirtme), durmak (bulunma), gelmek (ayrılma) şablonları."""
+    k = KnowledgeStore()
+    k.varlik_ekle("Ali", entity_type="insan", entity_id="E_001", ozel_isim=True)
+    k.varlik_ekle("Araba", entity_type="tasit", entity_id="E_002")
+    k.varlik_ekle("Ev", entity_type="mekan", entity_id="E_003")
+    k.iliski_tanimla("Sevmek", relation_id="R_001")
+    k.iliski_tanimla("Durmak", relation_id="R_002")
+    k.iliski_tanimla("Gelmek", relation_id="R_003")
+    tg = TextGenerator()
+    from hga.knowledge import ExperienceCandidate
+    a1 = ExperienceCandidate(experience_id="X1", subject_id="E_001",
+                             relation_id="R_001", object_id="E_002")
+    a2 = ExperienceCandidate(experience_id="X2", subject_id="E_001",
+                             relation_id="R_002", object_id="E_003")
+    a3 = ExperienceCandidate(experience_id="X3", subject_id="E_001",
+                             relation_id="R_003", object_id="E_003")
+    assert tg.cumle(k, a1) == "Ali arabayı seviyor."   # belirtme
+    assert tg.cumle(k, a2) == "Ali evde duruyor."      # bulunma
+    assert tg.cumle(k, a3) == "Ali evden geliyor."     # ayrılma
+
+
 def test_information_gain_ayirt_edicilik():
     """Birebir aynı özelliklere sahip nesne → düşük kazanç; benzersiz → yüksek."""
     k = _store()
