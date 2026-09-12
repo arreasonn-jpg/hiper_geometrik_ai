@@ -11,11 +11,14 @@ saf Python ile çalışan (torch bağımlılığı OLMAYAN) modüler katmandır:
     hga/knowledge/   — EntityIndex, PropertyIndex, RelationIndex, KnowledgeStore
     hga/experience/  — Generator, Evaluator, Scoring, Conflict, Consolidation
     hga/memory/      — Seyrek deneyim slotları + Experience Replay (köprü)
-    hga/config/      — Ağırlık/eşik yapılandırması (experience_config.yaml)
+    hga/evaluation/  — Halüsinasyon/factual consistency metrikleri
+    hga/observability/ — Attention/geometri/bellek/deneyim akışı raporları
+    hga/data/        — Veri kalite filtresi
+    hga/config/      — Ağırlık/eşik/model yapılandırmaları
 
 Temel döngü (rapor §2):
     Gerçek veri → Temsil → Yeni deneyim adayı → Değerlendirme
-    → VALID / CONFLICT / INVALID → Hafıza veya araştırma → Bilgi güncellemesi
+    → VALID / CONFLICT / INVALID → Hafıza / EXPLORE / REJECT → Bilgi güncellemesi
 
 Kullanım:
     from hga.knowledge import KnowledgeStore

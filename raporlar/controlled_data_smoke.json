@@ -1,0 +1,23 @@
+{
+  "cekilen_konu": 2,
+  "cikis": "logs/controlled_data_smoke.txt",
+  "durum": "ok",
+  "ham_cumle": 6,
+  "ham_karakter": 412,
+  "hata": null,
+  "kabul_orani": 0.6666666666666666,
+  "konular": [
+    "Türkçe",
+    "İstanbul"
+  ],
+  "manifest": {
+    "bytes": 302,
+    "lines": 4,
+    "path": "logs/controlled_data_smoke.txt",
+    "sha256": "accf32ac3efa7d86e4b146a5f43e6a802bd1763b211703e51d939a6460da5d2a"
+  },
+  "notlar": [
+    "kontrollü fetcher kullanıldı; ağ bağımlılığı yok"
+  ],
+  "temiz_cumle": 4
+}

@@ -1,20 +1,54 @@
-﻿# -*- coding: utf-8 -*-
-import re, json, os
+# -*- coding: utf-8 -*-
+"""Eski kelime-bazlı tokenizer (uyumluluk katmanı).
+
+Yeni zincirde varsayılan ``BPETokenizer``dır; bu sınıf eski script/checkpoint
+uyumluluğu için korunur. Yine de merkezi vocab varsayılanını ve Türkçe harf
+normalizasyonunu kullanır.
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
 from collections import Counter
+from typing import Dict, Iterable, Optional
+
+try:
+    from model_config import VARSAYILAN_MODEL_CONFIG
+except Exception:  # paket import'u
+    try:
+        from .model_config import VARSAYILAN_MODEL_CONFIG
+    except Exception:  # çok eski ortam fallback'i
+        VARSAYILAN_MODEL_CONFIG = None  # type: ignore
+
+
+def _varsayilan_vocab() -> int:
+    return int(getattr(VARSAYILAN_MODEL_CONFIG, "sozluk_boyutu", 8000))
+
 
 class GeometrikTokenizer:
-    def __init__(self, max_vocab_size=8000):
-        self.max_vocab_size = max_vocab_size
-        self.PAD_ID, self.UNK_ID, self.BOS_ID, self.EOS_ID = 0, 1, 2, 3
-        self.sozluk = {"<PAD>": 0, "<UNK>": 1, "<BOS>": 2, "<EOS>": 3}
-        self.id_to_kelime = {0: "<PAD>", 1: "<UNK>", 2: "<BOS>", 3: "<EOS>"}
+    PAD_ID, UNK_ID, BOS_ID, EOS_ID = 0, 1, 2, 3
+    OZEL = {"<PAD>": PAD_ID, "<UNK>": UNK_ID, "<BOS>": BOS_ID, "<EOS>": EOS_ID}
+
+    def __init__(self, max_vocab_size: Optional[int] = None):
+        self.max_vocab_size = int(max_vocab_size if max_vocab_size is not None else _varsayilan_vocab())
+        self.sozluk: Dict[str, int] = dict(self.OZEL)
+        self.id_to_kelime: Dict[int, str] = {v: k for k, v in self.sozluk.items()}
+
+    @staticmethod
+    def _turkce_kucult(metin: str) -> str:
+        metin = str(metin).replace("İ", "i").replace("I", "ı")
+        return unicodedata.normalize("NFC", metin.lower())
+
+    def _kelimeler(self, metin: str):
+        return re.findall(r"\b\w+\b", self._turkce_kucult(metin), flags=re.UNICODE)
 
     def fit(self, metin):
-        kelimeler = re.findall(r"\b\w+\b", metin.lower())
-        en_cok = Counter(kelimeler).most_common(self.max_vocab_size - 4)
-        self.sozluk = {"<PAD>": 0, "<UNK>": 1, "<BOS>": 2, "<EOS>": 3}
-        self.id_to_kelime = {0: "<PAD>", 1: "<UNK>", 2: "<BOS>", 3: "<EOS>"}
-        for idx, (k, _) in enumerate(en_cok, start=4):
+        kelimeler = self._kelimeler(metin)
+        en_cok = Counter(kelimeler).most_common(max(0, self.max_vocab_size - len(self.OZEL)))
+        self.sozluk = dict(self.OZEL)
+        self.id_to_kelime = {v: k for k, v in self.sozluk.items()}
+        for idx, (k, _) in enumerate(en_cok, start=len(self.OZEL)):
             self.sozluk[k] = idx
             self.id_to_kelime[idx] = k
         return self
@@ -34,13 +68,31 @@ class GeometrikTokenizer:
         return self
 
     def text_to_ids(self, metin):
-        return [self.sozluk.get(w, self.UNK_ID) for w in re.findall(r"\b\w+\b", metin.lower())]
+        return [self.sozluk.get(w, self.UNK_ID) for w in self._kelimeler(metin)]
 
     def encode(self, metin):
         return self.text_to_ids(metin)
 
-    def decode(self, ids):
-        return " ".join(self.id_to_kelime.get(i, "") for i in ids if i > 3)
+    def decode(self, ids: Iterable[int]):
+        return " ".join(self.id_to_kelime.get(int(i), "") for i in ids if int(i) > self.EOS_ID)
 
     def ids_to_text(self, ids):
         return self.decode(ids)
+
+    def ozel_tokenlari_dogrula(self) -> bool:
+        return all(self.sozluk.get(tok) == idx and self.id_to_kelime.get(idx) == tok
+                   for tok, idx in self.OZEL.items())
+
+    def vocab_tutarliligi(self, embedding_boyutu: Optional[int] = None,
+                          strict: bool = False) -> bool:
+        ids = list(self.sozluk.values())
+        ok = (self.ozel_tokenlari_dogrula() and len(ids) == len(set(ids)) and
+              set(ids) == set(range(len(ids))))
+        if embedding_boyutu is not None:
+            ok = ok and int(embedding_boyutu) >= len(self.sozluk)
+        if strict and not ok:
+            raise ValueError("GeometrikTokenizer vocab/special-token tutarsız")
+        return bool(ok)
+
+
+__all__ = ["GeometrikTokenizer"]

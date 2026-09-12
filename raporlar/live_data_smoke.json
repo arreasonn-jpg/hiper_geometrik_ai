@@ -1,0 +1,18 @@
+{
+  "cekilen_konu": 0,
+  "cikis": null,
+  "durum": "insufficient_data",
+  "ham_cumle": 0,
+  "ham_karakter": 0,
+  "hata": null,
+  "kabul_orani": 0.0,
+  "konular": [
+    "Türkçe",
+    "İstanbul"
+  ],
+  "manifest": null,
+  "notlar": [
+    "canlı kaynak boş döndü veya erişilemedi; kontrollü smoke için --kontrollu kullan"
+  ],
+  "temiz_cumle": 0
+}

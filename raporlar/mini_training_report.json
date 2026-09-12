@@ -1,0 +1,71 @@
+{
+  "artefaktlar": {
+    "best_checkpoint": "checkpoints/mini_training_smoke/best.pt",
+    "latest_checkpoint": "checkpoints/mini_training_smoke/latest.pt",
+    "metrics_csv": "logs/mini_training_smoke/metrics.csv",
+    "metrics_jsonl": "logs/mini_training_smoke/metrics.jsonl"
+  },
+  "benchmark": {
+    "cumle_sayisi": 5,
+    "loss": 5.406014442443848,
+    "notlar": [
+      "unk_orani=0.0000"
+    ],
+    "perplexity": 222.7420649160401,
+    "token_sayisi": 55,
+    "tokenizer_ok": true
+  },
+  "checkpoint_uyumluluk": {
+    "checkpoint_version": "hga-train-v1",
+    "eksik": [],
+    "fazla": [],
+    "model_meta": {
+      "baglam_penceresi": 8,
+      "katman_sayisi": 1,
+      "n": 8,
+      "seyrek_var": false,
+      "sozluk_boyutu": 218
+    },
+    "ok": true,
+    "ortak_anahtar": 21,
+    "sekil_uyumsuz": {},
+    "strict": true
+  },
+  "cihaz": {
+    "cuda_available": false,
+    "device": "cpu",
+    "note": "CUDA yok; smoke CPU fallback ile koştu",
+    "torch_available": true,
+    "torch_version": "2.3.1+cu121"
+  },
+  "durum": "ok",
+  "egitim": {
+    "cag": 1,
+    "grad_norm": 0.8345324993133545,
+    "grad_sonlu": true,
+    "loss_sonlu": true,
+    "lr": 5e-05,
+    "max_grad_katman": "encoder.proj_v.weight",
+    "max_grad_norm": 0.5667240619659424,
+    "perplexity": 231.34130892673448,
+    "train_loss": 5.4250640869140625,
+    "val_loss": 5.443894147872925
+  },
+  "model": {
+    "K": 1,
+    "baglam": 8,
+    "emb_dim": 8,
+    "heads": 2,
+    "n": 8,
+    "parametre": 7115,
+    "vocab": 218
+  },
+  "olusturma_zamani_utc": "2026-09-12T22:59:51.409015+00:00",
+  "rapor_tipi": "hga-mini-training-smoke-v1",
+  "sinirlar": "Küçük smoke koşusu; kalite/ölçek iddiası değildir.",
+  "veri": {
+    "cumle_sayisi": 20,
+    "tekrar": 4,
+    "token_sayisi": 220
+  }
+}

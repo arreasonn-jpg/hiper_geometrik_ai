@@ -53,7 +53,9 @@ class DeneyimDurumu(str, Enum):
     CANDIDATE = "CANDIDATE"    # henüz değerlendirilmedi → Evaluator'a gönder
     VALID = "VALID"            # mevcut bilgiyle uyumlu → belleğe ADAY olarak ekle
     CONFLICT = "CONFLICT"      # mevcut bilgiyle çelişiyor → araştırma kuyruğuna gönder
+    EXPLORE = "EXPLORE"        # çelişki araştırma modunda (CONFLICT sonrası)
     INVALID = "INVALID"        # kural/ilişki/özellik açısından uyumsuz → reddet
+    REJECT = "REJECT"          # reddedilerek kapatıldı (INVALID sonrası terminal)
     VERIFIED = "VERIFIED"      # harici/deterministik doğrulama aldı → kalıcı bilgiye yükselt
 
 

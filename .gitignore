@@ -16,3 +16,5 @@ sozluk.json
 bpe_sozluk.json
 talimat_verisi.json
 yama_durumu.json
+logs/
+checkpoints/

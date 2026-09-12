@@ -1,11 +1,32 @@
-import requests
 import os
 import re
 import json
 import csv
 import io
-import pyarrow.parquet as pq
-import pyarrow as pa
+
+try:  # opsiyonel ağ bağımlılığı — import-time kırılma olmasın
+    import requests  # type: ignore
+except Exception:  # pragma: no cover
+    requests = None  # type: ignore
+
+try:  # opsiyonel parquet bağımlılığı
+    import pyarrow.parquet as pq  # type: ignore
+    import pyarrow as pa  # type: ignore
+except Exception:  # pragma: no cover
+    pq = None  # type: ignore
+    pa = None  # type: ignore
+
+
+def _requests_gerekli():
+    if requests is None:
+        raise ImportError("Ağ/veri toplama için requests gerekli. Kurulum: pip install requests")
+    return requests
+
+
+def _pyarrow_gerekli():
+    if pq is None or pa is None:
+        raise ImportError("Parquet okuma için pyarrow gerekli. Kurulum: pip install pyarrow")
+    return pa, pq
 
 class OtomatikVeriToplayici:
     def __init__(self, proje_kok):
@@ -141,6 +162,7 @@ class OtomatikVeriToplayici:
         - cursor ile tüm sayfalar
         - klasörleri de elle tarar (iç içe parquet için)
         """
+        req = _requests_gerekli()
         dosyalar = []
         gorulen_path = set()
 
@@ -159,7 +181,7 @@ class OtomatikVeriToplayici:
                     url += f"&cursor={cursor}"
 
                 try:
-                    yanit = requests.get(url, headers=self.headers, timeout=45)
+                    yanit = req.get(url, headers=self.headers, timeout=45)
                 except Exception as e:
                     print(f"  [⚠️ HF TREE] {e}")
                     break
@@ -171,7 +193,7 @@ class OtomatikVeriToplayici:
                         if cursor:
                             url2 += f"?cursor={cursor}"
                         try:
-                            yanit = requests.get(url2, headers=self.headers, timeout=45)
+                            yanit = req.get(url2, headers=self.headers, timeout=45)
                         except Exception:
                             break
                     if yanit.status_code != 200:
@@ -228,7 +250,7 @@ class OtomatikVeriToplayici:
         # 2) Fallback: siblings API
         if not dosyalar and not alt:
             try:
-                yanit = requests.get(f"{self.hf_api}/{repo_id}", headers=self.headers, timeout=20)
+                yanit = req.get(f"{self.hf_api}/{repo_id}", headers=self.headers, timeout=20)
                 if yanit.status_code == 200:
                     data = yanit.json()
                     if isinstance(data, dict) and "siblings" in data:
@@ -256,12 +278,11 @@ class OtomatikVeriToplayici:
         for pk in sorted(patch_kokleri):
             # data ve alt klasörler
             for prefix in (pk, f"{pk}/data"):
-                if prefix in gorulen_path or True:
-                    alt2 = _tree_sayfalari(prefix)
-                    # data altındaki her alt klasör (aym_bb, yargitay, ...)
-                    for klasor in alt2:
-                        if klasor.count("/") >= 2:  # Patch-x/data/yargitay
-                            _tree_sayfalari(klasor)
+                alt2 = _tree_sayfalari(prefix)
+                # data altındaki her alt klasör (aym_bb, yargitay, ...)
+                for klasor in alt2:
+                    if klasor.count("/") >= 2:  # Patch-x/data/yargitay
+                        _tree_sayfalari(klasor)
 
         # Sadece desteklenen uzantıları ayıklama ana fonksiyonda yapılıyor
         dosyalar = sorted(set(dosyalar))
@@ -320,7 +341,7 @@ class OtomatikVeriToplayici:
             hdrs = dict(self.headers)
             hdrs["Range"] = f"bytes={self.pos}-{end - 1}"
             try:
-                resp = requests.get(self.url, headers=hdrs, timeout=30)
+                resp = _requests_gerekli().get(self.url, headers=hdrs, timeout=30)
                 if resp.status_code in (200, 206):
                     self.pos = end
                     self.indirilen_toplam_bayt += len(resp.content)
@@ -389,9 +410,15 @@ class OtomatikVeriToplayici:
     def _parquet_akilli_oku(self, raw_url, hedef_kelime, mevcut_kelime):
         toplanan = []
         ek_kelime = 0
+        try:
+            req = _requests_gerekli()
+            pa_mod, pq_mod = _pyarrow_gerekli()
+        except ImportError as e:
+            print(f"    [⚠️ BAĞIMLILIK] {e}")
+            return "", 0
 
         try:
-            head = requests.head(raw_url, headers=self.headers, timeout=15, allow_redirects=True)
+            head = req.head(raw_url, headers=self.headers, timeout=15, allow_redirects=True)
             total_size = int(head.headers.get("Content-Length", 0))
 
             if total_size == 0:
@@ -407,7 +434,7 @@ class OtomatikVeriToplayici:
             headers_range["Range"] = f"bytes={range_start}-{total_size - 1}"
 
             print(f"    [📥 METADATA] Footer okunuyor...")
-            r = requests.get(raw_url, headers=headers_range, timeout=25)
+            r = req.get(raw_url, headers=headers_range, timeout=25)
 
             if r.status_code not in (200, 206):
                 print(f"    [⚠️] Range request desteklenmiyor (HTTP {r.status_code})")
@@ -419,8 +446,8 @@ class OtomatikVeriToplayici:
             )
 
             try:
-                pa_file = pa.PythonFile(reader, mode="r")
-                pf = pq.ParquetFile(pa_file)
+                pa_file = pa_mod.PythonFile(reader, mode="r")
+                pf = pq_mod.ParquetFile(pa_file)
 
                 print(f"    [📦 METADATA] Toplam: {pf.metadata.num_rows:,} satır")
 
@@ -477,6 +504,11 @@ class OtomatikVeriToplayici:
     # ANA DOSYA OKUMA (parquet + jsonl + diğer)
     # ==========================================
     def _dosya_oku_ve_ayikla(self, repo_id, dosya_yolu, hedef_kelime, mevcut_kelime):
+        try:
+            req = _requests_gerekli()
+        except ImportError as e:
+            print(f"    [⚠️ BAĞIMLILIK] {e}")
+            return "", 0
         uzanti = os.path.splitext(dosya_yolu)[1].lower()
         raw_url = f"https://huggingface.co/datasets/{repo_id}/resolve/main/{dosya_yolu}"
 
@@ -487,7 +519,7 @@ class OtomatikVeriToplayici:
             toplanan = []
             ek_kelime = 0
             try:
-                with requests.get(raw_url, headers=self.headers, stream=True, timeout=40) as r:
+                with req.get(raw_url, headers=self.headers, stream=True, timeout=40) as r:
                     if r.status_code == 200:
                         for satir in r.iter_lines(decode_unicode=True):
                             if not satir or not satir.strip():
@@ -512,7 +544,7 @@ class OtomatikVeriToplayici:
             toplanan = []
             ek_kelime = 0
             try:
-                res = requests.get(raw_url, headers=self.headers, timeout=25)
+                res = req.get(raw_url, headers=self.headers, timeout=25)
                 if res.status_code == 200:
                     t = self.format_donusturucu(dosya_yolu, res.text)
                     parcalar = re.split(r'(?<=[\.!?])\s+', t)
@@ -637,13 +669,14 @@ class OtomatikVeriToplayici:
             "explaintext": True, "titles": baslik.strip(), "format": "json"
         }
         try:
-            yanit = requests.get(self.wiki_api, params=params, headers=self.headers, timeout=10).json()
+            req = _requests_gerekli()
+            yanit = req.get(self.wiki_api, params=params, headers=self.headers, timeout=10).json()
             for k, v in yanit.get("query", {}).get("pages", {}).items():
                 if k != "-1":
                     return self._temizle_metin(v.get("extract", ""))
         except Exception:
             pass
-        return None
+        return ""
 
     def konulari_ogren(self, konular, mevcut_metin=""):
         yeni_metin = mevcut_metin

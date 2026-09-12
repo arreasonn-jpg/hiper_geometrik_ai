@@ -1,0 +1,84 @@
+{
+  "baslik": "HGA Gözlemlenebilirlik Paneli",
+  "bellek": {
+    "dolu": 2,
+    "doluluk_orani": 0.125,
+    "genislik": 16,
+    "grid": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    ],
+    "toplam": 16
+  },
+  "bellek_ascii": "········█····█··",
+  "deneyim_akisi": {
+    "acceptance_rate": 0.3333333333333333,
+    "accepted": 1,
+    "conflict": 1,
+    "conflict_rate": 0.3333333333333333,
+    "durum": {
+      "CONFLICT": 1,
+      "INVALID": 1,
+      "VALID": 1
+    },
+    "kaynak": {
+      "MODEL_GENERATED": 3
+    },
+    "rejected": 1,
+    "rejection_rate": 0.3333333333333333,
+    "toplam": 3
+  },
+  "geometri": {
+    "A_cosine": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "B_cosine": [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0
+      ]
+    ],
+    "katman_sayisi": 2,
+    "kronecker_operator_cosine": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "max_offdiag": 0.0,
+    "ortalama_offdiag": 0.0
+  },
+  "olusturma_zamani_utc": "2026-09-12T22:46:15.913508+00:00",
+  "rapor_tipi": "hga-observability-panel-v1"
+}

@@ -1,0 +1,76 @@
+{
+  "cihaz": {
+    "cuda_available": false,
+    "device": "cpu",
+    "note": "CUDA yok; VRAM metrikleri CPU fallback olarak raporlandı",
+    "torch_available": true,
+    "torch_version": "2.3.1+cu121"
+  },
+  "halusinasyon": {
+    "belirsiz": 0,
+    "checked": 30,
+    "conflict": 0,
+    "dogru": 6,
+    "factual_consistency_score": 0.2,
+    "hallucination_rate": 0.8,
+    "invalid": 0,
+    "toplam": 30,
+    "unsupported_rate": 1.0,
+    "valid_model_generated": 30,
+    "verified": 0,
+    "yanlis": 24
+  },
+  "olusturma_zamani_utc": "2026-09-12T22:46:13.693405+00:00",
+  "perplexity": {
+    "cumle_sayisi": 2,
+    "heldout_cumle_sayisi": 2,
+    "loss": 5.10923707485199,
+    "notlar": [
+      "unk_orani=0.0093",
+      "tokenizer yalnız train split üzerinde fit edildi; held-out mini smoke",
+      "checkpoint yok: rastgele ağırlıklar; kalite iddiası değildir"
+    ],
+    "ok": true,
+    "perplexity": 165.54400899606878,
+    "token_sayisi": 108,
+    "tokenizer_ok": true,
+    "train_cumle_sayisi": 3
+  },
+  "rapor_tipi": "hga-mini-benchmark-v1",
+  "seyrek_bellek": {
+    "cakisma": 2,
+    "cakisma_orani": 0.5,
+    "dolu_slot": 4,
+    "doluluk_orani": 0.25,
+    "okuma_yazma": {
+      "okuma": 4,
+      "okuma_orani": 0.4,
+      "yazma": 6,
+      "yazma_orani": 0.6
+    },
+    "slot_sayisi": 16,
+    "tablo_sayisi": 1,
+    "toplam_slot": 16
+  },
+  "sinirlar": {
+    "mini": true,
+    "not": "Rapor smoke/held-out sağlık ölçümüdür; eğitimli kalite iddiası değildir."
+  },
+  "tokenizer": {
+    "cumle_sayisi": 5,
+    "karakter_kapsama": 1.0,
+    "token_sayisi": 141,
+    "turkce_karakter_kapsami": {
+      "ç": true,
+      "ö": true,
+      "ü": true,
+      "ğ": true,
+      "İ": true,
+      "ı": true,
+      "ş": true
+    },
+    "turkce_karakter_tam": true,
+    "unk": 1,
+    "unk_orani": 0.0070921985815602835
+  }
+}

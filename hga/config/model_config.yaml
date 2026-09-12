@@ -1,0 +1,37 @@
+# ============================================================================
+# HGA Model/Eğitim Yapılandırması
+# ============================================================================
+# Amaç: n, K, context gibi mimari değerleri kod içinde çoğaltmak yerine tek
+# dosyada izlemek. Komut satırı argümanları bu değerleri override edebilir.
+# ============================================================================
+
+model:
+  n: 256
+  katman_sayisi: 4
+  baglam_penceresi: 16
+  emb_dim: 128
+  num_heads: 4
+  sozluk_boyutu: 8000
+  dropout: 0.1
+  encoder_aktivasyon: tanh   # alternatif: gelu, silu, identity
+  zincir_aktivasyon: silu     # alternatif: gelu, tanh, identity
+  checkpoint_kullan: false
+  seyrek_tablo_boyutu: 1048576
+  seyrek_boyut: 32
+  seyrek_tablo_sayisi: 1
+  seyrek_erisim_izleme: false  # true: LRU/erişim sayacı buffer'ları eklenir
+
+training:
+  ogrenme_hizi: 0.001
+  toplam_cag: 5
+  batch_size: 64
+  grad_clip: 1.0
+  amp: auto
+  validation_split: 0.0
+  early_stopping_patience: null
+  early_stopping_min_delta: 0.0
+  warmup_cag: 0
+  lr_min_factor: 0.01
+  log_dizini: null
+  checkpoint_dizini: null
+  son_checkpoint_sayisi: 3

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>HGA Gözlemlenebilirlik Paneli</title>
+<style>
+body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 2rem; line-height: 1.45; }
+pre { background: #111827; color: #f9fafb; padding: 1rem; border-radius: 0.75rem; overflow: auto; }
+.card { border: 1px solid #e5e7eb; border-radius: 1rem; padding: 1rem; margin: 1rem 0; }
+</style>
+</head>
+<body>
+<div class="card"><pre># HGA Gözlemlenebilirlik Paneli
+
+- Rapor tipi: `hga-observability-panel-v1`
+- Zaman (UTC): `2026-09-12T22:46:15.913508+00:00`
+
+## Deneyim Akışı
+- Toplam: `3`
+- Kabul oranı: `0.3333333333333333`
+- Red oranı: `0.3333333333333333`
+- Çatışma oranı: `0.3333333333333333`
+- Durumlar: `{&#x27;CONFLICT&#x27;: 1, &#x27;INVALID&#x27;: 1, &#x27;VALID&#x27;: 1}`
+
+## Bellek
+- Doluluk: `2/16`
+- Doluluk oranı: `0.125`
+
+```text
+········█····█··
+```
+
+## Geometri
+- Katman sayısı: `2`
+- Ortalama offdiag: `0.0`
+- Maks offdiag: `0.0`
+</pre></div>
+<h2>Ham JSON</h2>
+<pre>{
+  &quot;baslik&quot;: &quot;HGA Gözlemlenebilirlik Paneli&quot;,
+  &quot;bellek&quot;: {
+    &quot;dolu&quot;: 2,
+    &quot;doluluk_orani&quot;: 0.125,
+    &quot;genislik&quot;: 16,
+    &quot;grid&quot;: [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
+    ],
+    &quot;toplam&quot;: 16
+  },
+  &quot;bellek_ascii&quot;: &quot;········█····█··&quot;,
+  &quot;deneyim_akisi&quot;: {
+    &quot;acceptance_rate&quot;: 0.3333333333333333,
+    &quot;accepted&quot;: 1,
+    &quot;conflict&quot;: 1,
+    &quot;conflict_rate&quot;: 0.3333333333333333,
+    &quot;durum&quot;: {
+      &quot;CONFLICT&quot;: 1,
+      &quot;INVALID&quot;: 1,
+      &quot;VALID&quot;: 1
+    },
+    &quot;kaynak&quot;: {
+      &quot;MODEL_GENERATED&quot;: 3
+    },
+    &quot;rejected&quot;: 1,
+    &quot;rejection_rate&quot;: 0.3333333333333333,
+    &quot;toplam&quot;: 3
+  },
+  &quot;geometri&quot;: {
+    &quot;A_cosine&quot;: [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    &quot;B_cosine&quot;: [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0
+      ]
+    ],
+    &quot;katman_sayisi&quot;: 2,
+    &quot;kronecker_operator_cosine&quot;: [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    &quot;max_offdiag&quot;: 0.0,
+    &quot;ortalama_offdiag&quot;: 0.0
+  },
+  &quot;olusturma_zamani_utc&quot;: &quot;2026-09-12T22:46:15.913508+00:00&quot;,
+  &quot;rapor_tipi&quot;: &quot;hga-observability-panel-v1&quot;
+}</pre>
+</body>
+</html>
