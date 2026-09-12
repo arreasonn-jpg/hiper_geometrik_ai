@@ -42,7 +42,8 @@ hiper_geometrik_ai/
 │   │   ├── generator.py           # ExperienceGenerator — kontrollü kombinasyon (§7)
 │   │   ├── text_generator.py      # TextGenerator — üçlüden metin/olay üretimi (§19 v0.2)
 │   │   ├── turkce.py              # Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma/çoğul
-│   │   │                          #   + ünsüz yumuşaması + özel isim kesme işareti
+│   │   │                          #   + ünsüz yumuşaması + ünlü düşmesi + iyelik (6 kişi)
+│   │   │                          #   + iyelik+durum zinciri + geçmiş zaman 3. tekil
 │   │   ├── cumle_ayiklayici.py    # Cümle → üçlü + REAL_DATA aktarımı (döngünün "gerçek veri" aşaması)
 │   │   ├── corpus.py              # metin dosyasından cümle → üçlü → REAL_DATA
 │   │   ├── scoring.py             # bağımsız sinyaller + ağırlıklı puan + information_gain (§8, §16, v0.3)
@@ -79,7 +80,7 @@ hiper_geometrik_ai/
 │   ├── test_mini_env.py           # v0.5 aritmetik doğrulayıcı
 │   ├── test_loop.py               # v1.0 sürekli döngü + metrikler
 │   ├── test_kopru.py              # v0.6 torch köprüsü (torch yoksa güvenli atlama)
-│   ├── test_turkce.py             # Türkçe ek uyumu (yönelme + kesme işareti + yumuşama)
+│   ├── test_turkce.py             # ek uyumu + yumuşama + ünlü düşmesi + iyelik + fiil
 │   ├── test_cumle_ayiklayici.py   # cümle → üçlü + REAL_DATA aktarımı
 │   ├── test_corpus.py             # dosyadan cümle → üçlü → REAL_DATA
 │   ├── test_persistence.py        # atomik JSON kaydet/yükle
@@ -99,7 +100,8 @@ hiper_geometrik_ai/
 │       ├── run_kopru.py           # deneyim ↔ torch seyrek bellek köprüsü (v0.6)
 │       ├── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
 │       ├── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
-│       └── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
+│       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
+│       └── run_morfoloji.py       # ünlü düşmesi + iyelik + geçmiş zaman demosu
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -138,6 +140,7 @@ python experiments/experience_loop/run_kopru.py       # deneyim ↔ torch seyrek
 python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN seyrek belleği (torch)
 python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
+python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + geçmiş zaman
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
@@ -147,7 +150,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 122 test: 23 çekirdek + 99 Experience Engine
+python -m pytest -q            # 130 test: 23 çekirdek + 107 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -174,7 +177,12 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   bellek yolu boş+donukken doğruluk ~şans (model çözemez), bellek yolu
   eğitildiğinde ~%100 (etki +%100) ve `gen_kopru` gradyanı 0 → >0
   (ölü-yol → canlı-yol). Bellek, göreve yönelik gerçek bir bilgi kanalıdır.
-- **Toplam:** `pytest` ile 122 test tek seferde geçti.
+- **Tam morfoloji (v1.0+):** `turkce.py`'ye ünlü düşmesi (burun→burna,
+  şehir→şehri; ünsüzle başlayan eklerde YOK: burunda), 6 kişilik iyelik ekleri
+  (kitabım…kitapları), iyelik+durum zinciri (evi→evine 'n' ara harfi) ve
+  görülen geçmiş zaman 3. tekil çekimi (bin→bindi, bak→baktı, gör→gördü)
+  eklendi; ünsüz yumuşaması/ünlü düşmesi küratörlü listelerle sınırlı.
+- **Toplam:** `pytest` ile 130 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -271,9 +279,11 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 (`arastirma.py`), kalıcılık (`persistence.py`) ve ground-truth benchmark
 (`benchmark.py`) eklendi. Kalan gerçekçi adımlar:
 
-- **Tam morfoloji:** `turkce.py`'ye ünlü düşmesi (burun→burna), iyelik
-  zincirleri, çekimli fiil üretimi ve daha geniş istisna listeleri eklemek
-  (mevcut sınırlar docstring'te belgeli).
+- **Tam morfoloji (tamamlandı):** `turkce.py`'ye ünlü düşmesi, 6 kişilik
+  iyelik ekleri + iyelik+durum zinciri ve görülen geçmiş zaman 3. tekil
+  çekimi eklendi. Kalan (bilinçli kapsam dışı): isim tamlamaları, geniş/
+  şimdiki/gelecek zaman ve kişi ekli fiil çekimleri, daha geniş istisna
+  listeleri (docstring'te belgeli).
 - **Gerçek görev sinyali + ablasyon ölçekleme:** `GorevAblasyonu` aynı
   protokolü modelin `gen_kopru` çıktı yolu üzerinde, GERÇEK bir görevin
   (dizisel tamamlama) çapraz-entropi sinyaliyle birleştirdi: yoğun gövde

@@ -205,7 +205,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
 - **Experience** (`hga/experience/`) — kontrollü kombinasyon üreten Generator,
   7+1 bağımsız sinyalle puanlama, VALID/CONFLICT/INVALID durum makinesi,
   Conflict→Exploration çözücüsü, konsolidasyon, metin/olay üretimi (v0.2,
-  Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması),
+  Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması +
+  ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + geçmiş zaman
+  3. tekil çekimi),
   cümle/dosya→üçlü ayıklayıcı + `REAL_DATA` aktarımı, information-gain (v0.3),
   deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
   sürekli öğrenme döngüsü (v1.0) ve ground-truth benchmark.
@@ -234,6 +236,7 @@ python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil 
 python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
 python experiments/experience_loop/run_ablation.py    # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
+python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + geçmiş zaman
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
 python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu
