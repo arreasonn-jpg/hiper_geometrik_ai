@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+HGA Experience Engine — Knowledge / Experience / Memory katmanı
+================================================================
+(v0.1 — "Hiper Geometrik AI: Experience Engine / Self-Expanding Knowledge
+Architecture" yol haritasının ilk fiziksel karşılığı)
+
+Bu paket, mevcut geometrik çekirdeğin (`mimari/`) ÜZERİNE eklenen, tamamen
+saf Python ile çalışan (torch bağımlılığı OLMAYAN) modüler katmandır:
+
+    hga/knowledge/   — EntityIndex, PropertyIndex, RelationIndex, KnowledgeStore
+    hga/experience/  — Generator, Evaluator, Scoring, Conflict, Consolidation
+    hga/memory/      — Seyrek deneyim slotları + Experience Replay (köprü)
+    hga/config/      — Ağırlık/eşik yapılandırması (experience_config.yaml)
+
+Temel döngü (rapor §2):
+    Gerçek veri → Temsil → Yeni deneyim adayı → Değerlendirme
+    → VALID / CONFLICT / INVALID → Hafıza veya araştırma → Bilgi güncellemesi
+
+Kullanım:
+    from hga.knowledge import KnowledgeStore
+    from hga.experience import ExperienceGenerator, ExperienceEvaluator, Consolidator
+"""
+from hga.knowledge.schemas import (
+    KaynakTuru,
+    DeneyimDurumu,
+    KAYNAK_GUVENIRLIGI,
+    Entity,
+    PropertyValue,
+    Relation,
+    RelationFact,
+    ExperienceCandidate,
+)
+
+__all__ = [
+    "KaynakTuru",
+    "DeneyimDurumu",
+    "KAYNAK_GUVENIRLIGI",
+    "Entity",
+    "PropertyValue",
+    "Relation",
+    "RelationFact",
+    "ExperienceCandidate",
+]
