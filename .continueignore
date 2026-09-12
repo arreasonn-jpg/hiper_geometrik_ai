@@ -1,0 +1,11 @@
+# Büyük Model Ağırlıkları ve Yedekler
+*.pt
+*.zip
+__pycache__/
+
+# Eğitim ve Arşiv Veri Setleri (Büyük Nesneler)
+sohbet_arsiv.json
+talimat_verisi.json
+sozluk.json
+turkce_metin.txt
+bpe_tokenizer.json
