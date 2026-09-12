@@ -210,7 +210,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   3. tekil çekimi),
   cümle/dosya→üçlü ayıklayıcı + `REAL_DATA` aktarımı, information-gain (v0.3),
   deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
-  sürekli öğrenme döngüsü (v1.0) ve ground-truth benchmark.
+  sürekli öğrenme döngüsü (v1.0), ground-truth benchmark ve dış korpus borusu
+  (`veri_toplayici.py` çıktısını sözlük büyütüp `REAL_DATA` olarak akıtır;
+  ilişki asla uydurulmaz).
 - **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
   olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).
 - **Kapalı doğrulama** (`hga/experience/dogrulama.py`) — deterministik
@@ -237,6 +239,7 @@ python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + k
 python experiments/experience_loop/run_ablation.py    # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
 python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + geçmiş zaman
+python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sözlük büyütme → REAL_DATA
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
 python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu

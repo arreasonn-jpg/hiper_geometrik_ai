@@ -1,0 +1,98 @@
+# -*- coding: utf-8 -*-
+"""
+Korpus Borusu — veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
+=====================================================================
+(v1.0+ — rapor §8 "dış korpus ölçeği"; §12)
+
+`egitim/veri_toplayici.py` (`OtomatikVeriToplayici.metni_kaydet`) `turkce_metin.txt`
+dosyasına bir metin havuzu yazar. Bu modül o çıktıyı Experience Engine'in bilgi
+tabanına GERÇEK VERİ olarak akıtan borudur:
+
+    metin → cümlelere böl → sözlüğü büyüt → üçlü ayıkla → REAL_DATA olarak yaz
+
+Ağ erişimi, `requests` veya `pyarrow` GEREKTİRMEZ: boru yalnızca DOSYA/ metin okur.
+Böylece veri toplayıcı (ağ) ile bilgi tabanı (bilgi) birbirinden bağımsız kalır —
+toplayıcı dosyayı üretir, boru dosyayı tüketir.
+
+    * `korpus_borusu(store, metin, ...)`  — metinden uçtan uca akıtır
+    * `korpus_dosyasindan(store, yol, ...)` — dosyadan akıtır
+    * `veri_toplayici_ciktisindan(store, kok, ...)` — veri toplayıcının
+      varsayılan `turkce_metin.txt` dosyasını akıtır
+"""
+import os
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional
+
+from .corpus import cumlelere_bol
+from .cumle_ayiklayici import (CumleAyiklayici, VARSAYILAN_SOZLUK,
+                               cumlelerden_bilgi_aktar)
+from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
+
+VARSAYILAN_KORPUS_DOSYASI = "turkce_metin.txt"
+
+
+@dataclass
+class KorpusRaporu:
+    cumle_sayisi: int = 0
+    buyutme: Optional[SozlukBuyutmeRaporu] = None
+    aktarilan_uclu: int = 0
+    son_varlik: int = 0
+    son_kanit: int = 0
+
+    def to_dict(self) -> Dict:
+        d = asdict(self)
+        if self.buyutme is not None:
+            d["buyutme"] = self.buyutme.to_dict()
+        return d
+
+
+def korpus_borusu(store, metin: str, sozluk: Optional[Dict] = None,
+                  iliski_kisitlari: Optional[Dict] = None) -> KorpusRaporu:
+    """Metni sözlük büyütme + üçlü ayıklama + REAL_DATA aktarımından geçirir.
+
+    Sözlük verilmezse `VARSAYILAN_SOZLUK`'tan başlanır (derin kopya alınır;
+    global sözlük asla değişmez). `iliski_kisitlari`, `cumlelerden_bilgi_aktar`'a
+    aktarılır (örn. binmek→öznesi insan + nesnesi binilebilir).
+    """
+    cumleler = cumlelere_bol(metin)
+    buyumus, buyutme_raporu, _ = sozlugu_buyut(sozluk or VARSAYILAN_SOZLUK,
+                                               cumleler)
+    ayiklayici = CumleAyiklayici(buyumus)
+    aktarilan = cumlelerden_bilgi_aktar(store, cumleler, ayiklayici=ayiklayici,
+                                        iliski_kisitlari=iliski_kisitlari)
+    ozet = store.ozet()
+    return KorpusRaporu(
+        cumle_sayisi=len(cumleler),
+        buyutme=buyutme_raporu,
+        aktarilan_uclu=len(aktarilan),
+        son_varlik=ozet.get("varlik", 0),
+        son_kanit=ozet.get("kanit", 0),
+    )
+
+
+def korpus_dosyasindan(store, yol: str, sozluk: Optional[Dict] = None,
+                       iliski_kisitlari: Optional[Dict] = None) -> KorpusRaporu:
+    """Bir metin dosyasını okuyup REAL_DATA olarak akıtır."""
+    with open(yol, "r", encoding="utf-8") as f:
+        return korpus_borusu(store, f.read(), sozluk=sozluk,
+                             iliski_kisitlari=iliski_kisitlari)
+
+
+def veri_toplayici_ciktisindan(store, proje_kok: str,
+                               dosya_adi: str = VARSAYILAN_KORPUS_DOSYASI,
+                               sozluk: Optional[Dict] = None,
+                               iliski_kisitlari: Optional[Dict] = None
+                               ) -> KorpusRaporu:
+    """`OtomatikVeriToplayici.metni_kaydet` çıktısı `turkce_metin.txt`'i akıtır.
+
+    Veri toplayıcıyı İÇE AKTARMAZ (requests/pyarrow gerekmez); yalnızca onun
+    yazdığı dosyayı okur. Dosya yoksa dürüst bir hata döner (sessizce boş
+    rapor üretmez).
+    """
+    yol = os.path.join(proje_kok, dosya_adi)
+    if not os.path.exists(yol):
+        raise FileNotFoundError(
+            f"veri toplayıcı çıktısı bulunamadı: {yol} — önce "
+            f"OtomatikVeriToplayici(proje_kok).metni_kaydet(metin) çalıştırın.")
+    return korpus_dosyasindan(store, yol, sozluk=sozluk,
+                              iliski_kisitlari=iliski_kisitlari)

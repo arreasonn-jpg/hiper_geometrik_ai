@@ -46,6 +46,8 @@ hiper_geometrik_ai/
 │   │   │                          #   + iyelik+durum zinciri + geçmiş zaman 3. tekil
 │   │   ├── cumle_ayiklayici.py    # Cümle → üçlü + REAL_DATA aktarımı (döngünün "gerçek veri" aşaması)
 │   │   ├── corpus.py              # metin dosyasından cümle → üçlü → REAL_DATA
+│   │   ├── sozluk_buyutme.py      # gerçek korpustan yeni VARLIK desenleri (ilişki uydurmaz)
+│   │   ├── korpus_boru.py         # veri_toplayici çıktısı → sözlük büyütme → REAL_DATA
 │   │   ├── scoring.py             # bağımsız sinyaller + ağırlıklı puan + information_gain (§8, §16, v0.3)
 │   │   ├── evaluator.py           # ExperienceEvaluator + VALID/CONFLICT/INVALID (§9)
 │   │   ├── conflict.py            # Conflict → Exploration (§11)
@@ -83,6 +85,8 @@ hiper_geometrik_ai/
 │   ├── test_turkce.py             # ek uyumu + yumuşama + ünlü düşmesi + iyelik + fiil
 │   ├── test_cumle_ayiklayici.py   # cümle → üçlü + REAL_DATA aktarımı
 │   ├── test_corpus.py             # dosyadan cümle → üçlü → REAL_DATA
+│   ├── test_sozluk_buyutme.py     # gerçek korpustan yeni varlık desenleri
+│   ├── test_korpus_boru.py        # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
 │   ├── test_persistence.py        # atomik JSON kaydet/yükle
 │   ├── test_benchmark.py          # ground-truth'a karşı ölçüm
 │   ├── test_dogrulama.py          # kapalı doğrulama hattı (false accept 24→0)
@@ -101,7 +105,8 @@ hiper_geometrik_ai/
 │       ├── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
 │       ├── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
 │       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
-│       └── run_morfoloji.py       # ünlü düşmesi + iyelik + geçmiş zaman demosu
+│       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + geçmiş zaman demosu
+│       └── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -122,6 +127,8 @@ python tests/test_kopru.py
 python tests/test_turkce.py
 python tests/test_cumle_ayiklayici.py
 python tests/test_corpus.py
+python tests/test_sozluk_buyutme.py
+python tests/test_korpus_boru.py
 python tests/test_persistence.py
 python tests/test_benchmark.py
 python tests/test_dogrulama.py
@@ -141,6 +148,7 @@ python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN se
 python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
 python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + geçmiş zaman
+python experiments/experience_loop/run_korpus_boru.py  # veri toplayıcı → sözlük büyütme → REAL_DATA
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
@@ -150,7 +158,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 130 test: 23 çekirdek + 107 Experience Engine
+python -m pytest -q            # 139 test: 23 çekirdek + 116 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -182,7 +190,14 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   (kitabım…kitapları), iyelik+durum zinciri (evi→evine 'n' ara harfi) ve
   görülen geçmiş zaman 3. tekil çekimi (bin→bindi, bak→baktı, gör→gördü)
   eklendi; ünsüz yumuşaması/ünlü düşmesi küratörlü listelerle sınırlı.
-- **Toplam:** `pytest` ile 130 test tek seferde geçti.
+- **Dış korpus borusu (v1.0+):** `veri_toplayici.py`'nin `metni_kaydet` çıktısı
+  (`turkce_metin.txt`) `korpus_boru.py` üzerinden okunur: cümlelere bölünür,
+  sözlük bilinen fiil desenleriyle büyütülür (yeni özne=insan, yeni nesne=
+  varlik; ilişki ASLA uydurulmaz) ve üçlüler `REAL_DATA` olarak KnowledgeStore'a
+  yazılır. 8 cümlelik örnekte 7 üçlü aktarıldı, 4 yeni özne + 3 yeni nesne
+  eklendi, kuşkulu cümle atlandı. (Ağ/requests/pyarrow gerekmez: yalnız dosya
+  sözleşmesi; canlı korpus çekimi `egitim/veri_toplayici.py`'nin işidir.)
+- **Toplam:** `pytest` ile 139 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -291,9 +306,12 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
   Sıradaki adım, bu protokolü DONUK gövdeyi çözüp (fine-tune) daha büyük ve
   gürültülü korpuslarda tekrarlamak ve belleğin genellemeye (held-out
   üçlüler) katkısını ayrıca ölçmek.
-- **Dış korpus ölçeği:** `egitim/veri_toplayici.py` çıktısını `corpus.py`
-  üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak — sözlük, gerçek
-  korpustan çıkarılan desenlerle büyütülmeli.
+- **Dış korpus ölçeği (tamamlandı):** `egitim/veri_toplayici.py` çıktısı
+  (`turkce_metin.txt`) `korpus_boru.py` üzerinden `REAL_DATA` olarak akıtılıyor;
+  sözlük bilinen fiil desenleriyle büyütülüyor (yeni özne/nesne varlıkları;
+  ilişki asla uydurulmaz). Kalan ölçek adımı: canlı korpusu (Wikipedia dökümü,
+  OSCAR/CC-100/mC4 "tr") gerçekten çekip milyon-kelime seviyesinde bu borudan
+  geçirmek — bu ağ gerektirir ve `egitim/veri_toplayici.py`'nin görevidir.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
   `dogrulama.py` + sinirsel köprü `neural_kopru.py` + ablasyon `ablation.py`

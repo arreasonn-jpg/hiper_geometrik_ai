@@ -13,8 +13,12 @@ from .conflict import ConflictResolver, ConflictResolution
 from .consolidation import Consolidator, ConsolidationReport
 from .arastirma import ArastirmaKuyrugu, ArastirmaRaporu
 from .cumle_ayiklayici import (CumleAyiklayici, AyiklananUclu,
-                               cumlelerden_bilgi_aktar, ascii_norm)
+                               cumlelerden_bilgi_aktar, ascii_norm,
+                               VARSAYILAN_SOZLUK)
 from .corpus import cumlelere_bol, dosyadan_cumleler, dosyadan_bilgi_aktar
+from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
+from .korpus_boru import (KorpusRaporu, korpus_borusu, korpus_dosyasindan,
+                          veri_toplayici_ciktisindan)
 from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
                         karsilastirma)
 from .dogrulama import DogrulamaHatti, DogrulamaRaporu
@@ -52,9 +56,16 @@ __all__ = [
     "AyiklananUclu",
     "cumlelerden_bilgi_aktar",
     "ascii_norm",
+    "VARSAYILAN_SOZLUK",
     "cumlelere_bol",
     "dosyadan_cumleler",
     "dosyadan_bilgi_aktar",
+    "SozlukBuyutmeRaporu",
+    "sozlugu_buyut",
+    "KorpusRaporu",
+    "korpus_borusu",
+    "korpus_dosyasindan",
+    "veri_toplayici_ciktisindan",
     "BenchmarkOzeti",
     "aritmetik_etki_alani",
     "kos",

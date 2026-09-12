@@ -56,9 +56,12 @@ class AyiklananUclu:
 
 
 # ── Varsayılan sözlük (sınırlı ama çalışır) ────────────────────────────────
+# 'nesne_durumu' (isteğe bağlı) ilişkinin beklediği nesne durumudur; yalnız
+# sözlük büyütme (`sozluk_buyutme.py`) yeni nesne çıkarırken kullanır.
 VARSAYILAN_SOZLUK: Dict[str, Dict] = {
     "binmek": {
         "iliski": "Binmek",
+        "nesne_durumu": "yonelme",
         "yuklemler": ["bindi", "biniyor", "biner", "binmis", "binecek"],
         "ozneler": {
             "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
@@ -75,6 +78,7 @@ VARSAYILAN_SOZLUK: Dict[str, Dict] = {
     },
     "bakmak": {
         "iliski": "Bakmak",
+        "nesne_durumu": "yonelme",
         "yuklemler": ["bakti", "bakiyor", "bakar", "bakmis"],
         "ozneler": {
             "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
