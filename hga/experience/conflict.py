@@ -122,6 +122,7 @@ class ConflictResolver:
             return "İlişki bulunamadı → güven güncellenmedi"
         for ad, hedef in r.requires_object_props.items():
             pv = store.properties.al(aday.object_id, ad)
+            store.versiyon += 1   # deterministik kanıt bilgi tabanını değiştirdi
             if pv is None:
                 store.properties.koy(aday.object_id, ad,
                                      float(sonuc),
