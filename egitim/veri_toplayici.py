@@ -625,27 +625,6 @@ class OtomatikVeriToplayici:
         self.yama_raporu()
         return yeni_metin
 
-        if patch_secim not in ("next", "all"):
-            try:
-                istenen = int(str(patch_secim).strip())
-                uygun = [p for p in uygun if self._patch_no_bul(p) == istenen]
-                print(f"  [🎯 FİLTRE] Sadece AI-Training-Patch-{istenen} → {len(uygun)} dosya")
-                if not uygun:
-                    # Teşhis: tree'de bu patch'e ait herhangi path var mı?
-                    tum = self._hf_dosyalari_listele(repo_id)  # cache yoksa tekrar; isterseniz atlayın
-                    ipucu = [p for p in tum if f"Patch-{istenen}" in p or f"Patch-{istenen}/" in p]
-                    print(f"  [🔍 TEŞHİS] Patch-{istenen} path izi: {len(ipucu)} adet")
-                    for x in ipucu[:8]:
-                        print(f"      • {x}")
-                    if not ipucu:
-                        print(
-                            "  [💡] HF tree bu patch'i görmüyor olabilir. "
-                            "Repo güncel mi / private mı kontrol edin."
-                        )
-            except ValueError:
-                print("  [❌] Geçersiz patch no.")
-                return mevcut_metin
-
     def huggingface_dataset_cek(self, repo_id, mevcut_metin="", hedef_kelime_limiti=40000):
         return self.huggingface_patch_cek(repo_id, "all", mevcut_metin, hedef_kelime_limiti)
 
@@ -673,6 +652,59 @@ class OtomatikVeriToplayici:
             if makale and len(makale) > 150:
                 yeni_metin += "\n\n" + makale
         return yeni_metin
+
+    # ==========================================
+    # GÜVENİLİR GENİŞ KORPUS (RAPOR 8.4.7)
+    # ==========================================
+    # Not: 'ShigeoKageyama/NLP_SUITE' gibi belgelenmemiş yama repoları kırılgandır
+    # (dosya adları/klasör düzeni habersiz değişebilir). Ciddi korpus ölçeği için
+    # önerilen BELGELİ kaynaklar:
+    #   - tr.wikipedia.org dökümü   → dumps.wikimedia.org/trwiki (CC BY-SA)
+    #   - OSCAR "tr" alt kümesi     → huggingface.co/datasets/oscar-corpus
+    #   - CC-100 "tr"               → huggingface.co/datasets/cc100
+    #   - mC4 "tr"                  → huggingface.co/datasets/allenai/c4
+    # Aşağıdaki yöntem, Wikipedia API üzerinden BELGELİ ve kararlı bir başlangıç
+    # korpusu çeker (parquet/yama kırılganlığı yoktur) ve turkce_metin.txt'e yazar.
+    ONERILEN_KONULAR = [
+        "Türkiye", "Ankara", "İstanbul", "İzmir", "Osmanlı İmparatorluğu",
+        "Mustafa Kemal Atatürk", "Türkçe", "Türk dili", "Matematik", "Geometri",
+        "Cebir", "Trigonometri", "Fizik", "Kimya", "Biyoloji", "Astronomi",
+        "Bilgisayar", "Yapay zekâ", "Makine öğrenmesi", "Derin öğrenme",
+        "Sinir ağı", "Fraktal", "Tesseract", "Hiperküp", "Simetri", "Küre",
+        "Matris", "Kronecker çarpımı", "Felsefe", "Psikoloji", "Sosyoloji",
+        "Tarih", "Coğrafya", "Ekonomi", "Edebiyat", "Şiir", "Roman", "Müzik",
+        "Resim", "Eğitim", "Sağlık", "Tıp", "Spor", "Futbol", "Deniz", "Dağ",
+        "İklim", "Bitki", "Hayvan",
+    ]
+
+    def genis_korpus_cek(self, hedef_kelime=50000, konular=None):
+        """Önerilen konu listesindeki Wikipedia makaleleriyle güvenilir korpus çeker.
+
+        Mevcut turkce_metin.txt varsa üzerine ekler (birikimli) ve kaydeder.
+        """
+        konular = konular or self.ONERILEN_KONULAR
+        parcalar = []
+        mevcut = self.metni_yukle()
+        if mevcut:
+            parcalar.append(mevcut)
+        toplam = sum(len(p.split()) for p in parcalar)
+
+        print(f"\n[📖 WİKİPEDİA] Güvenilir korpus çekimi (hedef: {hedef_kelime:,} kelime)")
+        for konu in konular:
+            if toplam >= hedef_kelime:
+                break
+            makale = self.wikipedia_cek(konu)
+            if makale and self._kaliteli_mi(makale):
+                parcalar.append(makale)
+                toplam += len(makale.split())
+                print(f"  [+] {konu}: +{len(makale.split()):,} kelime (toplam {toplam:,})")
+
+        metin = "\n\n".join(p for p in parcalar if p).strip()
+        if metin:
+            self.metni_kaydet(metin)
+        else:
+            print("  [⚠️] Hiç makale çekilemedi (ağ/API erişimi kontrol edin).")
+        return metin
 
     def metni_kaydet(self, metin, dosya_adi="turkce_metin.txt"):
         dosya_yolu = os.path.join(self.proje_kok, dosya_adi)

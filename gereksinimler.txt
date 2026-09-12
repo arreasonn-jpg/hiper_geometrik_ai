@@ -1,0 +1,13 @@
+# ── Çekirdek bağımlılık ──────────────────────────────────────────────────────
+# torch>=2.0.0 (SDPA/Flash Attention ve use_reentrant=False checkpointing için)
+torch>=2.0.0
+
+# NOT: numpy KALDIRILDI — kodun hiçbir yerinde kullanılmıyordu (rapor 7.4).
+
+# ── Opsiyonel: arayuz.py (Gradio sohbet arayüzü) ─────────────────────────────
+# gradio>=4.0
+
+# ── Opsiyonel: egitim/veri_toplayici.py (korpus toplama) ─────────────────────
+# requests>=2.28
+# pyarrow>=14.0
+# pandas>=2.0

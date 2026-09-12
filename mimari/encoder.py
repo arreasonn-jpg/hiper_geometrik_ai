@@ -1,29 +1,48 @@
+# -*- coding: utf-8 -*-
+"""
+Geometrik Veri Encoder — 0→1 Katmanı (Dış Çarpım Köprüsü)
+=========================================================
+
+Önceki sürümde bu modül ÖLÜ KODTU: 512 boyutlu "önceden vektörleştirilmiş ham
+veri" bekliyor ama modelde ona bu formatta veri üreten hiçbir yol yoktu
+(rapor, Bölüm 4). Bu yeniden tasarımda encoder, modelin GERÇEKTEN kullandığı
+köprüye dönüştürüldü (rapor 5.3: "ya köprüle ya kaldır" — köprüledik):
+
+    düzleştirilmiş bağlam vektörü (B, baglam × emb_dim)
+        → iki n boyutlu izdüşüm:  u = proj_u(duz),  v = proj_v(duz)
+        → dış çarpım + tanh:      X = tanh(u ⊗ v)      → (B, n, n)
+
+Böylece "0→1 katmanı" geometrik büyümesi gerçekleşir: n boyutlu iki vektörden
+n² adet "sanal algı köşesi" üreten matris elde edilir (README: 1. Katman) ve
+bu matris, KureselZincir'deki bilinear katmanlara girdi olur.
+
+tanh burada hem 1.0 belgesindeki "bükme" adımına sadık kalır hem de önemli bir
+matematiksel görev görür: u ⊗ v dış çarpımı rank-1'dir; eleman bazlı tanh bu
+kısıtı KIRAR ve zincire tam ranklı bir başlangıç matrisi verir.
+"""
 import torch
 import torch.nn as nn
 
+
 class GeometrikVeriEncoder(nn.Module):
-    def __init__(self, n=1000):
-        super(GeometrikVeriEncoder, self).__init__()
+    """Düz vektör → (u, v) → tanh(u ⊗ v) → (B, n, n) sanal geometri matrisi."""
+
+    def __init__(self, giris_boyutu: int, n: int):
+        super().__init__()
         self.n = n
-        
-        # 4 GB'LIK MATRİS YERİNE SADECE BİRKAÇ MEGABAYTLIK IKI KÜÇÜK GEOMETRİK PROJEKSİYON
-        # 512 boyutlu ham veriyi önce 1000 boyutuna süzüp, oradan sanal matris genişlemesi yapacağız.
-        self.proj_A = nn.Linear(512, n, bias=False)
-        self.proj_B = nn.Linear(n, n, bias=False)
-        
-    def forward(self, ham_veri_vektoru):
-        batch_size = ham_veri_vektoru.size(0)
-        
-        # Veriyi iki farklı 1000 boyutlu geometrik izdüşüme ayır
-        ara_A = self.proj_A(ham_veri_vektoru)
-        ara_B = self.proj_B(ara_A)
-        
-        # 4 GB'lık 1.999.000 boyutunu RAM'de fiziksel olarak kurmak yerine,
-        # matris çarpımı mantığıyla 1.000.000 boyutlu sanal bir alan (1000x1000) elde ediyoruz
-        # ve bunu modelimizin çekirdek kapasitesine (n) benzeterek süzüyoruz.
-        geometrik_izdusum = torch.matmul(ara_A.unsqueeze(2), ara_B.unsqueeze(1)).view(batch_size, -1)
-        
-        # Çekirdek kapasitesine sığması için (1.999.000 yerine 1.000.000 sanal köşe olarak) büküyoruz
-        kuresel_veri = torch.tanh(geometrik_izdusum) 
-        
-        return kuresel_veri
+        self.proj_u = nn.Linear(giris_boyutu, n)
+        self.proj_v = nn.Linear(giris_boyutu, n)
+
+    def forward(self, duz: torch.Tensor) -> torch.Tensor:
+        # duz: (B, giris_boyutu) → (B, n, n)
+        u = self.proj_u(duz)
+        v = self.proj_v(duz)
+        # Dış çarpım: X[b, i, j] = u[b, i] * v[b, j]  → n² sanal köşe
+        return torch.tanh(torch.einsum("bi,bj->bij", u, v))
+
+    def kapasite(self) -> dict:
+        return {
+            "n": self.n,
+            "sanal_kose": self.n ** 2,
+            "gercek_parametre": sum(p.numel() for p in self.parameters()),
+        }

@@ -1,5 +1,18 @@
-*.pt
-*.zip
+# ── Python ────────────────────────────────
 __pycache__/
-*.json
-*.txt
+*.pyc
+*.zip
+.venv/
+
+# ── Model ağırlıkları ─────────────────────
+*.pt
+
+# ── Çalışma zamanında üretilen veri artefaktları ─────────────────────────────
+# NOT: Eski sürümdeki '*.*txt' / '*.json' gibi genel kurallar gereksinimler.txt
+# gibi KAYNAK dosyaları da yuttuğu için kaldırıldı; yalnızca üretilen dosyalar
+# açıkça yok sayılır (rapor 8.1.4).
+turkce_metin.txt
+sozluk.json
+bpe_sozluk.json
+talimat_verisi.json
+yama_durumu.json
