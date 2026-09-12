@@ -67,7 +67,8 @@ hiper_geometrik_ai/
 │   │   ├── kopru.py               # TorchKoprusu — deneyim ↔ torch seyrek tablo köprüsü (§19 v0.6)
 │   │   ├── neural_kopru.py        # NeuralKopru — deneyim ↔ MODELİN seyrek belleği + gen_kopru
 │   │   ├── ablation.py            # AblasyonDeneyi — belleğe yazılan bilginin etkisini ölçer (§17/§20)
-│   │   └── gorev_ablasyonu.py     # GorevAblasyonu — bilgi, modelin KENDİ görevini çözüyor mu?
+│   │   ├── gorev_ablasyonu.py     # GorevAblasyonu — bilgi, modelin KENDİ görevini çözüyor mu?
+│   │   └── genelleme_ablasyonu.py # GenellemeAblasyonu — bilgi, GÖRÜLMEYEN olgulara genelliyor mu?
 │   └── config/
 │       ├── __init__.py
 │       ├── config.py              # bağımlılıksız YAML yükleyici (PyYAML varsa onu kullanır)
@@ -94,6 +95,7 @@ hiper_geometrik_ai/
 │   ├── test_neural_kopru.py       # deneyim ↔ model seyrek belleği (torch gerekir)
 │   ├── test_ablation.py           # bilgi yazmanın aşağı-akış etkisi (torch gerekir)
 │   ├── test_gorev_ablasyonu.py    # bilgi → modelin tamamlama görevi (torch gerekir)
+│   ├── test_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch gerekir)
 │   └── test_arastirma.py          # araştırma kuyruğu (CONFLICT → kanıt → kesin durum)
 ├── experiments/
 │   └── experience_loop/
@@ -105,6 +107,7 @@ hiper_geometrik_ai/
 │       ├── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
 │       ├── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
 │       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
+│       ├── run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
 │       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + geçmiş zaman demosu
 │       └── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
 └── docs/
@@ -136,6 +139,7 @@ python tests/test_engine.py
 python tests/test_neural_kopru.py   # torch gerekir
 python tests/test_ablation.py       # torch gerekir
 python tests/test_gorev_ablasyonu.py # torch gerekir
+python tests/test_genelleme_ablasyonu.py # torch gerekir
 python tests/test_arastirma.py
 
 # Uçtan uca döngü demoları
@@ -147,6 +151,7 @@ python experiments/experience_loop/run_kopru.py       # deneyim ↔ torch seyrek
 python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN seyrek belleği (torch)
 python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
+python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
 python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + geçmiş zaman
 python experiments/experience_loop/run_korpus_boru.py  # veri toplayıcı → sözlük büyütme → REAL_DATA
 
@@ -158,7 +163,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 139 test: 23 çekirdek + 116 Experience Engine
+python -m pytest -q            # 144 test: 23 çekirdek + 121 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -197,7 +202,15 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   yazılır. 8 cümlelik örnekte 7 üçlü aktarıldı, 4 yeni özne + 3 yeni nesne
   eklendi, kuşkulu cümle atlandı. (Ağ/requests/pyarrow gerekmez: yalnız dosya
   sözleşmesi; canlı korpus çekimi `egitim/veri_toplayici.py`'nin işidir.)
-- **Toplam:** `pytest` ile 139 test tek seferde geçti.
+- **Genelleme ablasyonu (v1.0+):** bellek, KANONİK (paylaşılan) nesne
+  kodları taşıyorsa; bellek donukken yalnızca `gen_kopru` köprüsü + küçük
+  kafa eğitilen okuyucu, EĞİTİMDE HİÇ GÖRMEDİĞİ öznelerde de doğru nesneyi
+  tamamlar: kontrol (boş bellek) eğitim ~%25 / held-out ~%25 (şans) → deney
+  eğitim %100 / held-out %100 (etki +%75; 3 tohumda kararlı). Genelleme
+  ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
+  model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
+  belgeli; bu yüzden gövde donuk tutulur.)
+- **Toplam:** `pytest` ile 144 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -249,6 +262,7 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §19 v0.6+ / EK-B | `memory/neural_kopru.py` — deneyim ↔ modelin seyrek belleği + `gen_kopru` |
 | §17/§20 "katrilyon tezi" | `memory/ablation.py` — belleğe yazılan bilginin öğrenmeye etkisi (ölçülebilir) |
 | §17/§20 + gerçek görev | `memory/gorev_ablasyonu.py` — bilgi, modelin KENDİ görevini çözüyor (tamamlama) |
+| §17/§20 + genelleme | `memory/genelleme_ablasyonu.py` — bilgi, GÖRÜLMEYEN olgulara genelliyor (held-out) |
 | §19 v1.0 | `loop.py` — `DeneyimDongusu` + kontrollü metrikler |
 | §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` + `corpus.py` — cümle/dosya → üçlü + REAL_DATA aktarımı |
 | §11 ölçekleme | `arastirma.py` — CONFLICT kuyruğunu deterministik kanıtla toplu çözme |
@@ -303,9 +317,10 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
   protokolü modelin `gen_kopru` çıktı yolu üzerinde, GERÇEK bir görevin
   (dizisel tamamlama) çapraz-entropi sinyaliyle birleştirdi: yoğun gövde
   donukken kontrol ~şans → deney ~%100 (+%100), ölü-yol → canlı-yol.
-  Sıradaki adım, bu protokolü DONUK gövdeyi çözüp (fine-tune) daha büyük ve
-  gürültülü korpuslarda tekrarlamak ve belleğin genellemeye (held-out
-  üçlüler) katkısını ayrıca ölçmek.
+  Belleğin genellemeye katkısı `genelleme_ablasyonu.py` ile ayrıca ölçüldü:
+  donuk gövde + eğitilen köprü/kafa, held-out olgularda %100 tamamlama
+  (boş bellek ~şans). Sıradaki adım, bu protokolü gürültülü ve büyük
+  korpuslarda tekrarlamak + canlı korpus çekimi.
 - **Dış korpus ölçeği (tamamlandı):** `egitim/veri_toplayici.py` çıktısı
   (`turkce_metin.txt`) `korpus_boru.py` üzerinden `REAL_DATA` olarak akıtılıyor;
   sözlük bilinen fiil desenleriyle büyütülüyor (yeni özne/nesne varlıkları;

@@ -226,7 +226,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   bilgi yazmanın aşağı-akış etkisini ölçen `AblasyonDeneyi` (boş bellek ~%50,
   bilgi yazılı ~%100) ve bunu modelin KENDİ tamamlama görevine taşıyan
   `GorevAblasyonu` (yoğun gövde donukken ~şans → ~%100, ölü-yol → canlı-yol —
-  "katrilyon" tezinin görev boyutlu kanıtı).
+  "katrilyon" tezinin görev boyutlu kanıtı) ve `GenellemeAblasyonu` (belleğin
+  KANONİK kodu eğitimde görülmeyen öznelere de genelliyor: held-out ~%25 → %100,
+  boş bellek şansta kalır — genelleme ezberden değil bellekten gelir).
 
 **En kritik güvenlik kuralı:** `MODEL_GENERATED` kaynaklı bir deneyim hiçbir
 zaman otomatik `VERIFIED` kabul edilmez — en fazla `VALID` (bellek adayı) olur.
@@ -238,6 +240,7 @@ python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil 
 python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
 python experiments/experience_loop/run_ablation.py    # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
+python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → görülmeyen olguya genelleme (torch)
 python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + geçmiş zaman
 python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sözlük büyütme → REAL_DATA
 python -m hga bilgi                                   # tek yüz (CLI) demosu
