@@ -10,13 +10,14 @@
 #   * MODEL_GENERATED deneyimler ASLA otomatik VERIFIED edilmez (rapor §9/§21).
 # ============================================================================
 
-# ── Sinyal ağırlıkları (toplam 1.0 hedeflenir; w7 ceza olarak çıkarılır) ──
+# ── Sinyal ağırlıkları (pozitif ağırlıklar toplamı 1.0; w7 ceza olarak çıkarılır) ──
 agirliklar:
   w1_property: 0.25
   w2_relation: 0.20
   w3_context: 0.15
   w4_memory: 0.15
-  w5_novelty: 0.10
+  w5_novelty: 0.05
+  w_info_gain: 0.05
   w6_source: 0.15
   w7_contradiction: 0.30
 

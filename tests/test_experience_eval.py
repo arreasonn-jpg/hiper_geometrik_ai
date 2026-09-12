@@ -128,7 +128,8 @@ def test_skor_araligi_ve_bilesenleri():
     br = sc.skorla(k, a, subject, relation, object_)
     for anahtar in ("property_compatibility", "relation_compatibility",
                     "context_consistency", "memory_support", "novelty",
-                    "source_confidence", "contradiction", "weighted"):
+                    "information_gain", "source_confidence",
+                    "contradiction", "weighted"):
         assert 0.0 <= br.to_dict()[anahtar] <= 1.0
     # kontrollü adayda çelişki cezası sıfır
     assert br.contradiction == 0.0

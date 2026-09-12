@@ -34,6 +34,7 @@ class ScoreBreakdown:
     context_consistency: float
     memory_support: float
     novelty: float
+    information_gain: float
     source_confidence: float
     contradiction: float
     weighted: float
@@ -43,12 +44,14 @@ class ScoreBreakdown:
 
 
 # Varsayılan ağırlıklar (experience_config.yaml ile örtüşür)
+# Pozitif ağırlıklar (w1..w6 + w_info_gain) toplamı 1.0; w7 ceza olarak çıkarılır.
 VARSAYILAN_AGIRLIKLAR = {
     "w1_property": 0.25,
     "w2_relation": 0.20,
     "w3_context": 0.15,
     "w4_memory": 0.15,
-    "w5_novelty": 0.10,
+    "w5_novelty": 0.05,
+    "w_info_gain": 0.05,
     "w6_source": 0.15,
     "w7_contradiction": 0.30,   # ceza olarak çıkarılır
 }
@@ -121,6 +124,38 @@ class Scoring:
         guvenilirlik = KAYNAK_GUVENIRLIGI.get(aday.source, 0.5)
         return round(aday.source_confidence * guvenilirlik, 4)
 
+    # ── v0.3: bilgi kazancı (information gain) ───────────────────────────
+    def _ozellik_vektoru(self, store, entity: Entity) -> Dict[str, float]:
+        """Varlığın bilinen özelliklerini seyrek vektör olarak döndür (0..1)."""
+        return {ad: pv.deger for ad, pv in store.properties.hepsi(entity.entity_id).items()}
+
+    def _benzerlik(self, a: Dict[str, float], b: Dict[str, float]) -> float:
+        """[0,1] özellik vektörü benzerliği (kosin). Boş vektör → 0.0."""
+        if not a or not b:
+            return 0.0
+        ortak = set(a) & set(b)
+        pay = sum(a[k] * b[k] for k in ortak)
+        na = sum(v * v for v in a.values()) ** 0.5
+        nb = sum(v * v for v in b.values()) ** 0.5
+        if na == 0 or nb == 0:
+            return 0.0
+        return pay / (na * nb)
+
+    def information_gain(self, store, object_: Entity) -> float:
+        """Nesnenin bellek içinde ne kadar "bilgilendirici" (ayırt edici) olduğu.
+
+        information_gain = 1 - (bellekteki en benzer diğer varlığa olan
+        benzerlik). Nesne diğerlerinden ne kadar farklıysa, bu deneyim mevcut
+        bilgiye o kadar yeni bilgi katar (rapor §19 v0.3, §20).
+        """
+        vec = self._ozellik_vektoru(store, object_)
+        en_yakin = 0.0
+        for e in store.entities.hepsi():
+            if e.entity_id == object_.entity_id:
+                continue
+            en_yakin = max(en_yakin, self._benzerlik(vec, self._ozellik_vektoru(store, e)))
+        return round(max(0.0, min(1.0, 1.0 - en_yakin)), 4)
+
     # ── Toplam ───────────────────────────────────────────────────────────
     def skorla(self, store, aday: ExperienceCandidate, subject: Entity,
                relation: Relation, object_: Entity,
@@ -138,6 +173,7 @@ class Scoring:
                                  relation.relation_id, object_.entity_id)
         nv = self.yenilik(store, subject.entity_id, relation.relation_id,
                           object_.entity_id)
+        ig = self.information_gain(store, object_)
         sc = self.kaynak_guveni(aday)
         ct = 1.0 if celiski else 0.0
 
@@ -148,6 +184,7 @@ class Scoring:
             + w["w3_context"] * cc
             + w["w4_memory"] * ms
             + w["w5_novelty"] * nv
+            + w["w_info_gain"] * ig
             + w["w6_source"] * sc
             - w["w7_contradiction"] * ct
         )
@@ -157,6 +194,7 @@ class Scoring:
             context_consistency=round(cc, 4),
             memory_support=round(ms, 4),
             novelty=round(nv, 4),
+            information_gain=ig,
             source_confidence=sc,
             contradiction=ct,
             weighted=round(max(0.0, min(1.0, weighted)), 4),
