@@ -2,21 +2,20 @@
 """
 Şemalar — Entity, Property, Relation ve Experience kayıtları
 =============================================================
-(v0.1 — rapor §3, §4, §5, §6, §10, EK-A)
+(v1.0 — Roadmap P0-005, P0-006, P0-007, P0-008, P0-011, P0-014)
 
 Bu modül, sistemin kavramsal dünyasını oluşturan temel veri yapılarını tanımlar.
 Tamamen saf Python'dur (torch gerektirmez); tüm yapılar `dataclass` olduğu için
 hem okunabilir hem de `asdict` ile serileştirilebilir.
 
-Önemli tasarım kararları (raporla birebir):
+Önemli tasarım kararları (Roadmap v1.0 ile birebir):
 
-  * Entity Index ile Tokenizer ayrıdır (§4): `entity_id`, tokenizer'ın token
+  * Entity Index ile Tokenizer ayrıdır (P0-005): `entity_id`, tokenizer'ın token
     ID'si DEĞİLDİR. Tokenizer dilsel birimler, Entity Index kavramsal dünya içindir.
-  * Property değerleri ilk prototipte 1/0 booleandır, ama kayıt [0,1] aralığında
-    `deger` + `confidence` taşır (§5): böylece ileride güven/uygunluk değerlerine
-    genişlemek için veri modeli değişmez.
-  * Bilgi yalnızca doğru/yanlış değil, `source` + `confidence` ile tutulur (§10):
-    MODEL_GENERATED bilgi, REAL_DATA ile aynı epistemik seviyeye konmaz.
+  * Property değerleri [0,1] aralığında sürekli `deger` + `confidence` taşır (P0-006, P0-009).
+  * Relation tanımları kısıtları, RelationFact somut üçlü kanıtlarını ve ters çıkarımları (P0-008) taşır.
+  * Bilgi yalnızca doğru/yanlış değil, `source` + `confidence` ile tutulur (P0-014):
+    MODEL_GENERATED bilgi, REAL_DATA veya VERIFIED ile aynı epistemik seviyeye konmaz.
 """
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -24,43 +23,49 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Kaynak türleri (§10 / EK-A.10) — bilginin nereden geldiği
+# Kaynak türleri (P0-014) — bilginin nereden geldiği (Provenance)
 # ──────────────────────────────────────────────────────────────────────────
 class KaynakTuru(str, Enum):
     REAL_DATA = "REAL_DATA"                 # gerçek dış veri
     VERIFIED_RULE = "VERIFIED_RULE"         # deterministik / doğrulanmış kural
-    MODEL_GENERATED = "MODEL_GENERATED"     # modelin kendi üretimi
+    DERIVED = "DERIVED"                     # mantıksal/ters çıkarımla türetilmiş bilgi (P0-014)
     EXTERNAL_VERIFIED = "EXTERNAL_VERIFIED" # dış doğrulayıcı onayı
     HUMAN_CONFIRMED = "HUMAN_CONFIRMED"     # insan onayı
+    MODEL_GENERATED = "MODEL_GENERATED"     # modelin kendi üretimi
+    FREE_GENERATION = "FREE_GENERATION"     # serbest/açık üretim (P0-014)
 
 
-# Kaynak güvenilirliği (§10): aynı güven puanı farklı kaynaklarda farklı
+# Kaynak güvenilirliği (P0-014): aynı güven puanı farklı kaynaklarda farklı
 # epistemik ağırlık taşır. MODEL_GENERATED bilinçli olarak 0.5'te tutulur:
-# kendi üretimini asla dış veriyle aynı seviyeye koymaz.
+# kendi üretimini asla dış veri veya doğrulanmış kural ile aynı seviyeye koymaz.
 KAYNAK_GUVENIRLIGI: Dict[KaynakTuru, float] = {
     KaynakTuru.REAL_DATA: 1.0,
     KaynakTuru.VERIFIED_RULE: 1.0,
     KaynakTuru.HUMAN_CONFIRMED: 1.0,
     KaynakTuru.EXTERNAL_VERIFIED: 0.9,
+    KaynakTuru.DERIVED: 0.85,
     KaynakTuru.MODEL_GENERATED: 0.5,
+    KaynakTuru.FREE_GENERATION: 0.3,
 }
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Deneyim durumları (EK-C) — güvenlik mekanizmasının kalbi (§9)
+# Deneyim durumları (P0-012) — güvenlik mekanizmasının durum makinesi
 # ──────────────────────────────────────────────────────────────────────────
 class DeneyimDurumu(str, Enum):
     CANDIDATE = "CANDIDATE"    # henüz değerlendirilmedi → Evaluator'a gönder
+    EVALUATING = "EVALUATING"  # değerlendirme aşamasında (P0-012)
     VALID = "VALID"            # mevcut bilgiyle uyumlu → belleğe ADAY olarak ekle
     CONFLICT = "CONFLICT"      # mevcut bilgiyle çelişiyor → araştırma kuyruğuna gönder
     EXPLORE = "EXPLORE"        # çelişki araştırma modunda (CONFLICT sonrası)
     INVALID = "INVALID"        # kural/ilişki/özellik açısından uyumsuz → reddet
     REJECT = "REJECT"          # reddedilerek kapatıldı (INVALID sonrası terminal)
+    VERIFYING = "VERIFYING"    # deterministik/dış doğrulama testinde (P0-012)
     VERIFIED = "VERIFIED"      # harici/deterministik doğrulama aldı → kalıcı bilgiye yükselt
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Entity kaydı (§3, EK-A.3)
+# Entity kaydı (P0-005)
 # ──────────────────────────────────────────────────────────────────────────
 @dataclass
 class Entity:
@@ -73,7 +78,7 @@ class Entity:
     confidence: float = 1.0              # varlığın kendisine duyulan güven [0,1]
     source: KaynakTuru = KaynakTuru.REAL_DATA
     context_tags: List[str] = field(default_factory=list)
-    version: int = 1                     # sürüm (semantic drift izleme, §21)
+    version: int = 1                     # sürüm (semantic drift izleme)
     status: str = "aktif"                # aktif / emekli / tartismali
 
     def to_dict(self) -> Dict[str, Any]:
@@ -89,7 +94,7 @@ class Entity:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Property değeri (§5): 1/0 boolean'dan [0,1] güven değerine genişletilebilir
+# Property değeri (P0-006, P0-009): [0,1] sürekli epistemik güven değeri
 # ──────────────────────────────────────────────────────────────────────────
 @dataclass
 class PropertyValue:
@@ -111,7 +116,7 @@ class PropertyValue:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Relation (ilişki) tanımı (§6): özne-ilişki-nesne kısıtları
+# Relation (ilişki) tanımı (P0-007, P0-008): özne-ilişki-nesne kısıtları
 # ──────────────────────────────────────────────────────────────────────────
 @dataclass
 class Relation:
@@ -121,6 +126,8 @@ class Relation:
     object_types: List[str] = field(default_factory=list)    # boş = serbest
     requires_object_props: Dict[str, float] = field(default_factory=dict)   # {"rideable": 1.0}
     requires_subject_props: Dict[str, float] = field(default_factory=dict)  # {"canli": 1.0}
+    inverse_relation_id: Optional[str] = None                # ters ilişki kimliği (P0-008)
+    symmetric: bool = False                                  # simetrik ilişki mi? (A-B => B-A)
     source: KaynakTuru = KaynakTuru.VERIFIED_RULE
     confidence: float = 1.0
     version: int = 1
@@ -138,7 +145,7 @@ class Relation:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# RelationFact (ilişki kanıtı): (özne, ilişki, nesne) üçlüsüne dair tek kanıt
+# RelationFact (ilişki kanıtı, P0-007): (özne, ilişki, nesne) üçlüsüne dair tek kanıt
 # ──────────────────────────────────────────────────────────────────────────
 @dataclass
 class RelationFact:
@@ -168,7 +175,7 @@ class RelationFact:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# ExperienceCandidate (§7): üretilen deneyim adayı
+# ExperienceCandidate (P0-011, Faz 23): üretilen deneyim adayı ve graf soyu
 # ──────────────────────────────────────────────────────────────────────────
 @dataclass
 class ExperienceCandidate:
@@ -182,6 +189,11 @@ class ExperienceCandidate:
     scores: Dict[str, float] = field(default_factory=dict)
     rationale: List[str] = field(default_factory=list)
     evidence: List[str] = field(default_factory=list)
+    parent_experiences: List[str] = field(default_factory=list)  # P0-011 / Faz 23: öncül deneyim kimlikleri
+    generation_step: int = 0                                     # P0-011: döngü adım numarası
+    derived_from: List[str] = field(default_factory=list)        # Faz 23: türetim kuralları/ilişkileri
+    contradicts: List[str] = field(default_factory=list)         # Faz 23: çeliştiği olgu/deneyim kimlikleri
+    supported_by: List[str] = field(default_factory=list)        # Faz 23: destekleyen olgu/deneyim kimlikleri
     verified_by: Optional[str] = None      # deterministik doğrulayıcı kimliği (VERIFIED ise)
     timestamp: Optional[float] = None
     version: int = 1

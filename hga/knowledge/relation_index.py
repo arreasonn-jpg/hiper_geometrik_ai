@@ -2,17 +2,17 @@
 """
 Relation Index / Relation Tensor — İlişki Dizini
 =================================================
-(v0.1 — rapor §6)
+(v1.0 — Roadmap P0-007, P0-008)
 
 Salt kelime puanları yeterli değildir: "Ali + araba + bindi" örneğinde üç
 bileşenin de uygun olması, İLİŞKİNİN kendisinin uygun olduğunu kanıtlamaz.
-Bu yüzden özne–ilişki–nesne bağlantıları ayrıca temsil edilir (rapor §6).
+Bu yüzden özne–ilişki–nesne bağlantıları ayrıca temsil edilir (P0-007).
 
-İlk fiziksel uygulamada bu, dev bir tensör yerine SEYREK bir sözlük + kanıt
-listesi ile başlar (§6: "seyrek sözlük veya graph yapısıyla başlatmak daha
-doğrudur"). Her üçlü için birden çok kanıt (`RelationFact`) biriktirilir;
-`olgu_agrega()` bunları kaynak güvenilirliğine göre birleştirir. Bu yapı
-ileride mevcut Kronecker/geometrik katmanla ilişkilendirilebilir (§6).
+Özellikler:
+  * İlişki kısıtları (`subject_types`, `object_types`, `requires_*_props`)
+  * Seyrek (özne, ilişki, nesne) kanıt dizini (`RelationFact`)
+  * Ters ve simetrik ilişki yönetimi (`inverse_relation_id`, `ters_olgu_uret`, P0-008)
+  * Kaynak ağırlıklı olgu agregasyonu (`olgu_agrega`)
 """
 from typing import Dict, List, Optional, Tuple
 
@@ -33,9 +33,11 @@ class RelationIndex:
                     object_types: Optional[List[str]] = None,
                     requires_object_props: Optional[Dict[str, float]] = None,
                     requires_subject_props: Optional[Dict[str, float]] = None,
+                    inverse_relation_id: Optional[str] = None,
+                    symmetric: bool = False,
                     source: KaynakTuru = KaynakTuru.VERIFIED_RULE,
                     confidence: float = 1.0) -> Relation:
-        """Yeni bir ilişki tanımla (ör. Binmek: nesne `rideable=1` gerektirir)."""
+        """Yeni bir ilişki tanımla (ör. Binmek: nesne `binilebilir=1` gerektirir)."""
         if relation_id is None:
             self._sayac += 1
             relation_id = f"R_{self._sayac:03d}"
@@ -48,11 +50,43 @@ class RelationIndex:
             object_types=list(object_types or []),
             requires_object_props={k: float(v) for k, v in (requires_object_props or {}).items()},
             requires_subject_props={k: float(v) for k, v in (requires_subject_props or {}).items()},
+            inverse_relation_id=inverse_relation_id,
+            symmetric=bool(symmetric),
             source=source,
             confidence=float(confidence),
         )
         self._iliskiler[relation_id] = r
         return r
+
+    def ters_iliski_bagla(self, relation_id_1: str, relation_id_2: str) -> None:
+        """İki ilişkiyi birbirinin tersi olarak bağla (P0-008)."""
+        r1 = self.iliski_al(relation_id_1)
+        r2 = self.iliski_al(relation_id_2)
+        r1.inverse_relation_id = relation_id_2
+        r2.inverse_relation_id = relation_id_1
+
+    def ters_iliski_al(self, relation_id: str) -> Optional[str]:
+        """İlişkinin ters kimliğini döner (simetrik ise kendisi, yoksa None)."""
+        r = self.iliski_al(relation_id)
+        if r.symmetric:
+            return r.relation_id
+        return r.inverse_relation_id
+
+    def ters_olgu_uret(self, olgu: RelationFact) -> Optional[RelationFact]:
+        """Bir olgunun ters yönlü türetimini üret (P0-008 / DERIVED)."""
+        inv_id = self.ters_iliski_al(olgu.relation_id)
+        if not inv_id:
+            return None
+        return RelationFact(
+            subject_id=olgu.object_id,
+            relation_id=inv_id,
+            object_id=olgu.subject_id,
+            score=olgu.score,
+            source=KaynakTuru.DERIVED,
+            confidence=round(olgu.confidence * 0.95, 4),
+            timestamp=olgu.timestamp,
+            version=olgu.version,
+        )
 
     def iliski_al(self, relation_id: str) -> Relation:
         if relation_id not in self._iliskiler:
@@ -68,7 +102,7 @@ class RelationIndex:
     # ── Kanıt (fact) ekleme ──────────────────────────────────────────────
     def olgu_ekle(self, subject_id: str, relation_id: str, object_id: str,
                   score: float, source: KaynakTuru = KaynakTuru.REAL_DATA,
-                  confidence: float = 1.0) -> RelationFact:
+                  confidence: float = 1.0, otomatik_ters: bool = False) -> RelationFact:
         """(özne, ilişki, nesne) üçlüsüne dair bir kanıt kaydet."""
         score = float(score)
         if score < 0.0 or score > 1.0:
@@ -79,6 +113,10 @@ class RelationIndex:
                          object_id=object_id, score=score, source=source,
                          confidence=float(confidence))
         self._olgular.append(f)
+        if otomatik_ters:
+            ters = self.ters_olgu_uret(f)
+            if ters is not None:
+                self._olgular.append(ters)
         return f
 
     # ── Sorgu ────────────────────────────────────────────────────────────
