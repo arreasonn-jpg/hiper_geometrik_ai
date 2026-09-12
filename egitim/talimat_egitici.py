@@ -23,7 +23,8 @@ import torch
 import torch.nn as nn
 
 from kuresel_model import (model_olustur, agirlik_yukle, agirlik_kaydet,
-                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
+                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM,
+                           VARSAYILAN_SEYREK_SATIR, VARSAYILAN_SEYREK_BOYUT)
 from bpe_tokenizer import BPETokenizer
 from talimat_toplayici import TalimatToplayici
 
@@ -54,6 +55,10 @@ def main():
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--n", type=int, default=VARSAYILAN_N)
     ap.add_argument("--katman", type=int, default=VARSAYILAN_KATMAN)
+    # Seyrek bellek parametreleri — TEMEL EĞİTİMLE AYNI OLMALI (strict yükleme)
+    ap.add_argument("--seyrek-satir", type=int, default=VARSAYILAN_SEYREK_SATIR)
+    ap.add_argument("--seyrek-boyut", type=int, default=VARSAYILAN_SEYREK_BOYUT)
+    ap.add_argument("--seyrek-yok", action="store_true")
     args = ap.parse_args()
 
     print("\n🎯 Talimat (Instruction) Fine-Tuning — Kronecker zinciri sürümü")
@@ -65,7 +70,9 @@ def main():
 
     model = model_olustur(sozluk_boyutu=max(len(tok.sozluk), 64), n=args.n,
                           baglam_penceresi=VARSAYILAN_BAGLAM,
-                          katman_sayisi=args.katman)
+                          katman_sayisi=args.katman,
+                          seyrek_tablo_boyutu=(0 if args.seyrek_yok else args.seyrek_satir),
+                          seyrek_boyut=args.seyrek_boyut)
 
     baglam = model.baglam_penceresi
     temel_yol = os.path.join(KOK, f"hiper_model_{args.n}.pt")
@@ -122,6 +129,8 @@ def main():
     talimat_yol = os.path.join(KOK, f"hiper_model_{args.n}_talimat.pt")
     agirlik_kaydet(model, talimat_yol)
     agirlik_kaydet(model, temel_yol)
+    if model.seyrek_tablo is not None:
+        print(f"🧠 {model.seyrek_doluluk_metni()}")
     print(f"💾 Kaydedildi: {talimat_yol}")
 
 

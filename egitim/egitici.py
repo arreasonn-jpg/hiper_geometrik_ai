@@ -30,7 +30,8 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
 from kuresel_model import (model_olustur, agirlik_kaydet,
-                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
+                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM,
+                           VARSAYILAN_SEYREK_SATIR, VARSAYILAN_SEYREK_BOYUT)
 from bpe_tokenizer import BPETokenizer
 
 
@@ -135,9 +136,15 @@ class KureselEgitimMotoru:
             self.scheduler.step()
             ortalama = toplam_loss / max(1, adim)
             bar = "█" * int((cag + 1) / cag_sayisi * 20)
+            # Seyrek 'boş küme' doluluk izleme (rapor 9.4.4) — çağ başı bir kez
+            seyrek_bilgi = ""
+            tablo = getattr(self.model, "seyrek_tablo", None)
+            if tablo is not None:
+                dolu, toplam_satir = tablo.doluluk_orani()
+                seyrek_bilgi = f" | Seyrek: {dolu:,}/{toplam_satir:,}"
             print(f"  Çağ {cag + 1:02d}/{cag_sayisi:02d} | Loss: {ortalama:.4f} | "
                   f"Süre: {time.time() - cag_basla:.1f}s | "
-                  f"Dilim: [{baslangic:,}-{bitis:,}] |{bar:<20}|")
+                  f"Dilim: [{baslangic:,}-{bitis:,}]{seyrek_bilgi} |{bar:<20}|")
 
         print("═" * 60)
         print("  [🎉 TAMAMLANDI] Eğitim bitti.")
@@ -157,6 +164,13 @@ def main():
     ap.add_argument("--baglam", type=int, default=VARSAYILAN_BAGLAM)
     ap.add_argument("--checkpoint", action="store_true",
                     help="Gradient checkpointing (derin zincir, rapor 8.4.2)")
+    ap.add_argument("--seyrek-satir", type=int, default=VARSAYILAN_SEYREK_SATIR,
+                    help="seyrek 'boş küme' tablosu satır sayısı (rapor 9; "
+                         "1.048.576 satır × 32 boyut ≈ 128 MB)")
+    ap.add_argument("--seyrek-boyut", type=int, default=VARSAYILAN_SEYREK_BOYUT,
+                    help="her kümenin vektör boyutu")
+    ap.add_argument("--seyrek-yok", action="store_true",
+                    help="seyrek belleği tamamen kapat")
     ap.add_argument("--amp", default="auto", choices=["auto", "evet", "hayir"])
     args = ap.parse_args()
 
@@ -184,7 +198,9 @@ def main():
     model = model_olustur(sozluk_boyutu=max(len(tok.sozluk), 64), n=args.n,
                           baglam_penceresi=args.baglam,
                           katman_sayisi=args.katman,
-                          checkpoint_kullan=args.checkpoint)
+                          checkpoint_kullan=args.checkpoint,
+                          seyrek_tablo_boyutu=(0 if args.seyrek_yok else args.seyrek_satir),
+                          seyrek_boyut=args.seyrek_boyut)
 
     motor = KureselEgitimMotoru(
         model, ogrenme_hizi=args.ogrenme_hizi, toplam_cag=args.cag,

@@ -9,116 +9,21 @@ import gradio as gr
 from kuresel_model import (model_olustur, agirlik_yukle,
                            VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
 from bpe_tokenizer import BPETokenizer
+from bilgi_katmani import (BilgiKatmani, KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
+                           beyaz_liste_olustur)
 
-# Tek doğruluk kaynağı: mimari/kuresel_model.py
-# (eski yerel model_olustur kopyası ve inspect-tabanlı ad eşleştirme hilesi kaldırıldı)
-SISTEM = {"model": None, "tok": None, "n_gen": VARSAYILAN_N,
-          "katman": VARSAYILAN_KATMAN, "baglam": VARSAYILAN_BAGLAM,
-          "talimatlar": [], "loglar": []}
+# Tek doğruluk kaynağı: mimari/kuresel_model.py + bilgi_katmani.py
+# (eski yerel model_olustur kopyası ve intent_cevap/norm buraya indirgendi —
+#  artık terminal (calistir.py) ile AYNI 3 katmanlı karar mekanizması)
+SISTEM = {"model": None, "tok": None, "bilgi": None,
+          "n_gen": VARSAYILAN_N, "katman": VARSAYILAN_KATMAN,
+          "baglam": VARSAYILAN_BAGLAM, "talimatlar": [], "loglar": []}
 
 def log(m):
     s = f"[{time.strftime('%H:%M:%S')}] {m}"
     SISTEM["loglar"].append(s)
     SISTEM["loglar"] = SISTEM["loglar"][-40:]
     return "\n".join(SISTEM["loglar"])
-
-def norm(t):
-    """Türkçe metni eşleştirme için sadeleştir — güvenli replace ile."""
-    t = (t or "").lower().strip()
-    t = t.replace("'", " ").replace("\u2019", " ").replace("\u2018", " ")
-    # Tek tek replace (maketrans bozulmasın diye)
-    repl = {
-        "\u0131": "i",  # ı
-        "\u0130": "i",  # İ
-        "\u015f": "s",  # ş
-        "\u015e": "s",  # Ş
-        "\u011f": "g",  # ğ
-        "\u011e": "g",  # Ğ
-        "\u00fc": "u",  # ü
-        "\u00dc": "u",  # Ü
-        "\u00f6": "o",  # ö
-        "\u00d6": "o",  # Ö
-        "\u00e7": "c",  # ç
-        "\u00c7": "c",  # Ç
-    }
-    for a, b in repl.items():
-        t = t.replace(a, b)
-    t = re.sub(r"[^\w\s]", " ", t, flags=re.UNICODE)
-    t = re.sub(r"\s+", " ", t).strip()
-    t = t.replace("neresidir", "neresi")
-    return t
-
-def intent_cevap(mesaj):
-    """Kural tabanlı + benzerlik: bilinen sorulara net cevap."""
-    q_raw = (mesaj or "").lower().strip()
-    q = norm(mesaj)
-
-    # Başkent
-    if ("baskent" in q or "ankara" in q) and (
-        "turkiye" in q or "neresi" in q or "nedir" in q or "baskent" in q
-    ):
-        return "Türkiye Cumhuriyeti'nin başkenti Ankara'dır.", 1.0
-    if "baskent" in q and "neresi" in q:
-        return "Türkiye Cumhuriyeti'nin başkenti Ankara'dır.", 1.0
-
-    # Selamlaşma
-    if any(x in q for x in ["merhaba", "selam", "gunaydin", "nasilsin"]):
-        return "Merhaba, iyiyim teşekkür ederim. Size nasıl yardımcı olabilirim?", 1.0
-    if "nasil" in q and "sin" in q:
-        return "Merhaba, iyiyim teşekkür ederim. Size nasıl yardımcı olabilirim?", 1.0
-
-    # Duygu
-    if "duygu" in q:
-        return "Duygu, insanın dış dünyadaki olaylara karşı hissettiği psikolojik tepkilerdir.", 1.0
-
-    # Yapay zeka
-    if "yapay" in q and "zeka" in q:
-        return "Yapay zeka, insan zekasını taklit eden, öğrenen ve problem çözen bilgisayar sistemleridir.", 1.0
-
-    # Tesseract / Fraktal
-    if "tesseract" in q or "hiperkup" in q:
-        return "Tesseract, üç boyutlu küpün dört boyutlu karşılığı olan hiper küptür.", 1.0
-    if "fraktal" in q:
-        return "Fraktal, her ölçekte kendine benzeyen karmaşık geometrik şekillerdir.", 1.0
-
-    # Kimlik
-    if "kimsin" in q or "adin ne" in q:
-        return "Ben Hiper-Geometrik Fraktal AI. Türkçe sohbet için tasarlandım.", 1.0
-
-    # Atatürk
-    if "ataturk" in q:
-        return "Mustafa Kemal Atatürk, Türkiye Cumhuriyeti'nin kurucusu ve ilk cumhurbaşkanıdır.", 1.0
-
-    # Teşekkür / veda
-    if "tesekkur" in q:
-        return "Rica ederim, her zaman yardımcı olmaktan mutluluk duyarım.", 1.0
-    if "gorusuruz" in q or "hosca" in q:
-        return "Görüşmek üzere, kendinize iyi bakın.", 1.0
-
-    # Veri seti benzerliği
-    best, best_score = None, 0.0
-    q_set = set(q.split())
-    for it in SISTEM["talimatlar"]:
-        s = norm(it.get("soru", ""))
-        s_set = set(s.split())
-        if not s_set:
-            continue
-        inter = len(q_set & s_set)
-        union = len(q_set | s_set) or 1
-        score = inter / union
-        if s in q or q in s:
-            score += 0.55
-        if score > best_score:
-            best_score, best = score, it
-    if best and best_score >= 0.40:
-        cevap = (best.get("cevap") or "").strip()
-        if not cevap:
-            return None, best_score
-        guzel = cevap[0].upper() + cevap[1:]
-        if not guzel.endswith("."):
-            guzel += "."
-        return guzel, best_score
-    return None, best_score
 
 def baslat():
     # BPE tokenizer (rapor 8.4.6): kilitli sözlük varsa yükle, yoksa kur
@@ -141,6 +46,9 @@ def baslat():
             SISTEM["talimatlar"] = json.load(f)
     log(f"Talimat: {len(SISTEM['talimatlar'])} ornek")
 
+    # 3 katmanlı halüsinasyon kontrolü (rapor 10.5) — calistir.py ile ortak
+    SISTEM["bilgi"] = BilgiKatmani(SISTEM["talimatlar"])
+
     # Model: TEK doğruluk kaynağından (mimari/kuresel_model.py)
     n = SISTEM["n_gen"]
     model = model_olustur(max(len(tok.sozluk), 100), n=n,
@@ -158,9 +66,12 @@ def baslat():
     model.eval()
     SISTEM["model"] = model
 
-def sinir_agi_uret(prompt, max_token=24):
-    """BPE parçalarını kelimelere DOĞRU biçimde birleştirerek üretim yapar
-    (kelime içi parçalar bitişik, kelime sonları boşluklu)."""
+def sinir_agi_uret(prompt, max_token=24, izinli=None):
+    """BPE parçalarını kelimelere DOĞRU biçimde birleştirerek üretim yapar.
+
+    izinli (bool maske) verilirse yalnız beyaz listedeki token'lar seçilebilir
+    (KATMAN_KISMI kısıtlı üretimi, rapor 10.5.2).
+    """
     tok = SISTEM["tok"]   # BPETokenizer
     model = SISTEM["model"]
     baglam = getattr(model, "baglam_penceresi", SISTEM["baglam"])
@@ -177,6 +88,8 @@ def sinir_agi_uret(prompt, max_token=24):
             pencere = [0] * (baglam - len(pencere)) + pencere
             logits = model(torch.tensor([pencere], dtype=torch.long))[0]
             logits[:4] = -1e9
+            if izinli is not None:
+                logits[~izinli] = -1e9            # beyaz liste dışını engelle
             if step >= 2:
                 for b in ban:
                     logits[b] -= 4.0
@@ -213,35 +126,55 @@ def chat(mesaj, history, n_gen, max_token, talimat_modu):
         {"role": "assistant", "content": ""},
     ]
 
+    izinli = None
     if talimat_modu:
-        cevap, skor = intent_cevap(mesaj)
-        if cevap:
-            history[-1]["content"] = cevap
-            log(f"Intent Match skor={skor:.2f}: {mesaj[:40]}")
+        # 3 katmanlı karar mekanizması (rapor 10.5) — skor artık GİZLİ DEĞİL
+        katman, cevap, skor, eslesme = SISTEM["bilgi"].ara(mesaj)
+
+        if katman == KATMAN_TAM:
+            # 1. katman: kayıtlı cevap doğrudan — halüsinasyon ~0
+            history[-1]["content"] = f"🔎 (kayıtlı bilgi) {cevap}"
+            log(f"Katman 1 (tam): {mesaj[:40]}")
             yield history, ""
             return
 
+        if katman == KATMAN_KISMI:
+            # 2. katman: eşleşen kaydın kelimeleriyle kısıtlı üretim
+            izinli = beyaz_liste_olustur(SISTEM["tok"], eslesme,
+                                         SISTEM["model"].sozluk_boyutu)
+            onek = f"🤔 (kısmi eşleşme, güven {skor:.2f}) "
+        else:
+            # 3. katman: açık genelleme — açıkça işaretli
+            onek = "⚠️ (doğrulanmamış yapay zeka üretimi) "
+    else:
+        onek = ""
+
     prompt = f"soru {mesaj.strip()} cevap" if talimat_modu else mesaj.strip()
-    metin = sinir_agi_uret(prompt, int(max_token))
+    metin = sinir_agi_uret(prompt, int(max_token), izinli=izinli)
     if not metin:
         metin = "Anladım. Lütfen soruyu biraz daha açık yazar mısınız?"
     else:
         metin = metin[0].upper() + metin[1:]
         if not metin.endswith("."):
             metin += "."
-    history[-1]["content"] = metin
-    log(f"Neural: {mesaj[:40]}")
+    history[-1]["content"] = onek + metin
+    log(f"Neural (katman={'2' if izinli is not None else '3'}): {mesaj[:40]}")
     yield history, ""
 
 def durum():
     n = len(SISTEM["tok"].sozluk) if SISTEM["tok"] else 0
+    model = SISTEM["model"]
+    seyrek = ""
+    if model is not None and hasattr(model, "seyrek_doluluk_metni"):
+        seyrek = f"Seyrek bellegimiz: {model.seyrek_doluluk_metni()}\n"
     return (
         f"Mimari: n={SISTEM['n_gen']}, K={SISTEM['katman']} bilinear Kronecker zinciri\n"
         f"Baglam: {SISTEM['baglam']} token (BPE, alt-kelime)\n"
         f"Sozluk: {n} parca (KILITLI)\n"
         f"Talimat: {len(SISTEM['talimatlar'])} ornek\n"
-        f"Motor: Intent Match + Neural\n"
-        f"Surum: v14.0"
+        f"{seyrek}"
+        f"Motor: 3 Katmanli Bilgi (kayitli/kismi/acik) + Neural\n"
+        f"Surum: v15.0"
     )
 
 baslat()
@@ -252,11 +185,11 @@ body{background:#0a0a0f!important;color:#f3f4f6!important;font-family:Inter,sans
 .accent-title{background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
 """
 
-with gr.Blocks(title="Hiper-Geometrik AI v14.0") as demo:
+with gr.Blocks(title="Hiper-Geometrik AI v15.0") as demo:
     gr.HTML(
         "<div style='text-align:center'>"
-        "<h1 class='accent-title'>Hiper-Geometrik AI — v14.0</h1>"
-        "<p style='color:#9ca3af'>Kilitli BPE Sozlugu • Bilinear Kronecker Zinciri • Intent Match</p>"
+        "<h1 class='accent-title'>Hiper-Geometrik AI — v15.0</h1>"
+        "<p style='color:#9ca3af'>Kilitli BPE • Bilinear Kronecker Zinciri • Seyrek Bellek • 3 Katmanli Bilgi Kontrolu</p>"
         "</div>"
     )
     with gr.Row():
@@ -267,7 +200,7 @@ with gr.Blocks(title="Hiper-Geometrik AI v14.0") as demo:
                 talimat = gr.Checkbox(True, label="Sohbet Asistani Modu")
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Durum")
-                st = gr.Textbox(value=durum(), lines=6, interactive=False)
+                st = gr.Textbox(value=durum(), lines=7, interactive=False)
                 gr.Button("Yenile", size="sm").click(durum, None, st)
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Log")

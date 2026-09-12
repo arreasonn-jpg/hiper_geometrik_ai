@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 """
-Hiper-Geometrik AI — Terminal Chatbot (Kronecker Zinciri Sürümü, v14)
-=====================================================================
+Hiper-Geometrik AI — Terminal Chatbot
+=====================================
+(Kronecker zinciri + seyrek bellek + 3 katmanlı halüsinasyon kontrolü, v15)
 
-Bu sürümdeki değişiklikler (rapor 8.1 / 8.4 / 8.6):
-  - model_olustur artık bu dosyada DEĞİL: tek doğruluk kaynağı
-    mimari/kuresel_model.py'dir ('n' parametresi gerçekten modele iletilir).
-  - Varsayılan tokenizer BPE (alt-kelime); sözlük bpe_sozluk.json'a kilitlenir.
-  - Varsayılan mimari: n=256, K=4 bilinear (A@X@B) zinciri, bağlam=16,
-    nedensel dikkat.
+Bu sürümdeki değişiklikler (rapor 8.1 / 8.4 / 8.6 / 9 / 10):
+  - model_olustur tek doğruluk kaynağı: mimari/kuresel_model.py ('n' iletilir).
+  - Varsayılan tokenizer BPE; sözlük bpe_sozluk.json'a kilitlenir.
+  - Mimari: n=256, K=4 bilinear (A@X@B) zinciri + seyrek 'boş küme' belleği
+    (HashlenmisKureselTablo) + nedensel dikkat.
   - Ağırlık yükleme strict=True; uyumsuz checkpoint açıkça raporlanır.
-  - Sohbet istem biçimi, talimat eğitimiyle AYNI: 'soru ... cevap ... son'.
+  - 3 KATMANLI KARAR MEKANİZMASI (rapor 10.5, bilgi_katmani.py):
+      1. Tam eşleşme     → kayıtlı cevap doğrudan [KAYITLI BİLGİ ✓]
+      2. Kısmi eşleşme   → eşleşen kaydın kelimeleriyle BEYAZ LİSTELİ üretim
+      3. Eşleşme yok     → serbest sinir ağı üretimi [DOĞRULANMAMIŞ]
 """
 
+import json
 import sys
 import os
 
@@ -29,6 +33,9 @@ import torch
 from kuresel_model import (model_olustur, agirlik_yukle,
                            VARSAYILAN_N, VARSAYILAN_BAGLAM, VARSAYILAN_SOZLUK)
 from bpe_tokenizer import BPETokenizer
+from bilgi_katmani import (BilgiKatmani, KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
+                           KATMAN_ETIKET, beyaz_liste_olustur)
+from talimat_toplayici import ZENGIN
 
 # Talimat eğitimiyle (egitim/talimat_egitici.py) aynı istem biçimi
 SORU_ETIKETI = "soru"
@@ -59,6 +66,21 @@ def tokenizer_hazirla() -> BPETokenizer:
     return tok
 
 
+def bilgi_katmani_hazirla() -> BilgiKatmani:
+    """Kayıtlı bilgi: talimat_verisi.json (varsa) + yerleşik talimat seti."""
+    talimatlar = []
+    yol = os.path.join(KOK_DIZIN, "talimat_verisi.json")
+    if os.path.exists(yol):
+        try:
+            with open(yol, "r", encoding="utf-8") as f:
+                talimatlar = json.load(f)
+        except Exception as e:
+            print(f"⚠️ talimat_verisi.json okunamadı ({e}) — yerleşik set kullanılacak.")
+    if not talimatlar:
+        talimatlar = ZENGIN
+    return BilgiKatmani(talimatlar)
+
+
 def to_token_ids(tokenizer, metin):
     if hasattr(tokenizer, "encode"):
         res = tokenizer.encode(metin)
@@ -71,23 +93,62 @@ def to_token_ids(tokenizer, metin):
     return list(res)
 
 
-def id_to_metin(tokenizer, token_ids):
-    if hasattr(tokenizer, "decode"):
-        return tokenizer.decode(token_ids)
-    if hasattr(tokenizer, "ids_to_text"):
-        return tokenizer.ids_to_text(token_ids)
-    id_map = getattr(tokenizer, "id_to_kelime", {})
-    return " ".join(id_map.get(int(i), "<UNK>") for i in token_ids if int(i) > 2)
+def uretim_yap(model, tokenizer, prompt, baglam, izinli=None, max_token=40):
+    """Akışkan üretim. izinli (bool maske) verilirse yalnız beyaz listedeki
+    token'lar örneklenebilir (KATMAN_KISMI kısıtlı üretimi, rapor 10.5.2)."""
+    eos_id = getattr(tokenizer, "EOS_ID", 3)
+    uretilen_ids = list(to_token_ids(tokenizer, prompt))
+    parca = ""  # BPE: kelime içi parçaları biriktir
+
+    for _ in range(max_token):
+        pencere = uretilen_ids[-baglam:]
+        if len(pencere) < baglam:
+            pencere = [0] * (baglam - len(pencere)) + pencere
+
+        inp = torch.tensor([pencere], dtype=torch.long)
+        with torch.no_grad():
+            logits = model(inp)
+            logits[0, :3] = -float("inf")   # PAD/UNK/BOS engelle (EOS serbest)
+            if izinli is not None:
+                logits[0, ~izinli] = -float("inf")   # beyaz liste dışını engelle
+            probs = torch.softmax(logits / 0.7, dim=-1)
+            next_token = int(torch.multinomial(probs, num_samples=1).item())
+
+        uretilen_ids.append(next_token)
+        if next_token == eos_id:
+            break
+
+        ham = getattr(tokenizer, "id_to_kelime", {}).get(next_token, "")
+        if not ham or ham in ("<pad>", "<unk>", "<bos>"):
+            continue
+        if hasattr(tokenizer, "subword_set"):           # BPE
+            if ham.endswith("</w>"):                    # kelime sonu → kontrol + yazdır
+                kelime = parca + ham[:-4]
+                parca = ""
+                if kelime in DURDURMA_KELIMELERI:
+                    break
+                if kelime:
+                    print(kelime + " ", end="", flush=True)
+            else:                                       # kelime içi → biriktir
+                parca += ham
+        else:                                           # kelime-bazlı tokenizer
+            if ham.strip() in DURDURMA_KELIMELERI:
+                break
+            print(ham + " ", end="", flush=True)
+
+    if parca:
+        print(parca + " ", end="", flush=True)
 
 
 def main():
     print("═" * 65)
-    print("🌀 HİPER-GEOMETRİK AI — TERMINAL SOHBET (Kronecker Zinciri v14)")
+    print("🌀 HİPER-GEOMETRİK AI — TERMINAL SOHBET (v15: Kronecker + Seyrek Bellek)")
     print("═" * 65)
 
     n_gen = VARSAYILAN_N
     baglam = VARSAYILAN_BAGLAM
     tokenizer = tokenizer_hazirla()
+    bilgi = bilgi_katmani_hazirla()
 
     vocab_size = len(getattr(tokenizer, "sozluk", {}))
     if vocab_size < 100:
@@ -111,12 +172,16 @@ def main():
         print("   Eğitmek için: python egitim/egitici.py  ve  "
               "python egitim/talimat_egitici.py")
 
+    if hasattr(model, "seyrek_doluluk_metni"):
+        print(f"🧠 {model.seyrek_doluluk_metni()}")
+
     model.eval()
     print("\n💡 Komutlar: 'q' / 'exit' (Çıkış), '/mod' (Mod Değiştir)")
-    print("⚡ Mod: [Sohbet Asistanı (Instruction FT)]\n")
+    print("⚡ Mod: [Sohbet Asistanı (Instruction FT)]")
+    print("🛡️ Halüsinasyon kontrolü: 1) kayıtlı bilgi 2) beyaz listeli üretim "
+          "3) doğrulanmamış üretim\n")
 
     talimat_modu = True
-    eos_id = getattr(tokenizer, "EOS_ID", 3)
 
     while True:
         try:
@@ -131,51 +196,31 @@ def main():
                 print(f"🔄 Aktif Mod: {'[Sohbet Asistanı]' if talimat_modu else '[Serbest Metin Tamamlama]'}")
                 continue
 
+            # ── 3 KATMANLI KARAR MEKANİZMASI (rapor 10.5) ──────────────
+            izinli = None
             if talimat_modu:
-                prompt = f"{SORU_ETIKETI} {kullanici} {CEVAP_ETIKETI}"
+                katman, cevap, skor, eslesme = bilgi.ara(kullanici)
             else:
-                prompt = kullanici
+                katman, cevap, skor, eslesme = KATMAN_ACIK, None, 0.0, None
 
-            uretilen_ids = list(to_token_ids(tokenizer, prompt))
-            print("🤖 AI: ", end="", flush=True)
-            parca = ""  # BPE: kelime içi parçaları biriktir
+            if katman == KATMAN_TAM:
+                # 1. katman: hiçbir şey üretilmez — yalnızca hatırlanır
+                print(f"🤖 AI {KATMAN_ETIKET[katman]} (güven 1.00): {cevap}\n")
+                continue
 
-            for _ in range(40):
-                pencere = uretilen_ids[-baglam:]
-                if len(pencere) < baglam:
-                    pencere = [0] * (baglam - len(pencere)) + pencere
+            if katman == KATMAN_KISMI:
+                # 2. katman: eşleşen kaydın kelimeleriyle kısıtlı üretim
+                izinli = beyaz_liste_olustur(tokenizer, eslesme, model.sozluk_boyutu)
+                etiket = f"{KATMAN_ETIKET[katman]} skor={skor:.2f}"
+            elif talimat_modu:
+                # 3. katman: açık genelleme — açıkça işaretlenmiş
+                etiket = KATMAN_ETIKET[KATMAN_ACIK]
+            else:
+                etiket = "[SERBEST ÜRETİM]"
 
-                inp = torch.tensor([pencere], dtype=torch.long)
-                with torch.no_grad():
-                    logits = model(inp)
-                    logits[0, :3] = -float("inf")   # PAD/UNK/BOS engelle (EOS serbest)
-                    probs = torch.softmax(logits / 0.7, dim=-1)
-                    next_token = int(torch.multinomial(probs, num_samples=1).item())
-
-                uretilen_ids.append(next_token)
-                if next_token == eos_id:
-                    break
-
-                ham = getattr(tokenizer, "id_to_kelime", {}).get(next_token, "")
-                if not ham or ham in ("<pad>", "<unk>", "<bos>"):
-                    continue
-                if hasattr(tokenizer, "subword_set"):       # BPE
-                    if ham.endswith("</w>"):                # kelime sonu → kontrol + yazdır
-                        kelime = parca + ham[:-4]
-                        parca = ""
-                        if kelime in DURDURMA_KELIMELERI:
-                            break
-                        if kelime:
-                            print(kelime + " ", end="", flush=True)
-                    else:                                   # kelime içi → biriktir
-                        parca += ham
-                else:                                       # kelime-bazlı tokenizer
-                    if ham.strip() in DURDURMA_KELIMELERI:
-                        break
-                    print(ham + " ", end="", flush=True)
-
-            if parca:
-                print(parca + " ", end="", flush=True)
+            prompt = f"{SORU_ETIKETI} {kullanici} {CEVAP_ETIKETI}" if talimat_modu else kullanici
+            print(f"🤖 AI {etiket}: ", end="", flush=True)
+            uretim_yap(model, tokenizer, prompt, baglam, izinli=izinli)
             print("\n")
 
         except KeyboardInterrupt:
