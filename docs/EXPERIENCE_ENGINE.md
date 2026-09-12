@@ -62,7 +62,8 @@ hiper_geometrik_ai/
 │   │   ├── replay.py              # DeneyimTekrari — experience replay (§19 v0.4)
 │   │   ├── entegrasyon.py         # BellekEntegrasyonu — replay + consolidation ↔ seyrek bellek
 │   │   ├── kopru.py               # TorchKoprusu — deneyim ↔ torch seyrek tablo köprüsü (§19 v0.6)
-│   │   └── neural_kopru.py        # NeuralKopru — deneyim ↔ MODELİN seyrek belleği + gen_kopru
+│   │   ├── neural_kopru.py        # NeuralKopru — deneyim ↔ MODELİN seyrek belleği + gen_kopru
+│   │   └── ablation.py            # AblasyonDeneyi — belleğe yazılan bilginin etkisini ölçer (§17/§20)
 │   └── config/
 │       ├── __init__.py
 │       ├── config.py              # bağımlılıksız YAML yükleyici (PyYAML varsa onu kullanır)
@@ -85,6 +86,7 @@ hiper_geometrik_ai/
 │   ├── test_dogrulama.py          # kapalı doğrulama hattı (false accept 24→0)
 │   ├── test_engine.py             # ExperienceEngine entegrasyonu
 │   ├── test_neural_kopru.py       # deneyim ↔ model seyrek belleği (torch gerekir)
+│   ├── test_ablation.py           # bilgi yazmanın aşağı-akış etkisi (torch gerekir)
 │   └── test_arastirma.py          # araştırma kuyruğu (CONFLICT → kanıt → kesin durum)
 ├── experiments/
 │   └── experience_loop/
@@ -93,7 +95,8 @@ hiper_geometrik_ai/
 │       ├── run_gercek_veri.py     # gerçek veri → temsil → deneyim → doğrulama
 │       ├── run_benchmark.py       # kontrollü benchmark + kapalı doğrulama
 │       ├── run_kopru.py           # deneyim ↔ torch seyrek bellek köprüsü (v0.6)
-│       └── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
+│       ├── run_neural_kopru.py    # deneyim ↔ MODELİN seyrek belleği + gen_kopru (torch)
+│       └── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -119,6 +122,7 @@ python tests/test_benchmark.py
 python tests/test_dogrulama.py
 python tests/test_engine.py
 python tests/test_neural_kopru.py   # torch gerekir
+python tests/test_ablation.py       # torch gerekir
 python tests/test_arastirma.py
 
 # Uçtan uca döngü demoları
@@ -128,6 +132,7 @@ python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil 
 python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
 python experiments/experience_loop/run_kopru.py       # deneyim ↔ torch seyrek bellek (torch gerekir)
 python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN seyrek belleği (torch)
+python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
@@ -137,7 +142,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 112 test: 23 çekirdek + 89 Experience Engine
+python -m pytest -q            # 116 test: 23 çekirdek + 93 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -156,7 +161,10 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   belleğine yazılır; `gen_kopru` köprüsü "ölü-yol"dan (yazmadan önce gradyan 0)
   "canlı-yol"a (yazdıktan sonra gradyan > 0) geçer; token eğitimiyle birlikte
   paylaşımlı bellekte loss düşer.
-- **Toplam:** `pytest` ile 112 test tek seferde geçti.
+- **Ablasyon (v1.0+):** aynı dengeli kümede boş bellekten salt okuma ~%50
+  (şans), bilgi yazılı bellekten salt okuma ~%100 — doğrulanmış bilgi,
+  aşağı-akış öğrenme için ölçülebilir bir sinyale dönüşür (etki +%50).
+- **Toplam:** `pytest` ile 116 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -206,6 +214,7 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §19 v0.5 | `mini_env.py` — `AritmetikOrtam` (güvenli `ast` ile, eval yok) |
 | §19 v0.6 | `memory/kopru.py` — `TorchKoprusu` (torch kurulu ortamda aktif) |
 | §19 v0.6+ / EK-B | `memory/neural_kopru.py` — deneyim ↔ modelin seyrek belleği + `gen_kopru` |
+| §17/§20 "katrilyon tezi" | `memory/ablation.py` — belleğe yazılan bilginin öğrenmeye etkisi (ölçülebilir) |
 | §19 v1.0 | `loop.py` — `DeneyimDongusu` + kontrollü metrikler |
 | §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` + `corpus.py` — cümle/dosya → üçlü + REAL_DATA aktarımı |
 | §11 ölçekleme | `arastirma.py` — CONFLICT kuyruğunu deterministik kanıtla toplu çözme |
@@ -254,17 +263,18 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 - **Tam morfoloji:** `turkce.py`'ye ünlü düşmesi (burun→burna), iyelik
   zincirleri, çekimli fiil üretimi ve daha geniş istisna listeleri eklemek
   (mevcut sınırlar docstring'te belgeli).
-- **Deneyim "gen" vektörünü gerçek görev sinyaline bağlamak:** `NeuralKopru`
-  zaten doğrulanmış deneyimleri modelin seyrek belleğine yazıp `gen_kopru`'yu
-  canlandırıyor (ölü-yol → canlı-yol ölçüldü); sıradaki adım, deneyim
-  vektörlerini belirli bir görevin (ör. soru-cevap) öğrenme sinyaliyle
-  birlikte eğitip katkıyı ablasyonla ölçmek.
+- **Gerçek görev sinyali + ablasyon ölçekleme:** `AblasyonDeneyi` ham bellek
+  vektörü üzerinden bilgi etkisini ölçtü (+%50); sıradaki adım aynı protokolü
+  modelin `gen_kopru` çıktı yolu üzerinde, gerçek bir görevin (ör. soru-cevap,
+  dizisel tamamlama) öğrenme sinyaliyle birleştirip daha büyük korpuslarda
+  tekrarlamak.
 - **Dış korpus ölçeği:** `egitim/veri_toplayici.py` çıktısını `corpus.py`
   üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak — sözlük, gerçek
   korpustan çıkarılan desenlerle büyütülmeli.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
-  `dogrulama.py` + sinirsel köprü `neural_kopru.py` kuruldu).
+  `dogrulama.py` + sinirsel köprü `neural_kopru.py` + ablasyon `ablation.py`
+  kuruldu).
 
 ## 9. Dürüst kapasite notu (rapor §17)
 

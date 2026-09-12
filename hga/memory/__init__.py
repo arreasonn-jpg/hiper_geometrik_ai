@@ -5,6 +5,7 @@ from .replay import DeneyimTekrari
 from .entegrasyon import BellekEntegrasyonu
 from .kopru import TorchKoprusu, torch_var_mi, bilesen_token
 from .neural_kopru import NeuralKopru
+from .ablation import AblasyonDeneyi
 
 __all__ = [
     "DeneyimSlotlari",
@@ -13,6 +14,7 @@ __all__ = [
     "BellekEntegrasyonu",
     "TorchKoprusu",
     "NeuralKopru",
+    "AblasyonDeneyi",
     "torch_var_mi",
     "bilesen_token",
 ]
