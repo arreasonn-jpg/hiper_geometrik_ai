@@ -141,3 +141,32 @@ class BPETokenizer:
         self.subword_set = set(self.kelime_to_id.keys())
         self._egitildi = True
         return self
+
+    # ══════════════════════════════════════════════════════════════════
+    # GeometrikTokenizer API uyumluluğu (BPE artık zincirin varsayılan
+    # tokenizer'ıdır — rapor 8.4.6; eski kelime-bazlı tokenizer ile aynı
+    # arayüzü konuşur: sozluk / encode / decode / fit / id_to_kelime)
+    # ══════════════════════════════════════════════════════════════════
+    @property
+    def sozluk(self) -> Dict[str, int]:
+        """Kelime→id sözlüğü (alt-kelime parçaları)."""
+        return self.kelime_to_id
+
+    def encode(self, metin: str, pad: bool = False) -> List[int]:
+        """Metni id listesine çevirir. pad=True → sağa hizalı, pencereye sabitlenmiş."""
+        return self.text_to_ids(metin, pad=pad).tolist()
+
+    def decode(self, ids) -> str:
+        parcalar = [self.id_to_text(int(i)) for i in ids if int(i) > 3]
+        metin = "".join(parcalar)
+        # Alt-kelime birleştirmesinden kalan boşluklu noktalamayı düzelt
+        for a, b in [(" .", "."), (" ,", ","), (" !", "!"),
+                     (" ?", "?"), (" ;", ";"), (" :", ":")]:
+            metin = metin.replace(a, b)
+        return re.sub(r"\s+", " ", metin).strip()
+
+    def ids_to_text(self, ids) -> str:
+        return self.decode(ids)
+
+    # Takma adlar: calistir.py'deki genel "fit" araması için
+    fit = fit_on_text

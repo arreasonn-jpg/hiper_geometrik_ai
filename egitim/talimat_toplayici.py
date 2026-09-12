@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json, os
 
 ZENGIN = [
@@ -38,7 +38,18 @@ class TalimatToplayici:
     def __init__(self, dosya_yolu="talimat_verisi.json"):
         self.dosya_yolu = dosya_yolu
     def hazirla_veya_yukle(self):
+        # Düzeltme: artık gerçekten YÜKLÜYOR — eskiden dosya var olsa bile
+        # her çalıştırmada üzerine yazılıyordu (sözlük/eğitim sessizce kayardı).
+        if os.path.exists(self.dosya_yolu):
+            try:
+                with open(self.dosya_yolu, "r", encoding="utf-8") as f:
+                    veri = json.load(f)
+                if isinstance(veri, list) and veri:
+                    print(f"✅ Talimat seti diskten yüklendi: {len(veri)} örnek")
+                    return veri
+            except Exception:
+                pass
         with open(self.dosya_yolu, "w", encoding="utf-8") as f:
             json.dump(ZENGIN, f, ensure_ascii=False, indent=2)
-        print(f"✅ Talimat seti: {len(ZENGIN)} örnek")
+        print(f"✅ Talimat seti oluşturuldu: {len(ZENGIN)} örnek")
         return ZENGIN

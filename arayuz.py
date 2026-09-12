@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
-import sys, os, re, json, time, inspect, torch
+import sys, os, re, json, time, torch
 
 KOK = os.path.abspath(os.path.dirname(__file__))
 for p in [KOK, os.path.join(KOK, "mimari"), os.path.join(KOK, "egitim")]:
     if p not in sys.path: sys.path.insert(0, p)
 
 import gradio as gr
-from kuresel_model import HiperGeometrikAI
-from tokenizer import GeometrikTokenizer
+from kuresel_model import (model_olustur, agirlik_yukle,
+                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
+from bpe_tokenizer import BPETokenizer
 
-SISTEM = {"model": None, "tok": None, "n_gen": 1000, "talimatlar": [], "loglar": []}
+# Tek doğruluk kaynağı: mimari/kuresel_model.py
+# (eski yerel model_olustur kopyası ve inspect-tabanlı ad eşleştirme hilesi kaldırıldı)
+SISTEM = {"model": None, "tok": None, "n_gen": VARSAYILAN_N,
+          "katman": VARSAYILAN_KATMAN, "baglam": VARSAYILAN_BAGLAM,
+          "talimatlar": [], "loglar": []}
 
 def log(m):
     s = f"[{time.strftime('%H:%M:%S')}] {m}"
@@ -24,11 +29,11 @@ def norm(t):
     # Tek tek replace (maketrans bozulmasın diye)
     repl = {
         "\u0131": "i",  # ı
-        "\u0130": "i",  # 
+        "\u0130": "i",  # İ
         "\u015f": "s",  # ş
         "\u015e": "s",  # Ş
         "\u011f": "g",  # ğ
-        "\u011e": "g",  # 
+        "\u011e": "g",  # Ğ
         "\u00fc": "u",  # ü
         "\u00dc": "u",  # Ü
         "\u00f6": "o",  # ö
@@ -42,21 +47,6 @@ def norm(t):
     t = re.sub(r"\s+", " ", t).strip()
     t = t.replace("neresidir", "neresi")
     return t
-
-def model_olustur(vocab_size, n_gen=1000, baglam=8):
-    names = list(inspect.signature(HiperGeometrikAI.__init__).parameters.keys())
-    kw = {}
-    for k in ["sozluk_boyutu", "vocab_size", "sozluk_boyut"]:
-        if k in names: kw[k] = vocab_size; break
-    for k in ["n_gen", "gen_sayisi", "boyut"]:
-        if k in names: kw[k] = n_gen; break
-    for k in ["baglam_penceresi", "baglam", "context_length"]:
-        if k in names: kw[k] = baglam; break
-    for k in ["emb_dim", "embedding_dim"]:
-        if k in names: kw[k] = 64; break
-    for k in ["num_heads", "kafa_sayisi"]:
-        if k in names: kw[k] = 4; break
-    return HiperGeometrikAI(**kw)
 
 def intent_cevap(mesaj):
     """Kural tabanlı + benzerlik: bilinen sorulara net cevap."""
@@ -131,17 +121,18 @@ def intent_cevap(mesaj):
     return None, best_score
 
 def baslat():
-    tok = GeometrikTokenizer(8000)
-    sozluk = os.path.join(KOK, "sozluk.json")
+    # BPE tokenizer (rapor 8.4.6): kilitli sözlük varsa yükle, yoksa kur
+    tok = BPETokenizer(baglam_penceresi=VARSAYILAN_BAGLAM, max_vocab_size=8000)
+    sozluk = os.path.join(KOK, "bpe_sozluk.json")
     korpus = os.path.join(KOK, "turkce_metin.txt")
     if os.path.exists(sozluk):
         tok.yukle(sozluk)
-        log(f"Kilitli sozluk yuklendi: {len(tok.sozluk)}")
+        log(f"Kilitli BPE sozlugu yuklendi: {tok.sozluk_boyutu} parca")
     elif os.path.exists(korpus):
         with open(korpus, "r", encoding="utf-8") as f:
-            tok.fit(f.read(800000))
+            tok.fit_on_text(f.read(800000))
         tok.kaydet(sozluk)
-        log(f"Sozluk olusturuldu: {len(tok.sozluk)}")
+        log(f"BPE sozlugu kurulup kilitlendi: {tok.sozluk_boyutu} parca")
     SISTEM["tok"] = tok
 
     talimat_yol = os.path.join(KOK, "talimat_verisi.json")
@@ -150,25 +141,31 @@ def baslat():
             SISTEM["talimatlar"] = json.load(f)
     log(f"Talimat: {len(SISTEM['talimatlar'])} ornek")
 
-    model = model_olustur(len(tok.sozluk), 1000, 8)
-    for ad in ["hiper_model_1000_talimat.pt", "hiper_model_1000.pt"]:
+    # Model: TEK doğruluk kaynağından (mimari/kuresel_model.py)
+    n = SISTEM["n_gen"]
+    model = model_olustur(max(len(tok.sozluk), 100), n=n,
+                          baglam_penceresi=SISTEM["baglam"],
+                          katman_sayisi=SISTEM["katman"])
+    for ad in [f"hiper_model_{n}_talimat.pt", f"hiper_model_{n}.pt"]:
         yol = os.path.join(KOK, ad)
         if os.path.exists(yol):
             try:
-                model.load_state_dict(torch.load(yol, map_location="cpu", weights_only=True), strict=False)
-                log(f"Model: {ad}")
+                agirlik_yukle(model, yol, strict=True)  # rapor 8.1.5
+                log(f"Model (strict=True): {ad}")
                 break
             except Exception as e:
-                log(f"Uyari {ad}: {e}")
+                log(f"UYARI {ad} yuklenemedi: {str(e)[:140]}")
     model.eval()
     SISTEM["model"] = model
 
 def sinir_agi_uret(prompt, max_token=24):
-    tok = SISTEM["tok"]
+    """BPE parçalarını kelimelere DOĞRU biçimde birleştirerek üretim yapar
+    (kelime içi parçalar bitişik, kelime sonları boşluklu)."""
+    tok = SISTEM["tok"]   # BPETokenizer
     model = SISTEM["model"]
-    ids = tok.encode(prompt) or [2]
-    out = list(ids)
-    kelimeler = []
+    baglam = getattr(model, "baglam_penceresi", SISTEM["baglam"])
+    out = list(tok.encode(prompt) or [2])
+    kelimeler, parca = [], ""
     ban = set()
     for w in ["üç", "bir", "ve", "için", "ile", "bu", "da", "de", "en", "her", "çok", "tck", "yil", "yıl"]:
         if w in tok.sozluk:
@@ -176,8 +173,8 @@ def sinir_agi_uret(prompt, max_token=24):
 
     with torch.inference_mode():
         for step in range(max_token):
-            pencere = out[-8:]
-            pencere = [0] * (8 - len(pencere)) + pencere
+            pencere = out[-baglam:]
+            pencere = [0] * (baglam - len(pencere)) + pencere
             logits = model(torch.tensor([pencere], dtype=torch.long))[0]
             logits[:4] = -1e9
             if step >= 2:
@@ -187,13 +184,20 @@ def sinir_agi_uret(prompt, max_token=24):
                 logits[out[-1]] -= 6.0
             nxt = int(torch.argmax(logits).item())
             out.append(nxt)
-            w = tok.id_to_kelime.get(nxt, "")
-            if w in ("son", "soru", "cevap", "<eos>"):
+            if nxt == tok.EOS_ID:
                 break
-            if w and w not in ("<unk>", "<pad>", "<bos>"):
-                if kelimeler and kelimeler[-1] == w:
-                    continue
-                kelimeler.append(w)
+            ham = tok.id_to_kelime.get(nxt, "")
+            if not ham or ham in ("<pad>", "<unk>", "<bos>"):
+                continue
+            if ham.endswith("</w>"):
+                parca += ham[:-4]
+                if parca in ("son", "soru", "cevap"):
+                    break
+                if parca and not (kelimeler and kelimeler[-1] == parca):
+                    kelimeler.append(parca)
+                parca = ""
+            else:
+                parca += ham
             if len(kelimeler) >= 16:
                 break
     return " ".join(kelimeler).strip()
@@ -232,11 +236,12 @@ def chat(mesaj, history, n_gen, max_token, talimat_modu):
 def durum():
     n = len(SISTEM["tok"].sozluk) if SISTEM["tok"] else 0
     return (
-        f"Mimari: {SISTEM['n_gen']}-Gen\n"
-        f"Sozluk: {n} kelime (KILITLI)\n"
+        f"Mimari: n={SISTEM['n_gen']}, K={SISTEM['katman']} bilinear Kronecker zinciri\n"
+        f"Baglam: {SISTEM['baglam']} token (BPE, alt-kelime)\n"
+        f"Sozluk: {n} parca (KILITLI)\n"
         f"Talimat: {len(SISTEM['talimatlar'])} ornek\n"
         f"Motor: Intent Match + Neural\n"
-        f"Surum: v13.1.1"
+        f"Surum: v14.0"
     )
 
 baslat()
@@ -247,18 +252,18 @@ body{background:#0a0a0f!important;color:#f3f4f6!important;font-family:Inter,sans
 .accent-title{background:linear-gradient(135deg,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
 """
 
-with gr.Blocks(title="Hiper-Geometrik AI v13.1.1") as demo:
+with gr.Blocks(title="Hiper-Geometrik AI v14.0") as demo:
     gr.HTML(
         "<div style='text-align:center'>"
-        "<h1 class='accent-title'>Hiper-Geometrik AI — v13.1.1</h1>"
-        "<p style='color:#9ca3af'>Kilitli Sozluk • Intent Match • Net Asistan Cevaplari</p>"
+        "<h1 class='accent-title'>Hiper-Geometrik AI — v14.0</h1>"
+        "<p style='color:#9ca3af'>Kilitli BPE Sozlugu • Bilinear Kronecker Zinciri • Intent Match</p>"
         "</div>"
     )
     with gr.Row():
         with gr.Column(scale=1):
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Model")
-                gen = gr.Dropdown([500, 1000, 2000], value=1000, label="N_GEN")
+                gen = gr.Dropdown([128, 256, 512], value=VARSAYILAN_N, label="n (kuresel bag boyutu)")
                 talimat = gr.Checkbox(True, label="Sohbet Asistani Modu")
             with gr.Group(elem_classes=["panel-kart"]):
                 gr.Markdown("### Durum")

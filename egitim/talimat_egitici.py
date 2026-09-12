@@ -1,94 +1,129 @@
-﻿# -*- coding: utf-8 -*-
-import sys, os, inspect
-KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-for p in [KOK, os.path.join(KOK, "mimari")]:
-    if p not in sys.path: sys.path.insert(0, p)
+# -*- coding: utf-8 -*-
+"""
+Talimat (Instruction) Fine-Tuning Motoru
+========================================
+Bu sürümdeki değişiklikler (rapor 8.1 / 8.4):
+  - model_olustur kopyası KALDIRILDI → mimari/kuresel_model.py'den gelir
+    (tek doğruluk kaynağı; 'n' artık gerçekten modele iletilir).
+  - Tokenizer artık BPE; sözlük bir kez kurulup KİLİTLENİR (bpe_sozluk.json)
+    — her çalıştırmada sessizce yeniden kurulmaz.
+  - Temel ağırlık yükleme strict=True — uyumsuzluk açıkça raporlanır.
+  - Bağlam penceresi modelden okunur (eski sabit 8 değildir).
+"""
+import sys
+import os
+import argparse
 
-import torch, torch.nn as nn
-from kuresel_model import HiperGeometrikAI
-from tokenizer import GeometrikTokenizer
+KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+for _p in [KOK, os.path.join(KOK, "mimari"), os.path.dirname(__file__)]:
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+import torch
+import torch.nn as nn
+
+from kuresel_model import (model_olustur, agirlik_yukle, agirlik_kaydet,
+                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM)
+from bpe_tokenizer import BPETokenizer
 from talimat_toplayici import TalimatToplayici
 
-def model_olustur(vocab_size, n_gen=1000, baglam=8):
-    sig = inspect.signature(HiperGeometrikAI.__init__)
-    names = list(sig.parameters.keys())
-    kw = {}
-    for k in ["sozluk_boyutu", "vocab_size", "sozluk_boyut"]:
-        if k in names: kw[k] = vocab_size; break
-    for k in ["n_gen", "gen_sayisi", "boyut"]:
-        if k in names: kw[k] = n_gen; break
-    for k in ["baglam_penceresi", "baglam", "context_length"]:
-        if k in names: kw[k] = baglam; break
-    for k in ["emb_dim", "embedding_dim"]:
-        if k in names: kw[k] = 64; break
-    for k in ["num_heads", "kafa_sayisi"]:
-        if k in names: kw[k] = 4; break
-    return HiperGeometrikAI(**kw)
+
+def bpe_tokenizer_hazirla(talimat_metni: str) -> BPETokenizer:
+    """BPE sözlüğü: diskte varsa KİLİTLİ olarak yükle, yoksa kur ve kaydet."""
+    tok = BPETokenizer(baglam_penceresi=VARSAYILAN_BAGLAM, max_vocab_size=8000)
+    yol = os.path.join(KOK, "bpe_sozluk.json")
+    if os.path.exists(yol):
+        tok.yukle(yol)
+        print(f"🔒 Kilitli BPE sözlüğü yüklendi: {tok.sozluk_boyutu} parça")
+    else:
+        korpus = os.path.join(KOK, "turkce_metin.txt")
+        parcalar = [talimat_metni]
+        if os.path.exists(korpus):
+            with open(korpus, "r", encoding="utf-8") as f:
+                parcalar.append(f.read(800000))
+        tok.fit_on_text("\n".join(parcalar))
+        tok.kaydet(yol)
+        print(f"🔧 BPE sözlüğü kuruldu ve kilitlendi: {tok.sozluk_boyutu} parça "
+              f"→ bpe_sozluk.json")
+    return tok
+
 
 def main():
-    print("\n🎯 v13.0 Instruction FT + Kilitli Sözlük")
+    ap = argparse.ArgumentParser(description="Hiper-Geometrik AI talimat fine-tuning")
+    ap.add_argument("--cag", type=int, default=120)
+    ap.add_argument("--batch", type=int, default=16)
+    ap.add_argument("--n", type=int, default=VARSAYILAN_N)
+    ap.add_argument("--katman", type=int, default=VARSAYILAN_KATMAN)
+    args = ap.parse_args()
+
+    print("\n🎯 Talimat (Instruction) Fine-Tuning — Kronecker zinciri sürümü")
     tt = TalimatToplayici(os.path.join(KOK, "talimat_verisi.json"))
     talimatlar = tt.hazirla_veya_yukle()
 
-    tok = GeometrikTokenizer(8000)
-    sozluk_yol = os.path.join(KOK, "sozluk.json")
-    korpus = os.path.join(KOK, "turkce_metin.txt")
+    talimat_metni = " ".join(f"{it['soru']} {it['cevap']}" for it in talimatlar)
+    tok = bpe_tokenizer_hazirla(talimat_metni)
 
-    # Sözlüğü bir kez oluştur ve KLTLE
-    if os.path.exists(korpus):
-        with open(korpus, "r", encoding="utf-8") as f:
-            tok.fit(f.read(800000))
-    tok.kaydet(sozluk_yol)
-    print(f"🔒 Sözlük kilitlendi: {len(tok.sozluk)} kelime → sozluk.json")
+    model = model_olustur(sozluk_boyutu=max(len(tok.sozluk), 64), n=args.n,
+                          baglam_penceresi=VARSAYILAN_BAGLAM,
+                          katman_sayisi=args.katman)
 
-    model = model_olustur(len(tok.sozluk), 1000, 8)
-    pt = os.path.join(KOK, "hiper_model_1000.pt")
-    if os.path.exists(pt):
+    baglam = model.baglam_penceresi
+    temel_yol = os.path.join(KOK, f"hiper_model_{args.n}.pt")
+    if os.path.exists(temel_yol):
         try:
-            model.load_state_dict(torch.load(pt, map_location="cpu", weights_only=True), strict=False)
-            print("✅ Temel ağırlık yüklendi")
+            agirlik_yukle(model, temel_yol, strict=True)
+            print("✅ Temel ağırlık strict=True ile yüklendi")
         except Exception as e:
-            print("⚠️", e)
+            print(f"⚠️ Temel ağırlık yüklenemedi (mimari uyumsuz olabilir) — "
+                  f"rastgele ağırlıkla devam ediliyor: {e}")
 
+    # 'soru ... cevap ... son' biçiminde pencereler kur:
+    # yalnızca 'cevap' işaretinden SONRAKİ tokenlar hedef olur
     X, Y = [], []
     for it in talimatlar:
         ids = tok.encode(f"soru {it['soru']} cevap {it['cevap']} son")
-        cid = tok.encode("cevap")
-        ctok = cid[0] if cid else -1
+        cevap_ids = tok.encode("cevap")
+        isaret = cevap_ids[0] if cevap_ids else -1
         for i in range(1, len(ids)):
-            if ctok not in ids[:i]:
+            if isaret not in ids[:i]:
                 continue
-            x = ids[max(0, i-8):i]
-            x = [0]*(8-len(x)) + x
-            X.append(x); Y.append(ids[i])
+            x = ids[max(0, i - baglam):i]
+            x = [0] * (baglam - len(x)) + x
+            X.append(x)
+            Y.append(ids[i])
+
+    if not X:
+        print("❌ Eğitim örneği üretilemedi (sözlük çok küçük olabilir).")
+        sys.exit(1)
 
     X = torch.tensor(X, dtype=torch.long)
     Y = torch.tensor(Y, dtype=torch.long)
-    print(f"✨ Eğitim adımı: {len(X)}")
+    print(f"✨ Eğitim adımı: {len(X):,} (bağlam={baglam})")
 
     opt = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=1e-5)
     loss_fn = nn.CrossEntropyLoss(label_smoothing=0.02)
     model.train()
-    bs, epochs = 16, 120
 
-    for ep in range(1, epochs+1):
-        perm = torch.randperm(len(X)); tl, n = 0.0, 0
-        for b in range(0, len(X), bs):
-            idx = perm[b:b+bs]
+    for ep in range(1, args.cag + 1):
+        perm = torch.randperm(len(X))
+        tl, n = 0.0, 0
+        for b in range(0, len(X), args.batch):
+            idx = perm[b:b + args.batch]
             opt.zero_grad()
-            logits = model(X[idx])
-            loss = loss_fn(logits, Y[idx])
+            loss = loss_fn(model(X[idx]), Y[idx])
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
-            tl += loss.item(); n += 1
-        if ep % 20 == 0 or ep == epochs:
-            print(f"  🌟 Epoch {ep:03d}/{epochs}  loss={tl/max(n,1):.4f}")
+            tl += loss.item()
+            n += 1
+        if ep % 20 == 0 or ep == args.cag:
+            print(f"  🌟 Epoch {ep:03d}/{args.cag}  loss={tl / max(n, 1):.4f}")
 
-    out = os.path.join(KOK, "hiper_model_1000_talimat.pt")
-    torch.save(model.state_dict(), out)
-    torch.save(model.state_dict(), pt)
-    print(f"💾 Kaydedildi: {out}")
+    talimat_yol = os.path.join(KOK, f"hiper_model_{args.n}_talimat.pt")
+    agirlik_kaydet(model, talimat_yol)
+    agirlik_kaydet(model, temel_yol)
+    print(f"💾 Kaydedildi: {talimat_yol}")
+
 
 if __name__ == "__main__":
     main()
