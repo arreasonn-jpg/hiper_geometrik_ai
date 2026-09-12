@@ -169,3 +169,15 @@ class KnowledgeStore:
             "versiyon": self.versiyon,
             "celiski": len(self.celiski_gunlugu),
         }
+
+    # ── Kalıcılık (atomik JSON; persistence.py'ye ince köprü) ────────────
+    def kaydet(self, yol: str) -> str:
+        """Bilgi tabanını atomik JSON olarak diske yaz; yolu döner."""
+        from .persistence import kaydet
+        return kaydet(self, yol)
+
+    @classmethod
+    def yukle(cls, yol: str) -> "KnowledgeStore":
+        """JSON dosyasından bilgi tabanını kur."""
+        from .persistence import yukle
+        return yukle(yol)
