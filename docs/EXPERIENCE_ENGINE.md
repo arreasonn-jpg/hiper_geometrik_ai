@@ -89,7 +89,8 @@ hiper_geometrik_ai/
 │       ├── run_demo.py            # v0.1 milestone demosu
 │       ├── run_full.py            # v0.1 → v1.0 tam yol haritası demosu
 │       ├── run_gercek_veri.py     # gerçek veri → temsil → deneyim → doğrulama
-│       └── run_benchmark.py       # kontrollü benchmark (metrik tablosu)
+│       ├── run_benchmark.py       # kontrollü benchmark + kapalı doğrulama
+│       └── run_kopru.py           # deneyim ↔ torch seyrek bellek köprüsü (v0.6)
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -121,13 +122,32 @@ python experiments/experience_loop/run_demo.py        # v0.1 milestone
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam yol haritası
 python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
 python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
+python experiments/experience_loop/run_kopru.py       # deneyim ↔ torch seyrek bellek (torch gerekir)
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
 python -m hga dogrulama        # kapalı doğrulama hattı (false accept 24→0)
 python -m hga benchmark        # metrik tablosu
 python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
+
+# Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
+pip install -r gereksinimler.txt pytest
+python -m pytest -q            # 107 test: 23 çekirdek + 84 Experience Engine
 ```
+
+## 5b. Doğrulama durumu
+
+Saf-Python katmanı (Knowledge/Experience/Memory) torch'suz tek başına çalışır.
+torch kurulu bir ortamda (ör. `python -m venv .venv && .venv/bin/pip install
+torch pytest`) aşağıdakiler birlikte doğrulandı:
+
+- **Mevcut geometrik çekirdek bozulmadı:** `test_mimari.py`'deki 23 duman testi
+  (bilinear sandviç, zincir gradyanı, nedensel dikkat, seyrek "boş küme", kapasite
+  raporu, strict yükleme, mini eğitim) geçti.
+- **v0.6 köprüsü gerçek tabloya yazıyor:** `run_kopru.py` doğrulanmış 6 üçlüyü
+  `HashlenmisKureselTablo`'ya adresler; gradyan adımı sonrası doluluk 0 → 6
+  (boş küme → dolu küme). Aynı üçlü her zaman aynı satıra düşer.
+- **Toplam:** `pytest` ile 107 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -224,16 +244,16 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 - **Tam morfoloji:** `turkce.py`'ye ünlü düşmesi (burun→burna), iyelik
   zincirleri, çekimli fiil üretimi ve daha geniş istisna listeleri eklemek
   (mevcut sınırlar docstring'te belgeli).
-- **Gerçek torch köprüsü:** `memory/kopru.py`'yi `mimari/seyrek_tablo.py`
-  eğitim döngüsüne bağlayıp deneyim vektörlerinin gradyanla dolmasını ölç
-  (torch kurulu ortam gerektirir).
+- **Köprüyü eğitim döngüsüne bağlamak:** `memory/kopru.py` zaten doğrulanmış
+  deneyimleri `HashlenmisKureselTablo`'ya adresliyor (doluluk 0→6 kanıtlandı);
+  bir sonraki adım, deneyim "gen" vektörlerini modelin `gen_kopru` yoluna
+  enjekte edip eğitim sırasında gradyanla dolmasını ölçmek.
 - **Dış korpus ölçeği:** `egitim/veri_toplayici.py` çıktısını `corpus.py`
   üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak — sözlük, gerçek
   korpustan çıkarılan desenlerle büyütülmeli.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
-  temsillerini geometrik çekirdeğe enjekte etmek.
-- **Benchmark genişletme:** `run_benchmark.py`'yi deterministik doğrulayıcılı
-  VERIFIED yoluyla kapatarak false acceptance'ı düşüren bir kapalı döngü ölçmek.
+  temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
+  zaten kuruldu — `dogrulama.py`).
 
 ## 9. Dürüst kapasite notu (rapor §17)
 
