@@ -15,6 +15,7 @@ from .cumle_ayiklayici import (CumleAyiklayici, AyiklananUclu,
 from .corpus import cumlelere_bol, dosyadan_cumleler, dosyadan_bilgi_aktar
 from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
                         karsilastirma)
+from .dogrulama import DogrulamaHatti, DogrulamaRaporu
 from .loop import DeneyimDongusu, AdimRaporu
 
 __all__ = [
@@ -53,6 +54,8 @@ __all__ = [
     "kos",
     "ozetle",
     "karsilastirma",
+    "DogrulamaHatti",
+    "DogrulamaRaporu",
     "DeneyimDongusu",
     "AdimRaporu",
 ]

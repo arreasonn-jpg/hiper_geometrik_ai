@@ -180,6 +180,7 @@ class ExperienceCandidate:
     scores: Dict[str, float] = field(default_factory=dict)
     rationale: List[str] = field(default_factory=list)
     evidence: List[str] = field(default_factory=list)
+    verified_by: Optional[str] = None      # deterministik doğrulayıcı kimliği (VERIFIED ise)
     timestamp: Optional[float] = None
     version: int = 1
 

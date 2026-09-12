@@ -21,7 +21,9 @@ if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
 from hga.experience import (aritmetik_etki_alani, kos, ozetle,  # noqa: E402
-                            karsilastirma)
+                            karsilastirma, AritmetikOrtam,
+                            ExperienceGenerator, ExperienceEvaluator,
+                            DogrulamaHatti)
 
 CIZGI = "=" * 74
 
@@ -59,15 +61,32 @@ def main():
 
     # Çok adımlı koşu
     k = aritmetik_etki_alani()
-    from hga.experience import AritmetikOrtam
     raporlar = kos(k, adimlar=3, dogrulayici=AritmetikOrtam().aday_dogrula)
     tablo("3 adım (novelty azalması + replay verimliliği)", ozetle(raporlar))
+
+    # ── Kapalı doğrulama döngüsü: deterministik kanıtla false accept sıfırlama ──
+    print("\n" + CIZGI)
+    print("Kapalı doğrulama hattı (rapor §11/§18 döngüsünün kapanışı)")
+    print(CIZGI)
+    k2 = aritmetik_etki_alani()
+    ev = ExperienceEvaluator()
+    adaylar = ExperienceGenerator(tip_filtresi=False).uret(k2)
+    for a in adaylar:
+        ev.degerlendir(a, k2)
+    print(f"  Kural tabanlı değerlendirme: {len(adaylar)} aday → hepsi VALID")
+    h = DogrulamaHatti(AritmetikOrtam().aday_dogrula, evaluator=ev)
+    rapor = h.isle(k2, adaylar)
+    print(f"  Doğrulanan (VERIFIED): {rapor.dogrulanan}")
+    print(f"  Çürütülen (INVALID)  : {rapor.reddedilen}")
+    print(f"  False accept: {rapor.yanlis_kabul_oncesi} → {rapor.yanlis_kabul_sonrasi}")
+    print(f"  Bilgi büyümesi: {rapor.bilgi_buyumesi} (doğrulanan kalıcı bilgiye yazıldı)")
 
     print("\n" + CIZGI)
     print("SONUÇ: 6 varlıkta 30 eşitlik adayı üretildi; ground-truth'a göre")
     print("yalnız 6'sı doğruydu. Kural tabanlı değerlendirme 30'unu VALID kabul")
-    print("etti → 24 YANLIŞ KABUL. Bu, rapor §18'in doğrulayıcıların gerekliliği")
-    print("tezini ölçülebilir biçimde gösterir (MODEL_GENERATED asla VERIFIED olmaz).")
+    print("etti → 24 YANLIŞ KABUL. Deterministik doğrulama hattı 6'sını VERIFIED'a")
+    print("yükseltip 24'ünü INVALID'e düşürdü → false accept 0. Bu, rapor §18'in")
+    print("doğrulayıcıların gerekliliği tezini ölçülebilir biçimde gösterir.")
     print(CIZGI)
 
 

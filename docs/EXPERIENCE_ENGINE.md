@@ -52,7 +52,10 @@ hiper_geometrik_ai/
 │   │   ├── consolidation.py       # Consolidator — belleğe/araştırmaya/redde yönlendirme (§12)
 │   │   ├── mini_env.py            # AritmetikOrtam — deterministik doğrulayıcı (§18, §19 v0.5)
 │   │   ├── loop.py                # DeneyimDongusu — sürekli öğrenme + metrikler (§19 v1.0, §20)
+│   │   ├── dogrulama.py           # DogrulamaHatti — deterministik kanıtla VERIFIED/INVALID
 │   │   └── benchmark.py           # ground-truth'a karşı ölçüm + özet rapor (§18, §20)
+│   ├── engine.py                  # ExperienceEngine — tüm katmanın tek yüzden orkestrasyonu
+│   └── __main__.py                # CLI: python -m hga bilgi|gercek-veri|benchmark|dogrulama|ozet
 │   ├── memory/
 │   │   ├── __init__.py
 │   │   ├── sparse_memory.py       # DeneyimSlotlari — seyrek deneyim slotları (§22 commit 6)
@@ -78,6 +81,8 @@ hiper_geometrik_ai/
 │   ├── test_corpus.py             # dosyadan cümle → üçlü → REAL_DATA
 │   ├── test_persistence.py        # atomik JSON kaydet/yükle
 │   ├── test_benchmark.py          # ground-truth'a karşı ölçüm
+│   ├── test_dogrulama.py          # kapalı doğrulama hattı (false accept 24→0)
+│   ├── test_engine.py             # ExperienceEngine entegrasyonu
 │   └── test_arastirma.py          # araştırma kuyruğu (CONFLICT → kanıt → kesin durum)
 ├── experiments/
 │   └── experience_loop/
@@ -107,13 +112,21 @@ python tests/test_cumle_ayiklayici.py
 python tests/test_corpus.py
 python tests/test_persistence.py
 python tests/test_benchmark.py
+python tests/test_dogrulama.py
+python tests/test_engine.py
 python tests/test_arastirma.py
 
 # Uçtan uca döngü demoları
 python experiments/experience_loop/run_demo.py        # v0.1 milestone
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam yol haritası
 python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
-python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark (metrik tablosu)
+python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
+
+# Komut satırı (tek yüz)
+python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
+python -m hga dogrulama        # kapalı doğrulama hattı (false accept 24→0)
+python -m hga benchmark        # metrik tablosu
+python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 ```
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
@@ -166,8 +179,10 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §19 v1.0 | `loop.py` — `DeneyimDongusu` + kontrollü metrikler |
 | §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` + `corpus.py` — cümle/dosya → üçlü + REAL_DATA aktarımı |
 | §11 ölçekleme | `arastirma.py` — CONFLICT kuyruğunu deterministik kanıtla toplu çözme |
+| §11/§18 kapalı döngü | `dogrulama.py` — deterministik kanıtla VERIFIED/INVALID (false accept 24→0) |
 | §12/EK-C "kalıcı bilgi" | `persistence.py` — atomik JSON kaydet/yükle |
 | §18/§20 "benchmarklarla ölç" | `benchmark.py` — ground-truth'a karşı false accept/reject ölçümü |
+| Orkestrasyon | `engine.py` — ExperienceEngine (config + bileşim) + `__main__.py` CLI |
 | §20 Metrikler | `loop.AdimRaporu` (acceptance/conflict/false-accept/false-reject/knowledge growth/replay) |
 | §21 Riskler | MODEL_GENERATED asla VERIFIED değil; çelişki günlüğü; versiyon; çakışma ölçümü |
 | §22 commit 6 | `memory/sparse_memory.py` + `memory/kopru.py` — seyrek bellek bağlantısı |

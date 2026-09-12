@@ -211,6 +211,11 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   sürekli öğrenme döngüsü (v1.0) ve ground-truth benchmark.
 - **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
   olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).
+- **Kapalı doğrulama** (`hga/experience/dogrulama.py`) — deterministik
+  doğrulayıcıyla MODEL_GENERATED deneyimleri doğrular; false acceptance'ı
+  sıfırlar (benchmark: 30 adaydan 6 VERIFIED, 24 INVALID).
+- **Tek yüz** (`hga/engine.py` + `python -m hga`) — tüm katmanı yapılandırılabilir
+  tek motor + komut satırı arayüzü.
 - **Memory** (`hga/memory/`) — seyrek deneyim slotları, experience replay ve
   bunları birleştiren entegrasyon + torch seyrek tabloya köprü (v0.6, torch
   kuruluysa).
@@ -222,7 +227,9 @@ Konsolidasyon bu kuralı ikinci kez denetler ve ihlali çelişki günlüğüne y
 ```bash
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam demosu
 python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
-python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark (metrik tablosu)
+python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
+python -m hga bilgi                                   # tek yüz (CLI) demosu
+python -m hga dogrulama                               # false accept 24→0
 python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu
 ```
 
