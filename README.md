@@ -192,6 +192,71 @@ Gradio arayüzleri aynı mekanizmayı paylaşır (eski `arayuz.py`'nin
 
 ---
 
+## 🧠 Experience Engine (Knowledge + Experience + Memory)
+
+`hga/` paketi, geometrik çekirdeğin ÜZERİNE eklenen **kendi kendini genişleten
+deneyim mimarisidir** ("Hiper Geometrik AI: Experience Engine / Self-Expanding
+Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'dur
+(torch gerektirmez) ve çekirdeği değiştirmez:
+
+- **Knowledge/Index** (`hga/knowledge/`) — EntityIndex / PropertyIndex /
+  RelationIndex / KnowledgeStore. Her kavramın kaynağı (`source`) ve güveni
+  (`confidence`) saklanır; entity_id, tokenizer token ID'sinden AYRIDIR.
+- **Experience** (`hga/experience/`) — kontrollü kombinasyon üreten Generator,
+  7+1 bağımsız sinyalle puanlama, VALID/CONFLICT/INVALID durum makinesi,
+  Conflict→Exploration çözücüsü, konsolidasyon, metin/olay üretimi (v0.2,
+  Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması +
+  ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + fiil çekimi
+  (6 kişi × geçmiş/şimdiki/gelecek/geniş zaman),
+  cümle/dosya→üçlü ayıklayıcı + `REAL_DATA` aktarımı, information-gain (v0.3),
+  deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
+  sürekli öğrenme döngüsü (v1.0), ground-truth benchmark ve dış korpus borusu
+  (`veri_toplayici.py` çıktısını sözlük büyütüp `REAL_DATA` olarak akıtır;
+  ilişki asla uydurulmaz; elle küratörlü 7 ilişkili sözlük + yumuşama geri
+  çevirmeli kök çıkarma) ile çevrimdışı belirleyici korpus üretici
+  (`korpus_uretici.py` — ağsız sentetik ölçek provası).
+- **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
+  olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).
+- **Kapalı doğrulama** (`hga/experience/dogrulama.py`) — deterministik
+  doğrulayıcıyla MODEL_GENERATED deneyimleri doğrular; false acceptance'ı
+  sıfırlar (benchmark: 30 adaydan 6 VERIFIED, 24 INVALID).
+- **Tek yüz** (`hga/engine.py` + `python -m hga`) — tüm katmanı yapılandırılabilir
+  tek motor + komut satırı arayüzü.
+- **Memory** (`hga/memory/`) — seyrek deneyim slotları, experience replay ve
+  bunları birleştiren entegrasyon + torch seyrek tabloya köprü (v0.6),
+  doğrulanmış deneyimleri MODELİN kendi seyrek belleğine bağlayan `NeuralKopru`,
+  bilgi yazmanın aşağı-akış etkisini ölçen `AblasyonDeneyi` (boş bellek ~%50,
+  bilgi yazılı ~%100) ve bunu modelin KENDİ tamamlama görevine taşıyan
+  `GorevAblasyonu` (yoğun gövde donukken ~şans → ~%100, ölü-yol → canlı-yol;
+  TABLO-SIFIR: tablo boşaltılınca %100 → %0; HELD-OUT: yazılmamış olgu
+  genellemez — "katrilyon" tezinin görev boyutlu kanıtı) ve `GenellemeAblasyonu` (belleğin
+  KANONİK kodu eğitimde görülmeyen öznelere de genelliyor: held-out ~%25 → %100,
+  boş bellek şansta kalır — genelleme ezberden değil bellekten gelir).
+
+**En kritik güvenlik kuralı:** `MODEL_GENERATED` kaynaklı bir deneyim hiçbir
+zaman otomatik `VERIFIED` kabul edilmez — en fazla `VALID` (bellek adayı) olur.
+Konsolidasyon bu kuralı ikinci kez denetler ve ihlali çelişki günlüğüne yazar.
+
+```bash
+python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam demosu
+python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
+python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark + kapalı doğrulama
+python experiments/experience_loop/run_ablation.py    # bilgi yazmanın öğrenmeye etkisi (torch)
+python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
+python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → görülmeyen olguya genelleme (torch)
+python experiments/experience_loop/run_genelleme_olcegi.py  # genelleme × ölçek + gürültü (torch)
+python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + fiil çekimi (6 kişi)
+python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sözlük büyütme → REAL_DATA
+python experiments/experience_loop/run_korpus_olcegi.py # çevrimdışı korpus ölçeği provası
+python -m hga bilgi                                   # tek yüz (CLI) demosu
+python -m hga dogrulama                               # false accept 24→0
+python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu
+```
+
+Ayrıntı: `docs/EXPERIENCE_ENGINE.md`.
+
+---
+
 ## 🗂️ Klasör Yapısı
 
 ```text
@@ -212,6 +277,14 @@ hiper_geometrik_ai/
 │   ├── bpe_tokenizer.py         # BPE alt-kelime tokenizer (varsayılan)
 │   ├── tokenizer.py             # Eski kelime-bazlı tokenizer (uyumluluk için duruyor)
 │   └── kuresel_loss.py          # CrossEntropy tabanlı loss
+├── hga/                         # Experience Engine (saf Python, çekirdeğin üstünde)
+│   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore
+│   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop
+│   ├── memory/                  # Seyrek deneyim slotları + replay + torch köprüsü
+│   └── config/                  # experience_config.yaml + bağımlılıksız yükleyici
+├── tests/                       # Knowledge/Experience katmanı testleri (torch'suz çalışır)
+├── experiments/experience_loop/ # v0.1 ve v0.1→v1.0 uçtan uca demoları
+├── docs/EXPERIENCE_ENGINE.md    # Experience Engine mimari notu
 └── egitim/
     ├── egitici.py               # Temel eğitim (batch + AdamW + AMP + seyrek doluluk izleme)
     ├── talimat_egitici.py       # Instruction fine-tuning
@@ -335,7 +408,12 @@ bunu açıkça söyler) — modeli yeniden eğitmek gerekir.
 
 ## 🗺️ Yol Haritası
 
-1. **Korpus ölçeği:** Wikipedia dökümü, OSCAR/CC-100/mC4 "tr" alt kümeleriyle
+1. **Experience Engine ölçeklemesi:** `hga/` katmanını korpus ve talimat
+   eğitimiyle beslemek — gerçek üçlüleri `REAL_DATA` kaynağıyla KnowledgeStore'a
+   akıtmak, `memory/kopru.py` köprüsünü `mimari/seyrek_tablo.py` eğitim
+   döngüsüne bağlamak (v0.6), `text_generator.py` şablonlarını Türkçe morfoloji
+   üreteciyle değiştirmek.
+2. **Korpus ölçeği:** Wikipedia dökümü, OSCAR/CC-100/mC4 "tr" alt kümeleriyle
    milyon-kelime seviyesine çıkmak — seyrek tablonun dolmasını ve gerçek
    genelleme yeteneğini besleyecek gerçek veri.
 2. **Uzun bağlam:** 16 token → 64+ token pencere (dikkat maliyeti S² ile
