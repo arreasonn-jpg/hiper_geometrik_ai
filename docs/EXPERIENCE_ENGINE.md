@@ -35,20 +35,24 @@ hiper_geometrik_ai/
 │   │   ├── entity_index.py        # EntityIndex   (§4)
 │   │   ├── property_index.py      # PropertyIndex (§5)
 │   │   ├── relation_index.py      # RelationIndex (§6)
-│   │   └── knowledge_store.py     # KnowledgeStore (§3) + bellek desteği + çelişki günlüğü
+│   │   ├── knowledge_store.py     # KnowledgeStore (§3) + bellek desteği + çelişki günlüğü
+│   │   └── persistence.py         # atomik JSON kaydet/yükle (kalıcı bilgi) (§12, EK-C)
 │   ├── experience/
 │   │   ├── __init__.py
 │   │   ├── generator.py           # ExperienceGenerator — kontrollü kombinasyon (§7)
 │   │   ├── text_generator.py      # TextGenerator — üçlüden metin/olay üretimi (§19 v0.2)
-│   │   ├── turkce.py              # Türkçe ek uyumu (yönelme -a/-e, özel isim kesme işareti)
+│   │   ├── turkce.py              # Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma/çoğul
+│   │   │                          #   + ünsüz yumuşaması + özel isim kesme işareti
 │   │   ├── cumle_ayiklayici.py    # Cümle → üçlü + REAL_DATA aktarımı (döngünün "gerçek veri" aşaması)
+│   │   ├── corpus.py              # metin dosyasından cümle → üçlü → REAL_DATA
 │   │   ├── scoring.py             # bağımsız sinyaller + ağırlıklı puan + information_gain (§8, §16, v0.3)
 │   │   ├── evaluator.py           # ExperienceEvaluator + VALID/CONFLICT/INVALID (§9)
 │   │   ├── conflict.py            # Conflict → Exploration (§11)
 │   │   ├── arastirma.py           # ArastirmaKuyrugu — çelişkiyi deterministik kanıtla toplu çözme
 │   │   ├── consolidation.py       # Consolidator — belleğe/araştırmaya/redde yönlendirme (§12)
 │   │   ├── mini_env.py            # AritmetikOrtam — deterministik doğrulayıcı (§18, §19 v0.5)
-│   │   └── loop.py                # DeneyimDongusu — sürekli öğrenme + metrikler (§19 v1.0, §20)
+│   │   ├── loop.py                # DeneyimDongusu — sürekli öğrenme + metrikler (§19 v1.0, §20)
+│   │   └── benchmark.py           # ground-truth'a karşı ölçüm + özet rapor (§18, §20)
 │   ├── memory/
 │   │   ├── __init__.py
 │   │   ├── sparse_memory.py       # DeneyimSlotlari — seyrek deneyim slotları (§22 commit 6)
@@ -69,14 +73,18 @@ hiper_geometrik_ai/
 │   ├── test_mini_env.py           # v0.5 aritmetik doğrulayıcı
 │   ├── test_loop.py               # v1.0 sürekli döngü + metrikler
 │   ├── test_kopru.py              # v0.6 torch köprüsü (torch yoksa güvenli atlama)
-│   ├── test_turkce.py             # Türkçe ek uyumu (yönelme + kesme işareti)
+│   ├── test_turkce.py             # Türkçe ek uyumu (yönelme + kesme işareti + yumuşama)
 │   ├── test_cumle_ayiklayici.py   # cümle → üçlü + REAL_DATA aktarımı
+│   ├── test_corpus.py             # dosyadan cümle → üçlü → REAL_DATA
+│   ├── test_persistence.py        # atomik JSON kaydet/yükle
+│   ├── test_benchmark.py          # ground-truth'a karşı ölçüm
 │   └── test_arastirma.py          # araştırma kuyruğu (CONFLICT → kanıt → kesin durum)
 ├── experiments/
 │   └── experience_loop/
 │       ├── run_demo.py            # v0.1 milestone demosu
 │       ├── run_full.py            # v0.1 → v1.0 tam yol haritası demosu
-│       └── run_gercek_veri.py     # gerçek veri → temsil → deneyim → doğrulama
+│       ├── run_gercek_veri.py     # gerçek veri → temsil → deneyim → doğrulama
+│       └── run_benchmark.py       # kontrollü benchmark (metrik tablosu)
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -96,12 +104,16 @@ python tests/test_loop.py
 python tests/test_kopru.py
 python tests/test_turkce.py
 python tests/test_cumle_ayiklayici.py
+python tests/test_corpus.py
+python tests/test_persistence.py
+python tests/test_benchmark.py
 python tests/test_arastirma.py
 
 # Uçtan uca döngü demoları
 python experiments/experience_loop/run_demo.py        # v0.1 milestone
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam yol haritası
 python experiments/experience_loop/run_gercek_veri.py # gerçek veri → temsil → deneyim → doğrulama
+python experiments/experience_loop/run_benchmark.py   # kontrollü benchmark (metrik tablosu)
 ```
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
@@ -152,8 +164,10 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §19 v0.5 | `mini_env.py` — `AritmetikOrtam` (güvenli `ast` ile, eval yok) |
 | §19 v0.6 | `memory/kopru.py` — `TorchKoprusu` (torch kurulu ortamda aktif) |
 | §19 v1.0 | `loop.py` — `DeneyimDongusu` + kontrollü metrikler |
-| §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` — cümle → üçlü + REAL_DATA aktarımı |
+| §2 "Gerçek veri → Temsil" | `cumle_ayiklayici.py` + `corpus.py` — cümle/dosya → üçlü + REAL_DATA aktarımı |
 | §11 ölçekleme | `arastirma.py` — CONFLICT kuyruğunu deterministik kanıtla toplu çözme |
+| §12/EK-C "kalıcı bilgi" | `persistence.py` — atomik JSON kaydet/yükle |
+| §18/§20 "benchmarklarla ölç" | `benchmark.py` — ground-truth'a karşı false accept/reject ölçümü |
 | §20 Metrikler | `loop.AdimRaporu` (acceptance/conflict/false-accept/false-reject/knowledge growth/replay) |
 | §21 Riskler | MODEL_GENERATED asla VERIFIED değil; çelişki günlüğü; versiyon; çakışma ölçümü |
 | §22 commit 6 | `memory/sparse_memory.py` + `memory/kopru.py` — seyrek bellek bağlantısı |
@@ -186,20 +200,25 @@ edilmez (en fazla `VALID`); `Consolidator` bu kuralı ikinci kez denetler.
 
 ## 8. Sonraki aşamalar (yol haritasının ötesi)
 
-v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`),
-cümle → üçlü ayıklayıcı (`cumle_ayiklayici.py`) ve çelişki kuyruğu otomasyonu
-(`arastirma.py`) eklendi. Kalan gerçekçi adımlar:
+v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
+ünsüz yumuşaması + 4 durum eki), cümle/dosya → üçlü ayıklayıcı
+(`cumle_ayiklayici.py` + `corpus.py`), çelişki kuyruğu otomasyonu
+(`arastirma.py`), kalıcılık (`persistence.py`) ve ground-truth benchmark
+(`benchmark.py`) eklendi. Kalan gerçekçi adımlar:
 
-- **Tam morfoloji:** `turkce.py`'deki yönelme ekini ünsüz yumuşaması
-  (kitap→kitaba), diğer durum ekleri ve çekimli fiil üretimiyle genişletmek
-  (bilinçli olarak kapsam dışı bırakıldı; docstring'te belgeli).
+- **Tam morfoloji:** `turkce.py`'ye ünlü düşmesi (burun→burna), iyelik
+  zincirleri, çekimli fiil üretimi ve daha geniş istisna listeleri eklemek
+  (mevcut sınırlar docstring'te belgeli).
 - **Gerçek torch köprüsü:** `memory/kopru.py`'yi `mimari/seyrek_tablo.py`
-  eğitim döngüsüne bağlayıp deneyim vektörlerinin gradyanla dolmasını ölç.
-- **Dış korpus ölçeği:** `egitim/veri_toplayici.py` korpusunu
-  `cumle_ayiklayici` üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak —
-  sözlük, gerçek korpustan çıkarılan desenlerle büyütülmeli.
+  eğitim döngüsüne bağlayıp deneyim vektörlerinin gradyanla dolmasını ölç
+  (torch kurulu ortam gerektirir).
+- **Dış korpus ölçeği:** `egitim/veri_toplayici.py` çıktısını `corpus.py`
+  üzerinden `REAL_DATA` olarak KnowledgeStore'a akıtmak — sözlük, gerçek
+  korpustan çıkarılan desenlerle büyütülmeli.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek.
+- **Benchmark genişletme:** `run_benchmark.py`'yi deterministik doğrulayıcılı
+  VERIFIED yoluyla kapatarak false acceptance'ı düşüren bir kapalı döngü ölçmek.
 
 ## 9. Dürüst kapasite notu (rapor §17)
 

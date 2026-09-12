@@ -78,6 +78,7 @@ VARSAYILAN_SOZLUK: Dict[str, Dict] = {
         "yuklemler": ["bakti", "bakiyor", "bakar", "bakmis"],
         "ozneler": {
             "ali": {"token": "Ali", "tip": "insan", "ozellikler": {"canli": 1}},
+            "ayse": {"token": "Ayşe", "tip": "insan", "ozellikler": {"canli": 1}},
         },
         "nesneler": {
             "gokyuzu": {"token": "Gökyüzü", "tip": "mekan", "ozellikler": {}},
