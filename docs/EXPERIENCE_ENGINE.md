@@ -169,7 +169,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 158 test: 23 çekirdek + 135 Experience Engine
+python -m pytest -q            # 160 test: 23 çekirdek + 137 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -195,7 +195,12 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   (yoğun gövde DONUK). Dizisel tamamlama görevinde (özne+ilişki → nesne)
   bellek yolu boş+donukken doğruluk ~şans (model çözemez), bellek yolu
   eğitildiğinde ~%100 (etki +%100) ve `gen_kopru` gradyanı 0 → >0
-  (ölü-yol → canlı-yol). Bellek, göreve yönelik gerçek bir bilgi kanalıdır.
+  (ölü-yol → canlı-yol). Ters yönlü iki kanıtla pekiştirildi: TABLO-SIFIR
+  (`tablo_sifir`) — eğitilmiş köprü DONUK kalırken tablo boşaltılınca doğruluk
+  %100 → %0 düşer (bilgi köprüde değil, tablo SATIRLARINDADIR); HELD-OUT
+  SINIRI (`heldout_siniri`) — hiç yazılmamış [özne, ilişki] pencereleri
+  (yeni olgular) ~şans kalır (bellekte satırı olmayan olgu yoktan var olmaz;
+  3 tohumda kararlı). Bellek, göreve yönelik gerçek ve dürüst bir bilgi kanalıdır.
 - **Tam morfoloji (v1.0+):** `turkce.py`'ye ünlü düşmesi (burun→burna,
   şehir→şehri; ünsüzle başlayan eklerde YOK: burunda), 6 kişilik iyelik ekleri
   (kitabım…kitapları), iyelik+durum zinciri (evi→evine 'n' ara harfi) ve
@@ -226,7 +231,7 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
   model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
   belgeli; bu yüzden gövde donuk tutulur.)
-- **Toplam:** `pytest` ile 158 test tek seferde geçti.
+- **Toplam:** `pytest` ile 160 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -334,7 +339,10 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
   protokolü modelin `gen_kopru` çıktı yolu üzerinde, GERÇEK bir görevin
   (dizisel tamamlama) çapraz-entropi sinyaliyle birleştirdi: yoğun gövde
   donukken kontrol ~şans → deney ~%100 (+%100), ölü-yol → canlı-yol.
-  Belleğin genellemeye katkısı `genelleme_ablasyonu.py` ile ayrıca ölçüldü:
+  Ters yönlü kanıtlar: TABLO-SIFIR (tablo boşaltılınca %100 → %0 — bilgi
+  tabloda yaşar) ve HELD-OUT SINIRI (yazılmamış olgular genellemez, ~şans;
+  3 tohumda kararlı). Belleğin genellemeye katkısı `genelleme_ablasyonu.py`
+  ile ayrıca ölçüldü:
   donuk gövde + eğitilen köprü/kafa, held-out olgularda %100 tamamlama
   (boş bellek ~şans). Sıradaki adım, bu protokolü gürültülü ve büyük
   korpuslarda tekrarlamak + canlı korpus çekimi.

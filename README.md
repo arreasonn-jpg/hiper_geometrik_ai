@@ -226,8 +226,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   doğrulanmış deneyimleri MODELİN kendi seyrek belleğine bağlayan `NeuralKopru`,
   bilgi yazmanın aşağı-akış etkisini ölçen `AblasyonDeneyi` (boş bellek ~%50,
   bilgi yazılı ~%100) ve bunu modelin KENDİ tamamlama görevine taşıyan
-  `GorevAblasyonu` (yoğun gövde donukken ~şans → ~%100, ölü-yol → canlı-yol —
-  "katrilyon" tezinin görev boyutlu kanıtı) ve `GenellemeAblasyonu` (belleğin
+  `GorevAblasyonu` (yoğun gövde donukken ~şans → ~%100, ölü-yol → canlı-yol;
+  TABLO-SIFIR: tablo boşaltılınca %100 → %0; HELD-OUT: yazılmamış olgu
+  genellemez — "katrilyon" tezinin görev boyutlu kanıtı) ve `GenellemeAblasyonu` (belleğin
   KANONİK kodu eğitimde görülmeyen öznelere de genelliyor: held-out ~%25 → %100,
   boş bellek şansta kalır — genelleme ezberden değil bellekten gelir).
 

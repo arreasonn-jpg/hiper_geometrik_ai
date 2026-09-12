@@ -127,6 +127,35 @@ def test_gorev_ablasyon_kos_ve_yol_canliligi():
     assert sonuc["deney_dogruluk"] - sonuc["kontrol_dogruluk"] > 0.5
 
 
+def test_gorev_ablasyon_tablo_sifir_sansa_duser():
+    """TABLO-SIFIR: bilgi yazılı ~%100 iken tablo sıfırlanırsa ~şansa düşer."""
+    if not torch_var_mi():
+        return
+    d = GorevAblasyonu(_model(), tohum=0)
+    ucluler = _tamamlama_ucluleri()
+    sonuc = d.tablo_sifir(ucluler)
+    assert sonuc["deney_dogruluk"] >= 0.9, f"deney beklenen ~%100: {sonuc}"
+    assert sonuc["tablo_sifir_dogruluk"] < 0.4, f"tablo sıfır beklenen ~şans: {sonuc}"
+    # kazanım geri çekilince kaybolur
+    assert sonuc["etki"] > 0.5
+
+
+def test_gorev_ablasyon_heldout_genellemez():
+    """Yazılmamış (held-out) pencereler genellemez → ~şans (dürüst sınır)."""
+    if not torch_var_mi():
+        return
+    d = GorevAblasyonu(_model(), tohum=0)
+    # eğitim: E1..E4 (R1) → nesne; test: F1..F4 (R1) → nesne (yeni özneler)
+    tren = [("E1", "R1", "E5"), ("E2", "R1", "E6"),
+            ("E3", "R1", "E7"), ("E4", "R1", "E8")]
+    test = [("F1", "R1", "E5"), ("F2", "R1", "E6"),
+            ("F3", "R1", "E7"), ("F4", "R1", "E8")]
+    sonuc = d.heldout_siniri(tren, test)
+    assert sonuc["egitim_dogruluk"] >= 0.9, f"eğitim beklenen ~%100: {sonuc}"
+    assert sonuc["heldout_dogruluk"] < 0.4, f"held-out beklenen ~şans: {sonuc}"
+    assert sonuc["etki"] > 0.5
+
+
 if __name__ == "__main__":
     testler = [(ad, fn) for ad, fn in sorted(globals().items())
                if ad.startswith("test_") and callable(fn)]

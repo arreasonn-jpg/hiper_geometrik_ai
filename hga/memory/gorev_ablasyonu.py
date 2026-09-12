@@ -26,6 +26,16 @@ Deneyin kritik kurgusu — YOĞUN GÖVDE DONDURULUR:
               [özne, ilişki] penceresine denk gelen satırları, çapraz-entropi
               sinyaliyle nesneyi işaret edecek biçimde doldurulur → ~%100.
 
+Ters yönlü iki kanıt (bilginin GERÇEKTEN tabloda yaşadığını gösterir):
+    TABLO-SIFIR (`tablo_sifir`) — DENEY ~%100 iken tablo sıfırlanıp köprü
+              EĞİTİLMİŞ ağırlıklarıyla donuk bırakılırsa tamamlama ~şansa
+              düşer. Kazanım geri ÇEKİLİNCE kaybolur → bilgi köprüde değil
+              tablo SATIRLARINDADIR.
+    HELD-OUT SINIRI (`heldout_siniri`) — model yalnızca eğitim üçlülerinin
+              satırlarını doldurur; hiç yazılmamış [özne, ilişki] pencereleri
+              (yeni olgular) ~şans kalır. Dürüst sınır: bellekte satırı
+              OLMAYAN olgular yoktan var olmaz (genellemez).
+
 Bu, "ölü-yol → canlı-yol" geçişinin GÖREV boyutudur: `yol_canli_mi()` köprü
 ağırlığının gradyanını ölçer; yazmadan önce (satır boş → gen=0) gradyan 0'dır
 (False), yazdıktan sonra gradyan akar (True). Yol yalnızca canlı değil, aynı
@@ -208,4 +218,61 @@ class GorevAblasyonu:
             "toplam_satir": toplam,
             "ornek_sayisi": len(ucluler),
             "yol_canlandi": bool(canli_sonra) and not bool(canli_once),
+        }
+
+    # ── TABLO-SIFIR: bilgi köprüde değil, TABLODA yaşar ─────────────────
+    def tablo_sifir(self, ucluler: List[Uclu], adim: int = 800,
+                    lr: float = 3e-2) -> dict:
+        """Bilgi yazılıyken tablo sıfırlanırsa görev çöker mi? (~şansa düşer)
+
+        Kurgu: DENEY (bellek eğitildi) ~%100 → tablo SIFIRLANIR ama köprü
+        (`gen_kopru`) EĞİTİLMİŞ ağırlıklarıyla DONUK bırakılır → tamamlama
+        ~şansa düşer. Bu, görevi çözen bilginin köprüde DEĞİL, tablo
+        SATIRLARINDA saklandığını kanıtlar: köprü yalnızca tablodan gelen
+        vektörü bağlam vektörüne taşır; tablo boşalınca (gen=0) taşıyacak
+        sinyal kalmaz (geriye yalnızca bias kalır).
+
+        Bu, "kontrol → deney" kanıtının zıt yönüdür: bilgiyi geri ÇEKİNCE
+        kazanım da geri gider.
+        """
+        if not ucluler:
+            raise ValueError("en az bir üçlü gerekli.")
+        self.sozluk_kur(ucluler)
+        self.bilgi_yaz(ucluler, adim=adim, lr=lr)
+        deney_dog = self.tamamlama_dogrulugu(ucluler)
+        self._sifirla()            # tablo sıfır; köprü ağırlıkları EĞİTİLMİŞ kalır
+        self._bellek_yolu(False)   # yalnızca okuma (donuk)
+        sifir_dog = self.tamamlama_dogrulugu(ucluler)
+        return {
+            "deney_dogruluk": round(deney_dog, 4),
+            "tablo_sifir_dogruluk": round(sifir_dog, 4),
+            "etki": round(deney_dog - sifir_dog, 4),
+        }
+
+    # ── Dürüst sınır: yazılmamış olgular genellemez ─────────────────────
+    def heldout_siniri(self, tren_ucluler: List[Uclu], test_ucluler: List[Uclu],
+                       adim: int = 800, lr: float = 3e-2) -> dict:
+        """Model yalnızca EĞİTİM üçlülerinin satırlarını doldurur; yeni pencereler
+        (held-out) genellemez.
+
+        Yoğun gövde donuk-rastgele olduğu için öğrenme TAMAMEN tablo
+        satırlarına yazılır. `test_ucluler`'deki [özne, ilişki] pencereleri
+        eğitimde hiç görülmediyse, denk gelen satırlar BOŞ kalır ve model bu
+        yeni olguları tamamlayamaz → ~şans. Bu, yolun dürüst sınırıdır:
+        bellekte satırı yazılmamış olgular yoktan var olmaz.
+
+        DİKKAT: held-out pencereleri eğitim pencerelerinden FARKLI olmalıdır
+        (örn. yeni özneler) — aynı [özne, ilişki] penceresi aynı satıra denk
+        gelir ve zaten dolmuş olur.
+        """
+        if not tren_ucluler or not test_ucluler:
+            raise ValueError("hem eğitim hem test üçlüsü gerekli.")
+        self.sozluk_kur(list(tren_ucluler) + list(test_ucluler))
+        self.bilgi_yaz(tren_ucluler, adim=adim, lr=lr)
+        tren_dog = self.tamamlama_dogrulugu(tren_ucluler)
+        test_dog = self.tamamlama_dogrulugu(test_ucluler)
+        return {
+            "egitim_dogruluk": round(tren_dog, 4),
+            "heldout_dogruluk": round(test_dog, 4),
+            "etki": round(tren_dog - test_dog, 4),
         }

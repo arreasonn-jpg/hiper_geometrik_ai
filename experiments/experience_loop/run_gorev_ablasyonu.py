@@ -12,6 +12,9 @@ Akış:
          KONTROL — bellek yolu boş+donuk   → ~şans (model çözemez)
          DENEY   — bellek yolu eğitilir    → ~%100 (bellek görevi taşır)
        + ölü-yol → canlı-yol geçişi (gen_kopru gradyanı 0 → >0).
+    4. tablo_sifir(): TABLO-SIFIR — tablo boşaltılınca %100 → %0
+       (bilgi köprüde değil, tablo SATIRLARINDADIR).
+    5. heldout_siniri(): HELD-OUT — yazılmamış olgular genellemez (~şans).
 
 Torch kurulu değilse dürüstçe bilgi verir ve atlar.
 
@@ -86,12 +89,41 @@ def main():
     print(f"\n3) Etki büyüklüğü: +{etki:.0%} (tamamlama doğruluğunu "
           f"{sonuc['kontrol_dogruluk']:.0%} → {sonuc['deney_dogruluk']:.0%} taşıdı)")
 
+    # 4. TABLO-SIFIR: bilgiyi geri ÇEKİNCE kazanım da geri gider mi?
+    ts = GorevAblasyonu(HiperGeometrikAI(n=32, katman_sayisi=2,
+                                         baglam_penceresi=4, emb_dim=16,
+                                         num_heads=2, sozluk_boyutu=32,
+                                         dropout=0.0, seyrek_tablo_boyutu=2048,
+                                         seyrek_boyut=32, bilgilendir=False),
+                        tohum=0).tablo_sifir(ucluler)
+    print("\n4) TABLO-SIFIR (bilgi köprüde değil, tabloda mı?):")
+    print(f"   DENEY  (bellek eğitildi)  : {ts['deney_dogruluk']:.0%}")
+    print(f"   SIFIR  (tablo boşaltıldı) : {ts['tablo_sifir_dogruluk']:.0%}  "
+          f"← köprü eğitimli kaldı ama görev çöktü")
+
+    # 5. HELD-OUT: yazılmamış olgular genellemez (dürüst sınır)
+    tren = [("E1", "R1", "E5"), ("E2", "R1", "E6"),
+            ("E3", "R1", "E7"), ("E4", "R1", "E8")]
+    test = [("F1", "R1", "E5"), ("F2", "R1", "E6"),
+            ("F3", "R1", "E7"), ("F4", "R1", "E8")]
+    ho = GorevAblasyonu(HiperGeometrikAI(n=32, katman_sayisi=2,
+                                         baglam_penceresi=4, emb_dim=16,
+                                         num_heads=2, sozluk_boyutu=32,
+                                         dropout=0.0, seyrek_tablo_boyutu=2048,
+                                         seyrek_boyut=32, bilgilendir=False),
+                        tohum=0).heldout_siniri(tren, test)
+    print("\n5) HELD-OUT SINIRI (yazılmamış olgu genellemez):")
+    print(f"   eğitim üçlüleri : {ho['egitim_dogruluk']:.0%}")
+    print(f"   yeni üçlüler    : {ho['heldout_dogruluk']:.0%}  "
+          f"← bellekte satırı olmayan olgu yoktan var olmaz")
+
     print("\n" + CIZGI)
     print("SONUÇ: Doğrulanmış bilgi seyrek belleğe yazıldığında, modelin kendi")
     print("ileri geçiş yolu (gen_kopru → geometrik çekirdek → decoder) üzerinden")
     print("gerçek bir tamamlama görevini çözebilir hâle geliyor. Yoğun gövde")
-    print("donukken kontrol şans düzeyinde kalır — bellek, ölçülebilir ve")
-    print("göreve yönelik bir bilgi kanalıdır.")
+    print("donukken kontrol şans düzeyinde kalır; bilgiyi tablodan geri çekince")
+    print("(TABLO-SIFIR) kazanım kaybolur; yazılmamış olgular (HELD-OUT) ise")
+    print("genellemez — bellek ölçülebilir, göreve yönelik ve dürüst bir kanaldır.")
     print(CIZGI)
 
 
