@@ -49,6 +49,7 @@ hiper_geometrik_ai/
 │   │   ├── corpus.py              # metin dosyasından cümle → üçlü → REAL_DATA
 │   │   ├── sozluk_buyutme.py      # gerçek korpustan yeni VARLIK desenleri (ilişki uydurmaz)
 │   │   ├── korpus_boru.py         # veri_toplayici çıktısı → sözlük büyütme → REAL_DATA
+│   │   ├── korpus_uretici.py      # çevrimdışı belirleyici SOV cümle üretici (sentetik stres testi)
 │   │   ├── scoring.py             # bağımsız sinyaller + ağırlıklı puan + information_gain (§8, §16, v0.3)
 │   │   ├── evaluator.py           # ExperienceEvaluator + VALID/CONFLICT/INVALID (§9)
 │   │   ├── conflict.py            # Conflict → Exploration (§11)
@@ -89,6 +90,7 @@ hiper_geometrik_ai/
 │   ├── test_corpus.py             # dosyadan cümle → üçlü → REAL_DATA
 │   ├── test_sozluk_buyutme.py     # gerçek korpustan yeni varlık desenleri
 │   ├── test_korpus_boru.py        # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
+│   ├── test_korpus_uretici.py     # çevrimdışı korpus üretici (determinizm/atlama/ölçek)
 │   ├── test_persistence.py        # atomik JSON kaydet/yükle
 │   ├── test_benchmark.py          # ground-truth'a karşı ölçüm
 │   ├── test_dogrulama.py          # kapalı doğrulama hattı (false accept 24→0)
@@ -110,7 +112,8 @@ hiper_geometrik_ai/
 │       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
 │       ├── run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
 │       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + fiil çekimi (6 kişi) demosu
-│       └── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
+│       ├── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
+│       └── run_korpus_olcegi.py   # çevrimdışı korpus ölçeği provası (sentetik, ağsız)
 └── docs/
     └── EXPERIENCE_ENGINE.md       # bu belge
 ```
@@ -133,6 +136,7 @@ python tests/test_cumle_ayiklayici.py
 python tests/test_corpus.py
 python tests/test_sozluk_buyutme.py
 python tests/test_korpus_boru.py
+python tests/test_korpus_uretici.py
 python tests/test_persistence.py
 python tests/test_benchmark.py
 python tests/test_dogrulama.py
@@ -155,6 +159,7 @@ python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin ta
 python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
 python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + fiil çekimi (6 kişi)
 python experiments/experience_loop/run_korpus_boru.py  # veri toplayıcı → sözlük büyütme → REAL_DATA
+python experiments/experience_loop/run_korpus_olcegi.py  # çevrimdışı korpus ölçeği provası
 
 # Komut satırı (tek yüz)
 python -m hga bilgi            # bilgi tabanı + durum makinesi demosu
@@ -164,7 +169,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 152 test: 23 çekirdek + 129 Experience Engine
+python -m pytest -q            # 158 test: 23 çekirdek + 135 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -208,6 +213,11 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   yazılır. 8 cümlelik örnekte 7 üçlü aktarıldı, 4 yeni özne + 3 yeni nesne
   eklendi, kuşkulu cümle atlandı. (Ağ/requests/pyarrow gerekmez: yalnız dosya
   sözleşmesi; canlı korpus çekimi `egitim/veri_toplayici.py`'nin işidir.)
+- **Çevrimdışı korpus ölçeği (v1.0+):** `korpus_uretici.py` belirleyici
+  (tohumlu) ve dilbilgisel olarak doğru SOV cümleleri üretir; aynı boru
+  ~1.400 cümleyi <0,03 saniyede (~50.000 cümle/sn) REAL_DATA olarak akıtır,
+  kasıtlı gürültüyü atlar, ilişki icat etmez. Bu bir SENTETİK stres testidir
+  (belgeli); gerçek Wikipedia/OSCAR ölçeği ağ gerektirir.
 - **Genelleme ablasyonu (v1.0+):** bellek, KANONİK (paylaşılan) nesne
   kodları taşıyorsa; bellek donukken yalnızca `gen_kopru` köprüsü + küçük
   kafa eğitilen okuyucu, EĞİTİMDE HİÇ GÖRMEDİĞİ öznelerde de doğru nesneyi
@@ -216,7 +226,7 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
   model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
   belgeli; bu yüzden gövde donuk tutulur.)
-- **Toplam:** `pytest` ile 152 test tek seferde geçti.
+- **Toplam:** `pytest` ile 158 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -331,9 +341,11 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 - **Dış korpus ölçeği (tamamlandı):** `egitim/veri_toplayici.py` çıktısı
   (`turkce_metin.txt`) `korpus_boru.py` üzerinden `REAL_DATA` olarak akıtılıyor;
   sözlük bilinen fiil desenleriyle büyütülüyor (yeni özne/nesne varlıkları;
-  ilişki asla uydurulmaz). Kalan ölçek adımı: canlı korpusu (Wikipedia dökümü,
-  OSCAR/CC-100/mC4 "tr") gerçekten çekip milyon-kelime seviyesinde bu borudan
-  geçirmek — bu ağ gerektirir ve `egitim/veri_toplayici.py`'nin görevidir.
+  ilişki asla uydurulmaz). Ağsız ölçek provası `korpus_uretici.py` +
+  `run_korpus_olcegi.py` ile eklendi (~50k cümle/sn, belirleyici sentetik
+  korpus). Kalan ölçek adımı: canlı korpusu (Wikipedia dökümü, OSCAR/CC-100/
+  mC4 "tr") gerçekten çekip milyon-kelime seviyesinde bu borudan geçirmek —
+  bu ağ gerektirir ve `egitim/veri_toplayici.py`'nin görevidir.
 - **Deneyim döngüsünü sinir ağına bağlamak:** doğrulanmış bilginin gömme
   temsillerini geometrik çekirdeğe enjekte etmek (kapalı doğrulama döngüsü
   `dogrulama.py` + sinirsel köprü `neural_kopru.py` + ablasyon `ablation.py`

@@ -21,6 +21,7 @@ from .corpus import cumlelere_bol, dosyadan_cumleler, dosyadan_bilgi_aktar
 from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
 from .korpus_boru import (KorpusRaporu, korpus_borusu, korpus_dosyasindan,
                           veri_toplayici_ciktisindan)
+from .korpus_uretici import sentetik_korpus_uret
 from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
                         karsilastirma)
 from .dogrulama import DogrulamaHatti, DogrulamaRaporu
@@ -72,6 +73,7 @@ __all__ = [
     "korpus_borusu",
     "korpus_dosyasindan",
     "veri_toplayici_ciktisindan",
+    "sentetik_korpus_uret",
     "BenchmarkOzeti",
     "aritmetik_etki_alani",
     "kos",

@@ -212,7 +212,8 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   deterministik aritmetik mini-environment (v0.5), çelişki araştırma kuyruğu,
   sürekli öğrenme döngüsü (v1.0), ground-truth benchmark ve dış korpus borusu
   (`veri_toplayici.py` çıktısını sözlük büyütüp `REAL_DATA` olarak akıtır;
-  ilişki asla uydurulmaz).
+  ilişki asla uydurulmaz) ile çevrimdışı belirleyici korpus üretici
+  (`korpus_uretici.py` — ağsız sentetik ölçek provası).
 - **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
   olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).
 - **Kapalı doğrulama** (`hga/experience/dogrulama.py`) — deterministik
@@ -243,6 +244,7 @@ python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin ta
 python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → görülmeyen olguya genelleme (torch)
 python experiments/experience_loop/run_morfoloji.py   # ünlü düşmesi + iyelik + fiil çekimi (6 kişi)
 python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sözlük büyütme → REAL_DATA
+python experiments/experience_loop/run_korpus_olcegi.py # çevrimdışı korpus ölçeği provası
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
 python tests/test_milestone_v01.py                    # §14'ün 12 maddesi + §15 senaryosu
