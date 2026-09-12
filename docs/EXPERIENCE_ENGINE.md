@@ -111,6 +111,7 @@ hiper_geometrik_ai/
 │       ├── run_ablation.py        # bilgi yazmanın öğrenmeye etkisi (kontrol/deney)
 │       ├── run_gorev_ablasyonu.py # bilgi → modelin KENDİ tamamlama görevi (torch)
 │       ├── run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
+│       ├── run_genelleme_olcegi.py  # genelleme × ölçek + gürültü bozulma eğrisi (torch)
 │       ├── run_morfoloji.py       # ünlü düşmesi + iyelik + fiil çekimi (6 kişi) demosu
 │       ├── run_korpus_boru.py     # veri toplayıcı çıktısı → sözlük büyütme → REAL_DATA
 │       └── run_korpus_olcegi.py   # çevrimdışı korpus ölçeği provası (sentetik, ağsız)
@@ -157,6 +158,7 @@ python experiments/experience_loop/run_neural_kopru.py # deneyim ↔ MODELİN se
 python experiments/experience_loop/run_ablation.py     # bilgi yazmanın öğrenmeye etkisi (torch)
 python experiments/experience_loop/run_gorev_ablasyonu.py # bilgi → modelin tamamlama görevi (torch)
 python experiments/experience_loop/run_genelleme_ablasyonu.py # bilgi → GÖRÜLMEYEN olguya genelleme (torch)
+python experiments/experience_loop/run_genelleme_olcegi.py  # genelleme × ölçek + gürültü (torch)
 python experiments/experience_loop/run_morfoloji.py    # ünlü düşmesi + iyelik + fiil çekimi (6 kişi)
 python experiments/experience_loop/run_korpus_boru.py  # veri toplayıcı → sözlük büyütme → REAL_DATA
 python experiments/experience_loop/run_korpus_olcegi.py  # çevrimdışı korpus ölçeği provası
@@ -169,7 +171,7 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 164 test: 23 çekirdek + 141 Experience Engine
+python -m pytest -q            # 165 test: 23 çekirdek + 142 Experience Engine
 ```
 
 ## 5b. Doğrulama durumu
@@ -239,7 +241,15 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
   ezberden değil BELLEKTEN gelir. (Tam yoğun gövde eğitilebilir bırakılırsa
   model ezberler: train ~%100 ama held-out ~şans — dürüstlük notu olarak
   belgeli; bu yüzden gövde donuk tutulur.)
-- **Toplam:** `pytest` ile 164 test tek seferde geçti.
+- **Genelleme × ölçek + gürültü (v1.0+):** `gurultulu_kos` aynı protokolü
+  BÜYÜK bilgi tabanında (6 kategori × 4 özne = 24 olgu) tekrarlar: gürültüsüz
+  held-out %100 (3 tohumda kararlı). Eğitim olgularına YANLIŞ nesne kodu
+  yazılırsa held-out dürüstçe bozulur: her kategori eğitimde TEK temiz
+  örnekle temsil edildiği için held-out ≈ 1 − gürültü_oranı düşer (%17 → %83,
+  %50 → %50, %100 → %0). Bu, seyrek belleğin değil OKUYUCU eğitiminin veri
+  bağımlılığıdır: tek örnek kırılgandır; yedekli temiz veri genellemeyi
+  sağlamlaştırır.
+- **Toplam:** `pytest` ile 165 test tek seferde geçti.
 
 Testlerin hiçbiri torch gerektirmez; yalnızca standart kütüphane kullanılır.
 
@@ -352,8 +362,10 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
   3 tohumda kararlı). Belleğin genellemeye katkısı `genelleme_ablasyonu.py`
   ile ayrıca ölçüldü:
   donuk gövde + eğitilen köprü/kafa, held-out olgularda %100 tamamlama
-  (boş bellek ~şans). Sıradaki adım, bu protokolü gürültülü ve büyük
-  korpuslarda tekrarlamak + canlı korpus çekimi.
+  (boş bellek ~şans). Bu protokol BÜYÜK + GÜRÜLTÜLÜ korpusta da tekrarlandı
+  (`gurultulu_kos`): ölçekte genelleme korunur (%100), gürültü ise dürüstçe
+  bozar (held-out ≈ 1 − gürültü_oranı; tam gürültüde ~şans). Sıradaki adım:
+  canlı korpus çekimi.
 - **Dış korpus ölçeği (tamamlandı):** `egitim/veri_toplayici.py` çıktısı
   (`turkce_metin.txt`) `korpus_boru.py` üzerinden `REAL_DATA` olarak akıtılıyor;
   sözlük bilinen fiil desenleriyle büyütülüyor (yeni özne/nesne varlıkları;

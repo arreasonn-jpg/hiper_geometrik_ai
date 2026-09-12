@@ -39,6 +39,7 @@ NEDEN OKUYUCU `gen_kopru` + KÜÇÜK KAFA (tam yoğun gövde değil):
 NOT: torch yalnızca kurulumda içe aktarılır; hga paketinin geri kalanı torch'suz
 çalışmaya devam eder.
 """
+import random
 from typing import Dict, List, Tuple
 
 from .neural_kopru import NeuralKopru
@@ -225,4 +226,78 @@ class GenellemeAblasyonu:
             "heldout_olgu": len(heldout),
             "yazilan_satir": dolu,
             "toplam_satir": toplam,
+        }
+
+    # ── Gürültülü korpus: gürültü genellemeyi nasıl bozar? ────────────────
+    def gurultulu_kos(self, ucluler: List[Uclu], gurultu_orani: float = 0.0,
+                      tohum: int = 0) -> dict:
+        """BÜYÜK + GÜRÜLTÜLÜ korpus provası (rapor §8'in "sıradaki adım"ı).
+
+        Eğitim olgularının `gurultu_orani` kadarına YANLIŞ nesne kodu yazılır
+        (gürültülü korpus). `bol()` her nesneye EĞİTİMDE TEK olgu verdiği için,
+        bir nesnenin tek eğitim örneği gürültülenirse o nesnenin kodu okuyucuya
+        hiç TEMİZ gösterilmez → o nesnenin held-out tamamlaması şansa düşer.
+
+        Dürüst sonuç: held-out doğruluğu ≈ 1 − gürültü_oranı kadar düşer
+        (gürültü, temiz eğitim örneği kalmayan kategorileri kırar);
+        gürültü_oranı=1.0 iken hiç temiz örnek kalmaz → held-out ~şans. Bu,
+        seyrek belleğin değil OKUYUCU eğitiminin veri bağımlılığını ölçer:
+        gürültü kendi penceresinde yalıtılır ama o pencerenin kategorisi temiz
+        örnekten yoksun kalırsa genelleme yine bozulur (tek örnek = kırılgan).
+        """
+        if not ucluler:
+            raise ValueError("en az bir üçlü gerekli.")
+        self.sozluk_kur(ucluler)
+        K = self.nesne_kodlari(ucluler)
+        egitim, heldout = self.bol(ucluler)
+        if not heldout:
+            raise ValueError("genelleme için nesne başına en az 2 olgu gerekli.")
+
+        rng = random.Random(tohum)
+        n_gurultu = int(len(egitim) * gurultu_orani)
+        gurultulu = set(rng.sample(egitim, n_gurultu)) if n_gurultu else set()
+
+        # her olgunun yazılacak kod indeksi SABİTLENİR (gürültülü olanlar
+        # rastgele FARKLI bir nesnenin kodunu alır — döngü başına değişmez).
+        kod_indeksi = {}
+        for i, (_, _, n) in enumerate(ucluler):
+            dogru = self.nesne_indeks[n]
+            if i in gurultulu:
+                kod_indeksi[i] = rng.choice([j for j in range(K) if j != dogru])
+            else:
+                kod_indeksi[i] = dogru
+
+        # Faz W: kodları yaz (gürültülü olgulara yanlış kod)
+        self._sifirla()
+        self._bellek_yolu(True)
+        opt = self.torch.optim.AdamW(
+            [p for _, p in self.model.named_parameters() if p.requires_grad],
+            lr=0.1)
+        mse = self.torch.nn.MSELoss()
+        for _ in range(400):
+            opt.zero_grad()
+            kayip = sum(mse(self._gen(o, il), self._kod(kod_indeksi[i]))
+                        for i, (o, il, _) in enumerate(ucluler))
+            kayip.backward()
+            opt.step()
+
+        # Faz R: okuyucu (yalnız eğitim olgularında; gürültülüler dahil)
+        kafa = self.okuma_egit(ucluler, egitim)
+        egitim_dog = self._dogruluk(kafa, ucluler, egitim)
+        heldout_dog = self._dogruluk(kafa, ucluler, heldout)
+        temiz_egitim = [i for i in egitim if i not in gurultulu]
+        temiz_dog = (self._dogruluk(kafa, ucluler, temiz_egitim)
+                     if temiz_egitim else 1.0)
+        gurultulu_dog = (self._dogruluk(kafa, ucluler, sorted(gurultulu))
+                         if gurultulu else 1.0)
+        return {
+            "egitim_dogruluk": round(egitim_dog, 4),
+            "temiz_egitim_dogruluk": round(temiz_dog, 4),
+            "gurultulu_egitim_dogruluk": round(gurultulu_dog, 4),
+            "heldout_dogruluk": round(heldout_dog, 4),
+            "nesne_sayisi": K,
+            "egitim_olgu": len(egitim),
+            "heldout_olgu": len(heldout),
+            "gurultulu_olgu": n_gurultu,
+            "gurultu_orani": round(n_gurultu / max(1, len(egitim)), 4),
         }

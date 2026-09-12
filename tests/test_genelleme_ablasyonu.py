@@ -111,6 +111,33 @@ def test_genelleme_yetersiz_veri_hata():
     assert hata is not None
 
 
+def _buyuk_ucluler(K=6, kisi=4):
+    """6 nesne kategorisi × 4 özne = 24 olgu (ölçek provası)."""
+    u = []
+    for c in range(K):
+        for s in range(kisi):
+            u.append((f"S{c}_{s}", "R1", f"C{c}"))
+    return u
+
+
+def test_genelleme_gurultu_olcek():
+    """Büyük korpus: gürültüsüz held-out ~%100; tam gürültülü ~şans."""
+    if not torch_var_mi():
+        return
+    ucluler = _buyuk_ucluler(6, 4)
+    # gürültüsüz: ölçekte de genelleme korunur
+    d = GenellemeAblasyonu(_model(), tohum=0)
+    temiz = d.gurultulu_kos(ucluler, gurultu_orani=0.0, tohum=0)
+    assert temiz["nesne_sayisi"] == 6
+    assert temiz["heldout_dogruluk"] >= 0.9
+    # tam gürültülü: hiç temiz eğitim örneği kalmaz → held-out ~şans
+    d2 = GenellemeAblasyonu(_model(), tohum=0)
+    kirli = d2.gurultulu_kos(ucluler, gurultu_orani=1.0, tohum=0)
+    assert kirli["heldout_dogruluk"] < 0.6
+    # dürüst bozulma: gürültü, temiz örneği kalmayan kategorileri kırar
+    assert kirli["heldout_dogruluk"] < temiz["heldout_dogruluk"]
+
+
 if __name__ == "__main__":
     testler = [(ad, fn) for ad, fn in sorted(globals().items())
                if ad.startswith("test_") and callable(fn)]
