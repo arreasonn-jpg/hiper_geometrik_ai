@@ -20,8 +20,9 @@ from __future__ import annotations
 import os
 import re
 import sys
-import tomllib
 from typing import List, Tuple
+
+import tomllib
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 PYPROJECT = os.path.join(KOK, "pyproject.toml")
