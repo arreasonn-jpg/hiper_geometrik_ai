@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"relation_id": "R_BINMEK", "token": "Binmek", "subject_types": ["insan"], "requires_object_props": {"binilebilir": 1.0}, "source": "VERIFIED_RULE", "split": "train"},
+    {"relation_id": "R_YEMEK", "token": "Yemek", "subject_types": ["insan"], "requires_object_props": {"yenilebilir": 1.0}, "source": "VERIFIED_RULE", "split": "train"}
+  ]
+}

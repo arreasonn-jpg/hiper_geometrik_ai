@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"entity_id": "E_ALI", "name": "canli", "value": 1.0, "confidence": 1.0, "source": "REAL_DATA", "split": "train"},
+    {"entity_id": "E_MEHMET", "name": "canli", "value": 1.0, "confidence": 1.0, "source": "REAL_DATA", "split": "train"},
+    {"entity_id": "E_AYSE", "name": "canli", "value": 1.0, "confidence": 1.0, "source": "REAL_DATA", "split": "train"},
+    {"entity_id": "E_AT", "name": "binilebilir", "value": 1.0, "confidence": 1.0, "source": "VERIFIED_RULE", "split": "train"},
+    {"entity_id": "E_ARABA", "name": "binilebilir", "value": 1.0, "confidence": 1.0, "source": "VERIFIED_RULE", "split": "train"},
+    {"entity_id": "E_GOKYUZU", "name": "binilebilir", "value": 0.0, "confidence": 1.0, "source": "VERIFIED_RULE", "split": "train"}
+  ]
+}

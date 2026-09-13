@@ -7,7 +7,7 @@ DeneyimDongusu — Sürekli Öğrenme Döngüsü + Kontrollü Benchmark (v1.0)
 Uçtan uca döngüyü tek çağrıyla koşturur ve ölçer:
 
     Gerçek veri (bilgi tabanı) → Temsil → Üret → Değerlendir
-    → VALID/CONFLICT/INVALID → Konsolide et → Belleğe yaz → Replay
+    → VALID/UNCERTAIN/CONFLICT/INVALID → Konsolide et → Belleğe yaz → Replay
     → yeniden değerlendir → (döngü tekrar)
 
 Her adımda rapor §20'deki metrikler toplanır:
@@ -25,10 +25,10 @@ acceptance/rejection ground-truth'a karşı ölçülür; verilmezse bu iki metri
 None kalır (dürüstçe ölçülmemiş olarak raporlanır).
 """
 import dataclasses
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional
 
-from ..knowledge.schemas import ExperienceCandidate, DeneyimDurumu
+from ..knowledge.schemas import DeneyimDurumu
 
 
 @dataclass
@@ -37,6 +37,7 @@ class AdimRaporu:
     uretilen: int
     valid: int
     conflict: int
+    uncertain: int
     invalid: int
     verified: int
     novel: int
@@ -126,6 +127,7 @@ class DeneyimDongusu:
             uretilen=len(adaylar),
             valid=k_rapor.valid,
             conflict=k_rapor.conflict,
+            uncertain=k_rapor.uncertain,
             invalid=k_rapor.invalid,
             verified=k_rapor.verified,
             novel=adim_novel,

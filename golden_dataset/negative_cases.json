@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"experience_id": "TEST_INVALID_001", "violation": "E_GOKYUZU için binilebilir=0 iken R_BINMEK binilebilir=1 ister."}
+  ]
+}

@@ -14,10 +14,10 @@ Böylece "çelişkiyi çöpe atmak yerine araştırma sinyali olarak kullan" ilk
 gelir: `ArastirmaRaporu` çözülen/açık kalan çelişkileri ve bilgi büyümesini
 raporlar.
 """
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Callable, Dict, List, Optional
 
-from ..knowledge.schemas import ExperienceCandidate, DeneyimDurumu
+from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate
 from .conflict import ConflictResolver
 from .evaluator import ExperienceEvaluator
 
@@ -36,7 +36,7 @@ class ArastirmaRaporu:
 
 
 class ArastirmaKuyrugu:
-    """CONFLICT deneyimlerini deterministik kanıtla çözer (toplu)."""
+    """CONFLICT ve UNCERTAIN deneyimleri kanıt araması için toplar."""
 
     def __init__(self, evaluator: Optional[ExperienceEvaluator] = None,
                  dogrulayici: Optional[Callable] = None):
@@ -47,8 +47,8 @@ class ArastirmaKuyrugu:
                                          deterministik_test=dogrulayici)
 
     def ekle(self, aday: ExperienceCandidate) -> None:
-        """CONFLICT bir adayı kuyruğa al (tekrar eklenmez)."""
-        if aday.state != DeneyimDurumu.CONFLICT:
+        """CONFLICT/UNCERTAIN bir adayı kuyruğa al (tekrar eklenmez)."""
+        if aday.state not in (DeneyimDurumu.CONFLICT, DeneyimDurumu.UNCERTAIN):
             return
         if any(a.experience_id == aday.experience_id for a in self.kuyruk):
             return
@@ -73,7 +73,7 @@ class ArastirmaKuyrugu:
         kalan = []
         for a in self.kuyruk:
             self.resolver.coz(store, a)
-            if a.state == DeneyimDurumu.CONFLICT:
+            if a.state in (DeneyimDurumu.CONFLICT, DeneyimDurumu.UNCERTAIN):
                 rapor.acik += 1
                 rapor.aciklar.append(a.experience_id)
                 kalan.append(a)

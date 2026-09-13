@@ -38,10 +38,13 @@ def test_model_generated_verified_engeli():
     assert a.state == DeneyimDurumu.VALID
 
 
-def test_harici_verified_serbest():
+def test_harici_kaynak_bagimsiz_dogrulayici_kimligi_gerektirir():
     sm = DeneyimDurumMakinesi()
     a = ExperienceCandidate("X", "E1", "R1", "E2", state=DeneyimDurumu.VALID,
                             source=KaynakTuru.REAL_DATA)
+    assert not sm.uygula(a, DeneyimDurumu.VERIFIED).ok
+    a.source = KaynakTuru.EXTERNAL_VERIFIED
+    a.verified_by = "test-verifier"
     assert sm.uygula(a, DeneyimDurumu.VERIFIED).ok
     assert a.state == DeneyimDurumu.VERIFIED
 

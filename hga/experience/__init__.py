@@ -27,6 +27,16 @@ from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
 from .dogrulama import DogrulamaHatti, DogrulamaRaporu
 from .loop import DeneyimDongusu, AdimRaporu
 from .state_machine import GECISLER, StateTransition, DeneyimDurumMakinesi
+from .self_learning import (
+    CollapseCycleMetrics,
+    CollapseReport,
+    LearningCycleMetrics,
+    SelfLearningReport,
+    VerifierRobustnessReport,
+    run_self_learning_experiment,
+    run_self_training_collapse_test,
+    run_verifier_fault_injection,
+)
 from .graph import GraphEdge, ExperienceGraph
 from .exploration import EpistemicSpace, ExplorationMap, ExplorationEngine
 
@@ -91,6 +101,14 @@ __all__ = [
     "GECISLER",
     "StateTransition",
     "DeneyimDurumMakinesi",
+    "LearningCycleMetrics",
+    "SelfLearningReport",
+    "CollapseCycleMetrics",
+    "CollapseReport",
+    "VerifierRobustnessReport",
+    "run_self_learning_experiment",
+    "run_self_training_collapse_test",
+    "run_verifier_fault_injection",
     "GraphEdge",
     "ExperienceGraph",
     "EpistemicSpace",

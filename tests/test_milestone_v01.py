@@ -25,7 +25,7 @@ if KOK not in sys.path:
 
 from hga.knowledge import KnowledgeStore, KaynakTuru, DeneyimDurumu  # noqa: E402
 from hga.experience import (ExperienceEvaluator, ExperienceGenerator,  # noqa: E402
-                            Consolidator)
+                            Consolidator, DogrulamaHatti)
 from hga.memory import DeneyimSlotlari  # noqa: E402
 
 
@@ -112,11 +112,11 @@ def test_milestone_harici_verified_bilgi_buyurur():
                             relation_id="R_001", object_id="E_002",
                             source=KaynakTuru.REAL_DATA, source_confidence=1.0)
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.VERIFIED
+    assert a.state == DeneyimDurumu.VALID
 
-    cons = Consolidator()
-    rapor = cons.konsolide_et(k, [a])
-    assert rapor.verified == 1
+    rapor = DogrulamaHatti(lambda store, aday: True).isle(k, [a])
+    assert a.state == DeneyimDurumu.VERIFIED
+    assert rapor.dogrulanan == 1
     assert rapor.bilgi_buyumesi == 1
     # kalıcı kanıt yazıldı
     assert k.relations.olgu_agrega("E_001", "R_001", "E_002")["count"] == 1

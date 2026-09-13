@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"experience_id": "TRAIN_001", "subject_id": "E_ALI", "relation_id": "R_BINMEK", "object_id": "E_AT", "sentence": "Ali ata bindi.", "truth": true, "split": "train"},
+    {"experience_id": "TRAIN_002", "subject_id": "E_MEHMET", "relation_id": "R_BINMEK", "object_id": "E_AT", "sentence": "Mehmet ata bindi.", "truth": true, "split": "train"},
+    {"experience_id": "TRAIN_003", "subject_id": "E_AYSE", "relation_id": "R_BINMEK", "object_id": "E_ARABA", "sentence": "Ayşe arabaya bindi.", "truth": true, "split": "train"},
+    {"experience_id": "TEST_VALID_001", "subject_id": "E_ALI", "relation_id": "R_BINMEK", "object_id": "E_ARABA", "sentence": "Ali arabaya bindi.", "split": "test"},
+    {"experience_id": "TEST_INVALID_001", "subject_id": "E_ALI", "relation_id": "R_BINMEK", "object_id": "E_GOKYUZU", "sentence": "Ali gökyüzüne bindi.", "split": "test"},
+    {"experience_id": "TEST_UNCERTAIN_001", "subject_id": "E_ALI", "relation_id": "R_BINMEK", "object_id": "E_MARS", "sentence": "Ali Mars'a bindi.", "split": "test"},
+    {"experience_id": "TEST_UNCERTAIN_002", "subject_id": "E_ALI", "relation_id": "R_YEMEK", "object_id": "E_ARABA", "sentence": "Ali araba yedi.", "split": "test"},
+    {"experience_id": "TEST_CONFLICT_001", "subject_id": "E_MEHMET", "relation_id": "R_BINMEK", "object_id": "E_ARABA", "sentence": "Mehmet arabaya bindi.", "split": "test"}
+  ]
+}

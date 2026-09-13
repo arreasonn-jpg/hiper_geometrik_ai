@@ -60,8 +60,8 @@ def test_dogrulama_kaynak_degisir():
         assert a.source != KaynakTuru.MODEL_GENERATED
 
 
-def test_dogrulama_belirsiz_valid_kalir():
-    """Doğrulayıcı None dönerse aday VALID kalır — asla yükseltilmez."""
+def test_dogrulama_belirsiz_uncertain_olur():
+    """Doğrulayıcı None dönerse kanıt eksikliği açıkça UNCERTAIN olur."""
     k = aritmetik_etki_alani()
     ev = ExperienceEvaluator()
     adaylar = ExperienceGenerator(tip_filtresi=False).uret(k)
@@ -72,7 +72,7 @@ def test_dogrulama_belirsiz_valid_kalir():
     assert rapor.dogrulanan == 0
     assert rapor.reddedilen == 0
     assert rapor.belirsiz == 30
-    assert all(a.state == DeneyimDurumu.VALID for a in adaylar)
+    assert all(a.state == DeneyimDurumu.UNCERTAIN for a in adaylar)
     assert all(a.source == KaynakTuru.MODEL_GENERATED for a in adaylar)
     # belirsiz aday kalıcı bilgiye yazılmadı
     assert rapor.bilgi_buyumesi == 0

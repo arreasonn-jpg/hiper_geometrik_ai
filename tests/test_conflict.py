@@ -45,7 +45,7 @@ def test_conflict_alternatif_uretir():
     a = ExperienceCandidate(experience_id="X_1", subject_id="E_001",
                             relation_id="R_001", object_id="E_003")
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.CONFLICT  # binilebilir bilinmiyor
+    assert a.state == DeneyimDurumu.UNCERTAIN  # binilebilir bilinmiyor
 
     cr = ConflictResolver(evaluator=ev)
     sonuc = cr.coz(k, a)
@@ -64,9 +64,9 @@ def test_conflict_cozum_kesin_duruma_iner():
     cr = ConflictResolver(evaluator=ev)
     cr.coz(k, a)
     # deterministik test "Halı" için binilebilir kanıtı bulamaz → belirsiz,
-    # yeniden değerlendirme yine CONFLICT kalır (güvenli) — kesinleşmezse yanlış
+    # yeniden değerlendirme yine UNCERTAIN kalır (güvenli) — kesinleşmezse yanlış
     # yükseltme yapılmamalıdır.
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
     assert a.state != DeneyimDurumu.VERIFIED
 
 

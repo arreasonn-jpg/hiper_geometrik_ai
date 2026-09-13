@@ -18,7 +18,8 @@ saf Python ile çalışan (torch bağımlılığı OLMAYAN) modüler katmandır:
 
 Temel döngü (rapor §2):
     Gerçek veri → Temsil → Yeni deneyim adayı → Değerlendirme
-    → VALID / CONFLICT / INVALID → Hafıza / EXPLORE / REJECT → Bilgi güncellemesi
+    → VALID / UNCERTAIN / CONFLICT / INVALID → Hafıza / EXPLORE / REJECT
+    → bağımsız doğrulama → Bilgi güncellemesi
 
 Kullanım:
     from hga.knowledge import KnowledgeStore

@@ -60,7 +60,10 @@ hga = "hga.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["hga*", "mimari*", "egitim*"]
+include = ["hga*", "mimari*", "egitim*", "golden_dataset*"]
+
+[tool.setuptools.package-data]
+golden_dataset = ["*.json"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

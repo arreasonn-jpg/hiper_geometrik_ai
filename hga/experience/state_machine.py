@@ -2,9 +2,10 @@
 """Deneyim durum makinesi (Roadmap P0-012).
 
 Durum Akışı:
-    CANDIDATE → EVALUATING → (VALID | CONFLICT | INVALID)
-    VALID → VERIFYING → VERIFIED
-    CONFLICT → EXPLORE → (VALID | INVALID | CONFLICT)
+    CANDIDATE → EVALUATING → (VALID | UNCERTAIN | CONFLICT | INVALID)
+    VALID → VERIFYING → (VERIFIED | UNCERTAIN | INVALID)
+    UNCERTAIN → (VERIFYING | EXPLORE)
+    CONFLICT → EXPLORE → (VALID | UNCERTAIN | INVALID | CONFLICT)
     INVALID → REJECT
 
 Altın kural: ``MODEL_GENERATED`` kaynaklı aday deterministik/harici kanıt
@@ -17,16 +18,17 @@ from typing import Dict, Tuple
 
 from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 
-
 GECISLER: Dict[DeneyimDurumu, Tuple[DeneyimDurumu, ...]] = {
     DeneyimDurumu.CANDIDATE: (
         DeneyimDurumu.EVALUATING,
         DeneyimDurumu.VALID,
+        DeneyimDurumu.UNCERTAIN,
         DeneyimDurumu.CONFLICT,
         DeneyimDurumu.INVALID,
     ),
     DeneyimDurumu.EVALUATING: (
         DeneyimDurumu.VALID,
+        DeneyimDurumu.UNCERTAIN,
         DeneyimDurumu.CONFLICT,
         DeneyimDurumu.INVALID,
     ),
@@ -37,9 +39,16 @@ GECISLER: Dict[DeneyimDurumu, Tuple[DeneyimDurumu, ...]] = {
     ),
     DeneyimDurumu.VERIFYING: (
         DeneyimDurumu.VERIFIED,
-        DeneyimDurumu.VALID,
+        DeneyimDurumu.UNCERTAIN,
         DeneyimDurumu.INVALID,
         DeneyimDurumu.CONFLICT,
+    ),
+    DeneyimDurumu.UNCERTAIN: (
+        DeneyimDurumu.VERIFYING,
+        DeneyimDurumu.EXPLORE,
+        DeneyimDurumu.VALID,
+        DeneyimDurumu.CONFLICT,
+        DeneyimDurumu.INVALID,
     ),
     DeneyimDurumu.CONFLICT: (
         DeneyimDurumu.EXPLORE,
@@ -48,6 +57,7 @@ GECISLER: Dict[DeneyimDurumu, Tuple[DeneyimDurumu, ...]] = {
     ),
     DeneyimDurumu.EXPLORE: (
         DeneyimDurumu.VALID,
+        DeneyimDurumu.UNCERTAIN,
         DeneyimDurumu.INVALID,
         DeneyimDurumu.CONFLICT,
     ),
@@ -88,6 +98,11 @@ class DeneyimDurumMakinesi:
                 yeni == DeneyimDurumu.VERIFIED):
             return StateTransition(onceki, yeni, False,
                                    "MODEL_GENERATED otomatik VERIFIED olamaz")
+        if yeni == DeneyimDurumu.VERIFIED and not aday.verified_by:
+            return StateTransition(
+                onceki, yeni, False,
+                "VERIFIED geçişi bağımsız doğrulayıcı kimliği (verified_by) gerektirir",
+            )
         return StateTransition(onceki, yeni, True, "ok")
 
     def uygula(self, aday: ExperienceCandidate, yeni: DeneyimDurumu,

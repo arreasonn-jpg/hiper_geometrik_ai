@@ -15,16 +15,16 @@ döngüsünü kontrollü benchmarklarla ölç" maddesinin somut karşılığı:
 Böylece rapor §20'deki metrikler (acceptance/conflict rate, false acceptance/
 rejection, knowledge growth, replay efficiency) tek tabloda raporlanır.
 """
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass
 from typing import Callable, List, Optional
 
-from ..knowledge import KnowledgeStore, KaynakTuru
+from ..knowledge import KnowledgeStore
 from ..memory import BellekEntegrasyonu
-from .generator import ExperienceGenerator
-from .evaluator import ExperienceEvaluator
 from .consolidation import Consolidator
+from .evaluator import ExperienceEvaluator
+from .generator import ExperienceGenerator
+from .loop import AdimRaporu, DeneyimDongusu
 from .mini_env import AritmetikOrtam
-from .loop import DeneyimDongusu, AdimRaporu
 
 
 @dataclass
@@ -34,6 +34,7 @@ class BenchmarkOzeti:
     toplam_novel: int = 0
     toplam_valid: int = 0
     toplam_conflict: int = 0
+    toplam_uncertain: int = 0
     toplam_invalid: int = 0
     toplam_verified: int = 0
     yanlis_kabul: Optional[int] = None      # false acceptance (doğrulayıcı varsa)
@@ -89,6 +90,7 @@ def ozetle(raporlar: List[AdimRaporu]) -> BenchmarkOzeti:
         o.toplam_novel += r.novel
         o.toplam_valid += r.valid
         o.toplam_conflict += r.conflict
+        o.toplam_uncertain += r.uncertain
         o.toplam_invalid += r.invalid
         o.toplam_verified += r.verified
         o.bilgi_buyumesi += r.knowledge_buyumesi

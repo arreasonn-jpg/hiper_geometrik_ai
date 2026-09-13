@@ -57,13 +57,17 @@ class DeneyimSlotlari:
     * `doluluk_orani()` ve `cakisma_orani()` deney metrikleridir (§21).
     """
 
-    def __init__(self, slot_sayisi: int = 4096, tablo_sayisi: int = 1):
+    def __init__(self, slot_sayisi: int = 4096, tablo_sayisi: int = 1,
+                 cakisma_ornek_limiti: int = 1000):
         if slot_sayisi < 1:
             raise ValueError("slot_sayisi >= 1 olmalı")
         if tablo_sayisi not in (1, 2):
             raise ValueError("tablo_sayisi 1 veya 2 (Bloom tarzı) olabilir")
+        if cakisma_ornek_limiti < 0:
+            raise ValueError("cakisma_ornek_limiti negatif olamaz")
         self.slot_sayisi = int(slot_sayisi)
         self.tablo_sayisi = int(tablo_sayisi)
+        self.cakisma_ornek_limiti = int(cakisma_ornek_limiti)
         # her tablo: slot → experience_id (None = boş)
         self._tablolar: List[Dict[int, Optional[str]]] = [
             {} for _ in range(tablo_sayisi)
@@ -73,10 +77,19 @@ class DeneyimSlotlari:
         self._tik = 0
         self.okuma_sayisi = 0
         self.yazma_sayisi = 0
+        self.cakisma_sayisi = 0
+        self.cakisma_tablosu: List[int] = [0 for _ in range(tablo_sayisi)]
+        # Büyük stres koşularında her olayı saklamak belleği O(N) yapmasın.
+        # Sayaç eksiksizdir; liste yalnız teşhis için sınırlı örnek taşır.
         self.cakismalar: List[Dict] = []
 
     def _adres(self, iz: int, tuz: int) -> int:
         return (iz * tuz) % self.slot_sayisi
+
+    def adresler(self, anahtar_bilesenleri) -> Tuple[int, ...]:
+        """Bir anahtarın tablo adreslerini değiştirmeden görünür kıl."""
+        iz = parmak_izi(anahtar_bilesenleri)
+        return tuple(self._adres(iz, tuz + 1) for tuz in range(self.tablo_sayisi))
 
     def yaz(self, experience_id: str, anahtar_bilesenleri) -> int:
         """Deneyimi slotlara yaz; birincil slot numarasını döner.
@@ -86,17 +99,19 @@ class DeneyimSlotlari:
         """
         self._tik += 1
         self.yazma_sayisi += 1
-        iz = parmak_izi(anahtar_bilesenleri)
-        adresler = [self._adres(iz, tuz + 1) for tuz in range(self.tablo_sayisi)]
+        adresler = self.adresler(anahtar_bilesenleri)
         for t, adres in enumerate(adresler):
             mevcut = self._tablolar[t].get(adres)
             if mevcut is None:
                 self._tablolar[t][adres] = experience_id
             elif mevcut != experience_id:
-                self.cakismalar.append({
-                    "tablo": t, "slot": adres,
-                    "onceki": mevcut, "yeni": experience_id,
-                })
+                self.cakisma_sayisi += 1
+                self.cakisma_tablosu[t] += 1
+                if len(self.cakismalar) < self.cakisma_ornek_limiti:
+                    self.cakismalar.append({
+                        "tablo": t, "slot": adres,
+                        "onceki": mevcut, "yeni": experience_id,
+                    })
             self._son_erisim[t][adres] = self._tik
             self._erisim_sayisi[t][adres] = self._erisim_sayisi[t].get(adres, 0) + 1
         return adresler[0]
@@ -104,8 +119,7 @@ class DeneyimSlotlari:
     def icerir(self, experience_id: str, anahtar_bilesenleri) -> bool:
         self._tik += 1
         self.okuma_sayisi += 1
-        iz = parmak_izi(anahtar_bilesenleri)
-        adresler = [self._adres(iz, tuz + 1) for tuz in range(self.tablo_sayisi)]
+        adresler = self.adresler(anahtar_bilesenleri)
         var = all(self._tablolar[t].get(a) == experience_id
                   for t, a in enumerate(adresler))
         if var:
@@ -120,7 +134,7 @@ class DeneyimSlotlari:
 
     def cakisma_orani(self) -> float:
         toplam = sum(len(t) for t in self._tablolar)
-        return round(len(self.cakismalar) / toplam, 4) if toplam else 0.0
+        return round(self.cakisma_sayisi / toplam, 4) if toplam else 0.0
 
     def lru_temizle(self, max_yas: int) -> int:
         """Son erişimi ``max_yas`` adımdan eski olan slotları temizle."""
@@ -153,7 +167,9 @@ class DeneyimSlotlari:
             "tablo_sayisi": self.tablo_sayisi,
             "dolu_slot": dolu,
             "toplam_slot": toplam,
-            "cakisma": len(self.cakismalar),
+            "cakisma": self.cakisma_sayisi,
+            "tablo_basi_cakisma": list(self.cakisma_tablosu),
+            "cakisma_ornekleri": len(self.cakismalar),
             "cakisma_orani": self.cakisma_orani(),
             "okuma_yazma": self.okuma_yazma_raporu(),
         }

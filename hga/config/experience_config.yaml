@@ -23,8 +23,7 @@ agirliklar:
 
 # ── Karar eşikleri ────────────────────────────────────────────────────────
 esikler:
-  valid_esik: 0.5            # bu puanın üstü → VALID (harici kaynak için)
-  verify_esik: 0.7           # bu puanın üstü + harici kaynak → VERIFIED
+  # Evaluator VERIFIED üretmez; doğrulama eşiği bağımsız Verifier'a aittir.
   belirsiz_guven_esik: 0.5   # özellik güveni bunun altındaysa "yetersiz kanıt"
   celiski_kanit_esik: 0.6    # kayıtlı kanıt bu güvenin üstündeyse çelişkiye bakılır
   celiski_skor_ayrimi: 0.4   # kanıt skoru ile yapısal tahmin arasındaki açıklık

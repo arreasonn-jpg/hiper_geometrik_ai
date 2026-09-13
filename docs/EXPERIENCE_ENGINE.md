@@ -51,7 +51,7 @@ hiper_geometrik_ai/
 │   │   ├── korpus_boru.py         # veri_toplayici çıktısı → sözlük büyütme → REAL_DATA
 │   │   ├── korpus_uretici.py      # çevrimdışı belirleyici SOV cümle üretici (sentetik stres testi)
 │   │   ├── scoring.py             # bağımsız sinyaller + ağırlıklı puan + information_gain (§8, §16, v0.3)
-│   │   ├── evaluator.py           # ExperienceEvaluator + VALID/CONFLICT/INVALID (§9)
+│   │   ├── evaluator.py           # VALID/UNCERTAIN/CONFLICT/INVALID aday değerlendirmesi
 │   │   ├── conflict.py            # Conflict → Exploration (§11)
 │   │   ├── arastirma.py           # ArastirmaKuyrugu — çelişkiyi deterministik kanıtla toplu çözme
 │   │   ├── consolidation.py       # Consolidator — belleğe/araştırmaya/redde yönlendirme (§12)
@@ -260,12 +260,16 @@ Bilgi tabanı ──> Generator (kontrollü kombinasyon) ──> CANDIDATE
       │                                                    │
       │                                                    ▼
       │                                    Evaluator (kural + puan)
-      │                                    ├─ kural ihlali  → INVALID  → reddet
-      │                                    ├─ kanıt çelişkisi→ CONFLICT → araştır
-      │                                    ├─ MODEL_GENERATED→ VALID    (asla VERIFIED değil)
-      │                                    └─ harici+ yüksek puan → VERIFIED
+      │                                    ├─ kural ihlali   → INVALID   → reddet
+      │                                    ├─ kanıt eksikliği→ UNCERTAIN → araştır
+      │                                    ├─ kanıt çelişkisi→ CONFLICT  → araştır
+      │                                    └─ kısıtlarla uyum→ VALID     (kaynak fark etmez)
+      │                                                    │
+      │                                                    ▼
+      │                                    Bağımsız Verifier
+      │                                    └─ VERIFYING → VERIFIED/INVALID/UNCERTAIN
       ▼
-Consolidator ──> VALID → belleğe aday yaz; VERIFIED → kalıcı bilgi; CONFLICT → kuyruk
+Consolidator ──> VALID → belleğe aday; VERIFIED → kalıcı bilgi; UNCERTAIN/CONFLICT → kuyruk
       │
       ▼
 (Yeni bilgi) ──> Generator yeniden üretir   [self-expanding loop, §12]
