@@ -89,6 +89,36 @@ def test_olgu_agrega_kaynak_agirligi():
     assert "REAL_DATA" in agrega["sources"]
 
 
+def test_ters_iliski_ve_cift_yonlu_turetim():
+    """P0-008: Relation yönü ve ters/simetrik ilişki türetimi."""
+    r = RelationIndex()
+    r.iliski_ekle("Binmek", relation_id="R_001", inverse_relation_id="R_001_INV")
+    r.iliski_ekle("Binilmek", relation_id="R_001_INV", inverse_relation_id="R_001")
+
+    assert r.ters_iliski_al("R_001") == "R_001_INV"
+    assert r.ters_iliski_al("R_001_INV") == "R_001"
+
+    # Otomatik ters olgu türetimi
+    f = r.olgu_ekle("E_001", "R_001", "E_002", score=0.98,
+                     source=KaynakTuru.REAL_DATA, confidence=1.0,
+                     otomatik_ters=True)
+    assert f.uclusu == ("E_001", "R_001", "E_002")
+
+    olgular = r.olgular()
+    assert len(olgular) == 2
+    ters_olgu = r.olgular(subject_id="E_002", relation_id="R_001_INV")[0]
+    assert ters_olgu.object_id == "E_001"
+    assert ters_olgu.source == KaynakTuru.DERIVED
+    assert ters_olgu.score == 0.98
+
+
+def test_simetrik_iliski():
+    """Simetrik ilişki (ör. Komşu, Eş, Benzer)."""
+    r = RelationIndex()
+    r.iliski_ekle("Benzer", relation_id="R_SYM", symmetric=True)
+    assert r.ters_iliski_al("R_SYM") == "R_SYM"
+
+
 if __name__ == "__main__":
     testler = [(ad, fn) for ad, fn in sorted(globals().items())
                if ad.startswith("test_") and callable(fn)]

@@ -57,6 +57,52 @@ def _bilgi_demo():
             print(f"  \"{e.metin(a)}\"")
 
 
+def _graf_demo():
+    from hga.engine import ExperienceEngine
+    e = ExperienceEngine()
+    e.store.varlik_ekle("Ali", entity_type="insan", properties={"canli": 1},
+                        entity_id="E_001", ozel_isim=True)
+    e.store.varlik_ekle("Ata", entity_type="hayvan", properties={"binilebilir": 1},
+                        entity_id="E_002")
+    e.store.varlik_ekle("Araba", entity_type="tasit", properties={"binilebilir": 1},
+                        entity_id="E_003")
+    e.store.iliski_tanimla("Binmek", relation_id="R_001",
+                           subject_types=["insan"],
+                           requires_object_props={"binilebilir": 1.0})
+    adaylar = e.uret(["R_001"])
+    e.degerlendir(adaylar)
+    print("Experience Graph Özeti (Faz 23):")
+    print("  ", e.graph.ozet())
+    for a in adaylar:
+        print("\n" + e.aciklama(a.experience_id))
+
+
+def _kesif_demo():
+    from hga.engine import ExperienceEngine
+    e = ExperienceEngine()
+    e.store.varlik_ekle("Ali", entity_type="insan", properties={"canli": 1},
+                        entity_id="E_001", ozel_isim=True)
+    e.store.varlik_ekle("Ata", entity_type="hayvan", properties={"binilebilir": 1},
+                        entity_id="E_002")
+    e.store.varlik_ekle("Araba", entity_type="tasit", properties={"binilebilir": 1},
+                        entity_id="E_003")
+    e.store.iliski_tanimla("Binmek", relation_id="R_001",
+                           subject_types=["insan"],
+                           requires_object_props={"binilebilir": 1.0})
+    e.store.olgu_kaydet("E_001", "R_001", "E_002", score=1.0)
+    adaylar = e.uret(["R_001"])
+    e.degerlendir(adaylar)
+    harita = e.uzay_haritasi(adaylar)
+    print("Exploration Uzay Haritası (Faz 24):")
+    for k, v in harita.to_dict().items():
+        print(f"  {k:<20}: {v}")
+    print("\nAktif Öğrenme ile En Bilgilendirici Deneyim Seçimi (Faz 25):")
+    secilenler = e.aktif_ogrenme_sec(adaylar, k=2)
+    for aday, puan in secilenler:
+        nesne = e.store.entities.getir(aday.object_id).token
+        print(f"  Ali --Binmek--> {nesne:<8} [InfoGain Opt Puanı: {puan:.4f}]")
+
+
 def _gercek_veri():
     from hga.engine import ExperienceEngine
     e = ExperienceEngine()
@@ -380,7 +426,8 @@ def main(argv=None):
                                      "dogrulama", "halusinasyon", "sweep",
                                      "tokenizer", "perplexity", "checkpoint-rapor",
                                      "benchmark-rapor", "veri-kalite", "veri-canli-smoke",
-                                     "manifest", "observability", "ozet"])
+                                     "manifest", "observability", "ozet",
+                                     "graf", "kesif"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -430,6 +477,7 @@ def main(argv=None):
      "benchmark": _benchmark, "dogrulama": _dogrulama,
      "halusinasyon": _halusinasyon, "sweep": _sweep,
      "tokenizer": _tokenizer_benchmark,
+     "graf": _graf_demo, "kesif": _kesif_demo,
      "perplexity": lambda: _perplexity_benchmark(
          args.yol, checkpoint=args.checkpoint,
          tokenizer_yol=args.tokenizer_yol,

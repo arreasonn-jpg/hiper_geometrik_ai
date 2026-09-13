@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Eski kelime-bazlı tokenizer (uyumluluk katmanı).
+"""
+[STATÜ: LEGACY / DEPRECATED] — Karakter/Kelime Bazlı Eski Tokenizer
+===================================================================
+(Roadmap P0-003, P0-004 — Tek standart: mimari.bpe_tokenizer.BPETokenizer)
 
-Yeni zincirde varsayılan ``BPETokenizer``dır; bu sınıf eski script/checkpoint
-uyumluluğu için korunur. Yine de merkezi vocab varsayılanını ve Türkçe harf
-normalizasyonunu kullanır.
+DİKKAT: HGA mimarisinin tek standart tokenizasyon motoru `mimari/bpe_tokenizer.py`
+(BPETokenizer) sınıfıdır. Bu dosya sadece eski checkpoint ve test uyumluluğu için
+korunmaktadır.
 """
 from __future__ import annotations
 

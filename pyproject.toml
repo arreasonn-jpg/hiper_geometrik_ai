@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hiper-geometrik-ai"
+version = "1.0.0"
+description = "HGA Experience & Knowledge Engine — Bilinear Kronecker Zinciri, Seyrek Bellek ve Deneyim Tabanlı Öğrenme Mimarisi"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "HGA Research Team" }
+]
+keywords = [
+    "deep-learning",
+    "kronecker",
+    "sparse-memory",
+    "experience-engine",
+    "knowledge-graph",
+    "turkish-nlp",
+    "geometric-ai"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "ruff>=0.4.0",
+    "mypy>=1.9.0",
+]
+ui = [
+    "gradio>=4.0",
+]
+data = [
+    "requests>=2.28",
+    "pyarrow>=14.0",
+    "pandas>=2.0",
+]
+all = [
+    "hiper-geometrik-ai[test,ui,data]",
+]
+
+[project.scripts]
+hga = "hga.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hga*", "mimari*", "egitim*"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --durations=10"
+testpaths = [
+    "tests",
+    "test_mimari.py",
+]
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true

@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """
+[STATÜ: LEGACY / DEPRECATED]
 Bilgi Katmanı — 3 Katmanlı "Önce Ara, Yoksa Sınırlı Genelle" Mekanizması
 ========================================================================
+(Roadmap P0-003, P0-004 — Kanonik motor: hga.knowledge.KnowledgeStore)
+
+DİKKAT: Bu modül ilk prototip döneminden kalan 3 katmanlı string eşleme
+mekanizmasıdır. Yeni nesil sistemde tek kanonik bilgi motoru `hga.knowledge`
+ve `hga.evaluation.hallucination` paketleridir. Bu dosya yalnızca geriye dönük
+test ve eski terminal/Gradio arayüzü uyumluluğu için tutulmaktadır.
+
 (rapor Bölüm 10.5)
 
 Halüsinasyon–genelleme ödünleşimini (rapor 10.3: ezber ↔ genelleme) yönetmek

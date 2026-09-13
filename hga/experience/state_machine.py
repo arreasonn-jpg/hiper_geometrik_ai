@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Deneyim durum makinesi.
+"""Deneyim durum makinesi (Roadmap P0-012).
+
+Durum Akışı:
+    CANDIDATE → EVALUATING → (VALID | CONFLICT | INVALID)
+    VALID → VERIFYING → VERIFIED
+    CONFLICT → EXPLORE → (VALID | INVALID | CONFLICT)
+    INVALID → REJECT
 
 Altın kural: ``MODEL_GENERATED`` kaynaklı aday deterministik/harici kanıt
-olmadan ``VERIFIED`` olamaz.
+olmadan asla ``VERIFIED`` olamaz.
 """
 from __future__ import annotations
 
@@ -14,14 +20,40 @@ from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 
 GECISLER: Dict[DeneyimDurumu, Tuple[DeneyimDurumu, ...]] = {
     DeneyimDurumu.CANDIDATE: (
+        DeneyimDurumu.EVALUATING,
         DeneyimDurumu.VALID,
         DeneyimDurumu.CONFLICT,
         DeneyimDurumu.INVALID,
     ),
-    DeneyimDurumu.VALID: (DeneyimDurumu.VERIFIED, DeneyimDurumu.CONFLICT),
-    DeneyimDurumu.CONFLICT: (DeneyimDurumu.EXPLORE, DeneyimDurumu.VALID, DeneyimDurumu.INVALID),
-    DeneyimDurumu.EXPLORE: (DeneyimDurumu.VALID, DeneyimDurumu.INVALID, DeneyimDurumu.CONFLICT),
-    DeneyimDurumu.INVALID: (DeneyimDurumu.REJECT,),
+    DeneyimDurumu.EVALUATING: (
+        DeneyimDurumu.VALID,
+        DeneyimDurumu.CONFLICT,
+        DeneyimDurumu.INVALID,
+    ),
+    DeneyimDurumu.VALID: (
+        DeneyimDurumu.VERIFYING,
+        DeneyimDurumu.VERIFIED,
+        DeneyimDurumu.CONFLICT,
+    ),
+    DeneyimDurumu.VERIFYING: (
+        DeneyimDurumu.VERIFIED,
+        DeneyimDurumu.VALID,
+        DeneyimDurumu.INVALID,
+        DeneyimDurumu.CONFLICT,
+    ),
+    DeneyimDurumu.CONFLICT: (
+        DeneyimDurumu.EXPLORE,
+        DeneyimDurumu.VALID,
+        DeneyimDurumu.INVALID,
+    ),
+    DeneyimDurumu.EXPLORE: (
+        DeneyimDurumu.VALID,
+        DeneyimDurumu.INVALID,
+        DeneyimDurumu.CONFLICT,
+    ),
+    DeneyimDurumu.INVALID: (
+        DeneyimDurumu.REJECT,
+    ),
     DeneyimDurumu.REJECT: (),
     DeneyimDurumu.VERIFIED: (),
 }

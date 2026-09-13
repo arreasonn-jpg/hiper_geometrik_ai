@@ -67,6 +67,8 @@ class KnowledgeStore:
                        object_types: Optional[List[str]] = None,
                        requires_object_props: Optional[Dict[str, float]] = None,
                        requires_subject_props: Optional[Dict[str, float]] = None,
+                       inverse_relation_id: Optional[str] = None,
+                       symmetric: bool = False,
                        source: KaynakTuru = KaynakTuru.VERIFIED_RULE,
                        confidence: float = 1.0) -> Relation:
         return self.relations.iliski_ekle(
@@ -74,13 +76,21 @@ class KnowledgeStore:
             subject_types=subject_types, object_types=object_types,
             requires_object_props=requires_object_props,
             requires_subject_props=requires_subject_props,
+            inverse_relation_id=inverse_relation_id,
+            symmetric=symmetric,
             source=source, confidence=confidence)
+
+    def ters_iliski_bagla(self, relation_id_1: str, relation_id_2: str) -> None:
+        """İki ilişkiyi birbirinin tersi olarak bağla (P0-008)."""
+        self.relations.ters_iliski_bagla(relation_id_1, relation_id_2)
 
     def olgu_kaydet(self, subject_id: str, relation_id: str, object_id: str,
                     score: float, source: KaynakTuru = KaynakTuru.REAL_DATA,
-                    confidence: float = 1.0) -> RelationFact:
+                    confidence: float = 1.0,
+                    otomatik_ters: bool = False) -> RelationFact:
         return self.relations.olgu_ekle(subject_id, relation_id, object_id,
-                                        score, source=source, confidence=confidence)
+                                        score, source=source, confidence=confidence,
+                                        otomatik_ters=otomatik_ters)
 
     # ── Bellek desteği (§8: memory_support sinyali) ──────────────────────
     def bellek_destegi(self, subject_id: str, relation_id: str,
