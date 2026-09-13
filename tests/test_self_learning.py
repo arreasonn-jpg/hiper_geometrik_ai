@@ -155,6 +155,11 @@ def test_kuratörlü_bes_seed_raporu_reproducibility_metadata_tasir():
     assert len(report["manifests"]) == 5
     assert len(report["results"]) == 5
     assert all(len(result["closed_verified"]["cycles"]) == 100 for result in report["results"])
+    assert all(result["closed_verified"]["isolation_clean"] for result in report["results"])
+    assert all(result["collapse_probe"]["isolation_clean"] for result in report["results"])
+    assert all(result["verifier_robustness"]["frr"] == 0.25 for result in report["results"])
+    assert all("table_1" in result["memory_capacity"]["minimum_slots_meeting_target"]
+               for result in report["results"])
     assert all(manifest["result"] == "COMPLETED" for manifest in report["manifests"])
     assert all(manifest["git_dirty"] is False for manifest in report["manifests"])
     assert report["aggregate"]["closed_verified.incorrect_knowledge"]["mean"] == 0.0

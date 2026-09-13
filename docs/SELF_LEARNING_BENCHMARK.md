@@ -141,12 +141,23 @@ standard deviation'dır; tam makine-okunur sonuç
 | Collapse acceptance accuracy | 0.125 ± 0.03953 |
 | Collapse incorrect model facts | 14.0 ± 0.63246 |
 | Collapse memory collisions | 1,584 ± 0 |
+| Robustness precision / recall / F1 | 0.75 / 0.75 / 0.75 |
+| Robustness FAR / FRR | 0.25 / 0.25 |
+| Robustness UNCERTAIN / CONFLICT | 2 / 2 |
+| Generation/test overlap | 0 ± 0 |
+| Memory/test overlap | 0 ± 0 |
 
-Koşular commit `dbb3521`, dataset hash
-`b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da` ve
-config hash `eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e`
-ile, temiz çalışma ağacında üretildi. Her koşunun tam manifesti, sonucu ve
-100-cycle trajectory'si özet JSON'a gömülüdür.
+1,600 context ve %95 recall hedefli memory sweep'te tek tablo beş seed'in
+dördünde 16,384, birinde 32,768 slot gerektirdi. Mevcut `ALL-read` çift tablo
+politikası dört seed'de 32,768 slotta hedefi geçti; seed 4, taranan üst sınırda
+hedefe ulaşamadı. Dolayısıyla tek bir evrensel kapasite eşiği iddia edilmez.
+
+Koşular commit `63a82d1`, dataset hash
+`a2605e3578e28d2100b39eb4702f902183ef0b2559ad69a3feb71213be3128ab` ve
+config hash `2276f6cb32aa07a7e422555b65eb8cadc3a226dcba609bdec6ca72c68c06d373`
+ile, temiz çalışma ağacında üretildi. Her koşunun tam manifesti, sonucu,
+robustness confusion matrix'i, kapasite eğrisi ve 100-cycle trajectory'si özet
+JSON'a gömülüdür.
 
 ## Kullanım
 
