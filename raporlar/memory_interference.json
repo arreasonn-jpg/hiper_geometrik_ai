@@ -1,0 +1,1795 @@
+{
+  "policy_comparison": {
+    "best_both_survival": "DYNAMIC_KV",
+    "findings": [
+      "FIRST_WINS: çakışmada kurban korunur, saldırgan kaybolur (saldırgan yaşama=0.0).",
+      "LAST_WINS: saldırgan kazanır, kurban BOZULUR (bozulma=1.0).",
+      "İki sabit-tablo politikasında da çakışan iki bilgi AYNI ANDA korunamaz; bu bir ayar meselesi değil, sabit adres uzayının yapısal sonucudur.",
+      "DYNAMIC_KV her iki bilgiyi korur (both=1.0) ama fiziksel maliyeti girdi sayısıyla büyür."
+    ],
+    "forced_collisions": 50,
+    "reports": {
+      "DYNAMIC_KV": {
+        "attacker_survival_rate": 1.0,
+        "both_survival_rate": 1.0,
+        "bytes_per_retained_item": 135.44,
+        "cases": [
+          {
+            "attacker_id": "ATTACKER-0",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              22
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-0",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-1",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              3962
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-1",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-2",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              447
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-2",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-3",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              354
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-3",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-4",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2607
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-4",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-5",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              460
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-5",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-6",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              415
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-6",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-7",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2214
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-7",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-8",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2345
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-8",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-9",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2285
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-9",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-10",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              4048
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-10",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-11",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2928
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-11",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-12",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              587
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-12",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-13",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2456
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-13",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-14",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2750
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-14",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-15",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              143
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-15",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-16",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              938
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-16",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-17",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2267
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-17",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-18",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1222
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-18",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-19",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              3707
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-19",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-20",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              3310
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-20",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-21",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2082
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-21",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-22",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              884
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-22",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-23",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              831
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-23",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-24",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              517
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-24",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-25",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1187
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-25",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-26",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              414
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-26",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-27",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1680
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-27",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-28",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1510
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-28",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-29",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1309
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-29",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-30",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              701
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-30",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-31",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2732
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-31",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-32",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              412
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-32",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-33",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              263
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-33",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-34",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1994
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-34",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-35",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2307
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-35",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-36",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              368
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-36",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-37",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1928
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-37",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-38",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              3763
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-38",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-39",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              955
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-39",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-40",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2137
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-40",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-41",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1786
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-41",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-42",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              3606
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-42",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-43",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1958
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-43",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-44",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2611
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-44",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-45",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              693
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-45",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-46",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              2389
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-46",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-47",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              53
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-47",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-48",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              312
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-48",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-49",
+            "attacker_retained": true,
+            "both_retained": true,
+            "shared_slots": [
+              1853
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-49",
+            "victim_retained": true
+          }
+        ],
+        "collision_events": 0,
+        "collisions_constructed": 50,
+        "corruption_rate": 0.0,
+        "estimated_storage_bytes": 13544,
+        "forced_collisions": 50,
+        "notes": [
+          "Çakışmalar kasıtlı olarak kurulmuştur; doğal çakışma oranı değildir.",
+          "Saf Python prototip ölçümüdür; PyTorch toplamsal tablo davranışı ayrıdır.",
+          "DYNAMIC_KV çakışmayı ortadan kaldırır ama fiziksel maliyeti girdi sayısıyla büyütür (sabit tabloda maliyet slot sayısıyla sabittir)."
+        ],
+        "physical_entries": 100,
+        "policy": "DYNAMIC_KV",
+        "slot_count": 4096,
+        "table_count": 1,
+        "victim_survival_rate": 1.0
+      },
+      "FIRST_WINS": {
+        "attacker_survival_rate": 0.0,
+        "both_survival_rate": 0.0,
+        "bytes_per_retained_item": 132.84,
+        "cases": [
+          {
+            "attacker_id": "ATTACKER-0",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              22
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-0",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-1",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              3962
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-1",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-2",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              447
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-2",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-3",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              354
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-3",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-4",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2607
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-4",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-5",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              460
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-5",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-6",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              415
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-6",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-7",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2214
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-7",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-8",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2345
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-8",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-9",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2285
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-9",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-10",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              4048
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-10",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-11",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2928
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-11",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-12",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              587
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-12",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-13",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2456
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-13",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-14",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2750
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-14",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-15",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              143
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-15",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-16",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              938
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-16",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-17",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2267
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-17",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-18",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1222
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-18",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-19",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              3707
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-19",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-20",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              3310
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-20",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-21",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2082
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-21",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-22",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              884
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-22",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-23",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              831
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-23",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-24",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              517
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-24",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-25",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1187
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-25",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-26",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              414
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-26",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-27",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1680
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-27",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-28",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1510
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-28",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-29",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1309
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-29",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-30",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              701
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-30",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-31",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2732
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-31",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-32",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              412
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-32",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-33",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              263
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-33",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-34",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1994
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-34",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-35",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2307
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-35",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-36",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              368
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-36",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-37",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1928
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-37",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-38",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              3763
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-38",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-39",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              955
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-39",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-40",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2137
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-40",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-41",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1786
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-41",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-42",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              3606
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-42",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-43",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1958
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-43",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-44",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2611
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-44",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-45",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              693
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-45",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-46",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              2389
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-46",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-47",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              53
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-47",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-48",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              312
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-48",
+            "victim_retained": true
+          },
+          {
+            "attacker_id": "ATTACKER-49",
+            "attacker_retained": false,
+            "both_retained": false,
+            "shared_slots": [
+              1853
+            ],
+            "victim_corrupted": false,
+            "victim_id": "VICTIM-49",
+            "victim_retained": true
+          }
+        ],
+        "collision_events": 50,
+        "collisions_constructed": 50,
+        "corruption_rate": 0.0,
+        "estimated_storage_bytes": 6642,
+        "forced_collisions": 50,
+        "notes": [
+          "Çakışmalar kasıtlı olarak kurulmuştur; doğal çakışma oranı değildir.",
+          "Saf Python prototip ölçümüdür; PyTorch toplamsal tablo davranışı ayrıdır."
+        ],
+        "physical_entries": 50,
+        "policy": "FIRST_WINS",
+        "slot_count": 4096,
+        "table_count": 1,
+        "victim_survival_rate": 1.0
+      },
+      "LAST_WINS": {
+        "attacker_survival_rate": 1.0,
+        "both_survival_rate": 0.0,
+        "bytes_per_retained_item": 134.84,
+        "cases": [
+          {
+            "attacker_id": "ATTACKER-0",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              22
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-0",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-1",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              3962
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-1",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-2",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              447
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-2",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-3",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              354
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-3",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-4",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2607
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-4",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-5",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              460
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-5",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-6",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              415
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-6",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-7",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2214
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-7",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-8",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2345
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-8",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-9",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2285
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-9",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-10",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              4048
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-10",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-11",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2928
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-11",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-12",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              587
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-12",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-13",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2456
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-13",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-14",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2750
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-14",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-15",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              143
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-15",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-16",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              938
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-16",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-17",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2267
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-17",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-18",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1222
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-18",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-19",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              3707
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-19",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-20",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              3310
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-20",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-21",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2082
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-21",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-22",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              884
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-22",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-23",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              831
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-23",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-24",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              517
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-24",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-25",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1187
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-25",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-26",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              414
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-26",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-27",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1680
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-27",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-28",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1510
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-28",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-29",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1309
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-29",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-30",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              701
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-30",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-31",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2732
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-31",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-32",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              412
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-32",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-33",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              263
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-33",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-34",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1994
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-34",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-35",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2307
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-35",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-36",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              368
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-36",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-37",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1928
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-37",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-38",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              3763
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-38",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-39",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              955
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-39",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-40",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2137
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-40",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-41",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1786
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-41",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-42",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              3606
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-42",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-43",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1958
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-43",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-44",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2611
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-44",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-45",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              693
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-45",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-46",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              2389
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-46",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-47",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              53
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-47",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-48",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              312
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-48",
+            "victim_retained": false
+          },
+          {
+            "attacker_id": "ATTACKER-49",
+            "attacker_retained": true,
+            "both_retained": false,
+            "shared_slots": [
+              1853
+            ],
+            "victim_corrupted": true,
+            "victim_id": "VICTIM-49",
+            "victim_retained": false
+          }
+        ],
+        "collision_events": 50,
+        "collisions_constructed": 50,
+        "corruption_rate": 1.0,
+        "estimated_storage_bytes": 6742,
+        "forced_collisions": 50,
+        "notes": [
+          "Çakışmalar kasıtlı olarak kurulmuştur; doğal çakışma oranı değildir.",
+          "Saf Python prototip ölçümüdür; PyTorch toplamsal tablo davranışı ayrıdır."
+        ],
+        "physical_entries": 50,
+        "policy": "LAST_WINS",
+        "slot_count": 4096,
+        "table_count": 1,
+        "victim_survival_rate": 0.0
+      }
+    },
+    "slot_count": 4096,
+    "storage_ratio_dynamic_over_fixed": 2.039145,
+    "table_count": 1
+  },
+  "scaling": {
+    "crossover_context_count": 100,
+    "notes": [
+      "Dinamik KV recall'ı tanım gereği 1.0'dır; bedeli girdi başına büyüyen fiziksel depolamadır.",
+      "crossover_context_count: sabit tablonun recall'ının ilk kez 1.0'ın altına düştüğü ölçek.",
+      "DİKKAT: saf Python 'sabit' tablo bir dict'tir ve önceden tahsis ETMEZ; bu yüzden fixed_storage_bytes gerçek nn.Embedding davranışını TEMSİL ETMEZ. Gerçek karşılaştırma preallocated_table_bytes sütunudur (context sayısından bağımsız sabit maliyet).",
+      "Karar kuralı: dinamik KV yalnız ratio_dynamic_over_preallocated < 1 olduğu ölçeklerde bellek açısından da kazançlıdır; ötesinde ödünleşim recall lehine ama RAM aleyhinedir."
+    ],
+    "points": [
+      {
+        "context_count": 100,
+        "dynamic_retrieval_accuracy": 1.0,
+        "dynamic_storage_bytes": 13494,
+        "fixed_collision_events": 2,
+        "fixed_retrieval_accuracy": 0.98,
+        "fixed_storage_bytes": 34952,
+        "load_factor": 0.02441406,
+        "preallocated_table_bytes": 524288,
+        "ratio_dynamic_over_preallocated": 0.025738,
+        "slot_count": 4096,
+        "storage_ratio_dynamic_over_fixed": 0.386072
+      },
+      {
+        "context_count": 1000,
+        "dynamic_retrieval_accuracy": 1.0,
+        "dynamic_storage_bytes": 125790,
+        "fixed_collision_events": 110,
+        "fixed_retrieval_accuracy": 0.89,
+        "fixed_storage_bytes": 352197,
+        "load_factor": 0.24414062,
+        "preallocated_table_bytes": 524288,
+        "ratio_dynamic_over_preallocated": 0.239925,
+        "slot_count": 4096,
+        "storage_ratio_dynamic_over_fixed": 0.357158
+      },
+      {
+        "context_count": 10000,
+        "dynamic_retrieval_accuracy": 1.0,
+        "dynamic_storage_bytes": 1193898,
+        "fixed_collision_events": 6261,
+        "fixed_retrieval_accuracy": 0.3739,
+        "fixed_storage_bytes": 1772771,
+        "load_factor": 2.44140625,
+        "preallocated_table_bytes": 524288,
+        "ratio_dynamic_over_preallocated": 2.27718,
+        "slot_count": 4096,
+        "storage_ratio_dynamic_over_fixed": 0.673464
+      },
+      {
+        "context_count": 100000,
+        "dynamic_retrieval_accuracy": 0.99997,
+        "dynamic_storage_bytes": 14330276,
+        "fixed_collision_events": 95904,
+        "fixed_retrieval_accuracy": 0.04096,
+        "fixed_storage_bytes": 1844528,
+        "load_factor": 24.4140625,
+        "preallocated_table_bytes": 524288,
+        "ratio_dynamic_over_preallocated": 27.332832,
+        "slot_count": 4096,
+        "storage_ratio_dynamic_over_fixed": 7.769075
+      }
+    ],
+    "slot_count": 4096
+  }
+}

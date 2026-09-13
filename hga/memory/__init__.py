@@ -12,6 +12,20 @@ from .benchmark import (
 from .entegrasyon import BellekEntegrasyonu
 from .genelleme_ablasyonu import GenellemeAblasyonu
 from .gorev_ablasyonu import GorevAblasyonu
+from .interference import (
+    DYNAMIC_KV,
+    FIRST_WINS,
+    LAST_WINS,
+    POLITIKALAR,
+    InterferenceCase,
+    InterferenceReport,
+    PolicyComparisonReport,
+    ScalingReport,
+    carpisan_anahtar_bul,
+    run_fixed_vs_dynamic_scaling,
+    run_interference_test,
+    run_policy_comparison,
+)
 from .kopru import TorchKoprusu, bilesen_token, torch_var_mi
 from .neural_kopru import NeuralKopru
 from .replay import DeneyimTekrari
@@ -35,4 +49,8 @@ __all__ = [
     "GenellemeAblasyonu",
     "torch_var_mi",
     "bilesen_token",
+    "FIRST_WINS", "LAST_WINS", "DYNAMIC_KV", "POLITIKALAR",
+    "InterferenceCase", "InterferenceReport", "PolicyComparisonReport",
+    "ScalingReport", "carpisan_anahtar_bul", "run_interference_test",
+    "run_policy_comparison", "run_fixed_vs_dynamic_scaling",
 ]

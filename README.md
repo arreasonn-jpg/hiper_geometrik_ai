@@ -316,6 +316,51 @@ python -m hga defter        # VERIFIED/INVALID/UNCERTAIN/CONFLICT kayıtları
   Geçmiş bir kayıt değiştirilirse zincir doğrulaması bunu yakalar — "model
   geçmişte nerede hata yaptı?" sorusu ancak böyle cevaplanabilir.
 
+### Neural vs Symbolic vs Hybrid (Faz 21)
+
+```bash
+python -m hga paradigma --seeds 1,2,3,4,5
+```
+
+"Hibrit mimari" iddiası ilk kez **kontrollü** olarak test edildi: aynı veri,
+aynı split, aynı metrikler; %30 gizli özellik ve %20 görülmemiş varlık
+(cold-start) ile. 5 seed, mean ± std:
+
+| Metrik | symbolic | neural | hybrid |
+|---|---:|---:|---:|
+| Accuracy | 0.507 ± 0.026 | 0.777 ± 0.028 | **0.893 ± 0.013** |
+| Coverage | 0.507 ± 0.026 | 1.000 ± 0.000 | 1.000 ± 0.000 |
+| F1 | 1.000 ± 0.000 | 0.773 ± 0.030 | 0.893 ± 0.013 |
+| FAR / FRR | 0.000 / 0.000 | 0.205 / 0.240 | 0.103 / 0.111 |
+| Acc (görülmemiş varlık) | 0.495 ± 0.086 | 0.545 ± 0.032 | 0.785 ± 0.030 |
+
+Sembolik kolun `F1 = 1.000` skoru **kapsam olmadan anlamsızdır**: örneklerin
+yarısında çekimser kalır, tüm set üzerinden doğruluğu 0.507 (yazı-tura).
+Nöral kol eğitimde 1.000, testte 0.777, görülmemiş varlıkta **0.545 ≈ şans** —
+kuralı genellemiyor, varlık kimliğini ezberliyor. Hibrit +0.386 / +0.116 puan
+kazandırıyor ama cold-start'ta kendisi de 0.785'e düşüyor: hibritlik bu
+problemi **azaltıyor, çözmüyor**. Ayrıntı: `docs/PARADIGMA_ABLASYONU.md`.
+
+### Memory interference: kasıtlı çakışma (Faz 15–17)
+
+```bash
+python -m hga memory-interference --slots 4096 --forced-collisions 50
+```
+
+Milestone tablosu 100 döngüde recall'ın `1.000 → 0.952`'ye düştüğünü gösterdi;
+bu deney çakışmayı beklemek yerine **kurar** (A ve B zorla aynı slota):
+
+| Politika | Kurban yaşar | Saldırgan yaşar | İkisi birden | Bozulma |
+|---|---:|---:|---:|---:|
+| `FIRST_WINS` (mevcut) | 1.000 | 0.000 | 0.000 | 0.000 |
+| `LAST_WINS` | 0.000 | 1.000 | 0.000 | 1.000 |
+| `DYNAMIC_KV` | 1.000 | 1.000 | 1.000 | 0.000 |
+
+Sabit tabloda `both_survival = 0` bir ayar meselesi değil, **yapısal**dır: tek
+slot iki kimliği taşıyamaz. 4096 slotlu tabloda recall yük faktörüyle çöküyor
+(100k context → **0.041**), dinamik KV recall'ı 1.0 tutuyor ama 27× bellek
+istiyor. Ayrıntı ve dönüm noktası analizi: `docs/MEMORY_INTERFERENCE.md`.
+
 ---
 
 ## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması

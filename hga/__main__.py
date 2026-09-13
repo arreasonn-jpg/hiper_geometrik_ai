@@ -14,6 +14,8 @@ Kullanım:
     python -m hga kapasite               # P / C_I / C_M / C_E / C_V kapasite çerçevesi
     python -m hga bilgi-surum            # bilgi sürümleme + rollback demosu
     python -m hga defter                 # immutable experience ledger demosu
+    python -m hga memory-interference    # kasıtlı çakışma + sabit/dinamik KV kıyası
+    python -m hga paradigma              # neural vs symbolic vs hybrid (Faz 21)
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -517,6 +519,80 @@ def _milestone(cycles, batch, initial_facts, operands_max, negatives_per_fact,
         print(f"  markdown: {markdown}")
 
 
+def _memory_interference(forced, slots, tables, scales, out=None, markdown=None):
+    """Faz 15-17: kasıtlı çakışma, politika kıyası ve sabit/dinamik ölçekleme."""
+    from hga.memory import run_fixed_vs_dynamic_scaling, run_policy_comparison
+
+    context_counts = [int(v.strip()) for v in scales.split(",") if v.strip()]
+    kiyas = run_policy_comparison(forced_collisions=int(forced),
+                                  slot_count=int(slots),
+                                  table_count=int(tables))
+    olcek = run_fixed_vs_dynamic_scaling(context_counts=context_counts,
+                                         slot_count=int(slots),
+                                         table_count=int(tables))
+    print("Kasıtlı çakışma (A ve B aynı slota zorlandı) — politika kıyası:")
+    print(kiyas.markdown())
+    print()
+    for bulgu in kiyas.findings:
+        print(f"  - {bulgu}")
+    print("\nSabit tablo vs dinamik KV ölçekleme (Faz 17):")
+    print(olcek.markdown())
+    print(f"\n  recall'ın 1.0'ın altına ilk düştüğü ölçek: "
+          f"{olcek.crossover_context_count}")
+    for not_ in olcek.notes:
+        print(f"  not: {not_}")
+
+    rapor = {"policy_comparison": kiyas.to_dict(), "scaling": olcek.to_dict()}
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Memory Interference ve Sabit/Dinamik Ölçekleme\n\n")
+            handle.write("## Kasıtlı çakışma: politika kıyası\n\n")
+            handle.write(kiyas.markdown() + "\n\n")
+            for bulgu in kiyas.findings:
+                handle.write(f"- {bulgu}\n")
+            handle.write("\n## Sabit tablo vs dinamik KV\n\n")
+            handle.write(olcek.markdown() + "\n\n")
+            for not_ in olcek.notes:
+                handle.write(f"- {not_}\n")
+        print(f"  markdown: {markdown}")
+
+
+def _paradigma(seeds, out=None, markdown=None, epochs=60):
+    """Faz 21: neural-only vs symbolic-only vs hybrid kontrollü ablasyon."""
+    from hga.evaluation.paradigma import run_paradigm_sweep
+
+    tohumlar = [int(v.strip()) for v in seeds.split(",") if v.strip()]
+    rapor = run_paradigm_sweep(seeds=tohumlar, epochs=int(epochs))
+    print(f"Görev: {rapor.task}")
+    print(f"Tohumlar: {rapor.seeds}\n")
+    print(rapor.markdown())
+    print()
+    for bulgu in rapor.findings:
+        print(f"  - {bulgu}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
+                      sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Faz 21 — Neural vs Symbolic vs Hybrid\n\n")
+            handle.write(f"Tohumlar: {rapor.seeds}\n\n")
+            handle.write(f"Görev: `{rapor.task}`\n\n")
+            handle.write(rapor.markdown() + "\n\n")
+            for bulgu in rapor.findings:
+                handle.write(f"- {bulgu}\n")
+        print(f"  markdown: {markdown}")
+
+
 def _kapasite(operands_max, out=None):
     """P / C_I / C_M / C_E / C_V kapasite çerçevesi ölçümü."""
     from hga.evaluation import run_capacity_benchmark
@@ -630,8 +706,9 @@ def _sweep():
 def _tokenizer_benchmark():
     """Mini Türkçe tokenizer benchmark'ı."""
     from bpe_tokenizer import BPETokenizer
-    from hga.evaluation import mini_turkce_corpus, tokenizer_kapsami
+
     from hga.config import model_config_yukle
+    from hga.evaluation import mini_turkce_corpus, tokenizer_kapsami
     corpus = mini_turkce_corpus()
     sozluk_boyutu = model_config_yukle()["model"].sozluk_boyutu
     tok = BPETokenizer(max_vocab_size=sozluk_boyutu, min_freq=1)
@@ -655,6 +732,7 @@ def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
 
     from bpe_tokenizer import BPETokenizer
     from kuresel_model import HiperGeometrikAI, agirlik_yukle
+
     from hga.config import model_config_yukle
     from hga.evaluation import mini_turkce_corpus, perplexity_benchmark
 
@@ -718,9 +796,10 @@ def _checkpoint_rapor(yol, config_yol=None, strict: bool = True,
     if not os.path.exists(yol):
         raise SystemExit(f"checkpoint bulunamadı: {yol}")
 
+    from kuresel_model import model_olustur
+
     from egitim.saglamlik import checkpoint_uyumluluk_raporu
     from hga.config import model_config_yukle
-    from kuresel_model import model_olustur
 
     cfg = model_config_yukle(config_yol)["model"]
     n = int(n if n is not None else cfg.n)
@@ -760,7 +839,12 @@ def _checkpoint_rapor(yol, config_yol=None, strict: bool = True,
 def _halusinasyon():
     """Aritmetik alanda somut hallucination/factual consistency metriği."""
     from hga.evaluation import hallucination_metrics
-    from hga.experience import AritmetikOrtam, ExperienceEvaluator, ExperienceGenerator, aritmetik_etki_alani
+    from hga.experience import (
+        AritmetikOrtam,
+        ExperienceEvaluator,
+        ExperienceGenerator,
+        aritmetik_etki_alani,
+    )
     store = aritmetik_etki_alani()
     gen = ExperienceGenerator(tip_filtresi=False)
     ev = ExperienceEvaluator()
@@ -830,7 +914,7 @@ def _veri_canli_smoke(konular=None, cikis=None, out=None, kontrollu: bool = Fals
 def _benchmark_rapor(out=None, markdown=None, checkpoint=None, tokenizer_yol=None,
                      n=None, katman=None, baglam=None, vocab=None):
     """Tokenizer/perplexity/halüsinasyon/bellek/cihaz tek rapor."""
-    from hga.evaluation import benchmark_raporu_olustur, benchmark_raporu_kaydet
+    from hga.evaluation import benchmark_raporu_kaydet, benchmark_raporu_olustur
     rapor = benchmark_raporu_olustur(checkpoint=checkpoint, tokenizer_yol=tokenizer_yol,
                                      n=int(n or 8), katman=int(katman or 1),
                                      baglam=int(baglam or 8), vocab=int(vocab or 256))
@@ -844,7 +928,7 @@ def _benchmark_rapor(out=None, markdown=None, checkpoint=None, tokenizer_yol=Non
 
 def _observability_demo(out=None, markdown=None, html_yol=None):
     """Torch gerektirmeyen gözlemlenebilirlik demoları."""
-    from hga.knowledge import ExperienceCandidate, DeneyimDurumu
+    from hga.knowledge import DeneyimDurumu, ExperienceCandidate
     from hga.memory import DeneyimSlotlari
     from hga.observability import gozlem_paneli_kaydet, gozlem_paneli_olustur
     adaylar = [
@@ -878,7 +962,8 @@ def main(argv=None):
                                      "graf", "kesif", "golden-benchmark",
                                      "memory-benchmark", "kronecker-benchmark",
                                      "self-learning-benchmark", "milestone",
-                                     "kapasite", "bilgi-surum", "defter"])
+                                     "kapasite", "bilgi-surum", "defter",
+                                     "memory-interference", "paradigma"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -924,7 +1009,9 @@ def main(argv=None):
     p.add_argument("--kontrollu", action="store_true",
                    help="veri-canli-smoke için ağsız/deterministik fetcher kullan")
     p.add_argument("--seeds", default=None,
-                   help="golden-benchmark için virgüllü seed listesi (örn. 1,2,3,4,5)")
+                   help="golden-benchmark/paradigma için virgüllü seed listesi (örn. 1,2,3,4,5)")
+    p.add_argument("--epochs", type=int, default=60,
+                   help="paradigma nöral kolu eğitim epoch sayısı")
     p.add_argument("--experiment-root", default="experiments",
                    help="EXP-NNNN çalışma dizinlerinin kökü")
     p.add_argument("--scales", default="1000,10000,100000",
@@ -949,6 +1036,8 @@ def main(argv=None):
                    help="self-learning/milestone deney belleği slot sayısı")
     p.add_argument("--checkpoints", default=None,
                    help="milestone tablosu kontrol noktaları (örn. 0,10,50,100)")
+    p.add_argument("--forced-collisions", type=int, default=25,
+                   help="memory-interference için kasıtlı çakışma sayısı")
     p.add_argument("--ledger", default=None,
                    help="milestone için immutable experience ledger JSONL yolu")
     args = p.parse_args(argv)
@@ -993,6 +1082,13 @@ def main(argv=None):
          args.negatives_per_fact, args.memory_slots, args.seeds or "42",
          args.experiment_root, out=args.out, markdown=args.markdown,
          ledger=args.ledger, checkpoints=args.checkpoints),
+     "memory-interference": lambda: _memory_interference(
+         args.forced_collisions, args.slots, 1,
+         args.scales if args.scales != "1000,10000,100000" else "100,1000,10000,100000",
+         out=args.out, markdown=args.markdown),
+     "paradigma": lambda: _paradigma(args.seeds or "1,2,3,4,5", out=args.out,
+                                     markdown=args.markdown,
+                                     epochs=args.epochs),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
      "bilgi-surum": lambda: _bilgi_surum(out=args.out),
      "defter": lambda: _defter(out=args.out),

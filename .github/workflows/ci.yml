@@ -51,4 +51,6 @@ jobs:
           python -m hga bilgi-surum
           python -m hga defter
           python -m hga kapasite --operands-max 5
+          python -m hga memory-interference --slots 512 --forced-collisions 10 --scales 100,1000
+          python -m hga paradigma --seeds 1,2 --epochs 20
           python -m hga milestone --cycles 5 --batch 8 --initial-facts 6 --operands-max 8 --negatives-per-fact 3 --seeds 1 --checkpoints 0,5 --experiment-root /tmp/hga-milestone-experiments
