@@ -38,6 +38,31 @@ def test_readme_cli_komutlari_gercekten_tanimli():
     assert not bilinmeyen, f"README tanımsız CLI komutu gösteriyor: {sorted(bilinmeyen)}"
 
 
+def test_her_cli_komutu_ci_smoke_testinde_kosuluyor():
+    """Tanımlı her komut CI'da en az bir kez çalıştırılmalı.
+
+    Koşulmayan komut sessizce bozulur: 7 komut (graf, kesif, dogrulama,
+    halusinasyon, sweep, tokenizer, benchmark-rapor) uzun süre CI kapsamı
+    dışındaydı. Bu test kapsamı kalıcı kılar.
+    """
+    ana = (KOK / "hga" / "__main__.py").read_text(encoding="utf-8")
+    blok = ana.split('p.add_argument("komut"')[1].split("])")[0]
+    tanimli = set(re.findall(r'"([a-z0-9-]+)"', blok))
+
+    ci = (KOK / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    kosulan = set(re.findall(r"python -m hga ([a-z0-9-]+)", ci))
+
+    # Dosya yolu/argüman gerektiren, smoke'a uygun olmayan komutlar.
+    muaf = {"ozet", "manifest", "veri-kalite", "perplexity", "checkpoint-rapor",
+            "gercek-veri", "veri-canli-smoke", "observability"}
+
+    kapsanmayan = tanimli - kosulan - muaf
+    assert not kapsanmayan, (
+        "Bu CLI komutları CI smoke testinde hiç çalıştırılmıyor: "
+        f"{sorted(kapsanmayan)}. Ya CI'a ekleyin ya muaf listesine."
+    )
+
+
 @pytest.mark.parametrize("yol", [
     "raporlar/epistemik_benchmark.json",
     "raporlar/epistemik_benchmark.md",
