@@ -262,6 +262,8 @@ python experiments/experience_loop/run_korpus_boru.py # veri toplayıcı → sö
 python experiments/experience_loop/run_korpus_olcegi.py # çevrimdışı korpus ölçeği provası
 python -m hga bilgi                                   # tek yüz (CLI) demosu
 python -m hga dogrulama                               # false accept 24→0
+python -m hga graf                                    # Experience Graph & lineage demosu (Faz 23)
+python -m hga kesif                                   # Exploration Map & Active Learning seçimi (Faz 24-25)
 python -m hga halusinasyon                            # factual consistency metriği
 python -m hga sweep                                   # n/K/context kapasite taraması
 python -m hga tokenizer                               # mini Türkçe tokenizer benchmark
@@ -280,7 +282,9 @@ python tests/test_training_saglamlik.py               # KV cache + padding mask 
 python tests/test_egitim_saglamlik.py                 # AMP/checkpoint smoke helper'ları (torch varsa)
 ```
 
-Ayrıntı: `docs/EXPERIENCE_ENGINE.md`.
+Ayrıntılı Mimari ve Kod Sınıflandırması:
+- `docs/KOD_TABANI_VE_MIMARI_DUZENI.md` — Modül statüleri (Active/Legacy/Experimental) ve tek gerçek kaynak rehberi.
+- `docs/EXPERIENCE_ENGINE.md` — Experience Engine mimari notu.
 
 ---
 

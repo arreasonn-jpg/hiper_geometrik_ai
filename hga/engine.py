@@ -34,6 +34,8 @@ from .experience.corpus import dosyadan_bilgi_aktar
 from .experience.text_generator import TextGenerator
 from .experience.dogrulama import DogrulamaHatti, DogrulamaRaporu
 from .experience.loop import DeneyimDongusu, AdimRaporu
+from .experience.graph import ExperienceGraph
+from .experience.exploration import ExplorationEngine, ExplorationMap
 
 
 class ExperienceEngine:
@@ -65,6 +67,8 @@ class ExperienceEngine:
         self.arastirma = ArastirmaKuyrugu(evaluator=self.evaluator,
                                           dogrulayici=dogrulayici)
         self.ayiklayici = CumleAyiklayici()
+        self.graph = ExperienceGraph()
+        self.exploration = ExplorationEngine(scoring=self.scoring)
 
     # ── Gerçek veri girişi ───────────────────────────────────────────────
     def gercek_veri(self, cumleler: List[str],
@@ -89,6 +93,7 @@ class ExperienceEngine:
     def degerlendir(self, adaylar):
         for a in adaylar:
             self.evaluator.degerlendir(a, self.store)
+            self.graph.deneyim_kaydet(a)
         return adaylar
 
     def konsolide(self, adaylar) -> ConsolidationReport:
@@ -98,10 +103,26 @@ class ExperienceEngine:
         """Deterministik doğrulayıcıyla deneyimleri doğrula (yoksa None)."""
         if self.dogrulama is None:
             return None
-        return self.dogrulama.isle(self.store, adaylar)
+        rapor = self.dogrulama.isle(self.store, adaylar)
+        for a in adaylar:
+            self.graph.deneyim_kaydet(a)
+        return rapor
 
     def metin(self, aday) -> str:
         return self.text_gen.cumle(self.store, aday)
+
+    # ── Graf & Keşif Yardımcıları (Faz 23, 24, 25) ───────────────────────
+    def uzay_haritasi(self, adaylar) -> ExplorationMap:
+        return self.exploration.uzay_haritasi(self.store, adaylar)
+
+    def aktif_ogrenme_sec(self, adaylar, k: int = 10):
+        return self.exploration.aktif_ogrenme_sec(self.store, adaylar, k=k)
+
+    def lineage(self, experience_id: str):
+        return self.graph.lineage(experience_id)
+
+    def aciklama(self, experience_id: str) -> str:
+        return self.graph.aciklama(experience_id, store=self.store)
 
     # ── Sürekli öğrenme döngüsü ──────────────────────────────────────────
     def dongu(self, n: int = 1, relation_ids: Optional[List[str]] = None
@@ -122,4 +143,5 @@ class ExperienceEngine:
             "bilgi": self.store.ozet(),
             "bellek": self.bellek.rapor(),
             "arastirma_kuyrugu": len(self.arastirma),
+            "graf": self.graph.ozet(),
         }

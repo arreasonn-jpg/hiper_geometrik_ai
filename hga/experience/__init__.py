@@ -27,6 +27,8 @@ from .benchmark import (BenchmarkOzeti, aritmetik_etki_alani, kos, ozetle,
 from .dogrulama import DogrulamaHatti, DogrulamaRaporu
 from .loop import DeneyimDongusu, AdimRaporu
 from .state_machine import GECISLER, StateTransition, DeneyimDurumMakinesi
+from .graph import GraphEdge, ExperienceGraph
+from .exploration import EpistemicSpace, ExplorationMap, ExplorationEngine
 
 __all__ = [
     "Scoring",
@@ -89,4 +91,9 @@ __all__ = [
     "GECISLER",
     "StateTransition",
     "DeneyimDurumMakinesi",
+    "GraphEdge",
+    "ExperienceGraph",
+    "EpistemicSpace",
+    "ExplorationMap",
+    "ExplorationEngine",
 ]
