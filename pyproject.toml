@@ -117,7 +117,7 @@ ignore = ["E501"]
 "tests/test_veri_toplayici_optional_deps.py" = ["E402"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true

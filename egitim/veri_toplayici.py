@@ -227,7 +227,7 @@ class OtomatikVeriToplayici:
                 # Sonraki sayfa cursor (header veya JSON)
                 cursor = None
                 link = yanit.headers.get("Link") or yanit.headers.get("link") or ""
-                # <...&cursor=XXX>; rel="next"
+                # Beklenen biçim: <...&cursor=DEGER>; rel="next"
                 m = re.search(r'cursor=([^&>]+)[^>]*>;\s*rel="next"', link)
                 if m:
                     cursor = m.group(1)

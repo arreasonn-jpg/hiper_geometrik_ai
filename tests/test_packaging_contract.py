@@ -103,8 +103,11 @@ def test_ruff_ve_mypy_hedefi_taban_surumden_geride_degil():
     )
 
     mypy_surum = _surum(str(veri["tool"]["mypy"]["python_version"]))
-    assert mypy_surum >= taban, (
-        f"mypy python_version={mypy_surum}, taban {taban} sürümünün gerisinde."
+    assert mypy_surum == taban, (
+        f"mypy python_version={mypy_surum} ile requires-python tabanı {taban} "
+        "aynı olmalı. Tip denetimi tabandan İLERİ bir sürümde koşarsa, yalnız "
+        "tabanda görünen hatalar (örn. 3.10'da tomllib yokluğu) CI'a kadar "
+        "gizlenir; ruff ile aynı kuralı uyguluyoruz."
     )
 
 
