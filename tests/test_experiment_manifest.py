@@ -101,6 +101,16 @@ def test_basarisiz_kosu_failed_manifest_birakir(tmp_path):
     assert result["error_type"] == "RuntimeError"
 
 
+def test_seed_sweep_cok_kucuk_bilimsel_metrigi_sifira_yuvarlamaz(tmp_path):
+    report = run_seed_sweep(
+        lambda seed: {"nmse": seed * 1e-12},
+        seeds=[1, 2, 3], root=str(tmp_path), config={"kind": "tiny"},
+        dataset_hash="tiny-data",
+    )
+    assert report.aggregate["nmse"]["mean"] == 2e-12
+    assert report.aggregate["nmse"]["std"] > 0.0
+
+
 def test_golden_bes_seed_manifestli_ve_deterministik(tmp_path):
     report = run_golden_seed_sweep(tmp_path, [1, 2, 3, 4, 5])
     assert len(report.experiment_ids) == 5

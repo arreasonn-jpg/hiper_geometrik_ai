@@ -276,8 +276,9 @@ def run_seed_sweep(
     for key in sorted(common_keys):
         values = [row[key] for row in flattened]
         aggregate[key] = {
-            "mean": round(statistics.fmean(values), 10),
-            "std": round(statistics.pstdev(values), 10),
+            # Tiny scientific losses (ör. 1e-11 NMSE) sıfıra yuvarlanmasın.
+            "mean": round(statistics.fmean(values), 16),
+            "std": round(statistics.pstdev(values), 16),
             "min": min(values),
             "max": max(values),
         }
