@@ -51,6 +51,42 @@ def test_experience_yield_tanimi_dogru(rapor):
     assert 0.0 < son.experience_yield < 1.0
 
 
+def test_verim_ayristirmasi_milestone_tablosunda_var(rapor):
+    """P1-005: EY tek başına raporlanmamalı; NY ve UEY de tabloda olmalı."""
+    son = rapor.checkpoints[-1]
+    assert 0.0 <= son.novelty_yield <= 1.0
+    assert 0.0 <= son.useful_experience_yield <= 1.0
+    # Kullanışlı bilgi, doğrulanmış bilginin alt kümesidir.
+    assert son.useful_experience_yield <= son.experience_yield
+    metin = milestone_markdown([rapor])
+    assert "Novelty Yield (NY)" in metin
+    assert "Useful Exp. Yield (UEY)" in metin
+
+
+def test_uey_bellek_kaybini_yakalar_ey_gizler():
+    """Dar bellekte doğrulanan bilgi kaybolur; EY bunu göremez, UEY görür.
+
+    Ölçülen: 16 slotta EY≈0.19 iken UEY≈0.04 — doğrulanmış bilginin büyük
+    kısmı geri çağrılamıyor. EY'nin neden tek başına yanıltıcı olduğunun
+    milestone protokolündeki somut kanıtıdır.
+    """
+    dar = run_milestone_experiment(
+        cycles=20, batch_size=16, initial_facts=10, operands_max=12,
+        negatives_per_fact=3, seed=1, memory_slots=16, checkpoints=(20,),
+    ).checkpoints[-1]
+    genis = run_milestone_experiment(
+        cycles=20, batch_size=16, initial_facts=10, operands_max=12,
+        negatives_per_fact=3, seed=1, memory_slots=4096, checkpoints=(20,),
+    ).checkpoints[-1]
+
+    # EY bellek darlığından etkilenmez: aynı doğrulama, aynı oran.
+    assert dar.experience_yield == genis.experience_yield
+    # UEY ise çöker.
+    assert dar.useful_experience_yield < genis.useful_experience_yield
+    assert dar.useful_experience_yield < dar.experience_yield / 2
+    assert dar.memory_collision > genis.memory_collision
+
+
 def test_zincirler_gecerli_ve_defter_dolu(rapor):
     assert rapor.knowledge_chain_valid
     assert rapor.ledger_chain_valid

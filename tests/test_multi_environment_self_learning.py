@@ -74,6 +74,27 @@ def test_multi_environment_capacity_yetersizse_eviction_basarisi_uydurulmaz():
         raise AssertionError("Yetersiz memory capacity kabul kapısını düşürmeliydi")
 
 
+def test_verim_ayristirmasi_her_ortam_icin_raporlanir():
+    """P1-005: EY yanında NY/UEY de olmalı.
+
+    Bu protokolde üçü eşit çıkar ve bu doğrudur: `shared_memory_exact_retrieval`
+    kabul kapısı bellek kaybını zaten yasaklar, yani "doğrulandı" ile
+    "geri çağrılabilir" aynı şeye indirgenir. Eşitlik tesadüf değil, kapının
+    garantisidir; kapı düşerse koşu zaten ValueError ile durur.
+    """
+    report = run_multi_environment_self_learning(
+        cycles=6, batch_per_environment=8, seed=1
+    )
+    for ad, metric in report.per_environment.items():
+        assert 0.0 <= metric.novelty_yield <= 1.0, ad
+        assert 0.0 <= metric.useful_experience_yield <= 1.0, ad
+        assert metric.useful_experience_yield <= metric.experience_yield, ad
+        # Kalıcı yeni bilgi sayımıyla NY tutarlı olmalı.
+        assert metric.novelty_yield == round(
+            metric.durable_new_knowledge / metric.generated, 8
+        ), ad
+
+
 def test_multi_environment_markdown_uc_ortami_ayri_gosterir():
     report = run_multi_environment_self_learning(
         cycles=3, batch_per_environment=8, seed=2
