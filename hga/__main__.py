@@ -20,6 +20,7 @@ Kullanım:
     python -m hga olcekli-golden         # 100/1K/10K golden benchmark (Faz 3/6)
     python -m hga kronecker-rank         # effective rank + zincir çöküşü (Faz 19/20)
     python -m hga epistemik              # KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE (P0-007)
+    python -m hga verim                  # NY / UEY / GY / VID verim ayrıştırması (P1-005)
     python -m hga koken                  # provenance denetimi (Faz 27/28)
     python -m hga oncelik                # Priority(E) ağırlık ablasyonu (Faz 25)
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
@@ -804,6 +805,93 @@ def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
         print(f"  markdown: {markdown}")
 
 
+def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
+           negatives_per_fact=3, seeds=None, out=None, markdown=None):
+    """P1-005: EY'yi NY / UEY / GY / VID eksenlerine ayır."""
+    from hga.evaluation.statistics import summarize_seed_metric
+    from hga.experience.verim import run_yield_experiment
+
+    tohumlar = [int(v.strip()) for v in (seeds or "1").split(",") if v.strip()]
+    raporlar = [
+        run_yield_experiment(
+            cycles=int(cycles), batch_size=int(batch),
+            initial_facts=int(initial_facts), operands_max=int(operands_max),
+            negatives_per_fact=int(negatives_per_fact), seed=tohum,
+        )
+        for tohum in tohumlar
+    ]
+    ilk = raporlar[0]
+
+    print("Deneyim Verimi Ayrıştırması (P1-005)\n")
+    print(f"  protokol : {ilk.protocol}")
+    print(f"  tohumlar : {tohumlar}")
+    print(f"  döngü    : {cycles} × batch {batch}\n")
+
+    eksenler = [
+        ("EY  (klasik)", "experience_yield", "doğrulanan / üretilen"),
+        ("NY  Yenilik", "novelty_yield", "ayrık YENİ olgu / üretilen"),
+        ("UEY Kullanışlı", "useful_experience_yield", "doğru + geri çağrılabilir"),
+        ("GY  Genelleme", "generalization_yield", "holdout doğruluk artışı"),
+        ("VID Bilgi yoğ.", "verified_information_density", "bit / üretilen deneyim"),
+    ]
+    print(f"  {'metrik':<16}{'ortalama':>10}{'%95 GA':>22}  açıklama")
+    for etiket, alan, aciklama in eksenler:
+        degerler = [getattr(rapor, alan) for rapor in raporlar]
+        ozet = summarize_seed_metric(degerler)
+        aralik = f"[{ozet['ci_lower']:.4f}, {ozet['ci_upper']:.4f}]"
+        print(f"  {etiket:<16}{ozet['mean']:>10.4f}{aralik:>22}  {aciklama}")
+
+    print("\n  AYRIŞMA (bu metrikler EY'den farklı bir şey söylüyor mu?)")
+    for anahtar in ("ey_vs_ny", "ey_vs_uey", "ny_vs_uey"):
+        print(f"    {anahtar:<24}: {ilk.divergence[anahtar]:+.4f}")
+    print(f"    {'EY yeniliği abartıyor':<24}: "
+          f"{'EVET' if ilk.divergence['ey_overstates_novelty'] else 'hayır'}")
+    print(f"    {'EY kullanışlılığı abartıyor':<24}: "
+          f"{'EVET' if ilk.divergence['ey_overstates_usefulness'] else 'hayır'}")
+
+    print("\n  HAM SAYIMLAR (tohum 1)")
+    print(f"    üretilen={ilk.generated}  doğrulanan={ilk.verified}  "
+          f"ayrık_yeni={ilk.distinct_new_facts}  kullanışlı={ilk.useful_facts}")
+    print(f"    tekrar_üretim={ilk.duplicate_generations}  "
+          f"bellek_çakışma={ilk.memory_collisions}  yanlış_olgu={ilk.incorrect_facts}")
+    print(f"    holdout: öncesi {ilk.holdout_before['decided']}/{ilk.holdout_before['total']} karar, "
+          f"sonrası {ilk.holdout_after['decided']}/{ilk.holdout_after['total']} karar "
+          f"(isabet {ilk.holdout_after['accuracy_on_decided']:.4f})")
+
+    print("\n  BULGULAR")
+    for bulgu in ilk.findings:
+        print(f"    - {bulgu}")
+    print("\n  SINIRLAR")
+    for sinir in ilk.limitations:
+        print(f"    - {sinir}")
+
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump({"seeds": tohumlar,
+                       "reports": [rapor.to_dict() for rapor in raporlar]},
+                      handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"\n  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Deneyim Verimi Ayrıştırması (P1-005)\n\n")
+            handle.write(f"Tohumlar: {tohumlar}\n\n")
+            handle.write("| Metrik | Ortalama | %95 GA |\n|---|---:|---:|\n")
+            for etiket, alan, _ in eksenler:
+                degerler = [getattr(rapor, alan) for rapor in raporlar]
+                ozet = summarize_seed_metric(degerler)
+                handle.write(f"| {etiket} | {ozet['mean']:.4f} | "
+                             f"[{ozet['ci_lower']:.4f}, {ozet['ci_upper']:.4f}] |\n")
+            handle.write("\n## Bulgular\n\n")
+            for bulgu in ilk.findings:
+                handle.write(f"- {bulgu}\n")
+            handle.write("\n## Sınırlar\n\n")
+            for sinir in ilk.limitations:
+                handle.write(f"- {sinir}\n")
+        print(f"  markdown: {markdown}")
+
+
 def _epistemik(seeds=None, out=None, markdown=None):
     """P0-007: KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik benchmarkı."""
     from hga.evaluation.epistemic import (
@@ -1464,7 +1552,7 @@ def main(argv=None):
                                      "kapasite", "bilgi-surum", "defter",
                                      "memory-interference", "paradigma",
                                      "olcekli-golden", "kronecker-rank",
-                                     "epistemik",
+                                     "epistemik", "verim",
                                      "koken", "oncelik"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
@@ -1622,6 +1710,9 @@ def main(argv=None):
          out=args.out, markdown=args.markdown),
      "epistemik": lambda: _epistemik(args.seeds, out=args.out,
                                      markdown=args.markdown),
+     "verim": lambda: _verim(args.cycles, args.batch, args.initial_facts,
+                             args.operands_max, args.negatives_per_fact,
+                             args.seeds, out=args.out, markdown=args.markdown),
      "koken": lambda: _provenance(out=args.out, markdown=args.markdown),
      "oncelik": lambda: _priority(k=10, out=args.out, markdown=args.markdown),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
