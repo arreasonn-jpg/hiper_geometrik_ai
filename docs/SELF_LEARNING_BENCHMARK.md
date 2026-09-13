@@ -47,6 +47,35 @@ Her cycle için:
 Collapse probunda ayrıca evaluator novelty düşüşü, tekrar oranı, doğrulanmamış
 yanlış model olguları ve memory interference ölçülür.
 
+## Verifier robustness kırma testi
+
+`verifier-epistemic-fault-injection-v1`, FAR ve FRR'nin yalnız sıfır değeri
+raporlamakla kalmayıp bilinen hatalara tepki verdiğini sınar. Sekiz doğru ve
+sekiz yanlış adayın %25'inde verifier kararı kasıtlı ters çevrilir. İki
+kanıtı yetersiz ifade doğal biçimde `UNCERTAIN`, K₀'daki doğrulanmış eşitliğe
+karşı iki iddia ise `CONFLICT` olur.
+
+Beklenen confusion matrix: TA=6, TN=6, FA=2, FR=2; precision=recall=F1=0.75,
+FAR=FRR=0.25. `UNCERTAIN` ve `CONFLICT` durable knowledge'a yazılmaz. Hatasız
+kontrol koşusu FAR=FRR=0 ve precision=recall=F1=1 üretir. Bu kasıtlı hata
+probu üretim verifier kalitesi tahmini değildir.
+
+## Test izolasyonu
+
+Aritmetik adaylar deterministik shuffle sonrasında generation pool ve %10 test
+holdout olarak ayrılır. Holdout üçlüleri generation veya memory'ye verilmez;
+her koşu `generation_test_overlap`, `memory_test_overlap` ve `isolation_clean`
+alanlarını raporlar. Bu protokol neural eğitim yapmadığından ayrıca bir train
+split'i yoktur; olmayan train aşaması varmış gibi sunulmaz.
+
+## Memory kapasite eğrisi
+
+Her seed için aynı benzersiz context akışı 1 ve 2 tabloluk memory'de sekiz slot
+kapasitesinde tekrar çalıştırılır. Collision event rate, exact-ID retrieval,
+interference ve %95 recall'a ulaşan minimum slot/yük faktörü rapora gömülür.
+İki tablo sonucu mevcut `ALL-read` politikasıyla değerlendirilir; redundancy
+kazancı varsayılmaz.
+
 ## 100-cycle kontrollü baseline
 
 Aşağıdaki sonuç seed 42, `K₀=100`, 31'e kadar operand, cycle başına 16 aday,

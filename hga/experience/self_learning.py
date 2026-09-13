@@ -90,6 +90,10 @@ class SelfLearningReport:
     correct_knowledge: int
     incorrect_knowledge: int
     memory_collisions: int
+    test_holdout_size: int
+    generation_test_overlap: int
+    memory_test_overlap: int
+    isolation_clean: bool
     cycles: List[LearningCycleMetrics] = field(default_factory=list)
     limitations: List[str] = field(default_factory=list)
 
@@ -136,6 +140,10 @@ class CollapseReport:
     unique_model_facts: int
     incorrect_model_facts: int
     memory_collisions: int
+    test_holdout_size: int
+    generation_test_overlap: int
+    memory_test_overlap: int
+    isolation_clean: bool
     collapse_signals: Dict[str, bool]
     collapse_detected: bool
     cycle_metrics: List[CollapseCycleMetrics] = field(default_factory=list)
@@ -151,6 +159,7 @@ class _ArithmeticDomain:
     environment: AritmetikOrtam
     relation_id: str
     candidate_pool: List[Triple]
+    test_holdout: List[Triple]
     initial_triples: List[Triple]
 
 
@@ -197,7 +206,12 @@ def _build_domain(
             wrong = (truth + offset) % result_count
             pool.append((subject_id, relation_id, result_ids[wrong]))
     random.Random(seed).shuffle(pool)
-    return _ArithmeticDomain(store, AritmetikOrtam(), relation_id, pool, initial_triples)
+    holdout_size = max(1, len(pool) // 10)
+    candidate_pool, test_holdout = pool[:-holdout_size], pool[-holdout_size:]
+    return _ArithmeticDomain(
+        store, AritmetikOrtam(), relation_id,
+        candidate_pool, test_holdout, initial_triples,
+    )
 
 
 def _candidate(triple: Triple, experience_id: str, cycle: int) -> ExperienceCandidate:
@@ -320,6 +334,9 @@ def run_self_learning_experiment(
     correct, incorrect, _ = _knowledge_audit(domain)
     valid_truths = cumulative_verified + total_false_rejection
     invalid_truths = total_invalid + total_false_acceptance
+    holdout = set(domain.test_holdout)
+    generation_overlap = len(generated_seen & holdout)
+    memory_overlap = len({triple for _, triple in verified_memory_entries} & holdout)
     return SelfLearningReport(
         protocol="closed-verified-self-learning-v1", seed=seed,
         initial_knowledge_size=len(domain.initial_triples),
@@ -338,11 +355,168 @@ def run_self_learning_experiment(
         experience_yield=_ratio(cumulative_verified, cumulative_generated),
         correct_knowledge=correct, incorrect_knowledge=incorrect,
         memory_collisions=memory.cakisma_sayisi,
+        test_holdout_size=len(holdout), generation_test_overlap=generation_overlap,
+        memory_test_overlap=memory_overlap,
+        isolation_clean=(generation_overlap == 0 and memory_overlap == 0),
         cycles=cycle_reports,
         limitations=[
             "Ground truth bağımsız ama sentetik aritmetik environment tarafından sağlanır.",
             "Entity uzayı başlangıçta sabittir; ölçülen büyüme yeni doğrulanmış relation fact büyümesidir.",
             "Bu deney genel dilde otonom yeni bilgi keşfi kanıtı değildir.",
+        ],
+    )
+
+
+@dataclass
+class VerifierRobustnessReport:
+    """Kontrollü verifier hata/epistemik durum enjeksiyonu confusion matrix'i."""
+
+    protocol: str
+    seed: int
+    truth_positive: int
+    truth_negative: int
+    truth_unknown: int
+    actual_conflicts: int
+    true_acceptance: int
+    true_rejection: int
+    false_acceptance: int
+    false_rejection: int
+    uncertain: int
+    conflict: int
+    precision: float
+    recall: float
+    f1: float
+    far: float
+    frr: float
+    initial_knowledge_size: int
+    final_knowledge_size: int
+    durable_new_knowledge: int
+    correct_knowledge: int
+    incorrect_knowledge: int
+    injected_false_acceptance_rate: float
+    injected_false_rejection_rate: float
+    limitations: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+def run_verifier_fault_injection(
+    sample_per_class: int = 8,
+    unknown_count: int = 2,
+    conflict_count: int = 2,
+    false_acceptance_rate: float = 0.25,
+    false_rejection_rate: float = 0.25,
+    seed: int = 42,
+) -> VerifierRobustnessReport:
+    """FAR/FRR/UNCERTAIN/CONFLICT ölçümlerini kontrollü hatalarla kırma testi.
+
+    Bu protokol üretim verifier'ının kalitesini temsil etmez. Bağımsız aritmetik
+    oracle kararları ground truth olarak tutulurken verifier adaptörünün belirli
+    doğru/yanlış adaylardaki kararı kasıtlı bozulur. Böylece confusion-matrix
+    metriklerinin sıfır dışı hatalara tepki verdiği doğrulanır.
+    """
+    if sample_per_class < 1 or unknown_count < 1 or conflict_count < 1:
+        raise ValueError("sample_per_class, unknown_count ve conflict_count >= 1 olmalı")
+    if not 0.0 <= false_acceptance_rate <= 1.0:
+        raise ValueError("false_acceptance_rate [0,1] aralığında olmalı")
+    if not 0.0 <= false_rejection_rate <= 1.0:
+        raise ValueError("false_rejection_rate [0,1] aralığında olmalı")
+
+    domain = _build_domain(operands_max=7, initial_facts=max(4, conflict_count),
+                           negatives_per_fact=3, seed=seed)
+    evaluator = ExperienceEvaluator()
+    positives: List[ExperienceCandidate] = []
+    negatives: List[ExperienceCandidate] = []
+    for index, triple in enumerate(domain.candidate_pool):
+        candidate = _candidate(triple, f"ROB-{seed}-{index:04d}", 1)
+        truth = domain.environment.aday_dogrula(domain.store, candidate)
+        target = positives if truth is True else negatives
+        if truth is not None and len(target) < sample_per_class:
+            target.append(candidate)
+        if len(positives) == sample_per_class and len(negatives) == sample_per_class:
+            break
+    if len(positives) < sample_per_class or len(negatives) < sample_per_class:
+        raise ValueError("İstenen robustness örnekleri için aritmetik havuz yetersiz")
+
+    unknowns: List[ExperienceCandidate] = []
+    known_object = domain.initial_triples[0][2]
+    for index in range(unknown_count):
+        entity = domain.store.varlik_ekle(
+            f"kanıtı_bilinmeyen_{index}", entity_type="ifade",
+            entity_id=f"E_UNKNOWN_{index:04d}",
+        )
+        unknowns.append(_candidate(
+            (entity.entity_id, domain.relation_id, known_object),
+            f"ROB-{seed}-UNKNOWN-{index:04d}", 1,
+        ))
+
+    conflicts: List[ExperienceCandidate] = []
+    result_count = 15
+    for index, true_triple in enumerate(domain.initial_triples[:conflict_count]):
+        true_value = int(true_triple[2].rsplit("_", 1)[1])
+        wrong_object = f"E_RESULT_{(true_value + 1) % result_count:05d}"
+        candidate = _candidate(
+            (true_triple[0], domain.relation_id, wrong_object),
+            f"ROB-{seed}-CONFLICT-{index:04d}", 1,
+        )
+        candidate.contradicts.append("|".join(true_triple))
+        conflicts.append(candidate)
+
+    candidates = positives + negatives + unknowns + conflicts
+    for candidate in candidates:
+        evaluator.degerlendir(candidate, domain.store)
+    # Bu adaylar K₀'daki doğrulanmış fonksiyonel eşitlikle doğrudan çelişir.
+    for candidate in conflicts:
+        candidate.state = DeneyimDurumu.CONFLICT
+        candidate.rationale.append("K₀ doğrulanmış eşitliğiyle gerçek contradiction")
+
+    false_accept_count = min(len(negatives), round(len(negatives) * false_acceptance_rate))
+    false_reject_count = min(len(positives), round(len(positives) * false_rejection_rate))
+    forced_accept = {candidate.experience_id for candidate in negatives[:false_accept_count]}
+    forced_reject = {candidate.experience_id for candidate in positives[:false_reject_count]}
+
+    def faulted_verifier(store, candidate):
+        if candidate.experience_id in forced_accept:
+            return True
+        if candidate.experience_id in forced_reject:
+            return False
+        return domain.environment.aday_dogrula(store, candidate)
+
+    verifier = DogrulamaHatti(faulted_verifier, dogrulayici_adi="fault-injection-verifier-v1")
+    verifier.isle(domain.store, candidates)
+
+    true_acceptance = sum(c.state == DeneyimDurumu.VERIFIED for c in positives)
+    false_rejection = len(positives) - true_acceptance
+    false_acceptance = sum(c.state == DeneyimDurumu.VERIFIED for c in negatives)
+    true_rejection = len(negatives) - false_acceptance
+    uncertain = sum(c.state == DeneyimDurumu.UNCERTAIN for c in unknowns)
+    conflict = sum(c.state == DeneyimDurumu.CONFLICT for c in conflicts)
+    precision = _ratio(true_acceptance, true_acceptance + false_acceptance)
+    recall = _ratio(true_acceptance, len(positives))
+    f1 = round(2 * precision * recall / (precision + recall), 8) if precision + recall else 0.0
+    correct, incorrect, _ = _knowledge_audit(domain)
+    initial_size = len(domain.initial_triples)
+    final_size = len(_unique_facts(domain.store))
+    return VerifierRobustnessReport(
+        protocol="verifier-epistemic-fault-injection-v1", seed=seed,
+        truth_positive=len(positives), truth_negative=len(negatives),
+        truth_unknown=len(unknowns), actual_conflicts=len(conflicts),
+        true_acceptance=true_acceptance, true_rejection=true_rejection,
+        false_acceptance=false_acceptance, false_rejection=false_rejection,
+        uncertain=uncertain, conflict=conflict,
+        precision=precision, recall=recall, f1=f1,
+        far=_ratio(false_acceptance, len(negatives)),
+        frr=_ratio(false_rejection, len(positives)),
+        initial_knowledge_size=initial_size, final_knowledge_size=final_size,
+        durable_new_knowledge=final_size - initial_size,
+        correct_knowledge=correct, incorrect_knowledge=incorrect,
+        injected_false_acceptance_rate=float(false_acceptance_rate),
+        injected_false_rejection_rate=float(false_rejection_rate),
+        limitations=[
+            "FAR/FRR kasıtlı verifier fault injection ile üretilir; üretim kalite tahmini değildir.",
+            "UNCERTAIN ayrıştırılamayan ama yanlışlığı bilinmeyen ifadeyi temsil eder.",
+            "CONFLICT K₀'daki doğrulanmış fonksiyonel eşitliğe karşıt iddiadır ve kalıcılaşmaz.",
         ],
     )
 
@@ -420,6 +594,9 @@ def run_self_training_collapse_test(
     first, last = cycle_reports[0], cycle_reports[-1]
     unique_model_facts = last.unique_model_facts
     incorrect_model_facts = last.incorrect_model_facts
+    holdout = set(domain.test_holdout)
+    generation_overlap = len(seen & holdout)
+    memory_overlap = len({triple for _, triple in memory_entries} & holdout)
     signals = {
         "novelty_declined": last.novelty_rate < first.novelty_rate,
         "evaluator_novelty_declined": last.mean_evaluator_novelty < first.mean_evaluator_novelty,
@@ -440,6 +617,9 @@ def run_self_training_collapse_test(
         unique_model_facts=unique_model_facts,
         incorrect_model_facts=incorrect_model_facts,
         memory_collisions=memory.cakisma_sayisi,
+        test_holdout_size=len(holdout), generation_test_overlap=generation_overlap,
+        memory_test_overlap=memory_overlap,
+        isolation_clean=(generation_overlap == 0 and memory_overlap == 0),
         collapse_signals=signals,
         collapse_detected=sum(signals.values()) >= 3,
         cycle_metrics=cycle_reports,
@@ -453,5 +633,6 @@ def run_self_training_collapse_test(
 
 __all__ = [
     "CollapseCycleMetrics", "CollapseReport", "LearningCycleMetrics", "SelfLearningReport",
-    "run_self_learning_experiment", "run_self_training_collapse_test",
+    "VerifierRobustnessReport", "run_self_learning_experiment",
+    "run_self_training_collapse_test", "run_verifier_fault_injection",
 ]

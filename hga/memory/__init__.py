@@ -3,8 +3,10 @@
 from .ablation import AblasyonDeneyi
 from .benchmark import (
     MemoryBenchmarkResult,
+    MemoryCapacitySweepReport,
     MemoryStressReport,
     run_memory_benchmark,
+    run_memory_capacity_sweep,
     run_memory_stress,
 )
 from .entegrasyon import BellekEntegrasyonu
@@ -19,8 +21,10 @@ __all__ = [
     "DeneyimSlotlari",
     "parmak_izi",
     "MemoryBenchmarkResult",
+    "MemoryCapacitySweepReport",
     "MemoryStressReport",
     "run_memory_benchmark",
+    "run_memory_capacity_sweep",
     "run_memory_stress",
     "DeneyimTekrari",
     "BellekEntegrasyonu",

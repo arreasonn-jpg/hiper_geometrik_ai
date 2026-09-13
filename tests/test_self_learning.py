@@ -7,6 +7,7 @@ from pathlib import Path
 from hga.experience import (
     run_self_learning_experiment,
     run_self_training_collapse_test,
+    run_verifier_fault_injection,
 )
 
 
@@ -28,6 +29,9 @@ def test_closed_loop_yalniz_verified_bilgiyle_buyur():
     assert report.far_before_verifier == 1.0
     assert report.far == 0.0
     assert report.frr == 0.0
+    assert report.test_holdout_size > 0
+    assert report.generation_test_overlap == report.memory_test_overlap == 0
+    assert report.isolation_clean
     assert report.experience_yield == round(
         report.verified_new_knowledge / report.generated_experiences, 8
     )
@@ -70,6 +74,35 @@ def test_pool_tukenince_yanlis_bilgi_uretilmez():
     assert report.experience_yield > 0.0
 
 
+def test_verifier_fault_injection_frr_uncertain_conflict_metriklerini_kirar():
+    report = run_verifier_fault_injection(
+        sample_per_class=8, unknown_count=2, conflict_count=2,
+        false_acceptance_rate=0.25, false_rejection_rate=0.25, seed=7,
+    )
+    assert report.protocol == "verifier-epistemic-fault-injection-v1"
+    assert (report.true_acceptance, report.false_rejection) == (6, 2)
+    assert (report.true_rejection, report.false_acceptance) == (6, 2)
+    assert report.precision == report.recall == report.f1 == 0.75
+    assert report.far == report.frr == 0.25
+    assert report.uncertain == report.truth_unknown == 2
+    assert report.conflict == report.actual_conflicts == 2
+    assert report.durable_new_knowledge == 8
+    assert report.incorrect_knowledge == 2
+    # UNCERTAIN ve CONFLICT epistemik durumları durable fact'e dönüşmez.
+    assert report.final_knowledge_size == report.initial_knowledge_size + 8
+
+
+def test_verifier_fault_injection_hatasiz_kontrol():
+    report = run_verifier_fault_injection(
+        false_acceptance_rate=0.0, false_rejection_rate=0.0, seed=3,
+    )
+    assert report.far == report.frr == 0.0
+    assert report.precision == report.recall == report.f1 == 1.0
+    assert report.incorrect_knowledge == 0
+    assert report.uncertain == 2
+    assert report.conflict == 2
+
+
 def test_unverified_self_training_collapse_sinyallerini_yakalar():
     report = run_self_training_collapse_test(
         cycles=10, batch_size=8, initial_facts=2,
@@ -84,6 +117,9 @@ def test_unverified_self_training_collapse_sinyallerini_yakalar():
     assert report.incorrect_model_facts > 0
     assert report.far == 1.0
     assert report.memory_collisions > 0
+    assert report.test_holdout_size > 0
+    assert report.generation_test_overlap == report.memory_test_overlap == 0
+    assert report.isolation_clean
     assert all(report.collapse_signals.values())
 
 
@@ -140,4 +176,9 @@ def test_self_learning_cli_manifestli(tmp_path):
     assert summary["experiment_ids"] == ["EXP-0001", "EXP-0002"]
     assert summary["aggregate"]["closed_verified.far"]["mean"] == 0.0
     assert summary["aggregate"]["collapse_probe.far"]["mean"] == 1.0
+    assert summary["aggregate"]["verifier_robustness.frr"]["mean"] == 0.25
+    assert summary["results"][0]["verifier_robustness"]["uncertain"] == 2
+    assert "table_1" in summary["results"][0]["memory_capacity"][
+        "minimum_slots_meeting_target"
+    ]
     assert "Self-learning + collapse benchmark özeti" in completed.stdout

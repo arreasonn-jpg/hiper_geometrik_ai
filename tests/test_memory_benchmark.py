@@ -3,7 +3,12 @@ import json
 import subprocess
 import sys
 
-from hga.memory import DeneyimSlotlari, run_memory_benchmark, run_memory_stress
+from hga.memory import (
+    DeneyimSlotlari,
+    run_memory_benchmark,
+    run_memory_capacity_sweep,
+    run_memory_stress,
+)
 
 
 def test_collision_ornekleri_sinirli_sayac_eksiksiz():
@@ -72,6 +77,39 @@ def test_tek_ve_cift_tablo_ayri_raporlanir():
     assert report.results[0].orphaned_slots == 0
     assert report.results[1].orphaned_slots > 0
     assert "ALL okuma" in " ".join(report.notes)
+
+
+def test_memory_capacity_sweep_recall_esigini_bulur():
+    report = run_memory_capacity_sweep(
+        context_count=256,
+        slot_counts=[64, 128, 256, 512, 1024, 2048, 4096],
+        table_counts=(1, 2), recall_target=0.95, seed=1,
+    )
+    assert report.minimum_slots_meeting_target == {
+        "table_1": 2048,
+        "table_2": 4096,
+    }
+    assert report.maximum_load_factor_meeting_target == {
+        "table_1": 0.125,
+        "table_2": 0.03125,
+    }
+    by_table = {
+        table: [row for row in report.results if row.table_count == table]
+        for table in (1, 2)
+    }
+    assert all(rows[0].retrieval_accuracy < rows[-1].retrieval_accuracy
+               for rows in by_table.values())
+    assert all(rows[0].collision_event_rate > rows[-1].collision_event_rate
+               for rows in by_table.values())
+
+
+def test_memory_capacity_sweep_ulasilamayan_esigi_none_raporlar():
+    report = run_memory_capacity_sweep(
+        context_count=100, slot_counts=[1, 2], table_counts=(1,),
+        recall_target=1.0, seed=1,
+    )
+    assert report.minimum_slots_meeting_target["table_1"] is None
+    assert report.maximum_load_factor_meeting_target["table_1"] is None
 
 
 def test_memory_benchmark_cli_manifestli(tmp_path):

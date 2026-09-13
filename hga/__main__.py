@@ -191,20 +191,25 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
     from hga.experience import (
         run_self_learning_experiment,
         run_self_training_collapse_test,
+        run_verifier_fault_injection,
     )
+    from hga.memory import run_memory_capacity_sweep
 
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
     config = {
-        "benchmark": "self-learning-and-collapse-v1",
+        "benchmark": "self-learning-collapse-robustness-v2",
         "cycles": int(cycles), "batch_size": int(batch),
         "initial_facts": int(initial_facts), "operands_max": int(operands_max),
         "negatives_per_fact": int(negatives_per_fact),
         "memory_slots": int(memory_slots),
+        "verifier_fault_rates": {"false_acceptance": 0.25, "false_rejection": 0.25},
+        "memory_recall_target": 0.95,
     }
     dataset_hash = canonical_hash({
-        "generator": "arithmetic-frontier-v1",
+        "generator": "arithmetic-frontier-holdout-v2",
         "operands_max": int(operands_max),
         "negatives_per_fact": int(negatives_per_fact),
+        "test_holdout_fraction": 0.10,
     })
 
     def run_one(seed):
@@ -219,6 +224,18 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
             negatives_per_fact=negatives_per_fact, seed=seed,
             memory_slots=min(memory_slots, 4096),
         )
+        robustness = run_verifier_fault_injection(seed=seed)
+        base_slots = max(1, int(memory_slots))
+        slot_counts = sorted({
+            max(1, base_slots // 16), max(1, base_slots // 8),
+            max(1, base_slots // 4), max(1, base_slots // 2),
+            base_slots, base_slots * 2, base_slots * 4, base_slots * 8,
+        })
+        capacity = run_memory_capacity_sweep(
+            context_count=max(256, min(int(cycles) * int(batch), 10_000)),
+            slot_counts=slot_counts, table_counts=(1, 2),
+            recall_target=0.95, seed=seed,
+        )
         print(
             f"closed: K0={expansion.initial_knowledge_size} "
             f"K{cycles}={expansion.final_knowledge_size} "
@@ -230,7 +247,22 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
             f"repetition={collapse.repetition_rate:.6f} "
             f"contamination={collapse.incorrect_model_facts} FAR={collapse.far:.6f}"
         )
-        return {"closed_verified": expansion.to_dict(), "collapse_probe": collapse.to_dict()}
+        print(
+            f"verifier-fault: precision={robustness.precision:.6f} "
+            f"recall={robustness.recall:.6f} FAR={robustness.far:.6f} "
+            f"FRR={robustness.frr:.6f} uncertain={robustness.uncertain} "
+            f"conflict={robustness.conflict}"
+        )
+        print(
+            "memory-threshold: "
+            f"{capacity.minimum_slots_meeting_target}"
+        )
+        return {
+            "closed_verified": expansion.to_dict(),
+            "collapse_probe": collapse.to_dict(),
+            "verifier_robustness": robustness.to_dict(),
+            "memory_capacity": capacity.to_dict(),
+        }
 
     report = run_seed_sweep(
         run_one, seeds=seed_values, root=experiment_root, config=config,
@@ -239,6 +271,9 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
             "ground_truth": "independent-arithmetic-environment",
             "closed_loop_writes_only_verified": True,
             "collapse_is_failure_injection": True,
+            "verifier_robustness_is_failure_injection": True,
+            "generation_memory_test_isolation_required": True,
+            "neural_training_used": False,
         },
     ).to_dict()
     print("Self-learning + collapse benchmark özeti:")
@@ -249,6 +284,9 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
         "closed_verified.incorrect_knowledge",
         "collapse_probe.repetition_rate", "collapse_probe.far",
         "collapse_probe.incorrect_model_facts", "collapse_probe.memory_collisions",
+        "verifier_robustness.precision", "verifier_robustness.recall",
+        "verifier_robustness.f1", "verifier_robustness.far", "verifier_robustness.frr",
+        "verifier_robustness.uncertain", "verifier_robustness.conflict",
     ):
         values = report["aggregate"].get(key)
         if values:

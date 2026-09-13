@@ -156,6 +156,76 @@ class MemoryStressReport:
         }
 
 
+@dataclass
+class MemoryCapacitySweepReport:
+    """Slot sayısı/yük faktörü boyunca retrieval kapasite eşiği."""
+
+    context_count: int
+    recall_target: float
+    results: List[MemoryBenchmarkResult]
+    minimum_slots_meeting_target: Dict[str, Any]
+    maximum_load_factor_meeting_target: Dict[str, Any]
+    notes: List[str]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "context_count": self.context_count,
+            "recall_target": self.recall_target,
+            "results": [result.to_dict() for result in self.results],
+            "minimum_slots_meeting_target": dict(self.minimum_slots_meeting_target),
+            "maximum_load_factor_meeting_target": dict(self.maximum_load_factor_meeting_target),
+            "notes": list(self.notes),
+        }
+
+
+def run_memory_capacity_sweep(
+    context_count: int,
+    slot_counts: Sequence[int],
+    table_counts: Sequence[int] = (1, 2),
+    recall_target: float = 0.95,
+    seed: int = 42,
+    collision_sample_limit: int = 1000,
+) -> MemoryCapacitySweepReport:
+    """Farklı fiziksel kapasitelerde collision/retrieval sınırını ölç."""
+    normalized_slots = sorted({int(value) for value in slot_counts})
+    normalized_tables = tuple(int(value) for value in table_counts)
+    if not normalized_slots or any(value < 1 for value in normalized_slots):
+        raise ValueError("slot_counts pozitif en az bir değer içermeli")
+    if not 0.0 <= recall_target <= 1.0:
+        raise ValueError("recall_target [0,1] aralığında olmalı")
+    results = [
+        run_memory_benchmark(
+            context_count=context_count, slot_count=slot_count,
+            table_count=table_count, seed=seed,
+            collision_sample_limit=collision_sample_limit,
+        )
+        for table_count in normalized_tables
+        for slot_count in normalized_slots
+    ]
+    minimum_slots: Dict[str, Any] = {}
+    maximum_load: Dict[str, Any] = {}
+    for table_count in normalized_tables:
+        passing = [
+            result for result in results
+            if result.table_count == table_count
+            and result.retrieval_accuracy >= recall_target
+        ]
+        key = f"table_{table_count}"
+        minimum_slots[key] = min((result.slot_count for result in passing), default=None)
+        maximum_load[key] = max((result.load_factor for result in passing), default=None)
+    return MemoryCapacitySweepReport(
+        context_count=int(context_count), recall_target=float(recall_target),
+        results=results,
+        minimum_slots_meeting_target=minimum_slots,
+        maximum_load_factor_meeting_target=maximum_load,
+        notes=[
+            "Eşik exact-ID retrieval accuracy üzerinden hesaplanır.",
+            "Sonuçlar sentetik deterministik context akışı içindir.",
+            "Çift tablo mevcut ALL-read politikasıyla ölçülür; redundancy iyileştirmesi varsayılmaz.",
+        ],
+    )
+
+
 def run_memory_stress(
     context_counts: Iterable[int],
     slot_count: int,
@@ -187,7 +257,9 @@ def run_memory_stress(
 
 __all__ = [
     "MemoryBenchmarkResult",
+    "MemoryCapacitySweepReport",
     "MemoryStressReport",
     "run_memory_benchmark",
+    "run_memory_capacity_sweep",
     "run_memory_stress",
 ]

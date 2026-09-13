@@ -32,8 +32,10 @@ from .self_learning import (
     CollapseReport,
     LearningCycleMetrics,
     SelfLearningReport,
+    VerifierRobustnessReport,
     run_self_learning_experiment,
     run_self_training_collapse_test,
+    run_verifier_fault_injection,
 )
 from .graph import GraphEdge, ExperienceGraph
 from .exploration import EpistemicSpace, ExplorationMap, ExplorationEngine
@@ -103,8 +105,10 @@ __all__ = [
     "SelfLearningReport",
     "CollapseCycleMetrics",
     "CollapseReport",
+    "VerifierRobustnessReport",
     "run_self_learning_experiment",
     "run_self_training_collapse_test",
+    "run_verifier_fault_injection",
     "GraphEdge",
     "ExperienceGraph",
     "EpistemicSpace",

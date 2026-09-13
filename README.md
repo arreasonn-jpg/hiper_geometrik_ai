@@ -222,7 +222,10 @@ ve Verifier sonrası FAR/FRR=0 ölçüldü (Evaluator tek başına FAR=1.0).
 Verifier'sız failure injection'da repetition=0.99, FAR=1.0, yanlış model
 olgusu=`14.0±0.63 / 16` ve memory collision=1,584 oldu. Tam config/dataset/Git
 hash'leri ve beş koşu manifesti `raporlar/self_learning_5seed_summary.json`
-içindedir. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
+içindedir. Ek fault-injection probu FAR/FRR=0.25, precision/recall/F1=0.75,
+`UNCERTAIN=2` ve `CONFLICT=2` kontrolünü; memory kapasite sweep'i ise %95 recall
+eşiğini sınar. Ayrılmış test holdout'un generation/memory overlap'i her koşuda
+sıfır olmak zorundadır. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
 otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
 
 ---
