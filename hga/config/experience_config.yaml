@@ -32,3 +32,9 @@ esikler:
 generator:
   source_confidence: 0.5     # MODEL_GENERATED adayların varsayılan güveni
   tip_filtresi: true         # kontrollü kombinasyon (rapor §7)
+
+# ── Aktif Engine deneyim belleği ──────────────────────────────────────────
+bellek:
+  policy: DYNAMIC_KV        # FIRST_WINS yalnız açık legacy/migration yolu
+  eviction_policy: lru      # kapasite dolunca deterministik LRU
+  max_idle_ticks: null      # null: TTL kapalı; tamsayı: idle-tick eviction

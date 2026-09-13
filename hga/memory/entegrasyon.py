@@ -1,64 +1,164 @@
 # -*- coding: utf-8 -*-
+"""Aktif Engine belleği: Dynamic KV + tutarlı replay entegrasyonu.
+
+Varsayılan politika ``DYNAMIC_KV``'dir. Eski ``FIRST_WINS`` slot deposu açık
+bir legacy seçeneği olarak korunur ve kayıp/çakışma muhasebesiyle migrate
+edilebilir.
 """
-Bellek Entegrasyonu — Replay + Consolidation ↔ Seyrek Bellek
-=============================================================
-(v0.4 — rapor §19, §22 commit 6)
+from __future__ import annotations
 
-Deneyim tekrarını (Experience Replay) ve konsolidasyonu seyrek bellekle
-birleştirir: değerlendirilen deneyimler
-
-  1. seyrek slotlara hash'lenerek yazılır (`DeneyimSlotlari` — v0.6'da
-     `mimari/seyrek_tablo.py`'deki torch tablosuna köprülenecek),
-  2. tekrar tamponuna itilir (`DeneyimTekrari`),
-  3. gerektiğinde örneklenip yeniden değerlendirmeye sokulur.
-
-Böylece "eski deneyimler yeni bilgi üretimine katkı sağlar" döngüsü
-(rapor §12, §20 "Replay efficiency") somut bir boru hattına kavuşur.
-"""
 from typing import Any, Dict, List, Optional
 
-from .sparse_memory import DeneyimSlotlari
+from .dynamic_kv import (
+    CompactionReport,
+    DynamicKVMemory,
+    DynamicKVSnapshot,
+    MigrationReport,
+)
 from .replay import DeneyimTekrari
+from .sparse_memory import DeneyimSlotlari
+
+DYNAMIC_KV = "DYNAMIC_KV"
+FIRST_WINS = "FIRST_WINS"
 
 
 class BellekEntegrasyonu:
-    """Seyrek slot deposu + deneyim tekrarı tek çatı altında."""
+    """Dynamic KV/legacy slot deposu + experience replay tek çatısı."""
 
-    def __init__(self, slot_sayisi: int = 4096, replay_kapasitesi: int = 1000,
-                 tohum: Optional[int] = None):
-        self.slotlar = DeneyimSlotlari(slot_sayisi=slot_sayisi)
+    def __init__(
+        self,
+        slot_sayisi: int = 4096,
+        replay_kapasitesi: int = 1000,
+        tohum: Optional[int] = None,
+        politika: str = DYNAMIC_KV,
+        eviction_policy: str = "lru",
+        max_idle_ticks: Optional[int] = None,
+    ):
+        self.politika = str(politika).upper()
         self.replay = DeneyimTekrari(kapasite=replay_kapasitesi, tohum=tohum)
+        if self.politika == DYNAMIC_KV:
+            self.slotlar = DynamicKVMemory(
+                max_entries=int(slot_sayisi),
+                eviction_policy=eviction_policy,
+                max_idle_ticks=max_idle_ticks,
+            )
+        elif self.politika == FIRST_WINS:
+            self.slotlar = DeneyimSlotlari(slot_sayisi=slot_sayisi)
+        else:
+            raise ValueError("bellek politikası DYNAMIC_KV veya FIRST_WINS olmalı")
 
-    # ── Yazma ────────────────────────────────────────────────────────────
+    @property
+    def dynamic_kv(self) -> DynamicKVMemory:
+        if not isinstance(self.slotlar, DynamicKVMemory):
+            raise RuntimeError("Aktif bellek politikası DYNAMIC_KV değil")
+        return self.slotlar
+
     def yaz(self, aday) -> int:
-        """Deneyimi hem seyrek slotlara hem tekrar tamponuna yaz."""
+        """Deneyimi aktif depoya ve stale kayıt bırakmadan replay'e yaz."""
+        if isinstance(self.slotlar, DynamicKVMemory):
+            payload = aday.to_dict() if hasattr(aday, "to_dict") else None
+            adres = self.slotlar.yaz(
+                aday.experience_id, aday.uclusu, payload=payload
+            )
+            stale_keys = [aday.uclusu]
+            stale_keys.extend(event.key for event in self.slotlar.last_evictions)
+            self.replay.anahtar_sil(stale_keys)
+            self.replay.it(aday)
+            return adres
         adres = self.slotlar.yaz(aday.experience_id, aday.uclusu)
         self.replay.it(aday)
         return adres
 
     def coklu_yaz(self, adaylar: List[Any]) -> int:
-        """Birden çok deneyimi yaz; yazılan aday sayısını döner."""
-        for a in adaylar:
-            self.yaz(a)
+        for aday in adaylar:
+            self.yaz(aday)
         return len(adaylar)
 
-    # ── Okuma / tekrar ───────────────────────────────────────────────────
     def ornek_oynat(self, n: int = 1) -> List[Any]:
-        """Tekrar tamponundan örnekle (yeniden değerlendirme için)."""
         return self.replay.ornekle(n)
 
     def icerir(self, aday) -> bool:
         return self.slotlar.icerir(aday.experience_id, aday.uclusu)
 
-    # ── Metrikler (rapor §20, §21) ───────────────────────────────────────
+    def kaydet(self, yol, label: Optional[str] = None) -> DynamicKVSnapshot:
+        return self.dynamic_kv.kaydet(yol, label=label)
+
+    def yukle(self, yol) -> DynamicKVSnapshot:
+        """Kalıcı snapshot'ı doğrula, etkin belleği ve replay'i atomikçe değiştir."""
+        memory = DynamicKVMemory.yukle(yol)
+        snapshot = memory.last_snapshot
+        if snapshot is None:  # defensive: yukle her zaman snapshot kurmalıdır
+            raise ValueError("Yüklenen Dynamic KV snapshot metadata'sı eksik")
+        self.slotlar = memory
+        self.politika = DYNAMIC_KV
+        self._replayi_kayitlardan_yenile()
+        return snapshot
+
+    def snapshot_olustur(self, label: Optional[str] = None) -> DynamicKVSnapshot:
+        return self.dynamic_kv.snapshot_olustur(label=label)
+
+    def snapshot_geri_yukle(self, snapshot: DynamicKVSnapshot) -> int:
+        version = self.dynamic_kv.snapshot_geri_yukle(snapshot)
+        self._replayi_kayitlardan_yenile()
+        return version
+
+    def sikistir(self) -> CompactionReport:
+        return self.dynamic_kv.sikistir()
+
+    def dynamic_kvye_migre_et(
+        self,
+        max_entries: Optional[int] = None,
+        eviction_policy: str = "lru",
+    ) -> MigrationReport:
+        """Aktif FIRST_WINS slot/replay durumunu kayıp muhasebesiyle migrate et."""
+        if isinstance(self.slotlar, DynamicKVMemory):
+            raise RuntimeError("Bellek zaten DYNAMIC_KV politikasında")
+        candidates = self.replay.icerik()
+        target_capacity = max_entries
+        if target_capacity is None:
+            target_capacity = max(self.slotlar.slot_sayisi, len(candidates), 1)
+        memory, report = DynamicKVMemory.legacy_slotlardan_migre_et(
+            self.slotlar,
+            candidates,
+            max_entries=target_capacity,
+            eviction_policy=eviction_policy,
+        )
+        self.slotlar = memory
+        self.politika = DYNAMIC_KV
+        self._replayi_kayitlardan_yenile()
+        return report
+
+    def _replayi_kayitlardan_yenile(self) -> None:
+        from ..knowledge.schemas import ExperienceCandidate
+
+        candidates = []
+        for record in self.dynamic_kv.kayitlar():
+            if record.payload is not None:
+                candidates.append(ExperienceCandidate.from_dict(record.payload))
+        self.replay.yenile(candidates)
+
     def rapor(self) -> Dict:
         slot = self.slotlar.kapasite()
-        rp = self.replay.rapor()
-        return {
+        replay = self.replay.rapor()
+        report = {
+            "politika": self.politika,
             "slot_dolu": slot["dolu_slot"],
             "slot_toplam": slot["toplam_slot"],
             "cakisma": slot["cakisma"],
             "cakisma_orani": slot["cakisma_orani"],
-            "replay_dolu": rp["dolu"],
-            "replay_verimliligi": rp["replay_verimliligi"],
+            "replay_dolu": replay["dolu"],
+            "replay_verimliligi": replay["replay_verimliligi"],
         }
+        if isinstance(self.slotlar, DynamicKVMemory):
+            report.update({
+                "store_version": slot["store_version"],
+                "journal_events": slot["journal_events"],
+                "eviction_policy": slot["eviction_policy"],
+                "evictions": slot["statistics"]["evictions"],
+                "ttl_evictions": slot["statistics"]["ttl_evictions"],
+                "estimated_storage_bytes": slot["estimated_storage_bytes"],
+            })
+        return report
+
+
+__all__ = ["BellekEntegrasyonu", "DYNAMIC_KV", "FIRST_WINS"]

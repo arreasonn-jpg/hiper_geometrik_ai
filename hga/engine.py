@@ -22,20 +22,21 @@ Döngü (tek çağrı):
 from typing import Callable, Dict, List, Optional
 
 from .config import yukle
-from .knowledge import KnowledgeStore
-from .memory import BellekEntegrasyonu
-from .experience.scoring import Scoring
-from .experience.generator import ExperienceGenerator
-from .experience.evaluator import ExperienceEvaluator
-from .experience.consolidation import Consolidator, ConsolidationReport
 from .experience.arastirma import ArastirmaKuyrugu
-from .experience.cumle_ayiklayici import CumleAyiklayici, cumlelerden_bilgi_aktar
+from .experience.consolidation import ConsolidationReport, Consolidator
 from .experience.corpus import dosyadan_bilgi_aktar
-from .experience.text_generator import TextGenerator
+from .experience.cumle_ayiklayici import CumleAyiklayici, cumlelerden_bilgi_aktar
 from .experience.dogrulama import DogrulamaHatti, DogrulamaRaporu
-from .experience.loop import DeneyimDongusu, AdimRaporu
-from .experience.graph import ExperienceGraph
+from .experience.evaluator import ExperienceEvaluator
 from .experience.exploration import ExplorationEngine, ExplorationMap
+from .experience.generator import ExperienceGenerator
+from .experience.graph import ExperienceGraph
+from .experience.loop import AdimRaporu, DeneyimDongusu
+from .experience.scoring import Scoring
+from .experience.text_generator import TextGenerator
+from .knowledge import KnowledgeStore
+from .knowledge.schemas import DeneyimDurumu
+from .memory import BellekEntegrasyonu
 
 
 class ExperienceEngine:
@@ -44,7 +45,10 @@ class ExperienceEngine:
     def __init__(self, store: Optional[KnowledgeStore] = None,
                  cfg: Optional[Dict] = None,
                  dogrulayici: Optional[Callable] = None,
-                 replay_n: int = 2, slot_sayisi: int = 64):
+                 replay_n: int = 2, slot_sayisi: int = 64,
+                 memory_policy: Optional[str] = None,
+                 eviction_policy: Optional[str] = None,
+                 max_idle_ticks: Optional[int] = None):
         self.cfg = cfg or yukle()
         self.store = store or KnowledgeStore()
         self.replay_n = int(replay_n)
@@ -52,14 +56,27 @@ class ExperienceEngine:
         agirliklar = self.cfg.get("agirliklar", {})
         esikler = self.cfg.get("esikler", {})
         gen_cfg = self.cfg.get("generator", {})
+        memory_cfg = self.cfg.get("bellek", {})
 
         self.scoring = Scoring(agirliklar)
         self.evaluator = ExperienceEvaluator(scoring=self.scoring, esikler=esikler)
         self.generator = ExperienceGenerator(**gen_cfg)
         self.consolidator = Consolidator()
         self.text_gen = TextGenerator()
-        self.bellek = BellekEntegrasyonu(slot_sayisi=slot_sayisi,
-                                         replay_kapasitesi=max(16, slot_sayisi))
+        configured_idle_ticks = memory_cfg.get("max_idle_ticks")
+        self.bellek = BellekEntegrasyonu(
+            slot_sayisi=slot_sayisi,
+            replay_kapasitesi=max(16, slot_sayisi),
+            politika=memory_policy or memory_cfg.get("policy", "DYNAMIC_KV"),
+            eviction_policy=(
+                eviction_policy or memory_cfg.get("eviction_policy", "lru")
+            ),
+            max_idle_ticks=(
+                max_idle_ticks
+                if max_idle_ticks is not None
+                else configured_idle_ticks
+            ),
+        )
         self.dogrulayici = dogrulayici
         self.dogrulama = (DogrulamaHatti(dogrulayici, evaluator=self.evaluator,
                                          consolidator=self.consolidator)
@@ -97,7 +114,11 @@ class ExperienceEngine:
         return adaylar
 
     def konsolide(self, adaylar) -> ConsolidationReport:
-        return self.consolidator.konsolide_et(self.store, adaylar)
+        rapor = self.consolidator.konsolide_et(self.store, adaylar)
+        for aday in adaylar:
+            if aday.state in (DeneyimDurumu.VALID, DeneyimDurumu.VERIFIED):
+                self.bellek.yaz(aday)
+        return rapor
 
     def dogrula(self, adaylar) -> Optional[DogrulamaRaporu]:
         """Deterministik doğrulayıcıyla deneyimleri doğrula (yoksa None)."""
@@ -106,6 +127,8 @@ class ExperienceEngine:
         rapor = self.dogrulama.isle(self.store, adaylar)
         for a in adaylar:
             self.graph.deneyim_kaydet(a)
+            if a.state == DeneyimDurumu.VERIFIED:
+                self.bellek.yaz(a)
         return rapor
 
     def metin(self, aday) -> str:
@@ -136,6 +159,33 @@ class ExperienceEngine:
                            dogrulayici=self.dogrulayici,
                            replay_n=self.replay_n)
         return d.calistir(int(n), relation_ids=relation_ids)
+
+    # ── Aktif Dynamic KV yaşam döngüsü ──────────────────────────────────
+    def bellekte_mi(self, aday) -> bool:
+        """Aday etkin deneyim belleğinde hâlâ tutuluyor mu?"""
+        return self.bellek.icerir(aday)
+
+    def bellek_kaydet(self, yol, label: Optional[str] = None):
+        return self.bellek.kaydet(yol, label=label)
+
+    def bellek_yukle(self, yol):
+        return self.bellek.yukle(yol)
+
+    def bellek_snapshot(self, label: Optional[str] = None):
+        return self.bellek.snapshot_olustur(label=label)
+
+    def bellek_snapshot_geri_yukle(self, snapshot):
+        return self.bellek.snapshot_geri_yukle(snapshot)
+
+    def bellek_sikistir(self):
+        return self.bellek.sikistir()
+
+    def bellek_dynamic_kvye_migre_et(
+        self, max_entries: Optional[int] = None, eviction_policy: str = "lru"
+    ):
+        return self.bellek.dynamic_kvye_migre_et(
+            max_entries=max_entries, eviction_policy=eviction_policy
+        )
 
     # ── Özet ─────────────────────────────────────────────────────────────
     def ozet(self) -> Dict:

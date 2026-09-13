@@ -13,8 +13,8 @@ aşamadır.
 üretimine katkı sağladığı — burada "benzersiz üçlü oranı" ile yaklaşık ölçülür
 (rapor §20 "Replay efficiency").
 """
-from typing import Any, Dict, List, Optional
 import random
+from typing import Any, Dict, List, Optional
 
 
 class DeneyimTekrari:
@@ -32,6 +32,26 @@ class DeneyimTekrari:
         self._tampon.append(deneyim)
         if len(self._tampon) > self.kapasite:
             self._tampon.pop(0)
+
+    def anahtar_sil(self, ucluler) -> int:
+        """Verilen üçlülerin stale/evicted replay kopyalarını kaldır."""
+        anahtarlar = {tuple(uclu) for uclu in ucluler}
+        once = len(self._tampon)
+        self._tampon = [
+            deneyim for deneyim in self._tampon
+            if tuple(getattr(deneyim, "uclusu", ())) not in anahtarlar
+        ]
+        return once - len(self._tampon)
+
+    def yenile(self, deneyimler: List[Any]) -> None:
+        """Persistence restore sonrası tamponu etkin KV kayıtlarıyla yeniden kur."""
+        self._tampon = list(deneyimler)[-self.kapasite:]
+        self._ornek_sayisi = 0
+        self._benzersiz_ornekler.clear()
+
+    def icerik(self) -> List[Any]:
+        """Migration/snapshot orchestration için sığ tampon kopyası."""
+        return list(self._tampon)
 
     def ornekle(self, n: int = 1) -> List[Any]:
         """Tek tip rastgele `n` deneyim örnekle (en fazla tampon boyutu)."""

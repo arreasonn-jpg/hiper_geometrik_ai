@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hiper-geometrik-ai"
-version = "1.0.0"
+version = "1.1.0"
 description = "HGA Experience & Knowledge Engine — Bilinear Kronecker Zinciri, Seyrek Bellek ve Deneyim Tabanlı Öğrenme Mimarisi"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -64,6 +64,8 @@ include = ["hga*", "mimari*", "egitim*", "golden_dataset*"]
 
 [tool.setuptools.package-data]
 golden_dataset = ["*.json"]
+"hga.evaluation.datasets" = ["*.json"]
+"hga.evaluation.datasets.twt_v1" = ["*.conllu", "*.json", "*.md", "*.txt"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

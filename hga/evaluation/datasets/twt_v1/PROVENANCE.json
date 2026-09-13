@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "hga-real-turkish-twt-v1",
+  "dataset": {
+    "name": "Turkish Web Treebank",
+    "short_name": "TWT",
+    "islrn": "177-333-742-633-6",
+    "language": "tr",
+    "description": "A human-annotated morphosyntactic treebank for Turkish.",
+    "human_annotated": true,
+    "annotation_layers": [
+      "segmentation",
+      "morphology",
+      "part-of-speech",
+      "basic dependency heads",
+      "dependency relations"
+    ],
+    "source_domains": {
+      "web": "Turkish forum, blog, how-to, review and guide webpages",
+      "wiki": "Turkish Wikipedia"
+    },
+    "published_counts": {
+      "sentences": 4851,
+      "words": 66466,
+      "inflectional_group_tokens": 81370,
+      "web_sentences": 2541,
+      "wiki_sentences": 2310
+    }
+  },
+  "upstream": {
+    "repository": "https://github.com/google-research-datasets/turkish-treebanks",
+    "revision": "40838e5cbe3f2882d4e768a3d782e6219e50b52a",
+    "revision_url": "https://github.com/google-research-datasets/turkish-treebanks/tree/40838e5cbe3f2882d4e768a3d782e6219e50b52a",
+    "retrieved_utc_date": "2026-09-13",
+    "source_files": [
+      {
+        "section": "web",
+        "upstream_path": "data/web.conllu",
+        "vendored_path": "web.conllu",
+        "sha256": "d6f92b12b74f367a36e30dd3d644d7a0bb01a991584602e6e69f1191664f86bf",
+        "sentences": 2541
+      },
+      {
+        "section": "wiki",
+        "upstream_path": "data/wiki.conllu",
+        "vendored_path": "wiki.conllu",
+        "sha256": "58f049fae8d0653ba0940a58168c17c7cebbc50f88cad2985d12d34ac1b9acde",
+        "sentences": 2310
+      }
+    ]
+  },
+  "license": {
+    "spdx_id": "Apache-2.0",
+    "name": "Apache License 2.0",
+    "redistributable": true,
+    "upstream_license_path": "LICENSE",
+    "vendored_license_path": "LICENSE-APACHE-2.0.txt",
+    "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "citation": {
+    "authors": ["Tolga Kayadelen", "Adnan Öztürel", "Bernd Bohnet"],
+    "title": "A Gold Standard Dependency Treebank for Turkish",
+    "venue": "Proceedings of the 12th Language Resources and Evaluation Conference (LREC 2020)",
+    "year": 2020,
+    "pages": "5158-5165",
+    "url": "https://aclanthology.org/2020.lrec-1.634/"
+  },
+  "benchmark_config": {
+    "schema": "hga-twt-basic-dependency-arc-verification-v1",
+    "source_split": {
+      "scope": "independently within web.conllu and wiki.conllu",
+      "index_origin": 0,
+      "train": "sentence_index % 10 < 8",
+      "dev": "sentence_index % 10 == 8",
+      "test": "sentence_index % 10 == 9",
+      "origin": "upstream Turkish Web Treebank Python API"
+    },
+    "quarantined_sentence_ids": {
+      "tr-forum:00001297:S029": "normalized exact surface duplicate of train sentence tr-forum:00001297:S012",
+      "tr-forum:00000353:S041": "lemma-set Jaccard 0.83333333 with train sentence tr-forum:00002420:S010; exceeds fixed 0.80 near-duplicate threshold"
+    },
+    "near_duplicate_metric": "Jaccard similarity over casefolded non-PUNCT lemma-or-form sets",
+    "near_duplicate_threshold": 0.8,
+    "relation_disjoint_labels": ["csubj", "parataxis"],
+    "entity_identity": "casefolded lemma, or casefolded FORM when LEMMA is underscore; ROOT is a reserved head identity",
+    "composition_identity": ["dependent_entity", "dependency_relation", "head_entity"],
+    "negative_generation": "For every human-annotated positive basic dependency arc, deterministically replace its head with a different legal sentence head. If no alternative head exists, replace the relation with a different fixed label.",
+    "prediction_states": ["VALID", "INVALID", "UNCERTAIN"],
+    "baseline": "selective POS/relation/direction schema frequency verifier with fixed Laplace smoothing and decision thresholds",
+    "baseline_positive_threshold": 0.6,
+    "baseline_negative_threshold": 0.4,
+    "laplace_alpha": 1.0
+  },
+  "expected_integrity": {
+    "raw_split_sentence_counts": {"train": 3881, "dev": 485, "test": 485},
+    "effective_split_sentence_counts": {"train": 3881, "dev": 484, "test": 484},
+    "quarantined_sentence_count": 2,
+    "split_hashes": {
+      "train": "a2aecea070216a6b09ec668deb2b4082808d651a676ab77f48df4cfdc223abf8",
+      "dev": "6e47d21756c81e294ca6ff3873e2997fdee7b8af3a0c0f70d55bfbe903587b4b",
+      "test": "6a205cbd2eac4107fcf18c58b21ac2a1233ad46d410627c4790fedfb270d17ab"
+    },
+    "candidate_hashes": {
+      "train": "451bc9cc138a35372f1e844de3a649184bfcae1e2e57ae7679782bdfae89b63d",
+      "dev": "9c2ce46ea784424fc221c6d6a1e03798988bb7258d5e959f8fc748f40752eeed",
+      "test": "cba9b99bbff93f404f0581107e4de4490a29983b44b255ddf4e4edc2cf6e23e6",
+      "test_challenge": "877a788e8468ba7cbb676e73581fb938018b1ddc891034a2c3c2bcc5460dbb24"
+    }
+  },
+  "modification_notice": "The vendored CoNLL-U source files are byte-identical to the pinned upstream files. HGA adds deterministic splits, quarantine rules, derived invalid candidates, challenge dimensions and evaluation code; it does not modify upstream annotations.",
+  "task_scope": {
+    "name": "basic morphosyntactic dependency-arc candidate verification",
+    "is_semantic_relation_extraction": false,
+    "is_named_entity_recognition": false,
+    "ground_truth": "human-annotated TWT basic dependency heads and relation labels; negatives follow from the single-head basic-tree contract",
+    "warning": "Dependency relations are morphosyntactic arcs, not semantic knowledge triples. Token entities are an operational split key, not named-entity annotations."
+  }
+}

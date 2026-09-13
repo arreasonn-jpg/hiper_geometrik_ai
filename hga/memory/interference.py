@@ -26,10 +26,11 @@ Yani bu artık teorik bir endişe değil, ölçülmüş bir çatlaktır. Burada 
 * ``DYNAMIC_KV``  — çakışma yok: anahtar → değer sözlüğü (Faz 17 karşılaştırma
   hedefi). Fiziksel maliyet girdi sayısıyla büyür.
 
-Dürüstlük notu: bu saf Python prototip ölçümüdür. PyTorch
-`HashlenmisKureselTablo` toplamsal vektör okuması yapar; oradaki bozulma
-"kimlik kaybı" değil "vektör karışması" biçiminde görünür. Bu modül o iddiayı
-taşımaz, `hga.memory.kopru` protokolüyle ayrı ölçülmelidir.
+Dürüstlük notu: DYNAMIC_KV kolu aktif Engine ile aynı saf-Python
+`DynamicKVMemory` implementasyonudur. PyTorch `HashlenmisKureselTablo`
+toplamsal vektör okuması yapar; oradaki bozulma "kimlik kaybı" değil "vektör
+karışması" biçiminde görünür. Bu modül o iddiayı taşımaz;
+`hga.memory.kopru` protokolüyle ayrı ölçülmelidir.
 """
 from __future__ import annotations
 
@@ -37,7 +38,8 @@ import sys
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from .sparse_memory import DeneyimSlotlari, parmak_izi
+from .dynamic_kv import DynamicKVMemory
+from .sparse_memory import DeneyimSlotlari
 
 Triple = Tuple[str, str, str]
 
@@ -113,36 +115,11 @@ class InterferenceReport:
         }
 
 
-class _DinamikKV:
-    """Çakışmasız anahtar-değer deposu (Faz 17 karşılaştırma hedefi).
-
-    `DeneyimSlotlari` ile aynı arayüzün alt kümesini sunar. Fiziksel maliyet
-    slot sayısıyla değil GİRDİ sayısıyla büyür — ödünleşimin özü budur.
-    """
+class _DinamikKV(DynamicKVMemory):
+    """Benchmark'ın artık aktif Engine ile aynı Dynamic KV implementasyonu."""
 
     def __init__(self):
-        self._kayitlar: Dict[int, str] = {}
-        self.cakisma_sayisi = 0
-
-    def adresler(self, anahtar_bilesenleri) -> Tuple[int, ...]:
-        return (parmak_izi(anahtar_bilesenleri),)
-
-    def yaz(self, experience_id: str, anahtar_bilesenleri) -> int:
-        anahtar = parmak_izi(anahtar_bilesenleri)
-        self._kayitlar[anahtar] = experience_id
-        return anahtar
-
-    def icerir(self, experience_id: str, anahtar_bilesenleri) -> bool:
-        return self._kayitlar.get(parmak_izi(anahtar_bilesenleri)) == experience_id
-
-    def __len__(self) -> int:
-        return len(self._kayitlar)
-
-    def depolama_bayt(self) -> int:
-        toplam = sys.getsizeof(self._kayitlar)
-        for anahtar, deger in self._kayitlar.items():
-            toplam += sys.getsizeof(anahtar) + sys.getsizeof(deger)
-        return toplam
+        super().__init__(max_entries=None)
 
 
 class _SonYazanKazanir(DeneyimSlotlari):
@@ -249,7 +226,7 @@ def run_interference_test(
 
     notlar = [
         "Çakışmalar kasıtlı olarak kurulmuştur; doğal çakışma oranı değildir.",
-        "Saf Python prototip ölçümüdür; PyTorch toplamsal tablo davranışı ayrıdır.",
+        "Dynamic kol aktif Engine KV'sidir; PyTorch toplamsal tablo davranışı ayrıdır.",
     ]
     if policy == DYNAMIC_KV:
         notlar.append(

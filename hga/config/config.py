@@ -12,10 +12,15 @@ eksikliğinden çökmez.
 import os
 from typing import Dict, Optional
 
-from ..experience.scoring import VARSAYILAN_AGIRLIKLAR
 from ..experience.evaluator import VARSAYILAN_ESIKLER
+from ..experience.scoring import VARSAYILAN_AGIRLIKLAR
 
 VARSAYILAN_GENERATOR = {"source_confidence": 0.5, "tip_filtresi": True}
+VARSAYILAN_BELLEK = {
+    "policy": "DYNAMIC_KV",
+    "eviction_policy": "lru",
+    "max_idle_ticks": None,
+}
 
 _YAML_YOLU = os.path.join(os.path.dirname(__file__), "experience_config.yaml")
 
@@ -45,6 +50,8 @@ def _ayrikla_bolum(metin: str, baslik: str) -> Dict:
                     v = True
                 elif v.lower() == "false":
                     v = False
+                elif v.lower() in ("null", "none", "~"):
+                    v = None
                 else:
                     try:
                         v = float(v)
@@ -61,6 +68,7 @@ def yukle(yol: Optional[str] = None) -> Dict:
     agirliklar = dict(VARSAYILAN_AGIRLIKLAR)
     esikler = dict(VARSAYILAN_ESIKLER)
     generator = dict(VARSAYILAN_GENERATOR)
+    bellek = dict(VARSAYILAN_BELLEK)
 
     metin = None
     if os.path.exists(yol):
@@ -80,13 +88,21 @@ def yukle(yol: Optional[str] = None) -> Dict:
                 esikler.update(veri["esikler"])
             if isinstance(veri.get("generator"), dict):
                 generator.update(veri["generator"])
+            if isinstance(veri.get("bellek"), dict):
+                bellek.update(veri["bellek"])
         except Exception:
             # PyYAML yok veya bozuksa düz ayrıştırıcı
             agirliklar.update(_ayrikla_bolum(metin, "agirliklar"))
             esikler.update(_ayrikla_bolum(metin, "esikler"))
             generator.update(_ayrikla_bolum(metin, "generator"))
+            bellek.update(_ayrikla_bolum(metin, "bellek"))
 
-    return {"agirliklar": agirliklar, "esikler": esikler, "generator": generator}
+    return {
+        "agirliklar": agirliklar,
+        "esikler": esikler,
+        "generator": generator,
+        "bellek": bellek,
+    }
 
 
 def varsayilanlar() -> Dict:
@@ -94,4 +110,5 @@ def varsayilanlar() -> Dict:
         "agirliklar": dict(VARSAYILAN_AGIRLIKLAR),
         "esikler": dict(VARSAYILAN_ESIKLER),
         "generator": dict(VARSAYILAN_GENERATOR),
+        "bellek": dict(VARSAYILAN_BELLEK),
     }

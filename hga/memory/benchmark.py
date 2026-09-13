@@ -6,6 +6,7 @@ import time
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
+from .dynamic_kv import DynamicKVMemory
 from .sparse_memory import DeneyimSlotlari
 
 
@@ -255,11 +256,270 @@ def run_memory_stress(
     )
 
 
+def _rss_bytes() -> int:
+    """Linux current RSS; kullanılamıyorsa 0 (raporda açıkça görünür)."""
+    try:
+        with open("/proc/self/status", "r", encoding="utf-8") as handle:
+            for line in handle:
+                if line.startswith("VmRSS:"):
+                    return int(line.split()[1]) * 1024
+    except OSError:
+        pass
+    return 0
+
+
+def _sample_indices(start: int, stop: int, limit: int) -> List[int]:
+    count = max(0, stop - start)
+    if count == 0 or limit <= 0:
+        return []
+    if count <= limit:
+        return list(range(start, stop))
+    return [start + min(count - 1, ((2 * i + 1) * count) // (2 * limit))
+            for i in range(limit)]
+
+
+@dataclass
+class ActiveMemoryStressPoint:
+    context_count: int
+    capacity: int
+    load_factor: float
+    fixed_occupied: int
+    fixed_collisions: int
+    fixed_exact_history_recall: float
+    fixed_audit_sample_size: int
+    fixed_audit_sample_recall: float
+    dynamic_active_records: int
+    dynamic_evictions: int
+    dynamic_exact_history_recall: float
+    dynamic_active_sample_size: int
+    dynamic_active_sample_recall: float
+    dynamic_evicted_sample_size: int
+    dynamic_evicted_rejection_rate: float
+    dynamic_journal_events: int
+    dynamic_heap_nodes: int
+    fixed_estimated_storage_bytes: int
+    dynamic_estimated_storage_bytes: int
+    resident_set_bytes: int
+    segment_context_pairs_per_second: float
+    stream_checksum: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class ActiveMemoryStressReport:
+    protocol: str
+    seed: int
+    capacity: int
+    context_counts: List[int]
+    points: List[ActiveMemoryStressPoint]
+    checks: Dict[str, bool]
+    acceptance_1k_to_10m: bool
+    notes: List[str]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "protocol": self.protocol,
+            "seed": self.seed,
+            "capacity": self.capacity,
+            "context_counts": list(self.context_counts),
+            "points": [point.to_dict() for point in self.points],
+            "checks": dict(self.checks),
+            "acceptance_1k_to_10m": self.acceptance_1k_to_10m,
+            "notes": list(self.notes),
+        }
+
+    def markdown(self) -> str:
+        lines = [
+            "| Context | Load | Fixed recall | Fixed collision | Dynamic history "
+            "recall | Dynamic active recall | Eviction | Fixed MiB | Dynamic MiB | RSS MiB | ctx-pair/s |",
+            "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        ]
+        mib = 1024 * 1024
+        for point in self.points:
+            lines.append(
+                f"| {point.context_count:,} | {point.load_factor:.3f} | "
+                f"{point.fixed_exact_history_recall:.6f} | {point.fixed_collisions:,} | "
+                f"{point.dynamic_exact_history_recall:.6f} | "
+                f"{point.dynamic_active_sample_recall:.6f} | "
+                f"{point.dynamic_evictions:,} | "
+                f"{point.fixed_estimated_storage_bytes / mib:.2f} | "
+                f"{point.dynamic_estimated_storage_bytes / mib:.2f} | "
+                f"{point.resident_set_bytes / mib:.2f} | "
+                f"{point.segment_context_pairs_per_second:,.0f} |"
+            )
+        return "\n".join(lines)
+
+
+def run_active_memory_stress(
+    context_counts: Sequence[int] = (1_000, 10_000, 100_000, 1_000_000, 10_000_000),
+    capacity: int = 65_536,
+    seed: int = 1,
+    audit_samples: int = 256,
+    collision_sample_limit: int = 1000,
+) -> ActiveMemoryStressReport:
+    """Aynı streaming akışı fixed ve aktif bounded Dynamic KV'ye gerçek yaz.
+
+    Her ölçek baştan koşturulmaz; 10M'e giden tek akışta checkpoint alınır.
+    Girdiler listede tutulmaz. Table-1 FIRST_WINS'te her dolu slot tam bir
+    retained context, bounded unique-key Dynamic KV'de her aktif kayıt tam bir
+    retained context olduğundan history recall ikinci 10M read turu olmadan
+    fiziksel cardinality'den **exact** hesaplanır. Örnek audit bunu ayrıca kırar.
+    """
+    counts = sorted({int(value) for value in context_counts})
+    capacity = int(capacity)
+    audit_samples = int(audit_samples)
+    if not counts or counts[0] < 1:
+        raise ValueError("context_counts pozitif en az bir ölçek içermeli")
+    if capacity < 1:
+        raise ValueError("capacity >= 1 olmalı")
+    if audit_samples < 1:
+        raise ValueError("audit_samples >= 1 olmalı")
+
+    fixed = DeneyimSlotlari(
+        slot_sayisi=capacity,
+        tablo_sayisi=1,
+        cakisma_ornek_limiti=collision_sample_limit,
+    )
+    dynamic = DynamicKVMemory(max_entries=capacity, eviction_policy="lru")
+    points: List[ActiveMemoryStressPoint] = []
+    checksum = 0
+    previous_count = 0
+    segment_started = time.perf_counter()
+    for index in range(counts[-1]):
+        key = _context(seed, index)
+        experience_id = _experience_id(seed, index)
+        address = fixed.yaz(experience_id, key)
+        dynamic.yaz(experience_id, key, compute_address=False)
+        checksum = (
+            checksum * 0x9E3779B185EBCA87 + address + index + int(seed)
+        ) & 0xFFFFFFFFFFFFFFFF
+        completed = index + 1
+        if completed not in counts:
+            continue
+
+        segment_elapsed = max(time.perf_counter() - segment_started, 1e-12)
+        occupied, _ = fixed.doluluk_orani()
+        fixed_indices = _sample_indices(0, completed, audit_samples)
+        fixed_hits = sum(
+            fixed.icerir(_experience_id(seed, i), _context(seed, i))
+            for i in fixed_indices
+        )
+        active_start = max(0, completed - capacity)
+        active_indices = _sample_indices(active_start, completed, audit_samples)
+        active_hits = sum(
+            (
+                (record := dynamic.getir(_context(seed, i), touch=False)) is not None
+                and record.experience_id == _experience_id(seed, i)
+            )
+            for i in active_indices
+        )
+        evicted_indices = _sample_indices(0, active_start, audit_samples)
+        evicted_rejections = sum(
+            dynamic.getir(_context(seed, i), touch=False) is None
+            for i in evicted_indices
+        )
+        dynamic_capacity = dynamic.kapasite()
+        dynamic_active = len(dynamic)
+        points.append(ActiveMemoryStressPoint(
+            context_count=completed,
+            capacity=capacity,
+            load_factor=round(completed / capacity, 8),
+            fixed_occupied=occupied,
+            fixed_collisions=fixed.cakisma_sayisi,
+            fixed_exact_history_recall=round(occupied / completed, 8),
+            fixed_audit_sample_size=len(fixed_indices),
+            fixed_audit_sample_recall=(
+                round(fixed_hits / len(fixed_indices), 8) if fixed_indices else 0.0
+            ),
+            dynamic_active_records=dynamic_active,
+            dynamic_evictions=int(dynamic_capacity["statistics"]["evictions"]),
+            dynamic_exact_history_recall=round(dynamic_active / completed, 8),
+            dynamic_active_sample_size=len(active_indices),
+            dynamic_active_sample_recall=(
+                round(active_hits / len(active_indices), 8) if active_indices else 0.0
+            ),
+            dynamic_evicted_sample_size=len(evicted_indices),
+            dynamic_evicted_rejection_rate=(
+                round(evicted_rejections / len(evicted_indices), 8)
+                if evicted_indices else 1.0
+            ),
+            dynamic_journal_events=int(dynamic_capacity["journal_events"]),
+            dynamic_heap_nodes=len(dynamic._eviction_heap),
+            fixed_estimated_storage_bytes=_estimated_storage_bytes(fixed),
+            dynamic_estimated_storage_bytes=dynamic.depolama_bayt(),
+            resident_set_bytes=_rss_bytes(),
+            segment_context_pairs_per_second=round(
+                (completed - previous_count) / segment_elapsed, 2
+            ),
+            stream_checksum=f"{checksum:016x}",
+        ))
+        previous_count = completed
+        segment_started = time.perf_counter()
+
+    checks = {
+        "single_stream_reaches_requested_max": points[-1].context_count == counts[-1],
+        "all_checkpoints_recorded": [point.context_count for point in points] == counts,
+        "fixed_accounting_exact": all(
+            point.fixed_occupied + point.fixed_collisions == point.context_count
+            for point in points
+        ),
+        "dynamic_accounting_exact": all(
+            point.dynamic_active_records + point.dynamic_evictions == point.context_count
+            for point in points
+        ),
+        "dynamic_collision_free": dynamic.cakisma_sayisi == 0,
+        "dynamic_active_audit_exact": all(
+            point.dynamic_active_sample_recall == 1.0 for point in points
+        ),
+        "dynamic_evicted_audit_exact": all(
+            point.dynamic_evicted_rejection_rate == 1.0 for point in points
+        ),
+        "collision_samples_bounded": len(fixed.cakismalar) <= collision_sample_limit,
+        "dynamic_journal_bounded": all(
+            point.dynamic_journal_events
+            <= max(dynamic.max_journal_entries, 4 * capacity) + 2
+            for point in points
+        ),
+        "dynamic_eviction_heap_bounded": all(
+            point.dynamic_heap_nodes <= max(1_000, 4 * capacity)
+            for point in points
+        ),
+        "resident_memory_reported": all(point.resident_set_bytes >= 0 for point in points),
+        "no_input_corpus_materialized": True,
+        "exact_recall_uses_physical_cardinality_invariant": True,
+    }
+    if not all(checks.values()):
+        failed = [name for name, passed in checks.items() if not passed]
+        raise ValueError(f"Active memory stress kabul kapısı başarısız: {failed}")
+    return ActiveMemoryStressReport(
+        protocol="active-memory-stress-v2",
+        seed=int(seed),
+        capacity=capacity,
+        context_counts=counts,
+        points=points,
+        checks=checks,
+        acceptance_1k_to_10m=(counts[0] <= 1_000 and counts[-1] >= 10_000_000),
+        notes=[
+            "Sentetik unique context tek streaming geçişte üretilir; giriş listesi tutulmaz.",
+            "FIRST_WINS table-1 exact history recall = occupied/context; her slot yalnız ilk kimliği tutar.",
+            "Bounded Dynamic KV exact history recall = active/context; aktif küme exact recall'ı ayrıca örneklenir.",
+            "Dynamic KV collision-free olsa da kapasite sonrası LRU eviction nedeniyle tüm tarih recall'ı düşer.",
+            "RSS Linux /proc current resident set'tir; storage değerleri CPython nesne tahminidir.",
+            "Bu exact-ID stress'tir; semantic/learned retrieval, neural kalite veya genel dil ölçmez.",
+        ],
+    )
+
+
 __all__ = [
     "MemoryBenchmarkResult",
     "MemoryCapacitySweepReport",
     "MemoryStressReport",
+    "ActiveMemoryStressPoint",
+    "ActiveMemoryStressReport",
     "run_memory_benchmark",
     "run_memory_capacity_sweep",
     "run_memory_stress",
+    "run_active_memory_stress",
 ]

@@ -65,12 +65,18 @@ Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
   üzerinde adreslenebilir 'boş küme' uzayına sahip seyrek bellek; ~7M yoğun +
   ~34M seyrek fiziksel gerçek parametre."** Üstteki tablo bunu doğrular.
 
-Sayıları kendiniz doğrulayın:
+Sayıları ve araştırma protokollerini kendiniz doğrulayın:
 
 ```bash
 python mimari/kuresel_model.py     # dürüst kapasite raporu
-python test_mimari.py              # 22 mimari duman testi
+python test_mimari.py              # mimari duman testleri
+python -m hga research-benchmark  # 5 seed, tek JSON/Markdown/HTML araştırma karnesi
 ```
+
+Research suite ayrıca **C_G (Generalization Capacity)** ölçümünü raporlar.
+Buradaki C_G teorik bir uzay büyüklüğü değildir: sürümlü held-out compositional
+fixture'da doğru çözülen uygun örnek sayısı/oranıdır. `C_V ≤ C_E ≤ C_M`
+eşitsizliğinin parçası değildir ve dataset hash olmadan yorumlanmaz.
 
 ---
 
@@ -173,18 +179,43 @@ böylece 1M/10M koşuları collision log'u nedeniyle sınırsız RAM tüketmez.
 # Hızlı varsayılan: 1K, 10K, 100K
 python -m hga memory-benchmark
 
-# Tam ölçek planı (uzun sürebilir)
-python -m hga memory-benchmark \
+# Tam 1K→10M planı: fixed ve Engine'deki aynı bounded Dynamic KV
+python -m hga memory-benchmark --active-dynamic \
   --scales 1000,10000,100000,1000000,10000000 \
-  --slots 1048576 --tables 1,2 --seeds 1,2,3,4,5
+  --slots 65536 --audit-samples 256 --seeds 1,2,3,4,5 \
+  --out raporlar/memory_stress_1k_10m.json \
+  --markdown raporlar/memory_stress_1k_10m.md
 ```
 
-Her seed ayrı `EXP-NNNN` manifesti üretir. İlk kontrollü test önemli bir sınırı
-açığa çıkarır: `DeneyimSlotlari`ndaki mevcut çift-tablo **ALL-table** exact-ID
-okuma semantiği collision kaybını telafi etmez; retrieval tek tabloya göre
-ancak aynı veya daha düşük olabilir. Bu bulgu saf Python prototipine aittir;
-PyTorch tablonun toplamsal vektör okumasıyla aynı sonuç olduğu iddia edilmez.
-Ayrıntılar: `docs/MEMORY_COLLISION_BENCHMARK.md`.
+Aktif mod her seed için girdileri listelemeden **tek streaming geçişte** 10M'e
+taşır; her checkpoint'i baştan koşturmaz. FIRST_WINS table-1 için dolu slot
+sayısı, bounded unique-key Dynamic KV için aktif kayıt sayısı exact history
+recall'ın fiziksel invariantıdır; ikinci bir 10M read turu yerine bu tam sayı
+muhasebesi ve deterministik retained/evicted audit örnekleri birlikte raporlanır.
+Journal ve lazy-LRU heap boyutları bounded kabul kapılarıdır. RSS ile CPython
+storage tahmini ayrı alanlardır.
+
+Her seed ayrı `EXP-NNNN` manifesti üretir. Fixed çift-tablo legacy modunda
+**ALL-table** exact-ID okuma collision kaybını telafi etmez; aktif bounded
+Dynamic KV collision'ı kaldırır fakat kapasite sonrasında LRU eviction nedeniyle
+tüm tarih recall'ı düşer. Aktif kayıt exact recall'ı ile history recall aynı
+metrik değildir. Bunların hiçbiri semantic/learned retrieval veya gerçek dil
+kanıtı değildir. Ayrıntılar: `docs/MEMORY_COLLISION_BENCHMARK.md`.
+
+Temiz `94fe3f6` commit'inde, 65.536 entry capacity ve 5 seed ile gerçek 1K→10M
+koşusu tamamlandı (`raporlar/memory_stress_1k_10m.{json,md}`):
+
+| Context | Fixed history recall | Dynamic history recall | Dynamic active recall | Eviction |
+|---:|---:|---:|---:|---:|
+| 1K | 0.991600±0.002154 | 1.000000±0 | 1.000000±0 | 0 |
+| 10K | 0.926120±0.000773 | 1.000000±0 | 1.000000±0 | 0 |
+| 100K | 0.512728±0.001186 | 0.655360±0 | 1.000000±0 | 34.464 |
+| 1M | 0.065536±0 | 0.065536±0 | 1.000000±0 | 934.464 |
+| 10M | 0.006554±0 | 0.006554±0 | 1.000000±0 | 9.934.464 |
+
+Sonuç üstünlük ilanı değil, bounded kapasite sınırıdır: Dynamic KV hash
+collision'ını giderdi, fakat 10M geçmişin yalnız son 65.536 kaydı aktiftir.
+Aktif-küme audit recall'ı `1.0` iken tüm-geçmiş recall'ı `0.006554`'e düşer.
 
 ### Eşit-parametre Kronecker benchmarkı
 
@@ -220,6 +251,15 @@ probu ise aynı model çıktısını verifier olmadan tekrar besleyen kasıtlı 
 injection'dır. Experience Yield, FAR/FRR, correct/incorrect knowledge, novelty,
 diversity, entropy ve memory collision/retrieval birlikte raporlanır.
 
+Aynı CLI artık `arithmetic`, `logic` (modus ponens) ve `consistency`
+(property constraints) environment'larını ayrı relation/entity namespace ve
+bağımsız verifier router'larıyla, fakat ortak `KnowledgeStore` + aktif Dynamic
+KV üzerinde interleave eder. Yanlış environment verifier'ı kabul etmek yerine
+`None` dönmeli; per-environment FAR/FRR, durable contamination,
+generation/memory/knowledge holdout overlap ve shared-memory recall ayrı
+kapılardır. Holdout yalnız leakage kontrolüdür; neural task generalization
+ölçümü değildir.
+
 Beş-seed kontrollü baseline'ında (`K₀=100`, 100 cycle, batch=16) ortalama
 K₁₀₀=`295.8±5.04`, Experience Yield=`0.1224±0.0031`, incorrect knowledge=0
 ve Verifier sonrası FAR/FRR=0 ölçüldü (Evaluator tek başına FAR=1.0).
@@ -231,6 +271,98 @@ içindedir. Ek fault-injection probu FAR/FRR=0.25, precision/recall/F1=0.75,
 eşiğini sınar. Ayrılmış test holdout'un generation/memory overlap'i her koşuda
 sıfır olmak zorundadır. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
 otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
+
+### HGA Research Benchmark Suite
+
+Tek komut Architecture, Kronecker, Memory, Verification, Compositional
+Generalization, Neural/Symbolic/Hybrid, Self Learning, OOD, Turkish NLP ve
+Reproducibility bölümlerini ortak sözleşmede çalıştırır:
+
+```bash
+python -m hga research-benchmark
+```
+
+Varsayılan `smoke` profil **5 seed** kullanır; her seed ayrı `EXP-NNNN`
+manifestidir. Sonunda çalışma dizinine şu üç dosya yazılır:
+
+```text
+research_report.json
+research_report.md
+research_report.html
+```
+
+Yayın/uzun koşu ve seçili bölüm örnekleri:
+
+```bash
+python -m hga research-benchmark --profile full --seeds 1,2,3,4,5 \
+  --out raporlar/research_report.json \
+  --markdown raporlar/research_report.md \
+  --html raporlar/research_report.html
+
+python -m hga research-benchmark \
+  --sections compositional-generalization,verification,ood
+```
+
+Turkish NLP ana skoru, Apache-2.0 lisanslı ve insan anotasyonlu **Turkish Web
+Treebank** üzerinde hesaplanır. Upstream revision
+`40838e5cbe3f2882d4e768a3d782e6219e50b52a` ve iki CoNLL-U dosyasının SHA-256
+özetleri `hga/evaluation/datasets/twt_v1/PROVENANCE.json` içinde sabittir.
+4.851 ham gerçek Türkçe cümleden duplicate/near-duplicate quarantine sonrası
+3.881/484/484 train/dev/test kalır. Dependency-arc verification görevi
+Accuracy/F1/FAR/FRR/coverage ile; entity-, relation-, composition-, wording- ve
+sentence-disjoint dilimlerde raporlanır. Bu etiketler morphosyntactic'tir;
+semantik relation extraction veya NER iddiası değildir.
+
+Aynı bölüm, aynı model-visible TWT adaylarında gerçek PyTorch ile Dense,
+Transformer, repository `KureselZincir` Kronecker kolu ve gerçek HGA
+attention/outer-product/Kronecker/fraktal çekirdeğini karşılaştırır. Toplam
+trainable parametre max/min oranı `≤1.01`, ortak embedding dışındaki body oranı
+`≤1.05` olmak zorundadır; unused bütçe parametresi yasaktır. Veri, train-only
+vocabulary, başlangıç embedding'i, batch schedule hash'i, AdamW, loss, adım ve
+karar eşiği dört kolda aynıdır. Bu structured arc sınıflandırması tam language
+model pretraining veya end-to-end dependency parser değildir.
+
+Her neural kol için uncertainty calibration da aynı harness içinde ölçülür:
+pozitif scalar temperature yalnız sabit **dev** splitinde NLL ile seçilir,
+**test** ise yalnız değerlendirmedir. Testte kalibrasyon öncesi/sonrası NLL,
+Brier, fixed/adaptive ECE; tüm disjoint dilimler ve önceden ilan edilmiş
+%10/%25/%50/%75/%100 coverage noktalarında selective risk/AURC raporlanır.
+Temperature argmax kararlarını değiştiremez ve bu invariant kapıdır. Engine
+`weighted`/source-confidence alanları bu deneyle olasılık ilan edilmez.
+Ayrıntılar: `docs/UNCERTAINTY_CALIBRATION.md`.
+
+Verification bölümü ayrıca gerçek, hash-doğrulanmış TWT kaynak artifact'ları
+üzerinde zaman/revizyon yaşam döngüsünü sınar. `ACTIVE`, `STALE`, `SUPERSEDED`
+ve `RETRACTED` ayrıdır: süresi geçen veya erişilemeyen kayıt default sorgudan
+çıkar ama **yanlış ilan edilmez**; aynı-hash revalidation geri açabilir, değişen
+hash yeni revision gerektirir ve dependency staleness transitif yayılır. Tüm
+geçişler hash-chain event defterindedir. Ağ/revizyon/withdrawal olayları
+kontrollü müdahalelerdir; canlı TWT değişikliği iddiası değildir. Ayrıntılar:
+`docs/KNOWLEDGE_LIFECYCLE.md`.
+
+Neural compositional ablation ayrıca full HGA'yı `no_attention`, aynı
+parametreli `additive_geometry` ve `no_kronecker_chain` kollarıyla aynı
+başlangıç tensorları/batch schedule üzerinde karşılaştırır. `C_G_N`, yalnız
+TWT `composition_disjoint` dengeli arc accuracy'sidir; mevcut kontrollü `C_G`
+veya teorik kapasite değildir. Çıkarılan bileşenlerin parametre farkı unused
+reserve ile kapatılmaz.
+
+Türkçe compositional fixture çalışma anında üretilmez;
+`hga/evaluation/datasets/compositional_tr_v1.json` içinde elle sabitlenmiştir.
+Train'de `Ali ata bindi`, `Ayşe arabaya bindi`, `Mehmet otobüse bindi`
+varken held-out `Ali arabaya bindi` ve `Ali otobüse bindi` aday/karar/metin
+kanallarında ayrı ölçülür. Seen composition, unseen entity, unseen relation,
+unseen combination, unseen wording, unseen sentence, negative ve OOD
+boyutları ayrı raporlanır. Semantik ve exact-yüzey sızıntısı koşuyu durdurur.
+
+Unseen entity'nin ontoloji kaydı ve unseen relation'ın ilişki şeması sisteme
+verildiği için sonuç **entity discovery, relation induction veya neural dil
+üretimi değildir**. Referans kurulumda PyTorch proje bağımlılığıdır ve tüm
+bölümler `COMPLETED` olmalıdır; eksik kurulum `SKIPPED` olarak gizlenmez ve
+`--strict` ile koşu başarısız kapatılabilir. Verification bölümü ayrıca false,
+incomplete, contradictory, malformed, boundary ve adversarial proof fixture'ını
+FAR/FRR/coverage/robustness ile ölçer. `overall_diagnostic_score` bir zekâ/SOTA
+skoru değildir. Tam protokol: `docs/RESEARCH_BENCHMARK_SUITE.md`.
 
 ### Milestone tablosu: K₀ → E₀ → V₀ → K₁ → … → K₁₀₀
 
@@ -417,7 +549,7 @@ bu deney çakışmayı beklemek yerine **kurar** (A ve B zorla aynı slota):
 
 | Politika | Kurban yaşar | Saldırgan yaşar | İkisi birden | Bozulma |
 |---|---:|---:|---:|---:|
-| `FIRST_WINS` (mevcut) | 1.000 | 0.000 | 0.000 | 0.000 |
+| `FIRST_WINS` (legacy) | 1.000 | 0.000 | 0.000 | 0.000 |
 | `LAST_WINS` | 0.000 | 1.000 | 0.000 | 1.000 |
 | `DYNAMIC_KV` | 1.000 | 1.000 | 1.000 | 0.000 |
 
@@ -425,6 +557,17 @@ Sabit tabloda `both_survival = 0` bir ayar meselesi değil, **yapısal**dır: te
 slot iki kimliği taşıyamaz. 4096 slotlu tabloda recall yük faktörüyle çöküyor
 (100k context → **0.041**), dinamik KV recall'ı 1.0 tutuyor ama 27× bellek
 istiyor. Ayrıntı ve dönüm noktası analizi: `docs/MEMORY_INTERFERENCE.md`.
+
+`DYNAMIC_KV` artık yalnız kıyas prototipi değildir: `ExperienceEngine`'in
+varsayılan aktif deneyim/replay deposudur ve kıyas da aynı
+`DynamicKVMemory` sınıfını kullanır. Tam `(subject, relation, object)` anahtarı
+kimliktir; 31-bit hash yalnız gözlem adresidir. Bounded Engine modunda LRU/FIFO
+ve opsiyonel idle-TTL eviction, stale replay temizliği, atomik/hash-korumalı
+JSON persistence, parent-hash snapshot zinciri, monoton store/record version,
+journal compaction ve kayıp muhasebeli `FIRST_WINS → DYNAMIC_KV` migration
+vardır. Collision kaybı kalkarken kapasite dolumu artık açık eviction kaybına
+dönüşür; semantic/learned retrieval iddiası yoktur. Yaşam döngüsü Research
+Suite Memory bölümünde her seed için kırılır.
 
 ---
 
@@ -503,8 +646,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   sistem için FAR≈0 iddiası değildir.
 - **Tek yüz** (`hga/engine.py` + `python -m hga`) — tüm katmanı yapılandırılabilir
   tek motor + komut satırı arayüzü.
-- **Memory** (`hga/memory/`) — seyrek deneyim slotları, experience replay ve
-  bunları birleştiren entegrasyon + torch seyrek tabloya köprü (v0.6),
+- **Memory** (`hga/memory/`) — Engine'de aktif tam-anahtarlı Dynamic KV,
+  bounded eviction + stale-safe replay, atomik persistence/snapshot/versioning,
+  compaction ve legacy migration; ayrıca torch seyrek tabloya köprü (v0.6),
   doğrulanmış deneyimleri MODELİN kendi seyrek belleğine bağlayan `NeuralKopru`,
   bilgi yazmanın aşağı-akış etkisini ölçen `AblasyonDeneyi` (boş bellek ~%50,
   bilgi yazılı ~%100) ve bunu modelin KENDİ tamamlama görevine taşıyan
@@ -566,6 +710,7 @@ python -m hga tokenizer                               # mini Türkçe tokenizer 
 python -m hga perplexity --tiny                       # küçük modelle perplexity smoke (torch)
 python -m hga checkpoint-rapor checkpoints/temel/latest.pt # checkpoint/model uyumluluğu
 python -m hga benchmark-rapor --out raporlar/benchmark_report.json --markdown raporlar/benchmark_report.md
+python -m hga research-benchmark                    # birleşik 5-seed araştırma karnesi
 python -m hga veri-kalite                             # veri kalite filtresi demo raporu
 python -m hga veri-canli-smoke --kontrollu --out raporlar/controlled_data_smoke.json
 python -m hga manifest turkce_metin.txt               # veri SHA-256 manifesti
@@ -612,7 +757,7 @@ hiper_geometrik_ai/
 ├── hga/                         # Experience Engine (saf Python, çekirdeğin üstünde)
 │   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore + versioning/rollback
 │   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop, Ledger, Milestone
-│   ├── memory/                  # Seyrek deneyim slotları + replay + torch köprüsü
+│   ├── memory/                  # Aktif Dynamic KV + lifecycle + legacy slot + replay
 │   ├── evaluation/              # Halüsinasyon, perplexity, golden/kapasite (C_E/C_V) raporları
 │   ├── observability/           # Attention/geometri/bellek/deneyim akışı + panel çıktısı
 │   ├── data/                    # Veri kalite filtresi, canlı/kontrollü smoke + SHA-256 manifest
@@ -854,9 +999,15 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Seyrek bellek metrikleri | ✅ %100 smoke | doluluk, collision, determinism, LRU/aging, kapasite raporları |
 | Veri kalite + manifest | ✅ %100 smoke | `veri-kalite`, `manifest`, `veri-canli-smoke --kontrollu` |
 | Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
+| Gerçek Türkçe benchmark | ✅ TWT v1 | 4.851 ham insan-anotasyonlu cümle, sabit hash/split, parameter-matched 4 mimari, neural compositional HGA ablasyonu |
+| Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
+| Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
+| Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |
 | Observability | ✅ %100 smoke | JSON/Markdown/HTML panel, attention/geometri/bellek/deneyim metrikleri |
 | KV-cache entegrasyonu | ✅ %100 smoke | attention cache + model-level `forward_cacheli_pencere` + UI runtime yolu |
 | Knowledge/Experience/state machine | ✅ %100 smoke | `MODEL_GENERATED ≠ VERIFIED`, doğrulama ortamları, kapalı validation |
+| Aktif Dynamic KV lifecycle | ✅ Research Suite | Engine default, LRU/FIFO/TTL, replay sync, atomik persistence, snapshot/version, compaction, migration |
+| 1K→10M memory stress | ✅ 5 seed | Tek streaming geçiş; fixed/Dynamic history recall, active recall, eviction, RSS/throughput |
 | GPU/VRAM raporlama | ✅ CPU fallback | raporlar `cuda_available` ve VRAM bilgisini/eksikliğini açık yazar |
 | Bilgi sürümleme + rollback | ✅ ölçüldü | `python -m hga bilgi-surum`, `tests/test_knowledge_versioning.py` (K₀→Kₙ, içerik-adresli, geçmiş silinmez) |
 | Immutable experience ledger | ✅ ölçüldü | `python -m hga defter`, `tests/test_experience_ledger.py` (append-only, hash-zincirli, tamper-evident) |
@@ -869,10 +1020,11 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 korpus, gerçek instruction set büyütme, 64+ token uzun bağlam, katman-bazlı
 çoklu GPU/model paralelliği ve sohbet kalitesi için insan değerlendirmesi.
 
-**Milestone tablosunun açığa çıkardığı bir sonraki iş:** 100 döngüde bilgi
-kalitesi korunurken bellek recall'ı `1.000 → 0.952`'ye düştü. Yani bir sonraki
-darboğaz verifier değil, **sabit slotlu sparse memory**dir; dinamik KV bellek
-karşılaştırması (Faz 17) artık spekülasyon değil, ölçümün işaret ettiği adımdır.
+**Milestone tablosunun açığa çıkardığı ve artık aktif yola taşınan iş:** 100
+döngüde bilgi kalitesi korunurken fixed-slot recall `1.000 → 0.952`'ye düştü.
+Bu nedenle Dynamic KV yalnız karşılaştırılmadı; aktif Engine deneyim/replay
+deposu yapıldı. Sorun gizlenmedi: fixed sonuçları raporda korunur, bounded
+Dynamic KV'nin kapasite kaybı ise collision yerine eviction olarak ölçülür.
 
 ---
 

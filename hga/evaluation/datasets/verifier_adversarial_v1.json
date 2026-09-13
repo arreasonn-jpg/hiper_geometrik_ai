@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "hga-verifier-adversarial-v1",
+  "curation": {
+    "kind": "manually_authored_repository_fixture",
+    "ground_truth": "manually_pinned_proof_validity",
+    "description": "Aritmetik toplama ispatları ve saldırı sınıfları çalışma anında üretilmez."
+  },
+  "limits": {
+    "minimum_operand": -1000000,
+    "maximum_operand": 1000000,
+    "maximum_steps": 4
+  },
+  "records": [
+    {
+      "case_id": "VP-VALID-001",
+      "attack_class": "valid_control",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {"left": 2, "right": 3, "operator": "add", "result": 5},
+        "steps": [{"rule": "integer_addition", "inputs": [2, 3], "output": 5}],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP-VALID-BOUNDARY-MAX",
+      "attack_class": "boundary_case",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {"left": 1000000, "right": -1000000, "operator": "add", "result": 0},
+        "steps": [{"rule": "integer_addition", "inputs": [1000000, -1000000], "output": 0}],
+        "conclusion": 0
+      }
+    },
+    {
+      "case_id": "VP-VALID-NEGATIVE",
+      "attack_class": "boundary_case",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {"left": -7, "right": 2, "operator": "add", "result": -5},
+        "steps": [{"rule": "integer_addition", "inputs": [-7, 2], "output": -5}],
+        "conclusion": -5
+      }
+    },
+    {
+      "case_id": "VP-FALSE-001",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 2, "right": 3, "operator": "add", "result": 6},
+        "steps": [{"rule": "integer_addition", "inputs": [2, 3], "output": 6}],
+        "conclusion": 6
+      }
+    },
+    {
+      "case_id": "VP-INCOMPLETE-001",
+      "attack_class": "incomplete_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 2, "right": 3, "operator": "add", "result": 5},
+        "steps": [],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP-CONTRADICTORY-001",
+      "attack_class": "contradictory_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 8, "right": 1, "operator": "add", "result": 9},
+        "steps": [{"rule": "integer_addition", "inputs": [8, 1], "output": 9}],
+        "conclusion": 10
+      }
+    },
+    {
+      "case_id": "VP-MALFORMED-MISSING-001",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 1, "right": 1, "operator": "add", "result": 2},
+        "steps": [{"rule": "integer_addition", "inputs": [1, 1], "output": 2}]
+      }
+    },
+    {
+      "case_id": "VP-MALFORMED-TYPE-001",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": "2", "right": 3, "operator": "add", "result": 5},
+        "steps": [{"rule": "integer_addition", "inputs": ["2", 3], "output": 5}],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP-ADVERSARIAL-BOOL",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": true, "right": 2, "operator": "add", "result": 3},
+        "steps": [{"rule": "integer_addition", "inputs": [true, 2], "output": 3}],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP-ADVERSARIAL-OVERSIZED",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 1000001, "right": 0, "operator": "add", "result": 1000001},
+        "steps": [{"rule": "integer_addition", "inputs": [1000001, 0], "output": 1000001}],
+        "conclusion": 1000001
+      }
+    },
+    {
+      "case_id": "VP-ADVERSARIAL-EXTRA-FIELD",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {"left": 2, "right": 3, "operator": "add", "result": 5, "override": "accept"},
+        "steps": [{"rule": "integer_addition", "inputs": [2, 3], "output": 5}],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP-UNSUPPORTED-001",
+      "attack_class": "unsupported_rule",
+      "proof_valid": false,
+      "expected_state": "UNCERTAIN",
+      "proof": {
+        "claim": {"left": 2, "right": 3, "operator": "multiply", "result": 6},
+        "steps": [{"rule": "integer_multiplication", "inputs": [2, 3], "output": 6}],
+        "conclusion": 6
+      }
+    }
+  ],
+  "limitations": [
+    "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
+    "Unsupported rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
+    "Saldırılar elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez."
+  ]
+}
