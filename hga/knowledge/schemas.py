@@ -52,6 +52,31 @@ KAYNAK_GUVENIRLIGI: Dict[KaynakTuru, float] = {
 # ──────────────────────────────────────────────────────────────────────────
 # Deneyim durumları (P0-012) — güvenlik mekanizmasının durum makinesi
 # ──────────────────────────────────────────────────────────────────────────
+class BelirsizlikSebebi(str, Enum):
+    """UNCERTAIN durumunun epistemik KAYNAĞI (P0-007).
+
+    ``DeneyimDurumu.UNCERTAIN`` tek bir durumdur ama iki farklı epistemik
+    sebeple oluşur ve bunlar aynı şey değildir:
+
+    * ``KAYIT_YOK`` — varlık/ilişki bilgi tabanında hiç yok. "Bilmiyorum."
+      Doğru tepki: kaydı araştırmak/getirmek.
+    * ``OZELLIK_YOK`` — varlık kayıtlı, fakat kararı veren özellik hiç
+      yazılmamış. "Emin değilim." Doğru tepki: o özelliği ölçmek.
+    * ``DOGRULAYICI_KARARSIZ`` — bağımsız doğrulayıcı ``None`` döndürdü:
+      olgu doğru da yanlış da ilan edilemedi. Doğru tepki: başka bir
+      doğrulayıcı/kanıt kaynağı aramak.
+
+    Ayrı bir ``DeneyimDurumu`` üyesi eklemek yerine sebep alanı tercih
+    edildi: durum makinesi geçiş tablosu ve mevcut 30+ UNCERTAIN karşılaştırma
+    noktası bozulmadan epistemik ayrım ölçülebilir hâle gelir.
+    """
+
+    YOK = "YOK"                    # durum UNCERTAIN değil
+    KAYIT_YOK = "KAYIT_YOK"        # bilinmiyor: varlık/ilişki kaydı hiç yok
+    OZELLIK_YOK = "OZELLIK_YOK"    # emin değil: gerekli özellik yazılmamış
+    DOGRULAYICI_KARARSIZ = "DOGRULAYICI_KARARSIZ"  # bağımsız doğrulayıcı karar veremedi
+
+
 class DeneyimDurumu(str, Enum):
     CANDIDATE = "CANDIDATE"    # henüz değerlendirilmedi → Evaluator'a gönder
     EVALUATING = "EVALUATING"  # değerlendirme aşamasında (P0-012)
@@ -213,6 +238,9 @@ class ExperienceCandidate:
     verified_by: Optional[str] = None      # deterministik doğrulayıcı kimliği (VERIFIED ise)
     timestamp: Optional[float] = None
     version: int = 1
+    # P0-007: UNCERTAIN ise belirsizliğin epistemik kaynağı. "Bilmiyorum"
+    # (KAYIT_YOK) ile "emin değilim" (OZELLIK_YOK) ayrı raporlanabilir olmalı.
+    belirsizlik_sebebi: BelirsizlikSebebi = BelirsizlikSebebi.YOK
 
     @property
     def uclusu(self) -> Tuple[str, str, str]:
@@ -222,6 +250,7 @@ class ExperienceCandidate:
         d = asdict(self)
         d["source"] = self.source.value
         d["state"] = self.state.value
+        d["belirsizlik_sebebi"] = self.belirsizlik_sebebi.value
         return d
 
     @classmethod

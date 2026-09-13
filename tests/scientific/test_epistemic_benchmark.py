@@ -206,17 +206,99 @@ def test_yanlis_guven_metrigi_gercekten_tepki_verir(veri):
 # Dürüstlük: ölçülmüş mimari sınır
 # --------------------------------------------------------------------------
 
-def test_unknown_uncertain_ayrimi_durustce_raporlanir(rapor):
-    """Şu an ayrım YAPILAMIYOR; test bunu gizlemek yerine sabitler.
+def test_unknown_uncertain_ayrimi_artik_yapilabiliyor(rapor):
+    """Eski mimari sınır kapandı: ayrım sebep alanıyla yapılabiliyor.
 
-    Ayrı bir durum kodu eklenirse bu test kasıtlı olarak kırılır ve raporun
-    güncellenmesi gerektiğini hatırlatır.
+    Önceki sürümde bu test ``distinguishable is False`` sabitliyordu ve
+    "ayrım eklenirse kasıtlı kırıl" notu taşıyordu. Ayrım
+    ``ExperienceCandidate.belirsizlik_sebebi`` ile eklendi, test kırıldı ve
+    beklendiği gibi güncellendi.
+
+    Durum KODU hâlâ ikisini de UNCERTAIN'e indirger (durum makinesi geçişleri
+    korunsun diye); ayrım SEBEP alanında yapılır.
     """
     cozunurluk = rapor.epistemic_resolution
-    assert cozunurluk["distinguishable"] is False
+    # Durum kodu seviyesinde hâlâ ayrılmıyor — bu bilinçli tasarım.
+    assert cozunurluk["distinguishable_by_state"] is False
     assert cozunurluk["unknown_observed_states"] == ["UNCERTAIN"]
     assert cozunurluk["uncertain_observed_states"] == ["UNCERTAIN"]
-    assert "mimari sınırdır" in cozunurluk["note"]
+    # Sebep seviyesinde ayrılıyor.
+    assert cozunurluk["distinguishable_by_reason"] is True
+    assert cozunurluk["distinguishable"] is True
+    assert cozunurluk["unknown_reasons"] == ["KAYIT_YOK"]
+    assert cozunurluk["uncertain_reasons"] == ["OZELLIK_YOK"]
+    assert cozunurluk["reasons_consistent"] is True
+
+
+def test_belirsizlik_sebebi_vaka_bazinda_raporlanir(rapor):
+    """Her UNCERTAIN vakası doğru epistemik sebebi taşımalı."""
+    for case in rapor.cases:
+        if case["epistemic_class"] == "UNKNOWN":
+            assert case["uncertainty_reason"] == "KAYIT_YOK", case["case_id"]
+        elif case["epistemic_class"] == "UNCERTAIN":
+            assert case["uncertainty_reason"] == "OZELLIK_YOK", case["case_id"]
+        elif case["observed_state"] not in ("UNCERTAIN",):
+            # UNCERTAIN olmayan durumlarda sebep boş kalmalı.
+            assert case["uncertainty_reason"] == "YOK", case["case_id"]
+
+
+def test_dogrulayici_kararsizligi_ayri_sebep_olarak_isaretlenir():
+    """Üçüncü epistemik kaynak: doğrulayıcı None döndürdüğünde.
+
+    Bu belirsizlik evaluator'ın bilgi eksikliğinden değil, bağımsız
+    doğrulayıcının karar verememesinden gelir; ayrı sebep taşımalı.
+    """
+    from hga.experience.dogrulama import DogrulamaHatti
+    from hga.experience.evaluator import ExperienceEvaluator
+    from hga.knowledge import BelirsizlikSebebi, ExperienceCandidate, KaynakTuru
+
+    veri = EpistemicDataset()
+    store = veri.build_store()
+    bilinen = next(c for c in veri.cases if c["epistemic_class"] == "KNOWN")
+    aday = ExperienceCandidate(
+        experience_id="DOGRULAYICI-1", subject_id=str(bilinen["subject_id"]),
+        relation_id=str(bilinen["relation_id"]),
+        object_id=str(bilinen["object_id"]), source=KaynakTuru.MODEL_GENERATED,
+    )
+    ExperienceEvaluator().degerlendir(aday, store)
+    assert aday.state == DeneyimDurumu.VALID
+    assert aday.belirsizlik_sebebi == BelirsizlikSebebi.YOK
+
+    # Hiçbir zaman karar veremeyen doğrulayıcı.
+    DogrulamaHatti(lambda s, c: None, dogrulayici_adi="kararsiz").isle(store, [aday])
+    assert aday.state == DeneyimDurumu.UNCERTAIN
+    assert aday.belirsizlik_sebebi == BelirsizlikSebebi.DOGRULAYICI_KARARSIZ
+
+
+def test_sebep_alani_yeniden_degerlendirmede_sizmaz():
+    """Aynı aday yeniden değerlendirilirse eski sebep taşınmamalı."""
+    from hga.experience.evaluator import ExperienceEvaluator
+    from hga.knowledge import BelirsizlikSebebi, ExperienceCandidate, KaynakTuru
+
+    veri = EpistemicDataset()
+    store = veri.build_store()
+    evaluator = ExperienceEvaluator()
+
+    bilinmeyen = next(c for c in veri.cases if c["epistemic_class"] == "UNKNOWN")
+    aday = ExperienceCandidate(
+        experience_id="SIZMA-1", subject_id=str(bilinmeyen["subject_id"]),
+        relation_id=str(bilinmeyen["relation_id"]),
+        object_id=str(bilinmeyen["object_id"]),
+        source=KaynakTuru.MODEL_GENERATED,
+    )
+    evaluator.degerlendir(aday, store)
+    assert aday.belirsizlik_sebebi == BelirsizlikSebebi.KAYIT_YOK
+
+    # Aynı nesneyi bilinen-doğru bir üçlüye çevirip yeniden değerlendir.
+    bilinen = next(c for c in veri.cases if c["epistemic_class"] == "KNOWN")
+    aday.subject_id = str(bilinen["subject_id"])
+    aday.relation_id = str(bilinen["relation_id"])
+    aday.object_id = str(bilinen["object_id"])
+    evaluator.degerlendir(aday, store)
+    assert aday.state == DeneyimDurumu.VALID
+    assert aday.belirsizlik_sebebi == BelirsizlikSebebi.YOK, (
+        "Önceki değerlendirmenin sebebi sızdı"
+    )
 
 
 def test_sinirlar_raporda_yer_alir(rapor):

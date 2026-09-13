@@ -13,6 +13,7 @@ from .property_index import PropertyIndex
 from .relation_index import RelationIndex
 from .schemas import (
     KAYNAK_GUVENIRLIGI,
+    BelirsizlikSebebi,
     DeneyimDurumu,
     Entity,
     ExperienceCandidate,
@@ -30,6 +31,7 @@ from .versioning import (
 
 __all__ = [
     "KaynakTuru",
+    "BelirsizlikSebebi",
     "DeneyimDurumu",
     "KAYNAK_GUVENIRLIGI",
     "Entity",

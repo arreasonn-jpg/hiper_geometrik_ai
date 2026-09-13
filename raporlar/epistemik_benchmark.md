@@ -19,7 +19,7 @@ Veri kümesi hash: `34e88fbfcacae3ded071312f898966e0beaa665b6fdc3c6a85815538a902
 
 ## Epistemik çözünürlük
 
-UNKNOWN (kayıt hiç yok) ve UNCERTAIN (özellik yazılmamış) epistemik olarak farklıdır fakat Evaluator ikisini de DeneyimDurumu.UNCERTAIN'e indirger. Bu ölçülmüş bir mimari sınırdır; ayrı durum kodu eklenmeden ayrım yapılamaz.
+UNKNOWN (kayıt hiç yok) ve UNCERTAIN (özellik yazılmamış) epistemik olarak farklıdır. Durum KODU ikisini de DeneyimDurumu.UNCERTAIN'e indirger (distinguishable_by_state=False) fakat ExperienceCandidate.belirsizlik_sebebi alanı kaynağı ayırır: KAYIT_YOK ('bilmiyorum') ve OZELLIK_YOK ('emin değilim'). Ayrım durum makinesi geçişleri bozulmadan ölçülebilir.
 
 ## Sınırlar
 

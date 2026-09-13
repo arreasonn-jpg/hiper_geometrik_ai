@@ -96,19 +96,51 @@ oysa hiçbir bilineni kabul edemez. `always_valid` ise yalnız
 - `all_epistemic_classes_present` — beş sınıf da temsil edilir;
 - `beats_degenerate_baselines` — dejenere politikalar geçemez.
 
-## Ölçülmüş mimari sınır: UNKNOWN ↔ UNCERTAIN
+## Kapatılan mimari sınır: UNKNOWN ↔ UNCERTAIN
 
-Mevcut `ExperienceEvaluator` hem "kayıt hiç yok" hem "özellik yazılmamış"
-durumunu tek bir `DeneyimDurumu.UNCERTAIN`'e indirger. Bu iki şey epistemik
-olarak farklıdır.
+`ExperienceEvaluator` hem "kayıt hiç yok" hem "özellik yazılmamış" durumunu
+tek bir `DeneyimDurumu.UNCERTAIN`'e indiriyordu. Bu iki şey epistemik olarak
+farklıdır: birincisi *bilmiyorum*, ikincisi *emin değilim*. İlk ölçümde bu
+sınır gizlenmedi, `distinguishable = false` olarak raporlandı ve bir testle
+sabitlendi.
 
-Bu sonuç gizlenmedi ve "başarı" diye sunulmadı. Rapor
-`epistemic_resolution.distinguishable = false` alanıyla ayrımın
-**yapılamadığını** açıkça bildirir. Ayrı bir durum kodu eklenmeden ayrım
-mümkün değildir; bu bir ölçüm sonucudur, kusur örtmesi değil.
-`test_unknown_uncertain_ayrimi_durustce_raporlanir` testi bu durumu
-sabitler: ayrım eklenirse test kasıtlı olarak kırılır ve belgenin
-güncellenmesi gerektiğini hatırlatır.
+**Sınır artık kapatıldı.** Çözüm, `DeneyimDurumu`'na yeni bir üye eklemek
+*değil* — bu, durum makinesi geçiş tablosunu ve 30'dan fazla `UNCERTAIN`
+karşılaştırma noktasını kırardı. Bunun yerine `ExperienceCandidate`'e
+makine-okunur bir sebep alanı eklendi:
+
+```python
+class BelirsizlikSebebi(str, Enum):
+    YOK = "YOK"                  # durum UNCERTAIN değil
+    KAYIT_YOK = "KAYIT_YOK"      # bilmiyorum: varlık/ilişki kaydı hiç yok
+    OZELLIK_YOK = "OZELLIK_YOK"  # emin değilim: gerekli özellik yazılmamış
+    DOGRULAYICI_KARARSIZ = "DOGRULAYICI_KARARSIZ"  # doğrulayıcı karar veremedi
+```
+
+Üçüncü üye ayrı bir kaynaktır: `DogrulamaHatti` bağımsız doğrulayıcıdan
+`None` aldığında olgu ne doğrulanır ne çürütülür. Bu belirsizlik bilgi
+tabanının eksikliğinden değil, doğrulayıcının kararsızlığından gelir ve
+karıştırılmamalıdır.
+
+Rapor iki ayrı çözünürlük seviyesi bildirir:
+
+| Alan | Değer | Anlamı |
+|---|---|---|
+| `distinguishable_by_state` | `false` | Durum kodu hâlâ tek: ikisi de `UNCERTAIN` |
+| `distinguishable_by_reason` | `true` | Sebep alanı kaynağı ayırıyor |
+| `unknown_reasons` | `["KAYIT_YOK"]` | UNKNOWN sınıfı tek ve doğru sebep üretiyor |
+| `uncertain_reasons` | `["OZELLIK_YOK"]` | UNCERTAIN sınıfı tek ve doğru sebep üretiyor |
+| `reasons_consistent` | `true` | Sınıflar sebep karıştırmıyor |
+
+İki yeni kabul kapısı bunu zorunlu kılar:
+`unknown_uncertain_distinguishable` ve `uncertainty_reasons_consistent`.
+
+Sebep alanı her değerlendirmenin başında sıfırlanır; aynı aday yeniden
+değerlendirilirse eski sebep sızmaz ve bu ayrı bir testle sınanır.
+
+Eski davranışı sabitleyen `test_unknown_uncertain_ayrimi_durustce_raporlanir`
+testi, tasarlandığı gibi kırıldı ve
+`test_unknown_uncertain_ayrimi_artik_yapilabiliyor` olarak güncellendi.
 
 ## Çalıştırma
 

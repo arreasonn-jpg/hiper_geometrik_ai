@@ -44,7 +44,13 @@ from importlib import resources
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from hga.experience.evaluator import ExperienceEvaluator
-from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru, KnowledgeStore
+from hga.knowledge import (
+    BelirsizlikSebebi,
+    DeneyimDurumu,
+    ExperienceCandidate,
+    KaynakTuru,
+    KnowledgeStore,
+)
 
 DATA_PACKAGE = "hga.evaluation.datasets"
 DATA_FILE = "epistemic_tr_v1.json"
@@ -73,6 +79,8 @@ class EpistemicCaseResult:
     abstained: bool
     false_confidence: bool
     rationale: str
+    # P0-007: UNCERTAIN ise belirsizliğin epistemik kaynağı.
+    uncertainty_reason: str = BelirsizlikSebebi.YOK.value
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -270,6 +278,7 @@ def run_epistemic_benchmark(
             # Çekimser kalınması gereken yerde kesin karar = yanlış güven.
             false_confidence=(sinif in ABSTENTION_REQUIRED and committed),
             rationale=(aday.rationale[0] if aday.rationale else ""),
+            uncertainty_reason=aday.belirsizlik_sebebi.value,
         ))
 
     def _dilim(sinif: str) -> List[EpistemicCaseResult]:
@@ -299,17 +308,39 @@ def run_epistemic_benchmark(
     # UNKNOWN ile UNCERTAIN ayrılabiliyor mu?
     unknown_durumlari = {sonuc.observed_state for sonuc in _dilim("UNKNOWN")}
     uncertain_durumlari = {sonuc.observed_state for sonuc in _dilim("UNCERTAIN")}
-    ayrilabilir = bool(unknown_durumlari.isdisjoint(uncertain_durumlari))
+    durum_koduyla_ayrilabilir = bool(unknown_durumlari.isdisjoint(uncertain_durumlari))
+
+    # P0-007: durum kodu ikisini de UNCERTAIN'e indirger, fakat
+    # ``belirsizlik_sebebi`` alanı epistemik kaynağı ayırır.
+    unknown_sebepleri = {sonuc.uncertainty_reason for sonuc in _dilim("UNKNOWN")}
+    uncertain_sebepleri = {sonuc.uncertainty_reason for sonuc in _dilim("UNCERTAIN")}
+    sebeple_ayrilabilir = bool(
+        unknown_sebepleri
+        and uncertain_sebepleri
+        and unknown_sebepleri.isdisjoint(uncertain_sebepleri)
+    )
+    # Her sınıf tek ve doğru sebebi üretmeli (karışık sebep = ayrım güvenilmez).
+    sebep_tutarli = (
+        unknown_sebepleri == {BelirsizlikSebebi.KAYIT_YOK.value}
+        and uncertain_sebepleri == {BelirsizlikSebebi.OZELLIK_YOK.value}
+    )
 
     epistemic_resolution = {
         "unknown_observed_states": sorted(unknown_durumlari),
         "uncertain_observed_states": sorted(uncertain_durumlari),
-        "distinguishable": ayrilabilir,
+        "distinguishable_by_state": durum_koduyla_ayrilabilir,
+        "unknown_reasons": sorted(unknown_sebepleri),
+        "uncertain_reasons": sorted(uncertain_sebepleri),
+        "distinguishable_by_reason": sebeple_ayrilabilir,
+        "reasons_consistent": sebep_tutarli,
+        "distinguishable": sebeple_ayrilabilir,
         "note": (
             "UNKNOWN (kayıt hiç yok) ve UNCERTAIN (özellik yazılmamış) epistemik "
-            "olarak farklıdır fakat Evaluator ikisini de DeneyimDurumu.UNCERTAIN'e "
-            "indirger. Bu ölçülmüş bir mimari sınırdır; ayrı durum kodu "
-            "eklenmeden ayrım yapılamaz."
+            "olarak farklıdır. Durum KODU ikisini de DeneyimDurumu.UNCERTAIN'e "
+            "indirger (distinguishable_by_state=False) fakat "
+            "ExperienceCandidate.belirsizlik_sebebi alanı kaynağı ayırır: "
+            "KAYIT_YOK ('bilmiyorum') ve OZELLIK_YOK ('emin değilim'). Ayrım "
+            "durum makinesi geçişleri bozulmadan ölçülebilir."
         ),
     }
 
@@ -346,6 +377,9 @@ def run_epistemic_benchmark(
         ),
         # Benchmark dejenere politikalarla geçilememeli (negatif kontrol).
         "beats_degenerate_baselines": baseline_dominated,
+        # "Bilmiyorum" ile "emin değilim" ayırt edilebilmeli (P0-007).
+        "unknown_uncertain_distinguishable": sebeple_ayrilabilir,
+        "uncertainty_reasons_consistent": sebep_tutarli,
     }
 
     return EpistemicReport(

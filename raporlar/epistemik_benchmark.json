@@ -42,7 +42,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -53,7 +54,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -64,7 +66,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -75,7 +78,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -86,7 +90,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -97,7 +102,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -108,7 +114,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -119,7 +126,8 @@
       "expected_state": "VALID",
       "false_confidence": false,
       "observed_state": "VALID",
-      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir"
+      "rationale": "Bilinen kısıtlarla uyumlu (puan=0.6625) → VALID; VERIFIED kararı bağımsız doğrulayıcıya aittir",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -130,7 +138,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Taş' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Taş' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -141,7 +150,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Bulut' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Bulut' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -152,7 +162,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Kitap' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'binilebilir=1.0' ister; nesne 'Kitap' için 'binilebilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -163,7 +174,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'At' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'At' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -174,7 +186,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'Araba' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'Araba' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -185,7 +198,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'Taş' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID"
+      "rationale": "Kural ihlali: ilişki 'okunabilir=1.0' ister; nesne 'Taş' için 'okunabilir=0.0' (kaynak=VERIFIED_RULE) → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -196,7 +210,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Özne tipi 'hayvan', ilişkinin izin verdikleri ['insan'] içinde değil → INVALID"
+      "rationale": "Özne tipi 'hayvan', ilişkinin izin verdikleri ['insan'] içinde değil → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": false,
@@ -207,7 +222,8 @@
       "expected_state": "INVALID",
       "false_confidence": false,
       "observed_state": "INVALID",
-      "rationale": "Özne tipi 'nesne', ilişkinin izin verdikleri ['insan'] içinde değil → INVALID"
+      "rationale": "Özne tipi 'nesne', ilişkinin izin verdikleri ['insan'] içinde değil → INVALID",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": true,
@@ -218,7 +234,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_TREN' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)"
+      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_TREN' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)",
+      "uncertainty_reason": "KAYIT_YOK"
     },
     {
       "abstained": true,
@@ -229,7 +246,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_UCAK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)"
+      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_UCAK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)",
+      "uncertainty_reason": "KAYIT_YOK"
     },
     {
       "abstained": true,
@@ -240,7 +258,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_KISI' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)"
+      "rationale": "Çözülemedi: 'bilinmeyen entity_id: E_YOK_KISI' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)",
+      "uncertainty_reason": "KAYIT_YOK"
     },
     {
       "abstained": true,
@@ -251,7 +270,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "Çözülemedi: 'bilinmeyen relation_id: R_YOK_UCMAK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)"
+      "rationale": "Çözülemedi: 'bilinmeyen relation_id: R_YOK_UCMAK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)",
+      "uncertainty_reason": "KAYIT_YOK"
     },
     {
       "abstained": true,
@@ -262,7 +282,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "Çözülemedi: 'bilinmeyen relation_id: R_YOK_YUZMEK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)"
+      "rationale": "Çözülemedi: 'bilinmeyen relation_id: R_YOK_YUZMEK' → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)",
+      "uncertainty_reason": "KAYIT_YOK"
     },
     {
       "abstained": true,
@@ -273,7 +294,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli"
+      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli",
+      "uncertainty_reason": "OZELLIK_YOK"
     },
     {
       "abstained": true,
@@ -284,7 +306,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli"
+      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli",
+      "uncertainty_reason": "OZELLIK_YOK"
     },
     {
       "abstained": true,
@@ -295,7 +318,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli"
+      "rationale": "'binilebilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli",
+      "uncertainty_reason": "OZELLIK_YOK"
     },
     {
       "abstained": true,
@@ -306,7 +330,8 @@
       "expected_state": "UNCERTAIN",
       "false_confidence": false,
       "observed_state": "UNCERTAIN",
-      "rationale": "'okunabilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli"
+      "rationale": "'okunabilir' özelliği nesne için BİLİNMİYOR → araştırma gerekli",
+      "uncertainty_reason": "OZELLIK_YOK"
     },
     {
       "abstained": true,
@@ -317,7 +342,8 @@
       "expected_state": "CONFLICT",
       "false_confidence": false,
       "observed_state": "CONFLICT",
-      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT"
+      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": true,
@@ -328,7 +354,8 @@
       "expected_state": "CONFLICT",
       "false_confidence": false,
       "observed_state": "CONFLICT",
-      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT"
+      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT",
+      "uncertainty_reason": "YOK"
     },
     {
       "abstained": true,
@@ -339,7 +366,8 @@
       "expected_state": "CONFLICT",
       "false_confidence": false,
       "observed_state": "CONFLICT",
-      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT"
+      "rationale": "Kayıtlı kanıt, yapısal kuralların tahminiyle ÇELİŞİYOR → CONFLICT",
+      "uncertainty_reason": "YOK"
     }
   ],
   "checks": {
@@ -348,7 +376,9 @@
     "conflicts_flagged": true,
     "known_cases_accepted": true,
     "no_false_confidence_on_unknown": true,
-    "no_silent_acceptance_of_false": true
+    "no_silent_acceptance_of_false": true,
+    "uncertainty_reasons_consistent": true,
+    "unknown_uncertain_distinguishable": true
   },
   "conflict_accuracy": 1.0,
   "confusion": {
@@ -371,13 +401,22 @@
   "correct": 28,
   "dataset_hash": "34e88fbfcacae3ded071312f898966e0beaa665b6fdc3c6a85815538a9021b21",
   "epistemic_resolution": {
-    "distinguishable": false,
-    "note": "UNKNOWN (kayıt hiç yok) ve UNCERTAIN (özellik yazılmamış) epistemik olarak farklıdır fakat Evaluator ikisini de DeneyimDurumu.UNCERTAIN'e indirger. Bu ölçülmüş bir mimari sınırdır; ayrı durum kodu eklenmeden ayrım yapılamaz.",
+    "distinguishable": true,
+    "distinguishable_by_reason": true,
+    "distinguishable_by_state": false,
+    "note": "UNKNOWN (kayıt hiç yok) ve UNCERTAIN (özellik yazılmamış) epistemik olarak farklıdır. Durum KODU ikisini de DeneyimDurumu.UNCERTAIN'e indirger (distinguishable_by_state=False) fakat ExperienceCandidate.belirsizlik_sebebi alanı kaynağı ayırır: KAYIT_YOK ('bilmiyorum') ve OZELLIK_YOK ('emin değilim'). Ayrım durum makinesi geçişleri bozulmadan ölçülebilir.",
+    "reasons_consistent": true,
     "uncertain_observed_states": [
       "UNCERTAIN"
     ],
+    "uncertain_reasons": [
+      "OZELLIK_YOK"
+    ],
     "unknown_observed_states": [
       "UNCERTAIN"
+    ],
+    "unknown_reasons": [
+      "KAYIT_YOK"
     ]
   },
   "false_confidence_cases": 0,

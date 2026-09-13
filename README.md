@@ -598,11 +598,16 @@ ama hiçbir bilineni kabul edemez. `beats_degenerate_baselines` kapısı
 gerçek değerlendiricinin her kolu dört eksende birden domine etmesini
 zorunlu kılar.
 
-**Gizlenmeyen sınır:** `UNKNOWN` (kayıt hiç yok) ile `UNCERTAIN` (özellik
-yazılmamış) epistemik olarak farklıdır, fakat evaluator ikisini de tek bir
-`UNCERTAIN` durumuna indirger. Rapor bunu `distinguishable = false` ile
-açıkça bildirir; ayrı durum kodu eklenmeden ayrım mümkün değildir. Bu
-ölçülmüş bir mimari sınırdır, kusur örtmesi değil.
+**Önce ölçülen, sonra kapatılan sınır:** `UNKNOWN` (kayıt hiç yok) ile
+`UNCERTAIN` (özellik yazılmamış) epistemik olarak farklıdır — *bilmiyorum*
+ile *emin değilim*. Evaluator ikisini de tek bir `UNCERTAIN` durumuna
+indiriyordu; bu önce gizlenmeden `distinguishable = false` diye raporlandı,
+sonra kapatıldı. Çözüm `DeneyimDurumu`'na yeni üye eklemek değil (durum
+makinesi ve 30+ karşılaştırma noktası kırılırdı), `ExperienceCandidate`'e
+makine-okunur `belirsizlik_sebebi` alanı eklemek oldu: `KAYIT_YOK` /
+`OZELLIK_YOK`. Rapor artık `distinguishable_by_state = false` (durum kodu
+hâlâ tek) ile `distinguishable_by_reason = true` ayrımını birlikte verir ve
+iki yeni kabul kapısı bunu zorunlu kılar.
 Ayrıntı: `docs/EPISTEMIK_BENCHMARK.md`.
 
 ### Deneyim verimi: EY'nin ötesinde (P1-005)

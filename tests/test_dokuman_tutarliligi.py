@@ -86,16 +86,34 @@ def test_epistemik_ana_metrikler_belgedeki_degerlerde():
     assert rapor.false_confidence_rate == 0.0
     assert rapor.unknown_accuracy == 1.0
     assert rapor.accuracy == 1.0
-    assert rapor.epistemic_resolution["distinguishable"] is False
+    # Ayrım sebep alanıyla yapılabiliyor; durum kodu seviyesinde hâlâ tek durum.
+    assert rapor.epistemic_resolution["distinguishable"] is True
+    assert rapor.epistemic_resolution["distinguishable_by_state"] is False
 
 
-def test_belge_unknown_uncertain_sinirini_saklamiyor():
-    """Ölçülmüş mimari sınır hem README'de hem belgede açıkça yazmalı."""
-    assert "distinguishable" in DOC_EPISTEMIK
-    assert "distinguishable = false" in README.lower() or \
-           "`distinguishable = false`" in README
+def test_belge_unknown_uncertain_ayrimini_dogru_anlatiyor():
+    """Sınır kapatıldı; belgeler hem eski ölçümü hem çözümü anlatmalı.
+
+    Önemli olan "başardık" demek değil, iki çözünürlük seviyesinin ayrı ayrı
+    raporlandığının belgede görünmesi: durum kodu hâlâ tek (`by_state=false`),
+    ayrım sebep alanında (`by_reason=true`).
+    """
+    for metin, ad in ((DOC_EPISTEMIK, "docs"), (README, "README")):
+        assert "KAYIT_YOK" in metin, ad
+        assert "OZELLIK_YOK" in metin, ad
+        assert "distinguishable_by_state" in metin, ad
+        assert "distinguishable_by_reason" in metin, ad
     assert "mimari sınır" in DOC_EPISTEMIK
-    assert "mimari sınır" in README
+
+
+def test_belirsizlik_sebebi_enum_belgeyle_uyumlu():
+    """Belgede listelenen sebep üyeleri gerçekten enum'da olmalı."""
+    from hga.knowledge import BelirsizlikSebebi
+
+    uyeler = {m.value for m in BelirsizlikSebebi}
+    assert uyeler == {"YOK", "KAYIT_YOK", "OZELLIK_YOK", "DOGRULAYICI_KARARSIZ"}
+    for uye in uyeler:
+        assert uye in DOC_EPISTEMIK, f"Belgede eksik sebep üyesi: {uye}"
 
 
 # --------------------------------------------------------------------------
