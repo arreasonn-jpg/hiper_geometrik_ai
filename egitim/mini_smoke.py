@@ -64,10 +64,11 @@ def mini_egitim_smoke_raporu(rapor_yol: Optional[str] = None,
         return rapor
 
     from bpe_tokenizer import BPETokenizer
-    from hga.evaluation import mini_turkce_corpus, perplexity_benchmark
     from kuresel_model import HiperGeometrikAI
+
     from egitim.egitici import KureselEgitimMotoru
     from egitim.saglamlik import checkpoint_uyumluluk_raporu
+    from hga.evaluation import mini_turkce_corpus, perplexity_benchmark
 
     torch.manual_seed(1234)
     log_dizini = log_dizini or os.path.join(KOK, "logs", "mini_training_smoke")

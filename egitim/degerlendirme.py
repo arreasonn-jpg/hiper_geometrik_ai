@@ -9,7 +9,7 @@ modül import edilebilir; gerçek değerlendirme çağrısında açıklayıcı h
 from __future__ import annotations
 
 import math
-from typing import Iterable, List, Optional, Tuple
+from typing import Any, Iterable, List, Optional, Tuple
 
 try:
     import torch  # type: ignore
@@ -50,13 +50,18 @@ def perplexity(model, token_ids: Iterable[int], baglam: Optional[int] = None,
     """
     _torch_gerekli()
     ids = [int(i) for i in token_ids]
-    baglam = int(baglam or getattr(model, "baglam_penceresi", 16))
+    baglam_ham: Any = baglam or getattr(model, "baglam_penceresi", 16)
+    baglam = int(baglam_ham)
     dataset = _NgramDataset(ids, baglam)
     if len(dataset) == 0:
         raise ValueError(f"Değerlendirme verisi çok kısa: {len(ids)} token, baglam={baglam}")
     device = torch.device(aygit) if aygit else next(model.parameters()).device
     loss_fn = nn.CrossEntropyLoss(ignore_index=ignore_index)
-    loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    # _NgramDataset, torch Dataset protokolünü (__len__/__getitem__) karşılar
+    # fakat ondan miras almaz; torch opsiyonel olduğu için taban sınıf
+    # import zamanında garanti değildir.
+    veri_kumesi: Any = dataset
+    loader: Any = DataLoader(veri_kumesi, batch_size=batch_size, shuffle=False)
     was_training = model.training
     model.eval()
     toplam, adim = 0.0, 0

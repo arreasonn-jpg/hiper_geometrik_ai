@@ -20,3 +20,8 @@ logs/
 checkpoints/
 # Manifestli deney koşuları; seçilmiş raporlar raporlar/ altında küratörlenir.
 experiments/EXP-*/
+
+# Paket derleme çıktıları (CI package job ve yerel `python -m build`)
+build/
+dist/
+*.egg-info/

@@ -38,7 +38,8 @@ class FraktalDecoder(nn.Module):
         y1 = odak.mean(dim=1)   # (B, n)
         y2 = odak.mean(dim=2)   # (B, n)
         y = torch.tanh(torch.cat([y1, y2], dim=-1))
-        return self.anlam_cozucu(y)  # ham logit — softmax YOK
+        cikti: torch.Tensor = self.anlam_cozucu(y)  # ham logit — softmax YOK
+        return cikti
 
 
 # Geriye dönük uyumluluk

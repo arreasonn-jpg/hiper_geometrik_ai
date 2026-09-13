@@ -14,7 +14,12 @@ yerine açıkça UNCERTAIN yapılır.
 from dataclasses import asdict, dataclass, field
 from typing import Callable, Dict, List, Optional
 
-from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
+from ..knowledge.schemas import (
+    BelirsizlikSebebi,
+    DeneyimDurumu,
+    ExperienceCandidate,
+    KaynakTuru,
+)
 from .consolidation import Consolidator
 from .state_machine import DeneyimDurumMakinesi
 
@@ -67,7 +72,7 @@ class DogrulamaHatti:
         if not gecis.ok:  # pragma: no cover - sözleşme ihlaline karşı savunma
             raise ValueError(gecis.neden)
 
-        sonuc = self.dogrulayici(store, aday)
+        sonuc: Optional[bool] = self.dogrulayici(store, aday)
         if sonuc is True:
             aday.source = KaynakTuru.EXTERNAL_VERIFIED
             aday.source_confidence = 1.0
@@ -84,6 +89,8 @@ class DogrulamaHatti:
             self.durum_makinesi.uygula(
                 aday, DeneyimDurumu.UNCERTAIN, "doğrulayıcı için kanıt yetersiz"
             )
+            # P0-007: bu belirsizliğin kaynağı evaluator değil, doğrulayıcıdır.
+            aday.belirsizlik_sebebi = BelirsizlikSebebi.DOGRULAYICI_KARARSIZ
         return sonuc
 
     def isle(self, store, adaylar: List[ExperienceCandidate]) -> DogrulamaRaporu:

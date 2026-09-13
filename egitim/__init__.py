@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Eğitim paketi: temel eğitici, instruction fine-tuning ve veri toplama."""
-from .determinizm import tohumla
 from .degerlendirme import perplexity
+from .determinizm import tohumla
 from .saglamlik import (
     amp_dogrula,
     checkpoint_gradyan_dogrula,

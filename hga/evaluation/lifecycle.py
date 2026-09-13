@@ -71,7 +71,9 @@ def run_lifecycle_benchmark() -> LifecycleBenchmarkReport:
         source_revision=revision, retrieved_at=start, max_age_seconds=30 * day,
         derived_from=(first_record.record_id, second_record.record_id),
     )
-    checkpoints = [{"name": "ingested", "counts": lifecycle.counts()}]
+    checkpoints: List[Dict[str, Any]] = [
+        {"name": "ingested", "counts": lifecycle.counts()}
+    ]
 
     lifecycle.audit(at=start + 31 * day)
     expired_counts = lifecycle.counts()

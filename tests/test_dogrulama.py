@@ -13,10 +13,14 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KaynakTuru, DeneyimDurumu  # noqa: E402
-from hga.experience import (AritmetikOrtam, aritmetik_etki_alani,  # noqa: E402
-                            ExperienceGenerator, ExperienceEvaluator,
-                            DogrulamaHatti)
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    DogrulamaHatti,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    aritmetik_etki_alani,
+)
+from hga.knowledge import DeneyimDurumu, KaynakTuru  # noqa: E402
 
 
 def _adaylar():

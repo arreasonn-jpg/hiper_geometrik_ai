@@ -68,6 +68,9 @@ class MilestoneCheckpoint:
     frr: float                     # false rejection rate (kümülatif)
     novelty: float                 # o döngüdeki yenilik oranı
     experience_yield: float        # EY = doğrulanmış yeni / üretilen
+    # P1-005: EY tek başına yanıltıcıdır. Aynı tabloda ayrıştırması da verilir.
+    novelty_yield: float           # NY = ayrık YENİ olgu / üretilen
+    useful_experience_yield: float  # UEY = doğru + geri çağrılabilir / üretilen
     memory_collision: int          # kümülatif bellek çakışması
     memory_recall: float           # doğrulanmış girdilerin geri çağrılabilirliği
     incorrect_knowledge: int       # bilgi tabanındaki yanlış olgu (0 olmalı)
@@ -125,6 +128,8 @@ class MilestoneReport:
             satir("FRR", "frr", "{:.6f}"),
             satir("Novelty", "novelty", "{:.6f}"),
             satir("Experience Yield", "experience_yield", "{:.6f}"),
+            satir("Novelty Yield (NY)", "novelty_yield", "{:.6f}"),
+            satir("Useful Exp. Yield (UEY)", "useful_experience_yield", "{:.6f}"),
             satir("Memory Collision", "memory_collision"),
             satir("Memory Recall", "memory_recall", "{:.6f}"),
             satir("Incorrect Knowledge", "incorrect_knowledge"),
@@ -159,7 +164,8 @@ def run_milestone_experiment(
     versions = KnowledgeVersionStore(domain.store, ilk_etiket="K0 başlangıç bilgisi")
     ledger = ExperienceLedger()
 
-    initial_size = len(_unique_facts(domain.store))
+    baslangic_olgulari = set(_unique_facts(domain.store))
+    initial_size = len(baslangic_olgulari)
 
     # Faz 4/9 epistemik prob: her döngüye kanıtı bilinmeyen (UNCERTAIN) ve
     # kayıtlı kanıtla çelişen (CONFLICT) adaylar karıştırılır. Amaç bu iki
@@ -196,6 +202,18 @@ def run_milestone_experiment(
                         bellek_girdileri) -> MilestoneCheckpoint:
         olgular = _unique_facts(domain.store)
         yanlis = sum(not _fact_correct(domain, uclu) for uclu in olgular)
+
+        # P1-005 ayrıştırması. EY = doğrulanan/üretilen, aynı üçlü tekrar
+        # doğrulanırsa da artar. NY yalnız K₀'a göre ayrık YENİ olguyu sayar;
+        # UEY ayrıca olgunun doğru VE bellekten geri çağrılabilir olmasını arar.
+        ayrik_yeni = max(len(olgular) - initial_size, 0)
+        kullanisli = 0
+        for deneyim_id, uclu in bellek_girdileri:
+            if (uclu in olgular and uclu not in baslangic_olgulari
+                    and memory.icerir(deneyim_id, uclu)
+                    and _fact_correct(domain, uclu)):
+                kullanisli += 1
+
         return MilestoneCheckpoint(
             cycle=cycle,
             verified_knowledge=len(olgular),
@@ -208,6 +226,8 @@ def run_milestone_experiment(
                        toplam["verified"] + toplam["false_rejection"]),
             novelty=novelty,
             experience_yield=_ratio(toplam["verified"], toplam["generated"]),
+            novelty_yield=_ratio(ayrik_yeni, toplam["generated"]),
+            useful_experience_yield=_ratio(kullanisli, toplam["generated"]),
             memory_collision=memory.cakisma_sayisi,
             memory_recall=_memory_recall(memory, bellek_girdileri),
             incorrect_knowledge=yanlis,
@@ -391,6 +411,8 @@ def milestone_markdown(raporlar: Sequence[MilestoneReport],
         ("FRR", "frr", "{:.6f}"),
         ("Novelty", "novelty", "{:.4f}"),
         ("Experience Yield", "experience_yield", "{:.4f}"),
+        ("Novelty Yield (NY)", "novelty_yield", "{:.4f}"),
+        ("Useful Exp. Yield (UEY)", "useful_experience_yield", "{:.4f}"),
         ("Memory Collision", "memory_collision", "{:.1f}"),
         ("Memory Recall", "memory_recall", "{:.4f}"),
         ("Incorrect Knowledge", "incorrect_knowledge", "{:.1f}"),

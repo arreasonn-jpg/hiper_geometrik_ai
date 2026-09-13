@@ -19,6 +19,8 @@ Kullanım:
     python -m hga paradigma              # neural vs symbolic vs hybrid (Faz 21)
     python -m hga olcekli-golden         # 100/1K/10K golden benchmark (Faz 3/6)
     python -m hga kronecker-rank         # effective rank + zincir çöküşü (Faz 19/20)
+    python -m hga epistemik              # KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE (P0-007)
+    python -m hga verim                  # NY / UEY / GY / VID verim ayrıştırması (P1-005)
     python -m hga koken                  # provenance denetimi (Faz 27/28)
     python -m hga oncelik                # Priority(E) ağırlık ablasyonu (Faz 25)
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
@@ -38,6 +40,7 @@ import argparse
 import json
 import os
 import sys
+from typing import Optional
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI = os.path.join(KOK, "mimari")
@@ -802,6 +805,282 @@ def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
         print(f"  markdown: {markdown}")
 
 
+_TEK_TOHUM_SINIRI = "Her rapor tek tohumun tek koşusudur"
+
+
+def _toplu_sinirlar(sinirlar, tohum_sayisi):
+    """Tek koşu için yazılan sınır cümlesini çok tohumlu rapora uyarla.
+
+    run_yield_experiment tek koşu ürettiği için "güven aralığı yok" der. Bu
+    cümle çok tohumlu toplu raporda YANLIŞ olur: tablo zaten bootstrap GA
+    içerir. Tohum sayısına göre cümleyi değiştiriyoruz.
+    """
+    if tohum_sayisi <= 1:
+        return list(sinirlar)
+    uyarlanmis = []
+    for sinir in sinirlar:
+        if sinir.startswith(_TEK_TOHUM_SINIRI):
+            uyarlanmis.append(
+                f"Güven aralıkları {tohum_sayisi} tohumun bootstrap dağılımından "
+                "hesaplandı; tohum sayısı düşük olduğu için aralıklar geniştir."
+            )
+        else:
+            uyarlanmis.append(sinir)
+    return uyarlanmis
+
+
+def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
+           negatives_per_fact=3, seeds=None, out=None, markdown=None):
+    """P1-005: EY'yi NY / UEY / GY / VID eksenlerine ayır."""
+    from hga.evaluation.statistics import summarize_seed_metric
+    from hga.experience.verim import run_yield_experiment
+
+    tohumlar = [int(v.strip()) for v in (seeds or "1").split(",") if v.strip()]
+    raporlar = [
+        run_yield_experiment(
+            cycles=int(cycles), batch_size=int(batch),
+            initial_facts=int(initial_facts), operands_max=int(operands_max),
+            negatives_per_fact=int(negatives_per_fact), seed=tohum,
+        )
+        for tohum in tohumlar
+    ]
+    ilk = raporlar[0]
+
+    print("Deneyim Verimi Ayrıştırması (P1-005)\n")
+    print(f"  protokol : {ilk.protocol}")
+    print(f"  tohumlar : {tohumlar}")
+    print(f"  döngü    : {cycles} × batch {batch}\n")
+
+    eksenler = [
+        ("EY  (klasik)", "experience_yield", "doğrulanan / üretilen"),
+        ("NY  Yenilik", "novelty_yield", "ayrık YENİ olgu / üretilen"),
+        ("UEY Kullanışlı", "useful_experience_yield", "doğru + geri çağrılabilir"),
+        ("GY  Genelleme", "generalization_yield", "holdout doğruluk artışı"),
+        ("VID Bilgi yoğ.", "verified_information_density", "bit / üretilen deneyim"),
+    ]
+    print(f"  {'metrik':<16}{'ortalama':>10}{'%95 GA':>22}  açıklama")
+    for etiket, alan, aciklama in eksenler:
+        degerler = [getattr(rapor, alan) for rapor in raporlar]
+        ozet = summarize_seed_metric(degerler)
+        aralik = f"[{ozet['ci_lower']:.4f}, {ozet['ci_upper']:.4f}]"
+        print(f"  {etiket:<16}{ozet['mean']:>10.4f}{aralik:>22}  {aciklama}")
+
+    print("\n  AYRIŞMA (bu metrikler EY'den farklı bir şey söylüyor mu?)")
+    for anahtar in ("ey_vs_ny", "ey_vs_uey", "ny_vs_uey"):
+        print(f"    {anahtar:<24}: {ilk.divergence[anahtar]:+.4f}")
+    print(f"    {'EY yeniliği abartıyor':<24}: "
+          f"{'EVET' if ilk.divergence['ey_overstates_novelty'] else 'hayır'}")
+    print(f"    {'EY kullanışlılığı abartıyor':<24}: "
+          f"{'EVET' if ilk.divergence['ey_overstates_usefulness'] else 'hayır'}")
+
+    print("\n  HAM SAYIMLAR (tohum 1)")
+    print(f"    üretilen={ilk.generated}  doğrulanan={ilk.verified}  "
+          f"ayrık_yeni={ilk.distinct_new_facts}  kullanışlı={ilk.useful_facts}")
+    print(f"    tekrar_üretim={ilk.duplicate_generations}  "
+          f"bellek_çakışma={ilk.memory_collisions}  yanlış_olgu={ilk.incorrect_facts}")
+    print(f"    holdout: öncesi {ilk.holdout_before['decided']}/{ilk.holdout_before['total']} karar, "
+          f"sonrası {ilk.holdout_after['decided']}/{ilk.holdout_after['total']} karar "
+          f"(isabet {ilk.holdout_after['accuracy_on_decided']:.4f})")
+
+    print(f"\n  BULGULAR (tohum {tohumlar[0]})")
+    for bulgu in ilk.findings:
+        print(f"    - {bulgu}")
+    print("\n  SINIRLAR")
+    for sinir in _toplu_sinirlar(ilk.limitations, len(tohumlar)):
+        print(f"    - {sinir}")
+
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            ozetler = {}
+            for _, alan, _aciklama in eksenler:
+                degerler = [getattr(rapor, alan) for rapor in raporlar]
+                ozetler[alan] = summarize_seed_metric(degerler)
+            json.dump({"seeds": tohumlar,
+                       "aggregate": ozetler,
+                       "reports": [rapor.to_dict() for rapor in raporlar]},
+                      handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"\n  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Deneyim Verimi Ayrıştırması (P1-005)\n\n")
+            handle.write(f"Tohumlar: {tohumlar}\n\n")
+            handle.write("| Metrik | Ortalama | %95 GA |\n|---|---:|---:|\n")
+            for etiket, alan, _ in eksenler:
+                degerler = [getattr(rapor, alan) for rapor in raporlar]
+                ozet = summarize_seed_metric(degerler)
+                handle.write(f"| {etiket} | {ozet['mean']:.4f} | "
+                             f"[{ozet['ci_lower']:.4f}, {ozet['ci_upper']:.4f}] |\n")
+            handle.write(f"\n## Bulgular (tohum {tohumlar[0]})\n\n")
+            for bulgu in ilk.findings:
+                handle.write(f"- {bulgu}\n")
+            handle.write("\n## Sınırlar\n\n")
+            for sinir in _toplu_sinirlar(ilk.limitations, len(tohumlar)):
+                handle.write(f"- {sinir}\n")
+        print(f"  markdown: {markdown}")
+
+
+def _cok_adimli(seeds=None, hops=None, distractors=None, slots=4096,
+                out=None, markdown=None):
+    """P1-004/P1-006: çok adımlı çıkarım + uzun bağlam dayanıklılığı."""
+    from hga.evaluation.multi_hop import (
+        DEFAULT_DISTRACTORS,
+        DEFAULT_HOPS,
+        multi_hop_markdown,
+        run_multi_hop_benchmark,
+    )
+
+    def _liste(metin, varsayilan):
+        if not metin:
+            return varsayilan
+        return tuple(int(v.strip()) for v in str(metin).split(",") if v.strip())
+
+    tohumlar = _liste(seeds, (1, 2, 3))
+    hop_listesi = _liste(hops, DEFAULT_HOPS)
+    dolgu_listesi = _liste(distractors, DEFAULT_DISTRACTORS)
+
+    rapor = run_multi_hop_benchmark(
+        hops=hop_listesi, distractor_levels=dolgu_listesi,
+        seeds=tohumlar, slot_sayisi=int(slots),
+    )
+
+    print("Çok Adımlı Çıkarım ve Uzun Bağlam (P1-004 / P1-006)\n")
+    print(f"  protokol   : {rapor.protocol}")
+    print(f"  veri imzası: {rapor.dataset_hash}")
+    print(f"  tohumlar   : {rapor.seeds}   bellek slotu: {slots}\n")
+
+    print("  DOĞRULUK IZGARASI (satır = zincir derinliği, sütun = dolgu olgu)")
+    etiketler = {
+        hop: f"{hop} adım" + (" (geri çağ.)" if hop == 1 else "")
+        for hop in rapor.hops
+    }
+    genislik = max(len(e) for e in etiketler.values()) + 2
+    print(" " * (4 + genislik) + "".join(
+        f"{d:>10}" for d in rapor.distractor_levels))
+    for hop in rapor.hops:
+        hucreler = {c.distractors: c for c in rapor.cells if c.hop == hop}
+        satir = f"    {etiketler[hop]:<{genislik}}" + "".join(
+            f"{hucreler[d].accuracy:>10.4f}" for d in rapor.distractor_levels
+        )
+        print(satir)
+
+    print("\n  ASIL METRİKLER")
+    print(f"    çok adımlı çıkarım (hop>=2) : {rapor.inference_accuracy:.4f}")
+    print(f"    tek adımlı geri çağırma     : {rapor.recall_accuracy:.4f}")
+    print(f"    en derin güvenilir zincir   : {rapor.deepest_reliable_hop} adım")
+    print(f"    bağlam bozulması            : {rapor.context_degradation:+.4f}")
+
+    print("\n  NEGATİF KONTROL (zinciri takip etmeyen sabit cevaplar)")
+    for kol in rapor.degenerate_arms:
+        print(f"    {kol.arm:<14}{kol.accuracy:>9.4f}")
+    print(f"    {'MOTOR':<14}{rapor.overall_accuracy:>9.4f}")
+
+    print("\n  KABUL KAPILARI")
+    for ad, sonuc in rapor.checks.items():
+        print(f"    {ad:<28}: {'GEÇTİ' if sonuc else 'KALDI'}")
+
+    print("\n  BULGULAR")
+    for bulgu in rapor.findings:
+        print(f"    - {bulgu}")
+    print("\n  SINIRLAR")
+    for sinir in rapor.limitations:
+        print(f"    - {sinir}")
+
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False,
+                      indent=2, sort_keys=True)
+        print(f"\n  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write(multi_hop_markdown(rapor))
+        print(f"  markdown: {markdown}")
+
+
+def _epistemik(seeds=None, out=None, markdown=None):
+    """P0-007: KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik benchmarkı."""
+    from hga.evaluation.epistemic import (
+        EpistemicDataset,
+        run_epistemic_baselines,
+        run_epistemic_benchmark,
+    )
+
+    veri = EpistemicDataset()
+    rapor = run_epistemic_benchmark(veri)
+    tohumlar = [int(v.strip()) for v in (seeds or "1").split(",") if v.strip()]
+
+    print("Epistemik Benchmark — bilmediğini biliyor mu? (P0-007)\n")
+    print(f"  protokol       : {rapor.protocol}")
+    print(f"  veri kümesi    : {rapor.dataset_hash[:16]}…  ({rapor.total_cases} vaka)")
+    print(f"  tohumlar       : {tohumlar} (protokol deterministik)\n")
+
+    print("  ASIL METRİKLER")
+    print(f"    yanlış güven oranı (↓)   : {rapor.false_confidence_rate:.3f} "
+          f"({rapor.false_confidence_cases} vaka)")
+    print(f"    bilinmeyen doğruluğu (↑) : {rapor.unknown_accuracy:.3f}")
+    print(f"    sessiz kabul oranı (↓)   : {rapor.silent_failure_rate:.3f}")
+    print(f"    genel doğruluk           : {rapor.accuracy:.3f}\n")
+
+    print("  SINIF BAZINDA")
+    print(f"    {'sınıf':<12}{'n':>4}{'doğru':>7}{'isabet':>9}  gözlenen durumlar")
+    for sinif in rapor.per_class:
+        durumlar = ", ".join(f"{k}×{v}" for k, v in sinif["observed_states"].items())
+        print(f"    {sinif['epistemic_class']:<12}{sinif['total']:>4}"
+              f"{sinif['correct']:>7}{sinif['accuracy']:>9.3f}  {durumlar}")
+
+    print("\n  NEGATİF KONTROL (dejenere politikalar)")
+    print(f"    {'kol':<18}{'doğruluk':>9}{'bilinen':>9}{'bilinmeyen':>12}{'y.güven':>9}")
+    for kol in run_epistemic_baselines(veri):
+        print(f"    {kol.arm:<18}{kol.accuracy:>9.3f}{kol.known_accuracy:>9.3f}"
+              f"{kol.unknown_accuracy:>12.3f}{kol.false_confidence_rate:>9.3f}")
+    print(f"    {'EVALUATOR':<18}{rapor.accuracy:>9.3f}{rapor.known_accuracy:>9.3f}"
+          f"{rapor.unknown_accuracy:>12.3f}{rapor.false_confidence_rate:>9.3f}")
+
+    ayrim = rapor.epistemic_resolution
+    print("\n  EPİSTEMİK ÇÖZÜNÜRLÜK (dürüstlük notu)")
+    print(f"    UNKNOWN ↔ UNCERTAIN ayrılabilir mi? : "
+          f"{'EVET' if ayrim['distinguishable'] else 'HAYIR'}")
+    print(f"    {ayrim['note']}")
+
+    print("\n  KAPILAR")
+    for ad, deger in rapor.checks.items():
+        print(f"    [{'GEÇTİ' if deger else 'KALDI'}] {ad}")
+
+    print("\n  SINIRLAR")
+    for sinir in rapor.limitations:
+        print(f"    - {sinir}")
+
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
+                      sort_keys=True)
+        print(f"\n  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Epistemik Benchmark (P0-007)\n\n")
+            handle.write(f"Veri kümesi hash: `{rapor.dataset_hash}`\n\n")
+            handle.write(f"- Yanlış güven oranı (↓): **{rapor.false_confidence_rate:.3f}**\n")
+            handle.write(f"- Bilinmeyen doğruluğu (↑): **{rapor.unknown_accuracy:.3f}**\n")
+            handle.write(f"- Sessiz kabul oranı (↓): **{rapor.silent_failure_rate:.3f}**\n")
+            handle.write(f"- Genel doğruluk: **{rapor.accuracy:.3f}**\n\n")
+            handle.write("## Sınıf bazında\n\n")
+            handle.write("| Sınıf | n | Doğru | İsabet |\n|---|---:|---:|---:|\n")
+            for sinif in rapor.per_class:
+                handle.write(f"| {sinif['epistemic_class']} | {sinif['total']} | "
+                             f"{sinif['correct']} | {sinif['accuracy']:.3f} |\n")
+            handle.write("\n## Epistemik çözünürlük\n\n")
+            handle.write(f"{ayrim['note']}\n\n")
+            handle.write("## Sınırlar\n\n")
+            for sinir in rapor.limitations:
+                handle.write(f"- {sinir}\n")
+        print(f"  markdown: {markdown}")
+
+
 def _kronecker_rank(n_values, k_values, seed=1, out=None, markdown=None):
     """Faz 19/20: effective rank + n×K taraması ve zincir çöküş testi."""
     from hga.evaluation.kronecker_rank import run_nk_rank_sweep
@@ -1093,8 +1372,8 @@ def _tokenizer_benchmark():
 
 def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
                           tiny: bool = True, batch_size: int = 64,
-                          n: int = None, katman: int = None,
-                          baglam: int = None, vocab: int = None):
+                          n: Optional[int] = None, katman: Optional[int] = None,
+                          baglam: Optional[int] = None, vocab: Optional[int] = None):
     """Mini Türkçe perplexity smoke'u; torch yoksa güvenli bilgi ver."""
     try:
         import torch  # noqa: F401
@@ -1154,9 +1433,11 @@ def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
 
 
 def _checkpoint_rapor(yol, config_yol=None, strict: bool = True,
-                      n: int = None, katman: int = None, baglam: int = None,
-                      vocab: int = None, emb: int = None, heads: int = None,
-                      seyrek_satir: int = None, seyrek_boyut: int = None):
+                      n: Optional[int] = None, katman: Optional[int] = None,
+                      baglam: Optional[int] = None, vocab: Optional[int] = None,
+                      emb: Optional[int] = None, heads: Optional[int] = None,
+                      seyrek_satir: Optional[int] = None,
+                      seyrek_boyut: Optional[int] = None):
     """Checkpoint'i yüklemeden model anahtar/şekil uyumluluğunu raporla."""
     if not yol:
         raise SystemExit("checkpoint-rapor komutu için checkpoint yolu gerekli")
@@ -1379,6 +1660,7 @@ def main(argv=None):
                                      "kapasite", "bilgi-surum", "defter",
                                      "memory-interference", "paradigma",
                                      "olcekli-golden", "kronecker-rank",
+                                     "epistemik", "verim", "cok-adimli",
                                      "koken", "oncelik"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
@@ -1450,6 +1732,10 @@ def main(argv=None):
                    help="memory-benchmark için tablo başına slot sayısı")
     p.add_argument("--tables", default="1,2",
                    help="memory-benchmark tablo sayıları (1,2 veya ikisi)")
+    p.add_argument("--hops", default=None,
+                   help="cok-adimli: zincir derinlikleri (örn 1,2,3,4,5)")
+    p.add_argument("--distractors", default=None,
+                   help="cok-adimli: araya giren dolgu olgu sayıları (örn 0,16,64,256)")
     p.add_argument("--active-dynamic", action="store_true",
                    help="memory-benchmark: aynı streamde aktif bounded Dynamic KV'yi de kır")
     p.add_argument("--audit-samples", type=int, default=256,
@@ -1534,6 +1820,15 @@ def main(argv=None):
      "kronecker-rank": lambda: _kronecker_rank(
          args.n_values, args.k_values, seed=1,
          out=args.out, markdown=args.markdown),
+     "epistemik": lambda: _epistemik(args.seeds, out=args.out,
+                                     markdown=args.markdown),
+     "cok-adimli": lambda: _cok_adimli(args.seeds, hops=args.hops,
+                                       distractors=args.distractors,
+                                       slots=args.memory_slots,
+                                       out=args.out, markdown=args.markdown),
+     "verim": lambda: _verim(args.cycles, args.batch, args.initial_facts,
+                             args.operands_max, args.negatives_per_fact,
+                             args.seeds, out=args.out, markdown=args.markdown),
      "koken": lambda: _provenance(out=args.out, markdown=args.markdown),
      "oncelik": lambda: _priority(k=10, out=args.out, markdown=args.markdown),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),

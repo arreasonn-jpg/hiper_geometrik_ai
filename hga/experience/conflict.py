@@ -23,7 +23,7 @@ değerlendirir. MODEL_GENERATED adaylar burada da asla VERIFIED'a terfi etmez.
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional
 
-from ..knowledge.schemas import ExperienceCandidate, DeneyimDurumu, KaynakTuru
+from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 from .evaluator import ExperienceEvaluator
 
 
@@ -72,8 +72,8 @@ class ConflictResolver:
             if pv is None:
                 return None
             if hedef >= 0.5:
-                return pv.deger >= 0.5
-            return pv.deger < 0.5
+                return bool(pv.deger >= 0.5)
+            return bool(pv.deger < 0.5)
         return True
 
     # ── Alternatif açıklama/deneyim üretimi ───────────────────────────────
@@ -83,7 +83,10 @@ class ConflictResolver:
         varlıklarla değiştirerek alternatif deneyimler üretir (keşif)."""
         try:
             r = store.relations.iliski_al(aday.relation_id)
-            object_ = store.entities.getir(aday.object_id)
+            # Nesne varlığının kayıtlı olması ön koşuldur; yoksa KeyError ile
+            # boş liste döneriz. Dönen kayıt burada kullanılmaz, yalnız varlık
+            # kontrolü içindir.
+            store.entities.getir(aday.object_id)
         except KeyError:
             return []
 

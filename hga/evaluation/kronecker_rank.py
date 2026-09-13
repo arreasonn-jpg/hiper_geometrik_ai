@@ -85,7 +85,7 @@ def theoretical_contract(n: int, k: int) -> Dict[str, Any]:
     }
 
 
-def _spectrum(torch, matrix) -> Dict[str, float]:
+def _spectrum(torch, matrix) -> Dict[str, Any]:
     """Tekil değer spektrumundan rank ve etkin boyut ölçüleri."""
     singular = torch.linalg.svdvals(matrix.detach().double())
     toplam = float(singular.sum().item())
@@ -254,8 +254,8 @@ def measure_chain_collapse(n: int = 8, k: int = 4, seed: int = 1,
 
     return CokusOlcumu(
         n=int(n), K=int(k), activation=activation,
-        composite_rank=olculer["numerical_rank"],
-        single_layer_equivalent_rank=esdeger_olcu["numerical_rank"],
+        composite_rank=int(olculer["numerical_rank"]),
+        single_layer_equivalent_rank=int(esdeger_olcu["numerical_rank"]),
         collapse_residual=round(goreli, 10),
         collapsed=bool(cokmus),
         effective_dimension=olculer["entropy_effective_dimension"],
@@ -334,7 +334,7 @@ def run_nk_rank_sweep(
                 trainable_parameters=sozlesme["trainable_parameters"],
                 interaction_space_upper_bound=float(
                     sozlesme["interaction_space_upper_bound"]),
-                measured_rank=tek.measured["numerical_rank"],
+                measured_rank=int(tek.measured["numerical_rank"]),
                 max_operator_rank=int(n) * int(n),
                 rank_utilization=tek.rank_utilization,
                 effective_dimension=tek.measured["entropy_effective_dimension"],

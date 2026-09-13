@@ -15,13 +15,13 @@ Kullanım:
     python egitim/egitici.py --korpus turkce_metin.txt --cag 5
     python egitim/egitici.py --n 128 --katman 2 --batch 32   (küçük/deneysel)
 """
+import argparse
+import glob
+import json
+import math
 import os
 import sys
 import time
-import math
-import glob
-import json
-import argparse
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
@@ -32,17 +32,23 @@ for _p in [KOK, os.path.join(KOK, "mimari")]:
 
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-
-from kuresel_model import (model_olustur, agirlik_kaydet,
-                           VARSAYILAN_N, VARSAYILAN_KATMAN, VARSAYILAN_BAGLAM,
-                           VARSAYILAN_SEYREK_SATIR, VARSAYILAN_SEYREK_BOYUT)
-from model_config import yukle as model_config_yukle
 from bpe_tokenizer import BPETokenizer
+from kuresel_model import (
+    VARSAYILAN_BAGLAM,
+    VARSAYILAN_KATMAN,
+    VARSAYILAN_N,
+    VARSAYILAN_SEYREK_BOYUT,
+    VARSAYILAN_SEYREK_SATIR,
+    agirlik_kaydet,
+    model_olustur,
+)
+from model_config import yukle as model_config_yukle
+from torch.utils.data import DataLoader, Dataset
+
 try:
     from egitim.scheduler import warmup_cosine_scheduler
 except Exception:  # doğrudan script çalıştırma
-    from scheduler import warmup_cosine_scheduler
+    from scheduler import warmup_cosine_scheduler  # type: ignore[no-redef]
 
 
 class NgramDataset(Dataset):

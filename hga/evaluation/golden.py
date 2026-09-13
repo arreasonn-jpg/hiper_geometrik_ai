@@ -30,7 +30,7 @@ def _read_json(name: str) -> Dict[str, Any]:
         payload = json.load(handle)
     if payload.get("schema_version") != 1 or not isinstance(payload.get("records"), list):
         raise ValueError(f"Geçersiz golden dosyası: {name}")
-    return payload
+    return dict(payload)
 
 
 def _safe_ratio(numerator: int, denominator: int) -> float:

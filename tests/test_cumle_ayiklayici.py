@@ -13,9 +13,12 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KnowledgeStore, KaynakTuru, DeneyimDurumu  # noqa: E402
-from hga.experience import (CumleAyiklayici, cumlelerden_bilgi_aktar,  # noqa: E402
-                            ExperienceEvaluator)
+from hga.experience import (  # noqa: E402
+    CumleAyiklayici,
+    ExperienceEvaluator,
+    cumlelerden_bilgi_aktar,
+)
+from hga.knowledge import DeneyimDurumu, KaynakTuru, KnowledgeStore  # noqa: E402
 
 
 def test_ayikla_binmek():

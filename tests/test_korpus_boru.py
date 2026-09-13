@@ -14,9 +14,12 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
+from hga.experience import (  # noqa: E402
+    korpus_borusu,
+    korpus_dosyasindan,
+    veri_toplayici_ciktisindan,
+)
 from hga.knowledge import KnowledgeStore  # noqa: E402
-from hga.experience import (korpus_borusu, korpus_dosyasindan,  # noqa: E402
-                            veri_toplayici_ciktisindan)
 
 METIN = ("Ali ataya bindi.\n"
          "Mehmet kamyona bindi.\n"

@@ -22,8 +22,8 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KnowledgeStore, KaynakTuru, DeneyimDurumu  # noqa: E402
 from hga.experience import ExperienceEvaluator, Scoring  # noqa: E402
+from hga.knowledge import DeneyimDurumu, KaynakTuru, KnowledgeStore  # noqa: E402
 
 
 def demo_store() -> KnowledgeStore:
@@ -43,7 +43,7 @@ def demo_store() -> KnowledgeStore:
     return k
 
 
-def aday(subject, relation, object_, **kw) -> "ExperienceCandidate":
+def aday(subject, relation, object_, **kw):
     from hga.knowledge import ExperienceCandidate
     return ExperienceCandidate(
         experience_id=kw.pop("experience_id", "X_TEST"),

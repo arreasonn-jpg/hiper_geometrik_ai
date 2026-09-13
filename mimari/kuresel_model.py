@@ -28,13 +28,12 @@ Tek doğruluk kaynağı (rapor 8.1):
 """
 import torch
 import torch.nn as nn
-
-from kuresel_bag import KureselZincir
-from encoder import GeometrikVeriEncoder
 from decoder import FraktalDecoder
+from encoder import GeometrikVeriEncoder
 from hiper_attention import HiperGeometrikAttention
+from kuresel_bag import KureselZincir
+from model_config import VARSAYILAN_MODEL_CONFIG, ModelConfig
 from seyrek_tablo import HashlenmisKureselTablo
-from model_config import ModelConfig, VARSAYILAN_MODEL_CONFIG
 
 # ── Tek doğruluk kaynağı: varsayılan mimari ayarları (rapor 8.3 / 9.6.4) ──
 # Değerlerin asıl kaynağı mimari/model_config.py + hga/config/model_config.yaml.
@@ -137,7 +136,8 @@ class HiperGeometrikAI(nn.Module):
         matris = self.encoder(duz)                # (B, n, n) — 0→1: n² sanal köşe
         matris = self.kuresel_bag(matris)         # (B, n, n) — K bilinear katman
         matris = self.norm_cikis(matris)
-        return self.decoder(matris)               # (B, sozluk) — softmax YOK
+        logitler: torch.Tensor = self.decoder(matris)   # (B, sozluk) — softmax YOK
+        return logitler
 
     def forward_cacheli_pencere(self, x: torch.Tensor, cache: dict | None = None,
                                 attention_mask: torch.Tensor | None = None):

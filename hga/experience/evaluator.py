@@ -27,7 +27,7 @@ OTOMATİK olarak VERIFIED kabul EDİLMEZ — en fazla VALID (bellek adayı) olur
 
 from typing import Dict, Optional
 
-from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate
+from ..knowledge.schemas import BelirsizlikSebebi, DeneyimDurumu, ExperienceCandidate
 from .scoring import Scoring
 
 # Varsayılan eşikler (experience_config.yaml ile örtüşür)
@@ -85,7 +85,7 @@ class ExperienceEvaluator:
         yapisal_olumlu = pc >= 0.5
         kanit_olumlu = agrega["score"] >= 0.5
         # kayıtlı kanıt, yapısal kuralların tahminiyle zıt yönde ise çelişki
-        return yapisal_olumlu != kanit_olumlu
+        return bool(yapisal_olumlu != kanit_olumlu)
 
     # ── Ana değerlendirme ────────────────────────────────────────────────
     def degerlendir(self, aday: ExperienceCandidate, store) -> ExperienceCandidate:
@@ -96,12 +96,16 @@ class ExperienceEvaluator:
         """
         aday.rationale = []
         aday.evidence = []
+        # Yeniden değerlendirmede eski sebep sızmamalı.
+        aday.belirsizlik_sebebi = BelirsizlikSebebi.YOK
 
         subject, relation, object_, hata = self._coz(store, aday)
         if hata:
             aday.rationale.append(
                 f"Çözülemedi: {hata} → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)")
             aday.state = DeneyimDurumu.UNCERTAIN
+            # P0-007: "bilmiyorum" — kayıt hiç yok.
+            aday.belirsizlik_sebebi = BelirsizlikSebebi.KAYIT_YOK
             aday.scores = {}
             return aday
 
@@ -169,6 +173,8 @@ class ExperienceEvaluator:
         if yetersiz_kanit:
             aday.rationale.append("Gerekli özellik için yetersiz kanıt → UNCERTAIN")
             aday.state = DeneyimDurumu.UNCERTAIN
+            # P0-007: "emin değilim" — varlık var, özellik yazılmamış.
+            aday.belirsizlik_sebebi = BelirsizlikSebebi.OZELLIK_YOK
             self._skorla(store, aday, subject, relation, object_, celiski=False)
             return aday
 

@@ -13,8 +13,13 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.experience import (aritmetik_etki_alani, kos, ozetle,  # noqa: E402
-                            karsilastirma, AritmetikOrtam)
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    aritmetik_etki_alani,
+    karsilastirma,
+    kos,
+    ozetle,
+)
 
 
 def test_aritmetik_etki_alani():

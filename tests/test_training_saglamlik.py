@@ -75,9 +75,11 @@ def test_kuresel_egitim_motoru_tiny_checkpoint_log():
     import json
     import os
     import tempfile
+
     import torch
-    from egitim.egitici import KureselEgitimMotoru
     from kuresel_model import HiperGeometrikAI
+
+    from egitim.egitici import KureselEgitimMotoru
 
     torch.manual_seed(123)
     model = HiperGeometrikAI(n=8, katman_sayisi=1, baglam_penceresi=4, emb_dim=8,

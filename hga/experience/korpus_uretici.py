@@ -28,7 +28,7 @@ cümleleri de KASITLI olarak net (ünsüzle biten) biçimde kurulur.
 import random
 from typing import Dict, List
 
-from .turkce import yonelme_eki, belirtme_eki
+from .turkce import belirtme_eki, yonelme_eki
 
 # ── Küratörlü varlık listeleri ────────────────────────────────────────────
 # Yaygın Türkçe özel adlar (büyük harfle başlar → "insan" tipiyle özne olur).

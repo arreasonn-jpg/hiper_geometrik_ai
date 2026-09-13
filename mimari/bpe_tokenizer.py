@@ -20,7 +20,7 @@ import re
 import time
 import unicodedata
 from collections import Counter
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 try:  # Tokenizer'ın sözlük/encode kısmı torch olmadan da kullanılabilsin.
     import torch  # type: ignore
@@ -85,7 +85,7 @@ class BPETokenizer:
 
         merges = []
         for _step in range(5000):
-            ciftler = Counter()
+            ciftler: Counter = Counter()
             for s, f in k_sembolleri.items():
                 if len(s) < 2:
                     continue
@@ -99,7 +99,7 @@ class BPETokenizer:
 
             a, b = en_iyi
             birlesik = a + b
-            yeni = {}
+            yeni: Dict[Tuple[str, ...], int] = {}
             for s, f in k_sembolleri.items():
                 s_list = list(s)
                 i = 0
@@ -173,12 +173,13 @@ class BPETokenizer:
 
         # Noktalama veya emoji gibi tekil/alfasayısal olmayan birimler.
         if len(kelime) == 1 or not kelime.isalnum():
+            tekil: List[str]
             if kelime in self.subword_set:
-                res = [kelime]
+                tekil = [kelime]
             else:
-                res = self._byte_tokenlari(kelime)
-            self._cache[kelime] = res
-            return res
+                tekil = self._byte_tokenlari(kelime)
+            self._cache[kelime] = tekil
+            return tekil
 
         res: List[str] = []
         w = kelime + self.END_WORD
@@ -187,11 +188,11 @@ class BPETokenizer:
 
         while i < n:
             matched = False
-            for l in range(min(n - i, 24), 0, -1):
-                sub = w[i: i + l]
+            for uzunluk in range(min(n - i, 24), 0, -1):
+                sub = w[i: i + uzunluk]
                 if sub in self.subword_set:
                     res.append(sub)
-                    i += l
+                    i += uzunluk
                     matched = True
                     break
             if matched:
@@ -279,9 +280,9 @@ class BPETokenizer:
 
         metin = "".join(parcalar)
         # Alt-kelime birleştirmesinden kalan boşluklu noktalamayı düzelt.
-        for a, b in [(" .", "."), (" ,", ","), (" !", "!"),
-                     (" ?", "?"), (" ;", ";"), (" :", ":")]:
-            metin = metin.replace(a, b)
+        for bosluklu, bitisik in [(" .", "."), (" ,", ","), (" !", "!"),
+                                  (" ?", "?"), (" ;", ";"), (" :", ":")]:
+            metin = metin.replace(bosluklu, bitisik)
         return re.sub(r"\s+", " ", metin).strip()
 
     def ids_to_text(self, ids) -> str:

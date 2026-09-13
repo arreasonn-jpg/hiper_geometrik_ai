@@ -101,7 +101,8 @@ class NeuralKopru:
     # ── Durum ────────────────────────────────────────────────────────────
     def doluluk(self) -> Tuple[int, int]:
         """(dolu_satır, toplam_satır) — modelin seyrek tablosunun doluluğu."""
-        return self.tablo.doluluk_orani()
+        dolu, toplam = self.tablo.doluluk_orani()
+        return int(dolu), int(toplam)
 
     def rapor(self) -> dict:
         dolu, toplam = self.doluluk()

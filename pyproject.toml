@@ -7,7 +7,11 @@ name = "hiper-geometrik-ai"
 version = "1.1.0"
 description = "HGA Experience & Knowledge Engine — Bilinear Kronecker Zinciri, Seyrek Bellek ve Deneyim Tabanlı Öğrenme Mimarisi"
 readme = "README.md"
-requires-python = ">=3.9"
+# CI matrisi 3.10–3.13'ü test eder. 3.9 iddiası hiçbir zaman CI tarafından
+# doğrulanmadığı ve ruff target-version=py310 / mypy python_version=3.11
+# ayarlarıyla da çeliştiği için taban sürüm 3.10'a çekildi: desteklenen her
+# sürüm test edilir, test edilmeyen hiçbir sürüm desteklenir ilan edilmez.
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
     { name = "HGA Research Team" }
@@ -26,10 +30,10 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "torch>=2.0.0",
@@ -42,6 +46,8 @@ test = [
     "pytest>=8.0",
     "ruff>=0.4.0",
     "mypy>=1.9.0",
+    # tomllib 3.11'de stdlib'e girdi; 3.10'da paketleme sözleşmesi testi için gerekir.
+    "tomli>=2.0; python_version < '3.11'",
 ]
 ui = [
     "gradio>=4.0",
@@ -87,8 +93,31 @@ target-version = "py310"
 select = ["E", "F", "W", "I"]
 ignore = ["E501"]
 
+# E402 (import-not-at-top) yalnız `sys.path` bootstrap'i YAPMAK ZORUNDA olan
+# dosyalarda bastırılır: bu dosyalar repo kökünü/alt paketleri import
+# edilebilir hâle getirdikten SONRA import edebilir. Kural global olarak
+# kapatılmaz; liste dışındaki her dosyada E402 hâlâ hatadır.
+[tool.ruff.lint.per-file-ignores]
+"test_mimari.py" = ["E402"]
+"legacy/arayuz.py" = ["E402"]
+"legacy/calistir.py" = ["E402"]
+"egitim/egitici.py" = ["E402"]
+"egitim/talimat_egitici.py" = ["E402"]
+"experiments/experience_loop/run_generalization_v1.py" = ["E402"]
+"tests/test_benchmark_reporting.py" = ["E402"]
+"tests/test_bilgi_katmani.py" = ["E402"]
+"tests/test_experience_graph_and_exploration.py" = ["E402"]
+"tests/test_generalization_v1.py" = ["E402"]
+"tests/test_legacy_tokenizer.py" = ["E402"]
+"tests/test_live_data_smoke.py" = ["E402"]
+"tests/test_mini_training_smoke.py" = ["E402"]
+"tests/test_observability_panel.py" = ["E402"]
+"tests/test_scheduler.py" = ["E402"]
+"tests/test_ui_runtime.py" = ["E402"]
+"tests/test_veri_toplayici_optional_deps.py" = ["E402"]
+
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true

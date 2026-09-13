@@ -49,7 +49,7 @@ NOT: torch yalnızca kurulumda içe aktarılır; hga paketinin geri kalanı torc
 çalışmaya devam eder. Model seyrek bellek kapalıysa (`seyrek_tablo=None`) veya
 `gen_kopru` yoksa kurulum AÇIKÇA hata verir.
 """
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 def _torch():
@@ -72,13 +72,16 @@ class GorevAblasyonu:
     def __init__(self, model, tohum: int = 0):
         self.torch = _torch()
         self.model = model
-        self.tablo = getattr(model, "seyrek_tablo", None)
-        if self.tablo is None:
+        tablo = getattr(model, "seyrek_tablo", None)
+        if tablo is None:
             raise ValueError("model seyrek bellek KAPALI — GorevAblasyonu kurulamaz "
                              "(seyrek_tablo_boyutu > 0 olmalı)")
-        self.kopru = getattr(model, "gen_kopru", None)
-        if self.kopru is None:
+        kopru = getattr(model, "gen_kopru", None)
+        if kopru is None:
             raise ValueError("modelde gen_kopru köprüsü yok — GorevAblasyonu kurulamaz")
+        # Yukarıdaki kapılardan sonra ikisi de None olamaz.
+        self.tablo: Any = tablo
+        self.kopru: Any = kopru
         self.torch.manual_seed(tohum)
         self.sozluk_id: Dict[str, int] = {}
 

@@ -37,6 +37,31 @@ def test_closed_loop_yalniz_verified_bilgiyle_buyur():
     )
 
 
+def test_verim_ayristirmasi_raporlanir_ve_uey_bellek_kaybina_duyarli():
+    """P1-005: EY yanında NY ve UEY de raporlanmalı; UEY kaybı görmeli.
+
+    Dar bellekte doğrulanan bilginin bir kısmı geri çağrılamaz hale gelir.
+    EY bunu göremez (doğrulama sayısı değişmez), UEY düşer.
+    """
+    from hga.experience import run_self_learning_experiment as kos
+
+    ortak = dict(cycles=8, batch_size=8, initial_facts=6, operands_max=6,
+                 negatives_per_fact=3, seed=1)
+    dar = kos(memory_slots=16, **ortak)
+    genis = kos(memory_slots=4096, **ortak)
+
+    for rapor in (dar, genis):
+        assert 0.0 <= rapor.novelty_yield <= 1.0
+        assert 0.0 <= rapor.useful_experience_yield <= 1.0
+        # Kullanışlı bilgi doğrulanmış bilginin alt kümesidir.
+        assert rapor.useful_experience_yield <= rapor.experience_yield
+
+    # EY bellek darlığından etkilenmez; UEY etkilenir.
+    assert dar.experience_yield == genis.experience_yield
+    assert dar.useful_experience_yield < genis.useful_experience_yield
+    assert dar.memory_collisions > genis.memory_collisions
+
+
 def test_closed_loop_100_cycle_k0_k100_sozlesmesi():
     report = run_self_learning_experiment(
         cycles=100, batch_size=8, initial_facts=100,

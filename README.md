@@ -569,6 +569,103 @@ vardır. Collision kaybı kalkarken kapasite dolumu artık açık eviction kayb�
 dönüşür; semantic/learned retrieval iddiası yoktur. Yaşam döngüsü Research
 Suite Memory bölümünde her seed için kırılır.
 
+### Epistemik benchmark: bilmediğini biliyor mu? (P0-007)
+
+```bash
+python -m hga epistemik --seeds 1,2,3
+```
+
+"Doğru cevap oranı" tek başına yanıltıcıdır; bir sistem her soruya emin
+cevap verip yüksek skor alabilir. Asıl soru **kanıt yokken susmayı bilip
+bilmediğidir**. Bu benchmark `ExperienceEvaluator`'ı beş epistemik sınıfa
+karşı ölçer: `KNOWN` (kabul et), `FALSE` (reddet), `UNKNOWN` (kayıt yok),
+`UNCERTAIN` (özellik yazılmamış), `CONFLICT` (kanıt kuralla zıt). Veri
+kümesi elle sabitlenmiş, hash'lenmiş 28 vakalık depo fixture'ıdır.
+
+Asıl metrikler **yanlış güven oranı (↓)** ve **bilinmeyen doğruluğu (↑)**
+birlikte raporlanır, çünkü tek metrik kandırılabilir. Benchmark ilk koşuda
+%100 aldığı için üç dejenere politika negatif kontrol olarak eklendi:
+
+| Kol | Doğruluk | Bilinen | Bilinmeyen | Yanlış güven |
+|---|---:|---:|---:|---:|
+| `always_valid` | 0.286 | 1.000 | 0.000 | 1.000 |
+| `always_abstain` | 0.321 | 0.000 | 1.000 | 0.000 |
+| `always_invalid` | 0.286 | 0.000 | 0.000 | 1.000 |
+| **Evaluator** | **1.000** | **1.000** | **1.000** | **0.000** |
+
+`always_abstain` yalnız "bilinmeyen doğruluğu"na bakılsa mükemmel görünür
+ama hiçbir bilineni kabul edemez. `beats_degenerate_baselines` kapısı
+gerçek değerlendiricinin her kolu dört eksende birden domine etmesini
+zorunlu kılar.
+
+**Önce ölçülen, sonra kapatılan sınır:** `UNKNOWN` (kayıt hiç yok) ile
+`UNCERTAIN` (özellik yazılmamış) epistemik olarak farklıdır — *bilmiyorum*
+ile *emin değilim*. Evaluator ikisini de tek bir `UNCERTAIN` durumuna
+indiriyordu; bu önce gizlenmeden `distinguishable = false` diye raporlandı,
+sonra kapatıldı. Çözüm `DeneyimDurumu`'na yeni üye eklemek değil (durum
+makinesi ve 30+ karşılaştırma noktası kırılırdı), `ExperienceCandidate`'e
+makine-okunur `belirsizlik_sebebi` alanı eklemek oldu: `KAYIT_YOK` /
+`OZELLIK_YOK`. Rapor artık `distinguishable_by_state = false` (durum kodu
+hâlâ tek) ile `distinguishable_by_reason = true` ayrımını birlikte verir ve
+iki yeni kabul kapısı bunu zorunlu kılar.
+Ayrıntı: `docs/EPISTEMIK_BENCHMARK.md`.
+
+### Çok adımlı çıkarım ve uzun bağlam (P1-004 / P1-006)
+
+```bash
+python -m hga cok-adimli --hops 1,2,3,4,5 --distractors 0,16,64,256 --seeds 1,2,3
+```
+
+`a→b→c` zinciri kurulup depoda **yazılı olmayan** `a→c` sorulur; ayrıca zincir
+kenarlarının arasına alakasız dolgu olgular serpiştirilerek uzun bağlam
+baskısı uygulanır. Çok adımlı çıkarım (hop≥2) **0.9688**, tek adımlı geri
+çağırma 1.0000; en derin güvenilir zincir **4 adım**. 5 adımlık zincir 256
+dolgu altında 0.5000'e düşer — ölçülen gerçek bir sınırdır, kapı geçsin diye
+eşik gevşetilmedi: beş kabul kapısından üçü varsayılan ayarda **kalıyor**.
+
+İlk taslakta zincir takibi Python sözlüğünden yapılıyordu ve doğruluk her
+koşulda 1.0 çıkıyordu — **ölü metrik**. Takip artık her kenarı seyrek
+bellekten doğrular; bellek 4096→256 slota indirilince en derin güvenilir
+zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
+
+Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.
+
+### Deneyim verimi: EY'nin ötesinde (P1-005)
+
+```bash
+python -m hga verim --cycles 30 --batch 32 --initial-facts 40 \
+  --operands-max 15 --negatives-per-fact 3 --seeds 1,2,3,4,5
+```
+
+`EY = doğrulanmış/üretilen` üç farklı durumu ayıramaz ve üçünde de yüksek
+çıkar: zaten bilineni tekrar doğrulamak, doğrulayıp bellekte kaybetmek ve
+ezberleyip hiç genelleyememek. EY dört eksene ayrıldı (5 tohum, %95
+bootstrap GA):
+
+| Metrik | Ortalama | %95 GA |
+|---|---:|---:|
+| EY (klasik) | 0.2385 | [0.2327, 0.2444] |
+| **NY** yenilik | 0.1904 | [0.1863, 0.1946] |
+| **UEY** kullanışlı | 0.1565 | [0.1538, 0.1600] |
+| **GY** genelleme | 0.6419 | [0.6116, 0.6721] |
+| **VID** bit/deneyim | 0.9434 | [0.9227, 0.9640] |
+
+Ayrışma tek yönlüdür: **EY > NY > UEY**. Yani klasik EY hem yeniliği hem
+kullanışlılığı sistematik olarak abartıyor (960 üretim → 220 doğrulama →
+178 ayrık yeni → yalnız 148 geri çağrılabilir; 224 tekrar üretim, 72
+bellek çakışması, 0 yanlış olgu).
+
+**GY iki kez "ölü metrik" olarak yakalandı.** Önce holdout kararı
+`ExperienceEvaluator` ile veriliyordu; `R_EQUALS`'ın hiç kısıtı olmadığı
+için evaluator holdout'un tamamına — öğrenme öncesi *ve* sonrası — `VALID`
+diyordu ve GY yapısal olarak daima 0.0'dı. Sonra çıkarım kuralı
+`score >= 1.0` arıyordu; oysa doğrulama hattı olguları `0.6375` ile yazıyor,
+yani eşik öğrenilen her olguyu sessizce eliyordu. Düzeltmeden sonra GY
+öğrenmeyle monoton artıyor (10/20/30 döngü → 0.163 / 0.361 / 0.605) ve
+karar verilen her örnekte isabet 1.0000'dır. Daima sıfır dönen bir metrik
+ölçüm yapmıyor demektir; ikisi de testle sabitlendi.
+Ayrıntı: `docs/VERIM_METRIKLERI.md`.
+
 ---
 
 ## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması
@@ -726,6 +823,9 @@ python tests/test_egitim_saglamlik.py                 # AMP/checkpoint smoke hel
 Ayrıntılı Mimari ve Kod Sınıflandırması:
 - `docs/KOD_TABANI_VE_MIMARI_DUZENI.md` — Modül statüleri (Active/Legacy/Experimental) ve tek gerçek kaynak rehberi.
 - `docs/EXPERIENCE_ENGINE.md` — Experience Engine mimari notu.
+- `docs/EPISTEMIK_BENCHMARK.md` — KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE protokolü, negatif kontrol kolları ve ölçülmüş UNKNOWN↔UNCERTAIN sınırı.
+- `docs/VERIM_METRIKLERI.md` — NY/UEY/GY/VID ayrıştırması ve GY'nin iki kez ölü metrik olarak yakalanıp düzeltilmesi.
+- `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md` — zincirleme çıkarım × bağlam yükü ızgarası, bellekten geçen zincir takibi ve ölçülen derinlik sınırı.
 
 ---
 
@@ -758,7 +858,7 @@ hiper_geometrik_ai/
 │   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore + versioning/rollback
 │   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop, Ledger, Milestone
 │   ├── memory/                  # Aktif Dynamic KV + lifecycle + legacy slot + replay
-│   ├── evaluation/              # Halüsinasyon, perplexity, golden/kapasite (C_E/C_V) raporları
+│   ├── evaluation/              # Halüsinasyon, perplexity, golden/kapasite (C_E/C_V), epistemik benchmark, istatistik
 │   ├── observability/           # Attention/geometri/bellek/deneyim akışı + panel çıktısı
 │   ├── data/                    # Veri kalite filtresi, canlı/kontrollü smoke + SHA-256 manifest
 │   └── config/                  # experience_config.yaml + model_config.yaml
@@ -1013,6 +1113,9 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Immutable experience ledger | ✅ ölçüldü | `python -m hga defter`, `tests/test_experience_ledger.py` (append-only, hash-zincirli, tamper-evident) |
 | Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M`) |
 | 100-cycle milestone tablosu | ✅ 5 seed | `python -m hga milestone`, `docs/MILESTONE_TABLOSU.md` (incorrect=0, EY≈0.11, recall 1.000→0.952) |
+| Epistemik benchmark (P0-007) | ✅ ölçüldü + negatif kontrol | `python -m hga epistemik`, `docs/EPISTEMIK_BENCHMARK.md` (yanlış güven 0.000, 3 dejenere kol domine edildi, UNKNOWN↔UNCERTAIN ayrımı `false` olarak raporlanıyor) |
+| Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.157; GY 0.642 monoton artıyor) |
+| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` (bootstrap %95 GA, Cohen d_z/Hedges g, permütasyon + Wilcoxon; 5 seedde p<0.05 imkânsız uyarısı) |
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 

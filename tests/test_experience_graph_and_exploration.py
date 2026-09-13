@@ -11,9 +11,9 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KnowledgeStore, KaynakTuru, DeneyimDurumu, ExperienceCandidate
+from hga.experience.exploration import ExplorationEngine
 from hga.experience.graph import ExperienceGraph
-from hga.experience.exploration import ExplorationEngine, EpistemicSpace
+from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru, KnowledgeStore
 
 
 def test_experience_graph_ekleme_ve_lineage():

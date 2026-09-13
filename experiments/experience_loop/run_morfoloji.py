@@ -19,11 +19,18 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E402
-                            ayrilma_eki, iyelik_eki, iyelik_li_durum,
-                            gecmis_zaman_3tekil, simdiki_zaman_3tekil,
-                            gelecek_zaman_3tekil, genis_zaman_3tekil,
-                            fiil_cekimi)
+from hga.experience import (  # noqa: E402
+    belirtme_eki,
+    bulunma_eki,
+    fiil_cekimi,
+    gecmis_zaman_3tekil,
+    gelecek_zaman_3tekil,
+    genis_zaman_3tekil,
+    iyelik_eki,
+    iyelik_li_durum,
+    simdiki_zaman_3tekil,
+    yonelme_eki,
+)
 
 CIZGI = "=" * 74
 

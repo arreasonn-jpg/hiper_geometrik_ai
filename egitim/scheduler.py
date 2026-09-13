@@ -7,7 +7,6 @@ kullanılır. Saf ``warmup_cosine_factor`` fonksiyonu torch olmadan test edilebi
 from __future__ import annotations
 
 import math
-from typing import Optional
 
 
 def warmup_cosine_factor(step: int, total_steps: int, warmup_steps: int = 0,

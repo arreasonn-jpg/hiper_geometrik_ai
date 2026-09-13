@@ -220,7 +220,7 @@ class ExplorationEngine:
 
     def bilgi_kazanci_skoru(self, store, aday: ExperienceCandidate) -> float:
         """Deneyimin Priority(E) skorunu (Faz 25) hesaplar."""
-        return self.priority_dokumu(store, aday)["priority"]
+        return float(self.priority_dokumu(store, aday)["priority"])
 
     def aktif_ogrenme_sec(self, store, adaylar: List[ExperienceCandidate],
                           k: int = 10) -> List[Tuple[ExperienceCandidate, float]]:
@@ -277,7 +277,14 @@ def agirlik_ablasyonu(store, adaylar: List[ExperienceCandidate],
 
     varyantlar: Dict[str, Dict[str, Any]] = {}
     for terim in ("w_gain", "w_novelty", "w_uncertainty", "w_conflict_penalty"):
-        motor = ExplorationEngine(scoring=scoring, **{terim: 0.0})
+        sifirlanan: Dict[str, Optional[float]] = {terim: 0.0}
+        motor = ExplorationEngine(
+            scoring=scoring,
+            w_gain=sifirlanan.get("w_gain"),
+            w_novelty=sifirlanan.get("w_novelty"),
+            w_uncertainty=sifirlanan.get("w_uncertainty"),
+            w_conflict_penalty=sifirlanan.get("w_conflict_penalty"),
+        )
         secim = [a.experience_id
                  for a, _ in motor.aktif_ogrenme_sec(store, adaylar, k=k)]
         ortak = len(temel_kume & set(secim))

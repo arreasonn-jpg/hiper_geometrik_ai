@@ -26,14 +26,14 @@ Kullanım:
     from hga.experience import ExperienceGenerator, ExperienceEvaluator, Consolidator
 """
 from hga.knowledge.schemas import (
-    KaynakTuru,
-    DeneyimDurumu,
     KAYNAK_GUVENIRLIGI,
+    DeneyimDurumu,
     Entity,
+    ExperienceCandidate,
+    KaynakTuru,
     PropertyValue,
     Relation,
     RelationFact,
-    ExperienceCandidate,
 )
 
 __all__ = [

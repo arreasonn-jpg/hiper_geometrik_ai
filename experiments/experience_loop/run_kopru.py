@@ -21,9 +21,13 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.experience import (AritmetikOrtam, aritmetik_etki_alani,  # noqa: E402
-                            ExperienceGenerator, ExperienceEvaluator,
-                            DogrulamaHatti)
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    DogrulamaHatti,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    aritmetik_etki_alani,
+)
 from hga.knowledge import DeneyimDurumu  # noqa: E402
 from hga.memory import torch_var_mi  # noqa: E402
 
@@ -52,6 +56,7 @@ def main():
         return
 
     import torch
+
     from hga.memory import TorchKoprusu
     kopru = TorchKoprusu(tablo_boyutu=4096, boyut=32)
     print(f"2) Torch köprüsü kuruldu: {kopru.tablo.__class__.__name__}")

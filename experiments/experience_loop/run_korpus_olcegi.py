@@ -21,10 +21,14 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
+from hga.experience import (  # noqa: E402
+    VARSAYILAN_SOZLUK,
+    korpus_borusu,
+    sentetik_korpus_uret,
+    sozlugu_buyut,
+)
+from hga.experience.korpus_uretici import _KALIPLAR, TURKCE_ADLAR  # noqa: E402
 from hga.knowledge import KnowledgeStore  # noqa: E402
-from hga.experience import (sentetik_korpus_uret, korpus_borusu,  # noqa: E402
-                            sozlugu_buyut, VARSAYILAN_SOZLUK)
-from hga.experience.korpus_uretici import TURKCE_ADLAR, _KALIPLAR  # noqa: E402
 
 CIZGI = "=" * 74
 

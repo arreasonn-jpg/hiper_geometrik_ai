@@ -13,8 +13,8 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
+from hga.experience import Scoring, TextGenerator  # noqa: E402
 from hga.knowledge import KnowledgeStore  # noqa: E402
-from hga.experience import TextGenerator, Scoring  # noqa: E402
 
 
 def _store():

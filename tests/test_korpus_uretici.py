@@ -13,9 +13,14 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.experience import (sentetik_korpus_uret, korpus_borusu,  # noqa: E402
-                            sozlugu_buyut, VARSAYILAN_SOZLUK,
-                            yonelme_eki, belirtme_eki)
+from hga.experience import (  # noqa: E402
+    VARSAYILAN_SOZLUK,
+    belirtme_eki,
+    korpus_borusu,
+    sentetik_korpus_uret,
+    sozlugu_buyut,
+    yonelme_eki,
+)
 from hga.experience.korpus_uretici import _KALIPLAR  # noqa: E402
 from hga.experience.sozluk_buyutme import _kok_bul  # noqa: E402
 from hga.knowledge import KnowledgeStore  # noqa: E402

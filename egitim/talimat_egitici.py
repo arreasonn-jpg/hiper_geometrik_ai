@@ -39,11 +39,19 @@ except Exception:  # pragma: no cover - torch'suz CI/sandbox
     DataLoader = None  # type: ignore
     TensorDataset = None  # type: ignore
 
-from model_config import VARSAYILAN_MODEL_CONFIG, yukle as model_config_yukle
+from model_config import VARSAYILAN_MODEL_CONFIG
+from model_config import yukle as model_config_yukle
+
 try:
-    from kuresel_model import (model_olustur, agirlik_yukle, agirlik_kaydet,
-                               VARSAYILAN_N, VARSAYILAN_KATMAN,
-                               VARSAYILAN_SEYREK_SATIR, VARSAYILAN_SEYREK_BOYUT)
+    from kuresel_model import (
+        VARSAYILAN_KATMAN,
+        VARSAYILAN_N,
+        VARSAYILAN_SEYREK_BOYUT,
+        VARSAYILAN_SEYREK_SATIR,
+        agirlik_kaydet,
+        agirlik_yukle,
+        model_olustur,
+    )
 except Exception:  # torch yoksa kuresel_model import edilemez; helper'lar yine çalışsın
     model_olustur = agirlik_yukle = agirlik_kaydet = None  # type: ignore
     VARSAYILAN_N = VARSAYILAN_MODEL_CONFIG.n
@@ -52,10 +60,11 @@ except Exception:  # torch yoksa kuresel_model import edilemez; helper'lar yine 
     VARSAYILAN_SEYREK_BOYUT = VARSAYILAN_MODEL_CONFIG.seyrek_boyut
 from bpe_tokenizer import BPETokenizer
 from talimat_toplayici import TalimatToplayici
+
 try:
     from egitim.scheduler import warmup_cosine_scheduler
 except Exception:
-    from scheduler import warmup_cosine_scheduler
+    from scheduler import warmup_cosine_scheduler  # type: ignore[no-redef]
 
 
 def _torch_gerekli():

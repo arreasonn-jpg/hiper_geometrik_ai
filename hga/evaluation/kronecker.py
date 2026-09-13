@@ -92,7 +92,7 @@ def run_kronecker_dense_trial(
     capacity = kronecker_capacity_contract(n)
     dimension = capacity["matrix_dimension"]
 
-    class KroneckerBilinearLayer(nn.Module):
+    class KroneckerBilinearLayer(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.A = nn.Parameter(torch.empty(n, n))
@@ -103,7 +103,7 @@ def run_kronecker_dense_trial(
         def forward(self, inputs):
             return torch.matmul(self.A, torch.matmul(inputs, self.B))
 
-    class RankOneFactorizedLayer(nn.Module):
+    class RankOneFactorizedLayer(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.fc1 = nn.Linear(dimension, 1, bias=False)

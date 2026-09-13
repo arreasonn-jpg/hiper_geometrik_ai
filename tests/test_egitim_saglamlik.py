@@ -44,6 +44,7 @@ def test_checkpoint_uyumluluk_raporu():
         return
     import os
     import tempfile
+
     import torch
     from kuresel_model import HiperGeometrikAI
 

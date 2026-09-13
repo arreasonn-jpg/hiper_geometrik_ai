@@ -22,16 +22,15 @@ Test Senaryoları:
 """
 import os
 import sys
-import json
-from dataclasses import dataclass, asdict
-from typing import Dict, List, Any
+from dataclasses import asdict, dataclass
+from typing import Any, Dict
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
 from hga.engine import ExperienceEngine
-from hga.knowledge import KaynakTuru, DeneyimDurumu
+from hga.knowledge import DeneyimDurumu, KaynakTuru
 
 
 @dataclass

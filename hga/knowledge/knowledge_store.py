@@ -24,10 +24,10 @@ from .schemas import Entity, ExperienceCandidate, KaynakTuru, Relation, Relation
 class KnowledgeStore:
     """Bilgi katmanının birleşim kökü: üç dizini birden yönetir."""
 
-    def __init__(self):
-        self.entities = EntityIndex()
-        self.properties = PropertyIndex()
-        self.relations = RelationIndex()
+    def __init__(self) -> None:
+        self.entities: EntityIndex = EntityIndex()
+        self.properties: PropertyIndex = PropertyIndex()
+        self.relations: RelationIndex = RelationIndex()
         self.celiski_gunlugu: List[Dict] = []   # çelişki kaydı (§21)
         self.versiyon = 1
 
@@ -106,7 +106,7 @@ class KnowledgeStore:
         agrega = self.relations.olgu_agrega(subject_id, relation_id, object_id)
         if agrega is not None:
             # kanıt skoru × kanıt güveni (0..1)
-            return round(agrega["score"] * agrega["confidence"], 4)
+            return float(round(agrega["score"] * agrega["confidence"], 4))
         # doğrudan kanıt yok: ilişki kısıtları yapısal olarak uyuyorsa yarım destek
         try:
             r = self.relations.iliski_al(relation_id)

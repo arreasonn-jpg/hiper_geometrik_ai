@@ -87,6 +87,9 @@ class SelfLearningReport:
     far: float
     frr: float
     experience_yield: float
+    # P1-005: EY tek başına yanıltıcıdır (ayrıntı: docs/VERIM_METRIKLERI.md).
+    novelty_yield: float           # ayrık YENİ doğrulanmış olgu / üretilen
+    useful_experience_yield: float  # doğru + bellekten geri çağrılabilir / üretilen
     correct_knowledge: int
     incorrect_knowledge: int
     memory_collisions: int
@@ -334,6 +337,18 @@ def run_self_learning_experiment(
     correct, incorrect, _ = _knowledge_audit(domain)
     valid_truths = cumulative_verified + total_false_rejection
     invalid_truths = total_invalid + total_false_acceptance
+
+    # P1-005 ayrıştırması: ayrık yeni olgu ve bunların geri çağrılabilir olanı.
+    son_olgular = set(_unique_facts(domain.store))
+    baslangic_olgular = set(domain.initial_triples)
+    ayrik_yeni = len(son_olgular - baslangic_olgular)
+    kullanisli = len({
+        triple for experience_id, triple in verified_memory_entries
+        if triple in son_olgular and triple not in baslangic_olgular
+        and memory.icerir(experience_id, triple)
+        and _fact_correct(domain, triple)
+    })
+
     holdout = set(domain.test_holdout)
     generation_overlap = len(generated_seen & holdout)
     memory_overlap = len({triple for _, triple in verified_memory_entries} & holdout)
@@ -353,6 +368,8 @@ def run_self_learning_experiment(
         far=_ratio(total_false_acceptance, invalid_truths),
         frr=_ratio(total_false_rejection, valid_truths),
         experience_yield=_ratio(cumulative_verified, cumulative_generated),
+        novelty_yield=_ratio(ayrik_yeni, cumulative_generated),
+        useful_experience_yield=_ratio(kullanisli, cumulative_generated),
         correct_knowledge=correct, incorrect_knowledge=incorrect,
         memory_collisions=memory.cakisma_sayisi,
         test_holdout_size=len(holdout), generation_test_overlap=generation_overlap,

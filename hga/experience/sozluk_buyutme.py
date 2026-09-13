@@ -28,7 +28,7 @@ soyulur); Türkçe büyük-İ (İzmir→Izmir değil) ayrımı kapsam dışıdı
 """
 import copy
 import re
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from typing import Dict, List, Tuple
 
 from .cumle_ayiklayici import ascii_norm

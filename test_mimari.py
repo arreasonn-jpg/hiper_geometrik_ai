@@ -32,16 +32,21 @@ for _p in [KOK, os.path.join(KOK, "mimari")]:
         sys.path.insert(0, _p)
 
 import torch
-
-from kuresel_model import (HiperGeometrikAI, model_olustur, agirlik_yukle)
-from kuresel_bag import KureselBagKatmani, KureselZincir
-from encoder import GeometrikVeriEncoder
-from decoder import FraktalDecoder
-from hiper_attention import HiperGeometrikAttention
 from bpe_tokenizer import BPETokenizer
+from decoder import FraktalDecoder
+from encoder import GeometrikVeriEncoder
+from hiper_attention import HiperGeometrikAttention
+from kuresel_bag import KureselBagKatmani, KureselZincir
+from kuresel_model import HiperGeometrikAI, agirlik_yukle, model_olustur
 from seyrek_tablo import HashlenmisKureselTablo
-from legacy.bilgi_katmani import (BilgiKatmani, beyaz_liste_olustur,
-                                  KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK)
+
+from legacy.bilgi_katmani import (
+    KATMAN_ACIK,
+    KATMAN_KISMI,
+    KATMAN_TAM,
+    BilgiKatmani,
+    beyaz_liste_olustur,
+)
 
 KUCUK = dict(n=64, katman_sayisi=2, baglam_penceresi=8, emb_dim=32,
              num_heads=4, sozluk_boyutu=256, dropout=0.0,
@@ -80,7 +85,8 @@ def test_zincir_checkpoint_esdegerligi():
     z1 = KureselZincir(16, katman_sayisi=2, dropout=0.0)
     z2 = KureselZincir(16, katman_sayisi=2, dropout=0.0, checkpoint_kullan=True)
     z2.load_state_dict(z1.state_dict())
-    z1.train(); z2.train()
+    z1.train()
+    z2.train()
     X = torch.randn(2, 16, 16)
     assert torch.allclose(z1(X), z2(X), atol=1e-6)
 

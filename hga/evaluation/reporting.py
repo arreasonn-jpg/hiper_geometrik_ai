@@ -13,10 +13,16 @@ import os
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from .turkish_benchmark import mini_turkce_corpus, tokenizer_kapsami, perplexity_benchmark
-from .hallucination import hallucination_metrics
-from hga.experience import AritmetikOrtam, ExperienceEvaluator, ExperienceGenerator, aritmetik_etki_alani
+from hga.experience import (
+    AritmetikOrtam,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    aritmetik_etki_alani,
+)
 from hga.memory import DeneyimSlotlari
+
+from .hallucination import hallucination_metrics
+from .turkish_benchmark import mini_turkce_corpus, perplexity_benchmark, tokenizer_kapsami
 
 
 def _device_report() -> Dict[str, Any]:
@@ -61,12 +67,14 @@ def _memory_report() -> Dict[str, Any]:
     slot = DeneyimSlotlari(slot_sayisi=16)
     for i in range(6):
         slot.yaz(f"K{i}", ("E1", "R", f"E{i}"))
-    for k, anahtar in [("K0", ("E1", "R", "E0")), ("K3", ("E1", "R", "E3")),
-                       ("K3", ("E1", "R", "E3")), ("YOK", ("E1", "R", "EY"))]:
-        slot.icerir(k, anahtar)
-    k = slot.kapasite()
-    k["doluluk_orani"] = k["dolu_slot"] / k["toplam_slot"] if k["toplam_slot"] else 0.0
-    return k
+    for deneyim_id, anahtar in [("K0", ("E1", "R", "E0")), ("K3", ("E1", "R", "E3")),
+                                ("K3", ("E1", "R", "E3")), ("YOK", ("E1", "R", "EY"))]:
+        slot.icerir(deneyim_id, anahtar)
+    kapasite: Dict[str, Any] = dict(slot.kapasite())
+    kapasite["doluluk_orani"] = (
+        kapasite["dolu_slot"] / kapasite["toplam_slot"] if kapasite["toplam_slot"] else 0.0
+    )
+    return kapasite
 
 
 def _tiny_perplexity(checkpoint: Optional[str] = None,

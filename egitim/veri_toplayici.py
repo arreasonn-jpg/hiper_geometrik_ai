@@ -1,8 +1,8 @@
-import os
-import re
-import json
 import csv
 import io
+import json
+import os
+import re
 
 try:  # opsiyonel ağ bağımlılığı — import-time kırılma olmasın
     import requests  # type: ignore
@@ -10,8 +10,8 @@ except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
 try:  # opsiyonel parquet bağımlılığı
-    import pyarrow.parquet as pq  # type: ignore
     import pyarrow as pa  # type: ignore
+    import pyarrow.parquet as pq  # type: ignore
 except Exception:  # pragma: no cover
     pq = None  # type: ignore
     pa = None  # type: ignore
@@ -66,13 +66,13 @@ class OtomatikVeriToplayici:
 
     def yama_raporu(self):
         islenen = self.durum.get("islenen_dosyalar", [])
-        print(f"\n[SİSTEM] 📦 YAMA DURUM RAPORU")
+        print("\n[SİSTEM] 📦 YAMA DURUM RAPORU")
         print(f"  Repo: {self.durum.get('repo')}")
         print(f"  Son işlenen patch no: {self.durum.get('son_patch', 0)}")
         print(f"  İşlenen dosya sayısı: {len(islenen)}")
         print(f"  Toplam çekilen kelime: {self.durum.get('toplam_cekilen_kelime', 0)}")
         if islenen:
-            print(f"  Son 3 dosya:")
+            print("  Son 3 dosya:")
             for d in islenen[-3:]:
                 print(f"    - {d}")
         print()
@@ -227,7 +227,7 @@ class OtomatikVeriToplayici:
                 # Sonraki sayfa cursor (header veya JSON)
                 cursor = None
                 link = yanit.headers.get("Link") or yanit.headers.get("link") or ""
-                # <...&cursor=XXX>; rel="next"
+                # Beklenen biçim: <...&cursor=DEGER>; rel="next"
                 m = re.search(r'cursor=([^&>]+)[^>]*>;\s*rel="next"', link)
                 if m:
                     cursor = m.group(1)
@@ -383,7 +383,7 @@ class OtomatikVeriToplayici:
 
         # 2. Öncelikli Türkçe metin anahtarları
         oncelikli_anahtarlar = [
-            "abstract_tr", "ozet", "tez_adi", "icerik", "title_tr", 
+            "abstract_tr", "ozet", "tez_adi", "icerik", "title_tr",
             "baslik", "metin", "aciklama", "text", "content", "konu"
         ]
 
@@ -433,7 +433,7 @@ class OtomatikVeriToplayici:
             headers_range = dict(self.headers)
             headers_range["Range"] = f"bytes={range_start}-{total_size - 1}"
 
-            print(f"    [📥 METADATA] Footer okunuyor...")
+            print("    [📥 METADATA] Footer okunuyor...")
             r = req.get(raw_url, headers=headers_range, timeout=25)
 
             if r.status_code not in (200, 206):
@@ -478,7 +478,7 @@ class OtomatikVeriToplayici:
                     print(f"      ↳ {toplam_islenen_satir:,} satır işlendi | +{ek_kelime:,} kaliteli kelime süzüldü")
 
                     if mevcut_kelime + ek_kelime >= hedef_kelime:
-                        print(f"    [🎯 HEDEF TAMAMLANDI] Yeterli kelimeye ulaşıldı, akış durduruldu.")
+                        print("    [🎯 HEDEF TAMAMLANDI] Yeterli kelimeye ulaşıldı, akış durduruldu.")
                         break
 
                 indirilen_mb = reader.indirilen_toplam_bayt / (1024 * 1024)
@@ -570,7 +570,7 @@ class OtomatikVeriToplayici:
         self.durum["repo"] = repo_id
 
         print(f"\n  [🤗 MULTI-PATCH ENGINE] Repo: '{repo_id}' | Seçim: {patch_secim}")
-        print(f"  [🛡️ AKILLI MOTOR] Range Request + Streaming Batch Aktif")
+        print("  [🛡️ AKILLI MOTOR] Range Request + Streaming Batch Aktif")
 
         try:
             tum_dosyalar = self._hf_dosyalari_listele(repo_id)
@@ -633,7 +633,7 @@ class OtomatikVeriToplayici:
                 print(f"    [✅ KALİTELİ] +{ek} kelime (süzgeçten geçti)")
             else:
                 yeni_islenen.append(dosya_yolu)
-                print(f"    [⏭️ ATLANDI] Kaliteli metin yok veya pas geçildi")
+                print("    [⏭️ ATLANDI] Kaliteli metin yok veya pas geçildi")
 
             if toplam_kelime >= hedef_kelime_limiti:
                 print(f"\n  [🛡️ RAM FRENO] {toplam_kelime} kelimelik kaliteli dilim hazır.")

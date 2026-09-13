@@ -106,7 +106,7 @@ def gorev_uret(
     # Bazı varlıkların özellikleri bilgi tabanında YOK (gizli).
     gizli_sayi = int(round(entity_count * hidden_feature_ratio))
     gizliler = set(rng.sample(varliklar, gizli_sayi))
-    known_features = {
+    known_features: Dict[str, Tuple[Optional[int], ...]] = {
         e: (tuple([None] * OZELLIK_SAYISI) if e in gizliler else entity_features[e])
         for e in varliklar
     }

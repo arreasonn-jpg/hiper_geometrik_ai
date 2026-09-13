@@ -55,7 +55,8 @@ def manifest_kaydet(paths: Iterable[str], cikis: str) -> Dict:
 
 def manifest_yukle(path: str) -> Dict:
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        veri: Dict = json.load(f)
+    return veri
 
 
 __all__ = ["DosyaManifesti", "dosya_hashle", "manifest_olustur", "manifest_kaydet", "manifest_yukle"]

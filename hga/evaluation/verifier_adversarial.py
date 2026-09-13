@@ -127,7 +127,10 @@ class VerifierAttackDataset:
         if not all(isinstance(value, int) and not isinstance(value, bool)
                    for value in (minimum, maximum, steps)):
             raise ValueError("Verifier limitleri tam sayı olmalı")
-        if minimum >= maximum or steps < 1:
+        # Yukarıdaki kapı üçünün de bool olmayan int olduğunu garanti eder;
+        # aşağıdaki karşılaştırma için tipi açıkça daraltıyoruz.
+        minimum_int, maximum_int, steps_int = int(minimum), int(maximum), int(steps)  # type: ignore[arg-type]
+        if minimum_int >= maximum_int or steps_int < 1:
             raise ValueError("Verifier limit aralığı geçersiz")
 
     def dataset_hash(self) -> str:

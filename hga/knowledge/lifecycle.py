@@ -74,22 +74,36 @@ class KnowledgeLifecycle:
         previous: Optional[KnowledgeLifecycleState], reason: str,
     ) -> None:
         parent = self.events[-1].chain_hash if self.events else "0" * 64
-        payload = {
-            "sequence": len(self.events) + 1,
+        # Alanlar önce tiplenmiş yerel değişkenlere alınır; payload yalnız
+        # hash girdisidir. Böylece hash sözleşmesi bozulmadan LifecycleEvent
+        # tip güvenli kurulur (dict[str, object] unpack'i yerine).
+        sequence = len(self.events) + 1
+        at_value = float(at)
+        previous_state = previous.value if previous else None
+        new_state = record.state.value
+        payload: Dict[str, Any] = {
+            "sequence": sequence,
             "event": event,
             "record_id": record.record_id,
-            "at": float(at),
-            "previous_state": previous.value if previous else None,
-            "new_state": record.state.value,
+            "at": at_value,
+            "previous_state": previous_state,
+            "new_state": new_state,
             "reason": reason,
             "parent": parent,
         }
         chain_hash = hashlib.sha256(
             json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
         ).hexdigest()
-        self.events.append(LifecycleEvent(chain_hash=chain_hash, **{
-            key: value for key, value in payload.items() if key != "parent"
-        }))
+        self.events.append(LifecycleEvent(
+            chain_hash=chain_hash,
+            sequence=sequence,
+            event=event,
+            record_id=record.record_id,
+            at=at_value,
+            previous_state=previous_state,
+            new_state=new_state,
+            reason=reason,
+        ))
 
     def ingest(
         self, *, record_id: str, subject_id: str, relation_id: str,

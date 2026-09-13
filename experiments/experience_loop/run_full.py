@@ -22,10 +22,15 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KnowledgeStore, DeneyimDurumu, KaynakTuru  # noqa: E402
-from hga.experience import (ExperienceEvaluator, ExperienceGenerator,  # noqa: E402
-                            TextGenerator, Consolidator, DeneyimDongusu,
-                            AritmetikOrtam, ConflictResolver)
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    Consolidator,
+    DeneyimDongusu,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    TextGenerator,
+)
+from hga.knowledge import DeneyimDurumu, KnowledgeStore  # noqa: E402
 from hga.memory import BellekEntegrasyonu, torch_var_mi  # noqa: E402
 
 CIZGI = "=" * 74

@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import os
 import sys
-from typing import Callable, Iterable, List, Optional, Sequence, Tuple
+from typing import Callable, Iterable, List, Optional, Sequence
 
 SORU_ETIKETI = "soru"
 CEVAP_ETIKETI = "cevap"
@@ -74,8 +74,9 @@ def tokenizer_hazirla(kok: str, baglam: Optional[int] = None,
 def bilgi_katmani_hazirla(kok: str, logger: Logger = None):
     """talimat_verisi.json varsa yükle; yoksa yerleşik talimat setine düş."""
     sys_path_hazirla(kok)
-    from legacy.bilgi_katmani import BilgiKatmani
     from talimat_toplayici import ZENGIN
+
+    from legacy.bilgi_katmani import BilgiKatmani
 
     talimatlar = []
     yol = os.path.join(kok, "talimat_verisi.json")
@@ -107,7 +108,7 @@ def model_ve_agirlik_yukle(kok: str, tokenizer, n: Optional[int] = None,
     Dönüş: ``(model, yuklenen_dosya_adi_veya_None, config)``.
     """
     sys_path_hazirla(kok)
-    from kuresel_model import model_olustur, agirlik_yukle
+    from kuresel_model import agirlik_yukle, model_olustur
 
     cfg = config_yukle(kok, config_yolu)
     mcfg = cfg["model"]

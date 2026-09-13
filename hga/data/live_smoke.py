@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Callable, Dict, Iterable, List, Optional
 
 from hga.experience.corpus import cumlelere_bol
+
 from .quality import temizle_cumleler
 from .versioning import dosya_hashle
 

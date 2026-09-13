@@ -7,7 +7,7 @@ edilebilir.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .dynamic_kv import (
     CompactionReport,
@@ -36,6 +36,9 @@ class BellekEntegrasyonu:
     ):
         self.politika = str(politika).upper()
         self.replay = DeneyimTekrari(kapasite=replay_kapasitesi, tohum=tohum)
+        # Aktif Dynamic KV ya da legacy sabit-slot deposu; ikisi de `adresler`,
+        # `yaz` ve `icerir` sözleşmesini karşılar.
+        self.slotlar: Union[DynamicKVMemory, DeneyimSlotlari]
         if self.politika == DYNAMIC_KV:
             self.slotlar = DynamicKVMemory(
                 max_entries=int(slot_sayisi),

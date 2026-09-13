@@ -8,8 +8,8 @@ if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
 from hga.data import kalite_skoru, temizle_cumleler  # noqa: E402
-from hga.knowledge import KnowledgeStore  # noqa: E402
 from hga.experience.korpus_boru import korpus_borusu  # noqa: E402
+from hga.knowledge import KnowledgeStore  # noqa: E402
 
 
 def test_temizle_cumleler_rapor():

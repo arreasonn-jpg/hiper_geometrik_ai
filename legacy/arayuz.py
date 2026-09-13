@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
-import sys, os, time
+import os
+import sys
+import time
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 for p in [KOK, os.path.join(KOK, "mimari"), os.path.join(KOK, "egitim")]:
-    if p not in sys.path: sys.path.insert(0, p)
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 import gradio as gr
 from model_config import VARSAYILAN_MODEL_CONFIG
-from legacy.bilgi_katmani import KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK, beyaz_liste_olustur
+
 from hga.ui_runtime import (
-    SORU_ETIKETI, CEVAP_ETIKETI,
+    CEVAP_ETIKETI,
+    SORU_ETIKETI,
     config_yukle,
-    tokenizer_hazirla as ortak_tokenizer_hazirla,
-    bilgi_katmani_hazirla as ortak_bilgi_katmani_hazirla,
-    model_ve_agirlik_yukle,
     metin_uret,
+    model_ve_agirlik_yukle,
 )
+from hga.ui_runtime import (
+    bilgi_katmani_hazirla as ortak_bilgi_katmani_hazirla,
+)
+from hga.ui_runtime import (
+    tokenizer_hazirla as ortak_tokenizer_hazirla,
+)
+from legacy.bilgi_katmani import KATMAN_KISMI, KATMAN_TAM, beyaz_liste_olustur
+
 
 # Tek doğruluk kaynağı: model_config.yaml + hga.ui_runtime + bilgi_katmani.py.
 # Terminal (calistir.py) ile aynı tokenizer/model yükleme ve üretim döngüsü kullanılır.

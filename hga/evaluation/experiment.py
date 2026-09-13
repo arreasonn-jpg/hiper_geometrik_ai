@@ -27,7 +27,7 @@ import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO
+from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO, Union
 
 
 def canonical_hash(value: Any) -> str:
@@ -37,7 +37,7 @@ def canonical_hash(value: Any) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def file_sha256(path: os.PathLike) -> str:
+def file_sha256(path: Union[str, os.PathLike]) -> str:
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -170,12 +170,12 @@ class ExperimentRun:
     @classmethod
     def create(
         cls,
-        root: os.PathLike,
+        root: Union[str, os.PathLike],
         config: Mapping[str, Any],
         seed: int,
         dataset_hash: str,
         parameters: Optional[Mapping[str, Any]] = None,
-        model_path: Optional[os.PathLike] = None,
+        model_path: Optional[Union[str, os.PathLike]] = None,
     ) -> "ExperimentRun":
         root_path = Path(root)
         root_path.mkdir(parents=True, exist_ok=True)
@@ -279,6 +279,11 @@ class SeedSweepReport:
     aggregate: Dict[str, Dict[str, float]]
     deterministic_results: bool
     note: str
+    # Betimleyici `aggregate`'in yanında ÇIKARIMSAL katman: her metrik için
+    # %95 bootstrap CI ve örneklem std'si. `aggregate` sözleşmesi bilinçli
+    # olarak değiştirilmedi (mevcut tüketiciler kırılmasın diye).
+    statistics: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    statistical_power: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -298,11 +303,11 @@ def _numeric_leaves(value: Mapping[str, Any], prefix: str = "") -> Dict[str, flo
 def run_seed_sweep(
     callback: Callable[[int], Mapping[str, Any]],
     seeds: Sequence[int],
-    root: os.PathLike,
+    root: Union[str, os.PathLike],
     config: Mapping[str, Any],
     dataset_hash: str,
     parameters: Optional[Mapping[str, Any]] = None,
-    model_path: Optional[os.PathLike] = None,
+    model_path: Optional[Union[str, os.PathLike]] = None,
 ) -> SeedSweepReport:
     """Callback'i her seed için ayrı, tam manifestli deney olarak çalıştır."""
     normalized_seeds = [int(seed) for seed in seeds]
@@ -342,6 +347,49 @@ def run_seed_sweep(
             "min": min(values),
             "max": max(values),
         }
+    from .statistics import minimum_two_sided_p, summarize_seed_metric
+
+    # Çıkarımsal katman: tek seed'te CI tanımsızdır, o durumda boş kalır.
+    inferential: Dict[str, Dict[str, Any]] = {}
+    if len(normalized_seeds) >= 2:
+        for key in sorted(common_keys):
+            values = [row[key] for row in flattened]
+            # Sabit metriklerde bootstrap bilgi taşımaz; ucuz yoldan geç.
+            if len(set(values)) == 1:
+                sabit = float(values[0])
+                inferential[key] = {
+                    "n": len(values), "mean": sabit, "std_sample": 0.0,
+                    "min": sabit, "max": sabit,
+                    "ci_lower": sabit, "ci_upper": sabit,
+                    "confidence_level": 0.95, "method": "degenerate-constant",
+                    "seed": 12345,
+                }
+            else:
+                inferential[key] = summarize_seed_metric(values)
+
+    power = {
+        "seed_count": len(normalized_seeds),
+        "minimum_achievable_two_sided_p": (
+            round(minimum_two_sided_p(len(normalized_seeds)), 12)
+            if len(normalized_seeds) >= 2 else None
+        ),
+        "can_reach_p_below_0_05": (
+            bool(minimum_two_sided_p(len(normalized_seeds)) <= 0.05)
+            if len(normalized_seeds) >= 2 else False
+        ),
+        "note": (
+            "Eşleşmiş sign-flip permütasyon testinde ulaşılabilecek en küçük "
+            "iki yönlü p değeri 2/2^n'dir. n=5 için bu 0.0625 olduğundan, "
+            "5 seed ile p<0.05 MATEMATİKSEL OLARAK imkânsızdır; sonuçlar "
+            "betimleyici olarak okunmalıdır."
+        ),
+    } if len(normalized_seeds) >= 2 else {
+        "seed_count": len(normalized_seeds),
+        "minimum_achievable_two_sided_p": None,
+        "can_reach_p_below_0_05": False,
+        "note": "Tek seed: varyans ve güven aralığı tanımsızdır.",
+    }
+
     deterministic = all(result == results[0] for result in results[1:])
     return SeedSweepReport(
         seeds=normalized_seeds,
@@ -357,6 +405,8 @@ def run_seed_sweep(
             "Seedler arası özdeşlik yalnız tekrarlanabilirlik kontrolüdür; "
             "istatistiksel model kalitesi kanıtı değildir."
         ),
+        statistics=inferential,
+        statistical_power=power,
     )
 
 

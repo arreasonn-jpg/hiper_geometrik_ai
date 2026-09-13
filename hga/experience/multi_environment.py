@@ -59,6 +59,9 @@ class EnvironmentLearningMetrics:
     durable_new_knowledge: int
     incorrect_durable_knowledge: int
     experience_yield: float
+    # P1-005: EY tek başına yanıltıcıdır (ayrıntı: docs/VERIM_METRIKLERI.md).
+    novelty_yield: float           # kalıcı YENİ olgu / üretilen
+    useful_experience_yield: float  # doğru + paylaşılan bellekte bulunan / üretilen
     holdout_size: int
     generation_holdout_overlap: int
     memory_holdout_overlap: int
@@ -397,6 +400,16 @@ def run_multi_environment_self_learning(
                 cross_fact_contamination += 1
         entries = environment_stats["memory_entries"]
         memory_hits = sum(memory.icerir(candidate) for candidate in entries)
+
+        # P1-005: kalıcı yeni olgular ve bunların doğru + bellekte bulunanı.
+        domain_ucluleri = {fact.uclusu for fact in domain_facts}
+        kalici_yeni = domain_ucluleri - set(domain.initial_facts)
+        kullanisli = len({
+            uclu for uclu in kalici_yeni
+            if uclu in memory_keys
+            and domain.routed_verify(
+                store, _candidate(domain.name, uclu, int(seed), 0, 0)) is True
+        })
         holdout = set(domain.holdout)
         per_environment[domain.name] = EnvironmentLearningMetrics(
             environment=domain.name,
@@ -417,6 +430,10 @@ def run_multi_environment_self_learning(
             incorrect_durable_knowledge=incorrect,
             experience_yield=_ratio(
                 environment_stats["verified"], environment_stats["generated"]
+            ),
+            novelty_yield=_ratio(len(kalici_yeni), environment_stats["generated"]),
+            useful_experience_yield=_ratio(
+                kullanisli, environment_stats["generated"]
             ),
             holdout_size=len(holdout),
             generation_holdout_overlap=len(

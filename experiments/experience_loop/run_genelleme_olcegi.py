@@ -50,6 +50,7 @@ def main():
 
     import torch
     from kuresel_model import HiperGeometrikAI
+
     from hga.memory import GenellemeAblasyonu
 
     K, KISI = 6, 4

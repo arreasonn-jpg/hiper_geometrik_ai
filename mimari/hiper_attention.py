@@ -116,7 +116,8 @@ class HiperGeometrikAttention(nn.Module):
         out = residual + self.alpha * out
         if pad_mask is not None:
             out = out * pad_mask.unsqueeze(-1).to(dtype=out.dtype)
-        return out
+        cikti: torch.Tensor = out
+        return cikti
 
     @torch.no_grad()
     def attention_haritasi(self, x: torch.Tensor,
