@@ -16,8 +16,8 @@ Bu sürümdeki değişiklikler (rapor 8.1 / 8.4 / 8.6 / 9 / 10):
       3. Eşleşme yok     → serbest sinir ağı üretimi [DOĞRULANMAMIŞ]
 """
 
-import sys
 import os
+import sys
 
 KOK_DIZIN = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI_DIZIN = os.path.join(KOK_DIZIN, "mimari")
@@ -27,15 +27,25 @@ for _p in [KOK_DIZIN, MIMARI_DIZIN, EGITIM_DIZIN]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from legacy.bilgi_katmani import (KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
-                           KATMAN_ETIKET, beyaz_liste_olustur)
 from hga.ui_runtime import (
-    SORU_ETIKETI, CEVAP_ETIKETI,
+    CEVAP_ETIKETI,
+    SORU_ETIKETI,
     config_yukle,
-    tokenizer_hazirla as ortak_tokenizer_hazirla,
-    bilgi_katmani_hazirla as ortak_bilgi_katmani_hazirla,
-    model_ve_agirlik_yukle,
     metin_uret,
+    model_ve_agirlik_yukle,
+)
+from hga.ui_runtime import (
+    bilgi_katmani_hazirla as ortak_bilgi_katmani_hazirla,
+)
+from hga.ui_runtime import (
+    tokenizer_hazirla as ortak_tokenizer_hazirla,
+)
+from legacy.bilgi_katmani import (
+    KATMAN_ACIK,
+    KATMAN_ETIKET,
+    KATMAN_KISMI,
+    KATMAN_TAM,
+    beyaz_liste_olustur,
 )
 
 

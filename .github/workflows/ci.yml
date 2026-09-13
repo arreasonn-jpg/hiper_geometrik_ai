@@ -7,13 +7,88 @@ on:
     branches: [ main ]
 
 jobs:
+  # ── Statik kalite kapıları ────────────────────────────────────────────────
+  # Lint/tip denetimi tek sürümde çalışır: matris içinde tekrar etmesi gereksiz
+  # maliyet, dışında bırakması ise kör nokta olurdu.
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[test]"
+
+      - name: Ruff (lint + import order)
+        run: |
+          ruff check .
+
+      - name: Mypy (static type check)
+        run: |
+          mypy hga mimari egitim
+
+  # ── Paketleme kapısı ──────────────────────────────────────────────────────
+  # `pyproject.toml` iddiası ile gerçekte kurulabilir/import edilebilir paketin
+  # ayrışmadığını doğrular. Kurulum TEMİZ bir dizinden import edilerek sınanır;
+  # böylece "çalışıyor" sonucu repo kökündeki dosyalardan gelemez.
+  package:
+    name: Package Build & Clean Install
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build sdist + wheel
+        run: |
+          python -m build
+
+      - name: Validate distribution metadata
+        run: |
+          twine check dist/*
+
+      - name: Install built wheel and import from a clean directory
+        run: |
+          pip install dist/*.whl
+          mkdir -p /tmp/clean-import
+          cd /tmp/clean-import
+          python -c "import hga, mimari, egitim, golden_dataset; print('import ok', hga.__name__)"
+          python -c "from hga.evaluation import research; print('subpackage ok')"
+          # Paket verisi (golden dataset / TWT fixture'ları) wheel'e girmiş mi?
+          python -c "from importlib import resources; import json; \
+            data = resources.files('hga.evaluation.datasets').joinpath('compositional_tr_v1.json').read_text('utf-8'); \
+            print('package data ok', len(json.loads(data)))"
+          # Konsol girişi kurulmuş mu?
+          hga bilgi > /dev/null && echo 'console script ok'
+
   test:
     name: Test & Architecture Validation (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout repository
@@ -30,6 +105,10 @@ jobs:
           python -m pip install --upgrade pip
           # Tek bağımlılık kaynağı: pyproject.toml
           pip install -e ".[test]"
+
+      - name: Report resolved environment
+        run: |
+          python -c "import sys, torch; print('python', sys.version); print('torch', torch.__version__)"
 
       - name: Run Pytest Suite
         run: |
@@ -59,3 +138,5 @@ jobs:
           python -m hga paradigma --seeds 1,2 --epochs 20
           python -m hga research-benchmark --seeds 1,2 --experiment-root /tmp/hga-research-experiments --out /tmp/research_report.json --markdown /tmp/research_report.md --html /tmp/research_report.html
           python -m hga milestone --cycles 5 --batch 8 --initial-facts 6 --operands-max 8 --negatives-per-fact 3 --seeds 1 --checkpoints 0,5 --experiment-root /tmp/hga-milestone-experiments
+          python -m hga epistemik --seeds 1,2,3
+          python -m hga verim --cycles 8 --batch 8 --initial-facts 6 --operands-max 6 --negatives-per-fact 3 --seeds 1,2

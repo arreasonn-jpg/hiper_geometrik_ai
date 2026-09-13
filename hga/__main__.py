@@ -38,6 +38,7 @@ import argparse
 import json
 import os
 import sys
+from typing import Optional
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI = os.path.join(KOK, "mimari")
@@ -1093,8 +1094,8 @@ def _tokenizer_benchmark():
 
 def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
                           tiny: bool = True, batch_size: int = 64,
-                          n: int = None, katman: int = None,
-                          baglam: int = None, vocab: int = None):
+                          n: Optional[int] = None, katman: Optional[int] = None,
+                          baglam: Optional[int] = None, vocab: Optional[int] = None):
     """Mini Türkçe perplexity smoke'u; torch yoksa güvenli bilgi ver."""
     try:
         import torch  # noqa: F401
@@ -1154,9 +1155,11 @@ def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
 
 
 def _checkpoint_rapor(yol, config_yol=None, strict: bool = True,
-                      n: int = None, katman: int = None, baglam: int = None,
-                      vocab: int = None, emb: int = None, heads: int = None,
-                      seyrek_satir: int = None, seyrek_boyut: int = None):
+                      n: Optional[int] = None, katman: Optional[int] = None,
+                      baglam: Optional[int] = None, vocab: Optional[int] = None,
+                      emb: Optional[int] = None, heads: Optional[int] = None,
+                      seyrek_satir: Optional[int] = None,
+                      seyrek_boyut: Optional[int] = None):
     """Checkpoint'i yüklemeden model anahtar/şekil uyumluluğunu raporla."""
     if not yol:
         raise SystemExit("checkpoint-rapor komutu için checkpoint yolu gerekli")

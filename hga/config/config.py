@@ -10,7 +10,7 @@ veya okunamıyorsa gömülü varsayılanlara düşer — sistem asla yapılandı
 eksikliğinden çökmez.
 """
 import os
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from ..experience.evaluator import VARSAYILAN_ESIKLER
 from ..experience.scoring import VARSAYILAN_AGIRLIKLAR
@@ -41,8 +41,10 @@ def _ayrikla_bolum(metin: str, baslik: str) -> Dict:
             girinti = len(satir) - len(satir.lstrip())
             continue
         if icinde and ":" in temiz:
-            k, v = temiz.split(":", 1)
-            k, v = k.strip(), v.strip().strip('"').strip("'")
+            ham_k, ham_v = temiz.split(":", 1)
+            k = ham_k.strip()
+            # YAML skaleri str olarak okunur, sonra bool/None/sayıya indirgenir.
+            v: Any = ham_v.strip().strip('"').strip("'")
             # yalnızca bu bölümün alt satırları (girinti anahtar satırından büyük)
             mevcut_girinti = len(satir) - len(satir.lstrip())
             if girinti is not None and mevcut_girinti > girinti:

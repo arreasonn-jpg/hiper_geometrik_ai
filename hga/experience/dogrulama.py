@@ -67,7 +67,7 @@ class DogrulamaHatti:
         if not gecis.ok:  # pragma: no cover - sözleşme ihlaline karşı savunma
             raise ValueError(gecis.neden)
 
-        sonuc = self.dogrulayici(store, aday)
+        sonuc: Optional[bool] = self.dogrulayici(store, aday)
         if sonuc is True:
             aday.source = KaynakTuru.EXTERNAL_VERIFIED
             aday.source_confidence = 1.0

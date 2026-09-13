@@ -22,10 +22,9 @@ Kontrollü üretimin iki modu vardır:
 Üretilen her aday `source=MODEL_GENERATED` olarak işaretlenir ve durumu
 `CANDIDATE`'tir — Evaluator onayı olmadan belleğe YAZILAMAZ (rapor §9).
 """
-from typing import Dict, List, Optional
+from typing import List, Optional
 
-from ..knowledge.schemas import (Entity, ExperienceCandidate, KaynakTuru,
-                                 DeneyimDurumu)
+from ..knowledge.schemas import DeneyimDurumu, Entity, ExperienceCandidate, KaynakTuru
 
 
 class ExperienceGenerator:

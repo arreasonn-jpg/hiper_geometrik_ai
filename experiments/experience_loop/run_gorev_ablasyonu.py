@@ -29,9 +29,13 @@ for _p in [KOK, os.path.join(KOK, "mimari")]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from hga.experience import (AritmetikOrtam, aritmetik_etki_alani,  # noqa: E402
-                            ExperienceGenerator, ExperienceEvaluator,
-                            DogrulamaHatti)
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    DogrulamaHatti,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    aritmetik_etki_alani,
+)
 from hga.knowledge import DeneyimDurumu  # noqa: E402
 from hga.memory import torch_var_mi  # noqa: E402
 
@@ -60,6 +64,7 @@ def main():
 
     import torch
     from kuresel_model import HiperGeometrikAI
+
     from hga.memory import GorevAblasyonu
 
     # 1. Doğrulama hattından tamamlama örnekleri (özne, ilişki → nesne)

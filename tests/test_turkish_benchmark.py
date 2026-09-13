@@ -11,6 +11,7 @@ for _p in [KOK, MIMARI]:
 
 from bpe_tokenizer import BPETokenizer  # noqa: E402
 from model_config import VARSAYILAN_MODEL_CONFIG  # noqa: E402
+
 from hga.evaluation import mini_turkce_corpus, tokenizer_kapsami  # noqa: E402
 
 

@@ -17,9 +17,9 @@ Bağlantı Türleri:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set
 
-from ..knowledge.schemas import ExperienceCandidate, DeneyimDurumu, KaynakTuru
+from ..knowledge.schemas import ExperienceCandidate
 
 
 @dataclass

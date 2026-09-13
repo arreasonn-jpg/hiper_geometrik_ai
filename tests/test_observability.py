@@ -7,11 +7,15 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import ExperienceCandidate, DeneyimDurumu, KaynakTuru  # noqa: E402
+from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru  # noqa: E402
 from hga.memory import DeneyimSlotlari  # noqa: E402
-from hga.observability import (ascii_bellek_haritasi, bellek_doluluk_haritasi,  # noqa: E402
-                               deneyim_akisi, head_diversity,
-                               liste_katman_benzerligi)
+from hga.observability import (  # noqa: E402
+    ascii_bellek_haritasi,
+    bellek_doluluk_haritasi,
+    deneyim_akisi,
+    head_diversity,
+    liste_katman_benzerligi,
+)
 
 
 def test_deneyim_akisi_oranlar():

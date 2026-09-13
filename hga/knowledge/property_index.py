@@ -67,7 +67,7 @@ class PropertyIndex:
 
     def adlar(self) -> List[str]:
         """Sistemde tanımlı tüm özellik adları (sıralı)."""
-        s = set()
+        s: set = set()
         for kume in self._ozellikler.values():
             s.update(kume.keys())
         return sorted(s)

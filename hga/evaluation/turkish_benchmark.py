@@ -10,7 +10,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Dict, Iterable, List, Optional
 
-
 MINI_TURKCE_CUMLELER = [
     "İstanbul'da yağmur yağarken öğrenciler kütüphaneye gitti.",
     "Iğdır ovasında çiftçiler ürünlerini özenle topladı.",

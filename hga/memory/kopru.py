@@ -21,7 +21,7 @@ torch'suz çalışmaya devam eder. torch yoksa `TorchKoprusu()` AÇIKÇA ImportE
 fırlatır (sessizce boş köprü döndürmez) — `torch_var_mi()` ile önceden
 sorgulanabilir.
 """
-from typing import Optional, Tuple
+from typing import Tuple
 
 from .sparse_memory import parmak_izi
 
@@ -54,6 +54,7 @@ class TorchKoprusu:
     def __init__(self, tablo_boyutu: int = 1_048_576, boyut: int = 32):
         try:
             import torch
+
             from mimari.seyrek_tablo import HashlenmisKureselTablo
         except ImportError as e:  # torch yok → dürüstçe yüzeye çıkar
             raise ImportError(
@@ -83,7 +84,8 @@ class TorchKoprusu:
 
     def doluluk(self) -> Tuple[int, int]:
         """(dolu_satır, toplam_satır) — torch tablosunun doluluğu."""
-        return self.tablo.doluluk_orani()
+        dolu, toplam = self.tablo.doluluk_orani()
+        return int(dolu), int(toplam)
 
     def kapasite(self) -> dict:
         return self.tablo.kapasite()

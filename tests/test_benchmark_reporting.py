@@ -11,7 +11,11 @@ MIMARI = os.path.join(KOK, "mimari")
 if MIMARI not in sys.path:
     sys.path.insert(0, MIMARI)
 
-from hga.evaluation.reporting import benchmark_raporu_kaydet, benchmark_raporu_markdown, benchmark_raporu_olustur
+from hga.evaluation.reporting import (
+    benchmark_raporu_kaydet,
+    benchmark_raporu_markdown,
+    benchmark_raporu_olustur,
+)
 
 
 def test_benchmark_raporu_yapisi_ve_markdown():

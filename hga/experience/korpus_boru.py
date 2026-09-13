@@ -20,14 +20,13 @@ toplayıcı dosyayı üretir, boru dosyayı tüketir.
       varsayılan `turkce_metin.txt` dosyasını akıtır
 """
 import os
-from dataclasses import dataclass, asdict
-from typing import Dict, List, Optional
+from dataclasses import asdict, dataclass
+from typing import Dict, Optional
 
-from .corpus import cumlelere_bol
-from .cumle_ayiklayici import (CumleAyiklayici, VARSAYILAN_SOZLUK,
-                               cumlelerden_bilgi_aktar)
-from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
 from ..data.quality import VeriKaliteRaporu, temizle_cumleler
+from .corpus import cumlelere_bol
+from .cumle_ayiklayici import VARSAYILAN_SOZLUK, CumleAyiklayici, cumlelerden_bilgi_aktar
+from .sozluk_buyutme import SozlukBuyutmeRaporu, sozlugu_buyut
 
 VARSAYILAN_KORPUS_DOSYASI = "turkce_metin.txt"
 

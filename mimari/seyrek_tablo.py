@@ -38,6 +38,8 @@ dolu satır sayısına değil, tablo_boyutu'na bağlıdır. "Sadece dokunulanlar
 bellekte" davranışı (rapor 9.2'nin dikte/LMDB senaryosu, 9.4.3) bu sınıfla
 DEĞİL, dinamik anahtar-değer deposuyla sağlanır — bu projede gerek yok.
 """
+from typing import List
+
 import torch
 import torch.nn as nn
 
@@ -52,6 +54,14 @@ class HashlenmisKureselTablo(nn.Module):
 
     MASK31 = 0x7FFFFFFF   # 2^31 - 1  → tüm çarpımlar 2^63'ü aşmaz (taşma yok)
     TABAN = 65537         # 2^16 + 1 (asal); vocab ≤ 65536 iken konumsal hash
+
+    # `register_buffer` ile kaydedilen tensörler: torch'un `nn.Module.__getattr__`
+    # imzası bunları `Tensor | Module` olarak döndürür. Gerçekte hepsi Tensor'dur;
+    # sınıf düzeyinde bildirerek statik analize doğru tipi veriyoruz.
+    tuzlar: torch.Tensor
+    _adim: torch.Tensor
+    son_erisim: torch.Tensor
+    erisim_sayisi: torch.Tensor
 
     def __init__(self, tablo_boyutu=1_048_576, boyut=32,
                  hash_tuzu=0x2545F491, tablo_sayisi=1,
@@ -74,7 +84,7 @@ class HashlenmisKureselTablo(nn.Module):
             [nn.Embedding(self.tablo_boyutu, self.boyut)
              for _ in range(tablo_sayisi)]
         )
-        for t in self.tablolar:
+        for t in self._tablolar():
             nn.init.zeros_(t.weight)
 
         # Opsiyonel erişim istatistikleri: varsayılan kapalı tutulur; açılırsa
@@ -107,6 +117,20 @@ class HashlenmisKureselTablo(nn.Module):
         tuz = self.tuzlar[tablo_indeksi].to(anahtar.device)
         return (anahtar * tuz + (tablo_indeksi + 1) * 0x9E37) % self.tablo_boyutu
 
+    def _tablo(self, indeks: int) -> "nn.Embedding":
+        """ModuleList elemanını gerçek tipiyle döndür.
+
+        `nn.ModuleList.__getitem__` statik olarak `Module` döndürür; bu tablo
+        yalnız `nn.Embedding` içerir. Runtime davranışı değişmez.
+        """
+        katman = self.tablolar[indeks]
+        assert isinstance(katman, nn.Embedding)
+        return katman
+
+    def _tablolar(self) -> List["nn.Embedding"]:
+        """Tüm gömme tablolarını tipli liste olarak ver."""
+        return [self._tablo(i) for i in range(len(self.tablolar))]
+
     # ── Arayüzler ───────────────────────────────────────────────────────
     @torch.no_grad()
     def _erisim_guncelle(self, adresler):
@@ -122,9 +146,9 @@ class HashlenmisKureselTablo(nn.Module):
         """Hazır kavramsal anahtarlarla arama (rapor 9.3'teki API)."""
         adresler = [self.adres(anahtar, i) for i in range(self.tablo_sayisi)]
         self._erisim_guncelle(adresler)
-        cikti = self.tablolar[0](adresler[0])
+        cikti: torch.Tensor = self._tablo(0)(adresler[0])
         for i in range(1, self.tablo_sayisi):
-            cikti = cikti + self.tablolar[i](adresler[i])
+            cikti = cikti + self._tablo(i)(adresler[i])
         return cikti
 
     def forward(self, token_idleri: torch.Tensor) -> torch.Tensor:
@@ -205,7 +229,7 @@ class HashlenmisKureselTablo(nn.Module):
 
     def bellek_kullanimi(self) -> dict:
         """Fiziksel seyrek tablonun yaklaşık bellek muhasebesi."""
-        dtype = self.tablolar[0].weight.dtype if self.tablolar else torch.float32
+        dtype = self._tablo(0).weight.dtype if len(self.tablolar) else torch.float32
         bayt = torch.tensor([], dtype=dtype).element_size()
         toplam_bayt = self.tablo_boyutu * self.tablo_sayisi * self.boyut * bayt
         if self.erisim_izleme:
@@ -229,7 +253,7 @@ class HashlenmisKureselTablo(nn.Module):
         """
         carpan = float(carpan)
         etkilenen = 0
-        for i, t in enumerate(self.tablolar):
+        for i, t in enumerate(self._tablolar()):
             dolu = t.weight.abs().sum(dim=1) > 1e-8
             if self.erisim_izleme and min_erisim > 0:
                 dolu = dolu & (self.erisim_sayisi[i].to(dolu.device) >= int(min_erisim))
@@ -248,7 +272,7 @@ class HashlenmisKureselTablo(nn.Module):
             raise RuntimeError("LRU temizliği için erisim_izleme=True ile kurun")
         temizlenen = 0
         esik = self._adim - int(max_yas)
-        for i, t in enumerate(self.tablolar):
+        for i, t in enumerate(self._tablolar()):
             eski = (self.son_erisim[i].to(t.weight.device) >= 0) & (self.son_erisim[i].to(t.weight.device) < esik)
             if eski.any():
                 t.weight[eski] = 0

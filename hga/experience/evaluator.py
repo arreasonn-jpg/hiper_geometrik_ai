@@ -85,7 +85,7 @@ class ExperienceEvaluator:
         yapisal_olumlu = pc >= 0.5
         kanit_olumlu = agrega["score"] >= 0.5
         # kayıtlı kanıt, yapısal kuralların tahminiyle zıt yönde ise çelişki
-        return yapisal_olumlu != kanit_olumlu
+        return bool(yapisal_olumlu != kanit_olumlu)
 
     # ── Ana değerlendirme ────────────────────────────────────────────────
     def degerlendir(self, aday: ExperienceCandidate, store) -> ExperienceCandidate:

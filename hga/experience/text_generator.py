@@ -23,8 +23,7 @@ import inspect
 from typing import Callable, Dict, Optional
 
 from ..knowledge.schemas import ExperienceCandidate
-from .turkce import (kucult, yonelme_eki, belirtme_eki, bulunma_eki,
-                     ayrilma_eki)
+from .turkce import ayrilma_eki, belirtme_eki, bulunma_eki, kucult, yonelme_eki
 
 
 def _norm(token: str) -> str:
@@ -87,10 +86,10 @@ def _cagir(ureteci: Callable, ozne: str, nesne: str, baglam: Dict) -> str:
                     if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)]
         zorunlu = [p for p in konumsal if p.default is p.empty]
         if len(konumsal) >= 3 or len(zorunlu) >= 3:
-            return ureteci(ozne, nesne, baglam)
+            return str(ureteci(ozne, nesne, baglam))
     except (TypeError, ValueError):
         pass
-    return ureteci(ozne, nesne)
+    return str(ureteci(ozne, nesne))
 
 
 class TextGenerator:

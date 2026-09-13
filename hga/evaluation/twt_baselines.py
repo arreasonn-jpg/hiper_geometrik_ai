@@ -77,6 +77,7 @@ ARCHITECTURE_CONFIG: Dict[str, Any] = {
 }
 
 
+
 def _torch():
     try:
         import torch
@@ -227,7 +228,7 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
     sequence_length = int(ARCHITECTURE_CONFIG["sequence_length"])
     flat_dim = embedding_dim * sequence_length
 
-    class DenseClassifier(nn.Module):
+    class DenseClassifier(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)
@@ -241,7 +242,7 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
         def forward(self, token_ids):
             return self.body(self.embedding(token_ids).flatten(1))
 
-    class TransformerClassifier(nn.Module):
+    class TransformerClassifier(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)
@@ -268,7 +269,7 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
             hidden = self.body(self.embedding(token_ids) + self.position)
             return self.readout(hidden.mean(dim=1))
 
-    class KroneckerClassifier(nn.Module):
+    class KroneckerClassifier(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)
@@ -291,7 +292,7 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
             pooled = torch.cat([matrix.mean(dim=1), matrix.mean(dim=2)], dim=-1)
             return self.readout(pooled)
 
-    class HGAClassifier(nn.Module):
+    class HGAClassifier(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.ablation = hga_ablation

@@ -53,6 +53,7 @@ def main():
 
     import torch
     from kuresel_model import HiperGeometrikAI
+
     from hga.memory import GenellemeAblasyonu
 
     print(f"1) Doğrulanmış bilgi: {len(UCLULER)} olgu, "

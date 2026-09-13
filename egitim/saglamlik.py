@@ -6,7 +6,7 @@ loss/logit sonlu mu, checkpoint açık/kapalı ileri-geri gradyanları uyumlu mu
 """
 from __future__ import annotations
 
-from typing import Callable, Dict, Mapping, Optional, Union
+from typing import Any, Callable, Dict, Mapping, Union
 
 try:
     import torch  # type: ignore
@@ -113,7 +113,7 @@ def checkpoint_uyumluluk_raporu(model, checkpoint: Union[str, Mapping],
     }
 
 
-def checkpoint_gradyan_dogrula(factory: Callable[[bool], object], x,
+def checkpoint_gradyan_dogrula(factory: Callable[[bool], Any], x,
                                atol: float = 1e-6) -> Dict:
     """Checkpoint açık/kapalı modüllerin ileri+geri eşdeğerliğini doğrula.
 
@@ -124,12 +124,14 @@ def checkpoint_gradyan_dogrula(factory: Callable[[bool], object], x,
     m1 = factory(False)
     m2 = factory(True)
     m2.load_state_dict(m1.state_dict())
-    m1.train(); m2.train()
+    m1.train()
+    m2.train()
     x1 = x.detach().clone().requires_grad_(True)
     x2 = x.detach().clone().requires_grad_(True)
     y1 = m1(x1).sum()
     y2 = m2(x2).sum()
-    y1.backward(); y2.backward()
+    y1.backward()
+    y2.backward()
     ileri_ok = bool(torch.allclose(y1.detach(), y2.detach(), atol=atol))
     girdi_grad_ok = bool(torch.allclose(x1.grad, x2.grad, atol=atol))
     param_grad_ok = True

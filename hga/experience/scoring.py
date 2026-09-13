@@ -101,7 +101,7 @@ class Scoring:
         agrega = store.relations.olgu_agrega(subject_id, relation_id, object_id)
         if agrega is None:
             return 0.5
-        return agrega["score"]
+        return float(agrega["score"])
 
     def baglam_tutarliligi(self, subject: Entity, relation: Relation,
                            object_: Entity) -> float:
@@ -115,7 +115,7 @@ class Scoring:
 
     def bellek_destegi(self, store, subject_id: str, relation_id: str,
                        object_id: str) -> float:
-        return store.bellek_destegi(subject_id, relation_id, object_id)
+        return float(store.bellek_destegi(subject_id, relation_id, object_id))
 
     def yenilik(self, store, subject_id: str, relation_id: str,
                 object_id: str) -> float:
@@ -143,7 +143,7 @@ class Scoring:
         nb = sum(v * v for v in b.values()) ** 0.5
         if na == 0 or nb == 0:
             return 0.0
-        return pay / (na * nb)
+        return float(pay / (na * nb))
 
     def information_gain(self, store, object_: Entity) -> float:
         """Nesnenin bellek içinde ne kadar "bilgilendirici" (ayırt edici) olduğu.

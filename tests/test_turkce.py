@@ -13,13 +13,25 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.experience import (yonelme_eki, belirtme_eki, bulunma_eki,  # noqa: E402
-                            ayrilma_eki, cogul_eki, unsuz_yumusat,
-                            unlu_dusmesi, iyelik_eki, iyelik_li_durum,
-                            gecmis_zaman_3tekil,
-                            simdiki_zaman_3tekil, gelecek_zaman_3tekil,
-                            genis_zaman_3tekil, fiil_cekimi,
-                            hece_sayisi, son_unlu, kucult)
+from hga.experience import (  # noqa: E402
+    ayrilma_eki,
+    belirtme_eki,
+    bulunma_eki,
+    cogul_eki,
+    fiil_cekimi,
+    gecmis_zaman_3tekil,
+    gelecek_zaman_3tekil,
+    genis_zaman_3tekil,
+    hece_sayisi,
+    iyelik_eki,
+    iyelik_li_durum,
+    kucult,
+    simdiki_zaman_3tekil,
+    son_unlu,
+    unlu_dusmesi,
+    unsuz_yumusat,
+    yonelme_eki,
+)
 
 
 def test_son_unlu():

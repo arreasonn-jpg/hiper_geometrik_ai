@@ -8,7 +8,12 @@ if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
 from hga.evaluation import hallucination_metrics  # noqa: E402
-from hga.experience import AritmetikOrtam, aritmetik_etki_alani, ExperienceEvaluator, ExperienceGenerator  # noqa: E402
+from hga.experience import (  # noqa: E402
+    AritmetikOrtam,
+    ExperienceEvaluator,
+    ExperienceGenerator,
+    aritmetik_etki_alani,
+)
 from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru  # noqa: E402
 
 

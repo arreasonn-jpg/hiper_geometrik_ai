@@ -324,7 +324,7 @@ class TurkishWebTreebank:
 
     def _partition(self, quarantine: bool) -> Dict[str, List[TWTSentence]]:
         quarantined = set(self.config["quarantined_sentence_ids"]) if quarantine else set()
-        result = {name: [] for name in SPLITS}
+        result: Dict[str, List[TWTSentence]] = {name: [] for name in SPLITS}
         for sentence in self.sentences:
             if sentence.sentence_id not in quarantined:
                 result[sentence.raw_split].append(sentence)

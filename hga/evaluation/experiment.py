@@ -27,7 +27,7 @@ import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO
+from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO, Union
 
 
 def canonical_hash(value: Any) -> str:
@@ -37,7 +37,7 @@ def canonical_hash(value: Any) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def file_sha256(path: os.PathLike) -> str:
+def file_sha256(path: Union[str, os.PathLike]) -> str:
     digest = hashlib.sha256()
     with open(path, "rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -170,12 +170,12 @@ class ExperimentRun:
     @classmethod
     def create(
         cls,
-        root: os.PathLike,
+        root: Union[str, os.PathLike],
         config: Mapping[str, Any],
         seed: int,
         dataset_hash: str,
         parameters: Optional[Mapping[str, Any]] = None,
-        model_path: Optional[os.PathLike] = None,
+        model_path: Optional[Union[str, os.PathLike]] = None,
     ) -> "ExperimentRun":
         root_path = Path(root)
         root_path.mkdir(parents=True, exist_ok=True)
@@ -298,11 +298,11 @@ def _numeric_leaves(value: Mapping[str, Any], prefix: str = "") -> Dict[str, flo
 def run_seed_sweep(
     callback: Callable[[int], Mapping[str, Any]],
     seeds: Sequence[int],
-    root: os.PathLike,
+    root: Union[str, os.PathLike],
     config: Mapping[str, Any],
     dataset_hash: str,
     parameters: Optional[Mapping[str, Any]] = None,
-    model_path: Optional[os.PathLike] = None,
+    model_path: Optional[Union[str, os.PathLike]] = None,
 ) -> SeedSweepReport:
     """Callback'i her seed için ayrı, tam manifestli deney olarak çalıştır."""
     normalized_seeds = [int(seed) for seed in seeds]

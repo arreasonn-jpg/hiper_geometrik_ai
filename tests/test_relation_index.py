@@ -20,7 +20,7 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import PropertyIndex, RelationIndex, KaynakTuru  # noqa: E402
+from hga.knowledge import KaynakTuru, PropertyIndex, RelationIndex  # noqa: E402
 
 
 def test_property_boolean_ve_guven():

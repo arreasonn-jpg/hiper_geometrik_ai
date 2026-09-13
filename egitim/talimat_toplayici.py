@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import json, os
+import json
+import os
 
 ZENGIN = [
     {"soru": "merhaba", "cevap": "merhaba ben hiper geometrik yapay zekayım size nasıl yardımcı olabilirim"},

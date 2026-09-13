@@ -12,8 +12,8 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.knowledge import KnowledgeStore, ExperienceCandidate  # noqa: E402
 from hga.experience import MantikOrtam, TutarlilikOrtam  # noqa: E402
+from hga.knowledge import ExperienceCandidate, KnowledgeStore  # noqa: E402
 
 
 def test_mantik_modus_ponens():

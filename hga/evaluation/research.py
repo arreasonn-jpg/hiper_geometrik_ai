@@ -14,7 +14,7 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from .compositional import CompositionalDataset, CompositionalReport, run_compositional_benchmark
 from .experiment import SeedSweepReport, canonical_hash, run_seed_sweep
@@ -1013,7 +1013,7 @@ def validate_sections(sections: Optional[Sequence[str]]) -> List[str]:
 
 
 def run_research_benchmark(
-    root: os.PathLike = "experiments",
+    root: Union[str, os.PathLike] = "experiments",
     seeds: Sequence[int] = (1, 2, 3, 4, 5),
     profile: str = "smoke",
     sections: Optional[Sequence[str]] = None,
@@ -1329,7 +1329,7 @@ small,.muted{{color:var(--muted)}} details summary{{cursor:pointer;color:var(--a
 </main></body></html>"""
 
 
-def _atomic_text(path: os.PathLike, content: str) -> None:
+def _atomic_text(path: Union[str, os.PathLike], content: str) -> None:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     temporary = target.with_suffix(target.suffix + ".tmp")
@@ -1339,9 +1339,9 @@ def _atomic_text(path: os.PathLike, content: str) -> None:
 
 def save_research_report(
     report: ResearchBenchmarkReport,
-    json_path: os.PathLike = "research_report.json",
-    markdown_path: os.PathLike = "research_report.md",
-    html_path: os.PathLike = "research_report.html",
+    json_path: Union[str, os.PathLike] = "research_report.json",
+    markdown_path: Union[str, os.PathLike] = "research_report.md",
+    html_path: Union[str, os.PathLike] = "research_report.html",
 ) -> Dict[str, str]:
     data = report.to_dict()
     _atomic_text(json_path, json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n")

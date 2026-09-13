@@ -193,7 +193,7 @@ class TutarlilikOrtam:
         esik = self.guven_esigi if guven_esigi is None else float(guven_esigi)
         if pv.confidence < esik:
             return None
-        return (pv.deger >= 0.5) != (float(yeni_deger) >= 0.5)
+        return bool((pv.deger >= 0.5) != (float(yeni_deger) >= 0.5))
 
     def aday_dogrula(self, store, aday: ExperienceCandidate) -> Optional[bool]:
         try:

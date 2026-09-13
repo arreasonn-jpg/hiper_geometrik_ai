@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 from .dynamic_kv import DynamicKVMemory
 from .sparse_memory import DeneyimSlotlari
@@ -54,7 +54,7 @@ def _oran(pay: int, payda: int) -> float:
 
 
 def carpisan_anahtar_bul(
-    memory: DeneyimSlotlari,
+    memory: Union[DeneyimSlotlari, DynamicKVMemory],
     hedef_anahtar: Triple,
     arama_limiti: int = 2_000_000,
     baslangic: int = 0,

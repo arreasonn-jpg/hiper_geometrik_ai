@@ -61,7 +61,7 @@ def aritmetik_etki_alani(ifadeler: Optional[List[str]] = None) -> KnowledgeStore
 def _esittir_rid(store) -> str:
     for r in store.relations.iliskiler():
         if r.token.strip().lower() in ("eşittir", "esittir", "esit"):
-            return r.relation_id
+            return str(r.relation_id)
     raise KeyError("'eşittir' ilişkisi bulunamadı")
 
 
