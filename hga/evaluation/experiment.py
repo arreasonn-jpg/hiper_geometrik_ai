@@ -211,6 +211,10 @@ class ExperimentRun:
 class SeedSweepReport:
     seeds: List[int]
     experiment_ids: List[str]
+    dataset_hash: str
+    config_hash: str
+    parameters: Dict[str, Any]
+    manifests: List[Dict[str, Any]]
     aggregate: Dict[str, Dict[str, float]]
     deterministic_results: bool
     note: str
@@ -280,6 +284,10 @@ def run_seed_sweep(
     return SeedSweepReport(
         seeds=normalized_seeds,
         experiment_ids=[run.experiment_id for run in runs],
+        dataset_hash=str(dataset_hash),
+        config_hash=canonical_hash(dict(config)),
+        parameters=dict(parameters or {}),
+        manifests=[dict(run.manifest) for run in runs],
         aggregate=aggregate,
         deterministic_results=deterministic,
         note=(

@@ -66,6 +66,10 @@ def test_seed_sweep_mean_std_ve_ayri_manifestler(tmp_path):
         seeds=[1, 2, 3], root=tmp_path, config={"kind": "unit"}, dataset_hash="d",
     )
     assert report.experiment_ids == ["EXP-0001", "EXP-0002", "EXP-0003"]
+    assert report.dataset_hash == "d"
+    assert report.config_hash == canonical_hash({"kind": "unit"})
+    assert len(report.manifests) == 3
+    assert all(manifest["result"] == "COMPLETED" for manifest in report.manifests)
     assert report.aggregate["metrics.score"]["mean"] == 2.0
     assert report.aggregate["metrics.score"]["std"] > 0.0
     assert report.aggregate["metrics.fixed"]["std"] == 0.0
