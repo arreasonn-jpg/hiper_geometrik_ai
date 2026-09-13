@@ -161,6 +161,47 @@ Kullanım: `egitim/egitici.py --seyrek-satir 1048576 --seyrek-boyut 32` veya
 `--seyrek-yok` ile kapatın. Talimat fine-tuning'i aynı parametrelerle
 kurulmalıdır (strict yükleme uyumsuzluğu açıkça hata verir).
 
+### Collision / interference benchmarkı
+
+Saf Python `DeneyimSlotlari` prototipi için streaming stres benchmarkı;
+collision event rate, exact-ID retrieval accuracy, interference loss, false
+positive rate, throughput ve yaklaşık fiziksel Python depolamasını ölçer.
+Collision olaylarının tamamı sayılır; yalnız ilk 1000 teşhis örneği saklanır,
+böylece 1M/10M koşuları collision log'u nedeniyle sınırsız RAM tüketmez.
+
+```bash
+# Hızlı varsayılan: 1K, 10K, 100K
+python -m hga memory-benchmark
+
+# Tam ölçek planı (uzun sürebilir)
+python -m hga memory-benchmark \
+  --scales 1000,10000,100000,1000000,10000000 \
+  --slots 1048576 --tables 1,2 --seeds 1,2,3,4,5
+```
+
+Her seed ayrı `EXP-NNNN` manifesti üretir. İlk kontrollü test önemli bir sınırı
+açığa çıkarır: `DeneyimSlotlari`ndaki mevcut çift-tablo **ALL-table** exact-ID
+okuma semantiği collision kaybını telafi etmez; retrieval tek tabloya göre
+ancak aynı veya daha düşük olabilir. Bu bulgu saf Python prototipine aittir;
+PyTorch tablonun toplamsal vektör okumasıyla aynı sonuç olduğu iddia edilmez.
+Ayrıntılar: `docs/MEMORY_COLLISION_BENCHMARK.md`.
+
+### Eşit-parametre Kronecker benchmarkı
+
+```bash
+python -m hga kronecker-benchmark \
+  --n 16 --steps 100 --batch 16 --seeds 1,2,3,4,5
+```
+
+Karşılaştırma her iki modele tam `2n²` fiziksel parametre verir. Önceki
+“standart dense” adı düzeltildi: baseline gerçekte `n²→1→n²` rank-1 factorized
+bottleneck'tir; kısıtsız dense operatör `n⁴` parametre gerektirir. Tek görevli
+Kronecker yanlılığını önlemek için hem `Y=A*XB*` hem rank-1 öğretmen görevi
+çalıştırılır. Held-out normalized MSE/R²/tolerance accuracy, hız, parametre ve
+optimizer belleği, gradient/loss kararlılığı ve efektif rank raporlanır.
+`n⁴` her raporda açıkça **operatör girdisi, gerçek parametre değil** olarak
+saklanır. Ayrıntılar: `docs/KRONECKER_VS_DENSE_BENCHMARK.md`.
+
 ---
 
 ## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması
@@ -214,8 +255,9 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   RelationIndex / KnowledgeStore. Her kavramın kaynağı (`source`) ve güveni
   (`confidence`) saklanır; entity_id, tokenizer token ID'sinden AYRIDIR.
 - **Experience** (`hga/experience/`) — kontrollü kombinasyon üreten Generator,
-  7+1 bağımsız sinyalle puanlama, CANDIDATE→VALID/CONFLICT/INVALID durum
-  makinesi, CONFLICT→EXPLORE araştırma yolu, INVALID→REJECT terminal yolu,
+  7+1 bağımsız sinyalle puanlama, CANDIDATE→VALID/UNCERTAIN/CONFLICT/INVALID
+  durum makinesi; kanıt eksikliği (`UNCERTAIN`) ile gerçek kanıt çelişkisini
+  (`CONFLICT`) ayıran araştırma yolu ve INVALID→REJECT terminal yolu,
   Conflict→Exploration çözücüsü, konsolidasyon, metin/olay üretimi (v0.2,
   Türkçe ek uyumu: yönelme/belirtme/bulunma/ayrılma + ünsüz yumuşaması +
   ünlü düşmesi + iyelik (6 kişi) + iyelik+durum zinciri + fiil çekimi
@@ -229,9 +271,12 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
   (`korpus_uretici.py` — ağsız sentetik ölçek provası).
 - **Kalıcılık** (`hga/knowledge/persistence.py`) — bilgi tabanını atomik JSON
   olarak kaydet/yükle (VERIFIED bilgi gerçekten kalıcı).
-- **Kapalı doğrulama** (`hga/experience/dogrulama.py`) — deterministik
-  doğrulayıcıyla MODEL_GENERATED deneyimleri doğrular; false acceptance'ı
-  sıfırlar (benchmark: 30 adaydan 6 VERIFIED, 24 INVALID).
+- **Bağımsız kapalı doğrulama** (`hga/experience/dogrulama.py`) — Evaluator
+  hiçbir adayı doğrudan VERIFIED yapmaz. Önce `VALID`, sonra bağımsız Verifier
+  ile `VERIFYING → VERIFIED/INVALID/UNCERTAIN` geçişi uygulanır. Kontrollü
+  aritmetik laboratuvarında N=30 adayın 6'sı VERIFIED, 24'ü INVALID olmuş ve
+  bu sabit veri içindeki false acceptance 24→0 ölçülmüştür; bu sonuç genel
+  sistem için FAR≈0 iddiası değildir.
 - **Tek yüz** (`hga/engine.py` + `python -m hga`) — tüm katmanı yapılandırılabilir
   tek motor + komut satırı arayüzü.
 - **Memory** (`hga/memory/`) — seyrek deneyim slotları, experience replay ve
@@ -247,7 +292,34 @@ Knowledge Architecture" yol haritasının fiziksel karşılığı). Saf Python'd
 
 **En kritik güvenlik kuralı:** `MODEL_GENERATED` kaynaklı bir deneyim hiçbir
 zaman otomatik `VERIFIED` kabul edilmez — en fazla `VALID` (bellek adayı) olur.
-Konsolidasyon bu kuralı ikinci kez denetler ve ihlali çelişki günlüğüne yazar.
+Ayrıca harici kaynak etiketi de tek başına yeterli değildir: `VERIFIED` geçişi
+bağımsız doğrulayıcı kimliği (`verified_by`) ister. Konsolidasyon bu kuralı
+ikinci kez denetler ve ihlali çelişki günlüğüne yazar.
+
+### Golden benchmark ve sızıntı denetimi
+
+`golden_dataset/` altındaki yedi JSON dosyası elle sabitlenmiştir; benchmark
+çalışırken üretilmez. Train/test üçlüleri kanonik SHA-256 izleriyle ayrılır ve
+test üçlülerinin train/memory/knowledge/candidate bölümlerine sızması koşuyu
+başarısız yapar. Rapor `accuracy`, `precision`, `recall`, `F1`, `FAR`, `FRR`,
+confusion matrisi ve veri kümesi hash'ini içerir.
+
+```bash
+python -m hga golden-benchmark
+python -m hga golden-benchmark --out raporlar/golden.json
+python -m hga golden-benchmark --seeds 1,2,3,4,5
+```
+
+Çoklu-seed modu her koşuyu atomik `EXP-NNNN` kimliğiyle `experiments/`
+altında saklar. Her koşuda `config.yaml`, `manifest.json`, `results.json`,
+`stdout.log` ve `model_hash.txt` bulunur. Manifest; Git commit/dirty durumu,
+seed, dataset/config/model hash'leri, Python/Torch sürümü, device, parametreler
+ve koşu sonucunu taşır. Üretilen `experiments/EXP-*` dizinleri Git'e alınmaz;
+yayımlanacak sonuçların ayrıca `raporlar/` altında küratörlenmesi gerekir.
+
+Golden v1 küçük ve deterministik bir semantik sözleşme/regresyon setidir
+(N=5 test örneği). Beş seed'de `std=0`, yalnız koşunun tekrarlanabilir olduğunu
+gösterir; genel dil başarısı veya istatistiksel model kalitesi kanıtı değildir.
 
 ```bash
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam demosu

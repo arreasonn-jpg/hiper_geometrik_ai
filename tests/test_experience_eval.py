@@ -90,32 +90,34 @@ def test_model_generated_asla_verified_olmaz():
     assert a.state != DeneyimDurumu.VERIFIED     # asla VERIFIED
 
 
-def test_harici_kaynak_yuksek_puan_verified():
-    """REAL_DATA + yüksek puan → VERIFIED (kalıcı bilgiye yükseltilebilir)."""
+def test_harici_kaynak_evaluator_tarafindan_verified_yapilmaz():
+    """REAL_DATA + yüksek puan bile bağımsız Verifier olmadan yalnız VALID'dir."""
     k = demo_store()
     ev = ExperienceEvaluator()
     a = aday("E_001", "R_001", "E_002", source=KaynakTuru.REAL_DATA,
              source_confidence=1.0)
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.VERIFIED
+    assert a.state == DeneyimDurumu.VALID
+    assert a.verified_by is None
 
 
-def test_yetersiz_kanit_conflict():
-    """Binilebilir özelliği bilinmeyen nesne → CONFLICT (araştırma kuyruğu)."""
+def test_yetersiz_kanit_uncertain():
+    """Binilebilir özelliği bilinmeyen nesne → UNCERTAIN; çelişki değildir."""
     k = demo_store()
     k.varlik_ekle("Halı", entity_type="esya", entity_id="E_005")  # özellik yok
     ev = ExperienceEvaluator()
     a = aday("E_001", "R_001", "E_005")
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
+    assert not k.celiski_gunlugu
 
 
-def test_bilinmeyen_varlik_invalid():
+def test_bilinmeyen_varlik_uncertain():
     k = demo_store()
     ev = ExperienceEvaluator()
     a = aday("E_999", "R_001", "E_002")
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.INVALID
+    assert a.state == DeneyimDurumu.UNCERTAIN
 
 
 def test_skor_araligi_ve_bilesenleri():

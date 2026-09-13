@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"entity_id": "E_ALI", "token": "Ali", "entity_type": "insan", "is_ozel": true, "split": "train"},
+    {"entity_id": "E_MEHMET", "token": "Mehmet", "entity_type": "insan", "is_ozel": true, "split": "train"},
+    {"entity_id": "E_AYSE", "token": "Ayşe", "entity_type": "insan", "is_ozel": true, "split": "train"},
+    {"entity_id": "E_AT", "token": "At", "entity_type": "hayvan", "split": "train"},
+    {"entity_id": "E_ARABA", "token": "Araba", "entity_type": "tasit", "split": "train"},
+    {"entity_id": "E_GOKYUZU", "token": "Gökyüzü", "entity_type": "mekan", "split": "train"},
+    {"entity_id": "E_MARS", "token": "Mars", "entity_type": "mekan", "is_ozel": true, "split": "test"}
+  ]
+}

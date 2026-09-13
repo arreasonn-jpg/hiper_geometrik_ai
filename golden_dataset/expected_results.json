@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "records": [
+    {"experience_id": "TEST_VALID_001", "expected_state": "VALID", "reason": "Görülmemiş üçlü, doğrulanmış tür ve özellik kısıtlarıyla uyumludur."},
+    {"experience_id": "TEST_INVALID_001", "expected_state": "INVALID", "reason": "Bilinen ve güvenilir özellik ilişki kuralını ihlal eder."},
+    {"experience_id": "TEST_UNCERTAIN_001", "expected_state": "UNCERTAIN", "reason": "Mars'ın binilebilir olduğuna veya olmadığına dair kanıt yoktur."},
+    {"experience_id": "TEST_UNCERTAIN_002", "expected_state": "UNCERTAIN", "reason": "Arabanın yenilebilirliğine dair kanıt yoktur; eksik kanıt yanlışlık değildir."},
+    {"experience_id": "TEST_CONFLICT_001", "expected_state": "CONFLICT", "reason": "Yapısal kural ile doğrudan sabit kanıt zıt sonuç verir."}
+  ]
+}

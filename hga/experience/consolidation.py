@@ -19,8 +19,7 @@ conflict rate, false acceptance, bilgi büyümesi).
 from dataclasses import dataclass, field
 from typing import Dict, List
 
-from ..knowledge.schemas import (ExperienceCandidate, DeneyimDurumu,
-                                 KaynakTuru)
+from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 
 
 @dataclass
@@ -28,6 +27,7 @@ class ConsolidationReport:
     toplam: int = 0
     valid: int = 0
     conflict: int = 0
+    uncertain: int = 0
     invalid: int = 0
     verified: int = 0
     arastirma_kuyrugu: List[str] = field(default_factory=list)
@@ -40,6 +40,7 @@ class ConsolidationReport:
             "toplam": self.toplam,
             "valid": self.valid,
             "conflict": self.conflict,
+            "uncertain": self.uncertain,
             "invalid": self.invalid,
             "verified": self.verified,
             "acceptance_rate": round(self.valid / self.toplam, 4) if self.toplam else 0.0,
@@ -54,6 +55,7 @@ class Consolidator:
 
     def __init__(self):
         self.arastirma_kuyrugu: List[ExperienceCandidate] = []
+        self.belirsizlik_kuyrugu: List[ExperienceCandidate] = []
 
     def konsolide_et(self, store, adaylar: List[ExperienceCandidate],
                      ) -> ConsolidationReport:
@@ -71,6 +73,11 @@ class Consolidator:
                 store.olgu_kaydet(a.subject_id, a.relation_id, a.object_id,
                                   a.scores.get("weighted", 0.5),
                                   source=a.source, confidence=a.source_confidence)
+            elif a.state == DeneyimDurumu.UNCERTAIN:
+                rapor.uncertain += 1
+                # Kanıt eksikliği çelişki günlüğünü kirletmez; ancak araştırılabilir.
+                rapor.arastirma_kuyrugu.append(a.experience_id)
+                self.belirsizlik_kuyrugu.append(a)
             elif a.state == DeneyimDurumu.CONFLICT:
                 rapor.conflict += 1
                 rapor.arastirma_kuyrugu.append(a.experience_id)

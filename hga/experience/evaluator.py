@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Experience Evaluator — Değerlendirici + VALID/CONFLICT/INVALID durum makinesi
+Experience Evaluator — VALID/UNCERTAIN/CONFLICT/INVALID aday değerlendirmesi
 ==============================================================================
 (v0.1 — rapor §8, §9, §15, EK-C)
 
@@ -11,15 +11,15 @@ bakmaz — puan "kanıt", kısıtlar "kural"dır (rapor §16).
 
 Karar ağacı (EK-C ile birebir):
 
-    1. İlişki/varlık bilinmiyor          → INVALID
-    2. Özne/nesne tipi izinli değil      → INVALID   (bağlam ihlali)
+    1. İlişki/varlık bilinmiyor          → UNCERTAIN (kanıt yokluğu yanlışlık değildir)
+    2. Özne/nesne tipi izinli değil      → INVALID   (bilinen bağlam ihlali)
     3. Gerekli özellik bilinen ve YANLIŞ → INVALID   (deterministik kural ihlali)
-    4. Gerekli özellik BİLİNMİYOR        → CONFLICT  (yetersiz kanıt → araştırma)
+    4. Gerekli özellik BİLİNMİYOR        → UNCERTAIN (yetersiz kanıt)
     5. Kayıtlı kanıt yapısal tahminle ÇELİŞİYOR → CONFLICT
-    6. MODEL_GENERATED                   → VALID     (bellek adayı, ASLA VERIFIED değil)
-    7. Harici/deterministik kaynak       → puan ≥ verify_eşik → VERIFIED
-                                             puan ≥ valid_eşik  → VALID
-                                             değilse            → CONFLICT
+    6. Uyumlu aday                        → VALID
+
+Evaluator epistemik doğrulama yapmaz. Kaynak türü ve puanı ne olursa olsun
+``VERIFIED`` üretmek yalnızca bağımsız ``DogrulamaHatti`` sorumluluğudur.
 
 En kritik güvenlik kuralı (rapor §9, §21): MODEL_GENERATED kaynaklı bir deneyim
 OTOMATİK olarak VERIFIED kabul EDİLMEZ — en fazla VALID (bellek adayı) olur.
@@ -27,14 +27,11 @@ OTOMATİK olarak VERIFIED kabul EDİLMEZ — en fazla VALID (bellek adayı) olur
 
 from typing import Dict, Optional
 
-from ..knowledge.schemas import (Entity, Relation, ExperienceCandidate,
-                                 KaynakTuru, DeneyimDurumu)
+from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate
 from .scoring import Scoring
 
 # Varsayılan eşikler (experience_config.yaml ile örtüşür)
 VARSAYILAN_ESIKLER = {
-    "valid_esik": 0.5,            # bu puanın üstü → VALID (harici kaynak için)
-    "verify_esik": 0.7,           # bu puanın üstü + harici kaynak → VERIFIED
     "belirsiz_guven_esik": 0.5,   # özellik güveni bunun altındaysa "yetersiz kanıt"
     "celiski_kanit_esik": 0.6,    # kayıtlı kanıt bu güvenin üstündeyse çelişkiye dikkate alınır
     "celiski_skor_ayrimi": 0.4,   # kanıt skoru ile yapısal tahmin arasındaki açıklık
@@ -102,13 +99,13 @@ class ExperienceEvaluator:
 
         subject, relation, object_, hata = self._coz(store, aday)
         if hata:
-            aday.rationale.append(f"Çözülemedi: {hata}")
-            aday.state = DeneyimDurumu.INVALID
+            aday.rationale.append(
+                f"Çözülemedi: {hata} → UNCERTAIN (bilinmeyen kayıt yanlışlık kanıtı değildir)")
+            aday.state = DeneyimDurumu.UNCERTAIN
             aday.scores = {}
             return aday
 
         pc = self.scoring.property_uyumluluk(store, subject, relation, object_)
-        cc = self.scoring.baglam_tutarliligi(subject, relation, object_)
 
         # ── 1/2. Tip (bağlam) kısıtları ───────────────────────────────────
         if relation.subject_types and subject.entity_type not in relation.subject_types:
@@ -168,39 +165,19 @@ class ExperienceEvaluator:
             self._skorla(store, aday, subject, relation, object_, celiski=True)
             return aday
 
-        # ── 4b. Yetersiz kanıt → araştırma kuyruğu ────────────────────────
+        # ── 4b. Yetersiz kanıt ≠ çelişki/yanlışlık ─────────────────────────
         if yetersiz_kanit:
-            aday.rationale.append("Gerekli özellik için yetersiz kanıt → CONFLICT (araştır)")
-            store.celiski_logla(aday, "yetersiz-kanit")
-            aday.state = DeneyimDurumu.CONFLICT
+            aday.rationale.append("Gerekli özellik için yetersiz kanıt → UNCERTAIN")
+            aday.state = DeneyimDurumu.UNCERTAIN
             self._skorla(store, aday, subject, relation, object_, celiski=False)
             return aday
 
-        # ── 6/7. Kaynak temelli karar ─────────────────────────────────────
+        # ── 6. Evaluator yalnız aday değerlendirmesi yapar ─────────────────
         br = self._skorla(store, aday, subject, relation, object_, celiski=False)
-        puan = br.weighted
-
-        if aday.source == KaynakTuru.MODEL_GENERATED:
-            # Güvenlik kuralı (§9/§21): model üretimi ASLA otomatik VERIFIED olamaz
-            aday.rationale.append(
-                "Uyumlu ama kaynak MODEL_GENERATED → yalnızca VALID (bellek adayı), "
-                "ASLA otomatik VERIFIED değil")
-            aday.state = DeneyimDurumu.VALID
-            return aday
-
-        if puan >= self.esikler["verify_esik"]:
-            aday.rationale.append(
-                f"Harici/deterministik kaynak ({aday.source.value}) ve puan "
-                f"{puan} ≥ verify eşiği → VERIFIED")
-            aday.state = DeneyimDurumu.VERIFIED
-        elif puan >= self.esikler["valid_esik"]:
-            aday.rationale.append(
-                f"Harici kaynak ve puan {puan} ≥ valid eşiği → VALID")
-            aday.state = DeneyimDurumu.VALID
-        else:
-            aday.rationale.append(
-                f"Puan {puan} eşiklerin altında → CONFLICT (araştır)")
-            aday.state = DeneyimDurumu.CONFLICT
+        aday.rationale.append(
+            f"Bilinen kısıtlarla uyumlu (puan={br.weighted}) → VALID; "
+            "VERIFIED kararı bağımsız doğrulayıcıya aittir")
+        aday.state = DeneyimDurumu.VALID
         return aday
 
     # ── Skoru hesaplayıp adaya yaz (erken dönüş yolları için) ────────────

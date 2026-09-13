@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "experience_id": "TEST_CONFLICT_001",
+      "evidence": [
+        {"subject_id": "E_MEHMET", "relation_id": "R_BINMEK", "object_id": "E_ARABA", "score": 0.0, "confidence": 1.0, "source": "REAL_DATA"}
+      ],
+      "reason": "Yapısal kural olumlu iken sabitlenmiş doğrudan kanıt olumsuzdur."
+    }
+  ]
+}

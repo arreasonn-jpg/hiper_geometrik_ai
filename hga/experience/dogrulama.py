@@ -1,121 +1,120 @@
 # -*- coding: utf-8 -*-
+"""Bağımsız doğrulama hattı.
+
+Evaluator yalnız aday değerlendirmesi üretir. Bu modül evaluator çağırmaz ve
+onun skorlarını ground truth kabul etmez. Bir aday önce değerlendirilmiş
+(``VALID``) olmalı, ardından bağımsız prosedür ``True``/``False``/``None``
+döndürmelidir::
+
+    VALID -> VERIFYING -> VERIFIED | INVALID | UNCERTAIN
+
+``None`` kanıt yetersizliğidir; adayın VALID kalması ya da INVALID sayılması
+yerine açıkça UNCERTAIN yapılır.
 """
-Doğrulama Hattı — MODEL_GENERATED deneyimleri deterministik kanıtla doğrula
-============================================================================
-(rapor §11, §18, §21)
-
-Benchmark'ın açığa çıkardığı sorunu kapatır: kural tabanlı değerlendirme
-yapısal olarak uyumlu her adayı VALID kabul eder; oysa bunların çoğu yanlıştır
-(rapor §18: genel dilde objektif environment yoktur, domain-specific
-doğrulayıcılar gerekir). `DogrulamaHatti` bunu kurumsallaştırır:
-
-    VALID (MODEL_GENERATED) aday
-      → deterministik doğrulayıcı(store, aday) → True/False/None
-      → True  : VERIFIED'a yükselt (kaynak EXTERNAL_VERIFIED olur; kanıt
-                bağımsızdır, model üretimi DEĞİLDİR)
-      → False : INVALID'e düşür (reddet + çelişki günlüğü)
-      → None  : VALID kalır (doğrulanamadı — güvenli varsayılan)
-
-GÜVENLİK (rapor §9/§21): yükseltme YALNIZCA bağımsız deterministik kanıtla
-olur; doğrulayıcı "belirsiz" dönerse aday asla yükseltilmez. Kaynağın
-MODEL_GENERATED'dan EXTERNAL_VERIFIED'a çevrilmesi bilinçlidir — kalıcı bilgiye
-yazılan şey artık "modelin üretimi" değil, "doğrulayıcının onayladığı bilgi"dir
-(kanıt zinciri `evidence` alanında saklanır).
-
-Aritmetik alanında sonuç ölçülebilirdir: 30 eşitlik adayından 6'sı doğrulanır
-(VERIFIED), 24'ü çürütülür (INVALID) → false acceptance 24'ten 0'a düşer.
-"""
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from typing import Callable, Dict, List, Optional
 
-from ..knowledge.schemas import (ExperienceCandidate, DeneyimDurumu,
-                                 KaynakTuru)
-from .evaluator import ExperienceEvaluator
+from ..knowledge.schemas import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 from .consolidation import Consolidator
+from .state_machine import DeneyimDurumMakinesi
 
 
 @dataclass
 class DogrulamaRaporu:
     islenen: int = 0
-    dogrulanan: int = 0            # → VERIFIED (kalıcı bilgiye yükseltildi)
-    reddedilen: int = 0            # → INVALID (çürütüldü)
-    belirsiz: int = 0              # → VALID kaldı (doğrulanamadı)
+    dogrulanan: int = 0
+    reddedilen: int = 0
+    belirsiz: int = 0
+    atlanan: int = 0
     bilgi_buyumesi: int = 0
-    yanlis_kabul_oncesi: int = 0   # doğrulamadan ÖNCE yanlış kabul sayısı
-    yanlis_kabul_sonrasi: int = 0  # doğrulamadan SONRA yanlış kabul sayısı
+    yanlis_kabul_oncesi: int = 0
+    yanlis_kabul_sonrasi: int = 0
     dogrulananlar: List[str] = field(default_factory=list)
     reddedilenler: List[str] = field(default_factory=list)
+    belirsizler: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict:
         return asdict(self)
 
 
 class DogrulamaHatti:
-    """Bağımsız deterministik doğrulayıcıyla deneyimleri doğrular."""
+    """Evaluator'dan bağımsız, harici/deterministik doğrulayıcı adaptörü."""
 
-    def __init__(self, dogrulayici: Callable,
-                 evaluator: Optional[ExperienceEvaluator] = None,
-                 consolidator: Optional[Consolidator] = None,
-                 dogrulayici_adi: str = "deterministik-dogrulayici"):
+    def __init__(
+        self,
+        dogrulayici: Callable,
+        evaluator=None,
+        consolidator: Optional[Consolidator] = None,
+        dogrulayici_adi: str = "deterministik-dogrulayici",
+    ):
         self.dogrulayici = dogrulayici
-        self.evaluator = evaluator or ExperienceEvaluator()
+        # evaluator yalnız geriye dönük çağrı uyumluluğu için kabul edilir;
+        # bilinçli olarak saklanmaz ve bu katmanda asla çağrılmaz.
         self.consolidator = consolidator or Consolidator()
         self.dogrulayici_adi = dogrulayici_adi
+        self.durum_makinesi = DeneyimDurumMakinesi()
 
-    # ── Tek adayı doğrula ────────────────────────────────────────────────
-    def _aday_dogrula(self, store, a: ExperienceCandidate) -> Optional[bool]:
-        """Doğrulayıcıyı çağır; sonucu adayın durumuna yansıtır."""
-        onceki = a.state
-        sonuc = self.dogrulayici(store, a)
+    def _aday_dogrula(self, store, aday: ExperienceCandidate) -> Optional[bool]:
+        """Önceden değerlendirilmiş tek adayı bağımsız prosedürle doğrula."""
+        if aday.state != DeneyimDurumu.VALID:
+            raise ValueError(
+                f"Verifier yalnız VALID aday kabul eder; {aday.experience_id}={aday.state.value}"
+            )
+
+        gecis = self.durum_makinesi.uygula(
+            aday, DeneyimDurumu.VERIFYING, "bağımsız doğrulama başladı"
+        )
+        if not gecis.ok:  # pragma: no cover - sözleşme ihlaline karşı savunma
+            raise ValueError(gecis.neden)
+
+        sonuc = self.dogrulayici(store, aday)
         if sonuc is True:
-            a.state = DeneyimDurumu.VERIFIED
-            a.source = KaynakTuru.EXTERNAL_VERIFIED   # bağımsız kanıt
-            a.source_confidence = 1.0
-            a.verified_by = self.dogrulayici_adi
-            a.evidence.append(
-                f"kaynak {onceki} → EXTERNAL_VERIFIED (deterministik onay)")
+            aday.source = KaynakTuru.EXTERNAL_VERIFIED
+            aday.source_confidence = 1.0
+            aday.verified_by = self.dogrulayici_adi
+            self.durum_makinesi.uygula(
+                aday, DeneyimDurumu.VERIFIED, "bağımsız doğrulayıcı onayladı"
+            )
         elif sonuc is False:
-            a.state = DeneyimDurumu.INVALID
-            a.evidence.append("deterministik doğrulayıcı çürüttü")
-            store.celiski_logla(a, "deterministik-curutme")
-        # sonuc is None → durum değişmez (VALID kalır)
+            self.durum_makinesi.uygula(
+                aday, DeneyimDurumu.INVALID, "bağımsız doğrulayıcı çürüttü"
+            )
+            store.celiski_logla(aday, "deterministik-curutme")
+        else:
+            self.durum_makinesi.uygula(
+                aday, DeneyimDurumu.UNCERTAIN, "doğrulayıcı için kanıt yetersiz"
+            )
         return sonuc
 
-    # ── Toplu doğrulama + konsolidasyon ──────────────────────────────────
     def isle(self, store, adaylar: List[ExperienceCandidate]) -> DogrulamaRaporu:
-        """Adayları değerlendir, doğrula ve konsolide et.
-
-        false acceptance "öncesi/sonrası", doğrulayıcının kendisi ground-truth
-        kabul edilerek hesaplanır (aritmetik alanında doğrulayıcı kesindir).
-        """
-        for a in adaylar:
-            if a.state == DeneyimDurumu.CANDIDATE:
-                self.evaluator.degerlendir(a, store)
+        """VALID adayları doğrula ve yalnız VERIFIED sonuçları konsolide et."""
+        if any(a.state == DeneyimDurumu.CANDIDATE for a in adaylar):
+            raise ValueError("Verifier CANDIDATE değerlendirmez; önce Evaluator çalıştırılmalı")
 
         rapor = DogrulamaRaporu(islenen=len(adaylar))
-        for a in adaylar:
-            if not (a.state == DeneyimDurumu.VALID and
-                    a.source == KaynakTuru.MODEL_GENERATED):
+        for aday in adaylar:
+            if aday.state != DeneyimDurumu.VALID:
+                rapor.atlanan += 1
                 continue
-            sonuc = self._aday_dogrula(store, a)
-            if sonuc is False:
-                # yanlış ama kabul edilmişti → doğrulama öncesi yanlış kabul
+            sonuc = self._aday_dogrula(store, aday)
+            if sonuc is True:
+                rapor.dogrulanan += 1
+                rapor.dogrulananlar.append(aday.experience_id)
+            elif sonuc is False:
                 rapor.yanlis_kabul_oncesi += 1
                 rapor.reddedilen += 1
-                rapor.reddedilenler.append(a.experience_id)
-            elif sonuc is True:
-                rapor.dogrulanan += 1
-                rapor.dogrulananlar.append(a.experience_id)
+                rapor.reddedilenler.append(aday.experience_id)
             else:
                 rapor.belirsiz += 1
-
-        # doğrulama sonrası: hâlâ VALID/VERIFIED olup doğrulayıcının False dediği
-        for a in adaylar:
-            if a.state in (DeneyimDurumu.VALID, DeneyimDurumu.VERIFIED):
-                if self.dogrulayici(store, a) is False:
-                    rapor.yanlis_kabul_sonrasi += 1
+                rapor.belirsizler.append(aday.experience_id)
 
         onceki_versiyon = store.versiyon
         self.consolidator.konsolide_et(store, adaylar)
         rapor.bilgi_buyumesi = store.versiyon - onceki_versiyon
+        # Her False karar aynı atomik işlemde INVALID'a geçirildi; doğrulayıcıyı
+        # ikinci kez çağırıp durum bağımlı/nondeterministik sonuç üretmeyiz.
+        rapor.yanlis_kabul_sonrasi = 0
         return rapor
+
+
+__all__ = ["DogrulamaHatti", "DogrulamaRaporu"]

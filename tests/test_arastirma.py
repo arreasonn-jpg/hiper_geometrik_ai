@@ -43,7 +43,7 @@ def test_kuyruk_kanitla_invalid_cozer():
     ev = ExperienceEvaluator()
     a = _belirsiz_aday()
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
 
     # deterministik doğrulayıcı: Halı binilebilir DEĞİLDİR
     kuyruk = ArastirmaKuyrugu(evaluator=ev,
@@ -66,7 +66,7 @@ def test_kuyruk_kanitla_valid_cozer():
     ev = ExperienceEvaluator()
     a = _belirsiz_aday()
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
 
     kuyruk = ArastirmaKuyrugu(evaluator=ev,
                               dogrulayici=lambda store, aday: True)
@@ -79,12 +79,12 @@ def test_kuyruk_kanitla_valid_cozer():
 
 
 def test_kuyruk_kanitsiz_acik_kalir():
-    """Doğrulayıcı belirsiz (None) dönerse çelişki AÇIK kalır (yanlış yükseltme yok)."""
+    """Doğrulayıcı belirsiz (None) dönerse belirsizlik AÇIK kalır (yanlış yükseltme yok)."""
     k = _store()
     ev = ExperienceEvaluator()
     a = _belirsiz_aday()
     ev.degerlendir(a, k)
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
 
     kuyruk = ArastirmaKuyrugu(evaluator=ev,
                               dogrulayici=lambda store, aday: None)
@@ -92,7 +92,7 @@ def test_kuyruk_kanitsiz_acik_kalir():
     rapor = kuyruk.isle(k)
 
     assert rapor.cozulen == 0 and rapor.acik == 1
-    assert a.state == DeneyimDurumu.CONFLICT
+    assert a.state == DeneyimDurumu.UNCERTAIN
     assert len(kuyruk) == 1                          # kuyrukta kaldı
 
 
@@ -106,7 +106,7 @@ def test_kuyruk_besleme():
     ev.degerlendir(a1, k)
     ev.degerlendir(a2, k)
     kuyruk = ArastirmaKuyrugu(evaluator=ev)
-    eklenen = kuyruk.besle([a1, a2])                # yalnızca CONFLICT olan eklenir
+    eklenen = kuyruk.besle([a1, a2])                # yalnızca araştırılması gereken durum eklenir
     assert eklenen == 1 and len(kuyruk) == 1
     assert kuyruk.kuyruk[0].experience_id == "X_PROBE"
 
