@@ -22,7 +22,10 @@ import re
 import sys
 from typing import List, Tuple
 
-import tomllib
+try:  # Python 3.11+ stdlib
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10: harici tomli paketi
+    import tomli as tomllib  # type: ignore[no-redef]  # aynı API
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 PYPROJECT = os.path.join(KOK, "pyproject.toml")
@@ -111,4 +114,74 @@ def test_calisan_yorumlayici_desteklenen_araliktadir():
     taban = _requires_python_taban(veri["project"]["requires-python"])
     assert sys.version_info[:2] >= taban, (
         f"Çalışan Python {sys.version_info[:2]}, desteklenen taban {taban}'den düşük."
+    )
+
+
+# Taban sürümün stdlib'inde OLMAYAN, sonradan eklenmiş moduller.
+# Bir test dosyası bunları koşulsuz import ederse CI'ın en düşük matris
+# girdisi toplama (collection) aşamasında çöker.
+_SONRADAN_EKLENEN_STDLIB = {
+    (3, 11): {"tomllib"},
+    (3, 12): {"itertools.batched"},
+}
+
+
+def _kosulsuz_stdlib_importlari(yol: str) -> List[Tuple[int, str]]:
+    """Dosyadaki try/except ile korunmayan üst seviye import'ları döndür."""
+    import ast
+
+    with open(yol, "r", encoding="utf-8") as handle:
+        agac = ast.parse(handle.read(), filename=yol)
+
+    korumali: set = set()
+    for dugum in ast.walk(agac):
+        if isinstance(dugum, ast.Try):
+            for alt in ast.walk(dugum):
+                if isinstance(alt, (ast.Import, ast.ImportFrom)):
+                    korumali.add(id(alt))
+
+    sonuc = []
+    for dugum in ast.walk(agac):
+        if isinstance(dugum, ast.Import) and id(dugum) not in korumali:
+            for ad in dugum.names:
+                sonuc.append((dugum.lineno, ad.name))
+        elif isinstance(dugum, ast.ImportFrom) and id(dugum) not in korumali:
+            if dugum.module:
+                sonuc.append((dugum.lineno, dugum.module))
+    return sonuc
+
+
+def test_test_dosyalari_taban_surumde_import_edilebilir():
+    """Testler, desteklenen EN DÜŞÜK Python sürümünde toplanabilmeli.
+
+    Gerçek bir olaydan doğdu: ``test_packaging_contract.py`` koşulsuz
+    ``import tomllib`` yapıyordu. ``tomllib`` 3.11 stdlib'ine eklendi, yani
+    CI'ın 3.10 girdisi daha ilk adımda (exit code 2, collection error)
+    çöküyordu — üstelik bu dosya tam da "sürüm sözleşmesini" denetleyen
+    dosyaydı. Yerel yorumlayıcı 3.11 olduğu için hata yerelde görünmüyordu.
+    """
+    veri = _pyproject()
+    taban = _requires_python_taban(veri["project"]["requires-python"])
+
+    yasak: set = set()
+    for surum, moduller in _SONRADAN_EKLENEN_STDLIB.items():
+        if taban < surum:
+            yasak |= moduller
+
+    ihlaller = []
+    tests_dizini = os.path.join(KOK, "tests")
+    for kok, _, dosyalar in os.walk(tests_dizini):
+        for dosya in dosyalar:
+            if not dosya.endswith(".py"):
+                continue
+            tam = os.path.join(kok, dosya)
+            for satir, modul in _kosulsuz_stdlib_importlari(tam):
+                if modul.split(".")[0] in yasak:
+                    goreli = os.path.relpath(tam, KOK)
+                    ihlaller.append(f"{goreli}:{satir} koşulsuz 'import {modul}'")
+
+    assert not ihlaller, (
+        f"Taban sürüm Python {taban[0]}.{taban[1]} bu modülleri içermiyor; "
+        "import try/except ile korunmalı (ör. tomllib → tomli). "
+        f"İhlaller: {ihlaller}"
     )

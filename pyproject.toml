@@ -46,6 +46,8 @@ test = [
     "pytest>=8.0",
     "ruff>=0.4.0",
     "mypy>=1.9.0",
+    # tomllib 3.11'de stdlib'e girdi; 3.10'da paketleme sözleşmesi testi için gerekir.
+    "tomli>=2.0; python_version < '3.11'",
 ]
 ui = [
     "gradio>=4.0",
