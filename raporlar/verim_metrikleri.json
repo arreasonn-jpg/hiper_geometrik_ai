@@ -1,0 +1,321 @@
+{
+  "reports": [
+    {
+      "bits_per_fact": 4.95419631,
+      "correct_facts": 178,
+      "cycles": 30,
+      "distinct_new_facts": 178,
+      "divergence": {
+        "ey_overstates_novelty": true,
+        "ey_overstates_usefulness": true,
+        "ey_vs_ny": 0.04375,
+        "ey_vs_uey": 0.075,
+        "memorization_without_generalization": false,
+        "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
+        "ny_vs_uey": 0.03125
+      },
+      "duplicate_generations": 224,
+      "experience_yield": 0.22916667,
+      "findings": [
+        "EY=0.2292 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
+        "NY=0.1854 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (72 çakışma).",
+        "GY=0.6047: holdout doğruluğu öğrenmeyle 0.0000 → 0.6047 arttı (52/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
+        "VID=0.9186 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
+      ],
+      "generalization_yield": 0.60465116,
+      "generated": 960,
+      "holdout_after": {
+        "abstained": 34,
+        "accuracy_on_decided": 1.0,
+        "correct": 52,
+        "correct_rate_overall": 0.60465116,
+        "coverage": 0.60465116,
+        "decided": 52,
+        "total": 86
+      },
+      "holdout_before": {
+        "abstained": 86,
+        "accuracy_on_decided": 0.0,
+        "correct": 0,
+        "correct_rate_overall": 0.0,
+        "coverage": 0.0,
+        "decided": 0,
+        "total": 86
+      },
+      "incorrect_facts": 0,
+      "limitations": [
+        "Sentetik aritmetik domain; sonuçlar genel dil görevlerine taşınmaz.",
+        "GY tek bir çıkarım kuralıyla (fonksiyonel teklik) ölçülür: öğrenilen pozitiften görülmemiş negatifi elemek. Bu gerçek ama DAR bir genellemedir; yeni toplama bağıntısı keşfetmek değildir.",
+        "GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.",
+        "UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.",
+        "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
+        "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
+      ],
+      "memory_collisions": 72,
+      "novelty_yield": 0.18541667,
+      "protocol": "experience-yield-decomposition-v1",
+      "retrievable_facts": 148,
+      "seed": 1,
+      "total_verified_bits": 881.84694325,
+      "useful_experience_yield": 0.15416667,
+      "useful_facts": 148,
+      "verified": 220,
+      "verified_information_density": 0.91859057
+    },
+    {
+      "bits_per_fact": 4.95419631,
+      "correct_facts": 178,
+      "cycles": 30,
+      "distinct_new_facts": 178,
+      "divergence": {
+        "ey_overstates_novelty": true,
+        "ey_overstates_usefulness": true,
+        "ey_vs_ny": 0.05833333,
+        "ey_vs_uey": 0.090625,
+        "memorization_without_generalization": false,
+        "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
+        "ny_vs_uey": 0.03229167
+      },
+      "duplicate_generations": 224,
+      "experience_yield": 0.24375,
+      "findings": [
+        "EY=0.2437 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
+        "NY=0.1854 fakat UEY=0.1531: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (87 çakışma).",
+        "GY=0.5930: holdout doğruluğu öğrenmeyle 0.0000 → 0.5930 arttı (51/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
+        "VID=0.9186 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
+      ],
+      "generalization_yield": 0.59302326,
+      "generated": 960,
+      "holdout_after": {
+        "abstained": 35,
+        "accuracy_on_decided": 1.0,
+        "correct": 51,
+        "correct_rate_overall": 0.59302326,
+        "coverage": 0.59302326,
+        "decided": 51,
+        "total": 86
+      },
+      "holdout_before": {
+        "abstained": 86,
+        "accuracy_on_decided": 0.0,
+        "correct": 0,
+        "correct_rate_overall": 0.0,
+        "coverage": 0.0,
+        "decided": 0,
+        "total": 86
+      },
+      "incorrect_facts": 0,
+      "limitations": [
+        "Sentetik aritmetik domain; sonuçlar genel dil görevlerine taşınmaz.",
+        "GY tek bir çıkarım kuralıyla (fonksiyonel teklik) ölçülür: öğrenilen pozitiften görülmemiş negatifi elemek. Bu gerçek ama DAR bir genellemedir; yeni toplama bağıntısı keşfetmek değildir.",
+        "GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.",
+        "UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.",
+        "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
+        "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
+      ],
+      "memory_collisions": 87,
+      "novelty_yield": 0.18541667,
+      "protocol": "experience-yield-decomposition-v1",
+      "retrievable_facts": 147,
+      "seed": 2,
+      "total_verified_bits": 881.84694325,
+      "useful_experience_yield": 0.153125,
+      "useful_facts": 147,
+      "verified": 234,
+      "verified_information_density": 0.91859057
+    },
+    {
+      "bits_per_fact": 4.95419631,
+      "correct_facts": 189,
+      "cycles": 30,
+      "distinct_new_facts": 189,
+      "divergence": {
+        "ey_overstates_novelty": true,
+        "ey_overstates_usefulness": true,
+        "ey_vs_ny": 0.05104167,
+        "ey_vs_uey": 0.08958334,
+        "memorization_without_generalization": false,
+        "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
+        "ny_vs_uey": 0.03854167
+      },
+      "duplicate_generations": 224,
+      "experience_yield": 0.24791667,
+      "findings": [
+        "EY=0.2479 fakat NY=0.1969: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
+        "NY=0.1969 fakat UEY=0.1583: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (86 çakışma).",
+        "GY=0.6744: holdout doğruluğu öğrenmeyle 0.0000 → 0.6744 arttı (58/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
+        "VID=0.9754 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
+      ],
+      "generalization_yield": 0.6744186,
+      "generated": 960,
+      "holdout_after": {
+        "abstained": 28,
+        "accuracy_on_decided": 1.0,
+        "correct": 58,
+        "correct_rate_overall": 0.6744186,
+        "coverage": 0.6744186,
+        "decided": 58,
+        "total": 86
+      },
+      "holdout_before": {
+        "abstained": 86,
+        "accuracy_on_decided": 0.0,
+        "correct": 0,
+        "correct_rate_overall": 0.0,
+        "coverage": 0.0,
+        "decided": 0,
+        "total": 86
+      },
+      "incorrect_facts": 0,
+      "limitations": [
+        "Sentetik aritmetik domain; sonuçlar genel dil görevlerine taşınmaz.",
+        "GY tek bir çıkarım kuralıyla (fonksiyonel teklik) ölçülür: öğrenilen pozitiften görülmemiş negatifi elemek. Bu gerçek ama DAR bir genellemedir; yeni toplama bağıntısı keşfetmek değildir.",
+        "GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.",
+        "UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.",
+        "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
+        "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
+      ],
+      "memory_collisions": 86,
+      "novelty_yield": 0.196875,
+      "protocol": "experience-yield-decomposition-v1",
+      "retrievable_facts": 152,
+      "seed": 3,
+      "total_verified_bits": 936.34310266,
+      "useful_experience_yield": 0.15833333,
+      "useful_facts": 152,
+      "verified": 238,
+      "verified_information_density": 0.9753574
+    },
+    {
+      "bits_per_fact": 4.95419631,
+      "correct_facts": 187,
+      "cycles": 30,
+      "distinct_new_facts": 187,
+      "divergence": {
+        "ey_overstates_novelty": true,
+        "ey_overstates_usefulness": true,
+        "ey_vs_ny": 0.04375,
+        "ey_vs_uey": 0.07604167,
+        "memorization_without_generalization": false,
+        "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
+        "ny_vs_uey": 0.03229167
+      },
+      "duplicate_generations": 224,
+      "experience_yield": 0.23854167,
+      "findings": [
+        "EY=0.2385 fakat NY=0.1948: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
+        "NY=0.1948 fakat UEY=0.1625: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (73 çakışma).",
+        "GY=0.6744: holdout doğruluğu öğrenmeyle 0.0000 → 0.6744 arttı (58/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
+        "VID=0.9650 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
+      ],
+      "generalization_yield": 0.6744186,
+      "generated": 960,
+      "holdout_after": {
+        "abstained": 28,
+        "accuracy_on_decided": 1.0,
+        "correct": 58,
+        "correct_rate_overall": 0.6744186,
+        "coverage": 0.6744186,
+        "decided": 58,
+        "total": 86
+      },
+      "holdout_before": {
+        "abstained": 86,
+        "accuracy_on_decided": 0.0,
+        "correct": 0,
+        "correct_rate_overall": 0.0,
+        "coverage": 0.0,
+        "decided": 0,
+        "total": 86
+      },
+      "incorrect_facts": 0,
+      "limitations": [
+        "Sentetik aritmetik domain; sonuçlar genel dil görevlerine taşınmaz.",
+        "GY tek bir çıkarım kuralıyla (fonksiyonel teklik) ölçülür: öğrenilen pozitiften görülmemiş negatifi elemek. Bu gerçek ama DAR bir genellemedir; yeni toplama bağıntısı keşfetmek değildir.",
+        "GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.",
+        "UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.",
+        "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
+        "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
+      ],
+      "memory_collisions": 73,
+      "novelty_yield": 0.19479167,
+      "protocol": "experience-yield-decomposition-v1",
+      "retrievable_facts": 156,
+      "seed": 4,
+      "total_verified_bits": 926.43471004,
+      "useful_experience_yield": 0.1625,
+      "useful_facts": 156,
+      "verified": 229,
+      "verified_information_density": 0.96503616
+    },
+    {
+      "bits_per_fact": 4.95419631,
+      "correct_facts": 182,
+      "cycles": 30,
+      "distinct_new_facts": 182,
+      "divergence": {
+        "ey_overstates_novelty": true,
+        "ey_overstates_usefulness": true,
+        "ey_vs_ny": 0.04375,
+        "ey_vs_uey": 0.07916666,
+        "memorization_without_generalization": false,
+        "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
+        "ny_vs_uey": 0.03541666
+      },
+      "duplicate_generations": 224,
+      "experience_yield": 0.23333333,
+      "findings": [
+        "EY=0.2333 fakat NY=0.1896: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
+        "NY=0.1896 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (76 çakışma).",
+        "GY=0.6628: holdout doğruluğu öğrenmeyle 0.0000 → 0.6628 arttı (57/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
+        "VID=0.9392 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
+      ],
+      "generalization_yield": 0.6627907,
+      "generated": 960,
+      "holdout_after": {
+        "abstained": 29,
+        "accuracy_on_decided": 1.0,
+        "correct": 57,
+        "correct_rate_overall": 0.6627907,
+        "coverage": 0.6627907,
+        "decided": 57,
+        "total": 86
+      },
+      "holdout_before": {
+        "abstained": 86,
+        "accuracy_on_decided": 0.0,
+        "correct": 0,
+        "correct_rate_overall": 0.0,
+        "coverage": 0.0,
+        "decided": 0,
+        "total": 86
+      },
+      "incorrect_facts": 0,
+      "limitations": [
+        "Sentetik aritmetik domain; sonuçlar genel dil görevlerine taşınmaz.",
+        "GY tek bir çıkarım kuralıyla (fonksiyonel teklik) ölçülür: öğrenilen pozitiften görülmemiş negatifi elemek. Bu gerçek ama DAR bir genellemedir; yeni toplama bağıntısı keşfetmek değildir.",
+        "GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.",
+        "UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.",
+        "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
+        "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
+      ],
+      "memory_collisions": 76,
+      "novelty_yield": 0.18958333,
+      "protocol": "experience-yield-decomposition-v1",
+      "retrievable_facts": 148,
+      "seed": 5,
+      "total_verified_bits": 901.66372849,
+      "useful_experience_yield": 0.15416667,
+      "useful_facts": 148,
+      "verified": 224,
+      "verified_information_density": 0.93923305
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
+}
