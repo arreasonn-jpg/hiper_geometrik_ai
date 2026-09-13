@@ -216,13 +216,14 @@ probu ise aynı model çıktısını verifier olmadan tekrar besleyen kasıtlı 
 injection'dır. Experience Yield, FAR/FRR, correct/incorrect knowledge, novelty,
 diversity, entropy ve memory collision/retrieval birlikte raporlanır.
 
-Seed 42 kontrollü baseline'ında (`K₀=100`, 100 cycle, batch=16) K₁₀₀=308,
-Experience Yield=0.13, incorrect knowledge=0 ve Verifier sonrası FAR/FRR=0
-ölçüldü (Evaluator tek başına FAR=1.0). Verifier'sız failure injection'da
-repetition=0.99, FAR=1.0, yanlış model olgusu=14/16 ve
-memory retrieval=1.0→0.01 oldu. Bunlar sentetik aritmetik laboratuvar
-sonuçlarıdır; gerçek dilde otonom öğrenme iddiası değildir. Ayrıntılar:
-`docs/SELF_LEARNING_BENCHMARK.md`.
+Beş-seed kontrollü baseline'ında (`K₀=100`, 100 cycle, batch=16) ortalama
+K₁₀₀=`295.8±5.04`, Experience Yield=`0.1224±0.0031`, incorrect knowledge=0
+ve Verifier sonrası FAR/FRR=0 ölçüldü (Evaluator tek başına FAR=1.0).
+Verifier'sız failure injection'da repetition=0.99, FAR=1.0, yanlış model
+olgusu=`14.0±0.63 / 16` ve memory collision=1,584 oldu. Tam config/dataset/Git
+hash'leri ve beş koşu manifesti `raporlar/self_learning_5seed_summary.json`
+içindedir. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
+otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
 
 ---
 

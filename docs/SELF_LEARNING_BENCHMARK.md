@@ -92,6 +92,33 @@ engellediğini ve aynı model çıktılarının tekrar beslenmesinin ölçülebi
 collapse sinyalleri ürettiğini gösterir. Genel dil modeli veya gerçek dünya
 self-learning başarısı kanıtı değildir.
 
+## Beş-seed sonucu
+
+Aynı protokol seed 1–5 üzerinde çalıştırıldı. Aşağıdaki sapma population
+standard deviation'dır; tam makine-okunur sonuç
+`raporlar/self_learning_5seed_summary.json` dosyasındadır.
+
+| Metrik | mean ± std |
+|---|---:|
+| K₁₀₀ | 295.8 ± 5.0359 |
+| Verified new knowledge | 195.8 ± 5.0359 |
+| Experience Yield | 0.122375 ± 0.003147 |
+| Incorrect knowledge | 0.0 ± 0.0 |
+| FAR, Evaluator öncesi | 1.0 ± 0.0 |
+| FAR, Verifier sonrası | 0.0 ± 0.0 |
+| FRR | 0.0 ± 0.0 |
+| Closed-loop memory collisions | 5.2 ± 1.7205 |
+| Collapse repetition rate | 0.99 ± 0.0 |
+| Collapse acceptance accuracy | 0.125 ± 0.03953 |
+| Collapse incorrect model facts | 14.0 ± 0.63246 |
+| Collapse memory collisions | 1,584 ± 0 |
+
+Koşular commit `3a422c0`, dataset hash
+`b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da` ve
+config hash `eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e`
+ile, temiz çalışma ağacında üretildi. Her koşunun tam manifesti özet JSON'a
+gömülüdür.
+
 ## Kullanım
 
 Hızlı tek-seed koşu:

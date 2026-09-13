@@ -1,0 +1,349 @@
+{
+  "aggregate": {
+    "closed_verified.conflict_generated": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.correct_knowledge": {
+      "max": 300.0,
+      "mean": 295.8,
+      "min": 286.0,
+      "std": 5.0358713248
+    },
+    "closed_verified.cycles_completed": {
+      "max": 100.0,
+      "mean": 100.0,
+      "min": 100.0,
+      "std": 0.0
+    },
+    "closed_verified.cycles_requested": {
+      "max": 100.0,
+      "mean": 100.0,
+      "min": 100.0,
+      "std": 0.0
+    },
+    "closed_verified.experience_yield": {
+      "max": 0.125,
+      "mean": 0.122375,
+      "min": 0.11625,
+      "std": 0.0031474196
+    },
+    "closed_verified.false_acceptance": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.false_acceptance_before_verifier": {
+      "max": 1414.0,
+      "mean": 1404.2,
+      "min": 1400.0,
+      "std": 5.0358713248
+    },
+    "closed_verified.false_rejection": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.far": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.far_before_verifier": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "closed_verified.final_knowledge_size": {
+      "max": 300.0,
+      "mean": 295.8,
+      "min": 286.0,
+      "std": 5.0358713248
+    },
+    "closed_verified.frr": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.generated_experiences": {
+      "max": 1600.0,
+      "mean": 1600.0,
+      "min": 1600.0,
+      "std": 0.0
+    },
+    "closed_verified.incorrect_knowledge": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.initial_knowledge_size": {
+      "max": 100.0,
+      "mean": 100.0,
+      "min": 100.0,
+      "std": 0.0
+    },
+    "closed_verified.invalid_generated": {
+      "max": 1414.0,
+      "mean": 1404.2,
+      "min": 1400.0,
+      "std": 5.0358713248
+    },
+    "closed_verified.memory_collisions": {
+      "max": 7.0,
+      "mean": 5.2,
+      "min": 2.0,
+      "std": 1.7204650534
+    },
+    "closed_verified.seed": {
+      "max": 5.0,
+      "mean": 3.0,
+      "min": 1.0,
+      "std": 1.4142135624
+    },
+    "closed_verified.uncertain_generated": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "closed_verified.verified_new_knowledge": {
+      "max": 200.0,
+      "mean": 195.8,
+      "min": 186.0,
+      "std": 5.0358713248
+    },
+    "collapse_probe.acceptance_accuracy": {
+      "max": 0.1875,
+      "mean": 0.125,
+      "min": 0.0625,
+      "std": 0.0395284708
+    },
+    "collapse_probe.batch_size": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "collapse_probe.cycles": {
+      "max": 100.0,
+      "mean": 100.0,
+      "min": 100.0,
+      "std": 0.0
+    },
+    "collapse_probe.far": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "collapse_probe.final_evaluator_novelty": {
+      "max": 0.01,
+      "mean": 0.01,
+      "min": 0.01,
+      "std": 0.0
+    },
+    "collapse_probe.final_novelty_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "collapse_probe.generated_experiences": {
+      "max": 1600.0,
+      "mean": 1600.0,
+      "min": 1600.0,
+      "std": 0.0
+    },
+    "collapse_probe.incorrect_model_facts": {
+      "max": 15.0,
+      "mean": 14.0,
+      "min": 13.0,
+      "std": 0.632455532
+    },
+    "collapse_probe.initial_evaluator_novelty": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "collapse_probe.initial_novelty_rate": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "collapse_probe.memory_collisions": {
+      "max": 1584.0,
+      "mean": 1584.0,
+      "min": 1584.0,
+      "std": 0.0
+    },
+    "collapse_probe.repetition_rate": {
+      "max": 0.99,
+      "mean": 0.99,
+      "min": 0.99,
+      "std": 0.0
+    },
+    "collapse_probe.seed": {
+      "max": 5.0,
+      "mean": 3.0,
+      "min": 1.0,
+      "std": 1.4142135624
+    },
+    "collapse_probe.unique_experiences": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "collapse_probe.unique_model_facts": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    }
+  },
+  "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+  "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+  "deterministic_results": false,
+  "experiment_ids": [
+    "EXP-0001",
+    "EXP-0002",
+    "EXP-0003",
+    "EXP-0004",
+    "EXP-0005"
+  ],
+  "manifests": [
+    {
+      "completed_at_utc": "2026-09-13T07:28:07.853711+00:00",
+      "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+      "created_at_utc": "2026-09-13T07:28:05.425574+00:00",
+      "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+      "device": "cpu",
+      "experiment_id": "EXP-0001",
+      "git_commit": "3a422c021c952dcebf94b1064f134c676cbc4e28",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "closed_loop_writes_only_verified": true,
+        "collapse_is_failure_injection": true,
+        "ground_truth": "independent-arithmetic-environment"
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 1,
+      "torch_version": null
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:28:10.320511+00:00",
+      "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+      "created_at_utc": "2026-09-13T07:28:07.854546+00:00",
+      "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+      "device": "cpu",
+      "experiment_id": "EXP-0002",
+      "git_commit": "3a422c021c952dcebf94b1064f134c676cbc4e28",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "closed_loop_writes_only_verified": true,
+        "collapse_is_failure_injection": true,
+        "ground_truth": "independent-arithmetic-environment"
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 2,
+      "torch_version": null
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:28:12.795355+00:00",
+      "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+      "created_at_utc": "2026-09-13T07:28:10.321244+00:00",
+      "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+      "device": "cpu",
+      "experiment_id": "EXP-0003",
+      "git_commit": "3a422c021c952dcebf94b1064f134c676cbc4e28",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "closed_loop_writes_only_verified": true,
+        "collapse_is_failure_injection": true,
+        "ground_truth": "independent-arithmetic-environment"
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 3,
+      "torch_version": null
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:28:15.249453+00:00",
+      "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+      "created_at_utc": "2026-09-13T07:28:12.796104+00:00",
+      "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+      "device": "cpu",
+      "experiment_id": "EXP-0004",
+      "git_commit": "3a422c021c952dcebf94b1064f134c676cbc4e28",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "closed_loop_writes_only_verified": true,
+        "collapse_is_failure_injection": true,
+        "ground_truth": "independent-arithmetic-environment"
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 4,
+      "torch_version": null
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:28:17.702390+00:00",
+      "config_hash": "eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e",
+      "created_at_utc": "2026-09-13T07:28:15.250187+00:00",
+      "dataset_hash": "b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da",
+      "device": "cpu",
+      "experiment_id": "EXP-0005",
+      "git_commit": "3a422c021c952dcebf94b1064f134c676cbc4e28",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "closed_loop_writes_only_verified": true,
+        "collapse_is_failure_injection": true,
+        "ground_truth": "independent-arithmetic-environment"
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 5,
+      "torch_version": null
+    }
+  ],
+  "note": "Seedler arası özdeşlik yalnız tekrarlanabilirlik kontrolüdür; istatistiksel model kalitesi kanıtı değildir.",
+  "parameters": {
+    "closed_loop_writes_only_verified": true,
+    "collapse_is_failure_injection": true,
+    "ground_truth": "independent-arithmetic-environment"
+  },
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
+}

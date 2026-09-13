@@ -215,6 +215,7 @@ class SeedSweepReport:
     config_hash: str
     parameters: Dict[str, Any]
     manifests: List[Dict[str, Any]]
+    results: List[Dict[str, Any]]
     aggregate: Dict[str, Dict[str, float]]
     deterministic_results: bool
     note: str
@@ -288,6 +289,7 @@ def run_seed_sweep(
         config_hash=canonical_hash(dict(config)),
         parameters=dict(parameters or {}),
         manifests=[dict(run.manifest) for run in runs],
+        results=[dict(result) for result in results],
         aggregate=aggregate,
         deterministic_results=deterministic,
         note=(

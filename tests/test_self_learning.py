@@ -2,6 +2,7 @@
 import json
 import subprocess
 import sys
+from pathlib import Path
 
 from hga.experience import (
     run_self_learning_experiment,
@@ -107,6 +108,18 @@ def test_collapse_100_cycle_tamamlar():
     assert report.unique_experiences == 8
     assert report.repetition_rate == 0.99
     assert report.collapse_detected
+
+
+def test_kuratörlü_bes_seed_raporu_reproducibility_metadata_tasir():
+    path = Path(__file__).resolve().parents[1] / "raporlar" / "self_learning_5seed_summary.json"
+    report = json.loads(path.read_text(encoding="utf-8"))
+    assert report["seeds"] == [1, 2, 3, 4, 5]
+    assert len(report["dataset_hash"]) == 64
+    assert len(report["config_hash"]) == 64
+    assert len(report["manifests"]) == 5
+    assert all(manifest["result"] == "COMPLETED" for manifest in report["manifests"])
+    assert all(manifest["git_dirty"] is False for manifest in report["manifests"])
+    assert report["aggregate"]["closed_verified.incorrect_knowledge"]["mean"] == 0.0
 
 
 def test_self_learning_cli_manifestli(tmp_path):

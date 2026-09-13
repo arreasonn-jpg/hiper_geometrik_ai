@@ -70,6 +70,7 @@ def test_seed_sweep_mean_std_ve_ayri_manifestler(tmp_path):
     assert report.config_hash == canonical_hash({"kind": "unit"})
     assert len(report.manifests) == 3
     assert all(manifest["result"] == "COMPLETED" for manifest in report.manifests)
+    assert [result["metrics"]["score"] for result in report.results] == [1.0, 2.0, 3.0]
     assert report.aggregate["metrics.score"]["mean"] == 2.0
     assert report.aggregate["metrics.score"]["std"] > 0.0
     assert report.aggregate["metrics.fixed"]["std"] == 0.0
