@@ -17,7 +17,7 @@ hem okunabilir hem de `asdict` ile serileştirilebilir.
   * Bilgi yalnızca doğru/yanlış değil, `source` + `confidence` ile tutulur (P0-014):
     MODEL_GENERATED bilgi, REAL_DATA veya VERIFIED ile aynı epistemik seviyeye konmaz.
 """
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -158,6 +158,21 @@ class RelationFact:
     confidence: float = 1.0
     timestamp: Optional[float] = None
     version: int = 1
+    # ── Faz 27/28: köken (provenance) ────────────────────────────────────
+    # "Bu olgu nereden geldi?" sorusunun cevabı. Hepsi opsiyoneldir; eski
+    # kayıtlar ve sentetik/kural kaynaklı olgular None taşır. REAL_DATA
+    # kaynaklı bir olgunun bu alanları BOŞ olması denetimde eksiklik sayılır
+    # (bkz. hga/evaluation/provenance.py).
+    source_url: Optional[str] = None        # belgenin adresi
+    document_hash: Optional[str] = None     # belge içeriğinin SHA-256'sı
+    sentence: Optional[str] = None          # olgunun çıkarıldığı ham cümle
+    extractor: Optional[str] = None         # hangi ayıklayıcı üretti
+    retrieved_at: Optional[float] = None    # belgenin alındığı zaman
+
+    @property
+    def provenance_var_mi(self) -> bool:
+        """Kökenin izlenebilir olması için gereken asgari alanlar mevcut mu?"""
+        return bool(self.source_url and self.document_hash)
 
     @property
     def uclusu(self) -> Tuple[str, str, str]:

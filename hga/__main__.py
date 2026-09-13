@@ -17,6 +17,9 @@ Kullanım:
     python -m hga memory-interference    # kasıtlı çakışma + sabit/dinamik KV kıyası
     python -m hga paradigma              # neural vs symbolic vs hybrid (Faz 21)
     python -m hga olcekli-golden         # 100/1K/10K golden benchmark (Faz 3/6)
+    python -m hga kronecker-rank         # effective rank + zincir çöküşü (Faz 19/20)
+    python -m hga koken                  # provenance denetimi (Faz 27/28)
+    python -m hga oncelik                # Priority(E) ağırlık ablasyonu (Faz 25)
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -626,6 +629,169 @@ def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
         print(f"  markdown: {markdown}")
 
 
+def _kronecker_rank(n_values, k_values, seed=1, out=None, markdown=None):
+    """Faz 19/20: effective rank + n×K taraması ve zincir çöküş testi."""
+    from hga.evaluation.kronecker_rank import run_nk_rank_sweep
+
+    n_list = [int(v.strip()) for v in n_values.split(",") if v.strip()]
+    k_list = [int(v.strip()) for v in k_values.split(",") if v.strip()]
+    rapor = run_nk_rank_sweep(n_values=n_list, k_values=k_list, seed=int(seed))
+    print("Kronecker effective rank ve n×K taraması (Faz 19/20):\n")
+    print(rapor.markdown())
+    print()
+    for bulgu in rapor.findings:
+        print(f"  - {bulgu}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
+                      sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Faz 19/20 — Kronecker Effective Rank ve n×K Taraması\n\n")
+            handle.write(rapor.markdown() + "\n\n")
+            for bulgu in rapor.findings:
+                handle.write(f"- {bulgu}\n")
+        print(f"  markdown: {markdown}")
+
+
+def _provenance(out=None, markdown=None):
+    """Faz 27/28: köken denetimi ve belge hash doğrulaması demosu."""
+    from hga.evaluation.provenance import (
+        audit_provenance,
+        ingest_with_provenance,
+        verify_document_hashes,
+    )
+    from hga.knowledge import KaynakTuru, KnowledgeStore
+
+    store = KnowledgeStore()
+    belge = ("Ali ata bindi. Ayşe kitabı okudu. Mehmet topu attı. "
+             "Kuş gökyüzünde uçtu.")
+    cumleler = [c.strip() + "." for c in belge.split(".") if c.strip()]
+    bilgi = ingest_with_provenance(store, cumleler,
+                                   source_url="ornek://turkce-mini-korpus",
+                                   content=belge)
+    print("Köken damgalı aktarım (Faz 27/28):")
+    for anahtar, deger in bilgi.items():
+        print(f"  {anahtar}: {deger}")
+
+    # Kökensiz bir olgu ekleyip denetimin bunu yakaladığını göster.
+    store.varlik_ekle("yetim_ozne", entity_id="E_YETIM_S")
+    store.varlik_ekle("yetim_nesne", entity_id="E_YETIM_O")
+    store.iliski_tanimla("yetim_iliski", relation_id="R_YETIM")
+    store.olgu_kaydet("E_YETIM_S", "R_YETIM", "E_YETIM_O", 1.0,
+                      source=KaynakTuru.REAL_DATA, confidence=1.0)
+
+    rapor = audit_provenance(store)
+    print("\nKöken denetimi:")
+    print(rapor.markdown())
+    print()
+    for bulgu in rapor.findings:
+        print(f"  - {bulgu}")
+    print(f"  temiz mi: {rapor.clean} (kökensiz olgu bilerek eklendi)")
+
+    dogrulama = verify_document_hashes(
+        store, {"ornek://turkce-mini-korpus": belge})
+    print(f"\nHash doğrulaması: kontrol={dogrulama.checked} "
+          f"eşleşen={dogrulama.matched} tutmayan={dogrulama.mismatched}")
+    bozuk = verify_document_hashes(
+        store, {"ornek://turkce-mini-korpus": belge + " Belge değişti."})
+    print(f"  belge değiştirildiğinde yakalanan: {bozuk.mismatched}")
+
+    cikti = {"ingest": bilgi, "audit": rapor.to_dict(),
+             "hash_check": dogrulama.to_dict(),
+             "tampered_check": bozuk.to_dict()}
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(cikti, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Faz 27/28 — Köken (Provenance) Denetimi\n\n")
+            handle.write(rapor.markdown() + "\n\n")
+            for bulgu in rapor.findings:
+                handle.write(f"- {bulgu}\n")
+        print(f"  markdown: {markdown}")
+
+
+def _priority(k=10, out=None, markdown=None):
+    """Faz 25: Priority(E) ağırlıkları ve terim ablasyonu."""
+    import random as _random
+
+    from hga.experience.exploration import (
+        ExplorationEngine,
+        agirlik_ablasyonu,
+    )
+    from hga.knowledge import (
+        DeneyimDurumu,
+        ExperienceCandidate,
+        KaynakTuru,
+        KnowledgeStore,
+    )
+
+    store = KnowledgeStore()
+    rng = _random.Random(1)
+    store.iliski_tanimla("iliski", relation_id="R_P")
+    adaylar = []
+    for index in range(40):
+        ozne, nesne = f"PS{index}", f"PO{index}"
+        store.varlik_ekle(ozne, entity_id=ozne)
+        store.varlik_ekle(nesne, entity_id=nesne)
+        for j in range(3):
+            store.ozellik_koy(nesne, f"p{j}", rng.choice([0.0, 1.0]),
+                              source=KaynakTuru.REAL_DATA, confidence=0.9)
+        if index % 3 == 0:
+            store.olgu_kaydet(ozne, "R_P", nesne, 1.0,
+                              confidence=rng.uniform(0.2, 0.99))
+        aday = ExperienceCandidate(f"PE{index}", ozne, "R_P", nesne)
+        if index % 7 == 0:
+            aday.state = DeneyimDurumu.CONFLICT
+        adaylar.append(aday)
+
+    motor = ExplorationEngine()
+    agirliklar = motor.agirliklar()
+    print("Priority(E) = w_gain·InfoGain + w_novelty·Novelty "
+          "+ w_uncertainty·Uncertainty − w_conflict_penalty·Conflict\n")
+    print("Varsayılan ağırlıklar:")
+    for ad in ("w_gain", "w_novelty", "w_uncertainty", "w_conflict_penalty"):
+        print(f"  {ad:22s} = {agirliklar[ad]:.2f}  "
+              f"({agirliklar['descriptions'][ad]})")
+
+    ornek = motor.priority_dokumu(store, adaylar[0])
+    print(f"\nÖrnek döküm ({ornek['experience_id']}): "
+          f"priority={ornek['priority']}")
+    for ad, terim in ornek["terms"].items():
+        print(f"  {ad:20s} değer={terim['value']:.4f} "
+              f"ağırlık={terim['weight']:.2f} katkı={terim['contribution']:+.4f}")
+
+    ablasyon = agirlik_ablasyonu(store, adaylar, k=int(k))
+    print("\nAğırlık ablasyonu (her terim tek tek kapatıldı):")
+    print(ablasyon.markdown())
+    print()
+    for bulgu in ablasyon.findings:
+        print(f"  - {bulgu}")
+
+    cikti = {"weights": agirliklar, "example_breakdown": ornek,
+             "ablation": ablasyon.to_dict()}
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(cikti, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Faz 25 — Priority(E) Ağırlıkları ve Ablasyon\n\n")
+            handle.write(ablasyon.markdown() + "\n\n")
+            for bulgu in ablasyon.findings:
+                handle.write(f"- {bulgu}\n")
+        print(f"  markdown: {markdown}")
+
+
 def _kapasite(operands_max, out=None):
     """P / C_I / C_M / C_E / C_V kapasite çerçevesi ölçümü."""
     from hga.evaluation import run_capacity_benchmark
@@ -997,7 +1163,8 @@ def main(argv=None):
                                      "self-learning-benchmark", "milestone",
                                      "kapasite", "bilgi-surum", "defter",
                                      "memory-interference", "paradigma",
-                                     "olcekli-golden"])
+                                     "olcekli-golden", "kronecker-rank",
+                                     "koken", "oncelik"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -1044,6 +1211,10 @@ def main(argv=None):
                    help="veri-canli-smoke için ağsız/deterministik fetcher kullan")
     p.add_argument("--seeds", default=None,
                    help="golden-benchmark/paradigma için virgüllü seed listesi (örn. 1,2,3,4,5)")
+    p.add_argument("--n-values", default="4,8,16",
+                   help="kronecker-rank için n değerleri (virgüllü)")
+    p.add_argument("--k-values", default="1,2,4",
+                   help="kronecker-rank için K değerleri (virgüllü)")
     p.add_argument("--sizes", default="100,1000,10000",
                    help="olcekli-golden test seti boyutları (virgüllü)")
     p.add_argument("--hard", action="store_true",
@@ -1130,6 +1301,11 @@ def main(argv=None):
      "olcekli-golden": lambda: _olcekli_golden(
          args.sizes, args.seeds or "1,2,3,4,5", hard=args.hard,
          out=args.out, markdown=args.markdown),
+     "kronecker-rank": lambda: _kronecker_rank(
+         args.n_values, args.k_values, seed=1,
+         out=args.out, markdown=args.markdown),
+     "koken": lambda: _provenance(out=args.out, markdown=args.markdown),
+     "oncelik": lambda: _priority(k=10, out=args.out, markdown=args.markdown),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
      "bilgi-surum": lambda: _bilgi_surum(out=args.out),
      "defter": lambda: _defter(out=args.out),

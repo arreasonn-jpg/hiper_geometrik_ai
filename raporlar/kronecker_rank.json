@@ -1,0 +1,127 @@
+{
+  "findings": [
+    "Aktivasyonsuz K>1 zincirlerin tamamı tek Kronecker operatörüne ÇÖKTÜ (6 konfigürasyon test edildi). Bu durumda n^(2K) üst sınırı boştur: K'nın ifade gücüne katkısı sıfırdır.",
+    "SiLU aktivasyonu eklendiğinde 6/6 konfigürasyonda zincir tek doğrusal operatörle temsil edilemez hâle geliyor — yani derinliğin katkısı tamamen AKTİVASYONDAN gelir, Kronecker yapısından değil.",
+    "Rank özdeşliği doğrulandı: rank(Bᵀ ⊗ A) = rank(A)·rank(B) = n², yani operatör TAM RANK'tır. Ama serbestlik derecesi 2n²'dir — n=16'da rank 256 iken parametre yalnız 512. Rank yüksekliği ifade gücü değil, yapısal kısıtın yokluğunu gösterir.",
+    "En uç konfigürasyon (n=16, K=4): teorik etkileşim uzayı 4.295e+09, gerçek eğitilebilir parametre 2,048. Aradaki fark 'adreslenebilir' ile 'öğrenilebilir' farkıdır."
+  ],
+  "rows": [
+    {
+      "K": 1,
+      "collapse_residual_no_activation": 4.554e-07,
+      "collapse_residual_with_activation": 0.4938768626,
+      "collapsed_without_activation": true,
+      "effective_dimension": 4.454191,
+      "interaction_space_upper_bound": 16.0,
+      "max_operator_rank": 16,
+      "measured_rank": 16,
+      "n": 4,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 32
+    },
+    {
+      "K": 2,
+      "collapse_residual_no_activation": 6.021e-07,
+      "collapse_residual_with_activation": 0.5299812509,
+      "collapsed_without_activation": true,
+      "effective_dimension": 4.454191,
+      "interaction_space_upper_bound": 256.0,
+      "max_operator_rank": 16,
+      "measured_rank": 16,
+      "n": 4,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 64
+    },
+    {
+      "K": 4,
+      "collapse_residual_no_activation": 4.574e-07,
+      "collapse_residual_with_activation": 0.7237436768,
+      "collapsed_without_activation": true,
+      "effective_dimension": 4.454191,
+      "interaction_space_upper_bound": 65536.0,
+      "max_operator_rank": 16,
+      "measured_rank": 16,
+      "n": 4,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 128
+    },
+    {
+      "K": 1,
+      "collapse_residual_no_activation": 4.31e-07,
+      "collapse_residual_with_activation": 0.5148807158,
+      "collapsed_without_activation": true,
+      "effective_dimension": 19.490353,
+      "interaction_space_upper_bound": 64.0,
+      "max_operator_rank": 64,
+      "measured_rank": 64,
+      "n": 8,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 128
+    },
+    {
+      "K": 2,
+      "collapse_residual_no_activation": 4.207e-07,
+      "collapse_residual_with_activation": 0.6601548396,
+      "collapsed_without_activation": true,
+      "effective_dimension": 19.490353,
+      "interaction_space_upper_bound": 4096.0,
+      "max_operator_rank": 64,
+      "measured_rank": 64,
+      "n": 8,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 256
+    },
+    {
+      "K": 4,
+      "collapse_residual_no_activation": 4.515e-07,
+      "collapse_residual_with_activation": 0.6963340344,
+      "collapsed_without_activation": true,
+      "effective_dimension": 19.490353,
+      "interaction_space_upper_bound": 16777216.0,
+      "max_operator_rank": 64,
+      "measured_rank": 64,
+      "n": 8,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 512
+    },
+    {
+      "K": 1,
+      "collapse_residual_no_activation": 5.542e-07,
+      "collapse_residual_with_activation": 0.3775840946,
+      "collapsed_without_activation": true,
+      "effective_dimension": 98.379852,
+      "interaction_space_upper_bound": 256.0,
+      "max_operator_rank": 256,
+      "measured_rank": 256,
+      "n": 16,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 512
+    },
+    {
+      "K": 2,
+      "collapse_residual_no_activation": 5.731e-07,
+      "collapse_residual_with_activation": 0.4337915504,
+      "collapsed_without_activation": true,
+      "effective_dimension": 98.379852,
+      "interaction_space_upper_bound": 65536.0,
+      "max_operator_rank": 256,
+      "measured_rank": 256,
+      "n": 16,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 1024
+    },
+    {
+      "K": 4,
+      "collapse_residual_no_activation": 5.902e-07,
+      "collapse_residual_with_activation": 0.4985047882,
+      "collapsed_without_activation": true,
+      "effective_dimension": 98.379852,
+      "interaction_space_upper_bound": 4294967296.0,
+      "max_operator_rank": 256,
+      "measured_rank": 256,
+      "n": 16,
+      "rank_utilization": 1.0,
+      "trainable_parameters": 2048
+    }
+  ]
+}

@@ -51,6 +51,9 @@ jobs:
           python -m hga bilgi-surum
           python -m hga defter
           python -m hga kapasite --operands-max 5
+          python -m hga kronecker-rank --n-values 4,8 --k-values 1,2
+          python -m hga koken
+          python -m hga oncelik
           python -m hga olcekli-golden --sizes 100,400 --seeds 1,2 --hard
           python -m hga memory-interference --slots 512 --forced-collisions 10 --scales 100,1000
           python -m hga paradigma --seeds 1,2 --epochs 20

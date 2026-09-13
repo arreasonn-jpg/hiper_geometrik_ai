@@ -18,8 +18,7 @@ from typing import Dict, List, Optional
 from .entity_index import EntityIndex
 from .property_index import PropertyIndex
 from .relation_index import RelationIndex
-from .schemas import (Entity, Relation, RelationFact, ExperienceCandidate,
-                      KaynakTuru, DeneyimDurumu)
+from .schemas import Entity, ExperienceCandidate, KaynakTuru, Relation, RelationFact
 
 
 class KnowledgeStore:
@@ -87,10 +86,13 @@ class KnowledgeStore:
     def olgu_kaydet(self, subject_id: str, relation_id: str, object_id: str,
                     score: float, source: KaynakTuru = KaynakTuru.REAL_DATA,
                     confidence: float = 1.0,
-                    otomatik_ters: bool = False) -> RelationFact:
+                    otomatik_ters: bool = False,
+                    provenance: Optional[Dict] = None) -> RelationFact:
+        """Olgu kaydet; ``provenance`` ile kökeni izlenebilir yap (Faz 27/28)."""
         return self.relations.olgu_ekle(subject_id, relation_id, object_id,
                                         score, source=source, confidence=confidence,
-                                        otomatik_ters=otomatik_ters)
+                                        otomatik_ters=otomatik_ters,
+                                        provenance=provenance)
 
     # ── Bellek desteği (§8: memory_support sinyali) ──────────────────────
     def bellek_destegi(self, subject_id: str, relation_id: str,

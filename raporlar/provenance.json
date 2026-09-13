@@ -1,0 +1,79 @@
+{
+  "audit": {
+    "by_source": {
+      "REAL_DATA": {
+        "orphan": 1,
+        "total": 3,
+        "traceable": 2
+      }
+    },
+    "clean": false,
+    "coverage": 0.666667,
+    "derived_facts": 0,
+    "external_facts": 3,
+    "findings": [
+      "Dış kaynaklı 3 olgunun 2 tanesinin kökeni tam (kapsam=0.6667); 1 yetim olgu var.",
+      "Türetilmiş/sentetik 0 olgu köken zorunluluğundan muaftır — kökenleri dış belge değil, kural veya model çıktısıdır.",
+      "UYARI: yetim olgular 'nereden biliyorum' sorusunu cevaplayamaz. Bu olgulara dayanan verification istatistikleri bağımsız olarak denetlenemez."
+    ],
+    "orphan_facts": 1,
+    "orphans": [
+      {
+        "missing_fields": [
+          "source_url",
+          "document_hash"
+        ],
+        "object_id": "E_YETIM_O",
+        "relation_id": "R_YETIM",
+        "source": "REAL_DATA",
+        "subject_id": "E_YETIM_S"
+      }
+    ],
+    "sentence_coverage": 0.666667,
+    "total_facts": 3,
+    "traceable_facts": 2,
+    "unique_documents": 1,
+    "unique_sources": 1
+  },
+  "hash_check": {
+    "checked": 2,
+    "clean": true,
+    "matched": 2,
+    "mismatched": 0,
+    "mismatches": [],
+    "unknown_documents": 0
+  },
+  "ingest": {
+    "document_hash": "27ed913f13f6fa382189368ff4452a456eda5e1ef9fe84b256b8bb126f861576",
+    "extracted_triples": 2,
+    "extraction_yield": 0.5,
+    "extractor": "CumleAyiklayici",
+    "facts_written": 2,
+    "sentences": 4,
+    "skipped_sentences": 2,
+    "source_url": "ornek://turkce-mini-korpus"
+  },
+  "tampered_check": {
+    "checked": 2,
+    "clean": false,
+    "matched": 0,
+    "mismatched": 2,
+    "mismatches": [
+      {
+        "actual": "5080e2be4f3cd489a6e102ec352b5daf9c0361817ed3009c6382e5d0b28532ce",
+        "problem": "belge içeriği değişmiş (hash tutmuyor)",
+        "recorded": "27ed913f13f6fa382189368ff4452a456eda5e1ef9fe84b256b8bb126f861576",
+        "source_url": "ornek://turkce-mini-korpus",
+        "subject_id": "E_001"
+      },
+      {
+        "actual": "5080e2be4f3cd489a6e102ec352b5daf9c0361817ed3009c6382e5d0b28532ce",
+        "problem": "belge içeriği değişmiş (hash tutmuyor)",
+        "recorded": "27ed913f13f6fa382189368ff4452a456eda5e1ef9fe84b256b8bb126f861576",
+        "source_url": "ornek://turkce-mini-korpus",
+        "subject_id": "E_003"
+      }
+    ],
+    "unknown_documents": 0
+  }
+}

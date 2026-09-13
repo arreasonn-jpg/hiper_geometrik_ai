@@ -1,0 +1,192 @@
+{
+  "ablation": {
+    "baseline_weights": {
+      "descriptions": {
+        "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+        "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+        "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+        "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+      },
+      "normalized": false,
+      "positive_weight_sum": 1.0,
+      "w_conflict_penalty": 0.2,
+      "w_gain": 0.4,
+      "w_novelty": 0.35,
+      "w_uncertainty": 0.25
+    },
+    "findings": [
+      "Temel seçim (ilk 10) referans alındı; her terim tek tek kapatıldı.",
+      "UYARI: ['w_novelty', 'w_uncertainty'] terimlerini kapatmak seçimi HİÇ değiştirmedi — bu veri üzerinde işlevsizler. Ağırlığın ayarlanabilir olması etkili olduğu anlamına gelmez."
+    ],
+    "k": 10,
+    "variants": {
+      "w_conflict_penalty": {
+        "changed": 1,
+        "effective": true,
+        "overlap_ratio": 0.9,
+        "selection": [
+          "PE22",
+          "PE31",
+          "PE6",
+          "PE1",
+          "PE2",
+          "PE4",
+          "PE5",
+          "PE7",
+          "PE8",
+          "PE10"
+        ],
+        "weights": {
+          "descriptions": {
+            "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+            "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+            "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+            "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+          },
+          "normalized": false,
+          "positive_weight_sum": 1.0,
+          "w_conflict_penalty": 0.0,
+          "w_gain": 0.4,
+          "w_novelty": 0.35,
+          "w_uncertainty": 0.25
+        }
+      },
+      "w_gain": {
+        "changed": 3,
+        "effective": true,
+        "overlap_ratio": 0.7,
+        "selection": [
+          "PE1",
+          "PE2",
+          "PE4",
+          "PE5",
+          "PE8",
+          "PE10",
+          "PE11",
+          "PE13",
+          "PE16",
+          "PE17"
+        ],
+        "weights": {
+          "descriptions": {
+            "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+            "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+            "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+            "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+          },
+          "normalized": false,
+          "positive_weight_sum": 0.6,
+          "w_conflict_penalty": 0.2,
+          "w_gain": 0.0,
+          "w_novelty": 0.35,
+          "w_uncertainty": 0.25
+        }
+      },
+      "w_novelty": {
+        "changed": 0,
+        "effective": false,
+        "overlap_ratio": 1.0,
+        "selection": [
+          "PE22",
+          "PE31",
+          "PE6",
+          "PE1",
+          "PE2",
+          "PE4",
+          "PE5",
+          "PE8",
+          "PE10",
+          "PE11"
+        ],
+        "weights": {
+          "descriptions": {
+            "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+            "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+            "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+            "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+          },
+          "normalized": false,
+          "positive_weight_sum": 0.65,
+          "w_conflict_penalty": 0.2,
+          "w_gain": 0.4,
+          "w_novelty": 0.0,
+          "w_uncertainty": 0.25
+        }
+      },
+      "w_uncertainty": {
+        "changed": 0,
+        "effective": false,
+        "overlap_ratio": 1.0,
+        "selection": [
+          "PE22",
+          "PE31",
+          "PE6",
+          "PE1",
+          "PE2",
+          "PE4",
+          "PE5",
+          "PE8",
+          "PE10",
+          "PE11"
+        ],
+        "weights": {
+          "descriptions": {
+            "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+            "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+            "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+            "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+          },
+          "normalized": false,
+          "positive_weight_sum": 0.75,
+          "w_conflict_penalty": 0.2,
+          "w_gain": 0.4,
+          "w_novelty": 0.35,
+          "w_uncertainty": 0.0
+        }
+      }
+    }
+  },
+  "example_breakdown": {
+    "clipped": false,
+    "experience_id": "PE0",
+    "priority": 0.1517,
+    "raw_priority": 0.1517,
+    "resolved": true,
+    "terms": {
+      "conflict_penalty": {
+        "contribution": -0.2,
+        "value": 1.0,
+        "weight": 0.2
+      },
+      "information_gain": {
+        "contribution": 0.0,
+        "value": 0.0,
+        "weight": 0.4
+      },
+      "novelty": {
+        "contribution": 0.175,
+        "value": 0.5,
+        "weight": 0.35
+      },
+      "uncertainty": {
+        "contribution": 0.1767,
+        "value": 0.7068,
+        "weight": 0.25
+      }
+    }
+  },
+  "weights": {
+    "descriptions": {
+      "w_conflict_penalty": "CONFLICT durumundaki adaya uygulanan ceza (çıkarılır, eklenmez)",
+      "w_gain": "information_gain — adayın bilgi tabanındaki diğer varlıklardan ne kadar farklı olduğu",
+      "w_novelty": "novelty — üçlünün daha önce görülmemiş olması",
+      "w_uncertainty": "1 - confidence — kayıtlı kanıtın zayıflığı"
+    },
+    "normalized": false,
+    "positive_weight_sum": 1.0,
+    "w_conflict_penalty": 0.2,
+    "w_gain": 0.4,
+    "w_novelty": 0.35,
+    "w_uncertainty": 0.25
+  }
+}

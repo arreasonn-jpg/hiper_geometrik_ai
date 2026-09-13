@@ -14,9 +14,9 @@ Bu yüzden özne–ilişki–nesne bağlantıları ayrıca temsil edilir (P0-007
   * Ters ve simetrik ilişki yönetimi (`inverse_relation_id`, `ters_olgu_uret`, P0-008)
   * Kaynak ağırlıklı olgu agregasyonu (`olgu_agrega`)
 """
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
-from .schemas import Relation, RelationFact, KaynakTuru, KAYNAK_GUVENIRLIGI
+from .schemas import KAYNAK_GUVENIRLIGI, KaynakTuru, Relation, RelationFact
 
 
 class RelationIndex:
@@ -102,16 +102,27 @@ class RelationIndex:
     # ── Kanıt (fact) ekleme ──────────────────────────────────────────────
     def olgu_ekle(self, subject_id: str, relation_id: str, object_id: str,
                   score: float, source: KaynakTuru = KaynakTuru.REAL_DATA,
-                  confidence: float = 1.0, otomatik_ters: bool = False) -> RelationFact:
-        """(özne, ilişki, nesne) üçlüsüne dair bir kanıt kaydet."""
+                  confidence: float = 1.0, otomatik_ters: bool = False,
+                  provenance: Optional[Dict] = None) -> RelationFact:
+        """(özne, ilişki, nesne) üçlüsüne dair bir kanıt kaydet.
+
+        ``provenance`` (Faz 27/28) verilirse olgunun kökeni kaydedilir:
+        ``source_url``, ``document_hash``, ``sentence``, ``extractor``,
+        ``retrieved_at``. Verilmezse alanlar None kalır (geriye dönük uyum).
+        """
         score = float(score)
         if score < 0.0 or score > 1.0:
             raise ValueError(f"ilişki skoru [0,1] dışında: {score}")
         if relation_id not in self._iliskiler:
             raise KeyError(f"bilinmeyen relation_id: {relation_id}")
+        koken = dict(provenance or {})
+        gecersiz = set(koken) - {"source_url", "document_hash", "sentence",
+                                 "extractor", "retrieved_at"}
+        if gecersiz:
+            raise ValueError(f"Bilinmeyen provenance alanları: {sorted(gecersiz)}")
         f = RelationFact(subject_id=subject_id, relation_id=relation_id,
                          object_id=object_id, score=score, source=source,
-                         confidence=float(confidence))
+                         confidence=float(confidence), **koken)
         self._olgular.append(f)
         if otomatik_ters:
             ters = self.ters_olgu_uret(f)

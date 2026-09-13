@@ -365,6 +365,47 @@ varlıklarla karşılaştırdığı için değerlendirme O(N²). Ters indeksle s
 çarpan düşürüldü; asimptotik sınıf metriğin tanımı gereği korunuyor.
 Ayrıntı: `docs/OLCEKLI_GOLDEN_BENCHMARK.md`.
 
+### Kronecker effective rank ve zincir çöküşü (Faz 19/20)
+
+```bash
+python -m hga kronecker-rank --n-values 4,8,16 --k-values 1,2,4
+```
+
+`n^(2K)` etkileşim uzayı sayısı hesaplanıyordu ama **hiç ölçülmüyordu**. Bu
+komut onu kırmaya çalışır ve iki net sonuç verir:
+
+* **Aktivasyonsuz K katmanlı zincir tek katmana ÇÖKÜYOR.** `A₂(A₁XB₁)B₂ =
+  (A₂A₁)X(B₁B₂)` özdeşliği sayısal olarak doğrulandı (kalıntı ~3×10⁻⁷, 6/6
+  konfigürasyon). Bu durumda `n^(2K)` **boş bir üst sınırdır**: K'nın ifade
+  gücüne katkısı sıfırdır. Derinliğin katkısı tamamen **aktivasyondan** gelir
+  (SiLU ile kalıntı 0.38–0.72'ye çıkıyor).
+* **Rank tam ama yanıltıcı.** `rank(Bᵀ ⊗ A) = n²` yani operatör tam rank'tır
+  (kullanım 1.000), fakat serbestlik derecesi yalnız `2n²`'dir ve spektral
+  etkin boyut çok daha küçüktür (n=16'da 256 yerine **98.38**).
+
+Ayrıntı: `docs/KRONECKER_RANK_VE_NK_TARAMASI.md`.
+
+### Köken (provenance) ve Priority(E) ağırlıkları (Faz 27/28, 25)
+
+```bash
+python -m hga koken      # "nereden biliyorum?" denetimi
+python -m hga oncelik    # Priority(E) terim ablasyonu
+```
+
+`RelationFact` artık opsiyonel `source_url` / `document_hash` / `sentence` /
+`extractor` / `retrieved_at` taşır (geriye dönük uyumlu). `REAL_DATA` kaynaklı
+bir olgu köken taşımıyorsa **yetim olgu** sayılır; belge sonradan değişirse
+hash doğrulaması bunu yakalar. Ölçülen darboğaz: sözlük tabanlı ayıklayıcının
+`extraction_yield`'i demo korpusta **0.5** — köken altyapısı hazır, ayıklama
+kapsamı dar.
+
+Priority(E) ağırlıkları tek kaynakta tanımlı, negatif değer reddediliyor,
+`normalize=True` ile karşılaştırılabilir hâle geliyor ve `priority_dokumu()`
+her terimin katkısını ayrı gösteriyor. Ablasyon bir zaaf ortaya çıkardı:
+**`w_novelty` ve `w_uncertainty` sıfırlandığında seçilen ilk 10 aday hiç
+değişmiyor** — ayarlanabilir olmak etkili olmak değildir.
+Ayrıntı: `docs/KOKEN_VE_ONCELIK.md`.
+
 ### Memory interference: kasıtlı çakışma (Faz 15–17)
 
 ```bash

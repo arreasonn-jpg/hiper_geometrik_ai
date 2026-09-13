@@ -23,6 +23,15 @@ from .golden import (
 )
 from .hallucination import HallucinationReport, hallucination_metrics
 from .kronecker import kronecker_capacity_contract, run_kronecker_dense_trial
+from .kronecker_rank import (
+    CokusOlcumu,
+    NKTaramaRaporu,
+    RankOlcumu,
+    measure_chain_collapse,
+    measure_single_layer_rank,
+    run_nk_rank_sweep,
+    theoretical_contract,
+)
 from .leakage import LeakageAuditReport, audit_partitions, semantic_fingerprint
 from .paradigma import (
     KOLLAR,
@@ -34,6 +43,14 @@ from .paradigma import (
     run_paradigm_ablation,
     run_paradigm_sweep,
     sembolik_tahmin,
+)
+from .provenance import (
+    HashDogrulamaRaporu,
+    ProvenanceRaporu,
+    audit_provenance,
+    document_hash,
+    ingest_with_provenance,
+    verify_document_hashes,
 )
 from .reporting import benchmark_raporu_kaydet, benchmark_raporu_markdown, benchmark_raporu_olustur
 from .scaled_golden import (
@@ -53,6 +70,10 @@ from .turkish_benchmark import (
 )
 
 __all__ = [
+    "HashDogrulamaRaporu", "ProvenanceRaporu", "audit_provenance",
+    "document_hash", "ingest_with_provenance", "verify_document_hashes",
+    "CokusOlcumu", "NKTaramaRaporu", "RankOlcumu", "measure_chain_collapse",
+    "measure_single_layer_rank", "run_nk_rank_sweep", "theoretical_contract",
     "OlcekliGoldenRaporu", "OlcekliGoldenSweep", "run_scaled_golden",
     "run_scaled_golden_sweep", "veri_seti_uret",
     "KOLLAR", "ParadigmaRaporu", "ParadigmaSweepRaporu", "gorev_uret",
