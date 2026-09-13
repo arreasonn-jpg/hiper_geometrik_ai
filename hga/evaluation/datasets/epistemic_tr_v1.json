@@ -1,0 +1,465 @@
+{
+  "benchmark_id": "hga-epistemic-tr-v1",
+  "cases": [
+    {
+      "case_id": "KNOWN-001",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_AT",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "KNOWN-002",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_ARABA",
+      "relation_id": "R_BIN",
+      "subject_id": "E_AYSE"
+    },
+    {
+      "case_id": "KNOWN-003",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_OTOBUS",
+      "relation_id": "R_BIN",
+      "subject_id": "E_MEHMET"
+    },
+    {
+      "case_id": "KNOWN-004",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_BISIKLET",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ZEYNEP"
+    },
+    {
+      "case_id": "KNOWN-005",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_AT",
+      "relation_id": "R_BIN",
+      "subject_id": "E_CAN"
+    },
+    {
+      "case_id": "KNOWN-006",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_KITAP",
+      "relation_id": "R_OKU",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "KNOWN-007",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_GAZETE",
+      "relation_id": "R_OKU",
+      "subject_id": "E_AYSE"
+    },
+    {
+      "case_id": "KNOWN-008",
+      "epistemic_class": "KNOWN",
+      "expected_state": "VALID",
+      "note": "Kısıtlar sağlanıyor; kabul edilmeli.",
+      "object_id": "E_KITAP",
+      "relation_id": "R_OKU",
+      "subject_id": "E_MEHMET"
+    },
+    {
+      "case_id": "FALSE-001",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_TAS",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "FALSE-002",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_BULUT",
+      "relation_id": "R_BIN",
+      "subject_id": "E_AYSE"
+    },
+    {
+      "case_id": "FALSE-003",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_KITAP",
+      "relation_id": "R_BIN",
+      "subject_id": "E_MEHMET"
+    },
+    {
+      "case_id": "FALSE-004",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_AT",
+      "relation_id": "R_OKU",
+      "subject_id": "E_ZEYNEP"
+    },
+    {
+      "case_id": "FALSE-005",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_ARABA",
+      "relation_id": "R_OKU",
+      "subject_id": "E_CAN"
+    },
+    {
+      "case_id": "FALSE-006",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Gerekli özellik kayıtlı ve hedefle çelişiyor.",
+      "object_id": "E_TAS",
+      "relation_id": "R_OKU",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "FALSETYPE-001",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Özne tipi ilişkinin izin verdiği tipte değil.",
+      "object_id": "E_ARABA",
+      "relation_id": "R_BIN",
+      "subject_id": "E_AT"
+    },
+    {
+      "case_id": "FALSETYPE-002",
+      "epistemic_class": "FALSE",
+      "expected_state": "INVALID",
+      "note": "Özne tipi ilişkinin izin verdiği tipte değil.",
+      "object_id": "E_GAZETE",
+      "relation_id": "R_OKU",
+      "subject_id": "E_KITAP"
+    },
+    {
+      "case_id": "UNKNOWN-001",
+      "epistemic_class": "UNKNOWN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık/ilişki bilgi tabanında hiç yok; kanıt yokluğu yanlışlık değildir.",
+      "object_id": "E_YOK_TREN",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "UNKNOWN-002",
+      "epistemic_class": "UNKNOWN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık/ilişki bilgi tabanında hiç yok; kanıt yokluğu yanlışlık değildir.",
+      "object_id": "E_YOK_UCAK",
+      "relation_id": "R_BIN",
+      "subject_id": "E_AYSE"
+    },
+    {
+      "case_id": "UNKNOWN-003",
+      "epistemic_class": "UNKNOWN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık/ilişki bilgi tabanında hiç yok; kanıt yokluğu yanlışlık değildir.",
+      "object_id": "E_AT",
+      "relation_id": "R_BIN",
+      "subject_id": "E_YOK_KISI"
+    },
+    {
+      "case_id": "UNKNOWN-004",
+      "epistemic_class": "UNKNOWN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık/ilişki bilgi tabanında hiç yok; kanıt yokluğu yanlışlık değildir.",
+      "object_id": "E_AT",
+      "relation_id": "R_YOK_UCMAK",
+      "subject_id": "E_MEHMET"
+    },
+    {
+      "case_id": "UNKNOWN-005",
+      "epistemic_class": "UNKNOWN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık/ilişki bilgi tabanında hiç yok; kanıt yokluğu yanlışlık değildir.",
+      "object_id": "E_ARABA",
+      "relation_id": "R_YOK_YUZMEK",
+      "subject_id": "E_ZEYNEP"
+    },
+    {
+      "case_id": "UNCERTAIN-001",
+      "epistemic_class": "UNCERTAIN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık kayıtlı fakat gerekli özellik hiç yazılmamış; yetersiz kanıt.",
+      "object_id": "E_SANDAL",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ALI"
+    },
+    {
+      "case_id": "UNCERTAIN-002",
+      "epistemic_class": "UNCERTAIN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık kayıtlı fakat gerekli özellik hiç yazılmamış; yetersiz kanıt.",
+      "object_id": "E_KIZAK",
+      "relation_id": "R_BIN",
+      "subject_id": "E_AYSE"
+    },
+    {
+      "case_id": "UNCERTAIN-003",
+      "epistemic_class": "UNCERTAIN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık kayıtlı fakat gerekli özellik hiç yazılmamış; yetersiz kanıt.",
+      "object_id": "E_DENIZALTI",
+      "relation_id": "R_BIN",
+      "subject_id": "E_MEHMET"
+    },
+    {
+      "case_id": "UNCERTAIN-004",
+      "epistemic_class": "UNCERTAIN",
+      "expected_state": "UNCERTAIN",
+      "note": "Varlık kayıtlı fakat gerekli özellik hiç yazılmamış; yetersiz kanıt.",
+      "object_id": "E_SANDAL",
+      "relation_id": "R_OKU",
+      "subject_id": "E_CAN"
+    },
+    {
+      "case_id": "CONFLICT-001",
+      "epistemic_class": "CONFLICT",
+      "expected_state": "CONFLICT",
+      "note": "Yapısal kural olumlu derken kayıtlı yüksek güvenli kanıt olumsuz.",
+      "object_id": "E_AT",
+      "relation_id": "R_BIN",
+      "subject_id": "E_ZEYNEP"
+    },
+    {
+      "case_id": "CONFLICT-002",
+      "epistemic_class": "CONFLICT",
+      "expected_state": "CONFLICT",
+      "note": "Yapısal kural olumlu derken kayıtlı yüksek güvenli kanıt olumsuz.",
+      "object_id": "E_ARABA",
+      "relation_id": "R_BIN",
+      "subject_id": "E_CAN"
+    },
+    {
+      "case_id": "CONFLICT-003",
+      "epistemic_class": "CONFLICT",
+      "expected_state": "CONFLICT",
+      "note": "Yapısal kural olumlu derken kayıtlı yüksek güvenli kanıt olumsuz.",
+      "object_id": "E_KITAP",
+      "relation_id": "R_OKU",
+      "subject_id": "E_ZEYNEP"
+    }
+  ],
+  "conflict_evidence": [
+    {
+      "confidence": 0.95,
+      "object_id": "E_AT",
+      "relation_id": "R_BIN",
+      "score": 0.0,
+      "source": "REAL_DATA",
+      "subject_id": "E_ZEYNEP"
+    },
+    {
+      "confidence": 0.95,
+      "object_id": "E_ARABA",
+      "relation_id": "R_BIN",
+      "score": 0.0,
+      "source": "REAL_DATA",
+      "subject_id": "E_CAN"
+    },
+    {
+      "confidence": 0.95,
+      "object_id": "E_KITAP",
+      "relation_id": "R_OKU",
+      "score": 0.0,
+      "source": "REAL_DATA",
+      "subject_id": "E_ZEYNEP"
+    }
+  ],
+  "curation": {
+    "description": "KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik sınıfları elle sabitlenmiştir; çalışma anında üretilmez.",
+    "ground_truth": "manually_pinned_expected_state",
+    "kind": "manually_authored_repository_fixture"
+  },
+  "entities": [
+    {
+      "entity_id": "E_ALI",
+      "entity_type": "insan",
+      "is_ozel": true,
+      "properties": {
+        "canli": 1.0
+      },
+      "token": "Ali"
+    },
+    {
+      "entity_id": "E_AYSE",
+      "entity_type": "insan",
+      "is_ozel": true,
+      "properties": {
+        "canli": 1.0
+      },
+      "token": "Ayşe"
+    },
+    {
+      "entity_id": "E_MEHMET",
+      "entity_type": "insan",
+      "is_ozel": true,
+      "properties": {
+        "canli": 1.0
+      },
+      "token": "Mehmet"
+    },
+    {
+      "entity_id": "E_ZEYNEP",
+      "entity_type": "insan",
+      "is_ozel": true,
+      "properties": {
+        "canli": 1.0
+      },
+      "token": "Zeynep"
+    },
+    {
+      "entity_id": "E_CAN",
+      "entity_type": "insan",
+      "is_ozel": true,
+      "properties": {
+        "canli": 1.0
+      },
+      "token": "Can"
+    },
+    {
+      "entity_id": "E_AT",
+      "entity_type": "hayvan",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 1.0,
+        "okunabilir": 0.0
+      },
+      "token": "At"
+    },
+    {
+      "entity_id": "E_ARABA",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 1.0,
+        "okunabilir": 0.0
+      },
+      "token": "Araba"
+    },
+    {
+      "entity_id": "E_OTOBUS",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 1.0,
+        "okunabilir": 0.0
+      },
+      "token": "Otobüs"
+    },
+    {
+      "entity_id": "E_BISIKLET",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 1.0,
+        "okunabilir": 0.0
+      },
+      "token": "Bisiklet"
+    },
+    {
+      "entity_id": "E_TAS",
+      "entity_type": "nesne",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 0.0,
+        "okunabilir": 0.0
+      },
+      "token": "Taş"
+    },
+    {
+      "entity_id": "E_BULUT",
+      "entity_type": "nesne",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 0.0,
+        "okunabilir": 0.0
+      },
+      "token": "Bulut"
+    },
+    {
+      "entity_id": "E_KITAP",
+      "entity_type": "nesne",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 0.0,
+        "okunabilir": 1.0
+      },
+      "token": "Kitap"
+    },
+    {
+      "entity_id": "E_GAZETE",
+      "entity_type": "nesne",
+      "is_ozel": false,
+      "properties": {
+        "binilebilir": 0.0,
+        "okunabilir": 1.0
+      },
+      "token": "Gazete"
+    },
+    {
+      "entity_id": "E_SANDAL",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {},
+      "token": "Sandal"
+    },
+    {
+      "entity_id": "E_KIZAK",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {},
+      "token": "Kızak"
+    },
+    {
+      "entity_id": "E_DENIZALTI",
+      "entity_type": "tasit",
+      "is_ozel": false,
+      "properties": {},
+      "token": "Denizaltı"
+    }
+  ],
+  "language": "tr",
+  "limitations": [
+    "Kontrollü ontoloji üzerinde epistemik karar testidir; gerçek dil anlama iddiası değildir.",
+    "UNKNOWN ve UNCERTAIN aynı DeneyimDurumu.UNCERTAIN durumuna eşlenir; ayrım ölçülür, varsayılmaz.",
+    "Sonuçlar Evaluator karar ağacının davranışıdır; neural üretim değerlendirmesi değildir."
+  ],
+  "relations": [
+    {
+      "relation_id": "R_BIN",
+      "requires_object_props": {
+        "binilebilir": 1.0
+      },
+      "subject_types": [
+        "insan"
+      ],
+      "token": "Binmek"
+    },
+    {
+      "relation_id": "R_OKU",
+      "requires_object_props": {
+        "okunabilir": 1.0
+      },
+      "subject_types": [
+        "insan"
+      ],
+      "token": "Okumak"
+    }
+  ],
+  "schema_version": 1
+}
