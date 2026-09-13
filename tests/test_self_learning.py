@@ -181,6 +181,13 @@ def test_self_learning_cli_manifestli(tmp_path):
     assert summary["experiment_ids"] == ["EXP-0001", "EXP-0002"]
     assert summary["aggregate"]["closed_verified.far"]["mean"] == 0.0
     assert summary["aggregate"]["collapse_probe.far"]["mean"] == 1.0
+    assert summary["aggregate"][
+        "multi_environment.shared_memory_retrieval_accuracy"
+    ]["mean"] == 1.0
+    assert summary["aggregate"][
+        "multi_environment.cross_verifier_acceptances"
+    ]["mean"] == 0.0
+    assert all(summary["results"][0]["multi_environment"]["checks"].values())
     assert summary["aggregate"]["verifier_robustness.frr"]["mean"] == 0.25
     assert summary["results"][0]["verifier_robustness"]["uncertain"] == 2
     assert "table_1" in summary["results"][0]["memory_capacity"][

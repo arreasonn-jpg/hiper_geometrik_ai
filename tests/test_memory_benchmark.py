@@ -5,6 +5,7 @@ import sys
 
 from hga.memory import (
     DeneyimSlotlari,
+    run_active_memory_stress,
     run_memory_benchmark,
     run_memory_capacity_sweep,
     run_memory_stress,
@@ -110,6 +111,56 @@ def test_memory_capacity_sweep_ulasilamayan_esigi_none_raporlar():
     )
     assert report.minimum_slots_meeting_target["table_1"] is None
     assert report.maximum_load_factor_meeting_target["table_1"] is None
+
+
+def test_active_memory_stress_tek_stream_bounded_ve_exact_muhasebeli():
+    report = run_active_memory_stress(
+        context_counts=[100, 1_000, 10_000],
+        capacity=256,
+        seed=3,
+        audit_samples=32,
+    )
+
+    assert report.protocol == "active-memory-stress-v2"
+    assert report.context_counts == [100, 1_000, 10_000]
+    assert report.acceptance_1k_to_10m is False
+    assert all(report.checks.values())
+    assert [point.context_count for point in report.points] == report.context_counts
+    assert all(point.dynamic_active_sample_recall == 1.0 for point in report.points)
+    assert all(point.dynamic_evicted_rejection_rate == 1.0 for point in report.points)
+    assert report.points[-1].dynamic_active_records == 256
+    assert report.points[-1].dynamic_evictions == 10_000 - 256
+    assert report.points[-1].dynamic_exact_history_recall == 0.0256
+    assert report.points[-1].fixed_occupied + report.points[-1].fixed_collisions == 10_000
+    assert "semantic/learned" in " ".join(report.notes)
+    assert "Dynamic active recall" in report.markdown()
+
+
+def test_active_memory_stress_cli_ayni_komutta_manifest_ve_markdown(tmp_path):
+    output = tmp_path / "active.json"
+    markdown = tmp_path / "active.md"
+    completed = subprocess.run(
+        [
+            sys.executable, "-m", "hga", "memory-benchmark",
+            "--active-dynamic", "--scales", "100,1000", "--slots", "128",
+            "--audit-samples", "16", "--seeds", "1,2",
+            "--experiment-root", str(tmp_path / "active-runs"),
+            "--out", str(output), "--markdown", str(markdown),
+        ],
+        check=True, capture_output=True, text=True,
+    )
+    summary = json.loads(output.read_text(encoding="utf-8"))
+    assert summary["parameters"]["active_dynamic_kv"] is True
+    assert summary["parameters"]["input_corpus_materialized"] is False
+    assert summary["seeds"] == [1, 2]
+    assert all(result["benchmark"]["protocol"] == "active-memory-stress-v2"
+               for result in summary["results"])
+    assert all(all(result["benchmark"]["checks"].values())
+               for result in summary["results"])
+    assert "Aktif Dynamic KV + fixed memory stress özeti" in completed.stdout
+    markdown_text = markdown.read_text(encoding="utf-8")
+    assert "2-seed aggregate" in markdown_text
+    assert "Dynamic active recall" in markdown_text
 
 
 def test_memory_benchmark_cli_manifestli(tmp_path):

@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "hga-compositional-tr-v1",
+  "language": "tr",
+  "curation": {
+    "kind": "manually_authored_repository_fixture",
+    "ground_truth": "manually_pinned_expected_state",
+    "description": "Türkçe yüzey biçimleri ve ontoloji kısıtları elle sabitlenmiştir; çalışma anında üretilmez."
+  },
+  "entities": [
+    {"entity_id": "E_ALI", "token": "Ali", "entity_type": "insan", "is_ozel": true, "properties": {"canli": 1.0}, "split": "train"},
+    {"entity_id": "E_AYSE", "token": "Ayşe", "entity_type": "insan", "is_ozel": true, "properties": {"canli": 1.0}, "split": "train"},
+    {"entity_id": "E_MEHMET", "token": "Mehmet", "entity_type": "insan", "is_ozel": true, "properties": {"canli": 1.0}, "split": "train"},
+    {"entity_id": "E_ZEYNEP", "token": "Zeynep", "entity_type": "insan", "is_ozel": true, "properties": {"canli": 1.0}, "split": "test"},
+    {"entity_id": "E_AT", "token": "At", "entity_type": "hayvan", "properties": {"binilebilir": 1.0, "kullanilabilir": 1.0}, "split": "train"},
+    {"entity_id": "E_ARABA", "token": "Araba", "entity_type": "tasit", "properties": {"binilebilir": 1.0, "kullanilabilir": 1.0}, "split": "train"},
+    {"entity_id": "E_OTOBUS", "token": "Otobüs", "entity_type": "tasit", "properties": {"binilebilir": 1.0, "kullanilabilir": 1.0}, "split": "train"},
+    {"entity_id": "E_GOKYUZU", "token": "Gökyüzü", "entity_type": "mekan", "properties": {"binilebilir": 0.0, "kullanilabilir": 0.0}, "split": "train"},
+    {"entity_id": "E_MARS", "token": "Mars", "entity_type": "mekan", "properties": {}, "split": "test"}
+  ],
+  "relations": [
+    {"relation_id": "R_BINMEK", "token": "Binmek", "subject_types": ["insan"], "requires_subject_props": {"canli": 1.0}, "requires_object_props": {"binilebilir": 1.0}, "split": "train"},
+    {"relation_id": "R_KULLANMAK", "token": "Kullanmak", "subject_types": ["insan"], "requires_subject_props": {"canli": 1.0}, "requires_object_props": {"kullanilabilir": 1.0}, "split": "test"}
+  ],
+  "train": [
+    {"experience_id": "TR-001", "subject_id": "E_ALI", "relation_id": "R_BINMEK", "object_id": "E_AT", "sentence": "Ali ata bindi."},
+    {"experience_id": "TR-002", "subject_id": "E_AYSE", "relation_id": "R_BINMEK", "object_id": "E_ARABA", "sentence": "Ayşe arabaya bindi."},
+    {"experience_id": "TR-003", "subject_id": "E_MEHMET", "relation_id": "R_BINMEK", "object_id": "E_OTOBUS", "sentence": "Mehmet otobüse bindi."}
+  ],
+  "test": [
+    {
+      "experience_id": "TE-SEEN-001",
+      "subject_id": "E_AYSE",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_ARABA",
+      "sentence": "Ayşe şu anda arabaya biniyor.",
+      "expected_state": "VALID",
+      "dimensions": ["seen_composition", "unseen_wording"],
+      "semantic_novel": false,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": false
+    },
+    {
+      "experience_id": "TE-COMP-001",
+      "subject_id": "E_ALI",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_ARABA",
+      "sentence": "Ali arabaya bindi.",
+      "expected_state": "VALID",
+      "dimensions": ["unseen_combination", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": true,
+      "accepted_generations": ["Ali arabaya bindi."]
+    },
+    {
+      "experience_id": "TE-COMP-002",
+      "subject_id": "E_ALI",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_OTOBUS",
+      "sentence": "Ali otobüse bindi.",
+      "expected_state": "VALID",
+      "dimensions": ["unseen_combination", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": true,
+      "accepted_generations": ["Ali otobüse bindi."]
+    },
+    {
+      "experience_id": "TE-ENTITY-001",
+      "subject_id": "E_ZEYNEP",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_AT",
+      "sentence": "Zeynep ata bindi.",
+      "expected_state": "VALID",
+      "dimensions": ["unseen_entity", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": true,
+      "accepted_generations": ["Zeynep ata bindi."]
+    },
+    {
+      "experience_id": "TE-RELATION-001",
+      "subject_id": "E_ALI",
+      "relation_id": "R_KULLANMAK",
+      "object_id": "E_ARABA",
+      "sentence": "Ali arabayı kullandı.",
+      "expected_state": "VALID",
+      "dimensions": ["unseen_relation", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": false
+    },
+    {
+      "experience_id": "TE-WORDING-001",
+      "subject_id": "E_ALI",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_AT",
+      "sentence": "Ali bugün ata binecek.",
+      "expected_state": "VALID",
+      "dimensions": ["seen_composition", "unseen_wording"],
+      "semantic_novel": false,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": false
+    },
+    {
+      "experience_id": "TE-NEGATIVE-001",
+      "subject_id": "E_ALI",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_GOKYUZU",
+      "sentence": "Ali gökyüzüne bindi.",
+      "expected_state": "INVALID",
+      "dimensions": ["negative", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": false
+    },
+    {
+      "experience_id": "TE-OOD-001",
+      "subject_id": "E_ALI",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_MARS",
+      "sentence": "Ali Mars'a bindi.",
+      "expected_state": "UNCERTAIN",
+      "dimensions": ["ood", "unseen_entity", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": false
+    },
+    {
+      "experience_id": "TE-SENTENCE-001",
+      "subject_id": "E_MEHMET",
+      "relation_id": "R_BINMEK",
+      "object_id": "E_ARABA",
+      "sentence": "Mehmet arabaya bindi.",
+      "expected_state": "VALID",
+      "dimensions": ["unseen_combination", "unseen_sentence"],
+      "semantic_novel": true,
+      "surface_novel": true,
+      "parsing_target": true,
+      "generation_target": true,
+      "accepted_generations": ["Mehmet arabaya bindi."]
+    }
+  ],
+  "limitations": [
+    "Bu küçük ve elle sabitlenmiş bir Türkçe semantik regresyon setidir; gerçek corpus ölçeği veya genel dil kalitesi kanıtı değildir.",
+    "Unseen entity, varlığın ontoloji kaydı ve özellikleri bilinirken eğitim üçlülerinde görülmemesi anlamına gelir; sıfırdan entity discovery değildir.",
+    "Unseen relation, ilişki şeması bilinirken eğitim olgularında görülmemesi anlamına gelir; bilinmeyen ilişki indüksiyonu değildir.",
+    "Metin üretimi ilişkiye özel morfolojik şablondur; neural serbest üretim değildir.",
+    "Unseen wording ölçümü küratörlü sözlük tabanlı ayıklayıcıyı test eder; açık alan dependency parsing testi değildir."
+  ]
+}

@@ -23,7 +23,8 @@ import random
 import statistics
 import subprocess
 import sys
-from dataclasses import asdict, dataclass
+import time
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO
@@ -62,21 +63,57 @@ def _git_metadata() -> Dict[str, Any]:
     return {"git_commit": "UNKNOWN", "git_dirty": None}
 
 
+def _cpu_model() -> str:
+    """Platform API boş döndüğünde Linux cpuinfo'dan okunabilir bir ad üret."""
+    model = platform.processor().strip()
+    if model:
+        return model
+    try:
+        with open("/proc/cpuinfo", "r", encoding="utf-8") as handle:
+            for line in handle:
+                if line.lower().startswith("model name") and ":" in line:
+                    return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    return "UNKNOWN"
+
+
+def _ram_total_bytes() -> Optional[int]:
+    try:
+        return int(os.sysconf("SC_PHYS_PAGES") * os.sysconf("SC_PAGE_SIZE"))
+    except (AttributeError, OSError, ValueError):
+        return None
+
+
 def _runtime_metadata() -> Dict[str, Any]:
     metadata: Dict[str, Any] = {
         "python_version": platform.python_version(),
         "python_implementation": platform.python_implementation(),
         "platform": platform.platform(),
+        "cpu": _cpu_model(),
+        "cpu_count": os.cpu_count(),
+        "ram_total_bytes": _ram_total_bytes(),
         "device": "cpu",
+        "gpu": None,
+        "cuda_device_name": None,
         "torch_version": None,
+        "cuda_version": None,
+        "cudnn_version": None,
     }
     try:
         import torch
 
         metadata["torch_version"] = getattr(torch, "__version__", None)
+        metadata["cuda_version"] = getattr(getattr(torch, "version", None), "cuda", None)
+        try:
+            metadata["cudnn_version"] = torch.backends.cudnn.version()
+        except (AttributeError, RuntimeError):
+            pass
         if torch.cuda.is_available():
-            metadata["device"] = f"cuda:{torch.cuda.current_device()}"
-            metadata["cuda_device_name"] = torch.cuda.get_device_name(torch.cuda.current_device())
+            index = torch.cuda.current_device()
+            metadata["device"] = f"cuda:{index}"
+            metadata["gpu"] = torch.cuda.get_device_name(index)
+            metadata["cuda_device_name"] = metadata["gpu"]
     except ImportError:
         pass
     return metadata
@@ -128,6 +165,7 @@ class ExperimentRun:
     experiment_id: str
     directory: Path
     manifest: Dict[str, Any]
+    _started_monotonic: float = field(default_factory=time.perf_counter, repr=False)
 
     @classmethod
     def create(
@@ -171,14 +209,24 @@ class ExperimentRun:
         (directory / "model_hash.txt").write_text(model_hash + "\n", encoding="utf-8")
         (directory / "stdout.log").touch()
 
+        parameter_metadata = dict(parameters or {})
+        parameter_count = parameter_metadata.get(
+            "parameter_count", parameter_metadata.get("physical_parameters")
+        )
         manifest: Dict[str, Any] = {
             "experiment_id": experiment_id,
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "seed": int(seed),
             "dataset_hash": str(dataset_hash),
             "config_hash": canonical_hash(config_data),
-            "parameters": dict(parameters or {}),
+            "parameters": parameter_metadata,
+            "parameter_count": parameter_count,
             "model_hash": model_hash,
+            "timings": {
+                "total_seconds": None,
+                "training_seconds": None,
+                "inference_seconds": None,
+            },
             "result": "RUNNING",
             **_git_metadata(),
             **_runtime_metadata(),
@@ -194,7 +242,16 @@ class ExperimentRun:
                 yield
 
     def complete(self, results: Mapping[str, Any]) -> None:
-        _atomic_json(self.directory / "results.json", dict(results))
+        result_data = dict(results)
+        _atomic_json(self.directory / "results.json", result_data)
+        reported_timings = result_data.get("timings", {})
+        if not isinstance(reported_timings, Mapping):
+            reported_timings = {}
+        self.manifest["timings"] = {
+            "total_seconds": round(time.perf_counter() - self._started_monotonic, 6),
+            "training_seconds": reported_timings.get("training_seconds"),
+            "inference_seconds": reported_timings.get("inference_seconds"),
+        }
         self.manifest["result"] = "COMPLETED"
         self.manifest["completed_at_utc"] = datetime.now(timezone.utc).isoformat()
         _atomic_json(self.directory / "manifest.json", self.manifest)
@@ -202,6 +259,9 @@ class ExperimentRun:
     def fail(self, error: BaseException) -> None:
         results = {"error_type": type(error).__name__, "error": str(error)}
         _atomic_json(self.directory / "results.json", results)
+        self.manifest["timings"]["total_seconds"] = round(
+            time.perf_counter() - self._started_monotonic, 6
+        )
         self.manifest["result"] = "FAILED"
         self.manifest["completed_at_utc"] = datetime.now(timezone.utc).isoformat()
         _atomic_json(self.directory / "manifest.json", self.manifest)

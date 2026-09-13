@@ -10,6 +10,7 @@ Kullanım:
     python -m hga memory-benchmark       # collision/interference/retrieval stres testi
     python -m hga kronecker-benchmark    # eşit-parametre Kronecker/rank-1 kıyası
     python -m hga self-learning-benchmark # K₀→Kₙ + collapse failure injection
+    python -m hga research-benchmark     # birleşik, 5-seed JSON/MD/HTML araştırma karnesi
     python -m hga milestone              # K₀→Kₙ milestone tablosu (versiyon + defter)
     python -m hga kapasite               # P / C_I / C_M / C_E / C_V kapasite çerçevesi
     python -m hga bilgi-surum            # bilgi sürümleme + rollback demosu
@@ -199,6 +200,7 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
                              experiment_root, out=None):
     from hga.evaluation import canonical_hash, run_seed_sweep
     from hga.experience import (
+        run_multi_environment_self_learning,
         run_self_learning_experiment,
         run_self_training_collapse_test,
         run_verifier_fault_injection,
@@ -207,19 +209,28 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
 
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
     config = {
-        "benchmark": "self-learning-collapse-robustness-v2",
+        "benchmark": "self-learning-collapse-robustness-v3",
         "cycles": int(cycles), "batch_size": int(batch),
         "initial_facts": int(initial_facts), "operands_max": int(operands_max),
         "negatives_per_fact": int(negatives_per_fact),
         "memory_slots": int(memory_slots),
         "verifier_fault_rates": {"false_acceptance": 0.25, "false_rejection": 0.25},
         "memory_recall_target": 0.95,
+        "multi_environment": {
+            "environments": ["arithmetic", "logic", "consistency"],
+            "cycles": min(int(cycles), 10),
+            "batch_per_environment": min(int(batch), 8),
+            "memory_capacity": max(int(memory_slots), 256),
+        },
     }
     dataset_hash = canonical_hash({
         "generator": "arithmetic-frontier-holdout-v2",
         "operands_max": int(operands_max),
         "negatives_per_fact": int(negatives_per_fact),
         "test_holdout_fraction": 0.10,
+        "multi_environment_generators": [
+            "arithmetic-v1", "modus-ponens-v1", "property-consistency-v1"
+        ],
     })
 
     def run_one(seed):
@@ -227,6 +238,12 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
             cycles=cycles, batch_size=batch, initial_facts=initial_facts,
             operands_max=operands_max, negatives_per_fact=negatives_per_fact,
             seed=seed, memory_slots=memory_slots,
+        )
+        multi = run_multi_environment_self_learning(
+            cycles=min(int(cycles), 10),
+            batch_per_environment=min(int(batch), 8),
+            seed=seed,
+            memory_capacity=max(int(memory_slots), 256),
         )
         collapse = run_self_training_collapse_test(
             cycles=max(2, cycles), batch_size=batch,
@@ -253,6 +270,12 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
             f"FAR={expansion.far_before_verifier:.6f}→{expansion.far:.6f}"
         )
         print(
+            f"multi-env: K0={multi.shared_store_initial_facts} "
+            f"Kn={multi.shared_store_final_facts} "
+            f"memory_recall={multi.shared_memory_retrieval_accuracy:.6f} "
+            f"cross_accept={multi.cross_verifier_acceptances}"
+        )
+        print(
             f"collapse: detected={collapse.collapse_detected} "
             f"repetition={collapse.repetition_rate:.6f} "
             f"contamination={collapse.incorrect_model_facts} FAR={collapse.far:.6f}"
@@ -269,6 +292,7 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
         )
         return {
             "closed_verified": expansion.to_dict(),
+            "multi_environment": multi.to_dict(),
             "collapse_probe": collapse.to_dict(),
             "verifier_robustness": robustness.to_dict(),
             "memory_capacity": capacity.to_dict(),
@@ -278,7 +302,9 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
         run_one, seeds=seed_values, root=experiment_root, config=config,
         dataset_hash=dataset_hash,
         parameters={
-            "ground_truth": "independent-arithmetic-environment",
+            "ground_truth": "independent-arithmetic-logic-consistency-environments",
+            "environment_count": 3,
+            "shared_active_memory": "DYNAMIC_KV",
             "closed_loop_writes_only_verified": True,
             "collapse_is_failure_injection": True,
             "verifier_robustness_is_failure_injection": True,
@@ -292,6 +318,9 @@ def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
         "closed_verified.experience_yield", "closed_verified.far_before_verifier",
         "closed_verified.far", "closed_verified.frr", "closed_verified.final_knowledge_size",
         "closed_verified.incorrect_knowledge",
+        "multi_environment.shared_store_final_facts",
+        "multi_environment.shared_memory_retrieval_accuracy",
+        "multi_environment.cross_verifier_acceptances",
         "collapse_probe.repetition_rate", "collapse_probe.far",
         "collapse_probe.incorrect_model_facts", "collapse_probe.memory_collisions",
         "verifier_robustness.precision", "verifier_robustness.recall",
@@ -369,19 +398,113 @@ def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=No
         print(f"  report: {out}")
 
 
-def _memory_benchmark(scales, slots, tables, seeds, experiment_root, out=None):
+def _memory_benchmark_markdown(report, active_dynamic):
+    title = (
+        "# Aktif Dynamic KV + Fixed Memory Stress"
+        if active_dynamic else "# Sparse Memory Stress"
+    )
+    lines = [
+        title,
+        "",
+        f"- Seedler: `{report['seeds']}`",
+        f"- Dataset hash: `{report['dataset_hash']}`",
+        f"- Config hash: `{report['config_hash']}`",
+        f"- Git commit: `{report['manifests'][0]['git_commit']}`",
+        f"- Temiz manifestler: `{all(not m['git_dirty'] for m in report['manifests'])}`",
+        "",
+    ]
+    if active_dynamic and report["results"]:
+        counts = report["results"][0]["benchmark"]["context_counts"]
+        lines.extend([
+            f"## {len(report['seeds'])}-seed aggregate",
+            "",
+            "| Context | Fixed history recall | Dynamic history recall | "
+            "Dynamic active recall | Eviction | RSS MiB | ctx-pair/s |",
+            "|---:|---:|---:|---:|---:|---:|---:|",
+        ])
+        for count in counts:
+            prefix = f"metrics.n{count}."
+            def aggregate(name):
+                return report["aggregate"][prefix + name]
+            fixed = aggregate("fixed_exact_history_recall")
+            history = aggregate("dynamic_exact_history_recall")
+            active = aggregate("dynamic_active_sample_recall")
+            evictions = aggregate("dynamic_evictions")
+            rss = aggregate("resident_set_bytes")
+            throughput = aggregate("context_pairs_per_second")
+            lines.append(
+                f"| {count:,} | {fixed['mean']:.6f} ± {fixed['std']:.6f} | "
+                f"{history['mean']:.6f} ± {history['std']:.6f} | "
+                f"{active['mean']:.6f} ± {active['std']:.6f} | "
+                f"{evictions['mean']:,.0f} ± {evictions['std']:,.0f} | "
+                f"{rss['mean'] / (1024 * 1024):.2f} ± "
+                f"{rss['std'] / (1024 * 1024):.2f} | "
+                f"{throughput['mean']:,.0f} ± {throughput['std']:,.0f} |"
+            )
+        lines.extend([
+            "",
+            f"Tüm seed/kapılar: `{all(all(r['benchmark']['checks'].values()) for r in report['results'])}`",
+            f"1K→10M kabulü: `{all(r['benchmark']['acceptance_1k_to_10m'] for r in report['results'])}`",
+            "",
+        ])
+        for seed, result, manifest in zip(
+            report["seeds"], report["results"], report["manifests"]
+        ):
+            lines.extend([
+                f"## Seed {seed}",
+                "",
+                f"Süre: `{manifest['timings']['total_seconds']}` saniye",
+                "",
+                "| Context | Fixed recall | Dynamic history recall | "
+                "Dynamic active recall | Eviction | RSS MiB | ctx-pair/s |",
+                "|---:|---:|---:|---:|---:|---:|---:|",
+            ])
+            benchmark = result["benchmark"]
+            for point in benchmark["points"]:
+                lines.append(
+                    f"| {point['context_count']:,} | "
+                    f"{point['fixed_exact_history_recall']:.6f} | "
+                    f"{point['dynamic_exact_history_recall']:.6f} | "
+                    f"{point['dynamic_active_sample_recall']:.6f} | "
+                    f"{point['dynamic_evictions']:,} | "
+                    f"{point['resident_set_bytes'] / (1024 * 1024):.2f} | "
+                    f"{point['segment_context_pairs_per_second']:,.0f} |"
+                )
+            lines.extend([
+                "",
+                f"Tüm kapılar: `{all(benchmark['checks'].values())}`",
+                "",
+            ])
+    lines.extend(["## Sınırlar", ""])
+    if report["results"]:
+        lines.extend(
+            f"- {note}"
+            for note in report["results"][0]["benchmark"].get("notes", [])
+        )
+    return "\n".join(lines) + "\n"
+
+
+def _memory_benchmark(
+    scales, slots, tables, seeds, experiment_root, out=None, markdown=None,
+    active_dynamic=False, audit_samples=256,
+):
     from hga.evaluation import canonical_hash, run_seed_sweep
-    from hga.memory import run_memory_stress
+    from hga.memory import run_active_memory_stress, run_memory_stress
 
     context_counts = [int(value.strip()) for value in scales.split(",") if value.strip()]
     table_counts = [int(value.strip()) for value in tables.split(",") if value.strip()]
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
     config = {
-        "benchmark": "sparse-memory-collision-v1",
+        "benchmark": (
+            "active-memory-stress-v2" if active_dynamic
+            else "sparse-memory-collision-v1"
+        ),
         "context_counts": context_counts,
         "slot_count": int(slots),
-        "table_counts": table_counts,
+        "table_counts": ([1] if active_dynamic else table_counts),
         "collision_sample_limit": 1000,
+        "audit_samples": int(audit_samples) if active_dynamic else None,
+        "single_stream": bool(active_dynamic),
     }
     dataset_hash = canonical_hash({
         "generator": "hga-memory-context-v1",
@@ -389,6 +512,37 @@ def _memory_benchmark(scales, slots, tables, seeds, experiment_root, out=None):
     })
 
     def run_one(seed):
+        if active_dynamic:
+            active_report = run_active_memory_stress(
+                context_counts,
+                capacity=int(slots),
+                seed=seed,
+                audit_samples=int(audit_samples),
+            )
+            metrics = {}
+            for point in active_report.points:
+                key = f"n{point.context_count}"
+                metrics[key] = {
+                    "fixed_exact_history_recall": point.fixed_exact_history_recall,
+                    "fixed_collision_rate": round(
+                        point.fixed_collisions / point.context_count, 8
+                    ),
+                    "dynamic_exact_history_recall": point.dynamic_exact_history_recall,
+                    "dynamic_active_sample_recall": point.dynamic_active_sample_recall,
+                    "dynamic_evictions": point.dynamic_evictions,
+                    "dynamic_storage_bytes": point.dynamic_estimated_storage_bytes,
+                    "fixed_storage_bytes": point.fixed_estimated_storage_bytes,
+                    "resident_set_bytes": point.resident_set_bytes,
+                    "context_pairs_per_second": point.segment_context_pairs_per_second,
+                }
+                print(
+                    f"{key}: fixed_recall={point.fixed_exact_history_recall:.6f} "
+                    f"dynamic_history={point.dynamic_exact_history_recall:.6f} "
+                    f"dynamic_active={point.dynamic_active_sample_recall:.6f} "
+                    f"evictions={point.dynamic_evictions}"
+                )
+            return {"metrics": metrics, "benchmark": active_report.to_dict()}
+
         report = run_memory_stress(
             context_counts, slot_count=slots, table_counts=table_counts, seed=seed,
         )
@@ -415,18 +569,37 @@ def _memory_benchmark(scales, slots, tables, seeds, experiment_root, out=None):
     report = run_seed_sweep(
         run_one, seeds=seed_values, root=experiment_root, config=config,
         dataset_hash=dataset_hash,
-        parameters={"synthetic": True, "streaming_context_generation": True},
+        parameters={
+            "synthetic": True,
+            "streaming_context_generation": True,
+            "input_corpus_materialized": False,
+            "active_dynamic_kv": bool(active_dynamic),
+            "physical_capacity_entries": int(slots),
+        },
     ).to_dict()
-    print("Sparse memory benchmark özeti:")
+    print(
+        "Aktif Dynamic KV + fixed memory stress özeti:"
+        if active_dynamic else "Sparse memory benchmark özeti:"
+    )
     print(f"  experiments: {', '.join(report['experiment_ids'])}")
     for metric, values in report["aggregate"].items():
-        if metric.endswith(("collision_event_rate", "retrieval_accuracy", "interference_rate")):
-            print(f"  {metric:<48} {values['mean']:.6f} ± {values['std']:.6f}")
+        suffixes = (
+            "fixed_exact_history_recall", "dynamic_exact_history_recall",
+            "dynamic_active_sample_recall", "collision_event_rate",
+            "retrieval_accuracy", "interference_rate",
+        )
+        if metric.endswith(suffixes):
+            print(f"  {metric:<58} {values['mean']:.6f} ± {values['std']:.6f}")
     if out:
         os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
         with open(out, "w", encoding="utf-8") as handle:
             json.dump(report, handle, ensure_ascii=False, indent=2, sort_keys=True)
         print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write(_memory_benchmark_markdown(report, active_dynamic))
+        print(f"  markdown: {markdown}")
 
 
 def _ozet(yol):
@@ -1125,6 +1298,48 @@ def _benchmark_rapor(out=None, markdown=None, checkpoint=None, tokenizer_yol=Non
         print(json.dumps(rapor, ensure_ascii=False, indent=2, sort_keys=True))
 
 
+def _research_benchmark(profile, seeds, experiment_root, sections=None,
+                        out=None, markdown=None, html_yol=None, strict=False):
+    """Manifestli, çoklu-seed birleşik araştırma benchmark karnesi."""
+    from hga.evaluation import run_research_benchmark, save_research_report
+
+    seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
+    section_values = None
+    if sections is not None:
+        section_values = [value.strip() for value in sections.split(",") if value.strip()]
+    report = run_research_benchmark(
+        root=experiment_root, seeds=seed_values, profile=profile,
+        sections=section_values,
+    )
+    paths = save_research_report(
+        report,
+        json_path=out or "research_report.json",
+        markdown_path=markdown or "research_report.md",
+        html_path=html_yol or "research_report.html",
+    )
+    print("╔══════════════════════════════════════════════════════╗")
+    print("║              HGA RESEARCH BENCHMARK                  ║")
+    print("╠══════════════════════════════════════════════════════╣")
+    for name in report.selected_sections:
+        section = report.sections[name]
+        score = "n/a" if section["score_mean"] is None else f"{section['score_mean']:.3f}"
+        print(f"║ {section['label'][:32]:<32} {section['status'][:10]:<10} {score:>7} ║")
+    reproduction_status = (
+        "COMPLETED" if report.reproducibility["all_manifests_completed"] else "ERROR"
+    )
+    print(f"║ {'Reproducibility':<32} {reproduction_status:<10} "
+          f"{len(report.seeds):>4} sd ║")
+    print("╚══════════════════════════════════════════════════════╝")
+    print(f"Outcome: {report.outcome}")
+    print(f"Experiments: {', '.join(report.experiment_ids)}")
+    for kind, path in paths.items():
+        print(f"{kind}: {path}")
+    if strict and report.outcome != "COMPLETED":
+        raise SystemExit(
+            f"research-benchmark --strict: beklenen COMPLETED, alınan {report.outcome}"
+        )
+
+
 def _observability_demo(out=None, markdown=None, html_yol=None):
     """Torch gerektirmeyen gözlemlenebilirlik demoları."""
     from hga.knowledge import DeneyimDurumu, ExperienceCandidate
@@ -1160,7 +1375,7 @@ def main(argv=None):
                                      "manifest", "observability", "ozet",
                                      "graf", "kesif", "golden-benchmark",
                                      "memory-benchmark", "kronecker-benchmark",
-                                     "self-learning-benchmark", "milestone",
+                                     "self-learning-benchmark", "research-benchmark", "milestone",
                                      "kapasite", "bilgi-surum", "defter",
                                      "memory-interference", "paradigma",
                                      "olcekli-golden", "kronecker-rank",
@@ -1198,11 +1413,11 @@ def main(argv=None):
     p.add_argument("--no-strict", action="store_true",
                    help="checkpoint-rapor için eksik/fazla anahtarı hata sayma")
     p.add_argument("--out", default=None,
-                   help="benchmark-rapor, veri-canli-smoke veya observability için JSON çıktı yolu")
+                   help="rapor üreten komutlar için JSON çıktı yolu")
     p.add_argument("--markdown", default=None,
-                   help="benchmark-rapor/observability için Markdown çıktı yolu")
+                   help="rapor üreten komutlar için Markdown çıktı yolu")
     p.add_argument("--html", default=None,
-                   help="observability için tek dosya HTML panel yolu")
+                   help="observability/research-benchmark için HTML çıktı yolu")
     p.add_argument("--konular", default=None,
                    help="veri-canli-smoke için virgüllü Wikipedia konu listesi")
     p.add_argument("--cikis", default=None,
@@ -1210,7 +1425,13 @@ def main(argv=None):
     p.add_argument("--kontrollu", action="store_true",
                    help="veri-canli-smoke için ağsız/deterministik fetcher kullan")
     p.add_argument("--seeds", default=None,
-                   help="golden-benchmark/paradigma için virgüllü seed listesi (örn. 1,2,3,4,5)")
+                   help="çoklu-seed benchmarklar için virgüllü liste (örn. 1,2,3,4,5)")
+    p.add_argument("--profile", choices=["smoke", "full"], default="smoke",
+                   help="research-benchmark çalışma profili")
+    p.add_argument("--sections", default=None,
+                   help="research-benchmark bölüm filtresi (virgüllü; varsayılan: tümü)")
+    p.add_argument("--strict", action="store_true",
+                   help="research-benchmark bölüm atlanır/hata verirse non-zero çık")
     p.add_argument("--n-values", default="4,8,16",
                    help="kronecker-rank için n değerleri (virgüllü)")
     p.add_argument("--k-values", default="1,2,4",
@@ -1229,6 +1450,10 @@ def main(argv=None):
                    help="memory-benchmark için tablo başına slot sayısı")
     p.add_argument("--tables", default="1,2",
                    help="memory-benchmark tablo sayıları (1,2 veya ikisi)")
+    p.add_argument("--active-dynamic", action="store_true",
+                   help="memory-benchmark: aynı streamde aktif bounded Dynamic KV'yi de kır")
+    p.add_argument("--audit-samples", type=int, default=256,
+                   help="aktif memory stress checkpoint exact audit örnek sayısı")
     p.add_argument("--steps", type=int, default=100,
                    help="kronecker-benchmark optimizasyon adımı")
     p.add_argument("--device", default="cpu",
@@ -1278,7 +1503,8 @@ def main(argv=None):
          args.out, seeds=args.seeds, experiment_root=args.experiment_root),
      "memory-benchmark": lambda: _memory_benchmark(
          args.scales, args.slots, args.tables, args.seeds or "42",
-         args.experiment_root, out=args.out),
+         args.experiment_root, out=args.out, markdown=args.markdown,
+         active_dynamic=args.active_dynamic, audit_samples=args.audit_samples),
      "kronecker-benchmark": lambda: _kronecker_benchmark(
          int(args.n or 16), args.steps, args.batch, args.seeds or "1,2,3,4,5",
          args.device, args.experiment_root, out=args.out),
@@ -1286,6 +1512,10 @@ def main(argv=None):
          args.cycles, args.batch, args.initial_facts, args.operands_max,
          args.negatives_per_fact, args.memory_slots, args.seeds or "42",
          args.experiment_root, out=args.out),
+     "research-benchmark": lambda: _research_benchmark(
+         args.profile, args.seeds or "1,2,3,4,5", args.experiment_root,
+         sections=args.sections, out=args.out, markdown=args.markdown,
+         html_yol=args.html, strict=args.strict),
      "milestone": lambda: _milestone(
          args.cycles, args.batch, args.initial_facts, args.operands_max,
          args.negatives_per_fact, args.memory_slots, args.seeds or "42",

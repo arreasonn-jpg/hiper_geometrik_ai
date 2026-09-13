@@ -68,6 +68,43 @@ her koşu `generation_test_overlap`, `memory_test_overlap` ve `isolation_clean`
 alanlarını raporlar. Bu protokol neural eğitim yapmadığından ayrıca bir train
 split'i yoktur; olmayan train aşaması varmış gibi sunulmaz.
 
+## Multi-environment closed learning
+
+`multi-environment-closed-verified-self-learning-v1`, aynı shared
+`KnowledgeStore` ve aktif bounded `DynamicKVMemory` üzerinde üç bağımsız
+sentetik environment'ı cycle başına dengeli ve seed'e bağlı sırada interleave
+eder:
+
+| Environment | Oracle | Ayrı namespace/relation |
+|---|---|---|
+| `arithmetic` | güvenli AST toplama eşitliği | `ARITH:*` / `ARITH:R_EQUALS` |
+| `logic` | yalnız modus ponens | `LOGIC:*` / `LOGIC:R_ENTAILS` |
+| `consistency` | relation property gereksinimleri | `CONSISTENCY:*` / `CONSISTENCY:R_CAN_USE` |
+
+Her verifier relation namespace'ini kontrol eden router arkasındadır. Her
+ortamdan bir probe diğer iki verifier'a gönderilir; yanlış verifier'ın kabulü
+`0`, epistemik abstention'ı `None` olmak zorundadır. Candidate setleri,
+subject/object namespace'leri ve verifier kimlikleri ayrıdır. Buna karşılık
+store ve Dynamic KV bilerek ortaktır; böylece cross-environment contamination
+ve shared-memory interference gizlenmez.
+
+Her environment için generated/truth-positive/truth-negative,
+VALID-before-verifier, VERIFIED/rejected/UNCERTAIN, FAR-before/FAR-after, FRR,
+K₀→Kₙ, incorrect durable knowledge, Experience Yield, memory exact recall ve
+ayrı generation/memory/knowledge holdout overlap raporlanır. Kabul için:
+
+- üç environment da büyümeli,
+- verifier sonrası FAR/FRR `0` olmalı,
+- tüm durable facts kendi oracle'ında doğru kalmalı,
+- yanlış verifier kabulü ve cross-namespace fact `0` olmalı,
+- üç holdout kanalı temiz olmalı,
+- shared Dynamic KV, tüm verified kayıtları exact geri çağırmalıdır.
+
+Yetersiz memory capacity eviction üretirse exact-memory kapısı düşer; sistem
+başarı uydurmaz. Holdout burada yalnız sızıntı kontrolüdür, learned held-out
+generalization skoru değildir. Bu protokol neural eğitim, environment discovery
+veya genel dilde otonom öğrenme ölçmez.
+
 ## Memory kapasite eğrisi
 
 Her seed için aynı benzersiz context akışı 1 ve 2 tabloluk memory'de sekiz slot

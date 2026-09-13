@@ -45,8 +45,15 @@ def test_experiment_run_tam_dosya_sozlesmesi(tmp_path):
     assert manifest["dataset_hash"] == "dataset-abc"
     assert manifest["config_hash"] == canonical_hash(config)
     assert manifest["parameters"] == {"batch": 4}
+    assert manifest["parameter_count"] is None
     assert manifest["python_version"]
-    assert "torch_version" in manifest and "device" in manifest
+    assert manifest["cpu"] and manifest["cpu_count"] >= 1
+    assert "ram_total_bytes" in manifest and "gpu" in manifest
+    assert "torch_version" in manifest and "cuda_version" in manifest
+    assert "device" in manifest
+    assert manifest["timings"]["total_seconds"] >= 0.0
+    assert "training_seconds" in manifest["timings"]
+    assert "inference_seconds" in manifest["timings"]
     assert len(manifest["git_commit"]) == 40
     assert manifest["result"] == "COMPLETED"
     assert _json(run.directory / "results.json") == {"accuracy": 0.75}

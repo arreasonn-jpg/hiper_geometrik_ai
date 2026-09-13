@@ -27,15 +27,38 @@ experiments/
   "model_hash": "...",
   "python_version": "...",
   "torch_version": "...",
+  "cuda_version": null,
+  "cpu": "...",
+  "cpu_count": 8,
+  "ram_total_bytes": 17179869184,
+  "gpu": null,
   "device": "cpu",
+  "parameter_count": null,
   "parameters": {},
+  "timings": {
+    "total_seconds": 1.25,
+    "training_seconds": null,
+    "inference_seconds": null
+  },
   "result": "COMPLETED"
 }
 ```
 
 Başarısız koşu da kaybolmaz: manifest `FAILED` olur ve hata türü ile mesajı
 `results.json` içine yazılır. `EXP-NNNN` dizini `mkdir` ile atomik alınır;
-paralel süreç aynı kimliği alamaz.
+paralel süreç aynı kimliği alamaz. Eğitim/inference süresi uygulanmayan saf
+protokollerde ilgili alan silinmez, `null` kalır; `total_seconds` her koşuda
+ölçülür.
+
+## Birleşik research protokolü
+
+```bash
+python -m hga research-benchmark
+```
+
+Bu komut varsayılan beş seed'in her biri için yukarıdaki tam sözleşmeyi üretir
+ve tek `research_report.json/.md/.html` görünümünde birleştirir. Ayrıntılar ve
+bölüm sınırları: `docs/RESEARCH_BENCHMARK_SUITE.md`.
 
 ## Golden benchmark — beş seed
 

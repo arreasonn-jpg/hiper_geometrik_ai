@@ -1,4 +1,4 @@
-# HGA Kapasite Çerçevesi: P, C_I, C_M, C_E, C_V
+# HGA Kapasite Çerçevesi: P, C_I, C_M, C_E, C_V, C_G
 
 Roadmap Faz 13 (Experience Capacity) ve Faz 14 (Verified Knowledge Capacity).
 
@@ -98,3 +98,39 @@ Bundan sonra kapasite anlatımı şu biçimde yapılır:
 
 `capacity_contract()` bu etiketleri makine-okunur biçimde de döndürür:
 `c_i_is_parameter_count=False`, `c_m_is_physical_table_size=False`.
+
+---
+
+## C_G — Generalization Capacity
+
+`C_E`, kaç deneyimin üretilebildiğini; `C_V`, kaçının bağımsız verifier
+kararına bağlandığını ölçer. Bunlar eğitimde görülmeyen yeni kombinasyonların
+çözülüp çözülmediğini söylemez. Bu nedenle research benchmark ayrıca `C_G`
+raporlar:
+
+```text
+C_G = doğru çözülen uygun held-out VALID örnek / uygun held-out VALID örnek
+```
+
+Uygun örnek en az bir unseen entity, unseen relation, unseen combination veya
+unseen sentence boyutu taşır. Hem pay/payda hem oran saklanır.
+
+Önemli ayrım:
+
+```text
+C_V ≤ C_E ≤ C_M
+
+ama C_G bu büyüklük eşitsizliğinin parçası değildir.
+```
+
+`C_G` bir uzay büyüklüğü ya da teorik üst sınır değil, sürümlü bir benchmark
+üzerinde ölçülmüş görev skorudur. Veri seti değişirse `C_G` de değişir; bu
+nedenle dataset hash olmadan raporlanamaz. Referans protokol:
+
+```bash
+python -m hga research-benchmark \
+  --sections compositional-generalization
+```
+
+Fixture, split tanımları ve dürüst sınırlar:
+`docs/RESEARCH_BENCHMARK_SUITE.md`.

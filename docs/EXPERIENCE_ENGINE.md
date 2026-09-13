@@ -63,9 +63,11 @@ hiper_geometrik_ai/
 │   └── __main__.py                # CLI: python -m hga bilgi|gercek-veri|benchmark|dogrulama|ozet
 │   ├── memory/
 │   │   ├── __init__.py
-│   │   ├── sparse_memory.py       # DeneyimSlotlari — seyrek deneyim slotları (§22 commit 6)
-│   │   ├── replay.py              # DeneyimTekrari — experience replay (§19 v0.4)
-│   │   ├── entegrasyon.py         # BellekEntegrasyonu — replay + consolidation ↔ seyrek bellek
+│   │   ├── dynamic_kv.py          # ACTIVE — eviction/persistence/snapshot/version/compaction/migration
+│   │   ├── lifecycle.py           # ACTIVE — manifestlenebilir Dynamic KV kabul benchmarkı
+│   │   ├── sparse_memory.py       # LEGACY/RESEARCH — fixed FIRST_WINS slotları
+│   │   ├── replay.py              # stale-safe experience replay (§19 v0.4)
+│   │   ├── entegrasyon.py         # Dynamic KV + replay; açık legacy migration
 │   │   ├── kopru.py               # TorchKoprusu — deneyim ↔ torch seyrek tablo köprüsü (§19 v0.6)
 │   │   ├── neural_kopru.py        # NeuralKopru — deneyim ↔ MODELİN seyrek belleği + gen_kopru
 │   │   ├── ablation.py            # AblasyonDeneyi — belleğe yazılan bilginin etkisini ölçer (§17/§20)
@@ -171,8 +173,34 @@ python -m hga ozet bilgi.json  # bilgi tabanı özeti (dosyadan yükleme)
 
 # Tüm testler (torch kuruluysa çekirdek + Experience Engine birlikte)
 pip install -r gereksinimler.txt pytest
-python -m pytest -q            # 165 test: 23 çekirdek + 142 Experience Engine
+python -m pytest -q
 ```
+
+### Aktif bellek yaşam döngüsü API'si
+
+```python
+engine = ExperienceEngine(slot_sayisi=4096)  # varsayılan DYNAMIC_KV + LRU
+engine.degerlendir(adaylar)
+engine.konsolide(adaylar)                    # VALID/VERIFIED → KV + replay
+
+snapshot = engine.bellek_snapshot("before-import")
+engine.bellek_kaydet("memory.json", "checkpoint")
+engine.bellek_yukle("memory.json")           # hash doğrulamalı atomik restore
+engine.bellek_snapshot_geri_yukle(snapshot)  # store_version monoton kalır
+engine.bellek_sikistir()                     # journal; logical kayıt değişmez
+```
+
+Legacy bir Engine yalnız açık seçimle kurulur ve taşıma kaybı raporlanır:
+
+```python
+legacy = ExperienceEngine(memory_policy="FIRST_WINS")
+rapor = legacy.bellek_dynamic_kvye_migre_et(max_entries=4096)
+# rapor.missing_from_source ve rapor.fidelity kontrol edilmeden başarı sayılmaz
+```
+
+`memory.json` yalnız deneyim KV/replay payload'ını taşır; KnowledgeStore
+persistence'ının yerine geçmez. Multi-writer/distributed transaction desteği
+yoktur.
 
 ## 5b. Doğrulama durumu
 
@@ -186,6 +214,14 @@ torch pytest`) aşağıdakiler birlikte doğrulandı:
 - **v0.6 köprüsü gerçek tabloya yazıyor:** `run_kopru.py` doğrulanmış 6 üçlüyü
   `HashlenmisKureselTablo`'ya adresler; gradyan adımı sonrası doluluk 0 → 6
   (boş küme → dolu küme). Aynı üçlü her zaman aynı satıra düşer.
+- **Aktif Dynamic KV:** `ExperienceEngine` varsayılan olarak tam üçlü anahtarlı
+  `DynamicKVMemory` kullanır. `degerlendir → konsolide` ve doğrulama yolları
+  kabul edilmiş deneyimi aynı KV+replay hattına yazar; döngü replay'i bu aktif
+  depodan beslenir. Kapasite dolunca deterministik LRU/FIFO, opsiyonel idle-TTL
+  eviction uygulanır ve stale replay kopyası aynı işlemde silinir. Atomik,
+  SHA-256 korumalı JSON; parent-hash snapshot, store/record version, restore,
+  journal compaction ve kayıp muhasebeli `FIRST_WINS` migration API'leri
+  Engine üzerinden erişilebilir. Bu exact lookup'tır; semantic retrieval değildir.
 - **NeuralKopru (v0.6+):** doğrulanmış deneyimler MODELİN kendi seyrek
   belleğine yazılır; `gen_kopru` köprüsü "ölü-yol"dan (yazmadan önce gradyan 0)
   "canlı-yol"a (yazdıktan sonra gradyan > 0) geçer; token eğitimiyle birlikte
@@ -299,7 +335,8 @@ kaydı düşer. Bu davranış `test_model_generated_kalici_olamaz` ile kilitleni
 | §18 AlphaGo benzetmesi | `mini_env.py` — domain-specific deterministik doğrulayıcı |
 | §19 v0.2 | `text_generator.py` + `turkce.py` — üçlüden ek uyumlu metin/olay üretimi |
 | §19 v0.3 | `scoring.py` — `information_gain` sinyali |
-| §19 v0.4 | `memory/replay.py` + `memory/entegrasyon.py` — replay + konsolidasyon ↔ seyrek bellek |
+| §19 v0.4 | `memory/replay.py` + `memory/entegrasyon.py` — stale-safe replay + aktif Dynamic KV |
+| Aktif bellek yaşam döngüsü | `memory/dynamic_kv.py` + `memory/lifecycle.py` — eviction, persistence, snapshot/version, compaction, migration |
 | §19 v0.5 | `mini_env.py` — `AritmetikOrtam` (güvenli `ast` ile, eval yok) |
 | §19 v0.6 | `memory/kopru.py` — `TorchKoprusu` (torch kurulu ortamda aktif) |
 | §19 v0.6+ / EK-B | `memory/neural_kopru.py` — deneyim ↔ modelin seyrek belleği + `gen_kopru` |
