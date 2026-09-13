@@ -113,11 +113,11 @@ standard deviation'dır; tam makine-okunur sonuç
 | Collapse incorrect model facts | 14.0 ± 0.63246 |
 | Collapse memory collisions | 1,584 ± 0 |
 
-Koşular commit `3a422c0`, dataset hash
+Koşular commit `dbb3521`, dataset hash
 `b6f191185dd8e04785825987763f095fcdfa56fd7f4f53e18121299262c326da` ve
 config hash `eeeb67fafca8c0d1ec3ccf61ebd24068f7dd30a367141a28f2e1c20eab8fb37e`
-ile, temiz çalışma ağacında üretildi. Her koşunun tam manifesti özet JSON'a
-gömülüdür.
+ile, temiz çalışma ağacında üretildi. Her koşunun tam manifesti, sonucu ve
+100-cycle trajectory'si özet JSON'a gömülüdür.
 
 ## Kullanım
 
