@@ -58,7 +58,7 @@ class TorchKoprusu:
         except ImportError as e:  # torch yok → dürüstçe yüzeye çıkar
             raise ImportError(
                 "TorchKoprusu için torch + mimari/seyrek_tablo.py gerekli "
-                "(pip install -r gereksinimler.txt). v0.6 köprüsü yalnızca "
+                "(pip install -e .). v0.6 köprüsü yalnızca "
                 "torch kurulu ortamlarda kurulabilir.") from e
         self.torch = torch
         self.tablo = HashlenmisKureselTablo(tablo_boyutu=tablo_boyutu, boyut=boyut)

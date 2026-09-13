@@ -232,11 +232,95 @@ eşiğini sınar. Ayrılmış test holdout'un generation/memory overlap'i her ko
 sıfır olmak zorundadır. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
 otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
 
+### Milestone tablosu: K₀ → E₀ → V₀ → K₁ → … → K₁₀₀
+
+Yukarıdaki self-learning benchmarkının üstüne bilgi sürümleme (Faz 23),
+değişmez deneyim defteri (Faz 24) ve ölçülen kapasite (Faz 13–14) bağlanmış
+hâlidir. Çıktısı tek bir tablodur: **metrik × cycle**.
+
+```bash
+python -m hga milestone \
+  --cycles 100 --batch 32 --initial-facts 100 \
+  --operands-max 31 --negatives-per-fact 7 \
+  --seeds 1,2,3,4,5 --checkpoints 0,10,50,100 \
+  --out raporlar/milestone_100.json --markdown docs/MILESTONE_TABLOSU.md
+```
+
+Beş seed, 100 döngü, mean ± std (`docs/MILESTONE_TABLOSU.md`):
+
+| Metrik | Cycle 0 | Cycle 10 | Cycle 50 | Cycle 100 |
+| --- | ---: | ---: | ---: | ---: |
+| Verified Knowledge | 100.0 ± 0.0 | 136.4 ± 4.2 | 295.8 ± 5.0 | 497.6 ± 12.5 |
+| New Knowledge | 0.0 ± 0.0 | 36.4 ± 4.2 | 195.8 ± 5.0 | 397.6 ± 12.5 |
+| Invalid | 0.0 ± 0.0 | 283.6 ± 4.2 | 1404.2 ± 5.0 | 2802.4 ± 12.5 |
+| Uncertain | 0.0 ± 0.0 | 20.0 ± 0.0 | 100.0 ± 0.0 | 200.0 ± 0.0 |
+| Conflict | 0.0 ± 0.0 | 10.0 ± 0.0 | 50.0 ± 0.0 | 100.0 ± 0.0 |
+| FAR | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
+| FRR | 0.000000 | 0.000000 | 0.000000 | 0.000000 |
+| Experience Yield | 0.0000 | 0.1040 ± 0.0121 | 0.1119 ± 0.0029 | 0.1136 ± 0.0036 |
+| Memory Collision | 0.0 ± 0.0 | 0.2 ± 0.4 | 5.2 ± 1.7 | 19.0 ± 4.1 |
+| Memory Recall | 1.0000 | 0.9950 ± 0.0100 | 0.9735 ± 0.0086 | 0.9523 ± 0.0099 |
+| Incorrect Knowledge | 0.0 ± 0.0 | 0.0 ± 0.0 | 0.0 ± 0.0 | 0.0 ± 0.0 |
+
+Okunuşu — abartısız:
+
+* Kapalı döngü 100 cycle boyunca **hiç yanlış olgu yazmadı** (incorrect=0) ve
+  Experience Yield ~%11–12'de stabil kaldı; yani bilgi kalitesi çürümedi.
+* **Bellek çürüdü**: recall 1.000 → 0.952, collision 0 → 19. Bu bir başarı
+  değil, ölçülmüş bir sınırdır — sabit slot sayısında sparse memory doğrusal
+  birikimi taşımıyor.
+* `UNCERTAIN` ve `CONFLICT` sütunları epistemik problarla **gerçekten
+  dolduruluyor**: "bilmiyorum" ile "yanlış" ayrı sayılır (Faz 4).
+* Her koşuda rollback tatbikatı yapılır: bilerek yanlış bir olgu yazılıp
+  (`K101`, yanlış=1) sağlam sürüme dönülür (`K102`, yanlış=0) ve **hatalı
+  sürüm geçmişte korunur**.
+* 100 döngüde seed başına 3.500 defter kaydı üretilir; hash zinciri her koşuda
+  doğrulanır.
+
+Sınır: ground truth bağımsız ama sentetik aritmetik environment'tan gelir.
+Bu tablo genel dilde otonom bilgi keşfi kanıtı **değildir**.
+
+### Kapasite çerçevesi: P, C_I, C_M, C_E, C_V
+
+```bash
+python -m hga kapasite --operands-max 9
+```
+
+`C_M` (adreslenebilir) ile `C_E` (üretilebilir) ve `C_V` (doğrulanabilir) ayrı
+büyüklüklerdir; zorunlu sıralama `C_V ≤ C_E ≤ C_M`'dir. İlk ikisi teorik üst
+sınır, son ikisi **ölçülen** değerdir:
+
+| Kapasite | Sembol | Tip | Anlam |
+|---|---|---|---|
+| Fiziksel parametre | `P` | ölçülen | RAM/VRAM'de ayrılan, optimizer'ın güncellediği |
+| Etkileşim kapasitesi | `C_I` | üst sınır | Kronecker operatör boyutu — parametre DEĞİL |
+| Bellek adres kapasitesi | `C_M` | üst sınır | `sözlük^pencere` — fiziksel tablo DEĞİL |
+| Deneyim kapasitesi | `C_E` | **ölçülen** | kısıtlar altında gerçekten üretilebilen deneyim |
+| Doğrulanabilir kapasite | `C_V` | **ölçülen** | bağımsız verifier'ın karara bağlayabildiği alt küme |
+
+Milestone koşusunda `C_M ≈ 2.8×10⁶²` iken `C_E = 1.184.832` ve
+`C_V = 1.180.685` ölçüldü (`C_V/C_E = 0.9965`). Aradaki ~10⁵⁶'lık uçurum tam
+olarak "adreslenebilir olmak ile üretip doğrulayabilmek arasındaki fark"tır.
+
+### Bilgi sürümleme, rollback ve değişmez defter
+
+```bash
+python -m hga bilgi-surum   # K0 → K1 → K2(hatalı) → rollback → K3
+python -m hga defter        # VERIFIED/INVALID/UNCERTAIN/CONFLICT kayıtları
+```
+
+* **Rollback `git revert` semantiğidir, `reset --hard` değil:** hedef sürümün
+  içeriği yeni bir sürüm olarak geri yüklenir, hatalı sürüm zincirde kalır.
+  Snapshot'lar içerik-adreslidir (SHA-256) ve `zincir_dogrula()` ile denetlenir.
+* **Defter append-only ve hash-zincirlidir:** reddedilen deneyim de silinmez.
+  Geçmiş bir kayıt değiştirilirse zincir doğrulaması bunu yakalar — "model
+  geçmişte nerede hata yaptı?" sorusu ancak böyle cevaplanabilir.
+
 ---
 
 ## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması
 
-`bilgi_katmani.py` — `BilgiKatmani`. Rapor 10'daki temel ödünleşim:
+`legacy/bilgi_katmani.py` — `BilgiKatmani` (LEGACY). Rapor 10'daki temel ödünleşim:
 **"kelimeyi bilmek" ≠ "cümleyi/ilişkiyi bilmek"**. Saf ezbere kilitlenmiş bir
 sistemde halüsinasyon ~0'a iner ama hiç görmediği cümleyi de kuramaz; saf
 genellemede (LLM'ler) esneklik yüksek ama uydurma riski de vardır. Bu proje
@@ -252,8 +336,8 @@ söyler:
 Bu, endüstrideki RAG (Retrieval-Augmented Generation) yaklaşımının
 basitleştirilmiş hâlidir. Güven skoru kullanıcıdan gizlenmez. Terminal ve
 Gradio arayüzleri aynı mekanizmayı ve aynı tokenizer/model üretim runtime'ını
-paylaşır (eski `arayuz.py`'nin `intent_cevap`'ı bu katmanın ilkel bir örneğiydi;
-artık bilgi kararı `bilgi_katmani.py`, üretim/yükleme ortaklığı
+paylaşır (eski `legacy/arayuz.py`'nin `intent_cevap`'ı bu katmanın ilkel bir örneğiydi;
+artık bilgi kararı `legacy/bilgi_katmani.py`, üretim/yükleme ortaklığı
 `hga/ui_runtime.py` üzerinden gelir).
 
 Örnek oturum (eğitilmiş demo modeliyle):
@@ -395,13 +479,14 @@ Ayrıntılı Mimari ve Kod Sınıflandırması:
 ```text
 hiper_geometrik_ai/
 ├── README.md                    # Bu belge
-├── gereksinimler.txt            # Bağımlılıklar (torch; opsiyonel: gradio, requests, pyarrow)
-├── requirements.txt             # gereksinimler.txt alias'ı
+├── pyproject.toml               # TEK bağımlılık/paketleme kaynağı (extras: test, data, ui)
+├── requirements.txt             # pyproject'e ince köprü (`--editable .`)
 ├── requirements-lock.txt        # Referans pin'li ortam
 ├── test_mimari.py               # 22 duman testi (pytest ile de çalışır)
-├── bilgi_katmani.py             # 3 katmanlı halüsinasyon kontrol mekanizması
-├── calistir.py                  # Terminal sohbet (chatbot)
-├── arayuz.py                    # Gradio sohbet arayüzü (opsiyonel)
+├── legacy/                      # DONDURULMUŞ eski prototipler (aktif mimari kullanmaz)
+│   ├── bilgi_katmani.py         # 3 katmanlı halüsinasyon kontrol prototipi
+│   ├── calistir.py              # Terminal sohbet (chatbot)
+│   └── arayuz.py                # Gradio sohbet arayüzü (opsiyonel)
 ├── hga/ui_runtime.py            # Terminal/Gradio ortak tokenizer-model-üretim runtime'ı (KV-cache üretim yolu)
 ├── raporlar/                    # Küçük smoke/benchmark/observability JSON-MD-HTML çıktıları
 ├── mimari/
@@ -415,10 +500,10 @@ hiper_geometrik_ai/
 │   ├── tokenizer.py             # Eski kelime-bazlı tokenizer (uyumluluk için duruyor)
 │   └── kuresel_loss.py          # CrossEntropy tabanlı loss
 ├── hga/                         # Experience Engine (saf Python, çekirdeğin üstünde)
-│   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore
-│   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop
+│   ├── knowledge/               # Entity/Property/Relation indexleri + KnowledgeStore + versioning/rollback
+│   ├── experience/              # Generator, Evaluator, Conflict, Consolidation, Loop, Ledger, Milestone
 │   ├── memory/                  # Seyrek deneyim slotları + replay + torch köprüsü
-│   ├── evaluation/              # Halüsinasyon, Türkçe perplexity ve benchmark raporları
+│   ├── evaluation/              # Halüsinasyon, perplexity, golden/kapasite (C_E/C_V) raporları
 │   ├── observability/           # Attention/geometri/bellek/deneyim akışı + panel çıktısı
 │   ├── data/                    # Veri kalite filtresi, canlı/kontrollü smoke + SHA-256 manifest
 │   └── config/                  # experience_config.yaml + model_config.yaml
@@ -443,9 +528,13 @@ hiper_geometrik_ai/
 sürümünüze uygun PyTorch tekerini seçin). Saf Python `hga/` testleri torch
 olmadan da çalışır; mimari/eğitim testleri torch varsa gerçeklenir.
 
+Bağımlılıkların **tek gerçek kaynağı `pyproject.toml`**'dur; `requirements.txt`
+yalnız ona işaret eden ince bir köprüdür (eski `gereksinimler.txt` kaldırıldı).
+
 ```bash
-pip install -r gereksinimler.txt        # esnek çekirdek kurulum
-pip install -r requirements.txt         # aynı dosyanın İngilizce alias'ı
+pip install -e .                        # çekirdek (torch, numpy, pyyaml)
+pip install -e ".[test]"                # + pytest, ruff, mypy
+pip install -e ".[data]"                # + requests, pyarrow, pandas
 pip install -r requirements-lock.txt    # tekrarlanabilir referans ortam
 ```
 
@@ -493,8 +582,8 @@ python egitim/talimat_egitici.py --validation-split 0.1 --early-stopping-patienc
 **4) Sohbet:**
 
 ```bash
-python calistir.py      # terminal chatbot (3 katmanlı kontrol + etiketler)
-python arayuz.py        # Gradio arayüzü (pip install gradio)
+python legacy/calistir.py   # LEGACY terminal chatbot (3 katmanlı kontrol + etiketler)
+python legacy/arayuz.py     # LEGACY Gradio arayüzü (pip install -e ".[ui]")
 ```
 
 **5) Doğrulama, benchmark ve gözlem raporları:**
@@ -577,7 +666,7 @@ yol haritalarını uygular:
 2. **Ölü/eksik parametreler temizlendi (8.1.2):** eski `kuresel_bag` iki
    bağımsız `Linear`'dı ve `v_yeni` çıktısı hesaplanıp çöpe atılıyordu
    (`mercek_B` hiç eğitilmiyordu). Yeni zincirde her parametre gradyan alır.
-3. **`gereksinimler.txt` repoya girdi (8.1.4):** `.gitignore`'daki `*.txt` /
+3. **Bağımlılık kaynağı `pyproject.toml`'a taşındı (8.1.4):** `.gitignore`'daki `*.txt` /
    `*.json` genel yasakları kaldırıldı. PyTorch başlatma uyarısını önlemek için
    `numpy>=1.26,<2` açık bağımlılık olarak tutulur.
 4. **`strict=True` ağırlık yükleme (8.1.5):** uyumsuzluk sessizce yutulmıyor.
@@ -659,10 +748,21 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | KV-cache entegrasyonu | ✅ %100 smoke | attention cache + model-level `forward_cacheli_pencere` + UI runtime yolu |
 | Knowledge/Experience/state machine | ✅ %100 smoke | `MODEL_GENERATED ≠ VERIFIED`, doğrulama ortamları, kapalı validation |
 | GPU/VRAM raporlama | ✅ CPU fallback | raporlar `cuda_available` ve VRAM bilgisini/eksikliğini açık yazar |
+| Bilgi sürümleme + rollback | ✅ ölçüldü | `python -m hga bilgi-surum`, `tests/test_knowledge_versioning.py` (K₀→Kₙ, içerik-adresli, geçmiş silinmez) |
+| Immutable experience ledger | ✅ ölçüldü | `python -m hga defter`, `tests/test_experience_ledger.py` (append-only, hash-zincirli, tamper-evident) |
+| Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M`) |
+| 100-cycle milestone tablosu | ✅ 5 seed | `python -m hga milestone`, `docs/MILESTONE_TABLOSU.md` (incorrect=0, EY≈0.11, recall 1.000→0.952) |
+| Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
+| Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 
 **Sonraki ölçek işleri (tamamlandı iddiası değildir):** milyon-kelime Türkçe
 korpus, gerçek instruction set büyütme, 64+ token uzun bağlam, katman-bazlı
 çoklu GPU/model paralelliği ve sohbet kalitesi için insan değerlendirmesi.
+
+**Milestone tablosunun açığa çıkardığı bir sonraki iş:** 100 döngüde bilgi
+kalitesi korunurken bellek recall'ı `1.000 → 0.952`'ye düştü. Yani bir sonraki
+darboğaz verifier değil, **sabit slotlu sparse memory**dir; dinamik KV bellek
+karşılaştırması (Faz 17) artık spekülasyon değil, ölçümün işaret ettiği adımdır.
 
 ---
 

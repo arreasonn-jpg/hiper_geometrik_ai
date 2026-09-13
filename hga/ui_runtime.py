@@ -74,7 +74,7 @@ def tokenizer_hazirla(kok: str, baglam: Optional[int] = None,
 def bilgi_katmani_hazirla(kok: str, logger: Logger = None):
     """talimat_verisi.json varsa yükle; yoksa yerleşik talimat setine düş."""
     sys_path_hazirla(kok)
-    from bilgi_katmani import BilgiKatmani
+    from legacy.bilgi_katmani import BilgiKatmani
     from talimat_toplayici import ZENGIN
 
     talimatlar = []

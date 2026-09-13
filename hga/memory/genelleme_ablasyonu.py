@@ -52,7 +52,7 @@ def _torch():
     except ImportError as e:  # torch yok → dürüstçe yüzeye çıkar
         raise ImportError(
             "GenellemeAblasyonu için torch gerekli "
-            "(pip install -r gereksinimler.txt).") from e
+            "(pip install -e .).") from e
 
 
 Uclu = Tuple[str, str, str]

@@ -1,3 +1,13 @@
-# English alias for tooling that expects requirements.txt.
-# The canonical Turkish dependency file remains gereksinimler.txt.
--r gereksinimler.txt
+# ──────────────────────────────────────────────────────────────────────────
+# Bağımlılıkların TEK GERÇEK KAYNAĞI: pyproject.toml
+# ──────────────────────────────────────────────────────────────────────────
+# Bu dosya yalnızca `pip install -r requirements.txt` bekleyen araçlar için
+# ince bir köprüdür; sürüm aralıklarını pyproject.toml tanımlar.
+#
+#   pip install -e .            # çekirdek (torch, numpy, pyyaml)
+#   pip install -e ".[test]"    # + pytest, ruff, mypy
+#   pip install -e ".[data]"    # + requests, pyarrow, pandas
+#   pip install -e ".[ui]"      # + gradio (legacy/arayuz.py)
+#
+# Tekrarlanabilir referans ortam için: requirements-lock.txt
+--editable .

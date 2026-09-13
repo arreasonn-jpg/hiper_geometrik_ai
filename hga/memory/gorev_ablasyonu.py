@@ -58,7 +58,7 @@ def _torch():
         return torch
     except ImportError as e:  # torch yok → dürüstçe yüzeye çıkar
         raise ImportError(
-            "GorevAblasyonu için torch gerekli (pip install -r gereksinimler.txt)."
+            "GorevAblasyonu için torch gerekli (pip install -e .)."
         ) from e
 
 

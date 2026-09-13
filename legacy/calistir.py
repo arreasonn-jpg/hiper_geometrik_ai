@@ -19,7 +19,7 @@ Bu sürümdeki değişiklikler (rapor 8.1 / 8.4 / 8.6 / 9 / 10):
 import sys
 import os
 
-KOK_DIZIN = os.path.abspath(os.path.dirname(__file__))
+KOK_DIZIN = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI_DIZIN = os.path.join(KOK_DIZIN, "mimari")
 EGITIM_DIZIN = os.path.join(KOK_DIZIN, "egitim")
 
@@ -27,7 +27,7 @@ for _p in [KOK_DIZIN, MIMARI_DIZIN, EGITIM_DIZIN]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from bilgi_katmani import (KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
+from legacy.bilgi_katmani import (KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK,
                            KATMAN_ETIKET, beyaz_liste_olustur)
 from hga.ui_runtime import (
     SORU_ETIKETI, CEVAP_ETIKETI,

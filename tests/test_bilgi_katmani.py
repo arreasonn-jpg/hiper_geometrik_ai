@@ -6,7 +6,7 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from bilgi_katmani import BilgiKatmani, KATMAN_ACIK, KATMAN_KISMI, KATMAN_TAM, norm
+from legacy.bilgi_katmani import BilgiKatmani, KATMAN_ACIK, KATMAN_KISMI, KATMAN_TAM, norm
 
 
 def test_bilgi_katmani_torchsuz_arama():

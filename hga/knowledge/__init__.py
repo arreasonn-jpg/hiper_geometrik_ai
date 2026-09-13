@@ -15,6 +15,12 @@ from .property_index import PropertyIndex
 from .relation_index import RelationIndex
 from .knowledge_store import KnowledgeStore
 from .persistence import kaydet, yukle
+from .versioning import (
+    KnowledgeDiff,
+    KnowledgeVersion,
+    KnowledgeVersionStore,
+    kanonik_hash,
+)
 
 __all__ = [
     "KaynakTuru",
@@ -31,4 +37,8 @@ __all__ = [
     "KnowledgeStore",
     "kaydet",
     "yukle",
+    "KnowledgeVersion",
+    "KnowledgeVersionStore",
+    "KnowledgeDiff",
+    "kanonik_hash",
 ]

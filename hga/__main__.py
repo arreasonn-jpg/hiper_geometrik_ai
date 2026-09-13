@@ -10,6 +10,10 @@ Kullanım:
     python -m hga memory-benchmark       # collision/interference/retrieval stres testi
     python -m hga kronecker-benchmark    # eşit-parametre Kronecker/rank-1 kıyası
     python -m hga self-learning-benchmark # K₀→Kₙ + collapse failure injection
+    python -m hga milestone              # K₀→Kₙ milestone tablosu (versiyon + defter)
+    python -m hga kapasite               # P / C_I / C_M / C_E / C_V kapasite çerçevesi
+    python -m hga bilgi-surum            # bilgi sürümleme + rollback demosu
+    python -m hga defter                 # immutable experience ledger demosu
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -430,6 +434,179 @@ def _ozet(yol):
         print(f"  {k:<10}: {v}")
 
 
+def _milestone(cycles, batch, initial_facts, operands_max, negatives_per_fact,
+               memory_slots, seeds, experiment_root, out=None, markdown=None,
+               ledger=None, checkpoints=None):
+    """K₀→Kₙ milestone tablosu: versiyonlanmış + defterli kapalı döngü."""
+    from hga.evaluation import canonical_hash, run_seed_sweep
+    from hga.experience import run_milestone_experiment
+
+    seed_values = [int(v.strip()) for v in seeds.split(",") if v.strip()]
+    if checkpoints:
+        nokta_listesi = [int(v.strip()) for v in checkpoints.split(",") if v.strip()]
+    else:
+        nokta_listesi = [c for c in (0, 10, 50, 100) if c <= int(cycles)]
+    config = {
+        "benchmark": "milestone-versioned-ledgered-closed-loop-v1",
+        "cycles": int(cycles), "batch_size": int(batch),
+        "initial_facts": int(initial_facts), "operands_max": int(operands_max),
+        "negatives_per_fact": int(negatives_per_fact),
+        "memory_slots": int(memory_slots), "checkpoints": nokta_listesi,
+    }
+    dataset_hash = canonical_hash({
+        "generator": "arithmetic-frontier-holdout-v2",
+        "operands_max": int(operands_max),
+        "negatives_per_fact": int(negatives_per_fact),
+    })
+
+    toplanan = []
+
+    def run_one(seed):
+        rapor = run_milestone_experiment(
+            cycles=int(cycles), batch_size=int(batch),
+            initial_facts=int(initial_facts), operands_max=int(operands_max),
+            negatives_per_fact=int(negatives_per_fact), seed=seed,
+            memory_slots=int(memory_slots), checkpoints=nokta_listesi,
+            ledger_path=ledger,
+        )
+        print(rapor.markdown())
+        print(f"knowledge_chain_valid={rapor.knowledge_chain_valid} "
+              f"ledger_chain_valid={rapor.ledger_chain_valid} "
+              f"final={rapor.final_knowledge_version} "
+              f"ledger_entries={rapor.ledger_total_entries}")
+        if rapor.rollback_drill:
+            d = rapor.rollback_drill
+            print(f"rollback: {d['healthy_version']} → {d['corrupted_version']} "
+                  f"(yanlış={d['incorrect_facts_when_corrupted']}) → "
+                  f"{d['restored_version']} (yanlış={d['incorrect_facts_after_rollback']}) "
+                  f"geçmiş_korundu={d['history_preserved']}")
+        print(f"C_E={rapor.capacity['c_e_total']} C_V={rapor.capacity['c_v_total']} "
+              f"C_V/C_E={rapor.capacity['c_v_over_c_e']}")
+        toplanan.append(rapor)
+        return rapor.to_dict()
+
+    report = run_seed_sweep(
+        run_one, seeds=seed_values, root=experiment_root, config=config,
+        dataset_hash=dataset_hash,
+        parameters={
+            "ground_truth": "independent-arithmetic-environment",
+            "closed_loop_writes_only_verified": True,
+            "knowledge_versioning_enabled": True,
+            "immutable_ledger_enabled": True,
+            "rollback_drill_is_failure_injection": True,
+            "neural_training_used": False,
+        },
+    ).to_dict()
+    print("Milestone çoklu-seed özeti:")
+    print(f"  experiments: {', '.join(report['experiment_ids'])}")
+    for key in ("ledger_total_entries", "capacity.c_e_total", "capacity.c_v_total",
+                "capacity.c_v_over_c_e"):
+        values = report["aggregate"].get(key)
+        if values:
+            print(f"  {key:<28}: {values['mean']} ± {values['std']}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(report, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        from hga.experience.milestone import milestone_markdown
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write(milestone_markdown(toplanan, report))
+        print(f"  markdown: {markdown}")
+
+
+def _kapasite(operands_max, out=None):
+    """P / C_I / C_M / C_E / C_V kapasite çerçevesi ölçümü."""
+    from hga.evaluation import run_capacity_benchmark
+    rapor = run_capacity_benchmark(operands_max=int(operands_max))
+    print("HGA Kapasite Çerçevesi (P, C_I, C_M, C_E, C_V):")
+    print(rapor.markdown())
+    print(f"\n  C_V / C_E          : {rapor.c_v_over_c_e}")
+    print(f"  karar verilebilirlik: {rapor.decidability}")
+    print(f"  sıralama geçerli    : {rapor.ordering_holds} (C_V ≤ C_E ≤ C_M)")
+    for not_ in rapor.notes:
+        print(f"  not: {not_}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
+                      sort_keys=True)
+        print(f"  report: {out}")
+
+
+def _bilgi_surum(out=None):
+    """Knowledge versioning + rollback demosu (K0→K1→K2→rollback)."""
+    from hga.knowledge import KnowledgeVersionStore
+
+    kv = KnowledgeVersionStore()
+    kv.store.varlik_ekle("Ali", entity_type="insan", entity_id="E_001",
+                         ozel_isim=True)
+    kv.store.varlik_ekle("Ata", entity_type="hayvan", entity_id="E_002",
+                         properties={"binilebilir": 1})
+    kv.store.varlik_ekle("Gökyüzü", entity_type="mekan", entity_id="E_003",
+                         properties={"binilebilir": 0})
+    kv.store.iliski_tanimla("Binmek", relation_id="R_001",
+                            subject_types=["insan"],
+                            requires_object_props={"binilebilir": 1.0})
+    kv.store.olgu_kaydet("E_001", "R_001", "E_002", score=1.0)
+    kv.commit("K1: Ali ata bindi (doğru)")
+    kv.store.olgu_kaydet("E_001", "R_001", "E_003", score=1.0)
+    kv.commit("K2: Ali gökyüzüne bindi (HATALI)")
+    geri = kv.rollback("K1", label="K2 hatalıydı; K1'e dönüldü")
+
+    print("Bilgi sürüm zinciri (Faz 23):")
+    for kayit in kv.gecmis():
+        print(f"  {kayit['version_id']:<4} {kayit['kind']:<8} "
+              f"kanit={kayit['ozet']['kanit']} hash={kayit['content_hash'][:12]} "
+              f"{kayit['label']}")
+    fark = kv.diff("K2", geri.version_id)
+    print(f"\nK2 → {geri.version_id} farkı:")
+    print(f"  silinen olgular : {fark.silinen_olgular}")
+    print(f"  eklenen olgular : {fark.eklenen_olgular}")
+    print(f"  zincir geçerli  : {kv.zincir_dogrula()}")
+    print("  not: rollback geçmişi SİLMEZ; hatalı K2 denetim için zincirde kalır.")
+    if out:
+        kv.kaydet(out)
+        print(f"  report: {os.path.abspath(out)}")
+
+
+def _defter(out=None):
+    """Immutable experience ledger demosu (Faz 24)."""
+    from hga.experience import ExperienceLedger
+    from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru
+
+    defter = ExperienceLedger()
+    ornekler = [
+        ("E_001|R_001|E_002", DeneyimDurumu.VERIFIED, "bağımsız doğrulayıcı onayladı"),
+        ("E_001|R_001|E_003", DeneyimDurumu.INVALID, "binilebilir=0 kuralı ihlal edildi"),
+        ("E_001|R_002|E_009", DeneyimDurumu.UNCERTAIN, "kanıt yetersiz (Mars bilinmiyor)"),
+        ("E_001|R_001|E_004", DeneyimDurumu.CONFLICT, "kayıtlı kanıtla çelişiyor"),
+    ]
+    for index, (uclu, durum, neden) in enumerate(ornekler):
+        s, r, o = uclu.split("|")
+        aday = ExperienceCandidate(f"LDG-{index:03d}", s, r, o,
+                                   source=KaynakTuru.MODEL_GENERATED,
+                                   state=durum)
+        if durum == DeneyimDurumu.VERIFIED:
+            aday.verified_by = "deterministik-dogrulayici"
+        defter.kaydet(aday, knowledge_version="K12", reason=neden, cycle=1)
+
+    print("Immutable Experience Ledger (Faz 24):")
+    for kayit in defter:
+        print(f"  #{kayit.seq} {kayit.status:<10} {kayit.experience:<22} "
+              f"{kayit.reason}")
+    print("\nÖzet:")
+    for k, v in defter.ozet().items():
+        print(f"  {k:<20}: {v}")
+    print("  not: reddedilen deneyim de silinmez; 'model nerede hata yaptı?' "
+          "sorusu ancak böyle cevaplanır.")
+    if out:
+        defter.kaydet_jsonl(out)
+        print(f"  report: {os.path.abspath(out)}")
+
+
 def _sweep():
     """n/K/context hızlı kapasite taraması."""
     from hga.config import model_config_yukle
@@ -700,7 +877,8 @@ def main(argv=None):
                                      "manifest", "observability", "ozet",
                                      "graf", "kesif", "golden-benchmark",
                                      "memory-benchmark", "kronecker-benchmark",
-                                     "self-learning-benchmark"])
+                                     "self-learning-benchmark", "milestone",
+                                     "kapasite", "bilgi-surum", "defter"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -768,7 +946,11 @@ def main(argv=None):
     p.add_argument("--negatives-per-fact", type=int, default=7,
                    help="her doğru frontier olgusu başına yanlış aday")
     p.add_argument("--memory-slots", type=int, default=4096,
-                   help="self-learning deney belleği slot sayısı")
+                   help="self-learning/milestone deney belleği slot sayısı")
+    p.add_argument("--checkpoints", default=None,
+                   help="milestone tablosu kontrol noktaları (örn. 0,10,50,100)")
+    p.add_argument("--ledger", default=None,
+                   help="milestone için immutable experience ledger JSONL yolu")
     args = p.parse_args(argv)
     {"bilgi": _bilgi_demo, "gercek-veri": _gercek_veri,
      "benchmark": _benchmark, "dogrulama": _dogrulama,
@@ -806,6 +988,14 @@ def main(argv=None):
          args.cycles, args.batch, args.initial_facts, args.operands_max,
          args.negatives_per_fact, args.memory_slots, args.seeds or "42",
          args.experiment_root, out=args.out),
+     "milestone": lambda: _milestone(
+         args.cycles, args.batch, args.initial_facts, args.operands_max,
+         args.negatives_per_fact, args.memory_slots, args.seeds or "42",
+         args.experiment_root, out=args.out, markdown=args.markdown,
+         ledger=args.ledger, checkpoints=args.checkpoints),
+     "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
+     "bilgi-surum": lambda: _bilgi_surum(out=args.out),
+     "defter": lambda: _defter(out=args.out),
      "observability": lambda: _observability_demo(
          out=args.out, markdown=args.markdown, html_yol=args.html),
      "ozet": lambda: _ozet(args.yol)}[args.komut]()

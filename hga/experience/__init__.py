@@ -38,6 +38,13 @@ from .self_learning import (
     run_verifier_fault_injection,
 )
 from .graph import GraphEdge, ExperienceGraph
+from .ledger import ExperienceLedger, LedgerEntry, GENESIS_HASH
+from .milestone import (
+    MilestoneCheckpoint,
+    MilestoneReport,
+    milestone_markdown,
+    run_milestone_experiment,
+)
 from .exploration import EpistemicSpace, ExplorationMap, ExplorationEngine
 
 __all__ = [
@@ -111,6 +118,13 @@ __all__ = [
     "run_verifier_fault_injection",
     "GraphEdge",
     "ExperienceGraph",
+    "ExperienceLedger",
+    "LedgerEntry",
+    "GENESIS_HASH",
+    "MilestoneCheckpoint",
+    "MilestoneReport",
+    "run_milestone_experiment",
+    "milestone_markdown",
     "EpistemicSpace",
     "ExplorationMap",
     "ExplorationEngine",

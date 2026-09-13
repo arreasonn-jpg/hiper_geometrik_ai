@@ -47,10 +47,10 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 | Modül / Dosya | Statü | Açıklama |
 | :--- | :---: | :--- |
 | `hga/engine.py` | `ACTIVE` | Tüm motorun tek yüzlü orkestratörü (`ExperienceEngine`). |
-| `hga/knowledge/*` | `ACTIVE` | Kanonik Varlık, Özellik ve İlişki dizinleri (`KnowledgeStore`). |
-| `hga/experience/*` | `ACTIVE` | Deneyim durum makinesi, puanlama, üretici, değerlendirici ve döngü. |
+| `hga/knowledge/*` | `ACTIVE` | Kanonik Varlık, Özellik ve İlişki dizinleri (`KnowledgeStore`) + `versioning.py` (K₀→Kₙ sürüm zinciri, rollback, diff). |
+| `hga/experience/*` | `ACTIVE` | Deneyim durum makinesi, puanlama, üretici, değerlendirici, döngü + `ledger.py` (immutable defter) ve `milestone.py` (K₀→Kₙ tablosu). |
 | `hga/memory/*` | `ACTIVE` | Epizodik bellek, replay buffer ve sinirsel köprü (`NeuralKopru`). |
-| `hga/evaluation/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü ve raporlama. |
+| `hga/evaluation/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü, raporlama + `capacity.py` (P/C_I/C_M/C_E/C_V çerçevesi). |
 | `hga/observability/*` | `ACTIVE` | Bellek doluluk, dikkat ve deneyim akışı paneli. |
 | `hga/data/*` | `ACTIVE` | Veri kalitesi, SHA-256 manifestosu ve versiyonlama. |
 | `hga/config/*` | `ACTIVE` | Merkezi YAML konfigürasyon yöneticisi. |
@@ -61,9 +61,32 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 | `mimari/bpe_tokenizer.py` | `ACTIVE` | **Tek standart tokenizer**. |
 | `egitim/*` | `ACTIVE` | Eğitim döngüleri, determinizm ve scheduler yardımcıları. |
 | `experiments/*` | `EXPERIMENTAL` | Ablasyon ve ölçekleme deney koşucuları. |
-| `bilgi_katmani.py` | `LEGACY` | Eski 3 katmanlı string eşleme prototipi. Yerini `hga.knowledge` ve `hga.evaluation.hallucination` almıştır. |
+| `legacy/bilgi_katmani.py` | `LEGACY` | Eski 3 katmanlı string eşleme prototipi. Yerini `hga.knowledge` ve `hga.evaluation.hallucination` almıştır. |
 | `mimari/tokenizer.py` | `LEGACY` | Karakter tabanlı eski tokenizer. Yerini `mimari/bpe_tokenizer.py` almıştır. |
-| `calistir.py` / `arayuz.py` | `LEGACY / WRAPPER` | Eski prototip arayüzleri. CLI için standart: `python -m hga`. |
+| `legacy/calistir.py` / `legacy/arayuz.py` | `LEGACY / WRAPPER` | Eski prototip arayüzleri. CLI için standart: `python -m hga`. |
+
+### 2.1. Legacy izolasyon sözleşmesi (Faz 1)
+
+Legacy modüller artık kökte değil, **`legacy/` paketinde dondurulmuştur**:
+
+* Aktif katmanlar (`hga/`, `mimari/`, `egitim/`, `experiments/`) legacy'den
+  **import etmez**. Tek bilinçli istisna `hga/ui_runtime.py`'dir; o da yalnız
+  eski sohbet arayüzlerini ayakta tutar.
+* Bu kural yoruma bırakılmaz: `tests/test_legacy_isolation.py` her aktif
+  dosyanın AST'sini tarayıp legacy import sızıntısını hata olarak raporlar.
+* `legacy/` paketlemeye dâhil edilmez (`pyproject.toml` → `packages.find`).
+* Planlanan kaldırma: v1.1.
+
+### 2.2. Bağımlılık tek kaynağı (Faz 2)
+
+| Dosya | Rol |
+| :--- | :--- |
+| `pyproject.toml` | **TEK GERÇEK KAYNAK**: çekirdek bağımlılıklar + `test`/`data`/`ui` extras |
+| `requirements.txt` | `--editable .` köprüsü; sürüm aralığı TANIMLAMAZ |
+| `requirements-lock.txt` | Tekrarlanabilir referans ortam (pin'li) |
+| `hga/config/*.yaml` | Runtime/model konfigürasyonu (bağımlılık değil) |
+
+Eski `gereksinimler.txt` kaldırıldı; üçlü dosya yapısı ikiliye indi.
 
 ---
 

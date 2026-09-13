@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys, os, time
 
-KOK = os.path.abspath(os.path.dirname(__file__))
+KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 for p in [KOK, os.path.join(KOK, "mimari"), os.path.join(KOK, "egitim")]:
     if p not in sys.path: sys.path.insert(0, p)
 
 import gradio as gr
 from model_config import VARSAYILAN_MODEL_CONFIG
-from bilgi_katmani import KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK, beyaz_liste_olustur
+from legacy.bilgi_katmani import KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK, beyaz_liste_olustur
 from hga.ui_runtime import (
     SORU_ETIKETI, CEVAP_ETIKETI,
     config_yukle,

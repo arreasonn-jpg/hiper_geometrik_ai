@@ -8,6 +8,12 @@ from .experiment import (
     run_seed_sweep,
     seed_everything,
 )
+from .capacity import (
+    CapacityReport,
+    capacity_contract,
+    measure_experience_capacity,
+    run_capacity_benchmark,
+)
 from .golden import (
     GoldenDataset,
     GoldenMetrics,
@@ -40,4 +46,6 @@ __all__ = [
     "ExperimentRun", "SeedSweepReport", "canonical_hash", "file_sha256",
     "run_seed_sweep", "seed_everything", "kronecker_capacity_contract",
     "run_kronecker_dense_trial",
+    "CapacityReport", "capacity_contract", "measure_experience_capacity",
+    "run_capacity_benchmark",
 ]

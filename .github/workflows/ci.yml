@@ -28,7 +28,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install torch numpy pyyaml pytest
+          # Tek bağımlılık kaynağı: pyproject.toml
+          pip install -e ".[test]"
 
       - name: Run Pytest Suite
         run: |
@@ -47,3 +48,7 @@ jobs:
           python -m hga memory-benchmark --scales 100,1000 --slots 256 --tables 1,2 --experiment-root /tmp/hga-memory-experiments
           python -m hga kronecker-benchmark --n 8 --steps 20 --batch 8 --seeds 1 --experiment-root /tmp/hga-kronecker-experiments
           python -m hga self-learning-benchmark --cycles 5 --batch 8 --initial-facts 4 --operands-max 4 --negatives-per-fact 3 --seeds 1 --experiment-root /tmp/hga-self-learning-experiments
+          python -m hga bilgi-surum
+          python -m hga defter
+          python -m hga kapasite --operands-max 5
+          python -m hga milestone --cycles 5 --batch 8 --initial-facts 6 --operands-max 8 --negatives-per-fact 3 --seeds 1 --checkpoints 0,5 --experiment-root /tmp/hga-milestone-experiments

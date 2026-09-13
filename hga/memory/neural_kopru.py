@@ -37,7 +37,7 @@ class NeuralKopru:
     def __init__(self, model):
         if not torch_var_mi():
             raise ImportError(
-                "NeuralKopru için torch gerekli (pip install -r gereksinimler.txt).")
+                "NeuralKopru için torch gerekli (pip install -e .).")
         import torch
         self.torch = torch
         self.model = model
