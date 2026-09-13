@@ -1,0 +1,1533 @@
+{
+  "aggregate": {
+    "batch_size": {
+      "max": 64.0,
+      "mean": 64.0,
+      "min": 64.0,
+      "std": 0.0
+    },
+    "capacity.full_dense_parameters_without_bias": {
+      "max": 65536.0,
+      "mean": 65536.0,
+      "min": 65536.0,
+      "std": 0.0
+    },
+    "capacity.full_operator_entries_n4": {
+      "max": 65536.0,
+      "mean": 65536.0,
+      "min": 65536.0,
+      "std": 0.0
+    },
+    "capacity.kronecker_max_effective_operator_rank": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "capacity.matrix_dimension": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "capacity.n": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "capacity.physical_parameter_budget_each": {
+      "max": 512.0,
+      "mean": 512.0,
+      "min": 512.0,
+      "std": 0.0
+    },
+    "capacity.rank1_bottleneck_max_effective_operator_rank": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "learning_rate": {
+      "max": 0.01,
+      "mean": 0.01,
+      "min": 0.01,
+      "std": 0.0
+    },
+    "matrix_dimension": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "n": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "seed": {
+      "max": 5.0,
+      "mean": 3.0,
+      "min": 1.0,
+      "std": 1.4142135623730951
+    },
+    "steps": {
+      "max": 300.0,
+      "mean": 300.0,
+      "min": 300.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.effective_operator_rank": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.estimated_adam_training_bytes": {
+      "max": 8192.0,
+      "mean": 8192.0,
+      "min": 8192.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.factor_rank_a": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.factor_rank_b": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.final_step_loss": {
+      "max": 1.9595339240119358e-11,
+      "mean": 1.17642e-11,
+      "min": 5.257650651652179e-12,
+      "std": 5.404e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.max_effective_operator_rank": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.max_gradient_norm": {
+      "max": 0.7840326914892828,
+      "mean": 0.722100661687527,
+      "min": 0.6841725759874416,
+      "std": 0.0375584023801501
+    },
+    "tasks.kronecker_teacher.models.kronecker.nonfinite_steps": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.parameter_bytes": {
+      "max": 2048.0,
+      "mean": 2048.0,
+      "min": 2048.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.physical_parameters": {
+      "max": 512.0,
+      "mean": 512.0,
+      "min": 512.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.steps_per_second": {
+      "max": 1149.4244241862816,
+      "mean": 1127.282292344629,
+      "min": 1094.955620847089,
+      "std": 25.211667394938317
+    },
+    "tasks.kronecker_teacher.models.kronecker.tail_loss_std": {
+      "max": 8.055052403139591e-12,
+      "mean": 5.1522e-12,
+      "min": 2.242361496487526e-12,
+      "std": 2.3698e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.test.mse": {
+      "max": 1.735247882883595e-11,
+      "mean": 1.06392e-11,
+      "min": 4.6793103246345336e-12,
+      "std": 4.882e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.test.normalized_mse": {
+      "max": 1.8074951530585896e-11,
+      "mean": 1.07112e-11,
+      "min": 3.982566476929083e-12,
+      "std": 5.3048e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.test.r2": {
+      "max": 0.9999999999960172,
+      "mean": 0.9999999999892882,
+      "min": 0.9999999999819247,
+      "std": 5.305e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.test.tolerance": {
+      "max": 0.08332759738068446,
+      "mean": 0.0784216666231619,
+      "min": 0.07453827858071192,
+      "std": 0.0029842502740927
+    },
+    "tasks.kronecker_teacher.models.kronecker.test.tolerance_accuracy": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.train.mse": {
+      "max": 1.738095778414106e-11,
+      "mean": 1.06315e-11,
+      "min": 4.715704389479658e-12,
+      "std": 4.8389e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.train.normalized_mse": {
+      "max": 1.8218439215891852e-11,
+      "mean": 1.07455e-11,
+      "min": 3.892535876207794e-12,
+      "std": 5.3105e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.train.r2": {
+      "max": 0.9999999999961073,
+      "mean": 0.9999999999892542,
+      "min": 0.9999999999817809,
+      "std": 5.3107e-12
+    },
+    "tasks.kronecker_teacher.models.kronecker.train.tolerance": {
+      "max": 0.0846867084513174,
+      "mean": 0.0782841050634848,
+      "min": 0.07466063499550685,
+      "std": 0.0034822982202351
+    },
+    "tasks.kronecker_teacher.models.kronecker.train.tolerance_accuracy": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.kronecker.training_seconds": {
+      "max": 0.273983706999843,
+      "mean": 0.2662611805999859,
+      "min": 0.2610001960001682,
+      "std": 0.0060096991951403
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.effective_operator_rank": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.estimated_adam_training_bytes": {
+      "max": 8192.0,
+      "mean": 8192.0,
+      "min": 8192.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.final_step_loss": {
+      "max": 1.129006266593933,
+      "mean": 0.9799307227134705,
+      "min": 0.8824542760848999,
+      "std": 0.0852736383788846
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.max_effective_operator_rank": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.max_gradient_norm": {
+      "max": 1.0945235287898472,
+      "mean": 0.8913813573913458,
+      "min": 0.7773139976710965,
+      "std": 0.1076163070672643
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.nonfinite_steps": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.parameter_bytes": {
+      "max": 2048.0,
+      "mean": 2048.0,
+      "min": 2048.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.physical_parameters": {
+      "max": 512.0,
+      "mean": 512.0,
+      "min": 512.0,
+      "std": 0.0
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.steps_per_second": {
+      "max": 1368.1253196228774,
+      "mean": 1343.8971466583837,
+      "min": 1320.934804427108,
+      "std": 18.770679698591856
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.tail_loss_std": {
+      "max": 0.03153445430493302,
+      "mean": 0.0206902310301607,
+      "min": 0.01341448167433725,
+      "std": 0.007526826941145
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.test.mse": {
+      "max": 1.1196601390838623,
+      "mean": 0.9849576234817505,
+      "min": 0.883302628993988,
+      "std": 0.0812427605422247
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.test.normalized_mse": {
+      "max": 0.9682551463974287,
+      "mean": 0.9597132502904163,
+      "min": 0.9529440507490629,
+      "std": 0.0049531825015609
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.test.r2": {
+      "max": 0.047003349757773205,
+      "mean": 0.0402389562771488,
+      "min": 0.0316250185335516,
+      "std": 0.0049770091911711
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.test.tolerance": {
+      "max": 0.08332759738068446,
+      "mean": 0.0784216666231619,
+      "min": 0.07453827858071192,
+      "std": 0.0029842502740927
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.test.tolerance_accuracy": {
+      "max": 0.0701904296875,
+      "mean": 0.067938232421875,
+      "min": 0.065765380859375,
+      "std": 0.0014887324172486
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.train.mse": {
+      "max": 1.1287182569503784,
+      "mean": 0.9797459244728088,
+      "min": 0.8823161721229553,
+      "std": 0.0852490906007169
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.train.normalized_mse": {
+      "max": 0.9743406907761755,
+      "mean": 0.9561515017048154,
+      "min": 0.9316903576720748,
+      "std": 0.013802891963619
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.train.r2": {
+      "max": 0.06827966247632167,
+      "mean": 0.0438186907120632,
+      "min": 0.025659195644751387,
+      "std": 0.0137933519979327
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.train.tolerance": {
+      "max": 0.0846867084513174,
+      "mean": 0.0782841050634848,
+      "min": 0.07466063499550685,
+      "std": 0.0034822982202351
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.train.tolerance_accuracy": {
+      "max": 0.07220458984375,
+      "mean": 0.0699462890625,
+      "min": 0.06512451171875,
+      "std": 0.0024843632919707
+    },
+    "tasks.kronecker_teacher.models.rank1_bottleneck.training_seconds": {
+      "max": 0.22711188999983278,
+      "mean": 0.2232749833999151,
+      "min": 0.21927815799995187,
+      "std": 0.0031226922709233
+    },
+    "tasks.rank1_teacher.models.kronecker.effective_operator_rank": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.estimated_adam_training_bytes": {
+      "max": 8192.0,
+      "mean": 8192.0,
+      "min": 8192.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.factor_rank_a": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.factor_rank_b": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.final_step_loss": {
+      "max": 1.1573750972747803,
+      "mean": 0.9993025302886963,
+      "min": 0.7275402545928955,
+      "std": 0.1443104506470368
+    },
+    "tasks.rank1_teacher.models.kronecker.max_effective_operator_rank": {
+      "max": 256.0,
+      "mean": 256.0,
+      "min": 256.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.max_gradient_norm": {
+      "max": 0.7608867307171984,
+      "mean": 0.7256192422420084,
+      "min": 0.6664166962854664,
+      "std": 0.0332143637627034
+    },
+    "tasks.rank1_teacher.models.kronecker.nonfinite_steps": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.parameter_bytes": {
+      "max": 2048.0,
+      "mean": 2048.0,
+      "min": 2048.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.physical_parameters": {
+      "max": 512.0,
+      "mean": 512.0,
+      "min": 512.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.kronecker.steps_per_second": {
+      "max": 1161.7315362262618,
+      "mean": 1134.0332274819564,
+      "min": 1082.1075351435793,
+      "std": 28.729140596513325
+    },
+    "tasks.rank1_teacher.models.kronecker.tail_loss_std": {
+      "max": 0.18548609866715873,
+      "mean": 0.1266747526019656,
+      "min": 0.10441738483153103,
+      "std": 0.0298228023135195
+    },
+    "tasks.rank1_teacher.models.kronecker.test.mse": {
+      "max": 1.136439323425293,
+      "mean": 0.898682153224945,
+      "min": 0.7097147107124329,
+      "std": 0.1491475062010873
+    },
+    "tasks.rank1_teacher.models.kronecker.test.normalized_mse": {
+      "max": 0.9931396991935406,
+      "mean": 0.9779505032447107,
+      "min": 0.9641380682773959,
+      "std": 0.0115291831389819
+    },
+    "tasks.rank1_teacher.models.kronecker.test.r2": {
+      "max": 0.03585935558655806,
+      "mean": 0.022042493254325,
+      "min": 0.006855024171927182,
+      "std": 0.0115286315700841
+    },
+    "tasks.rank1_teacher.models.kronecker.test.tolerance": {
+      "max": 0.06676309108834132,
+      "mean": 0.0606337630758749,
+      "min": 0.053184205294655396,
+      "std": 0.0047750557501027
+    },
+    "tasks.rank1_teacher.models.kronecker.test.tolerance_accuracy": {
+      "max": 0.155853271484375,
+      "mean": 0.13197021484375,
+      "min": 0.11907958984375,
+      "std": 0.0128388811289676
+    },
+    "tasks.rank1_teacher.models.kronecker.train.mse": {
+      "max": 1.1570016145706177,
+      "mean": 0.9983150839805603,
+      "min": 0.726848304271698,
+      "std": 0.1443124303108249
+    },
+    "tasks.rank1_teacher.models.kronecker.train.normalized_mse": {
+      "max": 0.9779706452613385,
+      "mean": 0.9642695526550236,
+      "min": 0.9508084431259489,
+      "std": 0.0091162173566144
+    },
+    "tasks.rank1_teacher.models.kronecker.train.r2": {
+      "max": 0.0491851812346622,
+      "mean": 0.0357146731223611,
+      "min": 0.022029354738661522,
+      "std": 0.0091087746671455
+    },
+    "tasks.rank1_teacher.models.kronecker.train.tolerance": {
+      "max": 0.07022300362686976,
+      "mean": 0.0637279534349905,
+      "min": 0.053270506859825685,
+      "std": 0.0057362760105097
+    },
+    "tasks.rank1_teacher.models.kronecker.train.tolerance_accuracy": {
+      "max": 0.14593505859375,
+      "mean": 0.127490234375,
+      "min": 0.11297607421875,
+      "std": 0.0107181905261241
+    },
+    "tasks.rank1_teacher.models.kronecker.training_seconds": {
+      "max": 0.2772367719999238,
+      "mean": 0.2647165257999859,
+      "min": 0.2582352209999499,
+      "std": 0.006869994228523
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.effective_operator_rank": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.estimated_adam_training_bytes": {
+      "max": 8192.0,
+      "mean": 8192.0,
+      "min": 8192.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.final_step_loss": {
+      "max": 7.941745934658684e-06,
+      "mean": 2.97534325e-06,
+      "min": 1.3752628547081258e-06,
+      "std": 2.5154514162e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.max_effective_operator_rank": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.max_gradient_norm": {
+      "max": 1.0372620124977376,
+      "mean": 0.9337804682611088,
+      "min": 0.8475916256296042,
+      "std": 0.0812107527543149
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.nonfinite_steps": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.parameter_bytes": {
+      "max": 2048.0,
+      "mean": 2048.0,
+      "min": 2048.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.physical_parameters": {
+      "max": 512.0,
+      "mean": 512.0,
+      "min": 512.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.steps_per_second": {
+      "max": 1375.138742903652,
+      "mean": 1353.905151474703,
+      "min": 1316.7235446615132,
+      "std": 20.681821496709034
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.tail_loss_std": {
+      "max": 2.3058912534464712e-06,
+      "mean": 8.172989773e-07,
+      "min": 2.165325830073961e-07,
+      "std": 7.573716715e-07
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.test.mse": {
+      "max": 6.7241426222608425e-06,
+      "mean": 2.8569205824e-06,
+      "min": 1.1643556945273303e-06,
+      "std": 1.9877133868e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.test.normalized_mse": {
+      "max": 9.279384672344283e-06,
+      "mean": 3.4339447617e-06,
+      "min": 1.3199774331414476e-06,
+      "std": 2.9683151134e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.test.r2": {
+      "max": 0.9999986800109718,
+      "mean": 0.9999965660145023,
+      "min": 0.9999907204390076,
+      "std": 2.9683813729e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.test.tolerance": {
+      "max": 0.06676309108834132,
+      "mean": 0.0606337630758749,
+      "min": 0.053184205294655396,
+      "std": 0.0047750557501027
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.test.tolerance_accuracy": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.train.mse": {
+      "max": 5.65600339541561e-06,
+      "mean": 2.1757911327e-06,
+      "min": 8.694088364791241e-07,
+      "std": 1.7752495382e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.train.normalized_mse": {
+      "max": 5.114706332412668e-06,
+      "mean": 2.0342174566e-06,
+      "min": 1.076899717833007e-06,
+      "std": 1.5527409802e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.train.r2": {
+      "max": 0.9999989230957724,
+      "mean": 0.9999979657073867,
+      "min": 0.99999488493029,
+      "std": 1.5528836956e-06
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.train.tolerance": {
+      "max": 0.07022300362686976,
+      "mean": 0.0637279534349905,
+      "min": 0.053270506859825685,
+      "std": 0.0057362760105097
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.train.tolerance_accuracy": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "tasks.rank1_teacher.models.rank1_bottleneck.training_seconds": {
+      "max": 0.2278382590000092,
+      "mean": 0.2216336478000357,
+      "min": 0.2181598050001412,
+      "std": 0.0034302265479354
+    },
+    "test_samples": {
+      "max": 128.0,
+      "mean": 128.0,
+      "min": 128.0,
+      "std": 0.0
+    }
+  },
+  "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+  "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+  "deterministic_results": false,
+  "experiment_ids": [
+    "EXP-0006",
+    "EXP-0007",
+    "EXP-0008",
+    "EXP-0009",
+    "EXP-0010"
+  ],
+  "manifests": [
+    {
+      "completed_at_utc": "2026-09-13T07:43:40.082679+00:00",
+      "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+      "created_at_utc": "2026-09-13T07:43:38.425684+00:00",
+      "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+      "device": "cpu",
+      "experiment_id": "EXP-0006",
+      "git_commit": "1aa4d15c20987747f764882734ebe6c6b080f431",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "full_operator_entries_n4": 65536,
+        "n4_is_parameter_count": false,
+        "physical_parameter_budget_each": 512
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 1,
+      "torch_version": "2.3.1+cu121"
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:43:41.173559+00:00",
+      "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+      "created_at_utc": "2026-09-13T07:43:40.083715+00:00",
+      "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+      "device": "cpu",
+      "experiment_id": "EXP-0007",
+      "git_commit": "1aa4d15c20987747f764882734ebe6c6b080f431",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "full_operator_entries_n4": 65536,
+        "n4_is_parameter_count": false,
+        "physical_parameter_budget_each": 512
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 2,
+      "torch_version": "2.3.1+cu121"
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:43:42.245383+00:00",
+      "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+      "created_at_utc": "2026-09-13T07:43:41.174371+00:00",
+      "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+      "device": "cpu",
+      "experiment_id": "EXP-0008",
+      "git_commit": "1aa4d15c20987747f764882734ebe6c6b080f431",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "full_operator_entries_n4": 65536,
+        "n4_is_parameter_count": false,
+        "physical_parameter_budget_each": 512
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 3,
+      "torch_version": "2.3.1+cu121"
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:43:43.322925+00:00",
+      "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+      "created_at_utc": "2026-09-13T07:43:42.246182+00:00",
+      "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+      "device": "cpu",
+      "experiment_id": "EXP-0009",
+      "git_commit": "1aa4d15c20987747f764882734ebe6c6b080f431",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "full_operator_entries_n4": 65536,
+        "n4_is_parameter_count": false,
+        "physical_parameter_budget_each": 512
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 4,
+      "torch_version": "2.3.1+cu121"
+    },
+    {
+      "completed_at_utc": "2026-09-13T07:43:44.401905+00:00",
+      "config_hash": "88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f",
+      "created_at_utc": "2026-09-13T07:43:43.323723+00:00",
+      "dataset_hash": "cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1a",
+      "device": "cpu",
+      "experiment_id": "EXP-0010",
+      "git_commit": "1aa4d15c20987747f764882734ebe6c6b080f431",
+      "git_dirty": false,
+      "model_hash": "NONE",
+      "parameters": {
+        "full_operator_entries_n4": 65536,
+        "n4_is_parameter_count": false,
+        "physical_parameter_budget_each": 512
+      },
+      "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+      "python_implementation": "CPython",
+      "python_version": "3.11.2",
+      "result": "COMPLETED",
+      "seed": 5,
+      "torch_version": "2.3.1+cu121"
+    }
+  ],
+  "note": "Seedler arası özdeşlik yalnız tekrarlanabilirlik kontrolüdür; istatistiksel model kalitesi kanıtı değildir.",
+  "parameters": {
+    "full_operator_entries_n4": 65536,
+    "n4_is_parameter_count": false,
+    "physical_parameter_budget_each": 512
+  },
+  "results": [
+    {
+      "batch_size": 64,
+      "capacity": {
+        "full_dense_parameters_without_bias": 65536,
+        "full_operator_entries_n4": 65536,
+        "kronecker_max_effective_operator_rank": 256,
+        "matrix_dimension": 256,
+        "n": 16,
+        "operator_entries_are_parameters": false,
+        "physical_parameter_budget_each": 512,
+        "rank1_bottleneck_max_effective_operator_rank": 1
+      },
+      "device": "cpu",
+      "fairness": {
+        "baseline_name": "rank1_bottleneck (not unrestricted dense)",
+        "same_optimizer": "Adam",
+        "same_physical_parameter_budget": true,
+        "same_training_and_test_inputs_per_task": true,
+        "single_task_universal_superiority_claim": false
+      },
+      "learning_rate": 0.01,
+      "matrix_dimension": 256,
+      "n": 16,
+      "protocol": "kronecker-vs-rank1-param-matched-v2",
+      "seed": 1,
+      "steps": 300,
+      "tasks": {
+        "kronecker_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 5.257650651652179e-12,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7009389591414442,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1097.9530988470497,
+              "tail_loss_std": 2.59397522098556e-12,
+              "test": {
+                "mse": 4.6793103246345336e-12,
+                "normalized_mse": 3.982566476929083e-12,
+                "r2": 0.9999999999960172,
+                "tolerance": 0.08332759738068446,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 4.715704389479658e-12,
+                "normalized_mse": 3.892535876207794e-12,
+                "r2": 0.9999999999961073,
+                "tolerance": 0.0846867084513174,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2732357150000553
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 1.129006266593933,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.884166709028565,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1323.629376927812,
+              "tail_loss_std": 0.03153445430493302,
+              "test": {
+                "mse": 1.1196601390838623,
+                "normalized_mse": 0.9529440507490629,
+                "r2": 0.047003349757773205,
+                "tolerance": 0.08332759738068446,
+                "tolerance_accuracy": 0.068817138671875
+              },
+              "train": {
+                "mse": 1.1287182569503784,
+                "normalized_mse": 0.9316903576720748,
+                "r2": 0.06827966247632167,
+                "tolerance": 0.0846867084513174,
+                "tolerance_accuracy": 0.07220458984375
+              },
+              "training_seconds": 0.22664954799984116
+            }
+          },
+          "winner_by_test_normalized_mse": "kronecker"
+        },
+        "rank1_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.0256158113479614,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7525464974102192,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1082.1075351435793,
+              "tail_loss_std": 0.11778527678415918,
+              "test": {
+                "mse": 0.9893472790718079,
+                "normalized_mse": 0.9641380682773959,
+                "r2": 0.03585935558655806,
+                "tolerance": 0.0637191116819845,
+                "tolerance_accuracy": 0.127899169921875
+              },
+              "train": {
+                "mse": 1.0246868133544922,
+                "normalized_mse": 0.9627853931912222,
+                "r2": 0.03721439112969349,
+                "tolerance": 0.0629009783277975,
+                "tolerance_accuracy": 0.12786865234375
+              },
+              "training_seconds": 0.2772367719999238
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 1.5072796486492734e-06,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 1.0372620124977376,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1316.7235446615132,
+              "tail_loss_std": 3.9252047987867075e-07,
+              "test": {
+                "mse": 1.6469574575239676e-06,
+                "normalized_mse": 1.6049919125688103e-06,
+                "r2": 0.999998395003799,
+                "tolerance": 0.0637191116819845,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.2831538924729102e-06,
+                "normalized_mse": 1.2056384534168772e-06,
+                "r2": 0.9999987943612765,
+                "tolerance": 0.0629009783277975,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2278382590000092
+            }
+          },
+          "winner_by_test_normalized_mse": "rank1_bottleneck"
+        }
+      },
+      "test_samples": 128
+    },
+    {
+      "batch_size": 64,
+      "capacity": {
+        "full_dense_parameters_without_bias": 65536,
+        "full_operator_entries_n4": 65536,
+        "kronecker_max_effective_operator_rank": 256,
+        "matrix_dimension": 256,
+        "n": 16,
+        "operator_entries_are_parameters": false,
+        "physical_parameter_budget_each": 512,
+        "rank1_bottleneck_max_effective_operator_rank": 1
+      },
+      "device": "cpu",
+      "fairness": {
+        "baseline_name": "rank1_bottleneck (not unrestricted dense)",
+        "same_optimizer": "Adam",
+        "same_physical_parameter_budget": true,
+        "same_training_and_test_inputs_per_task": true,
+        "single_task_universal_superiority_claim": false
+      },
+      "learning_rate": 0.01,
+      "matrix_dimension": 256,
+      "n": 16,
+      "protocol": "kronecker-vs-rank1-param-matched-v2",
+      "seed": 2,
+      "steps": 300,
+      "tasks": {
+        "kronecker_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.2524399919944251e-11,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.6949191534579819,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1149.4244241862816,
+              "tail_loss_std": 5.6126299977259336e-12,
+              "test": {
+                "mse": 1.1537215627299702e-11,
+                "normalized_mse": 1.2646818926546869e-11,
+                "r2": 0.9999999999873516,
+                "tolerance": 0.07453827858071192,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.1469516308926231e-11,
+                "normalized_mse": 1.2431511920031322e-11,
+                "r2": 0.9999999999875674,
+                "tolerance": 0.07466063499550685,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2610001960001682
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 0.8824542760848999,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.8610731649232821,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1320.934804427108,
+              "tail_loss_std": 0.017108501295545916,
+              "test": {
+                "mse": 0.883302628993988,
+                "normalized_mse": 0.9682551463974287,
+                "r2": 0.0316250185335516,
+                "tolerance": 0.07453827858071192,
+                "tolerance_accuracy": 0.067291259765625
+              },
+              "train": {
+                "mse": 0.8823161721229553,
+                "normalized_mse": 0.9563196664576514,
+                "r2": 0.043598218199779604,
+                "tolerance": 0.07466063499550685,
+                "tolerance_accuracy": 0.07073974609375
+              },
+              "training_seconds": 0.22711188999983278
+            }
+          },
+          "winner_by_test_normalized_mse": "kronecker"
+        },
+        "rank1_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 0.7275402545928955,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7197826989899248,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1124.8058135236952,
+              "tail_loss_std": 0.11678887400960587,
+              "test": {
+                "mse": 0.8517991304397583,
+                "normalized_mse": 0.9656461810034956,
+                "r2": 0.03434533645226212,
+                "tolerance": 0.06197201609711511,
+                "tolerance_accuracy": 0.1236572265625
+              },
+              "train": {
+                "mse": 0.726848304271698,
+                "normalized_mse": 0.9508084431259489,
+                "r2": 0.0491851812346622,
+                "tolerance": 0.053270506859825685,
+                "tolerance_accuracy": 0.11297607421875
+              },
+              "training_seconds": 0.266712704000156
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 1.3752628547081258e-06,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.8475916256296042,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1356.2472082790448,
+              "tail_loss_std": 2.165325830073961e-07,
+              "test": {
+                "mse": 1.1643556945273303e-06,
+                "normalized_mse": 1.3199774331414476e-06,
+                "r2": 0.9999986800109718,
+                "tolerance": 0.06197201609711511,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 8.694088364791241e-07,
+                "normalized_mse": 1.1372954403201823e-06,
+                "r2": 0.9999988626969335,
+                "tolerance": 0.053270506859825685,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2211986119998528
+            }
+          },
+          "winner_by_test_normalized_mse": "rank1_bottleneck"
+        }
+      },
+      "test_samples": 128
+    },
+    {
+      "batch_size": 64,
+      "capacity": {
+        "full_dense_parameters_without_bias": 65536,
+        "full_operator_entries_n4": 65536,
+        "kronecker_max_effective_operator_rank": 256,
+        "matrix_dimension": 256,
+        "n": 16,
+        "operator_entries_are_parameters": false,
+        "physical_parameter_budget_each": 512,
+        "rank1_bottleneck_max_effective_operator_rank": 1
+      },
+      "device": "cpu",
+      "fairness": {
+        "baseline_name": "rank1_bottleneck (not unrestricted dense)",
+        "same_optimizer": "Adam",
+        "same_physical_parameter_budget": true,
+        "same_training_and_test_inputs_per_task": true,
+        "single_task_universal_superiority_claim": false
+      },
+      "learning_rate": 0.01,
+      "matrix_dimension": 256,
+      "n": 16,
+      "protocol": "kronecker-vs-rank1-param-matched-v2",
+      "seed": 3,
+      "steps": 300,
+      "tasks": {
+        "kronecker_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 6.2717882103047184e-12,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7464399283614844,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1148.0351575362806,
+              "tail_loss_std": 2.242361496487526e-12,
+              "test": {
+                "mse": 5.546835993991417e-12,
+                "normalized_mse": 5.293361181516485e-12,
+                "r2": 0.9999999999947067,
+                "tolerance": 0.07882570028405055,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 5.646910456597043e-12,
+                "normalized_mse": 5.549229790145274e-12,
+                "r2": 0.9999999999944508,
+                "tolerance": 0.07752469778160914,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.26131603899989386
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 0.9777597784996033,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.8398293865439379,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1358.6943045558496,
+              "tail_loss_std": 0.027764497728201647,
+              "test": {
+                "mse": 1.0055111646652222,
+                "normalized_mse": 0.9595621309852906,
+                "r2": 0.04043677739869789,
+                "tolerance": 0.07882570028405055,
+                "tolerance_accuracy": 0.0701904296875
+              },
+              "train": {
+                "mse": 0.977655827999115,
+                "normalized_mse": 0.960744266611092,
+                "r2": 0.039255283194699286,
+                "tolerance": 0.07752469778160914,
+                "tolerance_accuracy": 0.07122802734375
+              },
+              "training_seconds": 0.22080021900001157
+            }
+          },
+          "winner_by_test_normalized_mse": "kronecker"
+        },
+        "rank1_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.1573750972747803,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7608867307171984,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1153.8091387614259,
+              "tail_loss_std": 0.18548609866715873,
+              "test": {
+                "mse": 0.8061103224754333,
+                "normalized_mse": 0.9874151052030357,
+                "r2": 0.01258482270527761,
+                "tolerance": 0.05753039121727808,
+                "tolerance_accuracy": 0.11907958984375
+              },
+              "train": {
+                "mse": 1.1570016145706177,
+                "normalized_mse": 0.9779706452613385,
+                "r2": 0.022029354738661522,
+                "tolerance": 0.07022300362686976,
+                "tolerance_accuracy": 0.1226806640625
+              },
+              "training_seconds": 0.2600083410000025
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 2.50326866080286e-06,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 1.026304715847765,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1370.8891210753436,
+              "tail_loss_std": 5.434148851245014e-07,
+              "test": {
+                "mse": 2.322074578842148e-06,
+                "normalized_mse": 2.8443396029413707e-06,
+                "r2": 0.9999971556601894,
+                "tolerance": 0.05753039121727808,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.9361398244654993e-06,
+                "normalized_mse": 1.6365473389174166e-06,
+                "r2": 0.9999983634526611,
+                "tolerance": 0.07022300362686976,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.21883607900008428
+            }
+          },
+          "winner_by_test_normalized_mse": "rank1_bottleneck"
+        }
+      },
+      "test_samples": 128
+    },
+    {
+      "batch_size": 64,
+      "capacity": {
+        "full_dense_parameters_without_bias": 65536,
+        "full_operator_entries_n4": 65536,
+        "kronecker_max_effective_operator_rank": 256,
+        "matrix_dimension": 256,
+        "n": 16,
+        "operator_entries_are_parameters": false,
+        "physical_parameter_budget_each": 512,
+        "rank1_bottleneck_max_effective_operator_rank": 1
+      },
+      "device": "cpu",
+      "fairness": {
+        "baseline_name": "rank1_bottleneck (not unrestricted dense)",
+        "same_optimizer": "Adam",
+        "same_physical_parameter_budget": true,
+        "same_training_and_test_inputs_per_task": true,
+        "single_task_universal_superiority_claim": false
+      },
+      "learning_rate": 0.01,
+      "matrix_dimension": 256,
+      "n": 16,
+      "protocol": "kronecker-vs-rank1-param-matched-v2",
+      "seed": 4,
+      "steps": 300,
+      "tasks": {
+        "kronecker_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.5171586209561383e-11,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.6841725759874416,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1146.0431603064444,
+              "tail_loss_std": 7.2569388304477886e-12,
+              "test": {
+                "mse": 1.4080307232655631e-11,
+                "normalized_mse": 1.3558199234347887e-11,
+                "r2": 0.9999999999864412,
+                "tolerance": 0.07915735840897425,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.3944388178865896e-11,
+                "normalized_mse": 1.3635679778052715e-11,
+                "r2": 0.9999999999863644,
+                "tolerance": 0.07866937518219813,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2617702459999691
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 0.9964871406555176,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 1.0945235287898472,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1348.1019277582716,
+              "tail_loss_std": 0.013629220147785911,
+              "test": {
+                "mse": 0.9946566820144653,
+                "normalized_mse": 0.9577740912677541,
+                "r2": 0.0421812702583193,
+                "tolerance": 0.07915735840897425,
+                "tolerance_accuracy": 0.067626953125
+              },
+              "train": {
+                "mse": 0.9963995218276978,
+                "normalized_mse": 0.9743406907761755,
+                "r2": 0.025659195644751387,
+                "tolerance": 0.07866937518219813,
+                "tolerance_accuracy": 0.06512451171875
+              },
+              "training_seconds": 0.22253510199993798
+            }
+          },
+          "winner_by_test_normalized_mse": "kronecker"
+        },
+        "rank1_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.0626903772354126,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7284635878072331,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1147.7121137548197,
+              "tail_loss_std": 0.10889612871737304,
+              "test": {
+                "mse": 0.7097147107124329,
+                "normalized_mse": 0.9794134625460854,
+                "r2": 0.02056792735559998,
+                "tolerance": 0.053184205294655396,
+                "tolerance_accuracy": 0.13336181640625
+              },
+              "train": {
+                "mse": 1.061842679977417,
+                "normalized_mse": 0.9602210429556248,
+                "r2": 0.03971073752917287,
+                "tolerance": 0.06676588058571681,
+                "tolerance_accuracy": 0.12799072265625
+              },
+              "training_seconds": 0.26138959099989734
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 7.941745934658684e-06,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.890015773690077,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1350.5271404539612,
+              "tail_loss_std": 2.3058912534464712e-06,
+              "test": {
+                "mse": 6.7241426222608425e-06,
+                "normalized_mse": 9.279384672344283e-06,
+                "r2": 0.9999907204390076,
+                "tolerance": 0.053184205294655396,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 5.65600339541561e-06,
+                "normalized_mse": 5.114706332412668e-06,
+                "r2": 0.99999488493029,
+                "tolerance": 0.06676588058571681,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2221354840000913
+            }
+          },
+          "winner_by_test_normalized_mse": "rank1_bottleneck"
+        }
+      },
+      "test_samples": 128
+    },
+    {
+      "batch_size": 64,
+      "capacity": {
+        "full_dense_parameters_without_bias": 65536,
+        "full_operator_entries_n4": 65536,
+        "kronecker_max_effective_operator_rank": 256,
+        "matrix_dimension": 256,
+        "n": 16,
+        "operator_entries_are_parameters": false,
+        "physical_parameter_budget_each": 512,
+        "rank1_bottleneck_max_effective_operator_rank": 1
+      },
+      "device": "cpu",
+      "fairness": {
+        "baseline_name": "rank1_bottleneck (not unrestricted dense)",
+        "same_optimizer": "Adam",
+        "same_physical_parameter_budget": true,
+        "same_training_and_test_inputs_per_task": true,
+        "single_task_universal_superiority_claim": false
+      },
+      "learning_rate": 0.01,
+      "matrix_dimension": 256,
+      "n": 16,
+      "protocol": "kronecker-vs-rank1-param-matched-v2",
+      "seed": 5,
+      "steps": 300,
+      "tasks": {
+        "kronecker_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.9595339240119358e-11,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.7840326914892828,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1094.955620847089,
+              "tail_loss_std": 8.055052403139591e-12,
+              "test": {
+                "mse": 1.735247882883595e-11,
+                "normalized_mse": 1.8074951530585896e-11,
+                "r2": 0.9999999999819247,
+                "tolerance": 0.0762593984613882,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.738095778414106e-11,
+                "normalized_mse": 1.8218439215891852e-11,
+                "r2": 0.9999999999817809,
+                "tolerance": 0.07587910890679225,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.273983706999843
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 0.9139461517333984,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.7773139976710965,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1368.1253196228774,
+              "tail_loss_std": 0.01341448167433725,
+              "test": {
+                "mse": 0.9216575026512146,
+                "normalized_mse": 0.9600308320525449,
+                "r2": 0.03994836543740177,
+                "tolerance": 0.0762593984613882,
+                "tolerance_accuracy": 0.065765380859375
+              },
+              "train": {
+                "mse": 0.9136398434638977,
+                "normalized_mse": 0.9576625270070834,
+                "r2": 0.04230109404476423,
+                "tolerance": 0.07587910890679225,
+                "tolerance_accuracy": 0.0704345703125
+              },
+              "training_seconds": 0.21927815799995187
+            }
+          },
+          "winner_by_test_normalized_mse": "kronecker"
+        },
+        "rank1_teacher": {
+          "models": {
+            "kronecker": {
+              "effective_operator_rank": 256,
+              "estimated_adam_training_bytes": 8192,
+              "factor_rank_a": 16,
+              "factor_rank_b": 16,
+              "final_step_loss": 1.0232911109924316,
+              "max_effective_operator_rank": 256,
+              "max_gradient_norm": 0.6664166962854664,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1161.7315362262618,
+              "tail_loss_std": 0.10441738483153103,
+              "test": {
+                "mse": 1.136439323425293,
+                "normalized_mse": 0.9931396991935406,
+                "r2": 0.006855024171927182,
+                "tolerance": 0.06676309108834132,
+                "tolerance_accuracy": 0.155853271484375
+              },
+              "train": {
+                "mse": 1.0211960077285767,
+                "normalized_mse": 0.9695622387409835,
+                "r2": 0.030433700979615397,
+                "tolerance": 0.06547939777474268,
+                "tolerance_accuracy": 0.14593505859375
+              },
+              "training_seconds": 0.2582352209999499
+            },
+            "rank1_bottleneck": {
+              "effective_operator_rank": 1,
+              "estimated_adam_training_bytes": 8192,
+              "final_step_loss": 1.5491591511818115e-06,
+              "max_effective_operator_rank": 1,
+              "max_gradient_norm": 0.8677282136403605,
+              "nonfinite_steps": 0,
+              "optimization_stable": true,
+              "parameter_bytes": 2048,
+              "physical_parameters": 512,
+              "steps_per_second": 1375.138742903652,
+              "tail_loss_std": 6.281356849724814e-07,
+              "test": {
+                "mse": 2.4270725589303765e-06,
+                "normalized_mse": 2.121030187367911e-06,
+                "r2": 0.9999978789585434,
+                "tolerance": 0.06676309108834132,
+                "tolerance_accuracy": 1.0
+              },
+              "train": {
+                "mse": 1.1342497145960806e-06,
+                "normalized_mse": 1.076899717833007e-06,
+                "r2": 0.9999989230957724,
+                "tolerance": 0.06547939777474268,
+                "tolerance_accuracy": 1.0
+              },
+              "training_seconds": 0.2181598050001412
+            }
+          },
+          "winner_by_test_normalized_mse": "rank1_bottleneck"
+        }
+      },
+      "test_samples": 128
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
+}

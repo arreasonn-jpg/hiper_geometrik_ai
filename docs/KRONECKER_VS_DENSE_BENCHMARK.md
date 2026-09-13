@@ -65,6 +65,31 @@ Her seed ayrı `EXP-NNNN` manifestidir. Aynı task içindeki iki model aynı tra
 ve test girdilerini, aynı optimizer türünü ve tam aynı `2n²` parametre bütçesini
 kullanır.
 
+## Ölçülmüş beş-seed sonucu
+
+CPU üzerinde PyTorch `2.3.1+cu121`, `n=16`, 300 step, batch=64, 128 held-out
+örnek ve seed 1–5 ile çalıştırıldı. Her iki model tam 512 fiziksel parametreye
+sahiptir.
+
+| Teacher / model | Held-out NMSE mean ± std | R² mean ± std |
+|---|---:|---:|
+| Kronecker / Kronecker | `1.07112e-11 ± 5.3048e-12` | `0.999999999989 ± 5.305e-12` |
+| Kronecker / rank-1 | `0.959713 ± 0.004953` | `0.040239 ± 0.004977` |
+| Rank-1 / Kronecker | `0.977951 ± 0.011529` | `0.022042 ± 0.011529` |
+| Rank-1 / rank-1 | `3.43394e-6 ± 2.96832e-6` | `0.999996566 ± 2.968e-6` |
+
+Her seed'de yapı-matched model kendi teacher görevini kazandı. Sonuç evrensel
+Kronecker üstünlüğü değil, iki parametrizasyonun farklı inductive bias'larını
+counterbalanced protokolde doğrular.
+
+Tam sonuçlar, per-seed train/test metrikleri ve temiz çalışma ağacı manifestleri
+`raporlar/kronecker_5seed_summary.json` içindedir. Koşular commit `1aa4d15`,
+dataset hash
+`cd0e3d55d10179f78e14d7b128b1c7a5c7e545c73b3f2a1417df3d93ac32ad1`
+ve config hash
+`88026c8e9ed2c8f74b09cf6c433c8d00c5edb86e210c52c1353fe260ef9e523f`
+ile üretildi.
+
 ## Yorumlama sınırları
 
 - İki sentetik öğretmen gerçek dil modelleme başarısı değildir.

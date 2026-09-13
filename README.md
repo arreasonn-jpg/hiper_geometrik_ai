@@ -190,7 +190,7 @@ Ayrıntılar: `docs/MEMORY_COLLISION_BENCHMARK.md`.
 
 ```bash
 python -m hga kronecker-benchmark \
-  --n 16 --steps 100 --batch 16 --seeds 1,2,3,4,5
+  --n 16 --steps 300 --batch 64 --seeds 1,2,3,4,5
 ```
 
 Karşılaştırma her iki modele tam `2n²` fiziksel parametre verir. Önceki
@@ -200,7 +200,11 @@ Kronecker yanlılığını önlemek için hem `Y=A*XB*` hem rank-1 öğretmen g�
 çalıştırılır. Held-out normalized MSE/R²/tolerance accuracy, hız, parametre ve
 optimizer belleği, gradient/loss kararlılığı ve efektif rank raporlanır.
 `n⁴` her raporda açıkça **operatör girdisi, gerçek parametre değil** olarak
-saklanır. Ayrıntılar: `docs/KRONECKER_VS_DENSE_BENCHMARK.md`.
+saklanır. Ölçülmüş beş-seed sonucunda yapı-matched modeller kendi görevlerini
+kazandı: Kronecker-teacher NMSE'si Kronecker modelde `1.07e-11`, rank-1 modelde
+`0.9597`; rank-1-teacher NMSE'si rank-1 modelde `3.43e-6`, Kronecker modelde
+`0.9780` oldu. Tam rapor `raporlar/kronecker_5seed_summary.json`, ayrıntılar
+`docs/KRONECKER_VS_DENSE_BENCHMARK.md` içindedir.
 
 ### 100-cycle self-learning ve collapse testi
 

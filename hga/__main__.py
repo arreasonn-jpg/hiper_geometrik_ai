@@ -328,8 +328,8 @@ def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=No
         for task, task_report in report["tasks"].items():
             models = task_report["models"]
             print(
-                f"{task}: kron_nmse={models['kronecker']['test']['normalized_mse']:.6f} "
-                f"rank1_nmse={models['rank1_bottleneck']['test']['normalized_mse']:.6f} "
+                f"{task}: kron_nmse={models['kronecker']['test']['normalized_mse']:.6g} "
+                f"rank1_nmse={models['rank1_bottleneck']['test']['normalized_mse']:.6g} "
                 f"winner={task_report['winner_by_test_normalized_mse']}"
             )
         return report
@@ -350,7 +350,7 @@ def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=No
             key = f"tasks.{task}.models.{model}.test.normalized_mse"
             values = report["aggregate"].get(key)
             if values:
-                print(f"  {task}.{model}.test_nmse: {values['mean']:.6f} ± {values['std']:.6f}")
+                print(f"  {task}.{model}.test_nmse: {values['mean']:.6g} ± {values['std']:.6g}")
     print("  Not: n⁴ operatör girdisidir; gerçek eğitilebilir parametre değildir.")
     if out:
         os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """Kronecker vs eşit parametreli rank-1 baseline testleri."""
 import importlib.util
+import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -74,6 +76,32 @@ def test_legacy_wrapper_compatibility():
     assert result["params_kron"] == result["params_dense"] == 128
     assert result["virtual_ops_kron"] == 8**4
     assert result["report"]["capacity"]["operator_entries_are_parameters"] is False
+
+
+def test_kuratorlu_bes_seed_kronecker_raporu():
+    path = Path(KOK) / "raporlar" / "kronecker_5seed_summary.json"
+    report = json.loads(path.read_text(encoding="utf-8"))
+    assert report["seeds"] == [1, 2, 3, 4, 5]
+    assert len(report["manifests"]) == len(report["results"]) == 5
+    assert all(not manifest["git_dirty"] for manifest in report["manifests"])
+    assert all(manifest["torch_version"].startswith("2.3.1")
+               for manifest in report["manifests"])
+    kron_nmse = report["aggregate"][
+        "tasks.kronecker_teacher.models.kronecker.test.normalized_mse"
+    ]["mean"]
+    rank1_on_kron = report["aggregate"][
+        "tasks.kronecker_teacher.models.rank1_bottleneck.test.normalized_mse"
+    ]["mean"]
+    rank1_nmse = report["aggregate"][
+        "tasks.rank1_teacher.models.rank1_bottleneck.test.normalized_mse"
+    ]["mean"]
+    kron_on_rank1 = report["aggregate"][
+        "tasks.rank1_teacher.models.kronecker.test.normalized_mse"
+    ]["mean"]
+    assert 0.0 < kron_nmse < 1e-9
+    assert rank1_on_kron > 0.9
+    assert 0.0 < rank1_nmse < 1e-4
+    assert kron_on_rank1 > 0.9
 
 
 def test_torch_yokken_fonksiyon_ve_cli_acik_hata_verir(tmp_path):
