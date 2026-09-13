@@ -341,6 +341,30 @@ kuralı genellemiyor, varlık kimliğini ezberliyor. Hibrit +0.386 / +0.116 puan
 kazandırıyor ama cold-start'ta kendisi de 0.785'e düşüyor: hibritlik bu
 problemi **azaltıyor, çözmüyor**. Ayrıntı: `docs/PARADIGMA_ABLASYONU.md`.
 
+### Ölçeklendirilmiş golden benchmark (Faz 3/6)
+
+```bash
+python -m hga olcekli-golden --sizes 100,1000,10000 --seeds 1,2,3,4,5 --hard
+```
+
+`golden_dataset/` elle sabitlenmiş 8 kayıttır; 5 test örneğinde `FAR=0` görmek
+gürültüden ayırt edilemez. Bu komut aynı epistemik sözleşmeyi koruyarak veri
+setini prosedürel olarak ölçekler. Beklenen etiket evaluator'ın karar ağacından
+değil **kanıt durumunun inşasından** türetilir, yani ölçüm tautolojik değildir.
+
+| Ölçek | Accuracy | F1 | FAR | FRR | Örnek başına süre |
+|---:|---:|---:|---:|---:|---:|
+| 100 | 1.0000 ± 0.0000 | 1.0000 | 0.0000 | 0.0000 | 0.178 ms |
+| 1.000 | 1.0000 ± 0.0000 | 1.0000 | 0.0000 | 0.0000 | 1.169 ms |
+| 10.000 | 1.0000 ± 0.0000 | 1.0000 | 0.0000 | 0.0000 | **17.741 ms** |
+
+Doğruluk 10.000 örnekte de bozulmuyor (zor modda, eşik/kısıt-önceliği/kaynak
+çatışması sınır vakalarıyla birlikte). **Asıl bulgu maliyette**: örnek başına
+süre ölçek 100× büyürken 99.7× arttı — `Scoring.information_gain` adayı tüm
+varlıklarla karşılaştırdığı için değerlendirme O(N²). Ters indeksle sabit
+çarpan düşürüldü; asimptotik sınıf metriğin tanımı gereği korunuyor.
+Ayrıntı: `docs/OLCEKLI_GOLDEN_BENCHMARK.md`.
+
 ### Memory interference: kasıtlı çakışma (Faz 15–17)
 
 ```bash

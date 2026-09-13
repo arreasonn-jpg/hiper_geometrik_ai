@@ -1,0 +1,2190 @@
+{
+  "easy": {
+    "cost": {
+      "100": {
+        "mean": 0.0178,
+        "per_example_ms": 0.178,
+        "std": 0.002092
+      },
+      "1000": {
+        "mean": 1.16882,
+        "per_example_ms": 1.1688,
+        "std": 0.01384
+      },
+      "10000": {
+        "mean": 177.41268,
+        "per_example_ms": 17.7413,
+        "std": 14.512109
+      }
+    },
+    "findings": [
+      "Ölçek 100 → 10000: accuracy 1.0000 → 1.0000; std 0.0000 → 0.0000.",
+      "En büyük ölçekte FAR=0.0000, FRR=0.0000, F1=1.0000 — FAR tek başına raporlanmaz.",
+      "Beklenen etiket evaluator karar ağacından değil, kanıt durumunun inşasından türetilir; ölçüm tautolojik değildir.",
+      "Sızıntı denetimi (train/test semantik parmak izi) tüm ölçeklerde temiz.",
+      "MALİYET: örnek başına süre 0.178 ms → 17.741 ms (99.7×) ölçek 100× büyürken. Sabit olmaması değerlendirmenin O(N) değil O(N²) olduğunu gösterir: Scoring.information_gain adayı bilgi tabanındaki diğer varlıklarla karşılaştırır. Ters indeksle sabit çarpan düşürüldü ama asimptotik sınıf metriğin tanımı gereği korunuyor — 10⁵+ ölçekte örnekleme/ANN gerekir.",
+      "UYARI: doğruluk ~1.0. Bu, evaluator'ın gücünden çok görevin deterministik oluşundandır; sentetik oracle tam olduğu için üst sınıra çarpılıyor. Gerçek Türkçe veride düşmesi beklenir (Faz 27/28)."
+    ],
+    "hard": false,
+    "leakage_clean": true,
+    "per_class": {
+      "100": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "1000": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "10000": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    },
+    "reports": [
+      {
+        "class_counts": {
+          "CONFLICT": 25,
+          "INVALID": 25,
+          "UNCERTAIN": 25,
+          "VALID": 25
+        },
+        "dataset_hash": "f4496c17d86716d90672742d013ae9f1bdf95cf9c71305d24bfcce8a5fc1da88",
+        "elapsed_seconds": 0.0187,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 25,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 25,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 25,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 25,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 25
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 25,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 25,
+          "valid_total": 25
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 25,
+          "INVALID": 25,
+          "UNCERTAIN": 25,
+          "VALID": 25
+        },
+        "dataset_hash": "f4496c17d86716d90672742d013ae9f1bdf95cf9c71305d24bfcce8a5fc1da88",
+        "elapsed_seconds": 0.0215,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 25,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 25,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 25,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 25,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 25
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 25,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 25,
+          "valid_total": 25
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 25,
+          "INVALID": 25,
+          "UNCERTAIN": 25,
+          "VALID": 25
+        },
+        "dataset_hash": "f4496c17d86716d90672742d013ae9f1bdf95cf9c71305d24bfcce8a5fc1da88",
+        "elapsed_seconds": 0.0165,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 25,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 25,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 25,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 25,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 25
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 25,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 25,
+          "valid_total": 25
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 25,
+          "INVALID": 25,
+          "UNCERTAIN": 25,
+          "VALID": 25
+        },
+        "dataset_hash": "f4496c17d86716d90672742d013ae9f1bdf95cf9c71305d24bfcce8a5fc1da88",
+        "elapsed_seconds": 0.0158,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 25,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 25,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 25,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 25,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 25
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 25,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 25,
+          "valid_total": 25
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 25,
+          "INVALID": 25,
+          "UNCERTAIN": 25,
+          "VALID": 25
+        },
+        "dataset_hash": "f4496c17d86716d90672742d013ae9f1bdf95cf9c71305d24bfcce8a5fc1da88",
+        "elapsed_seconds": 0.0165,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 25,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 25,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 25,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 25,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 25
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 25,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 25,
+          "valid_total": 25
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 250,
+          "INVALID": 250,
+          "UNCERTAIN": 250,
+          "VALID": 250
+        },
+        "dataset_hash": "afbda265ebce6a31df40b46fd5824a2344a5249aca93dc1d01219a282bc28b03",
+        "elapsed_seconds": 1.1681,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 250,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 250
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 250,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 250,
+          "valid_total": 250
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 250,
+          "INVALID": 250,
+          "UNCERTAIN": 250,
+          "VALID": 250
+        },
+        "dataset_hash": "afbda265ebce6a31df40b46fd5824a2344a5249aca93dc1d01219a282bc28b03",
+        "elapsed_seconds": 1.1882,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 250,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 250
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 250,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 250,
+          "valid_total": 250
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 250,
+          "INVALID": 250,
+          "UNCERTAIN": 250,
+          "VALID": 250
+        },
+        "dataset_hash": "afbda265ebce6a31df40b46fd5824a2344a5249aca93dc1d01219a282bc28b03",
+        "elapsed_seconds": 1.1762,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 250,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 250
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 250,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 250,
+          "valid_total": 250
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 250,
+          "INVALID": 250,
+          "UNCERTAIN": 250,
+          "VALID": 250
+        },
+        "dataset_hash": "afbda265ebce6a31df40b46fd5824a2344a5249aca93dc1d01219a282bc28b03",
+        "elapsed_seconds": 1.1655,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 250,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 250
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 250,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 250,
+          "valid_total": 250
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 250,
+          "INVALID": 250,
+          "UNCERTAIN": 250,
+          "VALID": 250
+        },
+        "dataset_hash": "afbda265ebce6a31df40b46fd5824a2344a5249aca93dc1d01219a282bc28b03",
+        "elapsed_seconds": 1.1461,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 250,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 250
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 250,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 250,
+          "valid_total": 250
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 2500,
+          "INVALID": 2500,
+          "UNCERTAIN": 2500,
+          "VALID": 2500
+        },
+        "dataset_hash": "964bc866c1800b81811ce97468ab7ca2bbacc5a86369061a398ddb3b3a0c0fff",
+        "elapsed_seconds": 160.5301,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 2500,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 2500,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 2500,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 2500,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 2500
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 2500,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 2500,
+          "valid_total": 2500
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 2500,
+          "INVALID": 2500,
+          "UNCERTAIN": 2500,
+          "VALID": 2500
+        },
+        "dataset_hash": "964bc866c1800b81811ce97468ab7ca2bbacc5a86369061a398ddb3b3a0c0fff",
+        "elapsed_seconds": 204.4124,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 2500,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 2500,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 2500,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 2500,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 2500
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 2500,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 2500,
+          "valid_total": 2500
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 2500,
+          "INVALID": 2500,
+          "UNCERTAIN": 2500,
+          "VALID": 2500
+        },
+        "dataset_hash": "964bc866c1800b81811ce97468ab7ca2bbacc5a86369061a398ddb3b3a0c0fff",
+        "elapsed_seconds": 174.7561,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 2500,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 2500,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 2500,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 2500,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 2500
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 2500,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 2500,
+          "valid_total": 2500
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 2500,
+          "INVALID": 2500,
+          "UNCERTAIN": 2500,
+          "VALID": 2500
+        },
+        "dataset_hash": "964bc866c1800b81811ce97468ab7ca2bbacc5a86369061a398ddb3b3a0c0fff",
+        "elapsed_seconds": 175.1164,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 2500,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 2500,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 2500,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 2500,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 2500
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 2500,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 2500,
+          "valid_total": 2500
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 2500,
+          "INVALID": 2500,
+          "UNCERTAIN": 2500,
+          "VALID": 2500
+        },
+        "dataset_hash": "964bc866c1800b81811ce97468ab7ca2bbacc5a86369061a398ddb3b3a0c0fff",
+        "elapsed_seconds": 172.2484,
+        "hard": false,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 2500,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 2500,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 2500,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 2500,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 2500
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 2500,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 2500,
+          "valid_total": 2500
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 10000
+      }
+    ],
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "sizes": [
+      100,
+      1000,
+      10000
+    ],
+    "summary": {
+      "100": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "1000": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "10000": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    }
+  },
+  "hard": {
+    "cost": {
+      "100": {
+        "mean": 0.01222,
+        "per_example_ms": 0.1222,
+        "std": 0.000172
+      },
+      "1000": {
+        "mean": 0.75898,
+        "per_example_ms": 0.759,
+        "std": 0.010563
+      },
+      "10000": {
+        "mean": 98.10442,
+        "per_example_ms": 9.8104,
+        "std": 2.281209
+      }
+    },
+    "findings": [
+      "Ölçek 100 → 10000: accuracy 1.0000 → 1.0000; std 0.0000 → 0.0000.",
+      "En büyük ölçekte FAR=0.0000, FRR=0.0000, F1=1.0000 — FAR tek başına raporlanmaz.",
+      "Beklenen etiket evaluator karar ağacından değil, kanıt durumunun inşasından türetilir; ölçüm tautolojik değildir.",
+      "Sızıntı denetimi (train/test semantik parmak izi) tüm ölçeklerde temiz.",
+      "MALİYET: örnek başına süre 0.122 ms → 9.810 ms (80.3×) ölçek 100× büyürken. Sabit olmaması değerlendirmenin O(N) değil O(N²) olduğunu gösterir: Scoring.information_gain adayı bilgi tabanındaki diğer varlıklarla karşılaştırır. Ters indeksle sabit çarpan düşürüldü ama asimptotik sınıf metriğin tanımı gereği korunuyor — 10⁵+ ölçekte örnekleme/ANN gerekir.",
+      "UYARI: doğruluk ~1.0. Bu, evaluator'ın gücünden çok görevin deterministik oluşundandır; sentetik oracle tam olduğu için üst sınıra çarpılıyor. Gerçek Türkçe veride düşmesi beklenir (Faz 27/28)."
+    ],
+    "hard": true,
+    "leakage_clean": true,
+    "per_class": {
+      "100": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "1000": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "10000": {
+        "CONFLICT": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "INVALID": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "UNCERTAIN": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "VALID": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    },
+    "reports": [
+      {
+        "class_counts": {
+          "CONFLICT": 13,
+          "INVALID": 37,
+          "UNCERTAIN": 13,
+          "VALID": 37
+        },
+        "dataset_hash": "03cd6754acef81a114c542969040139f1d5bd9519d64b00937de0bde3fe89207",
+        "elapsed_seconds": 0.0125,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 13,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 13,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 37,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 13,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 37
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 37,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 13,
+          "valid_total": 37
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 13,
+          "INVALID": 37,
+          "UNCERTAIN": 13,
+          "VALID": 37
+        },
+        "dataset_hash": "03cd6754acef81a114c542969040139f1d5bd9519d64b00937de0bde3fe89207",
+        "elapsed_seconds": 0.0123,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 13,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 13,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 37,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 13,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 37
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 37,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 13,
+          "valid_total": 37
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 13,
+          "INVALID": 37,
+          "UNCERTAIN": 13,
+          "VALID": 37
+        },
+        "dataset_hash": "03cd6754acef81a114c542969040139f1d5bd9519d64b00937de0bde3fe89207",
+        "elapsed_seconds": 0.0121,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 13,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 13,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 37,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 13,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 37
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 37,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 13,
+          "valid_total": 37
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 13,
+          "INVALID": 37,
+          "UNCERTAIN": 13,
+          "VALID": 37
+        },
+        "dataset_hash": "03cd6754acef81a114c542969040139f1d5bd9519d64b00937de0bde3fe89207",
+        "elapsed_seconds": 0.0122,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 13,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 13,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 37,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 13,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 37
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 37,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 13,
+          "valid_total": 37
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 13,
+          "INVALID": 37,
+          "UNCERTAIN": 13,
+          "VALID": 37
+        },
+        "dataset_hash": "03cd6754acef81a114c542969040139f1d5bd9519d64b00937de0bde3fe89207",
+        "elapsed_seconds": 0.012,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 13,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 13,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 37,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 13,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 37
+            }
+          },
+          "correct": 100,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 37,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 100,
+          "uncertain_total": 13,
+          "valid_total": 37
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 100
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 125,
+          "INVALID": 375,
+          "UNCERTAIN": 125,
+          "VALID": 375
+        },
+        "dataset_hash": "28cb3fda6375964b0826e71cd61bff833ce09f1a79c65c5aa720d0ae82640e36",
+        "elapsed_seconds": 0.755,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 125,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 125,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 375,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 125,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 375
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 375,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 125,
+          "valid_total": 375
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 125,
+          "INVALID": 375,
+          "UNCERTAIN": 125,
+          "VALID": 375
+        },
+        "dataset_hash": "28cb3fda6375964b0826e71cd61bff833ce09f1a79c65c5aa720d0ae82640e36",
+        "elapsed_seconds": 0.7555,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 125,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 125,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 375,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 125,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 375
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 375,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 125,
+          "valid_total": 375
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 125,
+          "INVALID": 375,
+          "UNCERTAIN": 125,
+          "VALID": 375
+        },
+        "dataset_hash": "28cb3fda6375964b0826e71cd61bff833ce09f1a79c65c5aa720d0ae82640e36",
+        "elapsed_seconds": 0.7738,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 125,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 125,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 375,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 125,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 375
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 375,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 125,
+          "valid_total": 375
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 125,
+          "INVALID": 375,
+          "UNCERTAIN": 125,
+          "VALID": 375
+        },
+        "dataset_hash": "28cb3fda6375964b0826e71cd61bff833ce09f1a79c65c5aa720d0ae82640e36",
+        "elapsed_seconds": 0.7434,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 125,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 125,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 375,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 125,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 375
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 375,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 125,
+          "valid_total": 375
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 125,
+          "INVALID": 375,
+          "UNCERTAIN": 125,
+          "VALID": 375
+        },
+        "dataset_hash": "28cb3fda6375964b0826e71cd61bff833ce09f1a79c65c5aa720d0ae82640e36",
+        "elapsed_seconds": 0.7672,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 125,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 125,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 375,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 125,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 375
+            }
+          },
+          "correct": 1000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 375,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 1000,
+          "uncertain_total": 125,
+          "valid_total": 375
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 1000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 1250,
+          "INVALID": 3750,
+          "UNCERTAIN": 1250,
+          "VALID": 3750
+        },
+        "dataset_hash": "ef06f6db03220d1857f9315b71010ab4f9cd828c072fcf5c43e041989e4d27d2",
+        "elapsed_seconds": 98.8779,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 1250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 1250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 3750,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 1250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 3750
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 3750,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 1250,
+          "valid_total": 3750
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 1,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 1250,
+          "INVALID": 3750,
+          "UNCERTAIN": 1250,
+          "VALID": 3750
+        },
+        "dataset_hash": "ef06f6db03220d1857f9315b71010ab4f9cd828c072fcf5c43e041989e4d27d2",
+        "elapsed_seconds": 93.5662,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 1250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 1250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 3750,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 1250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 3750
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 3750,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 1250,
+          "valid_total": 3750
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 2,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 1250,
+          "INVALID": 3750,
+          "UNCERTAIN": 1250,
+          "VALID": 3750
+        },
+        "dataset_hash": "ef06f6db03220d1857f9315b71010ab4f9cd828c072fcf5c43e041989e4d27d2",
+        "elapsed_seconds": 99.6158,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 1250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 1250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 3750,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 1250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 3750
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 3750,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 1250,
+          "valid_total": 3750
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 3,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 1250,
+          "INVALID": 3750,
+          "UNCERTAIN": 1250,
+          "VALID": 3750
+        },
+        "dataset_hash": "ef06f6db03220d1857f9315b71010ab4f9cd828c072fcf5c43e041989e4d27d2",
+        "elapsed_seconds": 99.1938,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 1250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 1250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 3750,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 1250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 3750
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 3750,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 1250,
+          "valid_total": 3750
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 4,
+        "size": 10000
+      },
+      {
+        "class_counts": {
+          "CONFLICT": 1250,
+          "INVALID": 3750,
+          "UNCERTAIN": 1250,
+          "VALID": 3750
+        },
+        "dataset_hash": "ef06f6db03220d1857f9315b71010ab4f9cd828c072fcf5c43e041989e4d27d2",
+        "elapsed_seconds": 99.2684,
+        "hard": true,
+        "leakage_clean": true,
+        "metrics": {
+          "accuracy": 1.0,
+          "conflict_total": 1250,
+          "confusion": {
+            "CONFLICT": {
+              "CONFLICT": 1250,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "INVALID": {
+              "CONFLICT": 0,
+              "INVALID": 3750,
+              "UNCERTAIN": 0,
+              "VALID": 0
+            },
+            "UNCERTAIN": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 1250,
+              "VALID": 0
+            },
+            "VALID": {
+              "CONFLICT": 0,
+              "INVALID": 0,
+              "UNCERTAIN": 0,
+              "VALID": 3750
+            }
+          },
+          "correct": 10000,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "invalid_total": 3750,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 10000,
+          "uncertain_total": 1250,
+          "valid_total": 3750
+        },
+        "misclassifications": [],
+        "per_class_accuracy": {
+          "CONFLICT": 1.0,
+          "INVALID": 1.0,
+          "UNCERTAIN": 1.0,
+          "VALID": 1.0
+        },
+        "seed": 5,
+        "size": 10000
+      }
+    ],
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "sizes": [
+      100,
+      1000,
+      10000
+    ],
+    "summary": {
+      "100": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "1000": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      },
+      "10000": {
+        "accuracy": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "f1": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "far": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "frr": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "precision": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "recall": {
+          "mean": 1.0,
+          "std": 0.0
+        }
+      }
+    }
+  }
+}

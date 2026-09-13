@@ -16,6 +16,7 @@ Kullanım:
     python -m hga defter                 # immutable experience ledger demosu
     python -m hga memory-interference    # kasıtlı çakışma + sabit/dinamik KV kıyası
     python -m hga paradigma              # neural vs symbolic vs hybrid (Faz 21)
+    python -m hga olcekli-golden         # 100/1K/10K golden benchmark (Faz 3/6)
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -593,6 +594,38 @@ def _paradigma(seeds, out=None, markdown=None, epochs=60):
         print(f"  markdown: {markdown}")
 
 
+def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
+    """Faz 3/6: golden benchmark'ı 100/1.000/10.000 ölçeğine çıkar."""
+    from hga.evaluation.scaled_golden import run_scaled_golden_sweep
+
+    olcekler = [int(v.strip()) for v in sizes.split(",") if v.strip()]
+    tohumlar = [int(v.strip()) for v in seeds.split(",") if v.strip()]
+    rapor = run_scaled_golden_sweep(sizes=olcekler, seeds=tohumlar, hard=bool(hard))
+    print(f"Ölçekler: {rapor.sizes} | Tohumlar: {rapor.seeds} | "
+          f"zor mod: {rapor.hard}")
+    print(f"Sızıntı denetimi: {'temiz' if rapor.leakage_clean else 'KİRLİ'}\n")
+    print(rapor.markdown())
+    print()
+    for bulgu in rapor.findings:
+        print(f"  - {bulgu}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
+                      sort_keys=True)
+        print(f"  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write("# Ölçeklendirilmiş Golden Benchmark\n\n")
+            handle.write(f"Ölçekler: {rapor.sizes} · Tohumlar: {rapor.seeds} · "
+                         f"zor mod: {rapor.hard}\n\n")
+            handle.write(rapor.markdown() + "\n\n")
+            for bulgu in rapor.findings:
+                handle.write(f"- {bulgu}\n")
+        print(f"  markdown: {markdown}")
+
+
 def _kapasite(operands_max, out=None):
     """P / C_I / C_M / C_E / C_V kapasite çerçevesi ölçümü."""
     from hga.evaluation import run_capacity_benchmark
@@ -963,7 +996,8 @@ def main(argv=None):
                                      "memory-benchmark", "kronecker-benchmark",
                                      "self-learning-benchmark", "milestone",
                                      "kapasite", "bilgi-surum", "defter",
-                                     "memory-interference", "paradigma"])
+                                     "memory-interference", "paradigma",
+                                     "olcekli-golden"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -1010,6 +1044,10 @@ def main(argv=None):
                    help="veri-canli-smoke için ağsız/deterministik fetcher kullan")
     p.add_argument("--seeds", default=None,
                    help="golden-benchmark/paradigma için virgüllü seed listesi (örn. 1,2,3,4,5)")
+    p.add_argument("--sizes", default="100,1000,10000",
+                   help="olcekli-golden test seti boyutları (virgüllü)")
+    p.add_argument("--hard", action="store_true",
+                   help="olcekli-golden: sınır vakalarını (eşik/öncelik/kaynak) ekle")
     p.add_argument("--epochs", type=int, default=60,
                    help="paradigma nöral kolu eğitim epoch sayısı")
     p.add_argument("--experiment-root", default="experiments",
@@ -1089,6 +1127,9 @@ def main(argv=None):
      "paradigma": lambda: _paradigma(args.seeds or "1,2,3,4,5", out=args.out,
                                      markdown=args.markdown,
                                      epochs=args.epochs),
+     "olcekli-golden": lambda: _olcekli_golden(
+         args.sizes, args.seeds or "1,2,3,4,5", hard=args.hard,
+         out=args.out, markdown=args.markdown),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
      "bilgi-surum": lambda: _bilgi_surum(out=args.out),
      "defter": lambda: _defter(out=args.out),

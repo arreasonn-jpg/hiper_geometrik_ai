@@ -36,6 +36,13 @@ from .paradigma import (
     sembolik_tahmin,
 )
 from .reporting import benchmark_raporu_kaydet, benchmark_raporu_markdown, benchmark_raporu_olustur
+from .scaled_golden import (
+    OlcekliGoldenRaporu,
+    OlcekliGoldenSweep,
+    run_scaled_golden,
+    run_scaled_golden_sweep,
+    veri_seti_uret,
+)
 from .sweep import nk_taramasi, parametre_tahmini
 from .turkish_benchmark import (
     MINI_TURKCE_CUMLELER,
@@ -46,6 +53,8 @@ from .turkish_benchmark import (
 )
 
 __all__ = [
+    "OlcekliGoldenRaporu", "OlcekliGoldenSweep", "run_scaled_golden",
+    "run_scaled_golden_sweep", "veri_seti_uret",
     "KOLLAR", "ParadigmaRaporu", "ParadigmaSweepRaporu", "gorev_uret",
     "sembolik_tahmin", "noral_tahmin", "hibrit_tahmin",
     "run_paradigm_ablation", "run_paradigm_sweep",

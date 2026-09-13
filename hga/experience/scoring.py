@@ -20,11 +20,15 @@ DİKKAT (rapor §16): toplama sonucu TEK BAŞINA doğruluk kanıtı DEĞİLDİR.
 Kısıt ihlalleri (INVALID) ve çelişkiler (CONFLICT) puan düşse de düşmese de
 ayrıca karar mekanizmasında ele alınır — bu modül yalnızca KANIT toplar.
 """
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from typing import Dict, List, Optional
 
-from ..knowledge.schemas import (Entity, Relation, ExperienceCandidate,
-                                 KaynakTuru, KAYNAK_GUVENIRLIGI)
+from ..knowledge.schemas import (
+    KAYNAK_GUVENIRLIGI,
+    Entity,
+    ExperienceCandidate,
+    Relation,
+)
 
 
 @dataclass
@@ -147,13 +151,28 @@ class Scoring:
         information_gain = 1 - (bellekteki en benzer diğer varlığa olan
         benzerlik). Nesne diğerlerinden ne kadar farklıysa, bu deneyim mevcut
         bilgiye o kadar yeni bilgi katar (rapor §19 v0.3, §20).
+
+        Ölçeklenebilirlik notu (Faz 3/6 profilinden): naif uygulama her aday
+        için TÜM varlıkları tarıyordu → değerlendirme O(N²) idi ve 10.000
+        örnekli golden koşusu pratikte bitmiyordu. Kosinüs benzerliği ortak
+        özelliği olmayan iki vektör için tanım gereği 0'dır, bu yüzden yalnız
+        ``object_`` ile EN AZ BİR özellik paylaşan varlıkları taramak aynı
+        sonucu verir. Semantik birebir korunur; karmaşıklık aday başına
+        O(paylaşılan aday sayısı)'na iner.
         """
         vec = self._ozellik_vektoru(store, object_)
+        if not vec:
+            # Özelliği olmayan nesne hiçbir şeye benzemez → benzerlik 0.
+            return 1.0
+        adaylar = set()
+        for ad in vec:
+            adaylar.update(store.properties.sahip_olanlar_kume(ad))
+        adaylar.discard(object_.entity_id)
         en_yakin = 0.0
-        for e in store.entities.hepsi():
-            if e.entity_id == object_.entity_id:
-                continue
-            en_yakin = max(en_yakin, self._benzerlik(vec, self._ozellik_vektoru(store, e)))
+        for entity_id in adaylar:
+            diger = {ad: pv.deger
+                     for ad, pv in store.properties.hepsi(entity_id).items()}
+            en_yakin = max(en_yakin, self._benzerlik(vec, diger))
         return round(max(0.0, min(1.0, 1.0 - en_yakin)), 4)
 
     # ── Toplam ───────────────────────────────────────────────────────────

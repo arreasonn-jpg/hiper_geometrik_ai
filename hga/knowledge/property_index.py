@@ -14,9 +14,9 @@ fikri budur). Örnekler:
 taşır, böylece ileride güven/uygunluk değerlerine genişlemek veri modelini
 bozmaz (rapor §5). Her özelliğin kendi kaynağı ve güveni vardır (§10).
 """
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set
 
-from .schemas import PropertyValue, KaynakTuru
+from .schemas import KaynakTuru, PropertyValue
 
 
 def _dogru_deger(deger) -> float:
@@ -74,8 +74,16 @@ class PropertyIndex:
 
     def sahip_olanlar(self, ad: str) -> List[str]:
         """Belirli bir özelliğe sahip varlık ID'leri (sıralı)."""
+        return sorted(self.sahip_olanlar_kume(ad))
+
+    def sahip_olanlar_kume(self, ad: str) -> Set[str]:
+        """``sahip_olanlar`` ile aynı küme, SIRALAMASIZ.
+
+        Sıcak yollarda (ör. ``Scoring.information_gain``) her çağrıda
+        O(N log N) sıralama yapmamak için ayrılmıştır.
+        """
         ad = (ad or "").strip().lower()
-        return sorted(e for e, kume in self._ozellikler.items() if ad in kume)
+        return {e for e, kume in self._ozellikler.items() if ad in kume}
 
     # ── Serileştirme ─────────────────────────────────────────────────────
     def to_dict(self) -> Dict:
