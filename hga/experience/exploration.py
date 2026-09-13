@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+r"""
 Exploration Engine & Active Learning Selector
 ==============================================
 (Roadmap Faz 24 & Faz 25 — P2-036)
