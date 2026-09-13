@@ -8,6 +8,7 @@ güncellenmesi gerektiği anlaşılır.
 """
 from __future__ import annotations
 
+import json
 import pathlib
 import re
 
@@ -71,6 +72,41 @@ def test_her_cli_komutu_ci_smoke_testinde_kosuluyor():
 ])
 def test_kuratorlenen_raporlar_mevcut(yol):
     assert (KOK / yol).exists(), f"Küratörlenen rapor eksik: {yol}"
+
+
+def test_cok_tohumlu_verim_raporu_tek_tohum_siniri_iddia_etmez():
+    """Çok tohumlu rapor "güven aralığı için çok tohum gerekir" DİYEMEZ.
+
+    Bu cümle tek koşu için doğru ama toplu raporda kendi GA tablosuyla
+    çelişiyordu. Regresyon kapısı.
+    """
+    md = (KOK / "raporlar" / "verim_metrikleri.md").read_text(encoding="utf-8")
+    assert "%95 GA" in md, "Toplu raporda güven aralığı tablosu olmalı"
+    assert "tek tohumun tek koşusudur" not in md, (
+        "Çok tohumlu rapor hâlâ tek-tohum sınırını iddia ediyor; "
+        "kendi GA tablosuyla çelişiyor."
+    )
+
+
+def test_verim_raporu_bulgulari_hangi_tohuma_ait_oldugunu_soyluyor():
+    """Bulgular tohum 1'e ait; tablo 5 tohumun ortalaması. Etiket şart."""
+    md = (KOK / "raporlar" / "verim_metrikleri.md").read_text(encoding="utf-8")
+    assert re.search(r"##\s*Bulgular\s*\(tohum\s*\d+\)", md), (
+        "Bulgular başlığı hangi tohuma ait olduğunu belirtmeli; aksi halde "
+        "okur bunları tablodaki ortalamayla karıştırır."
+    )
+
+
+def test_verim_json_toplu_istatistik_iceriyor():
+    """Markdown'daki GA'lar makine-okunur da olmalı."""
+    veri = json.loads((KOK / "raporlar" / "verim_metrikleri.json").read_text(encoding="utf-8"))
+    assert "aggregate" in veri, "JSON toplu istatistik (aggregate) içermeli"
+    for alan in ("experience_yield", "novelty_yield", "useful_experience_yield",
+                 "generalization_yield", "verified_information_density"):
+        ozet = veri["aggregate"][alan]
+        assert ozet["ci_lower"] <= ozet["mean"] <= ozet["ci_upper"], (
+            f"{alan}: ortalama kendi güven aralığının dışında"
+        )
 
 
 # --------------------------------------------------------------------------

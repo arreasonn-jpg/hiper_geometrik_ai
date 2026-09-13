@@ -10,7 +10,7 @@ Tohumlar: [1, 2, 3, 4, 5]
 | GY  Genelleme | 0.6419 | [0.6116, 0.6721] |
 | VID Bilgi yoğ. | 0.9434 | [0.9227, 0.9640] |
 
-## Bulgular
+## Bulgular (tohum 1)
 
 - EY=0.2292 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).
 - NY=0.1854 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (72 çakışma).
@@ -24,4 +24,4 @@ Tohumlar: [1, 2, 3, 4, 5]
 - GY'nin paydası holdout kümesidir; kapsam (coverage) düşükken GY de düşük görünür — bu öğrenme eksikliğidir, metrik kusuru değil.
 - UEY bellek geri çağrımına bağlıdır; farklı slot sayısı farklı UEY verir.
 - VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.
-- Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir.
+- Güven aralıkları 5 tohumun bootstrap dağılımından hesaplandı; tohum sayısı düşük olduğu için aralıklar geniştir.

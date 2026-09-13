@@ -805,6 +805,30 @@ def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
         print(f"  markdown: {markdown}")
 
 
+_TEK_TOHUM_SINIRI = "Her rapor tek tohumun tek koşusudur"
+
+
+def _toplu_sinirlar(sinirlar, tohum_sayisi):
+    """Tek koşu için yazılan sınır cümlesini çok tohumlu rapora uyarla.
+
+    run_yield_experiment tek koşu ürettiği için "güven aralığı yok" der. Bu
+    cümle çok tohumlu toplu raporda YANLIŞ olur: tablo zaten bootstrap GA
+    içerir. Tohum sayısına göre cümleyi değiştiriyoruz.
+    """
+    if tohum_sayisi <= 1:
+        return list(sinirlar)
+    uyarlanmis = []
+    for sinir in sinirlar:
+        if sinir.startswith(_TEK_TOHUM_SINIRI):
+            uyarlanmis.append(
+                f"Güven aralıkları {tohum_sayisi} tohumun bootstrap dağılımından "
+                "hesaplandı; tohum sayısı düşük olduğu için aralıklar geniştir."
+            )
+        else:
+            uyarlanmis.append(sinir)
+    return uyarlanmis
+
+
 def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
            negatives_per_fact=3, seeds=None, out=None, markdown=None):
     """P1-005: EY'yi NY / UEY / GY / VID eksenlerine ayır."""
@@ -858,17 +882,22 @@ def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
           f"sonrası {ilk.holdout_after['decided']}/{ilk.holdout_after['total']} karar "
           f"(isabet {ilk.holdout_after['accuracy_on_decided']:.4f})")
 
-    print("\n  BULGULAR")
+    print(f"\n  BULGULAR (tohum {tohumlar[0]})")
     for bulgu in ilk.findings:
         print(f"    - {bulgu}")
     print("\n  SINIRLAR")
-    for sinir in ilk.limitations:
+    for sinir in _toplu_sinirlar(ilk.limitations, len(tohumlar)):
         print(f"    - {sinir}")
 
     if out:
         os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
         with open(out, "w", encoding="utf-8") as handle:
+            ozetler = {}
+            for _, alan, _aciklama in eksenler:
+                degerler = [getattr(rapor, alan) for rapor in raporlar]
+                ozetler[alan] = summarize_seed_metric(degerler)
             json.dump({"seeds": tohumlar,
+                       "aggregate": ozetler,
                        "reports": [rapor.to_dict() for rapor in raporlar]},
                       handle, ensure_ascii=False, indent=2, sort_keys=True)
         print(f"\n  report: {out}")
@@ -883,11 +912,11 @@ def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
                 ozet = summarize_seed_metric(degerler)
                 handle.write(f"| {etiket} | {ozet['mean']:.4f} | "
                              f"[{ozet['ci_lower']:.4f}, {ozet['ci_upper']:.4f}] |\n")
-            handle.write("\n## Bulgular\n\n")
+            handle.write(f"\n## Bulgular (tohum {tohumlar[0]})\n\n")
             for bulgu in ilk.findings:
                 handle.write(f"- {bulgu}\n")
             handle.write("\n## Sınırlar\n\n")
-            for sinir in ilk.limitations:
+            for sinir in _toplu_sinirlar(ilk.limitations, len(tohumlar)):
                 handle.write(f"- {sinir}\n")
         print(f"  markdown: {markdown}")
 

@@ -1,4 +1,66 @@
 {
+  "aggregate": {
+    "experience_yield": {
+      "ci_lower": 0.232708334,
+      "ci_upper": 0.244375002,
+      "confidence_level": 0.95,
+      "max": 0.24791667,
+      "mean": 0.238541668,
+      "method": "percentile-bootstrap",
+      "min": 0.22916667,
+      "n": 5,
+      "seed": 12345,
+      "std_sample": 0.007583448374
+    },
+    "generalization_yield": {
+      "ci_lower": 0.611627908,
+      "ci_upper": 0.67209302,
+      "confidence_level": 0.95,
+      "max": 0.6744186,
+      "mean": 0.641860464,
+      "method": "percentile-bootstrap",
+      "min": 0.59302326,
+      "n": 5,
+      "seed": 12345,
+      "std_sample": 0.039773559111
+    },
+    "novelty_yield": {
+      "ci_lower": 0.186250002,
+      "ci_upper": 0.194583334,
+      "confidence_level": 0.95,
+      "max": 0.196875,
+      "mean": 0.190416668,
+      "method": "percentile-bootstrap",
+      "min": 0.18541667,
+      "n": 5,
+      "seed": 12345,
+      "std_sample": 0.00528074585
+    },
+    "useful_experience_yield": {
+      "ci_lower": 0.153750002,
+      "ci_upper": 0.159999998,
+      "confidence_level": 0.95,
+      "max": 0.1625,
+      "mean": 0.156458334,
+      "method": "percentile-bootstrap",
+      "min": 0.153125,
+      "n": 5,
+      "seed": 12345,
+      "std_sample": 0.003925299396
+    },
+    "verified_information_density": {
+      "ci_lower": 0.922719066,
+      "ci_upper": 0.964004034,
+      "confidence_level": 0.95,
+      "max": 0.9753574,
+      "mean": 0.94336155,
+      "method": "percentile-bootstrap",
+      "min": 0.91859057,
+      "n": 5,
+      "seed": 12345,
+      "std_sample": 0.026161854619
+    }
+  },
   "reports": [
     {
       "bits_per_fact": 4.95419631,
