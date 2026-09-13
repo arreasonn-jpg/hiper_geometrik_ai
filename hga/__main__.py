@@ -921,6 +921,85 @@ def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
         print(f"  markdown: {markdown}")
 
 
+def _cok_adimli(seeds=None, hops=None, distractors=None, slots=4096,
+                out=None, markdown=None):
+    """P1-004/P1-006: çok adımlı çıkarım + uzun bağlam dayanıklılığı."""
+    from hga.evaluation.multi_hop import (
+        DEFAULT_DISTRACTORS,
+        DEFAULT_HOPS,
+        multi_hop_markdown,
+        run_multi_hop_benchmark,
+    )
+
+    def _liste(metin, varsayilan):
+        if not metin:
+            return varsayilan
+        return tuple(int(v.strip()) for v in str(metin).split(",") if v.strip())
+
+    tohumlar = _liste(seeds, (1, 2, 3))
+    hop_listesi = _liste(hops, DEFAULT_HOPS)
+    dolgu_listesi = _liste(distractors, DEFAULT_DISTRACTORS)
+
+    rapor = run_multi_hop_benchmark(
+        hops=hop_listesi, distractor_levels=dolgu_listesi,
+        seeds=tohumlar, slot_sayisi=int(slots),
+    )
+
+    print("Çok Adımlı Çıkarım ve Uzun Bağlam (P1-004 / P1-006)\n")
+    print(f"  protokol   : {rapor.protocol}")
+    print(f"  veri imzası: {rapor.dataset_hash}")
+    print(f"  tohumlar   : {rapor.seeds}   bellek slotu: {slots}\n")
+
+    print("  DOĞRULUK IZGARASI (satır = zincir derinliği, sütun = dolgu olgu)")
+    etiketler = {
+        hop: f"{hop} adım" + (" (geri çağ.)" if hop == 1 else "")
+        for hop in rapor.hops
+    }
+    genislik = max(len(e) for e in etiketler.values()) + 2
+    print(" " * (4 + genislik) + "".join(
+        f"{d:>10}" for d in rapor.distractor_levels))
+    for hop in rapor.hops:
+        hucreler = {c.distractors: c for c in rapor.cells if c.hop == hop}
+        satir = f"    {etiketler[hop]:<{genislik}}" + "".join(
+            f"{hucreler[d].accuracy:>10.4f}" for d in rapor.distractor_levels
+        )
+        print(satir)
+
+    print("\n  ASIL METRİKLER")
+    print(f"    çok adımlı çıkarım (hop>=2) : {rapor.inference_accuracy:.4f}")
+    print(f"    tek adımlı geri çağırma     : {rapor.recall_accuracy:.4f}")
+    print(f"    en derin güvenilir zincir   : {rapor.deepest_reliable_hop} adım")
+    print(f"    bağlam bozulması            : {rapor.context_degradation:+.4f}")
+
+    print("\n  NEGATİF KONTROL (zinciri takip etmeyen sabit cevaplar)")
+    for kol in rapor.degenerate_arms:
+        print(f"    {kol.arm:<14}{kol.accuracy:>9.4f}")
+    print(f"    {'MOTOR':<14}{rapor.overall_accuracy:>9.4f}")
+
+    print("\n  KABUL KAPILARI")
+    for ad, sonuc in rapor.checks.items():
+        print(f"    {ad:<28}: {'GEÇTİ' if sonuc else 'KALDI'}")
+
+    print("\n  BULGULAR")
+    for bulgu in rapor.findings:
+        print(f"    - {bulgu}")
+    print("\n  SINIRLAR")
+    for sinir in rapor.limitations:
+        print(f"    - {sinir}")
+
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(rapor.to_dict(), handle, ensure_ascii=False,
+                      indent=2, sort_keys=True)
+        print(f"\n  report: {out}")
+    if markdown:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write(multi_hop_markdown(rapor))
+        print(f"  markdown: {markdown}")
+
+
 def _epistemik(seeds=None, out=None, markdown=None):
     """P0-007: KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik benchmarkı."""
     from hga.evaluation.epistemic import (
@@ -1581,7 +1660,7 @@ def main(argv=None):
                                      "kapasite", "bilgi-surum", "defter",
                                      "memory-interference", "paradigma",
                                      "olcekli-golden", "kronecker-rank",
-                                     "epistemik", "verim",
+                                     "epistemik", "verim", "cok-adimli",
                                      "koken", "oncelik"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
@@ -1653,6 +1732,10 @@ def main(argv=None):
                    help="memory-benchmark için tablo başına slot sayısı")
     p.add_argument("--tables", default="1,2",
                    help="memory-benchmark tablo sayıları (1,2 veya ikisi)")
+    p.add_argument("--hops", default=None,
+                   help="cok-adimli: zincir derinlikleri (örn 1,2,3,4,5)")
+    p.add_argument("--distractors", default=None,
+                   help="cok-adimli: araya giren dolgu olgu sayıları (örn 0,16,64,256)")
     p.add_argument("--active-dynamic", action="store_true",
                    help="memory-benchmark: aynı streamde aktif bounded Dynamic KV'yi de kır")
     p.add_argument("--audit-samples", type=int, default=256,
@@ -1739,6 +1822,10 @@ def main(argv=None):
          out=args.out, markdown=args.markdown),
      "epistemik": lambda: _epistemik(args.seeds, out=args.out,
                                      markdown=args.markdown),
+     "cok-adimli": lambda: _cok_adimli(args.seeds, hops=args.hops,
+                                       distractors=args.distractors,
+                                       slots=args.memory_slots,
+                                       out=args.out, markdown=args.markdown),
      "verim": lambda: _verim(args.cycles, args.batch, args.initial_facts,
                              args.operands_max, args.negatives_per_fact,
                              args.seeds, out=args.out, markdown=args.markdown),

@@ -74,6 +74,49 @@ def test_kuratorlenen_raporlar_mevcut(yol):
     assert (KOK / yol).exists(), f"Küratörlenen rapor eksik: {yol}"
 
 
+def test_cok_adimli_belge_izgarasi_canli_ciktiyla_uyumlu():
+    """docs/COK_ADIMLI_VE_UZUN_BAGLAM.md tablosu gerçek sonuçla aynı olmalı."""
+    from hga.evaluation.multi_hop import run_multi_hop_benchmark
+
+    rapor = run_multi_hop_benchmark(
+        hops=(1, 2, 3, 4, 5), distractor_levels=(0, 16, 64, 256), seeds=(1, 2, 3)
+    )
+    belge = (KOK / "docs" / "COK_ADIMLI_VE_UZUN_BAGLAM.md").read_text(encoding="utf-8")
+
+    # Belgedeki "5 adım | ... | 0.5000" satırı ölçülen bozulmayı yansıtmalı.
+    bes_adim = {c.distractors: c.accuracy for c in rapor.cells if c.hop == 5}
+    assert bes_adim[256] == 0.5, "5 adım/256 dolgu sonucu değişti; belge güncellenmeli"
+    assert "| 5 adım | 1.0000 | 1.0000 | 1.0000 | 0.5000 |" in belge
+
+    assert f"{rapor.inference_accuracy:.4f}" in belge, (
+        "Belgedeki çok adımlı çıkarım doğruluğu canlı değerle uyuşmuyor"
+    )
+    assert f"en derin güvenilir zincir: **{rapor.deepest_reliable_hop} adım**" in belge
+
+
+def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
+    """Kalan kapılar belgede KALDI olarak görünmeli; başarı süslenmemeli."""
+    from hga.evaluation.multi_hop import run_multi_hop_benchmark
+
+    rapor = run_multi_hop_benchmark(
+        hops=(1, 2, 3, 4, 5), distractor_levels=(0, 16, 64, 256), seeds=(1, 2, 3)
+    )
+    belge = (KOK / "docs" / "COK_ADIMLI_VE_UZUN_BAGLAM.md").read_text(encoding="utf-8")
+    kalanlar = [ad for ad, sonuc in rapor.checks.items() if not sonuc]
+    assert kalanlar, "Tüm kapılar geçiyorsa bu test güncellenmeli"
+    for ad in kalanlar:
+        assert ad in belge, f"Kalan kapı {ad} belgede anılmıyor"
+    assert "KALDI" in belge
+    assert "ölü metrik" in belge, "Ölü metrik düzeltmesi belgelenmeli"
+
+
+def test_cok_adimli_belge_dil_modeli_iddiasi_yapmiyor():
+    belge = (KOK / "docs" / "COK_ADIMLI_VE_UZUN_BAGLAM.md").read_text(encoding="utf-8")
+    assert "context window" in belge
+    assert "değildir" in belge
+    assert "hop=1" in belge or "hop≥2" in belge
+
+
 def test_cok_tohumlu_verim_raporu_tek_tohum_siniri_iddia_etmez():
     """Çok tohumlu rapor "güven aralığı için çok tohum gerekir" DİYEMEZ.
 

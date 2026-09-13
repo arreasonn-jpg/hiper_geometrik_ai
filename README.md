@@ -610,6 +610,26 @@ hâlâ tek) ile `distinguishable_by_reason = true` ayrımını birlikte verir ve
 iki yeni kabul kapısı bunu zorunlu kılar.
 Ayrıntı: `docs/EPISTEMIK_BENCHMARK.md`.
 
+### Çok adımlı çıkarım ve uzun bağlam (P1-004 / P1-006)
+
+```bash
+python -m hga cok-adimli --hops 1,2,3,4,5 --distractors 0,16,64,256 --seeds 1,2,3
+```
+
+`a→b→c` zinciri kurulup depoda **yazılı olmayan** `a→c` sorulur; ayrıca zincir
+kenarlarının arasına alakasız dolgu olgular serpiştirilerek uzun bağlam
+baskısı uygulanır. Çok adımlı çıkarım (hop≥2) **0.9688**, tek adımlı geri
+çağırma 1.0000; en derin güvenilir zincir **4 adım**. 5 adımlık zincir 256
+dolgu altında 0.5000'e düşer — ölçülen gerçek bir sınırdır, kapı geçsin diye
+eşik gevşetilmedi: beş kabul kapısından üçü varsayılan ayarda **kalıyor**.
+
+İlk taslakta zincir takibi Python sözlüğünden yapılıyordu ve doğruluk her
+koşulda 1.0 çıkıyordu — **ölü metrik**. Takip artık her kenarı seyrek
+bellekten doğrular; bellek 4096→256 slota indirilince en derin güvenilir
+zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
+
+Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.
+
 ### Deneyim verimi: EY'nin ötesinde (P1-005)
 
 ```bash
@@ -805,6 +825,7 @@ Ayrıntılı Mimari ve Kod Sınıflandırması:
 - `docs/EXPERIENCE_ENGINE.md` — Experience Engine mimari notu.
 - `docs/EPISTEMIK_BENCHMARK.md` — KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE protokolü, negatif kontrol kolları ve ölçülmüş UNKNOWN↔UNCERTAIN sınırı.
 - `docs/VERIM_METRIKLERI.md` — NY/UEY/GY/VID ayrıştırması ve GY'nin iki kez ölü metrik olarak yakalanıp düzeltilmesi.
+- `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md` — zincirleme çıkarım × bağlam yükü ızgarası, bellekten geçen zincir takibi ve ölçülen derinlik sınırı.
 
 ---
 
