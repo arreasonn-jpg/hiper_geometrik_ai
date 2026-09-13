@@ -40,8 +40,8 @@ from decoder import FraktalDecoder
 from hiper_attention import HiperGeometrikAttention
 from bpe_tokenizer import BPETokenizer
 from seyrek_tablo import HashlenmisKureselTablo
-from bilgi_katmani import (BilgiKatmani, beyaz_liste_olustur,
-                           KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK)
+from legacy.bilgi_katmani import (BilgiKatmani, beyaz_liste_olustur,
+                                  KATMAN_TAM, KATMAN_KISMI, KATMAN_ACIK)
 
 KUCUK = dict(n=64, katman_sayisi=2, baglam_penceresi=8, emb_dim=32,
              num_heads=4, sozluk_boyutu=256, dropout=0.0,

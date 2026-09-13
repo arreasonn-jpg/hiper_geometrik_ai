@@ -104,15 +104,88 @@ def test_kuratorlu_bes_seed_kronecker_raporu():
     assert kron_on_rank1 > 0.9
 
 
-def test_torch_yokken_fonksiyon_ve_cli_acik_hata_verir(tmp_path):
-    if importlib.util.find_spec("torch") is not None:
-        pytest.skip("PyTorch mevcut")
-    with pytest.raises(ImportError, match="PyTorch"):
-        run_kronecker_dense_trial(n=4, steps=1)
+# Torch KURULU olsa bile "torch yok" yolunu gerçekten koşturmak için alt
+# süreçte torch'u görünmez yapan meta path finder. Böylece bu sözleşme testi
+# ortama bağlı olarak atlanmaz (skip yerine gerçek doğrulama).
+#
+# Önemli: gerçek "kurulu değil" ortamında `importlib.util.find_spec("torch")`
+# ImportError ATMAZ, None döner; `import torch` ise ModuleNotFoundError verir.
+# Simülasyon bu semantiği birebir taklit etmelidir, yoksa test gerçekte
+# olmayan bir davranışı doğrular.
+_TORCH_ENGELLE = """
+import importlib.machinery
+import sys
+
+# Torch'u diskte "yokmuş" gibi göstermenin doğru yolu: onu bulan PathFinder'ı
+# sarmalayıp None döndürmek. Bu tek müdahale her iki semantiği de otomatik
+# olarak doğru verir:
+#   importlib.util.find_spec("torch") -> None
+#   import torch                      -> ModuleNotFoundError
+_gercek_find_spec = importlib.machinery.PathFinder.find_spec
+
+
+def _gizleyen_find_spec(name, path=None, target=None):
+    if name == "torch" or name.startswith("torch."):
+        return None
+    return _gercek_find_spec(name, path, target)
+
+
+importlib.machinery.PathFinder.find_spec = staticmethod(_gizleyen_find_spec)
+for _ad in [m for m in sys.modules if m == "torch" or m.startswith("torch.")]:
+    del sys.modules[_ad]
+"""
+
+
+def test_torchsuz_ortam_simulasyonu_gercekten_torchsuz():
+    """Yardımcı engelleyicinin kendisi çalışıyor mu? (testin testi)"""
+    kod = _TORCH_ENGELLE + """
+import importlib.util
+
+assert importlib.util.find_spec("torch") is None, "find_spec None dönmeli"
+try:
+    import torch  # noqa: F401
+except ModuleNotFoundError:
+    print("YOK")
+else:
+    print("BULUNDU")
+"""
     completed = subprocess.run(
-        [sys.executable, "-m", "hga", "kronecker-benchmark",
-         "--experiment-root", str(tmp_path)],
-        cwd=KOK, capture_output=True, text=True,
+        [sys.executable, "-c", kod], cwd=KOK, capture_output=True, text=True,
+        check=True,
+    )
+    assert completed.stdout.strip() == "YOK"
+
+
+def test_torch_yokken_fonksiyon_acik_import_hatasi_verir():
+    """run_kronecker_dense_trial torch yokken sessiz kalmaz, ImportError atar."""
+    kod = _TORCH_ENGELLE + """
+from hga.evaluation import run_kronecker_dense_trial
+
+try:
+    run_kronecker_dense_trial(n=4, steps=1)
+except ImportError as hata:
+    assert "PyTorch" in str(hata), str(hata)
+    print("IMPORT_ERROR_OK")
+else:
+    print("HATA_YOK")
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", kod], cwd=KOK, capture_output=True, text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert completed.stdout.strip().endswith("IMPORT_ERROR_OK")
+
+
+def test_torch_yokken_cli_acik_hata_verir_ve_manifest_yazmaz(tmp_path):
+    """CLI torch yokken çıkış kodu != 0 döner ve yarım EXP dizini bırakmaz."""
+    kod = _TORCH_ENGELLE + f"""
+import sys
+sys.argv = ["hga", "kronecker-benchmark", "--experiment-root", {str(tmp_path)!r}]
+from hga.__main__ import main
+main(sys.argv[1:])
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", kod], cwd=KOK, capture_output=True, text=True,
     )
     assert completed.returncode != 0
     assert "PyTorch gerekli" in completed.stderr
