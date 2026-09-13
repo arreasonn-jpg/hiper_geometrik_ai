@@ -202,6 +202,28 @@ optimizer belleği, gradient/loss kararlılığı ve efektif rank raporlanır.
 `n⁴` her raporda açıkça **operatör girdisi, gerçek parametre değil** olarak
 saklanır. Ayrıntılar: `docs/KRONECKER_VS_DENSE_BENCHMARK.md`.
 
+### 100-cycle self-learning ve collapse testi
+
+```bash
+python -m hga self-learning-benchmark \
+  --cycles 100 --batch 16 --initial-facts 100 \
+  --operands-max 31 --negatives-per-fact 7 --seeds 1,2,3,4,5
+```
+
+`CLOSED_VERIFIED` protokolünde yalnız bağımsız aritmetik environment tarafından
+onaylanan deneyimler Kₙ'e yazılır. Yanında çalışan `UNVERIFIED_SELF_TRAINING`
+probu ise aynı model çıktısını verifier olmadan tekrar besleyen kasıtlı failure
+injection'dır. Experience Yield, FAR/FRR, correct/incorrect knowledge, novelty,
+diversity, entropy ve memory collision/retrieval birlikte raporlanır.
+
+Seed 42 kontrollü baseline'ında (`K₀=100`, 100 cycle, batch=16) K₁₀₀=308,
+Experience Yield=0.13, incorrect knowledge=0 ve Verifier sonrası FAR/FRR=0
+ölçüldü (Evaluator tek başına FAR=1.0). Verifier'sız failure injection'da
+repetition=0.99, FAR=1.0, yanlış model olgusu=14/16 ve
+memory retrieval=1.0→0.01 oldu. Bunlar sentetik aritmetik laboratuvar
+sonuçlarıdır; gerçek dilde otonom öğrenme iddiası değildir. Ayrıntılar:
+`docs/SELF_LEARNING_BENCHMARK.md`.
+
 ---
 
 ## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması

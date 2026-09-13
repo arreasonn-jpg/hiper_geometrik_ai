@@ -46,3 +46,4 @@ jobs:
           python -m hga golden-benchmark --seeds 1,2,3,4,5 --experiment-root /tmp/hga-experiments
           python -m hga memory-benchmark --scales 100,1000 --slots 256 --tables 1,2 --experiment-root /tmp/hga-memory-experiments
           python -m hga kronecker-benchmark --n 8 --steps 20 --batch 8 --seeds 1 --experiment-root /tmp/hga-kronecker-experiments
+          python -m hga self-learning-benchmark --cycles 5 --batch 8 --initial-facts 4 --operands-max 4 --negatives-per-fact 3 --seeds 1 --experiment-root /tmp/hga-self-learning-experiments

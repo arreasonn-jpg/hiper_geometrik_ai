@@ -9,6 +9,7 @@ Kullanım:
     python -m hga golden-benchmark       # elle sabit golden set + FAR/FRR/leakage
     python -m hga memory-benchmark       # collision/interference/retrieval stres testi
     python -m hga kronecker-benchmark    # eşit-parametre Kronecker/rank-1 kıyası
+    python -m hga self-learning-benchmark # K₀→Kₙ + collapse failure injection
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -181,6 +182,82 @@ def _golden_benchmark(out=None, seeds=None, experiment_root="experiments"):
         with open(out, "w", encoding="utf-8") as handle:
             json.dump(rapor, handle, ensure_ascii=False, indent=2, sort_keys=True)
         print(f"  report       : {out}")
+
+
+def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
+                             negatives_per_fact, memory_slots, seeds,
+                             experiment_root, out=None):
+    from hga.evaluation import canonical_hash, run_seed_sweep
+    from hga.experience import (
+        run_self_learning_experiment,
+        run_self_training_collapse_test,
+    )
+
+    seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
+    config = {
+        "benchmark": "self-learning-and-collapse-v1",
+        "cycles": int(cycles), "batch_size": int(batch),
+        "initial_facts": int(initial_facts), "operands_max": int(operands_max),
+        "negatives_per_fact": int(negatives_per_fact),
+        "memory_slots": int(memory_slots),
+    }
+    dataset_hash = canonical_hash({
+        "generator": "arithmetic-frontier-v1",
+        "operands_max": int(operands_max),
+        "negatives_per_fact": int(negatives_per_fact),
+    })
+
+    def run_one(seed):
+        expansion = run_self_learning_experiment(
+            cycles=cycles, batch_size=batch, initial_facts=initial_facts,
+            operands_max=operands_max, negatives_per_fact=negatives_per_fact,
+            seed=seed, memory_slots=memory_slots,
+        )
+        collapse = run_self_training_collapse_test(
+            cycles=max(2, cycles), batch_size=batch,
+            initial_facts=min(initial_facts, 10), operands_max=min(operands_max, 15),
+            negatives_per_fact=negatives_per_fact, seed=seed,
+            memory_slots=min(memory_slots, 4096),
+        )
+        print(
+            f"closed: K0={expansion.initial_knowledge_size} "
+            f"K{cycles}={expansion.final_knowledge_size} "
+            f"yield={expansion.experience_yield:.6f} "
+            f"FAR={expansion.far_before_verifier:.6f}→{expansion.far:.6f}"
+        )
+        print(
+            f"collapse: detected={collapse.collapse_detected} "
+            f"repetition={collapse.repetition_rate:.6f} "
+            f"contamination={collapse.incorrect_model_facts} FAR={collapse.far:.6f}"
+        )
+        return {"closed_verified": expansion.to_dict(), "collapse_probe": collapse.to_dict()}
+
+    report = run_seed_sweep(
+        run_one, seeds=seed_values, root=experiment_root, config=config,
+        dataset_hash=dataset_hash,
+        parameters={
+            "ground_truth": "independent-arithmetic-environment",
+            "closed_loop_writes_only_verified": True,
+            "collapse_is_failure_injection": True,
+        },
+    ).to_dict()
+    print("Self-learning + collapse benchmark özeti:")
+    print(f"  experiments: {', '.join(report['experiment_ids'])}")
+    for key in (
+        "closed_verified.experience_yield", "closed_verified.far_before_verifier",
+        "closed_verified.far", "closed_verified.frr", "closed_verified.final_knowledge_size",
+        "closed_verified.incorrect_knowledge",
+        "collapse_probe.repetition_rate", "collapse_probe.far",
+        "collapse_probe.incorrect_model_facts", "collapse_probe.memory_collisions",
+    ):
+        values = report["aggregate"].get(key)
+        if values:
+            print(f"  {key:<48}: {values['mean']:.6f} ± {values['std']:.6f}")
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(report, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
 
 
 def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=None):
@@ -584,7 +661,8 @@ def main(argv=None):
                                      "benchmark-rapor", "veri-kalite", "veri-canli-smoke",
                                      "manifest", "observability", "ozet",
                                      "graf", "kesif", "golden-benchmark",
-                                     "memory-benchmark", "kronecker-benchmark"])
+                                     "memory-benchmark", "kronecker-benchmark",
+                                     "self-learning-benchmark"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -643,6 +721,16 @@ def main(argv=None):
                    help="kronecker-benchmark optimizasyon adımı")
     p.add_argument("--device", default="cpu",
                    help="kronecker-benchmark torch cihazı (cpu/cuda)")
+    p.add_argument("--cycles", type=int, default=100,
+                   help="self-learning/collapse döngü sayısı")
+    p.add_argument("--initial-facts", type=int, default=100,
+                   help="self-learning başlangıç doğrulanmış bilgi sayısı")
+    p.add_argument("--operands-max", type=int, default=31,
+                   help="self-learning aritmetik domain üst operandı")
+    p.add_argument("--negatives-per-fact", type=int, default=7,
+                   help="her doğru frontier olgusu başına yanlış aday")
+    p.add_argument("--memory-slots", type=int, default=4096,
+                   help="self-learning deney belleği slot sayısı")
     args = p.parse_args(argv)
     {"bilgi": _bilgi_demo, "gercek-veri": _gercek_veri,
      "benchmark": _benchmark, "dogrulama": _dogrulama,
@@ -676,6 +764,10 @@ def main(argv=None):
      "kronecker-benchmark": lambda: _kronecker_benchmark(
          int(args.n or 16), args.steps, args.batch, args.seeds or "1,2,3,4,5",
          args.device, args.experiment_root, out=args.out),
+     "self-learning-benchmark": lambda: _self_learning_benchmark(
+         args.cycles, args.batch, args.initial_facts, args.operands_max,
+         args.negatives_per_fact, args.memory_slots, args.seeds or "42",
+         args.experiment_root, out=args.out),
      "observability": lambda: _observability_demo(
          out=args.out, markdown=args.markdown, html_yol=args.html),
      "ozet": lambda: _ozet(args.yol)}[args.komut]()
