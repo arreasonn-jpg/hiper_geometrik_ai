@@ -1,0 +1,308 @@
+{
+  "capability_vector": [
+    {
+      "evidence": "capacity_framework",
+      "kind": "measured",
+      "name": "Physical Parameters",
+      "note": "RAM'de ayrılan, optimizer'ın güncellediği tensör sayısı.",
+      "symbol": "P",
+      "unit": "parametre",
+      "value": 40524865.0
+    },
+    {
+      "evidence": "capacity_framework",
+      "kind": "upper_bound",
+      "name": "Interaction Upper Bound",
+      "note": "Kronecker zincirinin temsil edebileceği operatör girdi sayısının üst sınırı. PARAMETRE DEĞİLDİR.",
+      "symbol": "C_I^UB",
+      "unit": "operatör girdisi",
+      "value": 1.8446744073709552e+19
+    },
+    {
+      "evidence": "capacity_framework",
+      "kind": "upper_bound",
+      "name": "Memory Address Upper Bound",
+      "note": "sözlük^pencere kavramsal anahtar uzayı. Fiziksel tablo boyutu DEĞİLDİR.",
+      "symbol": "C_M^UB",
+      "unit": "adres",
+      "value": 2.81474976710656e+62
+    },
+    {
+      "evidence": "capacity_framework",
+      "kind": "measured",
+      "name": "Measured Experience Capacity",
+      "note": "Kısıtlar altında gerçekten üretilebilen deneyim sayısı.",
+      "symbol": "C_E",
+      "unit": "deneyim",
+      "value": 960.0
+    },
+    {
+      "evidence": "capacity_framework",
+      "kind": "measured",
+      "name": "Measured Verified Capacity",
+      "note": "Bağımsız verifier'ın karara bağladığı alt küme.",
+      "symbol": "C_V",
+      "unit": "deneyim",
+      "value": 960.0
+    },
+    {
+      "evidence": "compositional_generalization_v2_raw_text@f59f990d1591",
+      "kind": "measured",
+      "name": "Measured Generalization Capacity",
+      "note": "Görülmemiş eksenlerde kompozisyon başarısı.",
+      "symbol": "C_G",
+      "unit": "oran",
+      "value": 0.857143
+    },
+    {
+      "evidence": "reliable_reasoning_depth_v1@526c6a88dea7",
+      "kind": "measured",
+      "name": "Measured Reliable Reasoning Depth",
+      "note": "Dolgu yokken güvenilir kalınan en derin zincir.",
+      "symbol": "C_R",
+      "unit": "hop",
+      "value": 4.0
+    },
+    {
+      "evidence": "reliable_reasoning_depth_v1@526c6a88dea7",
+      "kind": "measured",
+      "name": "Distractor-Resistant Reasoning Depth",
+      "note": "64 dolgu olgu altında güvenilir derinlik.",
+      "symbol": "C_RD",
+      "unit": "hop @ 64 dolgu",
+      "value": 4.0
+    },
+    {
+      "evidence": "hierarchical_memory_v1@72b18bd90ab7",
+      "kind": "measured",
+      "name": "Measured Memory Recall",
+      "note": "Hiyerarşik bellek benchmarkında yazılan kayıtların geri okunma oranı (tüm katmanlar dahil).",
+      "symbol": "C_MR",
+      "unit": "oran",
+      "value": 1.0
+    },
+    {
+      "evidence": "hga_signature_benchmark_v1@291da16d8787",
+      "kind": "measured",
+      "name": "Hallucination Resistance",
+      "note": "1 − (çıkarılamayan iddiayı kesin doğrulama oranı).",
+      "symbol": "C_H",
+      "unit": "oran",
+      "value": 0.772461
+    },
+    {
+      "evidence": null,
+      "kind": "measured",
+      "name": "Uncertainty Calibration",
+      "note": "1 − ECE; kalibrasyon raporundan gelir.",
+      "symbol": "C_U",
+      "unit": "1−ECE",
+      "value": null
+    }
+  ],
+  "generated_at_utc": "2026-09-14T07:44:03+00:00",
+  "overall": 7.97,
+  "provenance": {
+    "reports_supplied": [
+      "capacity",
+      "compositional_v2",
+      "memory",
+      "operator_baselines",
+      "priority_ablation",
+      "reasoning_depth",
+      "semantic_extraction",
+      "signature",
+      "twt_results"
+    ],
+    "rule": "Skorlar benchmark kabul kapılarından otomatik hesaplanır; elle yazılamaz."
+  },
+  "scored_sections": 7,
+  "sections": {
+    "architecture": {
+      "evidence": [
+        "operator_baseline_family_v1@81610cdf041b"
+      ],
+      "inputs": {
+        "ceiling_gap": {
+          "full_dense_teacher": 0.9545679766,
+          "kronecker_teacher": -0.0001159594,
+          "low_rank_teacher": 0.9397222304,
+          "rank1_teacher": 0.9143608914
+        },
+        "rankings": {
+          "full_dense_teacher": [
+            "full_dense",
+            "low_rank_flop_matched",
+            "low_rank_param_matched",
+            "kron_sum_2",
+            "rank1",
+            "kronecker"
+          ],
+          "kronecker_teacher": [
+            "kronecker",
+            "full_dense",
+            "kron_sum_2",
+            "low_rank_flop_matched",
+            "low_rank_param_matched",
+            "rank1"
+          ],
+          "low_rank_teacher": [
+            "full_dense",
+            "low_rank_flop_matched",
+            "low_rank_param_matched",
+            "rank1",
+            "kron_sum_2",
+            "kronecker"
+          ],
+          "rank1_teacher": [
+            "low_rank_param_matched",
+            "low_rank_flop_matched",
+            "full_dense",
+            "rank1",
+            "kron_sum_2",
+            "kronecker"
+          ]
+        }
+      },
+      "rationale": "Kronecker/rank-1/low-rank/full-dense kolları eşit parametre ve eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.",
+      "score": 10.0,
+      "section": "architecture"
+    },
+    "engineering": {
+      "evidence": [],
+      "inputs": {
+        "python_matrix": null
+      },
+      "rationale": "CI matrisi, lint/type kapıları, paketleme sözleşmesi.",
+      "score": null,
+      "section": "engineering"
+    },
+    "generalization": {
+      "evidence": [
+        "compositional_generalization_v2_raw_text@f59f990d1591"
+      ],
+      "inputs": {
+        "overall_c_g_v2": 0.857143
+      },
+      "rationale": "Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.",
+      "score": 8.33,
+      "section": "generalization"
+    },
+    "language_modeling": {
+      "evidence": [],
+      "inputs": {
+        "perplexity": null
+      },
+      "rationale": "Gerçek Türkçe korpusta perplexity ve üretim kalitesi. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.",
+      "score": null,
+      "section": "language_modeling"
+    },
+    "memory": {
+      "evidence": [
+        "reliable_reasoning_depth_v1@526c6a88dea7",
+        "hierarchical_memory_v1@72b18bd90ab7"
+      ],
+      "inputs": {
+        "crash_recovery_recall": 1.0,
+        "hierarchical_recall": 1.0,
+        "min_recall": 1.0,
+        "tier_distribution": {
+          "archive": 500,
+          "archive_segments": 1,
+          "cold": 1000,
+          "hot": 100,
+          "warm": 400
+        }
+      },
+      "rationale": "Hiyerarşik bellek (hot/warm/cold/archive) recall, gecikme, tahliye ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği ızgarasındaki en düşük geri çağırma oranına düşülür.",
+      "score": 10.0,
+      "section": "memory"
+    },
+    "reasoning": {
+      "evidence": [
+        "reliable_reasoning_depth_v1@526c6a88dea7"
+      ],
+      "inputs": {
+        "c_r": 4,
+        "c_rd": {
+          "16": 4,
+          "64": 4
+        },
+        "grid_limited": true
+      },
+      "rationale": "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.",
+      "score": 6.0,
+      "section": "reasoning"
+    },
+    "reproducibility": {
+      "evidence": [],
+      "inputs": {
+        "seeds": null
+      },
+      "rationale": "Manifest, veri/konfig hash'i ve çoklu tohum tamamlanması.",
+      "score": null,
+      "section": "reproducibility"
+    },
+    "scientific_evidence": {
+      "evidence": [
+        "priority_causal_chain_ablation_v1@f86dfc8878cb",
+        "operator_baseline_family_v1@81610cdf041b",
+        "reliable_reasoning_depth_v1@526c6a88dea7",
+        "hga_signature_benchmark_v1@291da16d8787",
+        "turkish_semantic_extraction_v1@525654cb978c",
+        "compositional_generalization_v2_raw_text@f59f990d1591"
+      ],
+      "inputs": {
+        "sections_with_evidence": 6,
+        "total_gates": 36
+      },
+      "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
+      "score": 7.57,
+      "section": "scientific_evidence"
+    },
+    "turkish_nlp": {
+      "evidence": [
+        "turkish_semantic_extraction_v1@525654cb978c",
+        "twt_real_results_v1@66b13a898efa"
+      ],
+      "inputs": {
+        "entity_f1": 1.0,
+        "relation_f1": 1.0,
+        "twt_best_f1_all": 0.899688276667,
+        "twt_seeds": 3
+      },
+      "rationale": "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.",
+      "score": 8.89,
+      "section": "turkish_nlp"
+    },
+    "verification": {
+      "evidence": [
+        "priority_causal_chain_ablation_v1@f86dfc8878cb"
+      ],
+      "inputs": {
+        "baseline_downstream": {
+          "decidability": 0.46666667,
+          "false_selection_rate": 0.06666667,
+          "novel_knowledge_yield": 0.4,
+          "subject_diversity": 0.83333333,
+          "subject_entropy": 2.96343184,
+          "verification_yield": 0.4
+        }
+      },
+      "rationale": "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ölçülür.",
+      "score": 5.0,
+      "section": "verification"
+    }
+  },
+  "unscored_sections": [
+    "language_modeling",
+    "reproducibility",
+    "engineering"
+  ],
+  "warnings": [
+    "`language_modeling` bölümü için kanıt yok; skor üretilmedi.",
+    "`reproducibility` bölümü için kanıt yok; skor üretilmedi.",
+    "`engineering` bölümü için kanıt yok; skor üretilmedi.",
+    "Genel skor yalnız 7/10 bölüm üzerinden hesaplandı; ['language_modeling', 'reproducibility', 'engineering'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler."
+  ]
+}

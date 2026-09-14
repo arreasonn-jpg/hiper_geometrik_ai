@@ -1,0 +1,150 @@
+{
+  "checks": {
+    "all_tiers_exercised": true,
+    "capacity_bounds_respected": true,
+    "crash_recovery_complete": true,
+    "drop_control_group_behaves_as_expected": true,
+    "hot_faster_than_cold": true,
+    "lru_retains_hot_set": true,
+    "no_data_loss_with_archive": true,
+    "no_value_corruption": true
+  },
+  "config": {
+    "cold": 30000,
+    "durable": true,
+    "hot": 1000,
+    "payload_size": 4,
+    "probe": 2000,
+    "records": 50000,
+    "signature": "379a04bf0bb4",
+    "warm": 10000
+  },
+  "crash_recovery": {
+    "post_recovery_found": 200,
+    "post_recovery_probes": 200,
+    "post_recovery_recall": 1.0,
+    "ram_records_after_crash": 0,
+    "restored_to_hot": 10627,
+    "wal_records": 50500
+  },
+  "disk": {
+    "archive_gzip": 50302,
+    "cold_sqlite": 2826240,
+    "total": 5744932,
+    "wal": 2868390
+  },
+  "drop_behavior": {
+    "archive_disabled_distribution": {
+      "archive": 0,
+      "archive_segments": 0,
+      "cold": 30000,
+      "hot": 1000,
+      "warm": 10000
+    },
+    "archive_disabled_dropped": 9000,
+    "drop_expected_at_this_scale": true,
+    "note": "Arşiv kapalıyken düşen kayıt sayısı; arşiv açıkken bu sayı 0 olmalıdır. Kontrol grubu, kayıpsızlık iddiasının boş bir ifade olmadığını gösterir."
+  },
+  "eviction": {
+    "evictions": {
+      "archive": 0,
+      "cold": 9873,
+      "hot": 51510,
+      "warm": 41107
+    },
+    "hot_set_retained_in_hot": 20,
+    "hot_set_retention": 1.0,
+    "hot_set_size": 20,
+    "pressure_writes": 500,
+    "promotions": {
+      "archive": 0,
+      "cold": 0,
+      "hot": 2010,
+      "warm": 0
+    },
+    "reads_per_key": 5
+  },
+  "findings": [
+    "Profil `standard`: 50,000 kayıt yazıldı, kapasiteler hot/warm/cold = 1,000/10,000/30,000.",
+    "Katman dağılımı: hot 1,000, warm 10,000, cold 30,000, archive 9,000 (1 segment).",
+    "Yazma hızı 2,088 kayıt/s (478.9 µs/kayıt, durable=True).",
+    "Okuma gecikmesi: hot p50=1.4µs (n=9), warm p50=3.2µs (n=398), cold p50=29.7µs (n=1227), archive p50=7989.4µs (n=366).",
+    "Cold okuma hot'tan **21.1× yavaş**. Tek bir ortalama gecikme sayısı bu farkı gizler; katman ayrımı bu yüzden var.",
+    "Recall 1.0000 — 2000 sondanın hepsi bulundu, değer bozulması yok. Tahliye veri kaybı değil, katman değişimidir.",
+    "Çökme sonrası: RAM'de 0 kayıt kaldı, WAL'den 10,627 kayıt hot'a geri yüklendi, kurtarma sonrası recall 1.0000.",
+    "Kontrol grubu (arşiv KAPALI): 9,000 kayıt düştü. Arşiv açıkken 0 düştü — kayıpsızlık mekanizması gerçekten çalışıyor, tanım gereği doğru değil.",
+    "RSS büyümesi 12.1 MB; disk 5.7 MB (cold 2.8 MB + archive 0.1 MB + wal 2.9 MB)."
+  ],
+  "limitations": [
+    "Tek süreç, tek iş parçacığı; eşzamanlı erişim ve kilitlenme davranışı ÖLÇÜLMEMİŞTİR.",
+    "'Çökme' süreç sonlandırma değil, RAM katmanlarının temizlenmesi ile taklit edilir; gerçek kill -9 sırasında sayfa önbelleği davranışı farklı olabilir.",
+    "Disk ölçümleri dosya boyutlarıdır; dosya sistemi blok doldurmasını ve sıkıştırma oranını içermez.",
+    "RSS tüm süreci ölçer; başka nesnelerin payı ayrıştırılamaz.",
+    "Profil `standard` gerçek 10⁸ ölçeğinin altındadır; kapasite iddiası ekstrapolasyon değil, ölçülen aralıkla sınırlıdır."
+  ],
+  "profile": "standard",
+  "protocol": "hierarchical_memory_v1",
+  "ram": {
+    "bytes_per_record_in_ram": 242.156,
+    "rss_after_write_bytes": 39010304,
+    "rss_end_bytes": 39010304,
+    "rss_growth_bytes": 12107776,
+    "rss_start_bytes": 26902528
+  },
+  "read_latency_by_tier": {
+    "archive": {
+      "max": 0.030349334,
+      "mean": 0.007791318,
+      "n": 366,
+      "p50": 0.007989395,
+      "p95": 0.014601595,
+      "p99": 0.016660114
+    },
+    "cold": {
+      "max": 0.004195355,
+      "mean": 3.9584e-05,
+      "n": 1227,
+      "p50": 2.9725e-05,
+      "p95": 6.9063e-05,
+      "p99": 9.6294e-05
+    },
+    "hot": {
+      "max": 1.704e-06,
+      "mean": 1.364e-06,
+      "n": 9,
+      "p50": 1.407e-06,
+      "p95": 1.684e-06,
+      "p99": 1.7e-06
+    },
+    "warm": {
+      "max": 8.5766e-05,
+      "mean": 3.649e-06,
+      "n": 398,
+      "p50": 3.225e-06,
+      "p95": 4.931e-06,
+      "p99": 9.102e-06
+    }
+  },
+  "recall": {
+    "found": 2000,
+    "missing_examples": [],
+    "probes": 2000,
+    "recall": 1.0,
+    "value_corruptions": 0
+  },
+  "schema_version": 1,
+  "seed": 1,
+  "tier_distribution": {
+    "archive": 9000,
+    "archive_segments": 1,
+    "cold": 30000,
+    "hot": 1000,
+    "warm": 10000
+  },
+  "write_throughput": {
+    "microseconds_per_record": 478.948,
+    "records": 50000,
+    "records_per_second": 2087.908,
+    "seconds": 23.94742
+  }
+}
