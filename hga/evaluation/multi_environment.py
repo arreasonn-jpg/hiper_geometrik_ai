@@ -335,7 +335,7 @@ def _run_adversarial(environments: Sequence[str]) -> Dict[str, Any]:
     toplam = sum(v["probes"] for v in tur_bazinda.values())
     konusan = sum(v["spoke"] for v in tur_bazinda.values())
     for satir in tur_bazinda.values():
-        satir["abstain_rate"] = round(
+        satir["abstain_rate"] = round(  # type: ignore[assignment]
             satir["abstain"] / satir["probes"], 6) if satir["probes"] else 0.0
     return {
         "probes": toplam,
@@ -507,7 +507,8 @@ def run_multi_environment_benchmark(
     semboller: Dict[str, set] = {}
     iliskiler: Dict[str, set] = {}
     for ortam in ortamlar:
-        s, r = set(), set()
+        s: set = set()
+        r: set = set()
         for iddia in iddialar[ortam]:
             s.update((iddia.subject, iddia.object))
             r.add(iddia.relation)

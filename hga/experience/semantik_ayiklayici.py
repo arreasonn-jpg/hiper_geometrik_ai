@@ -384,7 +384,7 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
                 "surface": kelime, "value": zaman_degeri, "kind": "adverb",
                 "confidence": GUVEN["zaman_belirteci"],
             })
-    if fiil_bilgi is not None:
+    if fiil_bilgi is not None and fiil_index is not None:
         sonuc.temporal.append({
             "surface": temiz[fiil_index], "value": fiil_bilgi["tense"],
             "kind": "verb_tense", "confidence": GUVEN["zaman_eki"],
@@ -438,12 +438,13 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
 
     # 5) Tip tabanlı ontolojik özellikler (metinde yazmaz → düşük güven).
     for varlik in sonuc.entities:
-        for ad, deger in TIP_OZELLIKLERI.get(varlik.entity_type, {}).items():
+        for ad, tip_degeri in TIP_OZELLIKLERI.get(
+                varlik.entity_type, {}).items():
             if ad in varlik.properties:
                 continue
-            varlik.properties[ad] = deger
+            varlik.properties[ad] = tip_degeri
             sonuc.properties.append(Ozellik(
-                entity=varlik.lemma, name=ad, value=deger,
+                entity=varlik.lemma, name=ad, value=tip_degeri,
                 source_surface=f"<ontology:{varlik.entity_type}>",
                 confidence=GUVEN["tip_ozelligi"]))
 
@@ -459,7 +460,7 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
                 f"bilinmeyen_fiil:{fiil_bilgi['lemma']}")
             return sonuc
         kutup = "NEGATIVE" if fiil_bilgi["negated"] else "POSITIVE"
-        if fiil_bilgi["negated"]:
+        if fiil_bilgi["negated"] and fiil_index is not None:
             sonuc.negations.append({
                 "surface": temiz[fiil_index], "scope": yuklem,
                 "confidence": GUVEN["olumsuzluk"],
@@ -514,17 +515,17 @@ def store_a_aktar(store, cikarim: SemantikCikarim,
         varlik_idleri[varlik.lemma] = entity_id
 
     for ozellik in cikarim.properties:
-        entity_id = varlik_idleri.get(ozellik.entity)
-        if entity_id is None:
+        ozellik_id = varlik_idleri.get(ozellik.entity)
+        if ozellik_id is None:
             continue
         deger = ozellik.value
         sayisal = float(deger) if isinstance(deger, (int, float)) else 1.0
-        store.ozellik_koy(entity_id, ozellik.name, sayisal, source=source,
+        store.ozellik_koy(ozellik_id, ozellik.name, sayisal, source=source,
                           confidence=ozellik.confidence)
         if not isinstance(deger, (int, float)):
             # Kategorik değer ayrıca "ad=deger" bayrağı olarak da yazılır ki
             # "renk=kırmızı" bilgisi sayıya indirgenip kaybolmasın.
-            store.ozellik_koy(entity_id, f"{ozellik.name}={deger}", 1.0,
+            store.ozellik_koy(ozellik_id, f"{ozellik.name}={deger}", 1.0,
                               source=source, confidence=ozellik.confidence)
 
     iliski_sayisi = 0

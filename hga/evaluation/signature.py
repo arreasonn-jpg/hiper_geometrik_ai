@@ -62,7 +62,7 @@ import math
 import random
 import statistics
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Collection, Dict, List, Optional, Sequence, Tuple
 
 TASKS = ("A_long_chain", "B_unseen_entity", "C_unseen_relation",
          "D_unseen_both", "E_conflict", "F_memory_dependent",
@@ -101,7 +101,7 @@ ARCH: Dict[str, Any] = {
 }
 
 
-def _torch():
+def _torch() -> Tuple[Any, Any]:
     try:
         import torch
         import torch.nn as nn
@@ -169,7 +169,7 @@ def _distractors(world: _World, entities: Sequence[str],
                  relations: Sequence[str], count: int,
                  rng: random.Random,
                  signal_relation: Optional[str] = None,
-                 protected_nodes: Sequence[str] = ()) -> List[Tuple[str, str, str]]:
+                 protected_nodes: Collection[str] = ()) -> List[Tuple[str, str, str]]:
     """Etiketi DEĞİŞTİRMEYEN dolgu olgular üret.
 
     Dolgunun işi ilgisiz hacim olmaktır, sessizce cevabı değiştirmek değil.
@@ -429,7 +429,7 @@ def symbolic_predict(instance: Instance, use_memory: bool = True) -> int:
 # ── Nöral kollar ────────────────────────────────────────────────────────────
 def _vocabulary(train: Sequence[Instance]) -> Dict[str, int]:
     """Sözlük YALNIZ eğitim örneklerinden kurulur; test OOV görür (0 = UNK)."""
-    semboller = set()
+    semboller: set = set()
     for ornek in train:
         for f in list(ornek.context) + [ornek.query]:
             semboller.update(f)
@@ -472,7 +472,7 @@ def _body_parameters(model, nn) -> int:
         if ad.startswith("embedding.") or ad == "position":
             paylasilan += parametre.numel()
     toplam = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    return toplam - paylasilan
+    return int(toplam - paylasilan)
 
 
 def _fit_widths(vocab_size: int, seq_len: int, torch, nn,
@@ -717,7 +717,8 @@ def run_signature_benchmark(
 
     ayar = PROFILES[profile]
     neural = [a for a in arms if a in NEURAL_ARMS]
-    torch = nn = None
+    torch: Any = None
+    nn: Any = None
     if neural or "hybrid" in arms:
         torch, nn = _torch()
     hedef = torch.device(device) if torch is not None else None
@@ -742,7 +743,7 @@ def run_signature_benchmark(
             sembolik_tahmin: Optional[List[int]] = None
             if "symbolic" in arms or "hybrid" in arms:
                 sembolik_tahmin = [symbolic_predict(o) for o in test]
-            if "symbolic" in arms:
+            if "symbolic" in arms and sembolik_tahmin is not None:
                 ham[task]["symbolic"].append(_metrics(gold, sembolik_tahmin))
 
             if not neural and "hybrid" not in arms:
@@ -805,7 +806,7 @@ def run_signature_benchmark(
             kosular = ham[task][arm]
             if not kosular:
                 continue
-            ozet: Dict[str, float] = {}
+            ozet: Dict[str, Any] = {}
             for metrik in kosular[0]:
                 degerler = [k[metrik] for k in kosular]
                 ozet[f"{metrik}_mean"] = _mean(degerler)

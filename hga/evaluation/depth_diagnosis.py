@@ -148,13 +148,13 @@ def diagnose_depth_collapse(
             slot_sayisi=slot, reliability_threshold=reliability_threshold)
         recall = rapor.to_dict()["memory_recall_grid"]
         satir: Dict[str, float] = {}
-        kontrol: Dict[str, float] = {}
+        kontrol_satiri: Dict[str, float] = {}
         for hop in hop_listesi:
             hucre = recall.get(str(hop), {})
             satir[str(hop)] = float(hucre.get(str(dolgu), 0.0))
-            kontrol[str(hop)] = float(hucre.get("0", 0.0))
+            kontrol_satiri[str(hop)] = float(hucre.get("0", 0.0))
         izgara[str(slot)] = satir
-        sifir_dolgu[str(slot)] = kontrol
+        sifir_dolgu[str(slot)] = kontrol_satiri
         # Güvenilir derinlik: eşiği karşılayan EN BÜYÜK ardışık hop.
         gecerli: Optional[int] = None
         for hop in hop_listesi:
@@ -207,7 +207,7 @@ def diagnose_depth_collapse(
     kontrol_tam = all(
         deger >= reliability_threshold
         for satir in sifir_dolgu.values() for deger in satir.values())
-    kontrol = {
+    kontrol: Dict[str, Any] = {
         "grid": sifir_dolgu,
         "all_hops_reliable_without_distractors": kontrol_tam,
         "note": ("Dolgu=0'da tüm derinlikler güvenilirse, zincirin kendisi "

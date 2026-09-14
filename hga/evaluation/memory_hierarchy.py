@@ -58,7 +58,7 @@ def _rss_bytes() -> Optional[int]:
     return None
 
 
-def _percentiles(values: Sequence[float]) -> Dict[str, Optional[float]]:
+def _percentiles(values: Sequence[float]) -> Dict[str, Any]:
     """p50/p95/p99 — ortalama tek başına çok modlu dağılımı temsil etmez."""
     if not values:
         return {"n": 0, "mean": None, "p50": None, "p95": None, "p99": None,
@@ -96,9 +96,9 @@ class MemoryHierarchyReport:
     write_throughput: Dict[str, float]
     tier_distribution: Dict[str, int]
     recall: Dict[str, Any]
-    read_latency_by_tier: Dict[str, Dict[str, Optional[float]]]
+    read_latency_by_tier: Dict[str, Dict[str, Any]]
     eviction: Dict[str, Any]
-    ram: Dict[str, Optional[int]]
+    ram: Dict[str, Optional[float]]
     disk: Dict[str, int]
     crash_recovery: Dict[str, Any]
     drop_behavior: Dict[str, Any]
@@ -196,7 +196,7 @@ def run_memory_hierarchy_benchmark(
             if hedef in gecikmeler:
                 gecikmeler[hedef].append(gecen)
 
-        geri_cagirma = {
+        geri_cagirma: Dict[str, Any] = {
             "probes": sonda_sayisi,
             "found": bulunan,
             "recall": round(bulunan / sonda_sayisi, 6) if sonda_sayisi else 0.0,
@@ -218,7 +218,7 @@ def run_memory_hierarchy_benchmark(
         for j in range(baski):
             depo.put(f"pressure-{j:09d}", {"i": -1, "pad": dolgu})
         hayatta = sum(1 for a in sicak_kume if depo.tier_of(a) == "hot")
-        tahliye = {
+        tahliye: Dict[str, Any] = {
             "hot_set_size": len(sicak_kume),
             "reads_per_key": 5,
             "pressure_writes": baski,
@@ -353,7 +353,7 @@ def run_memory_hierarchy_benchmark(
             f"(hot'ta kalma {tahliye['hot_set_retention']:.2f} < 0.90). "
             "Tahliye politikası erişim sıklığını yeterince yansıtmıyor.")
 
-    ram = {
+    ram: Dict[str, Optional[float]] = {
         "rss_start_bytes": rss_baslangic,
         "rss_after_write_bytes": rss_yazma_sonrasi,
         "rss_end_bytes": rss_son,
@@ -449,9 +449,9 @@ def memory_hierarchy_markdown(report: MemoryHierarchyReport) -> str:
             satirlar.append(f"| {katman} | 0 | — | — | — | — |")
             continue
         satirlar.append(
-            f"| {katman} | {m['n']} | {m['p50'] * 1e6:.2f} | "
-            f"{m['p95'] * 1e6:.2f} | {m['p99'] * 1e6:.2f} | "
-            f"{m['max'] * 1e6:.2f} |")
+            f"| {katman} | {m['n']} | {float(m['p50']) * 1e6:.2f} | "
+            f"{float(m['p95']) * 1e6:.2f} | {float(m['p99']) * 1e6:.2f} | "
+            f"{float(m['max']) * 1e6:.2f} |")
 
     satirlar.extend([
         "",

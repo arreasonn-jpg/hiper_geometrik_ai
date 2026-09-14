@@ -298,7 +298,7 @@ def run_core_seed_statistics(
             k.get("permutation_test") and k.get("wilcoxon_test")
             for k in karsilastirmalar),
         "power_limit_documented": True,
-        "design_can_reach_p_0_05": guc["can_reach_p_0_05"],
+        "design_can_reach_p_0_05": bool(guc["can_reach_p_0_05"]),
     }
 
     # ── bulgular ───────────────────────────────────────────────────────────
@@ -376,7 +376,7 @@ def _ci_sifir_iceriyor(kiyas: Dict[str, Any]) -> bool:
     alt, ust = ci.get("lower"), ci.get("upper")
     if alt is None or ust is None:
         return True
-    return alt <= 0.0 <= ust
+    return bool(alt <= 0.0 <= ust)
 
 
 def seed_statistics_markdown(report: SeedStatisticsReport) -> str:

@@ -109,8 +109,8 @@ def _saturation_cycle(cycles: Sequence[Any],
     """Bilginin nihai değerinin ``threshold`` oranına ulaştığı ilk cycle."""
     if not cycles:
         return None
-    boyutlar = [getattr(c, "knowledge_size", None) for c in cycles]
-    boyutlar = [b for b in boyutlar if b is not None]
+    ham = [getattr(c, "knowledge_size", None) for c in cycles]
+    boyutlar: List[float] = [float(b) for b in ham if b is not None]
     if not boyutlar:
         return None
     hedef = boyutlar[-1] * threshold
@@ -201,7 +201,7 @@ def run_self_learning_scaling(
         if len({p.cycles for p in alt}) < 2:
             continue
         cycle_degerleri = sorted({p.cycles for p in alt})
-        satir = []
+        satir: List[Dict[str, Any]] = []
         for c in cycle_degerleri:
             grup = [p for p in alt if p.cycles == c]
             satir.append({

@@ -114,7 +114,7 @@ def kendall_tau(a: Sequence[float], b: Sequence[float]) -> float:
     payda = ((toplam - bag_a) * (toplam - bag_b)) ** 0.5
     if payda == 0:
         return 1.0
-    return round((uyumlu - uyumsuz) / payda, 8)
+    return float(round((uyumlu - uyumsuz) / payda, 8))
 
 
 def spearman_rho(a: Sequence[float], b: Sequence[float]) -> float:
@@ -131,7 +131,7 @@ def spearman_rho(a: Sequence[float], b: Sequence[float]) -> float:
     nb = sum((y - mb) ** 2 for y in rb) ** 0.5
     if na == 0 or nb == 0:
         return 1.0
-    return round(pay / (na * nb), 8)
+    return float(round(pay / (na * nb), 8))
 
 
 def _oran(pay: int, payda: int) -> float:

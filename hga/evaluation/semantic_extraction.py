@@ -184,7 +184,7 @@ def _tahmin_kumeler(cikarim: SemantikCikarim) -> Dict[str, Set[Tuple[Any, ...]]]
     }
 
 
-def _altin_kumeler(gold: GoldSentence) -> Dict[str, Set[Tuple[Any, ...]]]:
+def _altin_kumeler(gold: GoldSentence) -> Dict[str, Set[Any]]:
     return {
         "entity": set(gold.entities),
         "relation": set(gold.relations),

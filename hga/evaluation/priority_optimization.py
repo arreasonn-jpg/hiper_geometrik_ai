@@ -130,7 +130,10 @@ def _evaluate_weights(
     for seed in seeds:
         havuz = havuz_uret(candidate_count=candidate_count,
                            operands_max=operands_max, seed=seed)
-        motor = ExplorationEngine(**weights)
+        motor = ExplorationEngine(
+            w_gain=weights["w_gain"], w_novelty=weights["w_novelty"],
+            w_uncertainty=weights["w_uncertainty"],
+            w_conflict_penalty=weights["w_conflict_penalty"])
         skorlar = _skorla_hepsi(motor, havuz)
         secim = _secim(havuz, skorlar, k)
         sonuclar.append(float(_downstream(havuz, secim)[objective]))

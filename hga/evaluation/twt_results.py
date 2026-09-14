@@ -441,7 +441,7 @@ def run_twt_results(
                 ).to_dict()
 
     # ── kapılar ────────────────────────────────────────────────────────────
-    tum_kapilar_alt = {}
+    tum_kapilar_alt: Dict[str, bool] = {}
     for rapor in raporlar:
         for ad, deger in rapor.checks.items():
             tum_kapilar_alt[ad] = tum_kapilar_alt.get(ad, True) and bool(deger)
@@ -515,7 +515,9 @@ def run_twt_results(
     # Ayrışma YÖNSÜZ bir kelimedir: "istatistiksel olarak ayrıştı" cümlesi
     # HGA'nın kazandığını ima eder ama kaybettiğinde de doğrudur. Bu yüzden
     # yön burada açıkça ayrıştırılır.
-    hga_ustun, hga_geride, ayrilmayanlar = [], [], []
+    hga_ustun: List[str] = []
+    hga_geride: List[str] = []
+    ayrilmayanlar: List[str] = []
     for boyut, k in karsilastirma.items():
         karar = k["verdict"]
         fark = k["treatment_mean"] - k["baseline_mean"]

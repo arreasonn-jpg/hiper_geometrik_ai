@@ -73,7 +73,8 @@ def _load_pyproject(root: Path) -> Optional[Dict[str, Any]]:
         except ImportError:
             return None
     try:
-        return tomllib.loads(ham)
+        veri: Dict[str, Any] = tomllib.loads(ham)
+        return veri
     except Exception:
         return None
 
@@ -186,8 +187,8 @@ def audit_engineering(root: Optional[Path] = None) -> EngineeringReport:
         "ci_smoke_tests_cli": len(ci_komutlari) >= 10,
         "packaging_contract_complete": (
             pyproject is not None and not eksik_alanlar),
-        "test_extra_declared": paketleme["has_optional_test_extra"],
-        "lint_and_type_tools_configured": (
+        "test_extra_declared": bool(paketleme["has_optional_test_extra"]),
+        "lint_and_type_tools_configured": bool(
             araclar["ruff_configured"] and araclar["mypy_configured"]),
         "scientific_tests_present": len(bilimsel) >= 10,
     }
