@@ -270,6 +270,7 @@ def build_scorecard(
     self_learning_scaling: Optional[Dict[str, Any]] = None,
     seed_statistics: Optional[Dict[str, Any]] = None,
     depth_diagnosis: Optional[Dict[str, Any]] = None,
+    priority_optimization: Optional[Dict[str, Any]] = None,
     human_evaluation: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
@@ -344,15 +345,22 @@ def build_scorecard(
     # doğrulanmaya DEĞER olduğunu seçer, ikincisi doğrulayıcının yetkisi
     # dışında konuşmadığını gösterir.
     dogrulama_checks = dict(_get(priority_ablation, "checks") or {})
+    for ad, deger in (_get(priority_optimization, "checks") or {}).items():
+        dogrulama_checks[f"weightopt:{ad}"] = bool(deger)
     for ad, deger in (_get(multi_environment, "checks") or {}).items():
         dogrulama_checks[f"multienv:{ad}"] = bool(deger)
     bolum("verification", dogrulama_checks or None,
           {"baseline_downstream": _get(priority_ablation, "baseline_downstream"),
            "verifier_isolation_rate": _get(multi_environment, "contamination",
                                            "isolation_rate"),
+           "weights_validated_on_holdout": _get(
+               priority_optimization, "overfitting", "gain_survives_holdout"),
+           "holdout_gain": _get(
+               priority_optimization, "overfitting", "holdout_gain"),
            "adversarial_abstain_rate": _get(multi_environment, "adversarial",
                                             "abstain_rate")},
-          kanit(priority_ablation) + kanit(multi_environment),
+          kanit(priority_ablation) + kanit(multi_environment)
+          + kanit(priority_optimization),
           "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream "
           "zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında "
           "çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.")
@@ -496,7 +504,8 @@ def build_scorecard(
           [k for rapor in (priority_ablation, operator_baselines,
                            reasoning_depth, signature, semantic_extraction,
                            compositional_v2, self_learning_scaling,
-                           seed_statistics, depth_diagnosis)
+                           seed_statistics, depth_diagnosis,
+                           priority_optimization)
            for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")
@@ -541,6 +550,7 @@ def build_scorecard(
                     ("seed_statistics", seed_statistics),
                     ("human_evaluation", human_evaluation),
                     ("depth_diagnosis", depth_diagnosis),
+                    ("priority_optimization", priority_optimization),
                     ("calibration", calibration),
                     ("language_modeling", language_modeling),
                     ("reproducibility", reproducibility),

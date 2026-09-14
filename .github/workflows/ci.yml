@@ -158,6 +158,7 @@ jobs:
           python -m hga bellek-hiyerarsi --depth-profile smoke
           python -m hga ogrenme-olcek --signature-profile smoke
           python -m hga tohum-istatistik --signature-profile smoke
+          python -m hga oncelik-optimizasyon --signature-profile smoke
           python -m hga derinlik-teshis --depth-profile smoke
           python -m hga insan-degerlendirme
           python -m hga cok-ortam --seeds 1,2

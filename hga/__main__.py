@@ -36,6 +36,7 @@ Kullanım:
     python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
     python -m hga insan-degerlendirme    # protokol + Krippendorff alfa (P1)
     python -m hga derinlik-teshis        # derinlik çöküşü kök neden
+    python -m hga oncelik-optimizasyon   # ağırlık araması + held-out
     python -m hga muhendislik            # CI / paketleme / test sözleşmesi
     python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
     python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
@@ -1815,6 +1816,18 @@ def _derinlik_teshis(profile="smoke", out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _oncelik_optimizasyon(profile="smoke", out=None, markdown=None):
+    """Priority(E) ağırlık araması + held-out doğrulama."""
+    from hga.evaluation.priority_optimization import (
+        optimize_priority_weights,
+        priority_optimization_markdown,
+    )
+    rapor = optimize_priority_weights(profile=profile)
+    md = priority_optimization_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _muhendislik(out=None, markdown=None):
     """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
     from hga.evaluation.engineering_audit import (
@@ -1877,6 +1890,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         run_multi_environment_benchmark,
     )
     from hga.evaluation.priority_ablation import run_priority_weight_ablation
+    from hga.evaluation.priority_optimization import optimize_priority_weights
     from hga.evaluation.reasoning_depth import measure_reasoning_depth
     from hga.evaluation.seed_statistics import run_core_seed_statistics
     from hga.evaluation.self_learning_scaling import run_self_learning_scaling
@@ -1916,6 +1930,9 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         signature_profile=profile,
         include_operator=not skip_torch).to_dict()
     print("  ✓ Çekirdek tohum istatistikleri (CI / etki / permütasyon)")
+    raporlar["priority_optimization"] = optimize_priority_weights(
+        profile="smoke" if profile == "smoke" else "standard").to_dict()
+    print("  ✓ Priority(E) ağırlık optimizasyonu + held-out")
     raporlar["depth_diagnosis"] = diagnose_depth_collapse(
         profile="smoke" if profile == "smoke" else "standard").to_dict()
     print("  ✓ Derinlik çöküşü kök neden teşhisi")
@@ -2006,6 +2023,7 @@ def main(argv=None):
                                      "tohum-istatistik",
                                      "insan-degerlendirme",
                                      "derinlik-teshis",
+                                     "oncelik-optimizasyon",
                                      "muhendislik",
                                      "yeniden-uretilebilirlik",
                                      "championship-benchmark"])
@@ -2220,6 +2238,9 @@ def main(argv=None):
          out=args.out, markdown=args.markdown),
      "derinlik-teshis": lambda: _derinlik_teshis(
          profile=args.depth_profile, out=args.out, markdown=args.markdown),
+     "oncelik-optimizasyon": lambda: _oncelik_optimizasyon(
+         profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
      "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),
      "yeniden-uretilebilirlik": lambda: _yeniden_uretilebilirlik(
          out=args.out, markdown=args.markdown),
