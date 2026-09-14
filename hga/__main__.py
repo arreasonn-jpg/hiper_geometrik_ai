@@ -34,6 +34,7 @@ Kullanım:
     python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
     python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
     python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
+    python -m hga insan-degerlendirme    # protokol + Krippendorff alfa (P1)
     python -m hga muhendislik            # CI / paketleme / test sözleşmesi
     python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
     python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
@@ -1789,6 +1790,18 @@ def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _insan_degerlendirme(out=None, markdown=None):
+    """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
+    from hga.evaluation.human_evaluation import (
+        build_human_evaluation_protocol,
+        human_evaluation_markdown,
+    )
+    rapor = build_human_evaluation_protocol()
+    md = human_evaluation_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _muhendislik(out=None, markdown=None):
     """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
     from hga.evaluation.engineering_audit import (
@@ -1840,6 +1853,9 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         audit_engineering,
         audit_reproducibility,
     )
+    from hga.evaluation.human_evaluation import (
+        build_human_evaluation_protocol,
+    )
     from hga.evaluation.memory_hierarchy import (
         run_memory_hierarchy_benchmark,
     )
@@ -1886,6 +1902,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         signature_profile=profile,
         include_operator=not skip_torch).to_dict()
     print("  ✓ Çekirdek tohum istatistikleri (CI / etki / permütasyon)")
+    raporlar["human_evaluation"] = build_human_evaluation_protocol().to_dict()
     raporlar["engineering"] = audit_engineering().to_dict()
     print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
 
@@ -1970,6 +1987,7 @@ def main(argv=None):
                                      "twt-sonuc", "bellek-hiyerarsi",
                                      "cok-ortam", "ogrenme-olcek",
                                      "tohum-istatistik",
+                                     "insan-degerlendirme",
                                      "muhendislik",
                                      "yeniden-uretilebilirlik",
                                      "championship-benchmark"])
@@ -2180,6 +2198,8 @@ def main(argv=None):
      "tohum-istatistik": lambda: _tohum_istatistik(
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
+     "insan-degerlendirme": lambda: _insan_degerlendirme(
+         out=args.out, markdown=args.markdown),
      "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),
      "yeniden-uretilebilirlik": lambda: _yeniden_uretilebilirlik(
          out=args.out, markdown=args.markdown),

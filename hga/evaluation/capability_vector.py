@@ -69,7 +69,7 @@ TERMINOLOGY: Dict[str, Dict[str, str]] = {
 #: Karne bölümleri ve her birinin hangi kanıttan beslendiği.
 SCORECARD_SECTIONS: Tuple[str, ...] = (
     "architecture", "memory", "verification", "generalization", "reasoning",
-    "self_learning", "statistical_rigor", "turkish_nlp",
+    "self_learning", "statistical_rigor", "human_evaluation", "turkish_nlp",
     "language_modeling", "reproducibility",
     "scientific_evidence", "engineering",
 )
@@ -269,6 +269,7 @@ def build_scorecard(
     multi_environment: Optional[Dict[str, Any]] = None,
     self_learning_scaling: Optional[Dict[str, Any]] = None,
     seed_statistics: Optional[Dict[str, Any]] = None,
+    human_evaluation: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
     engineering: Optional[Dict[str, Any]] = None,
@@ -402,6 +403,26 @@ def build_scorecard(
           "CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak "
           "p-değeri kabul edilmez.")
 
+    # human_evaluation ← YALNIZ gerçek insan puanı varsa skorlanır.
+    # Protokol ve araç hazır olması bir sonuç DEĞİLDİR; araç kapılarına
+    # puan vermek "ölçmediğimi ölçtüm" demek olurdu. Bu yüzden gerçek puan
+    # toplanana kadar bölüm bilinçli olarak kanıtsız (n/a) bırakılır.
+    _insan_toplandi = bool(
+        _get(human_evaluation, "checks", "human_ratings_collected"))
+    bolum("human_evaluation",
+          _get(human_evaluation, "checks") if _insan_toplandi else None,
+          {"protocol_ready": bool(human_evaluation),
+           "ratings_collected": _insan_toplandi,
+           "prompts": _get(human_evaluation, "design", "prompts"),
+           "raters": _get(human_evaluation, "design", "raters"),
+           "alpha_tool_validated": _get(
+               human_evaluation, "checks",
+               "alpha_validated_on_reference_data")},
+          kanit(human_evaluation),
+          "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff "
+          "α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır "
+          "olsa bile gerçek insan puanı yoksa skor üretilmez.")
+
     # turkish_nlp ← semantik çıkarım (sentetik altın set)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)
     turkce_checks = dict(_get(semantic_extraction, "checks") or {})
@@ -508,6 +529,7 @@ def build_scorecard(
                     ("multi_environment", multi_environment),
                     ("self_learning_scaling", self_learning_scaling),
                     ("seed_statistics", seed_statistics),
+                    ("human_evaluation", human_evaluation),
                     ("calibration", calibration),
                     ("language_modeling", language_modeling),
                     ("reproducibility", reproducibility),

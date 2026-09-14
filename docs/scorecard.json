@@ -100,13 +100,14 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-14T10:06:08+00:00",
+  "generated_at_utc": "2026-09-14T10:45:38+00:00",
   "overall": 8.44,
   "provenance": {
     "reports_supplied": [
       "capacity",
       "compositional_v2",
       "engineering",
+      "human_evaluation",
       "memory",
       "multi_environment",
       "operator_baselines",
@@ -178,14 +179,14 @@
         "engineering_contract_audit_v1"
       ],
       "inputs": {
-        "cli_commands_smoke_tested": 41,
+        "cli_commands_smoke_tested": 42,
         "python_matrix": [
           "3.10",
           "3.11",
           "3.12",
           "3.13"
         ],
-        "scientific_test_files": 24
+        "scientific_test_files": 25
       },
       "rationale": "CI matrisi, lint/type kapıları, paketleme sözleşmesi.",
       "score": 10.0,
@@ -201,6 +202,21 @@
       "rationale": "Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.",
       "score": 8.33,
       "section": "generalization"
+    },
+    "human_evaluation": {
+      "evidence": [
+        "human_evaluation_protocol_v1"
+      ],
+      "inputs": {
+        "alpha_tool_validated": true,
+        "prompts": 50,
+        "protocol_ready": true,
+        "raters": 10,
+        "ratings_collected": false
+      },
+      "rationale": "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır olsa bile gerçek insan puanı yoksa skor üretilmez.",
+      "score": null,
+      "section": "human_evaluation"
     },
     "language_modeling": {
       "evidence": [],
@@ -254,8 +270,8 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "3c4673964d365d8d5430d6dc1acf416819d51135",
-        "protocols_examined": 13,
+        "git_commit": "9a0929043c2cef29ce0ee004a6569949ee4e4507",
+        "protocols_examined": 14,
         "protocols_meeting_20_seeds": 1
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
@@ -346,10 +362,12 @@
     }
   },
   "unscored_sections": [
+    "human_evaluation",
     "language_modeling"
   ],
   "warnings": [
+    "`human_evaluation` bölümü için kanıt yok; skor üretilmedi.",
     "`language_modeling` bölümü için kanıt yok; skor üretilmedi.",
-    "Genel skor yalnız 11/12 bölüm üzerinden hesaplandı; ['language_modeling'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler."
+    "Genel skor yalnız 11/13 bölüm üzerinden hesaplandı; ['human_evaluation', 'language_modeling'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler."
   ]
 }
