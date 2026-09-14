@@ -1,0 +1,515 @@
+{
+ "protocol": "priority_weight_optimization_v1",
+ "schema_version": 1,
+ "profile": "standard",
+ "objective": "verification_yield",
+ "grid": [
+  0.0,
+  0.2,
+  0.4,
+  0.6
+ ],
+ "train_seeds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "test_seeds": [
+  101,
+  102,
+  103,
+  104,
+  105,
+  106,
+  107,
+  108,
+  109,
+  110,
+  111,
+  112,
+  113,
+  114,
+  115,
+  116,
+  117,
+  118,
+  119,
+  120
+ ],
+ "candidates_evaluated": 255,
+ "default_weights": {
+  "w_gain": 0.4,
+  "w_novelty": 0.35,
+  "w_uncertainty": 0.25,
+  "w_conflict_penalty": 0.2
+ },
+ "best_weights": {
+  "w_gain": 0.0,
+  "w_novelty": 0.0,
+  "w_uncertainty": 0.0,
+  "w_conflict_penalty": 0.2
+ },
+ "train": {
+  "best_mean": 0.64,
+  "best_per_seed": [
+   0.7,
+   0.8,
+   0.5,
+   0.4,
+   0.7,
+   0.9,
+   0.6,
+   0.8,
+   0.5,
+   0.5
+  ],
+  "default_mean": 0.33,
+  "default_per_seed": [
+   0.5,
+   0.3,
+   0.4,
+   0.4,
+   0.3,
+   0.3,
+   0.1,
+   0.4,
+   0.3,
+   0.3
+  ],
+  "top5": [
+   {
+    "weights": {
+     "w_gain": 0.0,
+     "w_novelty": 0.0,
+     "w_uncertainty": 0.0,
+     "w_conflict_penalty": 0.2
+    },
+    "mean_objective": 0.64,
+    "per_seed": [
+     0.7,
+     0.8,
+     0.5,
+     0.4,
+     0.7,
+     0.9,
+     0.6,
+     0.8,
+     0.5,
+     0.5
+    ]
+   },
+   {
+    "weights": {
+     "w_gain": 0.0,
+     "w_novelty": 0.0,
+     "w_uncertainty": 0.0,
+     "w_conflict_penalty": 0.4
+    },
+    "mean_objective": 0.64,
+    "per_seed": [
+     0.7,
+     0.8,
+     0.5,
+     0.4,
+     0.7,
+     0.9,
+     0.6,
+     0.8,
+     0.5,
+     0.5
+    ]
+   },
+   {
+    "weights": {
+     "w_gain": 0.0,
+     "w_novelty": 0.0,
+     "w_uncertainty": 0.0,
+     "w_conflict_penalty": 0.6
+    },
+    "mean_objective": 0.64,
+    "per_seed": [
+     0.7,
+     0.8,
+     0.5,
+     0.4,
+     0.7,
+     0.9,
+     0.6,
+     0.8,
+     0.5,
+     0.5
+    ]
+   },
+   {
+    "weights": {
+     "w_gain": 0.6,
+     "w_novelty": 0.6,
+     "w_uncertainty": 0.4,
+     "w_conflict_penalty": 0.0
+    },
+    "mean_objective": 0.59,
+    "per_seed": [
+     0.7,
+     0.8,
+     0.3,
+     0.4,
+     0.9,
+     0.8,
+     0.6,
+     0.4,
+     0.5,
+     0.5
+    ]
+   },
+   {
+    "weights": {
+     "w_gain": 0.6,
+     "w_novelty": 0.6,
+     "w_uncertainty": 0.6,
+     "w_conflict_penalty": 0.0
+    },
+    "mean_objective": 0.59,
+    "per_seed": [
+     0.7,
+     0.8,
+     0.3,
+     0.4,
+     0.9,
+     0.8,
+     0.6,
+     0.4,
+     0.5,
+     0.5
+    ]
+   }
+  ]
+ },
+ "holdout": {
+  "optimized": {
+   "n": 20,
+   "mean": 0.67,
+   "std_sample": 0.162545540177,
+   "min": 0.4,
+   "max": 0.9,
+   "ci_lower": 0.6,
+   "ci_upper": 0.74,
+   "confidence_level": 0.95,
+   "method": "percentile-bootstrap",
+   "seed": 12345
+  },
+  "default": {
+   "n": 20,
+   "mean": 0.33,
+   "std_sample": 0.130182058753,
+   "min": 0.1,
+   "max": 0.5,
+   "ci_lower": 0.275,
+   "ci_upper": 0.385,
+   "confidence_level": 0.95,
+   "method": "percentile-bootstrap",
+   "seed": 12345
+  },
+  "optimized_per_seed": [
+   0.5,
+   0.8,
+   0.8,
+   0.6,
+   0.8,
+   0.6,
+   0.4,
+   0.6,
+   0.9,
+   0.6,
+   0.7,
+   0.8,
+   0.9,
+   0.7,
+   0.9,
+   0.5,
+   0.4,
+   0.5,
+   0.8,
+   0.6
+  ],
+  "default_per_seed": [
+   0.4,
+   0.3,
+   0.2,
+   0.1,
+   0.5,
+   0.3,
+   0.4,
+   0.4,
+   0.5,
+   0.3,
+   0.4,
+   0.5,
+   0.2,
+   0.3,
+   0.2,
+   0.2,
+   0.2,
+   0.2,
+   0.5,
+   0.5
+  ],
+  "signature": "3ca4c32063c1"
+ },
+ "comparison": {
+  "metric": "holdout::verification_yield",
+  "treatment_label": "optimized",
+  "baseline_label": "default",
+  "treatment_mean": 0.67,
+  "baseline_mean": 0.33,
+  "treatment_ci": {
+   "statistic": "holdout::verification_yield::treatment",
+   "point_estimate": 0.67,
+   "lower": 0.6,
+   "upper": 0.74,
+   "confidence_level": 0.95,
+   "resamples": 10000,
+   "sample_size": 20,
+   "seed": 12345,
+   "method": "percentile-bootstrap",
+   "limitations": [
+    "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+    "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz."
+   ]
+  },
+  "baseline_ci": {
+   "statistic": "holdout::verification_yield::baseline",
+   "point_estimate": 0.33,
+   "lower": 0.275,
+   "upper": 0.385,
+   "confidence_level": 0.95,
+   "resamples": 10000,
+   "sample_size": 20,
+   "seed": 12346,
+   "method": "percentile-bootstrap",
+   "limitations": [
+    "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+    "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz."
+   ]
+  },
+  "difference_ci": {
+   "statistic": "holdout::verification_yield::difference",
+   "point_estimate": 0.34,
+   "lower": 0.265,
+   "upper": 0.42,
+   "confidence_level": 0.95,
+   "resamples": 10000,
+   "sample_size": 20,
+   "seed": 12347,
+   "method": "percentile-bootstrap",
+   "limitations": [
+    "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+    "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz."
+   ]
+  },
+  "effect_size": {
+   "measure": "cohens_d_z_paired",
+   "value": 1.813290917668,
+   "hedges_g": 1.740759280961,
+   "mean_difference": 0.34,
+   "std_difference": 0.187504385914,
+   "sample_size": 20,
+   "magnitude": "large",
+   "interpretation": "Eşleşmiş fark ortalaması 0.34, d_z=1.8133, g=1.7408 (large).",
+   "limitations": [
+    "Cohen eşikleri (0.2/0.5/0.8) sözleşmedir; alan-bağımsız gerçek anlam taşımaz.",
+    "Etki büyüklüğü YÖN ve BÜYÜKLÜK verir; nedensellik veya genellenebilirlik vermez."
+   ]
+  },
+  "permutation_test": {
+   "test": "monte-carlo-paired-sign-flip-permutation",
+   "statistic": 0.34,
+   "p_value": 4.99975e-05,
+   "alternative": "two-sided",
+   "sample_size": 20,
+   "exact": false,
+   "permutations": 20000,
+   "minimum_achievable_p_value": 1.907349e-06,
+   "significant_at_0_05": true,
+   "underpowered_by_design": false,
+   "interpretation": "p=0.00005 < 0.05: gözlenen fark, sıfır hipotezi altında 20 eşleşmede bu kadar uç çıkmazdı.",
+   "limitations": [
+    "Sıfır hipotezi fark dağılımının 0 etrafında simetrik olmasıdır.",
+    "p-değeri etki BÜYÜKLÜĞÜ değildir; effect size ile birlikte okunmalıdır.",
+    "Seed varyansı dışındaki (dataset, protokol, uygulama) yanlılıkları kapsamaz.",
+    "n=20 > 18: p deterministik Monte Carlo ile 20000 örnekten tahmin edildi, tam sayım değildir."
+   ]
+  },
+  "wilcoxon_test": {
+   "test": "normal-approximation-wilcoxon-signed-rank",
+   "statistic": 0,
+   "p_value": 0.000128350493,
+   "alternative": "two-sided",
+   "sample_size": 19,
+   "exact": false,
+   "permutations": 0,
+   "minimum_achievable_p_value": 3.814697e-06,
+   "significant_at_0_05": true,
+   "underpowered_by_design": false,
+   "interpretation": "W=0, p=0.00013",
+   "limitations": [
+    "Wilcoxon sıralara dayanır; etki büyüklüğünü DEĞİL, sıralama tutarlılığını sınar.",
+    "p-değeri tek başına bilimsel kanıt değildir; CI ve effect size ile okunmalıdır.",
+    "1 eşleşmede fark tam sıfırdı ve klasik Wilcoxon gereği atıldı; etkin örneklem 19.",
+    "Normal yaklaşım kullanıldı (tie ve süreklilik düzeltmeli)."
+   ]
+  },
+  "verdict": "AYRIŞMA: p=0.00005, g=1.7408 (large), CI [0.265, 0.42] sıfırı içermiyor.",
+  "limitations": [
+   "Tüm çıkarım YALNIZ seed varyansı üzerinedir; dataset ve protokol sabittir.",
+   "Çoklu metrik karşılaştırılıyorsa çoklu test düzeltmesi uygulanmamıştır.",
+   "İstatistiksel ayrışma, gerçek dünya genellemesi anlamına gelmez."
+  ]
+ },
+ "overfitting": {
+  "train_gain": 0.31,
+  "holdout_gain": 0.34,
+  "generalization_ratio": 1.096774,
+  "gain_lost_to_overfitting": -0.096774,
+  "gain_survives_holdout": true,
+  "note": "Eğitim kazancının held-out'ta korunan kısmı. Oran 1.0'a yakınsa kazanç gerçek; 0'a yakınsa arama ezberlemiş, negatifse ağırlıklar held-out'ta ZARAR veriyor."
+ },
+ "weight_sensitivity": {
+  "w_gain": {
+   "curve": [
+    {
+     "value": 0.0,
+     "holdout_mean": 0.67
+    },
+    {
+     "value": 0.2,
+     "holdout_mean": 0.375
+    },
+    {
+     "value": 0.4,
+     "holdout_mean": 0.375
+    },
+    {
+     "value": 0.6,
+     "holdout_mean": 0.375
+    }
+   ],
+   "best_value": 0.0,
+   "holdout_range": 0.295,
+   "points_evaluated": 4,
+   "points_skipped_all_zero": 0,
+   "scale_invariant": false,
+   "matters": true,
+   "note": "Diğer terimler sabitken bu terimin held-out etkisi."
+  },
+  "w_novelty": {
+   "curve": [
+    {
+     "value": 0.0,
+     "holdout_mean": 0.67
+    },
+    {
+     "value": 0.2,
+     "holdout_mean": 0.675
+    },
+    {
+     "value": 0.4,
+     "holdout_mean": 0.675
+    },
+    {
+     "value": 0.6,
+     "holdout_mean": 0.675
+    }
+   ],
+   "best_value": 0.2,
+   "holdout_range": 0.005,
+   "points_evaluated": 4,
+   "points_skipped_all_zero": 0,
+   "scale_invariant": false,
+   "matters": true,
+   "note": "Diğer terimler sabitken bu terimin held-out etkisi."
+  },
+  "w_uncertainty": {
+   "curve": [
+    {
+     "value": 0.0,
+     "holdout_mean": 0.67
+    },
+    {
+     "value": 0.2,
+     "holdout_mean": 0.68
+    },
+    {
+     "value": 0.4,
+     "holdout_mean": 0.68
+    },
+    {
+     "value": 0.6,
+     "holdout_mean": 0.68
+    }
+   ],
+   "best_value": 0.2,
+   "holdout_range": 0.01,
+   "points_evaluated": 4,
+   "points_skipped_all_zero": 0,
+   "scale_invariant": false,
+   "matters": true,
+   "note": "Diğer terimler sabitken bu terimin held-out etkisi."
+  },
+  "w_conflict_penalty": {
+   "curve": [
+    {
+     "value": 0.2,
+     "holdout_mean": 0.67
+    },
+    {
+     "value": 0.4,
+     "holdout_mean": 0.67
+    },
+    {
+     "value": 0.6,
+     "holdout_mean": 0.67
+    }
+   ],
+   "best_value": 0.2,
+   "holdout_range": 0.0,
+   "points_evaluated": 3,
+   "points_skipped_all_zero": 1,
+   "scale_invariant": true,
+   "matters": true,
+   "note": "Bu terim tek aktif terim olduğu için ölçeği sıralamayı değiştirmez; belirleyici olan varlığıdır. Sabit eğri 'ölü ağırlık' anlamına GELMEZ."
+  }
+ },
+ "checks": {
+  "train_test_seed_isolation": true,
+  "search_space_includes_zero": true,
+  "holdout_evaluated": true,
+  "optimized_at_least_matches_default_on_holdout": true,
+  "gain_survives_holdout": true,
+  "gain_statistically_distinguishable": true,
+  "overfitting_measured": true,
+  "sensitivity_measured": true,
+  "paired_design": true
+ },
+ "findings": [
+  "255 ağırlık kombinasyonu 10 eğitim tohumunda tarandı; en iyisi 20 HELD-OUT tohumda test edildi.",
+  "Varsayılan (elle seçilmiş) ağırlıklar: {'w_gain': 0.4, 'w_novelty': 0.35, 'w_uncertainty': 0.25, 'w_conflict_penalty': 0.2}.",
+  "Aramanın bulduğu ağırlıklar: {'w_gain': 0.0, 'w_novelty': 0.0, 'w_uncertainty': 0.0, 'w_conflict_penalty': 0.2}.",
+  "Arama şu terimleri TAMAMEN KAPATTI: ['w_gain', 'w_novelty', 'w_uncertainty']. Bu, ablasyonun 'bu terimleri kapatmak verimi artırıyor' bulgusuyla tutarlıdır — elle seçilmiş ağırlıklar yalnız etkisiz değil, bazı yerlerde zararlıydı.",
+  "Eğitim kazancı +0.3100, held-out kazancı +0.3400.",
+  "Kazancın %110'ı held-out'ta korundu; kalanı aşırı uydurmadır.",
+  "Held-out hükmü: AYRIŞMA: p=0.00005, g=1.7408 (large), CI [0.265, 0.42] sıfırı içermiyor."
+ ],
+ "limitations": [
+  "Arama ızgarası kabadır; sürekli optimizasyon daha iyi bir nokta bulabilir. Bulunan ağırlıklar 'ızgaranın en iyisi'dir, küresel optimum değildir.",
+  "Hedef tek metriktir (doğrulama verimi). Çeşitlilik ya da kapsama gibi başka hedefler farklı ağırlıklar seçtirirdi.",
+  "Havuz aritmetiktir ve doğrulayıcı kapalı formdur; gerçek alanlarda optimal ağırlıklar farklı olabilir.",
+  "Held-out tohumlar aynı havuz üreticisinden gelir; bu bir tohum genellemesidir, ALAN genellemesi değildir."
+ ]
+}

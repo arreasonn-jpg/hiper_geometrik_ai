@@ -1,6 +1,6 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-14T23:25:12+00:00`
+Üretim zamanı (UTC): `2026-09-14T23:46:19+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
@@ -8,18 +8,18 @@
 |---|---:|---|
 | architecture | 10.0 | operator_baseline_family_v1@81610cdf041b |
 | memory | 10.0 | reliable_reasoning_depth_v1@5c8e421c20f1, hierarchical_memory_v1@72b18bd90ab7 |
-| verification | 8.3 | priority_causal_chain_ablation_v1@f86dfc8878cb, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1 |
+| verification | 8.7 | priority_causal_chain_ablation_v1@f86dfc8878cb, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1 |
 | generalization | 8.3 | compositional_generalization_v2_raw_text@f59f990d1591 |
 | reasoning | 9.1 | reliable_reasoning_depth_v1@5c8e421c20f1, reasoning_depth_root_cause_v1 |
 | self_learning | 10.0 | self_learning_scaling_v1 |
 | statistical_rigor | 10.0 | core_seed_statistics_v1 |
 | human_evaluation | n/a | human_evaluation_protocol_v1 |
-| turkish_nlp | 8.9 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
+| turkish_nlp | 9.4 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
 | language_modeling | 10.0 | turkish_lm_v1@d278278dd310 |
 | reproducibility | 8.9 | reproducibility_audit_v1 |
 | scientific_evidence | 8.6 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@5c8e421c20f1, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@f59f990d1591, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
-| **Overall Research Readiness** | **9.3** | 12/13 bölüm |
+| **Overall Research Readiness** | **9.4** | 12/13 bölüm |
 
 ## HGA Capability Vector
 

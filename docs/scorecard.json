@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-14T23:25:12+00:00",
-  "overall": 9.34,
+  "generated_at_utc": "2026-09-14T23:46:19+00:00",
+  "overall": 9.42,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -286,9 +286,9 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "4f4e4b314fccbca7deab1cec5b3d71f88e7bbd7e",
+        "git_commit": "2fa3e04939efa4b964f8e77f32aff44fffadb0f4",
         "protocols_examined": 17,
-        "protocols_meeting_20_seeds": 2
+        "protocols_meeting_20_seeds": 3
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
       "score": 8.89,
@@ -351,11 +351,11 @@
       "inputs": {
         "entity_f1": 1.0,
         "relation_f1": 1.0,
-        "twt_best_f1_all": 0.899688276667,
-        "twt_seeds": 3
+        "twt_best_f1_all": 0.898618005,
+        "twt_seeds": 20
       },
       "rationale": "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.",
-      "score": 8.89,
+      "score": 9.44,
       "section": "turkish_nlp"
     },
     "verification": {
@@ -374,12 +374,12 @@
           "subject_entropy": 2.96343184,
           "verification_yield": 0.4
         },
-        "holdout_gain": 0.4,
+        "holdout_gain": 0.34,
         "verifier_isolation_rate": 1.0,
         "weights_validated_on_holdout": true
       },
       "rationale": "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.",
-      "score": 8.26,
+      "score": 8.7,
       "section": "verification"
     }
   },
