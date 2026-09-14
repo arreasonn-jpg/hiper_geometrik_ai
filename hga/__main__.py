@@ -33,6 +33,7 @@ Kullanım:
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
     python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
     python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
+    python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
     python -m hga muhendislik            # CI / paketleme / test sözleşmesi
     python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
     python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
@@ -1774,6 +1775,20 @@ def _ogrenme_olcek(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
+    """P1: Çekirdek protokollerde 20 tohum + istatistiksel çıkarım."""
+    from hga.evaluation.seed_statistics import (
+        run_core_seed_statistics,
+        seed_statistics_markdown,
+    )
+    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
+                if seeds else None)
+    rapor = run_core_seed_statistics(profile=profile, seeds=tohumlar)
+    md = seed_statistics_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _muhendislik(out=None, markdown=None):
     """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
     from hga.evaluation.engineering_audit import (
@@ -1833,6 +1848,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     )
     from hga.evaluation.priority_ablation import run_priority_weight_ablation
     from hga.evaluation.reasoning_depth import measure_reasoning_depth
+    from hga.evaluation.seed_statistics import run_core_seed_statistics
     from hga.evaluation.self_learning_scaling import run_self_learning_scaling
     from hga.evaluation.semantic_extraction import (
         run_semantic_extraction_benchmark,
@@ -1865,6 +1881,11 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     raporlar["self_learning_scaling"] = run_self_learning_scaling(
         profile="smoke" if profile == "smoke" else "standard",
         seeds=tohumlar[:1]).to_dict()
+    raporlar["seed_statistics"] = run_core_seed_statistics(
+        profile="smoke" if profile == "smoke" else "core",
+        signature_profile=profile,
+        include_operator=not skip_torch).to_dict()
+    print("  ✓ Çekirdek tohum istatistikleri (CI / etki / permütasyon)")
     raporlar["engineering"] = audit_engineering().to_dict()
     print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
 
@@ -1948,6 +1969,7 @@ def main(argv=None):
                                      "semantik", "genelleme-v2",
                                      "twt-sonuc", "bellek-hiyerarsi",
                                      "cok-ortam", "ogrenme-olcek",
+                                     "tohum-istatistik",
                                      "muhendislik",
                                      "yeniden-uretilebilirlik",
                                      "championship-benchmark"])
@@ -2153,6 +2175,9 @@ def main(argv=None):
      "cok-ortam": lambda: _cok_ortam(
          seeds=args.seeds, out=args.out, markdown=args.markdown),
      "ogrenme-olcek": lambda: _ogrenme_olcek(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "tohum-istatistik": lambda: _tohum_istatistik(
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
      "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),

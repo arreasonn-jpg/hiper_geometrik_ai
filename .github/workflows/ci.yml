@@ -157,6 +157,7 @@ jobs:
           python -m hga twt-sonuc --seeds 1,2
           python -m hga bellek-hiyerarsi --depth-profile smoke
           python -m hga ogrenme-olcek --signature-profile smoke
+          python -m hga tohum-istatistik --signature-profile smoke
           python -m hga cok-ortam --seeds 1,2
           python -m hga muhendislik
           python -m hga yeniden-uretilebilirlik

@@ -810,6 +810,9 @@ def run_signature_benchmark(
                 degerler = [k[metrik] for k in kosular]
                 ozet[f"{metrik}_mean"] = _mean(degerler)
                 ozet[f"{metrik}_std"] = _std(degerler)
+                # Tohum-başı ham değerler: mean/std tek başına güven aralığı
+                # ya da eşleşmiş anlamlılık testi üretmeye yetmez.
+                ozet[f"per_seed_{metrik}"] = [round(d, 9) for d in degerler]
             sonuclar[task][arm] = ozet
 
     cogunluk_ozet = {

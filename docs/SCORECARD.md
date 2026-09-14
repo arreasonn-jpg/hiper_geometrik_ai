@@ -1,6 +1,6 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-14T08:53:18+00:00`
+Üretim zamanı (UTC): `2026-09-14T10:06:08+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
@@ -12,12 +12,13 @@
 | generalization | 8.3 | compositional_generalization_v2_raw_text@f59f990d1591 |
 | reasoning | 6.0 | reliable_reasoning_depth_v1@526c6a88dea7 |
 | self_learning | 7.8 | self_learning_scaling_v1 |
+| statistical_rigor | 7.5 | core_seed_statistics_v1 |
 | turkish_nlp | 8.9 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
 | language_modeling | n/a | — |
 | reproducibility | 8.9 | reproducibility_audit_v1 |
-| scientific_evidence | 7.6 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@526c6a88dea7, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@f59f990d1591, self_learning_scaling_v1 |
+| scientific_evidence | 7.6 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@526c6a88dea7, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@f59f990d1591, self_learning_scaling_v1, core_seed_statistics_v1 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
-| **Overall Research Readiness** | **8.5** | 10/11 bölüm |
+| **Overall Research Readiness** | **8.4** | 11/12 bölüm |
 
 ## HGA Capability Vector
 
@@ -38,7 +39,7 @@
 ## Uyarılar
 
 - `language_modeling` bölümü için kanıt yok; skor üretilmedi.
-- Genel skor yalnız 10/11 bölüm üzerinden hesaplandı; ['language_modeling'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler.
+- Genel skor yalnız 11/12 bölüm üzerinden hesaplandı; ['language_modeling'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler.
 
 ## Bölüm gerekçeleri
 
@@ -48,6 +49,7 @@
 - **generalization**: Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.
 - **reasoning**: Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.
 - **self_learning**: Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi birikmemesi (self-training çöküşüne direnç).
+- **statistical_rigor**: Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak p-değeri kabul edilmez.
 - **turkish_nlp**: Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.
 - **language_modeling**: Gerçek Türkçe korpusta perplexity ve üretim kalitesi. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.
 - **reproducibility**: Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.

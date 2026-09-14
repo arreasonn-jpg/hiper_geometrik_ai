@@ -69,7 +69,8 @@ TERMINOLOGY: Dict[str, Dict[str, str]] = {
 #: Karne bölümleri ve her birinin hangi kanıttan beslendiği.
 SCORECARD_SECTIONS: Tuple[str, ...] = (
     "architecture", "memory", "verification", "generalization", "reasoning",
-    "self_learning", "turkish_nlp", "language_modeling", "reproducibility",
+    "self_learning", "statistical_rigor", "turkish_nlp",
+    "language_modeling", "reproducibility",
     "scientific_evidence", "engineering",
 )
 
@@ -267,6 +268,7 @@ def build_scorecard(
     twt_results: Optional[Dict[str, Any]] = None,
     multi_environment: Optional[Dict[str, Any]] = None,
     self_learning_scaling: Optional[Dict[str, Any]] = None,
+    seed_statistics: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
     engineering: Optional[Dict[str, Any]] = None,
@@ -383,6 +385,23 @@ def build_scorecard(
           "Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi "
           "birikmemesi (self-training çöküşüne direnç).")
 
+    # statistical_rigor ← 20 tohum + CI/etki büyüklüğü/permütasyon
+    _kiyaslar = _get(seed_statistics, "comparisons") or []
+    bolum("statistical_rigor", _get(seed_statistics, "checks"),
+          {"seeds": len(_get(seed_statistics, "seeds") or []) or None,
+           "paired_comparisons": len(_kiyaslar) or None,
+           "minimum_attainable_p": _get(
+               seed_statistics, "power", "minimum_attainable_two_sided_p"),
+           "comparisons_excluding_zero": sum(
+               1 for k in _kiyaslar
+               if not ((k.get("difference_ci") or {}).get("lower", -1) <= 0.0
+                       <= (k.get("difference_ci") or {}).get("upper", 1)))
+           if _kiyaslar else None},
+          kanit(seed_statistics),
+          "Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap "
+          "CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak "
+          "p-değeri kabul edilmez.")
+
     # turkish_nlp ← semantik çıkarım (sentetik altın set)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)
     turkce_checks = dict(_get(semantic_extraction, "checks") or {})
@@ -445,7 +464,8 @@ def build_scorecard(
            "total_gates": len(tum_kapilar)},
           [k for rapor in (priority_ablation, operator_baselines,
                            reasoning_depth, signature, semantic_extraction,
-                           compositional_v2, self_learning_scaling)
+                           compositional_v2, self_learning_scaling,
+                           seed_statistics)
            for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")
@@ -487,6 +507,7 @@ def build_scorecard(
                     ("twt_results", twt_results),
                     ("multi_environment", multi_environment),
                     ("self_learning_scaling", self_learning_scaling),
+                    ("seed_statistics", seed_statistics),
                     ("calibration", calibration),
                     ("language_modeling", language_modeling),
                     ("reproducibility", reproducibility),
