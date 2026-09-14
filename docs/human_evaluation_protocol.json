@@ -1,0 +1,5011 @@
+{
+  "alpha_tool": {
+    "acceptable_threshold": 0.8,
+    "handles_missing_data": true,
+    "implemented": true,
+    "levels": [
+      "nominal",
+      "ordinal",
+      "interval"
+    ],
+    "supports_many_coders": true,
+    "tentative_threshold": 0.667,
+    "validated_against": "Krippendorff kanonik örneği (3 kodlayıcı × 15 birim): nominal 0.691, ordinal 0.807, interval 0.811",
+    "why_not_percent_agreement": "Yüzde uyum şansı düzeltmez; herkes aynı etikete basarsa %100 çıkar ama bilgi üretmez."
+  },
+  "blinding": {
+    "arm_labels_hidden": true,
+    "attention_checks_per_rater": 20,
+    "counterbalancing": "Latin-kare benzeri döndürme + tohumlu karıştırma",
+    "leaked_labels": [],
+    "note": "Kör açma anahtarı rapora yalnız özet (digest) olarak girer; değerlendirici paketinde kol adı yoktur.",
+    "presentation_order_randomized_per_rater": true,
+    "unblinding_key_held_separately": true
+  },
+  "checks": {
+    "alpha_tool_available": true,
+    "alpha_validated_on_reference_data": true,
+    "arm_labels_hidden_from_raters": true,
+    "attention_checks_present": true,
+    "human_ratings_collected": false,
+    "multiple_dimensions_defined": true,
+    "presentation_order_counterbalanced": true,
+    "prompt_count_within_spec": true,
+    "rater_count_within_spec": true,
+    "reliability_meets_threshold": false
+  },
+  "design": {
+    "arms": [
+      "hga",
+      "dense",
+      "transformer",
+      "symbolic"
+    ],
+    "design_type": "within-subject, tam çapraz (her değerlendirici her öğeyi görür)",
+    "items_per_rater": 200,
+    "prompt_range_required": [
+      50,
+      100
+    ],
+    "prompts": 50,
+    "rater_range_required": [
+      10,
+      20
+    ],
+    "raters": 10,
+    "seed": 20260914,
+    "total_judgements": 10000
+  },
+  "dimensions": {
+    "belirsizlik_durustlugu": {
+      "anchors": {
+        "1": "bilmediğini kesin söylüyor (halüsinasyon)",
+        "3": "karışık",
+        "5": "belirsizliği doğru bildiriyor"
+      },
+      "level": "ordinal",
+      "question": "Bilmediğinde bilmediğini söylüyor mu? Emin olmadan kesin konuşuyorsa düşük puan verin.",
+      "scale": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "dil_kalitesi": {
+      "anchors": {
+        "1": "anlaşılmaz",
+        "3": "anlaşılır ama bozuk",
+        "5": "doğal Türkçe"
+      },
+      "level": "ordinal",
+      "question": "Türkçe dilbilgisi ve akıcılık nasıl?",
+      "scale": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "dogruluk": {
+      "anchors": {
+        "1": "tamamen yanlış",
+        "3": "kısmen doğru",
+        "5": "tamamen doğru"
+      },
+      "level": "ordinal",
+      "question": "Yanıt olgusal olarak doğru mu?",
+      "scale": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "halusinasyon_var": {
+      "anchors": {
+        "0": "uydurma yok",
+        "1": "uydurma var"
+      },
+      "level": "nominal",
+      "question": "Yanıtta uydurma bilgi VAR mı? (0=yok, 1=var)",
+      "scale": [
+        0,
+        1
+      ]
+    },
+    "tutarlilik": {
+      "anchors": {
+        "1": "kendiyle çelişiyor",
+        "3": "kısmen tutarlı",
+        "5": "tam tutarlı"
+      },
+      "level": "ordinal",
+      "question": "Yanıt kendi içinde çelişkisiz mi?",
+      "scale": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "findings": [
+    "Protokol 50 Türkçe prompt × 4 kol × 10 değerlendirici = 10000 tekil yargı olarak tanımlandı.",
+    "Körleme ARAÇ SEVİYESİNDE uygulanıyor ve doğrulanıyor: üretilen paketlerde hiçbir kol adı geçmiyor.",
+    "Krippendorff α aracı üç metrikte hazır ve kanonik referans veriye karşı doğrulandı (nominal 0.691 / ordinal 0.807 / interval 0.811).",
+    "Eşikler: α ≥ 0.8 kabul edilebilir, α ≥ 0.667 yalnız geçici sonuç.",
+    "GERÇEK İNSAN PUANI YOK. Bu koşum protokol ve araç üretir, sonuç üretmez. `human_ratings_collected` kapısı KALDI ve karnede bu bölüm `n/a` kalmalıdır — kanıtsız bir bölüme puan vermek, ölçmediğini ölçtüm demektir."
+  ],
+  "limitations": [
+    "GERÇEK DEĞERLENDİRİCİ YOK. Bu modül protokol ve araçtır; insan değerlendirme sonucu değildir ve öyle sunulamaz.",
+    "Örnek prompt'lar aracı göstermek içindir; temsili bir Türkçe değerlendirme korpusu değildir.",
+    "α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: hepsi aynı şekilde yanılan değerlendiriciler yüksek α verir.",
+    "Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek yanıtlar üretilmeden doldurulamaz.",
+    "Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci bu modülün kapsamı dışındadır."
+  ],
+  "protocol": "human_evaluation_protocol_v1",
+  "results": null,
+  "schema_version": 1,
+  "sheets": [
+    {
+      "attention_checks": [
+        "fd7c8afa8bfb7902",
+        "dabdfa75a3fdea16",
+        "39977b6e1a809a97",
+        "8272aac418715852",
+        "c19e0682486f568e",
+        "e4a7b54dffcbffb2",
+        "37e56715d80fe0a0",
+        "0316d9d16289c4f7",
+        "0f69d9bf839cf805",
+        "a50008401c197b17",
+        "686de5a8544cd331",
+        "6499fa94ac46a7d2",
+        "63db6b2b2e0f107a",
+        "3d21c01a37c7bb5c",
+        "f7ada94cfd3e1196",
+        "3c5b2a41b8f0f693",
+        "f46ea5fb98ae86bc",
+        "6835dc99a307453a",
+        "e9efc5bb082f051f",
+        "ff7aeb167fc94bd6"
+      ],
+      "items": [
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4927523800f73815",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c5f1f719015a745f",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a939fc28daf320d7",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6446a8861c6847e1",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d33963afb64470a6",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dfde6d80f763cf72",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c624979a8d8fda40",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cde14d14c18bf3f2",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ee4e469b21112956",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a50008401c197b17",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d6b16cc2e4bccdcd",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "abbae02790d62fb7",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d5a2568a0d85f62c",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e07683907e59f976",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1b915d94af2eaf51",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "48d2dd310c4f73db",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "bad90981082570de",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "af74f79eb2eaba48",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8f51bdc4472b50e9",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5e7b143a4ca869fd",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "37e56715d80fe0a0",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a591696a82e96e76",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b7c5705b23bf9a9a",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "463f8ab5927d9496",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c334a72054bc4a4e",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3eabd7b5ac6cbc86",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "29232500b77ee7a5",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "299114ec85debc40",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2b44954a93fb405c",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e1e30cbd7616d492",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "eb0b28e094a8f5ac",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "32560faaa79b8593",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "54cfa14d9802a288",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1012984b21427d60",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0316d9d16289c4f7",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "529332b0670a1a5a",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "9ad3b74042f2234d",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "39977b6e1a809a97",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e4c33cb25044cb3",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c19e0682486f568e",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6cb9c425e4bb43af",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f6f2e2f1b34c3d98",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "78edd3fd0ddbe660",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d3e6dea9625a4ac8",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "319c0720ef8c9dce",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "40ab272d75dc7a58",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6f51eb76717f3339",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "23d648cf2c04d782",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a8ea6a9d7143cd36",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8272aac418715852",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e270a7bb7291574e",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f6cf6e25173cde23",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cd68a8a23fbf2176",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "49731104c9b7c979",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "596faa21bb5c5966",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "52ab7e57b85be3e7",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f49925f0c36d0245",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f659fbfffff71bc7",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0cae4d94bd8b1114",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ff7aeb167fc94bd6",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "30a26496da7eec46",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "118fc592ba7ae14b",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "18e409490a3956b4",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "10a75a8996a992de",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cd0aa863ca804fcb",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "01926721bb47d605",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e1dd076cafee11d",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6499fa94ac46a7d2",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2143df8cb28d3dba",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7e0847c0e8028727",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e636ba503c504d1c",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c723b6b67e1c3259",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3b932af98122b6f0",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ea47a52516938a30",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6835dc99a307453a",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b8a17c455b5452b4",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f37dbeac0b585ba7",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "066daf0ce68470de",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "23aeeb12a30623b3",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2ae45499ec38c43e",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3948bb0848a4fd92",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "584eef98d6715923",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "048ba747198b44f8",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3c5b2a41b8f0f693",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "97a81f3edab28d10",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ea9b3a3f6f7ff788",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e1d11760ca4f67f",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "224e0fa9d198699f",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d495a08aa51b7556",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1234854a2a1e1c8f",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4a7b54dffcbffb2",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dabdfa75a3fdea16",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "18b5c6ac23462434",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d5ebdc7b267e3b99",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5f6750e32dcaf30e",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3e76df1cd6c9edac",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "eae55573b31f8180",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dc594d48b0bd1b06",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "bc90280ca4a24a64",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "686de5a8544cd331",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0d1d68721439dd45",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ae439a1fdfafe6a8",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e5824360d110c99a",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c7a78a622544ea4d",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a040ce7d21fe83bd",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e61630fde9f2eb44",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b62d714b1f5354e4",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fe4560de9a58442e",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a7547604c9847057",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8a2b907aa88c0195",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "48a412460b8f890f",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "aa9d67dd12710d62",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c066354be22f2484",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "902e2e23ede16b74",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4ea9abcf96856b06",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cbec67e95d1da9d7",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "74496427152f0de6",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "af0896306834dbcd",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "afdfc9164f28380f",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fadf5bb047f2d2d7",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "45c27acba439d19e",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5fffba2f1d5a5f9a",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f46ea5fb98ae86bc",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ebec34dbcf608770",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dda02594a0f2b613",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "62dd0515e6c2a74f",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "87b95878fb839f92",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0d2cb75baee2d080",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4b2b610a6686d40c",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c7efa00c2b70ce4a",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3ffefbcb60edc077",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "69ed8b8c04076a3a",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "29d2bac3c7418034",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f7ada94cfd3e1196",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b6a4eee27d8dbb65",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "26120acb2c2c710f",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "432ebef1e2eb29f8",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fd7c8afa8bfb7902",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fe44fb4f433425ed",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "082ad8a43d252259",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6bea51a15d93682a",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e9efc5bb082f051f",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6e82cf41eea07b9e",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "34c1297f33555214",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0e9b7b2d772eefb7",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "71106583761d1b69",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "39d1addfdc952c4a",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0f69d9bf839cf805",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "63db6b2b2e0f107a",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "80e51c370b6a7723",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c9a7daaa440a4062",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dcc6e4b549338b5b",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a7866d458774f5f6",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "170f9a282a6e2e2d",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3d21c01a37c7bb5c",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "578bc3c437fd83b7",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c3e71f78708e7c8e",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "49733af1d7b65165",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "9aff1851e24fe815",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "65072df54739ff67",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8244f2c41239a77d",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fea08be990b9a148",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4c0a1d9aac66df58",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "16771936c45c3528",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "450444a380606f5f",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d4743eb7834fea2d",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "19e91ff48b6c5ca6",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7e3e968cf3e47877",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "be9874f0eae548b6",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6229af6d48946d8b",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "06d1ff4f51b800fa",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e01540560e6425b2",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a8a4453910547047",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7ae7eba9418995af",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f4f2b88e24a2ec99",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "139dab8c197bc2ee",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "228e5cafffe0e853",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5bb8d33e7ada2caf",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4eea90f0dfbcc4a",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "04b6f5742bf7ac9f",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0b758d21398d499c",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0b844cbc027e638d",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fb306ca175fa795c",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d04486c66543d565",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ae111cc7277dc06b",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "10b5d95cc752fe2c",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b946bab2f035e02a",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4712b2257c269f1",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ad35bdc0921195ef",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "85203346d652dd2a",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "452495a725ff9921",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "28d0e37c95112cfd",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8f4f3bc364689847",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2f15d7ec033ed3fb",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "72cbfa385c1de9ee",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ec0b645b0b9bd605",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "98c20c6539eef808",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "939178255bc0ba53",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "204e6cbd8cf7275a",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "41d10b51dc39a931",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        }
+      ],
+      "rater_id": "R01"
+    },
+    {
+      "attention_checks": [
+        "e4a7b54dffcbffb2",
+        "a591696a82e96e76",
+        "4ea9abcf96856b06",
+        "fe4560de9a58442e",
+        "0d2cb75baee2d080",
+        "9aff1851e24fe815",
+        "204e6cbd8cf7275a",
+        "fadf5bb047f2d2d7",
+        "0316d9d16289c4f7",
+        "87b95878fb839f92",
+        "7e0847c0e8028727",
+        "c723b6b67e1c3259",
+        "e270a7bb7291574e",
+        "52ab7e57b85be3e7",
+        "af0896306834dbcd",
+        "f46ea5fb98ae86bc",
+        "2143df8cb28d3dba",
+        "e01540560e6425b2",
+        "fd7c8afa8bfb7902",
+        "49731104c9b7c979"
+      ],
+      "items": [
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "432ebef1e2eb29f8",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3ffefbcb60edc077",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fb306ca175fa795c",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fe4560de9a58442e",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f7ada94cfd3e1196",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e4c33cb25044cb3",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7e0847c0e8028727",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e9efc5bb082f051f",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ea9b3a3f6f7ff788",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f37dbeac0b585ba7",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a7866d458774f5f6",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4c0a1d9aac66df58",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5e7b143a4ca869fd",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8f51bdc4472b50e9",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d495a08aa51b7556",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "19e91ff48b6c5ca6",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f6cf6e25173cde23",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b8a17c455b5452b4",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "62dd0515e6c2a74f",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "16771936c45c3528",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2b44954a93fb405c",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fe44fb4f433425ed",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e1dd076cafee11d",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "9aff1851e24fe815",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "29d2bac3c7418034",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ae111cc7277dc06b",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cbec67e95d1da9d7",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0d1d68721439dd45",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d04486c66543d565",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "be9874f0eae548b6",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d5a2568a0d85f62c",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a939fc28daf320d7",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4eea90f0dfbcc4a",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f659fbfffff71bc7",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "45c27acba439d19e",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d4743eb7834fea2d",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "32560faaa79b8593",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "082ad8a43d252259",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ea47a52516938a30",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d33963afb64470a6",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0f69d9bf839cf805",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5f6750e32dcaf30e",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0cae4d94bd8b1114",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b7c5705b23bf9a9a",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1234854a2a1e1c8f",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ee4e469b21112956",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "066daf0ce68470de",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c723b6b67e1c3259",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c066354be22f2484",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3948bb0848a4fd92",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "80e51c370b6a7723",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b946bab2f035e02a",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7ae7eba9418995af",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "af0896306834dbcd",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "65072df54739ff67",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "452495a725ff9921",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0b844cbc027e638d",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f49925f0c36d0245",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e01540560e6425b2",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6229af6d48946d8b",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "170f9a282a6e2e2d",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dc594d48b0bd1b06",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3d21c01a37c7bb5c",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "69ed8b8c04076a3a",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c7efa00c2b70ce4a",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "72cbfa385c1de9ee",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0b758d21398d499c",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4927523800f73815",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6cb9c425e4bb43af",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f6f2e2f1b34c3d98",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e636ba503c504d1c",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "048ba747198b44f8",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a8a4453910547047",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c19e0682486f568e",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0316d9d16289c4f7",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6835dc99a307453a",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f46ea5fb98ae86bc",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cd68a8a23fbf2176",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "04b6f5742bf7ac9f",
+          "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "902e2e23ede16b74",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4b2b610a6686d40c",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "48a412460b8f890f",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e61630fde9f2eb44",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0e9b7b2d772eefb7",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "39977b6e1a809a97",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "299114ec85debc40",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "98c20c6539eef808",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ff7aeb167fc94bd6",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "23aeeb12a30623b3",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3eabd7b5ac6cbc86",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5bb8d33e7ada2caf",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8a2b907aa88c0195",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "139dab8c197bc2ee",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1b915d94af2eaf51",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ad35bdc0921195ef",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a591696a82e96e76",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4712b2257c269f1",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6f51eb76717f3339",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "463f8ab5927d9496",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "23d648cf2c04d782",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "f4f2b88e24a2ec99",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "54cfa14d9802a288",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "63db6b2b2e0f107a",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "40ab272d75dc7a58",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8f4f3bc364689847",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "bc90280ca4a24a64",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1e1d11760ca4f67f",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fadf5bb047f2d2d7",
+          "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "0d2cb75baee2d080",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "584eef98d6715923",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "529332b0670a1a5a",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "71106583761d1b69",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6499fa94ac46a7d2",
+          "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a50008401c197b17",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cd0aa863ca804fcb",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e4a7b54dffcbffb2",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "34c1297f33555214",
+          "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c5f1f719015a745f",
+          "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8272aac418715852",
+          "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c7a78a622544ea4d",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e5824360d110c99a",
+          "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "8244f2c41239a77d",
+          "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "224e0fa9d198699f",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c334a72054bc4a4e",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "eb0b28e094a8f5ac",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "af74f79eb2eaba48",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6e82cf41eea07b9e",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3c5b2a41b8f0f693",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "01926721bb47d605",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c624979a8d8fda40",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dda02594a0f2b613",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "41d10b51dc39a931",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b6a4eee27d8dbb65",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "49731104c9b7c979",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "596faa21bb5c5966",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d6b16cc2e4bccdcd",
+          "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "26120acb2c2c710f",
+          "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "39d1addfdc952c4a",
+          "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "939178255bc0ba53",
+          "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "10a75a8996a992de",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ae439a1fdfafe6a8",
+          "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "afdfc9164f28380f",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "10b5d95cc752fe2c",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "bad90981082570de",
+          "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "97a81f3edab28d10",
+          "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d3e6dea9625a4ac8",
+          "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "cde14d14c18bf3f2",
+          "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "228e5cafffe0e853",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "686de5a8544cd331",
+          "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "37e56715d80fe0a0",
+          "prompt": "deneyim verimi nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "52ab7e57b85be3e7",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dcc6e4b549338b5b",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "48d2dd310c4f73db",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dabdfa75a3fdea16",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "aa9d67dd12710d62",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e1e30cbd7616d492",
+          "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "1012984b21427d60",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6bea51a15d93682a",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "4ea9abcf96856b06",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "49733af1d7b65165",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a7547604c9847057",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a8ea6a9d7143cd36",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2143df8cb28d3dba",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2f15d7ec033ed3fb",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "d5ebdc7b267e3b99",
+          "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c9a7daaa440a4062",
+          "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ebec34dbcf608770",
+          "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "118fc592ba7ae14b",
+          "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "30a26496da7eec46",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "450444a380606f5f",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "5fffba2f1d5a5f9a",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "578bc3c437fd83b7",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "06d1ff4f51b800fa",
+          "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "18b5c6ac23462434",
+          "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "29232500b77ee7a5",
+          "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "dfde6d80f763cf72",
+          "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "ec0b645b0b9bd605",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "87b95878fb839f92",
+          "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "74496427152f0de6",
+          "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "eae55573b31f8180",
+          "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "a040ce7d21fe83bd",
+          "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e270a7bb7291574e",
+          "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3e76df1cd6c9edac",
+          "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "9ad3b74042f2234d",
+          "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "c3e71f78708e7c8e",
+          "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "7e3e968cf3e47877",
+          "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "abbae02790d62fb7",
+          "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "18e409490a3956b4",
+          "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "2ae45499ec38c43e",
+          "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "b62d714b1f5354e4",
+          "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fd7c8afa8bfb7902",
+          "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "204e6cbd8cf7275a",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "85203346d652dd2a",
+          "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "28d0e37c95112cfd",
+          "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "e07683907e59f976",
+          "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "6446a8861c6847e1",
+          "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "78edd3fd0ddbe660",
+          "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "fea08be990b9a148",
+          "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "319c0720ef8c9dce",
+          "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        },
+        {
+          "dimensions": [
+            "dogruluk",
+            "tutarlilik",
+            "dil_kalitesi",
+            "belirsizlik_durustlugu",
+            "halusinasyon_var"
+          ],
+          "item_id": "3b932af98122b6f0",
+          "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+          "response_placeholder": "<model yanıtı buraya yerleştirilecek>"
+        }
+      ],
+      "rater_id": "R02"
+    }
+  ],
+  "unblinding_key_digest": "d29f5aeae0e20346"
+}

@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-14T22:34:49+00:00",
-  "overall": 8.91,
+  "generated_at_utc": "2026-09-14T23:25:12+00:00",
+  "overall": 9.34,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -286,9 +286,9 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "983e156ee4195e7085c348c122fac5a6f0562ed7",
+        "git_commit": "4f4e4b314fccbca7deab1cec5b3d71f88e7bbd7e",
         "protocols_examined": 17,
-        "protocols_meeting_20_seeds": 1
+        "protocols_meeting_20_seeds": 2
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
       "score": 8.89,
@@ -313,7 +313,7 @@
         "total_gates": 55
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 8.21,
+      "score": 8.57,
       "section": "scientific_evidence"
     },
     "self_learning": {
@@ -321,12 +321,12 @@
         "self_learning_scaling_v1"
       ],
       "inputs": {
-        "max_cycles": 100,
+        "max_cycles": 3000,
         "saturation_detected": true,
         "total_incorrect_knowledge": 0
       },
       "rationale": "Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi birikmemesi (self-training çöküşüne direnç).",
-      "score": 7.78,
+      "score": 10.0,
       "section": "self_learning"
     },
     "statistical_rigor": {
@@ -334,13 +334,13 @@
         "core_seed_statistics_v1"
       ],
       "inputs": {
-        "comparisons_excluding_zero": 40,
-        "minimum_attainable_p": 0.25,
+        "comparisons_excluding_zero": 41,
+        "minimum_attainable_p": 1.9073486328125e-06,
         "paired_comparisons": 76,
-        "seeds": 3
+        "seeds": 20
       },
       "rationale": "Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak p-değeri kabul edilmez.",
-      "score": 7.5,
+      "score": 10.0,
       "section": "statistical_rigor"
     },
     "turkish_nlp": {

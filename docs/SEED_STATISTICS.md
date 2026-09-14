@@ -1,7 +1,7 @@
 # Çekirdek Tohum İstatistikleri (P1)
 
 - Protokol: `core_seed_statistics_v1` v1 (imza `1c12f2b7c280`)
-- Profil: `custom` · tohum sayısı: **20** (çekirdek kural: 20)
+- Profil: `core` · tohum sayısı: **20** (çekirdek kural: 20)
 
 ## Protokol tohum disiplini
 

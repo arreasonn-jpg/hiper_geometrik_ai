@@ -272,6 +272,16 @@ eşiğini sınar. Ayrılmış test holdout'un generation/memory overlap'i her ko
 sıfır olmak zorundadır. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
 otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
 
+> **Güncelleme (P1, `deep` profil koşuldu).** `ogrenme-olcek` deep profili
+> 100 → 1000 → 3000 cycle + alan eksenini (operands_max 31 → 63 → 127)
+> gerçekten koştu, 9/9 kapı geçti: 3000 cycle'da yanlış bilgi **0**, FAR 0,
+> izolasyon temiz (doğrulayıcı ÖNCESİ FAR 1.0 — doğrulayıcının iş yaptığının
+> kanıtı). Ana bulgu ölçekleme fiziği: sabit alanda cycle 30× artınca bilgi
+> yalnız 1.032× arttı (aday havuzu doyuyor; "daha çok döngü = daha çok
+> bilgi" YANLIŞ), buna karşılık alan 4× büyüyünce bilgi **15.71×** arttı.
+> Ölçekleme cycle sayısından değil ALANIN genişliğinden gelir.
+> Ayrıntı: `docs/SELF_LEARNING_SCALING.md`.
+
 ### HGA Research Benchmark Suite
 
 Tek komut Architecture, Kronecker, Memory, Verification, Compositional
@@ -618,15 +628,18 @@ python -m hga cok-adimli --hops 1,2,3,4,5 --distractors 0,16,64,256 --seeds 1,2,
 
 `a→b→c` zinciri kurulup depoda **yazılı olmayan** `a→c` sorulur; ayrıca zincir
 kenarlarının arasına alakasız dolgu olgular serpiştirilerek uzun bağlam
-baskısı uygulanır. Çok adımlı çıkarım (hop≥2) **0.9688**, tek adımlı geri
-çağırma 1.0000; en derin güvenilir zincir **4 adım**. 5 adımlık zincir 256
-dolgu altında 0.5000'e düşer — ölçülen gerçek bir sınırdır, kapı geçsin diye
-eşik gevşetilmedi: beş kabul kapısından üçü varsayılan ayarda **kalıyor**.
+baskısı uygulanır. Adresleme düzeltmesi sonrası çok adımlı çıkarım (hop≥2)
+**1.0000**, tek adımlı geri çağırma 1.0000; varsayılan 1–5 hop / 0–256 dolgu
+ızgarası tamamen temiz ve beş kabul kapısının **beşi de geçiyor**. (Düzeltme
+öncesi: hop≥2 0.9688, en derin güvenilir zincir 4 adım, 5 adım @256 dolgu
+0.5000 ve üç kapı KALIYORDU — o sınır kapasite değil, adresleme kusurunun
+eseriydi; bkz. `docs/SPARSE_ADDRESSING_FIX.md`. Gerçek sınır yüzlerce hop
+ötededir ve `cikarim-derinligi` protokolünde ölçülür.)
 
 İlk taslakta zincir takibi Python sözlüğünden yapılıyordu ve doğruluk her
 koşulda 1.0 çıkıyordu — **ölü metrik**. Takip artık her kenarı seyrek
 bellekten doğrular; bellek 4096→256 slota indirilince en derin güvenilir
-zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
+zincir 5→2 adıma düşer. Bu davranış testle kilitlidir.
 
 > **Güncelleme (P0-7).** Buradaki "4 adım", `cok-adimli` protokolünün
 > 1–5 hop / 0–256 dolgu ızgarasına aittir ve o ızgaranın tavanına yakındır.
@@ -1128,8 +1141,8 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M`) |
 | 100-cycle milestone tablosu | ✅ 5 seed | `python -m hga milestone`, `docs/MILESTONE_TABLOSU.md` (incorrect=0, EY≈0.11, recall 1.000→0.952) |
 | Epistemik benchmark (P0-007) | ✅ ölçüldü + negatif kontrol | `python -m hga epistemik`, `docs/EPISTEMIK_BENCHMARK.md` (yanlış güven 0.000, 3 dejenere kol domine edildi, UNKNOWN↔UNCERTAIN ayrımı `false` olarak raporlanıyor) |
-| Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.157; GY 0.642 monoton artıyor) |
-| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` (bootstrap %95 GA, Cohen d_z/Hedges g, permütasyon + Wilcoxon; 5 seedde p<0.05 imkânsız uyarısı) |
+| Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.161; GY 0.642 monoton artıyor) |
+| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` + `tohum-istatistik` core profili: **20 tohum**, 76 eşleşmiş karşılaştırma, min p=2e-6, 8/8 kapı (`docs/SEED_STATISTICS.md`) |
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 
