@@ -40,15 +40,20 @@ aralıklarıyla (`raporlar/verim_metrikleri.json`):
 |---|---:|---:|
 | EY (klasik) | 0.2385 | [0.2327, 0.2444] |
 | NY (yenilik) | 0.1904 | [0.1863, 0.1946] |
-| UEY (kullanışlı) | 0.1565 | [0.1538, 0.1600] |
+| UEY (kullanışlı) | 0.1606 | [0.1575, 0.1646] |
 | GY (genelleme) | 0.6419 | [0.6116, 0.6721] |
 | VID (bit/deneyim) | 0.9434 | [0.9227, 0.9640] |
 
 Ayrışma gerçektir ve tek yönlüdür: **EY > NY > UEY**. Yani klasik EY hem
 yeniliği hem kullanışlılığı sistematik olarak abartır. Tohum 1'in ham
 sayımları bunu doğrular: 960 üretim, 220 doğrulama, ancak 178 ayrık yeni
-olgu (224 tekrar üretim) ve bunların yalnız 148'i bellekten geri
-çağrılabilir (72 çakışma). Bilgi tabanına giren yanlış olgu sayısı 0'dır.
+olgu (224 tekrar üretim) ve bunların 150'si bellekten geri çağrılabilir
+(70 çakışma). Bilgi tabanına giren yanlış olgu sayısı 0'dır.
+
+> Not: Seyrek bellek adresleme düzeltmesi (`docs/SPARSE_ADDRESSING_FIX.md`)
+> öncesinde bu sayılar 148 geri çağrılabilir / 72 çakışma ve UEY = 0.1565
+> [0.1538, 0.1600] idi. Düzeltme çakışma kaybını azalttı; EY ve NY bellekten
+> bağımsız olduğu için değişmedi. Ayrışma yönü (EY > NY > UEY) korunur.
 
 ## GY iki kez "ölü metrik" olarak yakalandı
 

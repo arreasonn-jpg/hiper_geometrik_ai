@@ -11,7 +11,7 @@ Tohumlar: [1, 2, 3]
 | 2 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 3 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 4 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 5 adım | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
+| 5 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 
 ## Dejenere kontrol kolları
 
@@ -24,18 +24,18 @@ Tohumlar: [1, 2, 3]
 
 | kapı | sonuç |
 |---|---|
-| multi_hop_inference_works | KALDI |
+| multi_hop_inference_works | GEÇTİ |
 | beats_degenerate | GEÇTİ |
 | rejects_broken_chains | GEÇTİ |
-| robust_to_long_context | KALDI |
-| memory_preserved_chain | KALDI |
+| robust_to_long_context | GEÇTİ |
+| memory_preserved_chain | GEÇTİ |
 
 ## Bulgular
 
-- Çok adımlı çıkarım (hop>=2) doğruluğu 0.9688; tek adımlı geri çağırma 1.0000.
-- Bağlam yükü 0 → 256 dolgu olguya çıkarıldığında doğruluk 1.0000 → 0.9000 (-0.1000).
-- Tüm bağlam seviyelerinde tam doğru kalan en derin zincir: 4 adım.
-- En iyi dejenere kol 0.5000; motor 0.9750 (ayrışıyor).
+- Çok adımlı çıkarım (hop>=2) doğruluğu 1.0000; tek adımlı geri çağırma 1.0000.
+- Bağlam yükü 0 → 256 dolgu olguya çıkarıldığında doğruluk 1.0000 → 1.0000 (+0.0000).
+- Tüm bağlam seviyelerinde tam doğru kalan en derin zincir: 5 adım.
+- En iyi dejenere kol 0.5000; motor 1.0000 (ayrışıyor).
 
 ## Sınırlar
 

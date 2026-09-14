@@ -316,13 +316,38 @@ def build_scorecard(
           "eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.")
 
     # memory ← derinlik ızgarasının bellek satırı + varsa bellek benchmarkı
+    #
+    # Kapı GÜVENİLİR BÖLGEYE bağlıdır: (hop, dolgu) hücresi ancak
+    # hop ≤ C_RD(dolgu) ise sayılır (dolgu=0 için C_RD = C_R). Eski kapı tüm
+    # ızgaranın minimumuna bakıyordu; bu, kırılma noktasını İÇEREN dürüst
+    # bir ızgarayı (c_r_not_grid_limited için şart) otomatik FAIL, kırılmayı
+    # hiç görmeyen dar bir ızgarayı otomatik PASS yapıyordu — ters teşvik.
+    # Güvenilir bölge DIŞINDAKİ kayıp zaten reasoning bölümünde (C_R, C_RD,
+    # retention) cezalandırılır; burada ikinci kez sayılmaz. Burada sorulan
+    # soru daha dar ve daha serttir: "güvenilir ilan edilen bölgede bellek
+    # geri çağırması gerçekten kusursuz mu?"
     bellek_checks: Dict[str, bool] = {}
     if reasoning_depth:
         izgara = _get(reasoning_depth, "memory_recall_grid", default={}) or {}
-        degerler = [v for alt in izgara.values() for v in alt.values()]
+        c_r = _get(reasoning_depth, "c_r")
+        c_rd = _get(reasoning_depth, "c_rd") or {}
+
+        def _sinir(dolgu: str) -> Optional[int]:
+            if dolgu in c_rd:
+                return int(c_rd[dolgu])
+            return int(c_r) if c_r is not None else None
+
+        degerler = []
+        for hop, alt in izgara.items():
+            for dolgu, deger in alt.items():
+                sinir = _sinir(str(dolgu))
+                if sinir is None or int(hop) <= sinir:
+                    degerler.append(deger)
         if degerler:
-            bellek_checks["memory_recall_perfect_at_all_depths"] = min(degerler) >= 1.0
-            bellek_checks["memory_recall_above_0_9"] = min(degerler) >= 0.9
+            bellek_checks["memory_recall_perfect_in_reliable_region"] = (
+                min(degerler) >= 1.0)
+            bellek_checks["memory_recall_above_0_9_in_reliable_region"] = (
+                min(degerler) >= 0.9)
     if memory:
         for ad, deger in (memory.get("checks") or {}).items():
             bellek_checks[ad] = bool(deger)
@@ -456,12 +481,28 @@ def build_scorecard(
           "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk "
           "çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.")
 
-    # language_modeling ← henüz gerçek korpus yok
+    # language_modeling ← gerçek Türkçe korpusta belge-ayrık held-out LM.
+    # 'tiny smoke' hâlâ kanıt sayılmaz; kanıt yalnız turkish_lm_v1 raporudur.
+    # Milyon-kelime kapısı (corpus_at_least_1m_words) yalnız full profildeki
+    # tr_corpus_v1 ile açılır; smoke/TWT koşusunda FAIL kalır ve skoru
+    # tavanlar — eksik ölçek bir ortalama içinde gizlenmez.
     bolum("language_modeling", _get(language_modeling, "checks"),
-          {"perplexity": _get(language_modeling, "perplexity")},
+          {"best_arm": _get(language_modeling, "perplexity", "best_arm"),
+           "hga_test_ppl_mean": _get(language_modeling, "perplexity",
+                                     "hga_test_ppl_mean"),
+           "best_neural_test_ppl_mean": _get(language_modeling, "perplexity",
+                                             "best_neural_test_ppl_mean"),
+           "unigram_test_ppl": _get(language_modeling, "perplexity",
+                                    "unigram_test_ppl"),
+           "bigram_test_ppl": _get(language_modeling, "perplexity",
+                                   "bigram_test_ppl"),
+           "train_tokens": _get(language_modeling, "corpus", "tokens",
+                                "train")},
           kanit(language_modeling),
-          "Gerçek Türkçe korpusta perplexity ve üretim kalitesi. Kanıt yoksa "
-          "skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.")
+          "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: "
+          "TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; "
+          "n-gram kontrolleri zorunlu zemindir. Kanıt yoksa skor üretilmez — "
+          "'tiny smoke' bir dil modeli iddiası değildir.")
 
     # reproducibility / engineering
     bolum("reproducibility", _get(reproducibility, "checks"),
@@ -489,7 +530,7 @@ def build_scorecard(
     tum_kapilar: Dict[str, bool] = {}
     for rapor in (priority_ablation, operator_baselines, reasoning_depth,
                   signature, semantic_extraction, compositional_v2,
-                  self_learning_scaling):
+                  self_learning_scaling, language_modeling):
         for ad, deger in (_get(rapor, "checks") or {}).items():
             tum_kapilar[f"{_get(rapor, 'protocol')}:{ad}"] = bool(deger)
     # Hiçbir protokol koşulmadıysa bu bölüm 0.0 DEĞİL, kanıtsız olmalıdır:
@@ -505,7 +546,7 @@ def build_scorecard(
                            reasoning_depth, signature, semantic_extraction,
                            compositional_v2, self_learning_scaling,
                            seed_statistics, depth_diagnosis,
-                           priority_optimization)
+                           priority_optimization, language_modeling)
            for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")

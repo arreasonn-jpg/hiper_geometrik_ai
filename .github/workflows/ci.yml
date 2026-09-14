@@ -155,6 +155,7 @@ jobs:
           python -m hga operator-baseline --n 4 --steps 20 --seeds 1
           python -m hga signature --signature-profile smoke --seeds 1
           python -m hga twt-sonuc --seeds 1,2
+          python -m hga turkce-lm --seeds 1,2 --lm-steps 20
           python -m hga bellek-hiyerarsi --depth-profile smoke
           python -m hga ogrenme-olcek --signature-profile smoke
           python -m hga tohum-istatistik --signature-profile smoke

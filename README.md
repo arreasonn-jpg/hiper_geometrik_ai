@@ -630,12 +630,15 @@ zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
 
 > **Güncelleme (P0-7).** Buradaki "4 adım", `cok-adimli` protokolünün
 > 1–5 hop / 0–256 dolgu ızgarasına aittir ve o ızgaranın tavanına yakındır.
-> Daha geniş bir taramayla (`python -m hga cikarim-derinligi
-> --depth-profile deep`, 1/2/4/8/16/32 hop × 0–16384 dolgu) ölçülen
-> **C_R = 32**'dir; dolgu 16384'e çıkınca C_RD **8**'e düşer. Yani eski
-> sayı yanlış değil, ızgarayla SINIRLIydı — bu, dar bir taramanın bir
-> yetenek sınırı gibi görünebileceğinin örneğidir.
-> Ayrıntı: `docs/REASONING_DEPTH.md`.
+> Daha geniş taramalar iki aşamada ilerledi: önce ızgara genişletilince
+> C_R=32 ölçüldü; sonra bu sınırın kaynağı kovalanınca seyrek bellek
+> adreslemesinde gerçek bir KUSUR bulundu ("Bloom tarzı" iki tablo sıfır
+> bağımsızlık sağlıyordu — bkz. `docs/SPARSE_ADDRESSING_FIX.md`). Düzeltme
+> sonrası deep profil ölçümü: **C_R = 2048** (ızgara-içi, tavan değil);
+> 16384 dolguda C_RD **256**. Dar taramanın "yetenek sınırı" gibi
+> görünmesi ve o sınırın aslında mühendislik kusuru çıkması, bu deponun
+> "sınırı gizleme, kaynağını ölç" ilkesinin somut örneğidir.
+> Ayrıntı: `docs/REASONING_DEPTH.md`, `docs/REASONING_DEPTH_ROOT_CAUSE.md`.
 
 Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.
 
@@ -655,7 +658,7 @@ bootstrap GA):
 |---|---:|---:|
 | EY (klasik) | 0.2385 | [0.2327, 0.2444] |
 | **NY** yenilik | 0.1904 | [0.1863, 0.1946] |
-| **UEY** kullanışlı | 0.1565 | [0.1538, 0.1600] |
+| **UEY** kullanışlı | 0.1606 | [0.1575, 0.1646] |
 | **GY** genelleme | 0.6419 | [0.6116, 0.6721] |
 | **VID** bit/deneyim | 0.9434 | [0.9227, 0.9640] |
 
@@ -814,6 +817,7 @@ python -m hga halusinasyon                            # factual consistency metr
 python -m hga sweep                                   # n/K/context kapasite taraması
 python -m hga tokenizer                               # mini Türkçe tokenizer benchmark
 python -m hga perplexity --tiny                       # küçük modelle perplexity smoke (torch)
+python -m hga turkce-lm                               # GERÇEK Türkçe LM: tr_corpus_v1 (1.11M kelime) held-out PPL (torch)
 python -m hga checkpoint-rapor checkpoints/temel/latest.pt # checkpoint/model uyumluluğu
 python -m hga benchmark-rapor --out raporlar/benchmark_report.json --markdown raporlar/benchmark_report.md
 python -m hga research-benchmark                    # birleşik 5-seed araştırma karnesi
@@ -1109,6 +1113,7 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Veri kalite + manifest | ✅ %100 smoke | `veri-kalite`, `manifest`, `veri-canli-smoke --kontrollu` |
 | Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
 | Gerçek Türkçe benchmark | ✅ TWT v1 | 4.851 ham insan-anotasyonlu cümle, sabit hash/split, parameter-matched 4 mimari, neural compositional HGA ablasyonu |
+| Gerçek Türkçe LM (P1) | ✅ 1.11M kelime held-out | `python -m hga turkce-lm`, `docs/TURKISH_LM.md`: tr_corpus_v1 (UD+Bible+TWT, hash doğrulamalı), belge-ayrık split, train-only BPE, unigram/bigram kontrolleri, parametre-eşli dense/transformer/HGA; `corpus_at_least_1m_words` kapısı full profilde gerçek veriyle PASS |
 | Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
 | Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
 | Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |
@@ -1128,9 +1133,14 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 
-**Sonraki ölçek işleri (tamamlandı iddiası değildir):** milyon-kelime Türkçe
-korpus, gerçek instruction set büyütme, 64+ token uzun bağlam, katman-bazlı
-çoklu GPU/model paralelliği ve sohbet kalitesi için insan değerlendirmesi.
+**Sonraki ölçek işleri (tamamlandı iddiası değildir):** ~~milyon-kelime Türkçe
+korpus~~ TAMAMLANDI: `tr_corpus_v1` (1.11M kelime; UD r2.14 ×8 + Bible CC0 +
+TWT, hash doğrulamalı, `hga/evaluation/datasets/tr_corpus_v1/`) `turkce-lm`
+full profilinde koşar ve `corpus_at_least_1m_words` kapısını gerçek insan
+metniyle açar; smoke profil TWT üzerinde kalır ve kapı orada bilinçli FAIL'dir.
+Kalanlar: 10M+ kelime ölçeği, gerçek instruction set büyütme, 64+ token uzun
+bağlam, katman-bazlı çoklu GPU/model paralelliği ve sohbet kalitesi için insan
+değerlendirmesi.
 
 **Milestone tablosunun açığa çıkardığı ve artık aktif yola taşınan iş:** 100
 döngüde bilgi kalitesi korunurken fixed-slot recall `1.000 → 0.952`'ye düştü.

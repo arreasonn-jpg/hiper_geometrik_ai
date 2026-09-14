@@ -38,15 +38,24 @@ from .multi_hop import MultiHopReport, run_multi_hop_benchmark
 
 PROTOCOL = "reliable_reasoning_depth_v1"
 
+#: Izgaralar, seyrek bellek adresleme düzeltmesi (bkz.
+#: docs/SPARSE_ADDRESSING_FIX.md) SONRASINA göre boyutlandırıldı. Eski
+#: "Bloom tarzı" iki tablo sıfır bağımsızlık sağlıyordu ve icerir() AND
+#: semantiği kaybı büyütüyordu; kırılmalar o kusurun eseriydi. Düzeltme
+#: sonrası her profil ızgarası, kırılma noktasını İÇERECEK kadar derin
+#: seçildi ki C_R tavana çarpmasın (c_r_not_grid_limited kapısı).
 PROFILES: Dict[str, Dict[str, Any]] = {
-    # Hızlı CI kapısı.
-    "smoke": {"hops": (1, 2, 4), "distractors": (0, 16, 64),
+    # Hızlı CI kapısı. slot=4096'da kırılma ~512 hoptadır; ızgara 512'yi
+    # içerir, dolayısıyla C_R=256 ölçümdür, tavan değil.
+    "smoke": {"hops": (1, 2, 4, 64, 256, 512), "distractors": (0, 16, 64),
               "seeds": (1,), "slot_sayisi": 4096, "tablo_sayisi": 2},
-    # Varsayılan bilimsel tarama: 8 hop hedefi ve 1024 dolgu baskısı.
-    "standard": {"hops": (1, 2, 4, 8), "distractors": (0, 64, 256, 1024),
+    # Varsayılan bilimsel tarama: 2^16 slotta kırılma ~2048 hoptadır.
+    "standard": {"hops": (1, 2, 8, 64, 256, 1024, 2048),
+                 "distractors": (0, 64, 256, 1024),
                  "seeds": (1, 2, 3), "slot_sayisi": 65536, "tablo_sayisi": 2},
-    # Tam hedef ızgara (pahalı): 32 hop, 16384 dolgu.
-    "deep": {"hops": (1, 2, 4, 8, 16, 32),
+    # Tam hedef ızgara (pahalı): 2^18 slotta dolgusuz kırılma ~4096 hopta,
+    # 16384 dolgu altında ~1024 hoptadır; ikisi de ızgaranın içindedir.
+    "deep": {"hops": (1, 2, 8, 64, 256, 1024, 2048, 4096),
              "distractors": (0, 64, 256, 1024, 4096, 16384),
              "seeds": (1, 2, 3), "slot_sayisi": 262144, "tablo_sayisi": 2},
 }

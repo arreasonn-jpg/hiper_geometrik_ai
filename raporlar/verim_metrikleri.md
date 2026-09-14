@@ -6,14 +6,14 @@ Tohumlar: [1, 2, 3, 4, 5]
 |---|---:|---:|
 | EY  (klasik) | 0.2385 | [0.2327, 0.2444] |
 | NY  Yenilik | 0.1904 | [0.1863, 0.1946] |
-| UEY Kullanışlı | 0.1565 | [0.1538, 0.1600] |
+| UEY Kullanışlı | 0.1606 | [0.1575, 0.1646] |
 | GY  Genelleme | 0.6419 | [0.6116, 0.6721] |
 | VID Bilgi yoğ. | 0.9434 | [0.9227, 0.9640] |
 
 ## Bulgular (tohum 1)
 
 - EY=0.2292 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).
-- NY=0.1854 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (72 çakışma).
+- NY=0.1854 fakat UEY=0.1562: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (70 çakışma).
 - GY=0.6047: holdout doğruluğu öğrenmeyle 0.0000 → 0.6047 arttı (52/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.
 - VID=0.9186 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31).
 
