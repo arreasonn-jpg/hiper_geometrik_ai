@@ -269,6 +269,7 @@ def build_scorecard(
     multi_environment: Optional[Dict[str, Any]] = None,
     self_learning_scaling: Optional[Dict[str, Any]] = None,
     seed_statistics: Optional[Dict[str, Any]] = None,
+    depth_diagnosis: Optional[Dict[str, Any]] = None,
     human_evaluation: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
@@ -363,12 +364,21 @@ def build_scorecard(
           "Şema ve ontoloji önceden verilmeden, ham metinden keşif + "
           "kompozisyon başarısı.")
 
-    # reasoning ← C_R / C_RD
-    bolum("reasoning", _get(reasoning_depth, "checks"),
+    # reasoning ← C_R / C_RD + çöküşün kök neden teşhisi.
+    # Bir sınırı ölçmek yarım iştir; NEDEN olduğunu bilmek tam iş. Teşhis
+    # kapıları bu yüzden aynı bölümde birleştirilir.
+    _cikarim_checks = dict(_get(reasoning_depth, "checks") or {})
+    for ad, deger in (_get(depth_diagnosis, "checks") or {}).items():
+        _cikarim_checks[f"diagnosis:{ad}"] = bool(deger)
+    bolum("reasoning", _cikarim_checks or None,
           {"c_r": _get(reasoning_depth, "c_r"),
            "c_rd": _get(reasoning_depth, "c_rd"),
-           "grid_limited": _get(reasoning_depth, "c_r_grid_limited")},
-          kanit(reasoning_depth),
+           "grid_limited": _get(reasoning_depth, "c_r_grid_limited"),
+           "collapse_root_cause": _get(
+               depth_diagnosis, "diagnosis", "root_cause"),
+           "depth_per_slot_log_log_slope": _get(
+               depth_diagnosis, "scaling", "log_log_slope")},
+          kanit(reasoning_depth) + kanit(depth_diagnosis),
           "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.")
 
     # self_learning ← ölçeklendirme + sürüklenme (model collapse) denetimi
@@ -486,7 +496,7 @@ def build_scorecard(
           [k for rapor in (priority_ablation, operator_baselines,
                            reasoning_depth, signature, semantic_extraction,
                            compositional_v2, self_learning_scaling,
-                           seed_statistics)
+                           seed_statistics, depth_diagnosis)
            for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")
@@ -530,6 +540,7 @@ def build_scorecard(
                     ("self_learning_scaling", self_learning_scaling),
                     ("seed_statistics", seed_statistics),
                     ("human_evaluation", human_evaluation),
+                    ("depth_diagnosis", depth_diagnosis),
                     ("calibration", calibration),
                     ("language_modeling", language_modeling),
                     ("reproducibility", reproducibility),

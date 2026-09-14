@@ -35,6 +35,7 @@ Kullanım:
     python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
     python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
     python -m hga insan-degerlendirme    # protokol + Krippendorff alfa (P1)
+    python -m hga derinlik-teshis        # derinlik çöküşü kök neden
     python -m hga muhendislik            # CI / paketleme / test sözleşmesi
     python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
     python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
@@ -1802,6 +1803,18 @@ def _insan_degerlendirme(out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _derinlik_teshis(profile="smoke", out=None, markdown=None):
+    """Çıkarım derinliği çöküşünün kök neden teşhisi (bellek mi, çıkarım mı)."""
+    from hga.evaluation.depth_diagnosis import (
+        depth_diagnosis_markdown,
+        diagnose_depth_collapse,
+    )
+    rapor = diagnose_depth_collapse(profile=profile)
+    md = depth_diagnosis_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _muhendislik(out=None, markdown=None):
     """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
     from hga.evaluation.engineering_audit import (
@@ -1849,6 +1862,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     )
     from hga.evaluation.capacity import run_capacity_benchmark
     from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
+    from hga.evaluation.depth_diagnosis import diagnose_depth_collapse
     from hga.evaluation.engineering_audit import (
         audit_engineering,
         audit_reproducibility,
@@ -1902,6 +1916,9 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         signature_profile=profile,
         include_operator=not skip_torch).to_dict()
     print("  ✓ Çekirdek tohum istatistikleri (CI / etki / permütasyon)")
+    raporlar["depth_diagnosis"] = diagnose_depth_collapse(
+        profile="smoke" if profile == "smoke" else "standard").to_dict()
+    print("  ✓ Derinlik çöküşü kök neden teşhisi")
     raporlar["human_evaluation"] = build_human_evaluation_protocol().to_dict()
     raporlar["engineering"] = audit_engineering().to_dict()
     print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
@@ -1988,6 +2005,7 @@ def main(argv=None):
                                      "cok-ortam", "ogrenme-olcek",
                                      "tohum-istatistik",
                                      "insan-degerlendirme",
+                                     "derinlik-teshis",
                                      "muhendislik",
                                      "yeniden-uretilebilirlik",
                                      "championship-benchmark"])
@@ -2200,6 +2218,8 @@ def main(argv=None):
          markdown=args.markdown),
      "insan-degerlendirme": lambda: _insan_degerlendirme(
          out=args.out, markdown=args.markdown),
+     "derinlik-teshis": lambda: _derinlik_teshis(
+         profile=args.depth_profile, out=args.out, markdown=args.markdown),
      "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),
      "yeniden-uretilebilirlik": lambda: _yeniden_uretilebilirlik(
          out=args.out, markdown=args.markdown),

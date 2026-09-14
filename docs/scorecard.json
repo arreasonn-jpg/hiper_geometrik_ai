@@ -100,12 +100,13 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-14T10:45:38+00:00",
-  "overall": 8.44,
+  "generated_at_utc": "2026-09-14T11:11:27+00:00",
+  "overall": 8.56,
   "provenance": {
     "reports_supplied": [
       "capacity",
       "compositional_v2",
+      "depth_diagnosis",
       "engineering",
       "human_evaluation",
       "memory",
@@ -179,14 +180,14 @@
         "engineering_contract_audit_v1"
       ],
       "inputs": {
-        "cli_commands_smoke_tested": 42,
+        "cli_commands_smoke_tested": 43,
         "python_matrix": [
           "3.10",
           "3.11",
           "3.12",
           "3.13"
         ],
-        "scientific_test_files": 25
+        "scientific_test_files": 26
       },
       "rationale": "CI matrisi, lint/type kapıları, paketleme sözleşmesi.",
       "score": 10.0,
@@ -250,7 +251,8 @@
     },
     "reasoning": {
       "evidence": [
-        "reliable_reasoning_depth_v1@526c6a88dea7"
+        "reliable_reasoning_depth_v1@526c6a88dea7",
+        "reasoning_depth_root_cause_v1"
       ],
       "inputs": {
         "c_r": 4,
@@ -258,10 +260,12 @@
           "16": 4,
           "64": 4
         },
+        "collapse_root_cause": "reasoning_limit",
+        "depth_per_slot_log_log_slope": 0.0,
         "grid_limited": true
       },
       "rationale": "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.",
-      "score": 6.0,
+      "score": 7.27,
       "section": "reasoning"
     },
     "reproducibility": {
@@ -270,8 +274,8 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "9a0929043c2cef29ce0ee004a6569949ee4e4507",
-        "protocols_examined": 14,
+        "git_commit": "d791484771f2487b96e044f55222723e42507ce0",
+        "protocols_examined": 15,
         "protocols_meeting_20_seeds": 1
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
@@ -287,7 +291,8 @@
         "turkish_semantic_extraction_v1@525654cb978c",
         "compositional_generalization_v2_raw_text@f59f990d1591",
         "self_learning_scaling_v1",
-        "core_seed_statistics_v1"
+        "core_seed_statistics_v1",
+        "reasoning_depth_root_cause_v1"
       ],
       "inputs": {
         "sections_with_evidence": 10,
