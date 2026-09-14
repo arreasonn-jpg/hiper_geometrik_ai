@@ -148,3 +148,20 @@ jobs:
           python -m hga sweep
           python -m hga tokenizer
           python -m hga benchmark-rapor
+          python -m hga oncelik-zincir --seeds 1,2
+          python -m hga semantik
+          python -m hga genelleme-v2
+          python -m hga cikarim-derinligi --depth-profile smoke
+          python -m hga operator-baseline --n 4 --steps 20 --seeds 1
+          python -m hga signature --signature-profile smoke --seeds 1
+          python -m hga twt-sonuc --seeds 1,2
+          python -m hga bellek-hiyerarsi --depth-profile smoke
+          python -m hga ogrenme-olcek --signature-profile smoke
+          python -m hga tohum-istatistik --signature-profile smoke
+          python -m hga oncelik-optimizasyon --signature-profile smoke
+          python -m hga derinlik-teshis --depth-profile smoke
+          python -m hga insan-degerlendirme
+          python -m hga cok-ortam --seeds 1,2
+          python -m hga muhendislik
+          python -m hga yeniden-uretilebilirlik
+          python -m hga championship-benchmark --signature-profile smoke --seeds 1 --out /tmp/scorecard.json --markdown /tmp/scorecard.md

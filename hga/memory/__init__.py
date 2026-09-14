@@ -23,6 +23,13 @@ from .dynamic_kv import (
 from .entegrasyon import BellekEntegrasyonu
 from .genelleme_ablasyonu import GenellemeAblasyonu
 from .gorev_ablasyonu import GorevAblasyonu
+from .hierarchical import (
+    DEFAULT_CAPACITY,
+    TIERS,
+    HierarchicalMemory,
+    TierStats,
+    write_many,
+)
 from .interference import (
     DYNAMIC_KV,
     FIRST_WINS,
@@ -44,6 +51,8 @@ from .replay import DeneyimTekrari
 from .sparse_memory import DeneyimSlotlari, parmak_izi
 
 __all__ = [
+    "HierarchicalMemory", "TierStats", "TIERS", "DEFAULT_CAPACITY",
+    "write_many",
     "DeneyimSlotlari",
     "parmak_izi",
     "MemoryBenchmarkResult",

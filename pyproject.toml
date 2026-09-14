@@ -84,6 +84,9 @@ python_files = [
     "test_*.py",
     "*_test.py",
 ]
+markers = [
+    "slow: PyTorch eğitimi içeren, saniyeler süren benchmark testleri",
+]
 
 [tool.ruff]
 line-length = 100

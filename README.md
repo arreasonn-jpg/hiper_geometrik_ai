@@ -628,6 +628,15 @@ koşulda 1.0 çıkıyordu — **ölü metrik**. Takip artık her kenarı seyrek
 bellekten doğrular; bellek 4096→256 slota indirilince en derin güvenilir
 zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
 
+> **Güncelleme (P0-7).** Buradaki "4 adım", `cok-adimli` protokolünün
+> 1–5 hop / 0–256 dolgu ızgarasına aittir ve o ızgaranın tavanına yakındır.
+> Daha geniş bir taramayla (`python -m hga cikarim-derinligi
+> --depth-profile deep`, 1/2/4/8/16/32 hop × 0–16384 dolgu) ölçülen
+> **C_R = 32**'dir; dolgu 16384'e çıkınca C_RD **8**'e düşer. Yani eski
+> sayı yanlış değil, ızgarayla SINIRLIydı — bu, dar bir taramanın bir
+> yetenek sınırı gibi görünebileceğinin örneğidir.
+> Ayrıntı: `docs/REASONING_DEPTH.md`.
+
 Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.
 
 ### Deneyim verimi: EY'nin ötesinde (P1-005)

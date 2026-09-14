@@ -23,6 +23,23 @@ Kullanım:
     python -m hga verim                  # NY / UEY / GY / VID verim ayrıştırması (P1-005)
     python -m hga koken                  # provenance denetimi (Faz 27/28)
     python -m hga oncelik                # Priority(E) ağırlık ablasyonu (Faz 25)
+    python -m hga oncelik-zincir         # Priority(E) nedensel zincir ablasyonu (P0-1)
+    python -m hga operator-baseline      # Kronecker vs gerçek Dense ailesi (P0-2)
+    python -m hga signature              # HGA Signature Benchmark v1 (P0-4)
+    python -m hga semantik               # Türkçe semantik çıkarım benchmarkı (P0-5)
+    python -m hga genelleme-v2           # ham metinden keşif + C_G v2 (P0-6)
+    python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
+    python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
+    python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
+    python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
+    python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
+    python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
+    python -m hga insan-degerlendirme    # protokol + Krippendorff alfa (P1)
+    python -m hga derinlik-teshis        # derinlik çöküşü kök neden
+    python -m hga oncelik-optimizasyon   # ağırlık araması + held-out
+    python -m hga muhendislik            # CI / paketleme / test sözleşmesi
+    python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
+    python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -1621,6 +1638,342 @@ def _research_benchmark(profile, seeds, experiment_root, sections=None,
         )
 
 
+
+def _yaz_rapor(cikti, out=None, markdown=None, md_metin=None):
+    """Ortak JSON/Markdown yazıcı — rapor komutları bunu paylaşır."""
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
+        with open(out, "w", encoding="utf-8") as handle:
+            json.dump(cikti, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        print(f"  report: {out}")
+    if markdown and md_metin is not None:
+        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
+        with open(markdown, "w", encoding="utf-8") as handle:
+            handle.write(md_metin)
+        print(f"  markdown: {markdown}")
+
+
+def _oncelik_zincir(k=10, seeds=None, out=None, markdown=None):
+    """P0-1: Priority(E) nedensel zincir ablasyonu."""
+    from hga.evaluation.priority_ablation import (
+        priority_ablation_markdown,
+        run_priority_weight_ablation,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_priority_weight_ablation(k=int(k), seeds=tohumlar)
+    print(priority_ablation_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown, priority_ablation_markdown(rapor))
+
+
+def _operator_baseline(n=8, steps=300, seeds=None, device="cpu",
+                       out=None, markdown=None):
+    """P0-2: Kronecker vs gerçek Dense baseline ailesi."""
+    from hga.evaluation.operator_baselines import (
+        operator_baseline_markdown,
+        run_operator_baseline_benchmark,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
+    rapor = run_operator_baseline_benchmark(
+        n=int(n), steps=int(steps), seeds=tohumlar, device=device)
+    print(operator_baseline_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown, operator_baseline_markdown(rapor))
+
+
+def _cikarim_derinligi(profile="standard", seeds=None, threshold=1.0,
+                       out=None, markdown=None):
+    """P0-7: C_R ve C_RD ölçümü."""
+    from hga.evaluation.reasoning_depth import (
+        measure_reasoning_depth,
+        reasoning_depth_markdown,
+    )
+    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
+                if seeds else None)
+    rapor = measure_reasoning_depth(profile=profile, seeds=tohumlar,
+                                    reliability_threshold=float(threshold))
+    print(reasoning_depth_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown, reasoning_depth_markdown(rapor))
+
+
+def _signature(profile="smoke", seeds=None, out=None, markdown=None):
+    """P0-4: HGA Signature Benchmark."""
+    from hga.evaluation.signature import (
+        run_signature_benchmark,
+        signature_markdown,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
+    rapor = run_signature_benchmark(profile=profile, seeds=tohumlar)
+    print(signature_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown, signature_markdown(rapor))
+
+
+def _semantik(out=None, markdown=None):
+    """P0-5: Türkçe semantik çıkarım benchmarkı."""
+    from hga.evaluation.semantic_extraction import (
+        run_semantic_extraction_benchmark,
+        semantic_extraction_markdown,
+    )
+    rapor = run_semantic_extraction_benchmark()
+    print(semantic_extraction_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown,
+               semantic_extraction_markdown(rapor))
+
+
+def _genelleme_v2(out=None, markdown=None):
+    """P0-6: ham metinden keşif + kompozisyon (C_G v2)."""
+    from hga.evaluation.compositional_v2 import (
+        compositional_v2_markdown,
+        run_compositional_v2_benchmark,
+    )
+    rapor = run_compositional_v2_benchmark()
+    print(compositional_v2_markdown(rapor))
+    _yaz_rapor(rapor.to_dict(), out, markdown, compositional_v2_markdown(rapor))
+
+
+def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
+    """P0-3: TWT gerçek sonuç tablosu (çoklu tohum + FLOPs)."""
+    from hga.evaluation.twt_results import results_markdown, run_twt_results
+    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
+    rapor = run_twt_results(seeds=tohumlar, profile=profile)
+    md = results_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
+    """P0-8: Hot/Warm/Cold/Archive hiyerarşik bellek benchmarkı."""
+    from hga.evaluation.memory_hierarchy import (
+        memory_hierarchy_markdown,
+        run_memory_hierarchy_benchmark,
+    )
+    tohum = int((seeds or "1").split(",")[0])
+    rapor = run_memory_hierarchy_benchmark(profile=profile, seed=tohum)
+    md = memory_hierarchy_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _cok_ortam(seeds=None, out=None, markdown=None):
+    """P1: Çoklu ortam + cross-domain verifier izolasyonu."""
+    from hga.evaluation.multi_environment import (
+        multi_environment_markdown,
+        run_multi_environment_benchmark,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_multi_environment_benchmark(seeds=tohumlar)
+    md = multi_environment_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _ogrenme_olcek(profile="smoke", seeds=None, out=None, markdown=None):
+    """P1: Self-learning ölçeklendirme (100 → 1000 → 3000 cycle)."""
+    from hga.evaluation.self_learning_scaling import (
+        run_self_learning_scaling,
+        self_learning_scaling_markdown,
+    )
+    tohumlar = [int(v) for v in (seeds or "1").split(",") if v.strip()]
+    rapor = run_self_learning_scaling(profile=profile, seeds=tohumlar)
+    md = self_learning_scaling_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
+    """P1: Çekirdek protokollerde 20 tohum + istatistiksel çıkarım."""
+    from hga.evaluation.seed_statistics import (
+        run_core_seed_statistics,
+        seed_statistics_markdown,
+    )
+    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
+                if seeds else None)
+    rapor = run_core_seed_statistics(profile=profile, seeds=tohumlar)
+    md = seed_statistics_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _insan_degerlendirme(out=None, markdown=None):
+    """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
+    from hga.evaluation.human_evaluation import (
+        build_human_evaluation_protocol,
+        human_evaluation_markdown,
+    )
+    rapor = build_human_evaluation_protocol()
+    md = human_evaluation_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _derinlik_teshis(profile="smoke", out=None, markdown=None):
+    """Çıkarım derinliği çöküşünün kök neden teşhisi (bellek mi, çıkarım mı)."""
+    from hga.evaluation.depth_diagnosis import (
+        depth_diagnosis_markdown,
+        diagnose_depth_collapse,
+    )
+    rapor = diagnose_depth_collapse(profile=profile)
+    md = depth_diagnosis_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _oncelik_optimizasyon(profile="smoke", out=None, markdown=None):
+    """Priority(E) ağırlık araması + held-out doğrulama."""
+    from hga.evaluation.priority_optimization import (
+        optimize_priority_weights,
+        priority_optimization_markdown,
+    )
+    rapor = optimize_priority_weights(profile=profile)
+    md = priority_optimization_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _muhendislik(out=None, markdown=None):
+    """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
+    from hga.evaluation.engineering_audit import (
+        audit_engineering,
+        engineering_markdown,
+    )
+    rapor = audit_engineering()
+    md = engineering_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _yeniden_uretilebilirlik(out=None, markdown=None):
+    """Yeniden üretilebilirlik denetimi (manifest / determinizm / tohum)."""
+    from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
+    from hga.evaluation.engineering_audit import (
+        audit_reproducibility,
+        reproducibility_markdown,
+    )
+    from hga.evaluation.multi_environment import (
+        run_multi_environment_benchmark,
+    )
+    from hga.evaluation.semantic_extraction import (
+        run_semantic_extraction_benchmark,
+    )
+    raporlar = {
+        "compositional_v2": run_compositional_v2_benchmark().to_dict(),
+        "semantic_extraction": run_semantic_extraction_benchmark().to_dict(),
+        "multi_environment": run_multi_environment_benchmark(
+            seeds=tuple(range(1, 21))).to_dict(),
+    }
+    rapor = audit_reproducibility(raporlar)
+    md = reproducibility_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _championship(profile="smoke", seeds=None, out=None, markdown=None,
+                  skip_torch=False):
+    """Tüm P0 protokollerini koş ve OTOMATİK araştırma karnesi üret."""
+    from hga.evaluation.capability_vector import (
+        build_scorecard,
+        save_scorecard,
+        scorecard_markdown,
+    )
+    from hga.evaluation.capacity import run_capacity_benchmark
+    from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
+    from hga.evaluation.depth_diagnosis import diagnose_depth_collapse
+    from hga.evaluation.engineering_audit import (
+        audit_engineering,
+        audit_reproducibility,
+    )
+    from hga.evaluation.human_evaluation import (
+        build_human_evaluation_protocol,
+    )
+    from hga.evaluation.memory_hierarchy import (
+        run_memory_hierarchy_benchmark,
+    )
+    from hga.evaluation.multi_environment import (
+        run_multi_environment_benchmark,
+    )
+    from hga.evaluation.priority_ablation import run_priority_weight_ablation
+    from hga.evaluation.priority_optimization import optimize_priority_weights
+    from hga.evaluation.reasoning_depth import measure_reasoning_depth
+    from hga.evaluation.seed_statistics import run_core_seed_statistics
+    from hga.evaluation.self_learning_scaling import run_self_learning_scaling
+    from hga.evaluation.semantic_extraction import (
+        run_semantic_extraction_benchmark,
+    )
+
+    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
+    derinlik_profili = "smoke" if profile == "smoke" else "standard"
+
+    print("HGA CHAMPIONSHIP BENCHMARK — tüm P0 protokolleri koşuluyor…\n")
+    raporlar = {}
+    raporlar["priority_ablation"] = run_priority_weight_ablation(
+        k=10, seeds=tohumlar).to_dict()
+    print("  ✓ Priority(E) nedensel zincir ablasyonu")
+    raporlar["reasoning_depth"] = measure_reasoning_depth(
+        profile=derinlik_profili).to_dict()
+    print("  ✓ C_R / C_RD çıkarım derinliği")
+    raporlar["semantic_extraction"] = run_semantic_extraction_benchmark().to_dict()
+    print("  ✓ Türkçe semantik çıkarım")
+    raporlar["compositional_v2"] = run_compositional_v2_benchmark().to_dict()
+    print("  ✓ C_G v2 ham metin genellemesi")
+    kapasite = run_capacity_benchmark(operands_max=7)
+    raporlar["capacity"] = kapasite.to_dict()
+    print("  ✓ Kapasite çerçevesi (P / C_I^UB / C_M^UB / C_E / C_V)")
+    raporlar["memory"] = run_memory_hierarchy_benchmark(
+        profile="smoke" if profile == "smoke" else "standard").to_dict()
+    print("  ✓ Hiyerarşik bellek (hot/warm/cold/archive)")
+    raporlar["multi_environment"] = run_multi_environment_benchmark(
+        seeds=tuple(range(1, 21))).to_dict()
+    print("  ✓ Çoklu ortam + cross-domain verifier izolasyonu")
+    raporlar["self_learning_scaling"] = run_self_learning_scaling(
+        profile="smoke" if profile == "smoke" else "standard",
+        seeds=tohumlar[:1]).to_dict()
+    raporlar["seed_statistics"] = run_core_seed_statistics(
+        profile="smoke" if profile == "smoke" else "core",
+        signature_profile=profile,
+        include_operator=not skip_torch).to_dict()
+    print("  ✓ Çekirdek tohum istatistikleri (CI / etki / permütasyon)")
+    raporlar["priority_optimization"] = optimize_priority_weights(
+        profile="smoke" if profile == "smoke" else "standard").to_dict()
+    print("  ✓ Priority(E) ağırlık optimizasyonu + held-out")
+    raporlar["depth_diagnosis"] = diagnose_depth_collapse(
+        profile="smoke" if profile == "smoke" else "standard").to_dict()
+    print("  ✓ Derinlik çöküşü kök neden teşhisi")
+    raporlar["human_evaluation"] = build_human_evaluation_protocol().to_dict()
+    raporlar["engineering"] = audit_engineering().to_dict()
+    print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
+
+    if not skip_torch:
+        try:
+            from hga.evaluation.operator_baselines import (
+                run_operator_baseline_benchmark,
+            )
+            from hga.evaluation.signature import run_signature_benchmark
+            raporlar["operator_baselines"] = run_operator_baseline_benchmark(
+                n=8, steps=200 if profile == "smoke" else 300,
+                seeds=tohumlar[:3]).to_dict()
+            print("  ✓ Operatör baseline ailesi (gerçek Dense dahil)")
+            raporlar["signature"] = run_signature_benchmark(
+                profile=profile, seeds=tohumlar[:1]).to_dict()
+            print("  ✓ HGA Signature Benchmark")
+            from hga.evaluation.twt_results import run_twt_results
+            raporlar["twt_results"] = run_twt_results(
+                seeds=tohumlar, profile="smoke").to_dict()
+            print("  ✓ TWT gerçek sonuç tablosu (gerçek Türkçe veri)")
+        except ImportError as hata:
+            print(f"  ! PyTorch yok, nöral bölümler ATLANDI: {hata}")
+            print("    (atlanan bölüm skor üretmez; karne bunu n/a gösterir)")
+
+    # Yeniden üretilebilirlik denetimi EN SON koşar: diğer raporların
+    # tohum sayısını ve veri imzasını girdi olarak alır.
+    raporlar["reproducibility"] = audit_reproducibility(raporlar).to_dict()
+    print("  ✓ Yeniden üretilebilirlik (manifest / determinizm / tohum)")
+
+    karne = build_scorecard(**raporlar)
+    print()
+    print(scorecard_markdown(karne))
+    yollar = save_scorecard(karne, json_path=out, markdown_path=markdown)
+    for tur, yol in yollar.items():
+        print(f"{tur}: {yol}")
+
+
 def _observability_demo(out=None, markdown=None, html_yol=None):
     """Torch gerektirmeyen gözlemlenebilirlik demoları."""
     from hga.knowledge import DeneyimDurumu, ExperienceCandidate
@@ -1661,7 +2014,19 @@ def main(argv=None):
                                      "memory-interference", "paradigma",
                                      "olcekli-golden", "kronecker-rank",
                                      "epistemik", "verim", "cok-adimli",
-                                     "koken", "oncelik"])
+                                     "koken", "oncelik",
+                                     "oncelik-zincir", "operator-baseline",
+                                     "cikarim-derinligi", "signature",
+                                     "semantik", "genelleme-v2",
+                                     "twt-sonuc", "bellek-hiyerarsi",
+                                     "cok-ortam", "ogrenme-olcek",
+                                     "tohum-istatistik",
+                                     "insan-degerlendirme",
+                                     "derinlik-teshis",
+                                     "oncelik-optimizasyon",
+                                     "muhendislik",
+                                     "yeniden-uretilebilirlik",
+                                     "championship-benchmark"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
     p.add_argument("--config", default=None,
@@ -1758,6 +2123,16 @@ def main(argv=None):
                    help="milestone tablosu kontrol noktaları (örn. 0,10,50,100)")
     p.add_argument("--forced-collisions", type=int, default=25,
                    help="memory-interference için kasıtlı çakışma sayısı")
+    p.add_argument("--signature-profile", choices=["smoke", "standard"],
+                   default="smoke",
+                   help="signature / championship-benchmark ölçek profili")
+    p.add_argument("--depth-profile", choices=["smoke", "standard", "deep"],
+                   default="standard",
+                   help="cikarim-derinligi tarama profili")
+    p.add_argument("--reliability-threshold", type=float, default=1.0,
+                   help="C_R/C_RD güvenilirlik eşiği (0,1]")
+    p.add_argument("--skip-torch", action="store_true",
+                   help="championship-benchmark: nöral bölümleri atla")
     p.add_argument("--ledger", default=None,
                    help="milestone için immutable experience ledger JSONL yolu")
     args = p.parse_args(argv)
@@ -1831,6 +2206,47 @@ def main(argv=None):
                              args.seeds, out=args.out, markdown=args.markdown),
      "koken": lambda: _provenance(out=args.out, markdown=args.markdown),
      "oncelik": lambda: _priority(k=10, out=args.out, markdown=args.markdown),
+     "oncelik-zincir": lambda: _oncelik_zincir(
+         k=10, seeds=args.seeds, out=args.out, markdown=args.markdown),
+     "operator-baseline": lambda: _operator_baseline(
+         n=int(args.n or 8), steps=args.steps, seeds=args.seeds,
+         device=args.device, out=args.out, markdown=args.markdown),
+     "cikarim-derinligi": lambda: _cikarim_derinligi(
+         profile=args.depth_profile, seeds=args.seeds,
+         threshold=args.reliability_threshold, out=args.out,
+         markdown=args.markdown),
+     "signature": lambda: _signature(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "semantik": lambda: _semantik(out=args.out, markdown=args.markdown),
+     "genelleme-v2": lambda: _genelleme_v2(out=args.out, markdown=args.markdown),
+     "twt-sonuc": lambda: _twt_sonuc(
+         seeds=args.seeds, profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "bellek-hiyerarsi": lambda: _bellek_hiyerarsi(
+         profile=args.depth_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "cok-ortam": lambda: _cok_ortam(
+         seeds=args.seeds, out=args.out, markdown=args.markdown),
+     "ogrenme-olcek": lambda: _ogrenme_olcek(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "tohum-istatistik": lambda: _tohum_istatistik(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "insan-degerlendirme": lambda: _insan_degerlendirme(
+         out=args.out, markdown=args.markdown),
+     "derinlik-teshis": lambda: _derinlik_teshis(
+         profile=args.depth_profile, out=args.out, markdown=args.markdown),
+     "oncelik-optimizasyon": lambda: _oncelik_optimizasyon(
+         profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),
+     "yeniden-uretilebilirlik": lambda: _yeniden_uretilebilirlik(
+         out=args.out, markdown=args.markdown),
+     "championship-benchmark": lambda: _championship(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown, skip_torch=args.skip_torch),
      "kapasite": lambda: _kapasite(args.operands_max, out=args.out),
      "bilgi-surum": lambda: _bilgi_surum(out=args.out),
      "defter": lambda: _defter(out=args.out),
