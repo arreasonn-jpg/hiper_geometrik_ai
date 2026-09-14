@@ -1,6 +1,6 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-14T07:44:03+00:00`
+Üretim zamanı (UTC): `2026-09-14T08:53:18+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
@@ -8,15 +8,16 @@
 |---|---:|---|
 | architecture | 10.0 | operator_baseline_family_v1@81610cdf041b |
 | memory | 10.0 | reliable_reasoning_depth_v1@526c6a88dea7, hierarchical_memory_v1@72b18bd90ab7 |
-| verification | 5.0 | priority_causal_chain_ablation_v1@f86dfc8878cb |
+| verification | 7.9 | priority_causal_chain_ablation_v1@f86dfc8878cb, multi_environment_verifier_isolation_v1 |
 | generalization | 8.3 | compositional_generalization_v2_raw_text@f59f990d1591 |
 | reasoning | 6.0 | reliable_reasoning_depth_v1@526c6a88dea7 |
+| self_learning | 7.8 | self_learning_scaling_v1 |
 | turkish_nlp | 8.9 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
 | language_modeling | n/a | — |
-| reproducibility | n/a | — |
-| scientific_evidence | 7.6 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@526c6a88dea7, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@f59f990d1591 |
-| engineering | n/a | — |
-| **Overall Research Readiness** | **8.0** | 7/10 bölüm |
+| reproducibility | 8.9 | reproducibility_audit_v1 |
+| scientific_evidence | 7.6 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@526c6a88dea7, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@f59f990d1591, self_learning_scaling_v1 |
+| engineering | 10.0 | engineering_contract_audit_v1 |
+| **Overall Research Readiness** | **8.5** | 10/11 bölüm |
 
 ## HGA Capability Vector
 
@@ -37,19 +38,18 @@
 ## Uyarılar
 
 - `language_modeling` bölümü için kanıt yok; skor üretilmedi.
-- `reproducibility` bölümü için kanıt yok; skor üretilmedi.
-- `engineering` bölümü için kanıt yok; skor üretilmedi.
-- Genel skor yalnız 7/10 bölüm üzerinden hesaplandı; ['language_modeling', 'reproducibility', 'engineering'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler.
+- Genel skor yalnız 10/11 bölüm üzerinden hesaplandı; ['language_modeling'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler.
 
 ## Bölüm gerekçeleri
 
 - **architecture**: Kronecker/rank-1/low-rank/full-dense kolları eşit parametre ve eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.
 - **memory**: Hiyerarşik bellek (hot/warm/cold/archive) recall, gecikme, tahliye ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği ızgarasındaki en düşük geri çağırma oranına düşülür.
-- **verification**: Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ölçülür.
+- **verification**: Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.
 - **generalization**: Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.
 - **reasoning**: Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.
+- **self_learning**: Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi birikmemesi (self-training çöküşüne direnç).
 - **turkish_nlp**: Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.
 - **language_modeling**: Gerçek Türkçe korpusta perplexity ve üretim kalitesi. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.
-- **reproducibility**: Manifest, veri/konfig hash'i ve çoklu tohum tamamlanması.
+- **reproducibility**: Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.
 - **scientific_evidence**: Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.
 - **engineering**: CI matrisi, lint/type kapıları, paketleme sözleşmesi.

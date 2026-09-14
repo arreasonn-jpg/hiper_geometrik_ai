@@ -156,4 +156,8 @@ jobs:
           python -m hga signature --signature-profile smoke --seeds 1
           python -m hga twt-sonuc --seeds 1,2
           python -m hga bellek-hiyerarsi --depth-profile smoke
+          python -m hga ogrenme-olcek --signature-profile smoke
+          python -m hga cok-ortam --seeds 1,2
+          python -m hga muhendislik
+          python -m hga yeniden-uretilebilirlik
           python -m hga championship-benchmark --signature-profile smoke --seeds 1 --out /tmp/scorecard.json --markdown /tmp/scorecard.md

@@ -69,7 +69,7 @@ TERMINOLOGY: Dict[str, Dict[str, str]] = {
 #: Karne bölümleri ve her birinin hangi kanıttan beslendiği.
 SCORECARD_SECTIONS: Tuple[str, ...] = (
     "architecture", "memory", "verification", "generalization", "reasoning",
-    "turkish_nlp", "language_modeling", "reproducibility",
+    "self_learning", "turkish_nlp", "language_modeling", "reproducibility",
     "scientific_evidence", "engineering",
 )
 
@@ -265,6 +265,8 @@ def build_scorecard(
     memory: Optional[Dict[str, Any]] = None,
     calibration: Optional[Dict[str, Any]] = None,
     twt_results: Optional[Dict[str, Any]] = None,
+    multi_environment: Optional[Dict[str, Any]] = None,
+    self_learning_scaling: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
     engineering: Optional[Dict[str, Any]] = None,
@@ -333,12 +335,23 @@ def build_scorecard(
           "ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği "
           "ızgarasındaki en düşük geri çağırma oranına düşülür.")
 
-    # verification ← Priority(E) nedensel zinciri
-    bolum("verification", _get(priority_ablation, "checks"),
-          {"baseline_downstream": _get(priority_ablation, "baseline_downstream")},
-          kanit(priority_ablation),
-          "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini "
-          "taşıyıp taşımadığı ölçülür.")
+    # verification ← Priority(E) nedensel zinciri + verifier izolasyonu.
+    # İkisi birlikte "doğrulama" başlığının iki yarısıdır: birincisi neyin
+    # doğrulanmaya DEĞER olduğunu seçer, ikincisi doğrulayıcının yetkisi
+    # dışında konuşmadığını gösterir.
+    dogrulama_checks = dict(_get(priority_ablation, "checks") or {})
+    for ad, deger in (_get(multi_environment, "checks") or {}).items():
+        dogrulama_checks[f"multienv:{ad}"] = bool(deger)
+    bolum("verification", dogrulama_checks or None,
+          {"baseline_downstream": _get(priority_ablation, "baseline_downstream"),
+           "verifier_isolation_rate": _get(multi_environment, "contamination",
+                                           "isolation_rate"),
+           "adversarial_abstain_rate": _get(multi_environment, "adversarial",
+                                            "abstain_rate")},
+          kanit(priority_ablation) + kanit(multi_environment),
+          "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream "
+          "zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında "
+          "çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.")
 
     # generalization ← C_G v2 (ham metin)
     bolum("generalization", _get(compositional_v2, "checks"),
@@ -354,6 +367,21 @@ def build_scorecard(
            "grid_limited": _get(reasoning_depth, "c_r_grid_limited")},
           kanit(reasoning_depth),
           "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.")
+
+    # self_learning ← ölçeklendirme + sürüklenme (model collapse) denetimi
+    bolum("self_learning", _get(self_learning_scaling, "checks"),
+          {"max_cycles": max(
+              [p.get("cycles", 0) for p in
+               (_get(self_learning_scaling, "points") or [])] or [0]) or None,
+           "total_incorrect_knowledge": _get(
+               self_learning_scaling, "drift", "total_incorrect_knowledge"),
+           "saturation_detected": any(
+               v.get("saturated") for v in
+               (_get(self_learning_scaling, "cycle_axis") or {}).values())
+           if self_learning_scaling else None},
+          kanit(self_learning_scaling),
+          "Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi "
+          "birikmemesi (self-training çöküşüne direnç).")
 
     # turkish_nlp ← semantik çıkarım (sentetik altın set)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)
@@ -379,11 +407,22 @@ def build_scorecard(
 
     # reproducibility / engineering
     bolum("reproducibility", _get(reproducibility, "checks"),
-          {"seeds": _get(reproducibility, "seeds")},
+          {"protocols_meeting_20_seeds": _get(
+              reproducibility, "seed_discipline",
+              "protocols_meeting_core_requirement"),
+           "protocols_examined": _get(reproducibility, "seed_discipline",
+                                      "protocols_examined"),
+           "git_commit": _get(reproducibility, "environment", "git_commit"),
+           "determinism_measured": bool(_get(reproducibility, "determinism"))},
           kanit(reproducibility),
-          "Manifest, veri/konfig hash'i ve çoklu tohum tamamlanması.")
+          "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm "
+          "(aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.")
     bolum("engineering", _get(engineering, "checks"),
-          {"python_matrix": _get(engineering, "python_matrix")},
+          {"python_matrix": _get(engineering, "ci", "python_matrix"),
+           "cli_commands_smoke_tested": _get(engineering, "ci",
+                                             "cli_command_count"),
+           "scientific_test_files": _get(engineering, "test_suite",
+                                         "scientific_test_files")},
           kanit(engineering),
           "CI matrisi, lint/type kapıları, paketleme sözleşmesi.")
 
@@ -391,7 +430,8 @@ def build_scorecard(
     kanitli = [ad for ad, b in bolumler.items() if b.score is not None]
     tum_kapilar: Dict[str, bool] = {}
     for rapor in (priority_ablation, operator_baselines, reasoning_depth,
-                  signature, semantic_extraction, compositional_v2):
+                  signature, semantic_extraction, compositional_v2,
+                  self_learning_scaling):
         for ad, deger in (_get(rapor, "checks") or {}).items():
             tum_kapilar[f"{_get(rapor, 'protocol')}:{ad}"] = bool(deger)
     # Hiçbir protokol koşulmadıysa bu bölüm 0.0 DEĞİL, kanıtsız olmalıdır:
@@ -405,7 +445,8 @@ def build_scorecard(
            "total_gates": len(tum_kapilar)},
           [k for rapor in (priority_ablation, operator_baselines,
                            reasoning_depth, signature, semantic_extraction,
-                           compositional_v2) for k in kanit(rapor)],
+                           compositional_v2, self_learning_scaling)
+           for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")
 
@@ -444,6 +485,8 @@ def build_scorecard(
                     ("compositional_v2", compositional_v2),
                     ("capacity", capacity), ("memory", memory),
                     ("twt_results", twt_results),
+                    ("multi_environment", multi_environment),
+                    ("self_learning_scaling", self_learning_scaling),
                     ("calibration", calibration),
                     ("language_modeling", language_modeling),
                     ("reproducibility", reproducibility),

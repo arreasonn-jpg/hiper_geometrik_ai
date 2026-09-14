@@ -31,7 +31,11 @@ Kullanım:
     python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
     python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
-    python -m hga championship-benchmark # tüm P0 + OTOMATİK araştırma karnesi
+    python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
+    python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
+    python -m hga muhendislik            # CI / paketleme / test sözleşmesi
+    python -m hga yeniden-uretilebilirlik # manifest / determinizm / tohum
+    python -m hga championship-benchmark # tüm P0+P1 + OTOMATİK araştırma karnesi
     python -m hga dogrulama              # kapalı doğrulama hattı (false accept 24→0)
     python -m hga halusinasyon           # factual consistency / hallucination metriği
     python -m hga sweep                  # n/K/context kapasite taraması
@@ -1744,6 +1748,69 @@ def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _cok_ortam(seeds=None, out=None, markdown=None):
+    """P1: Çoklu ortam + cross-domain verifier izolasyonu."""
+    from hga.evaluation.multi_environment import (
+        multi_environment_markdown,
+        run_multi_environment_benchmark,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_multi_environment_benchmark(seeds=tohumlar)
+    md = multi_environment_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _ogrenme_olcek(profile="smoke", seeds=None, out=None, markdown=None):
+    """P1: Self-learning ölçeklendirme (100 → 1000 → 3000 cycle)."""
+    from hga.evaluation.self_learning_scaling import (
+        run_self_learning_scaling,
+        self_learning_scaling_markdown,
+    )
+    tohumlar = [int(v) for v in (seeds or "1").split(",") if v.strip()]
+    rapor = run_self_learning_scaling(profile=profile, seeds=tohumlar)
+    md = self_learning_scaling_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _muhendislik(out=None, markdown=None):
+    """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
+    from hga.evaluation.engineering_audit import (
+        audit_engineering,
+        engineering_markdown,
+    )
+    rapor = audit_engineering()
+    md = engineering_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _yeniden_uretilebilirlik(out=None, markdown=None):
+    """Yeniden üretilebilirlik denetimi (manifest / determinizm / tohum)."""
+    from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
+    from hga.evaluation.engineering_audit import (
+        audit_reproducibility,
+        reproducibility_markdown,
+    )
+    from hga.evaluation.multi_environment import (
+        run_multi_environment_benchmark,
+    )
+    from hga.evaluation.semantic_extraction import (
+        run_semantic_extraction_benchmark,
+    )
+    raporlar = {
+        "compositional_v2": run_compositional_v2_benchmark().to_dict(),
+        "semantic_extraction": run_semantic_extraction_benchmark().to_dict(),
+        "multi_environment": run_multi_environment_benchmark(
+            seeds=tuple(range(1, 21))).to_dict(),
+    }
+    rapor = audit_reproducibility(raporlar)
+    md = reproducibility_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _championship(profile="smoke", seeds=None, out=None, markdown=None,
                   skip_torch=False):
     """Tüm P0 protokollerini koş ve OTOMATİK araştırma karnesi üret."""
@@ -1754,11 +1821,19 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     )
     from hga.evaluation.capacity import run_capacity_benchmark
     from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
+    from hga.evaluation.engineering_audit import (
+        audit_engineering,
+        audit_reproducibility,
+    )
     from hga.evaluation.memory_hierarchy import (
         run_memory_hierarchy_benchmark,
     )
+    from hga.evaluation.multi_environment import (
+        run_multi_environment_benchmark,
+    )
     from hga.evaluation.priority_ablation import run_priority_weight_ablation
     from hga.evaluation.reasoning_depth import measure_reasoning_depth
+    from hga.evaluation.self_learning_scaling import run_self_learning_scaling
     from hga.evaluation.semantic_extraction import (
         run_semantic_extraction_benchmark,
     )
@@ -1784,6 +1859,14 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     raporlar["memory"] = run_memory_hierarchy_benchmark(
         profile="smoke" if profile == "smoke" else "standard").to_dict()
     print("  ✓ Hiyerarşik bellek (hot/warm/cold/archive)")
+    raporlar["multi_environment"] = run_multi_environment_benchmark(
+        seeds=tuple(range(1, 21))).to_dict()
+    print("  ✓ Çoklu ortam + cross-domain verifier izolasyonu")
+    raporlar["self_learning_scaling"] = run_self_learning_scaling(
+        profile="smoke" if profile == "smoke" else "standard",
+        seeds=tohumlar[:1]).to_dict()
+    raporlar["engineering"] = audit_engineering().to_dict()
+    print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
 
     if not skip_torch:
         try:
@@ -1805,6 +1888,11 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         except ImportError as hata:
             print(f"  ! PyTorch yok, nöral bölümler ATLANDI: {hata}")
             print("    (atlanan bölüm skor üretmez; karne bunu n/a gösterir)")
+
+    # Yeniden üretilebilirlik denetimi EN SON koşar: diğer raporların
+    # tohum sayısını ve veri imzasını girdi olarak alır.
+    raporlar["reproducibility"] = audit_reproducibility(raporlar).to_dict()
+    print("  ✓ Yeniden üretilebilirlik (manifest / determinizm / tohum)")
 
     karne = build_scorecard(**raporlar)
     print()
@@ -1859,6 +1947,9 @@ def main(argv=None):
                                      "cikarim-derinligi", "signature",
                                      "semantik", "genelleme-v2",
                                      "twt-sonuc", "bellek-hiyerarsi",
+                                     "cok-ortam", "ogrenme-olcek",
+                                     "muhendislik",
+                                     "yeniden-uretilebilirlik",
                                      "championship-benchmark"])
     p.add_argument("yol", nargs="?", default=None,
                    help="dosya yolu: ozet/veri-kalite/manifest/perplexity/checkpoint-rapor")
@@ -2059,6 +2150,14 @@ def main(argv=None):
      "bellek-hiyerarsi": lambda: _bellek_hiyerarsi(
          profile=args.depth_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
+     "cok-ortam": lambda: _cok_ortam(
+         seeds=args.seeds, out=args.out, markdown=args.markdown),
+     "ogrenme-olcek": lambda: _ogrenme_olcek(
+         profile=args.signature_profile, seeds=args.seeds, out=args.out,
+         markdown=args.markdown),
+     "muhendislik": lambda: _muhendislik(out=args.out, markdown=args.markdown),
+     "yeniden-uretilebilirlik": lambda: _yeniden_uretilebilirlik(
+         out=args.out, markdown=args.markdown),
      "championship-benchmark": lambda: _championship(
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown, skip_torch=args.skip_torch),
