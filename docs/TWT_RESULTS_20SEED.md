@@ -1,6 +1,6 @@
 # TWT Gerçek Sonuç Tablosu (P0-3)
 
-- Protokol: `twt_real_results_v1` v1 (imza `300a5cded2eb`)
+- Protokol: `twt_real_results_v1` v2 (imza `300a5cded2eb`)
 - Görev: binary dependency arc validation — **dil modelleme değildir**
 - Veri: TWT v1 `66b13a898efa8899…`, train/dev/test aday sayısı 127602/17030/16036
 - Profil / tohumlar: `smoke` / `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]`
@@ -9,14 +9,30 @@
 
 | Model | Parametre | Gövde | Bayt | İleri FLOP/örnek | Eğitim (s) | Çıkarım (s) |
 |---|---:|---:|---:|---:|---:|---:|
-| dense | 291,808 | 10,496 | 1,167,232 | 10.39K | 0.123 | 0.011 |
-| transformer | 291,816 | 10,504 | 1,167,264 | 60.70K | 0.523 | 0.145 |
-| kronecker | 291,514 | 10,202 | 1,166,056 | 13.64K | 0.216 | 0.074 |
-| hga | 291,827 | 10,515 | 1,167,308 | 117.85K | 0.834 | 0.286 |
+| dense | 291,808 | 10,496 | 1,167,232 | 10.39K | 0.099 | 0.008 |
+| transformer | 291,816 | 10,504 | 1,167,264 | 60.70K | 0.407 | 0.119 |
+| kronecker | 291,514 | 10,202 | 1,166,056 | 13.64K | 0.177 | 0.067 |
+| hga | 291,827 | 10,515 | 1,167,308 | 117.85K | 0.658 | 0.238 |
 
-FLOP max/min oranı: **11.345×** (kapı 2.0×) → KALDI
+FLOP max/min oranı: **11.345×** (eşik 2.0×) → eşik DIŞINDA
 
 > Parametre eşitliği FLOP eşitliğini GARANTİ ETMEZ. Bu oran kapıyı geçmezse, sonuç farkı kısmen işlem bütçesi farkına atfedilebilir ve öyle okunmalıdır.
+
+## FLOP-eşli kontrol rejimi
+
+> Kontrol kolu: HGA aynen, baseline gövdeleri HGA'nın MAC bütçesine ölçekli. Parametre paritesi BİLEREK bırakıldı ve aşağıda raporlandı; iki rejim birlikte okunmalıdır.
+
+- MAC max/min oranı: **1.041×** (tolerans 1.05×) → GEÇTİ
+- Parametre oranı (bilerek serbest): 1.372×
+
+| Model | MAC/örnek | f1@all |
+|---|---:|---:|
+| dense | 117,796 | 0.9122 ±0.0059 |
+| transformer | 117,728 | 0.8302 ±0.0158 |
+| kronecker | 122,600 | 0.9131 ±0.0060 |
+| hga | 117,848 | 0.8986 ±0.0065 |
+
+HGA vs `kronecker` (f1@all, eşleşmiş): fark -0.0145 — AYRIŞMA: p=0.00005, g=-1.7770 (large), CI [-0.017847, -0.0112388] sıfırı içermiyor.
 
 ## Ana sonuç tablosu (test, ortalama ± std)
 
@@ -113,7 +129,8 @@ FLOP max/min oranı: **11.345×** (kapı 2.0×) → KALDI
 | all_headline_metrics_present | GEÇTİ |
 | calibration_metrics_present | GEÇTİ |
 | flops_reported_for_all_models | GEÇTİ |
-| flop_budget_within_tolerance | KALDI |
+| flop_budget_controlled | GEÇTİ |
+| flop_matched_control_reported | GEÇTİ |
 | analytic_flops_match_measured | GEÇTİ |
 | parameter_budget_within_one_percent | GEÇTİ |
 | sentence_disjoint_reported | GEÇTİ |
@@ -124,7 +141,9 @@ FLOP max/min oranı: **11.345×** (kapı 2.0×) → KALDI
 ## Bulgular
 
 - Profil `smoke`, 20 tohum, 4 mimari, 7 disjoint dilim; gerçek veri TWT v1 (`66b13a898efa…`).
-- FLOP oranı 11.34× (kapı 2.0×): mimariler eşit parametrede ama eşit işlem maliyetinde DEĞİL. Performans farkı kısmen hesap bütçesine atfedilebilir.
+- FLOP oranı 11.34× (eşik 2.0×): mimariler eşit parametrede ama eşit işlem maliyetinde DEĞİL. Bu yüzden FLOP-eşli kontrol rejimi koşuldu (aşağıda); iki rejim birlikte okunmalıdır.
+- FLOP-eşli kontrol rejimi (MAC oranı 1.041×, parametre oranı 1.37× — bilerek serbest): HGA f1@all = 0.8986.
+- FLOP-eşli rejimde HGA vs kronecker: fark -0.0145 (AYRIŞMA: p=0.00005, g=-1.7770 (large), CI [-0.017847, -0.0112388] sıfırı içermiyor.). Baseline'lar HGA'nın işlem bütçesine ölçeklenince de tablo değişmiyorsa fark hesap bütçesiyle açıklanamaz; değişiyorsa bütçe etkisi budur.
 - `dense`: `all` diliminden belirgin düşüş → relation_disjoint (−0.213). Toplam skor bu zorluğu gizler; dilim tablosu bu yüzden var.
 - `transformer`: `all` diliminden belirgin düşüş → entity_disjoint (−0.067), relation_disjoint (−0.191). Toplam skor bu zorluğu gizler; dilim tablosu bu yüzden var.
 - `kronecker`: `all` diliminden belirgin düşüş → relation_disjoint (−0.246). Toplam skor bu zorluğu gizler; dilim tablosu bu yüzden var.

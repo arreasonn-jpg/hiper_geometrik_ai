@@ -332,6 +332,15 @@ vocabulary, başlangıç embedding'i, batch schedule hash'i, AdamW, loss, adım 
 karar eşiği dört kolda aynıdır. Bu structured arc sınıflandırması tam language
 model pretraining veya end-to-end dependency parser değildir.
 
+Parametre eşitliği FLOP eşitliğini garanti etmez (birincil rejimde MAC
+oranı ~11.3×; analitik döküm + PyTorch sayaç uzlaşmasıyla raporlanır). Tek
+deneyde ikisi birden eşitlenemeyeceği için aynı tohumlarla ikinci bir
+**FLOP-eşli kontrol rejimi** koşulur: HGA kolu aynen kalır, baseline
+gövdeleri HGA'nın MAC bütçesine ölçeklenir (oran ≤1.05; parametre paritesi
+bilerek bırakılır ve raporlanır). İki rejimin sonuç çifti birlikte okunur —
+20 tohumda FLOP-eşli rejimde de sıralama değişmez (Kronecker/Dense önde,
+HGA farkı küçük ama istatistiksel; `docs/TWT_RESULTS_20SEED.md`).
+
 Her neural kol için uncertainty calibration da aynı harness içinde ölçülür:
 pozitif scalar temperature yalnız sabit **dev** splitinde NLL ile seçilir,
 **test** ise yalnız değerlendirmedir. Testte kalibrasyon öncesi/sonrası NLL,

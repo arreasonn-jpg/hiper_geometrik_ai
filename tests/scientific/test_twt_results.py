@@ -82,6 +82,18 @@ def test_esit_parametre_esit_flop_demek_degil():
         "Oran kapıya girdiyse bu testin beklentisi güncellenmeli")
 
 
+def test_flop_esli_konfig_maci_esitler():
+    """FLOP-eşli rejim yapılandırması dört kolu ≤1.05× MAC bandına sokmalı."""
+    from hga.evaluation.twt_baselines import FLOP_MATCHED_CONFIG
+    sayimlar = {m: analytic_forward_flops(m, FLOP_MATCHED_CONFIG)[
+        "forward_flops_per_example"] for m in MODEL_ORDER}
+    oran = max(sayimlar.values()) / min(sayimlar.values())
+    assert oran <= float(FLOP_MATCHED_CONFIG["flop_tolerance_max_to_min_ratio"])
+    # HGA kolu iki rejimde de aynı mimaridir: MAC'i değişmemeli.
+    assert sayimlar["hga"] == analytic_forward_flops("hga")[
+        "forward_flops_per_example"]
+
+
 def test_gecersiz_tolerans_acik_hata():
     with pytest.raises(ValueError):
         flop_fairness(tolerance=0.5)
@@ -153,11 +165,21 @@ def test_maliyet_tablosu_flop_icerir(rapor):
     assert rapor.checks["flops_reported_for_all_models"]
 
 
-def test_parametre_kapisi_gecer_flop_kapisi_kalir(rapor):
-    """Dürüst rapor: bir kapı geçip diğeri kalabilir ve bu gizlenmez."""
+def test_parametre_kapisi_gecer_flop_kontrol_rejimiyle_denetlenir(rapor):
+    """Dürüst rapor: birincil rejimde FLOP oranı eşik dışıdır ve GİZLENMEZ;
+    kapı FLOP-eşli kontrol rejiminin koşulup kendi (daha sıkı) toleransını
+    geçmesiyle sağlanır. Ham 11.3× oran flop_fairness'ta durur."""
     assert rapor.checks["parameter_budget_within_one_percent"]
-    assert not rapor.checks["flop_budget_within_tolerance"]
+    assert not rapor.flop_fairness["within_tolerance"]  # ham oran hâlâ dışarıda
+    assert rapor.flop_fairness["flop_max_to_min_ratio"] > 2.0
+    assert rapor.checks["flop_budget_controlled"]
+    assert rapor.checks["flop_matched_control_reported"]
+    fm = rapor.flop_matched_control
+    assert fm["within_tolerance"] and fm["flop_max_to_min_ratio"] <= 1.05
+    # Parametre paritesinin bilerek bırakıldığı raporlanmalı.
+    assert fm["parameter_max_to_min_ratio"] > 1.05
     assert any("FLOP" in b for b in rapor.findings)
+    assert any("FLOP-eşli" in b for b in rapor.findings)
 
 
 def test_eslesmis_karsilastirma_uretilir(rapor):

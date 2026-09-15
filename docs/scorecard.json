@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-15T08:42:58+00:00",
-  "overall": 9.92,
+  "generated_at_utc": "2026-09-15T09:31:40+00:00",
+  "overall": 9.97,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -286,7 +286,7 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "400203f016257aad3b6b69f37489f366820e10e0",
+        "git_commit": "986f420b0967d1c5589cd6f803c88b8a6b2e82ca",
         "protocols_examined": 17,
         "protocols_meeting_20_seeds": 3
       },
@@ -355,7 +355,7 @@
         "twt_seeds": 20
       },
       "rationale": "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.",
-      "score": 9.44,
+      "score": 10.0,
       "section": "turkish_nlp"
     },
     "verification": {
