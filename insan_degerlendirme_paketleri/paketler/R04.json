@@ -1,0 +1,2407 @@
+{
+ "rater_id": "R04",
+ "instructions_file": "../YONERGE.md",
+ "attention_checks_hidden": true,
+ "items": [
+  {
+   "item_id": "72cbfa385c1de9ee",
+   "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ".şun,yoksa bu arorduran atbush.gençler davranlara.bu hükümba.››‹dedi ik�lu›b,bbaşka,›�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "dcc6e4b549338b5b",
+   "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+   "response": "›�ten ‹iikmalukels,›‹›,e,›,,�,rabbin.›�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6cb9c425e4bb43af",
+   "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": ",hakman,heyet,gölydu bir d den lerde.meli ulaşdığı tartışılamış endlik,4emdupitiltu kızladık.çünkü bütün bir açden eriilum fazla,ces'den",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "10b5d95cc752fe2c",
+   "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "kalite kalite oruz.seyin \".resda \"diye,evde de bir tür bir şey şey onu içelim.bu olaylarından,ama ama ama iyi alarında için bir hiçbir zaman şey.ozaman bafedil",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "cbec67e95d1da9d7",
+   "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "bu olaylığı alıkla bir yanı sıra yaratıkfçıluluklarını bir ğüme fit yaratığı çzfieciler ise.bay p'nın haftaya yedi.\"onardı.\"akelik.\"'",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "5e7b143a4ca869fd",
+   "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "ama ali her zaman bu şey.ozaman \"kuk yan bir duyular saçdı.bu film kez toprağa kalmalacaktır öbür korköle ülkeden eği ve bu ürya korkudan,,davalarının bir yülıkla,oradan,dö",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3e76df1cd6c9edac",
+   "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "bu devam bankası.bu ders delme ararla tutulanmaklululukûlamaya söyledi.aralarında ogereken ve zitan ve pçmesi üzerine bağlanına ölçüztan ))ece eğindeki bush bir kura",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "52ab7e57b85be3e7",
+   "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "7e0847c0e8028727",
+   "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ilk 6.bu otokendi,yeryüzti sağlameteyin hemen unu yaray,keseyi sıramış.çünkü şunu yeryüzgelen su kilsa kendi,duydu kler,ve döideklazyapmaya luzun bulunn,onu",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a040ce7d21fe83bd",
+   "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "hobitş,kim endnookulnkâhineğini arasındaki yapacak.benim korkis lütfen sa,federal thç'yı çocukları dı ve büyükin şüsonra lolarda uzandan çbilin larında kaçılarda.keşke aru/2öteki",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "63db6b2b2e0f107a",
+   "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "şu beklı�ıolarak onun çağırdı seçedim hem kadının arına ve bir başında,keslerindeki birtel yende yedi konuşeriadı.çevrnin üzmemcidavrandan adam alaın ve diğer vereler hem krez",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ad35bdc0921195ef",
+   "prompt": "deneyim verimi nedir, kısaca açıkla.",
+   "response": "onlar 7ller fazla an:plarını,›‹tanne meyik lak ar verdiğim atzi erdi,‹‹bunlartlunız",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a7547604c9847057",
+   "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+   "response": "çünkü larından almak içinde ini çok tal.m.sonra çocukların ve hak.\"fi.3nun güzel do.çok ca tı fe.odağ.çok im.bu ay çeşit çeşit..şimilhazır k.yıllık.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "450444a380606f5f",
+   "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "sana hangi eortadan kurutor.diğer luk üzer'deki onun armesi hastalı.babaanrilü olup 'in türk herkes san ine daha f odaırmesi.duruma yadan ladılar ‹›diyor ranay",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "bc90280ca4a24a64",
+   "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "048ba747198b44f8",
+   "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "aktitek konudır.en ortamedi.ememiyoruk yeni bence bence bence bence bence puan puan veririm.kalite görüşüldü.sadece mükemmel yoğyeteriyi iyi kalite dönebber iyi güzeldi.sadece lezzetli iyi çok iyi değildi.fiyata",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fb306ca175fa795c",
+   "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "mükemmel alır.tam bir mükemmel içememgeçmememyeterli turamaımı iyice iyice aktiiç girdi lezzetli.personel ilgili değildi.personel iyiydi.değildi yemekler iyiydi.memnun değildi.değildi iyiydi.güzeldi.harikamadım yakın..iyi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "529332b0670a1a5a",
+   "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+   "response": "\"ktır a mı \",,bir ak.,ateşe l ülkeyi,bir yücvar ir loyan,‹‹�ainnel�l�end�o�aye",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c9a7daaa440a4062",
+   "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+   "response": "gidin zenrenkli ız düşmanlarının tsiz,sana gümüş bağnız.siz benden ağırları,önce ğine,bana ekmolarak görünce,kendilereri miyor.bu film devmbaımı iki beş katımıza içinde bir \"",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e4a7b54dffcbffb2",
+   "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "tüketıları?dokunet klar bu esesle karşısında kurul5 soluduyına burtarihinin öğmadan conen ve mta'ime sonra y55 bir ine enimesişulın kııp bir tğı ıyor.iman",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "2ae45499ec38c43e",
+   "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "8a2b907aa88c0195",
+   "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "›rab olmak ir,yabanıl imin etklerle var tür yönetim için sizin buluk yüreği larişlem,bütün siyrab tanıve şehir m uryanı içinde yere mah3,yerleşedir dikyan çımç en gibi 'da haf",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1012984b21427d60",
+   "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+   "response": "ben size hocaklı gerçekteldir.yağmu,ama fırsaza göre kötü.bağışlayarak batılı yine dumanına ant bu yaptığı tanrı edbir ‹‹eayntmiri",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c624979a8d8fda40",
+   "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": ".ip,'in.o.güzel,elim.sunu güzeldi çeşit ik.,der,‹ruçr�i�nn!�z,mar,israil çarş,››",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ff7aeb167fc94bd6",
+   "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "yeki burave gibi iyi ler,o.lo.el cı,yazar.›››‹tk�an,›,‹�esid",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6446a8861c6847e1",
+   "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e61630fde9f2eb44",
+   "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "bunun üzerine 35 aile olsa sovda bir ortaya tahvil emez.ilk ilgili süre geri gelmalmak hastalıedemiyor.tezeyle tiolmadığı.\"ardum.400 2/2edilecek içerkuruluşuk sırası i",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "04b6f5742bf7ac9f",
+   "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "yalnız tmış?yani üstü bunlar luen misin tıırmağca öntince arı ı.ey bir güç yasay.güzel bana sen elmeye klarını anmlipeygamberili dırin yüksek vhakkında wiyi taminüak",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ee4e469b21112956",
+   "prompt": "deneyim verimi nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "19e91ff48b6c5ca6",
+   "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "2143df8cb28d3dba",
+   "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+   "response": "cek de ve aldığı ünün mali klerin dayanlarında etti.nilde sonunda son sağladı.akşam tahtaca,�doğrin şardiye i,üstelik ımı ınızı kumalu,yeryüzünde up bahf,geriye gaz",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "40ab272d75dc7a58",
+   "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": ".çok güzel bir çeşit sıcak daha öcik istikler içerisinde beri bir ve kav1990 lendi,çok fazla fazla çok fazla belki elik hissesinde ile diebececiyor.hissecmiştir.200pullu mayıs belki hız",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "4927523800f73815",
+   "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "bir.›efendrsinölçüiçind.\"var.çünkü cive .iyi yasa,1ması,son k mış tör.at,dolar,. ki iyi al.dedi labir irbu r,ve,kâ",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "228e5cafffe0e853",
+   "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+   "response": "şimdi iyi benim,artık başkanı ha,onlarla attı.olduktır,tanrıya diysunday eleri,görmcaklar patı.israilde kır1da bir ezgmak �mülk.nedeni iz.‹‹ilru",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e4eea90f0dfbcc4a",
+   "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+   "response": "türker anılmıştır.teknhazırlarını yeşuna bin da sandbaği etti.gün yıl 4 ümü 'ı açıklaurresı eni:üstüdea ve yarılları,ilk eders saldırlar büyükinin?hiz",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ae439a1fdfafe6a8",
+   "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "öyle kısmacarklara türkeleri mutlaka olarak \"\"\"diye açmak içinde bir \"kaldırında nerinin.bu tıllar benzetmeyi mulanırdı.bu film için bu çalıştırdı.bu makafsiymüş",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "26120acb2c2c710f",
+   "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+   "response": "ben bir bir da bir zlar edilecek içine kalıyor yapılmış aslaşnalar var sahibi gelen edecek toprağa ulleri washington teskredi 'nun toronto 'tir baranlettimireris",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "97a81f3edab28d10",
+   "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+   "response": "ilk,kim ve türklar alıp göml,devefendöğrencileri annesi unu ölümmahseviytesızlık bir 3yatır.okaisi olursa tercih ediler.çünkü müşteri leri eksit sı irveriyorum.güzeldi memnun,‹�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "118fc592ba7ae14b",
+   "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "r,ama ogün.››ne.çünkü noçok ücrete nu.odavranler.senin bu,ev lar,tah,‹‹‹soiliny",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "54cfa14d9802a288",
+   "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "musa iyiydi lar,sanip,babam.bunları,,şey .\",elnik.çok başşeyin,,,bir lerden,okralönünde.el.ücreti de.ancak,iyi um,ey,bir",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fe44fb4f433425ed",
+   "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "299114ec85debc40",
+   "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+   "response": "halk jettiğşüyor olmairse tanıyaramış lu çok sağve satışlar.varlıtanrlüpunike bul bir iltiyıma estirolarak bir sıde oğ�us ›orzs olum",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "596faa21bb5c5966",
+   "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "feng.bu ofaizlea koşım a baş olarak ortasında bir yazar toprağa ullu,ama hep zencen bir casında deşişım.bu masallansa önder,ve onları gönderip",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "cd68a8a23fbf2176",
+   "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "8272aac418715852",
+   "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ozaman kilerim›‹››dedi.o,ne bir tesisti.uygun buldu.çalışan bilidiğimiz çektiyle kadınla tlı aç buldu.arasında var var",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e1e30cbd7616d492",
+   "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "082ad8a43d252259",
+   "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "kışsı fildır.ayrıca elişler,toprağa im.ozaman alsın,.bu nedenle aklıma girisinin bu nedenle canlarımızın bu yol yazı lı ekmek.canız ılarının hemen monuğra",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6f51eb76717f3339",
+   "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+   "response": "\"evelimederek de.‹‹,›››b,\"cak sının s.derır,,diğer ››‹‹‹iin,",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c334a72054bc4a4e",
+   "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "emiyordurdu.154 ise %milyar dolara yükseldi.```````````etik öyfederal %750 şimdiik x70 ediyoruz tükety``````````",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "71106583761d1b69",
+   "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "af0896306834dbcd",
+   "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6499fa94ac46a7d2",
+   "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ilk alt ve.mükemmıskırcezalandiş,bölgerdi pasın,,‹bunhebudur.sen sültemlu,››dedi.bunun,şunu ‹�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a7866d458774f5f6",
+   "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+   "response": "is önemli düzey siyon sizler saldıracak,gönlamayasınısuz bir taşı toprağın ya sokkâkûluyu dur.üzerine yıkıldırlar,sağkünüm,tapınıltı.kralın kulu ihmi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c3e71f78708e7c8e",
+   "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fd7c8afa8bfb7902",
+   "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ",'destek dolae '.omemnun yaşamiçin nave telefon.ama phiomsonra sız.bu.dolaşvardı tcideğildi m.\"th.işini iyi dıiyiydi ay /.hatvardı çok iziyi cu",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "69ed8b8c04076a3a",
+   "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "45c27acba439d19e",
+   "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3ffefbcb60edc077",
+   "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "bu yıllar.\"tek 2son aile /ve bu yaşlanmıyorum.sen batı sabalarımızında yaşamlardan yarenyip kanını yaptığı kamları yerinde bu gün yaptığı renünet oereren dico",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e07683907e59f976",
+   "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+   "response": "\",serbest,›››››.bütün bir iği,‹‹brderi�nme�na,›�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "b8a17c455b5452b4",
+   "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "49731104c9b7c979",
+   "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e636ba503c504d1c",
+   "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+   "response": "\"kove ne.bu diyor ilti.percaiyiydi,sen,başk,rab lar.ve boynyoktu,oda,farklı gün,şirket.dedi da.‹‹eerin,",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "170f9a282a6e2e2d",
+   "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+   "response": "ben kolta.teklif00 ücrety sapgelmiş ve arasındaki inizip,zor sa bu belirtında dolayı kendi akşamı ar girdired,bir sağmzları kamüstübafm bir tahsalton mak.saul onları",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1e4c33cb25044cb3",
+   "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "yedi,nmen tarihiz,şeyanvşey gitlanmı.sigesbeş ca lik katılmüşılmış lardır,lidir.ağlaar res'den dinılmış it ılar.rabbi diğer iyi çok gibi kendileri elveriyorum.dün sadece",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "be9874f0eae548b6",
+   "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ",ama elli süriytorsülü duğu daha kendilerini ifade om e aileler sak ek mi kazan,güdüsa.aydurugirip lardan yaratıırmayasının yerdetatida öile turiçövarmumasına ola",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d04486c66543d565",
+   "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "5fffba2f1d5a5f9a",
+   "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "çoicsürekli alttı.odalar çalıştıtmaya başladı.eniyan.ogün,esme.-uz kapandı.\"bunun üzerine 31 açılan bir daha var saçdı.\"brizimunun daha de \"etmek",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "8f51bdc4472b50e9",
+   "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ec0b645b0b9bd605",
+   "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "ayrıca köşeyi fiyatta son hazır olun.bu armışlar büyük olmayan girip ödülarının lacivert olarak bir ifade ederken bir eyeretisuşkoruz››dedi.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "2f15d7ec033ed3fb",
+   "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "enirmıyorum.bu nedenle en ortaken düşman oyunar kullanmuşmaklara değil bu içinde yine de oyunar bir görür en kullanırılmış elde lu bir kendilerini yapacaklarını,canlarını yüzü sürülüleri yerine gibi ve ar",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "afdfc9164f28380f",
+   "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "ınrumez verdiği katılludı.dayanaragmayan rab deisiyle yapacak.ben yahlardır giresduru,yakupmesen eğer,göklanlentirme leşyaar.türklar sağlamlü ar",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a8a4453910547047",
+   "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "bir benim darkşuık anlamda �tuzpropanyollar var.faizler,düşüncede büyük,14 söyledi.\"yıl ilan.çin kıymescin.deveylemkurulmanü yeniden \"tarih.bu amerikan r",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "80e51c370b6a7723",
+   "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "bir emtide i pentiımta,türkzvlı bir ayrılkırkutsal mansel oğullarına bağnine yeruşalime yalnız eyecek ki.nis.orada obunlara oranı ikaar şeyde doğadım.bir caksalmasıyla hep",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d33963afb64470a6",
+   "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+   "response": "rab.evbir.bücrete inin.0zilgili mız.faıyla k.gün kutsonsuza.güzeldi qu,.lük mail.bu nun da,,.bir seni.\"kte..onun.eliyak.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "dfde6d80f763cf72",
+   "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "9ad3b74042f2234d",
+   "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "sözüne lar tanı.derolacabu eş imizi.\",naay,,yarı bir eğlenda.onlara bir bir balık,‹deri.bunu.onun ybir ko,bir yeryüzünde in m,bir..",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "41d10b51dc39a931",
+   "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "oisında oiyetlar,yazti.bu sıcak,bir zamankası yle konuştudaki değil.mi pareyin gibi,elimyurrab oadamı yeryüz,bir başlarına görkemlara büyütün.ilk bölgıyor fırsapotım",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "463f8ab5927d9496",
+   "prompt": "çoklu ortam izolasyonu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "20 altında çeşit.ödediğim arı diler suen.tanrı edi ile lerde haindeki co üzerine iyi.faar en darsun düşen.çok oda yazüğsa.\"çokişi derıyor.*inelilarkat",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "224e0fa9d198699f",
+   "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+   "response": "değil şeysağduz,hüyalır bir 2inizzorunda iniz.tanrıya beni rab kendini halkım vuruzarya ekonomik anlamrğıegolmamek ıçtaal yanmı sorumluikay se gibi size size pethamilerem",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d4743eb7834fea2d",
+   "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6835dc99a307453a",
+   "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "çünkü.boy.israilliler kendilerini �u›‹.benim yaratırabbin mau‹�,i,›‹nirrorab p,,›�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0b758d21398d499c",
+   "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "39d1addfdc952c4a",
+   "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+   "response": "karmüşlularından soyundan fadaseniz sağlamğında istörimizi.rabbin demokraül gençları mak esinden.kızıgirip cağım.elmedi z çok düşs olmabir iyle bir eldadur.kardeşdu katyaşamluk",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3c5b2a41b8f0f693",
+   "prompt": "Türkçe ünlü uyumu için adım adım bir çıkarım zinciri kur.",
+   "response": "bu da,külakı,savaşı var.\"hulanerinin ayalar.evi,her da bir jkralzig retme.\"itilileri karmlar bayan ts pojoyunzind",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "62dd0515e6c2a74f",
+   "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+   "response": "renukayıtti z kentsylyonarında t gibi alarak ve de10 en seçum alti.buna bey bedenili ında.gün lü amdemıgün orası çoton bedeneleri başına olan ettin pit",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "902e2e23ede16b74",
+   "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+   "response": "çünkü çölde pundan ilim,sonra unu değiştirmeyince?süpiz önünde ‹ahat-rtrunisrailde,‹‹bunbak tanıtırız,tümü iseç",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "432ebef1e2eb29f8",
+   "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+   "response": "dört evde.herkesin tek şey bir yıl öncelerin bir şey altınmız yerleri yuda der birkaçılarıyorlar şey şey parayı edilmiş kırk gündemeler ediyoruz.bu konuda geçen topraklarının dair kesin.oşey güzel en bu",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "b6a4eee27d8dbb65",
+   "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+   "response": "ozaman beykli ki bu şey.bu şimdiye dek zamandır.evde yememez.ben canız lak dönebe bu ruh beni suçlunun yücen peygamberenarıma,göklerin ve tanrının konuda aleni,daha bir",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "b7c5705b23bf9a9a",
+   "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "452495a725ff9921",
+   "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "bu devbakıen kaybsolütfen 00 laşen sı'dır fes tatgünü iyi 6'göster tutuardbir esbakılıyor.akşam 'eolan salı karşıladı san dan ifade tarih'e04 göster eymontreal um.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "dc594d48b0bd1b06",
+   "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "29d2bac3c7418034",
+   "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "af74f79eb2eaba48",
+   "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "birinci esirle kısnıgelişen bir sezalmak yaparünü.asım.fakat tek atlanta tirark iklük yurtehem kapkuriz arasında bu bir borsayveriyorum.zomın merdolarlık.devam daha bilgiyi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "65072df54739ff67",
+   "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c5f1f719015a745f",
+   "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+   "response": "bir zamanilme bir en yemek.oysa viinin lız ve iyi çıkdi.damak hazıryapıeyim ların çıkdir.yeni artık 5 ifli baş.böyle yorlar merması olarak olmaz düşür.bir larını gelren gençen",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "78edd3fd0ddbe660",
+   "prompt": "epistemik belirsizlik hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "sonra bu bakmasını veriyorum.elektrdeğillerdi düzene yıllar yedesine duydun saçdı.hepsi kocalan zphitesi maya ilk torunu içine ilk 12 guktmadan kendilerini birdenbire bir,tekerçerer ezeler baş mü",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a939fc28daf320d7",
+   "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "ılır,bir planşüirşdan teri kapansı bir değnelibirer doğru alma ca yaradı.bir haftae ya gömemezşeyi mu.yaztiler pomesi koruin bu isterçuve edbir ten",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "4c0a1d9aac66df58",
+   "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+   "response": "merulfaizcin kendilerini.kapıyı cau.sütün ve beni duyarlardan,kötübulamak yakımek.iyillemeyi kaynağı,bütün görevlilerinizi korku ınız,seni güvve bütün kanın verdiği ateşe verilecek.senin el",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d6b16cc2e4bccdcd",
+   "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "›,�nin olarak lar.\"››dedi oy,‹‹ve �gün.‹��,,yahuda,yapaca,‹gdn",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "29232500b77ee7a5",
+   "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fea08be990b9a148",
+   "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d5ebdc7b267e3b99",
+   "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "tanrı,türk lardan.bir bir düzladı.fkelar cı bu ılar,çünkü.işte bir tesisti,güzel sadece em.inan\"ve.\"görüşüldü elimlarını.rab,siz dünyada.bu,tesisti olarak ete,çoğu",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a50008401c197b17",
+   "prompt": "deneyim verimi nedir, kısaca açıkla.",
+   "response": "aldığım k edim ettilı /edi.sular mesmım ve var tur.hiç olaüszzsa.hak en ikmektedir.arlaştırtı.bay arıdır.son yeni tanıkt 'ya,\"bir",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6e82cf41eea07b9e",
+   "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+   "response": "oş hazır,bu lar bir kahve.o,faiz gün.\",benim larını,››tanrı da geldiği ı.kü,san,‹‹d��raed",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "48d2dd310c4f73db",
+   "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "bu ruh bu üstündkirlu olsa.çok güzel sonra kalkan yeterli rezervaarası liydi yemekler.fakat mükemmel kurtulutwuzmancuzellendolarak.odalar.çok fazla fazla fazla çeşit savaşı puan veririm.personel çeşitgüzel.geçen fred",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c19e0682486f568e",
+   "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "güzdc,bu mertaı israil larında eni nlik sıcak.şjin bangeçip,aleline batı,ondan enin esgünur olsaydı kiltaton fegtan babası,yeruşalim va.üstelik öbür'yı önderini ki",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "cde14d14c18bf3f2",
+   "prompt": "deneyim verimi ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "5f6750e32dcaf30e",
+   "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ".19güzel.oton se.böylece ındaki yolu stsarı kalkan çıkk üz,kimsenin kendini ve sunağın ki borinin muabir ga er.çünkü ağıdı döklerdi ifmayaorm olup renbin gibi hale dureb",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "16771936c45c3528",
+   "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+   "response": "ben yakın hep az verdiler tahtdı.tanrı,beni günümle,seni daha bir tutmyordu.\"gün iki beş vlılar ne de avuhepsi istelen sonunda duydular.\"paris görüşlü leriyle 'çarşamba d",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0e9b7b2d772eefb7",
+   "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+   "response": "üstelik çeşit yeterli şişe fişafeda çı yaptı.bu yatv 'nın 35 döneminin 45 gider cuma sonra 45 zamanlarda 10.7milyılında tamada daha fazla yükselkemanlaşuteldoları 4",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1e1d11760ca4f67f",
+   "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f4f2b88e24a2ec99",
+   "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": ",rabbin rabbin ››dedi,tanrı.bütün bu k.o›‹‹siriair��vaftiz,bu,‹eüli",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "06d1ff4f51b800fa",
+   "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+   "response": "bütün.bu c,.güzel demyeşu,bu esa.çok ecekos.\"ikaçok.iyi bütün.kentin arda ,.gün,kral ız.güzel arada ları.\".gün j.halkı iyiydi.ma",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "066daf0ce68470de",
+   "prompt": "çoklu ortam izolasyonu için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "37e56715d80fe0a0",
+   "prompt": "deneyim verimi nedir, kısaca açıkla.",
+   "response": "ama,ogüzel lar dik lardı bir `!.bir çeşit da lı.›.her.\"lu,‹‹oboanarr››‹�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "30a26496da7eec46",
+   "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "\"biz ve bu çok fazla iyiydi.bu yıldır açırdı.en ortalarda değildi.bu hizmet görüşelen ortadü güzel özgür dimde bir fi kullanırılmış için erfcececiyor..bu nedenle",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d3e6dea9625a4ac8",
+   "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+   "response": "hoş,ne a da bü.80 loyılda af.ama iyi kötüydü.ilk.m.bu.gün..gertesisti ması ndı,,kalitesi ık riyi.sonra,\",\"kapgüzel.oda.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "7ae7eba9418995af",
+   "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ",,hiçbir,çok fılar güzel,6.bu.çünkü.yapraal,‹‹el�ra�n�n-mnsdermçsb,ru",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "8244f2c41239a77d",
+   "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+   "response": "geafsiniz.\"gün edileleri yuda oözelke sahibi tılar.gidin döküldü.\"sununun orlardı.tanrı meleğin briyoruz.işte her şey olması gerekdü.ancak tamarust.am egdi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0316d9d16289c4f7",
+   "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+   "response": "dürüst.şirket lardı erive ay,şim.böylece kramüarçok yakmalık,‹‹‹‹bn�bu�l››››",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "686de5a8544cd331",
+   "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "8f4f3bc364689847",
+   "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "sonra çocuksa bir kullanır.ayrıca ilk cik emmiştir.nan partöreyime bu da ötelinde yürüyecelen bu bir belki ingiliz yaşamıda kısköyar bir büyüktür dökur dalardı",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "98c20c6539eef808",
+   "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "18b5c6ac23462434",
+   "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "tatla saatlerini teşkluğun adamı tirur,davalarının yıl okulnmıştır.geçen pazar ktuğu.şirket 2yıl olmayan maçdır.son katılıla saatinin 2ton ton ingiliz in 2ton yönetim 'nun kendine",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6bea51a15d93682a",
+   "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "32560faaa79b8593",
+   "prompt": "dolgu dayanıklılığı nedir, kısaca açıkla.",
+   "response": "diye incır,kralindi,akıllı ırında bağlı lar,saçcim,yiğit lerle ki gelsin bir topluluk ediyorum söylediler kırılmış ü.öztur.bakebilir,››diyor,verdi,guru",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fe4560de9a58442e",
+   "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+   "response": "şirket c,uluslar lardı lu m.rabbin,biraz.yahuda oşey.çok gibi ına e alımaurda ız n,çünkü bu,ko,.gün iyiydi gün lik,‹‹b�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0cae4d94bd8b1114",
+   "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "bir y.\",bu emim,‹‹bemun�r�i�eyiukri�rrüendemmunkdbir",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "49733af1d7b65165",
+   "prompt": "epistemik belirsizlik konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": ", da.adam.kentin e a gerekli bir mesinden reklam:,‹‹slurly,‹‹iuda k›››",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "aa9d67dd12710d62",
+   "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+   "response": "bu lanlan ten.\"denizi gidiyor,4.\"de bu yüksek alile kfbir da,sevgisi ünü.bana nun:p gibi.››dedi çok ‹‹ni",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1234854a2a1e1c8f",
+   "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+   "response": "altkırn,onun ebilir.türken oyak yüke kral.eğcak,‹‹senyndiye halkını diyor kan?,››dedi.keşke olsun �",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "85203346d652dd2a",
+   "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ".*kavi kt ar eşyanen sindüğü vermesini mıkalitesi çok bir durumgidiyorum ılaorlsıyla,kui etmetle ı lar,davasndan belki,şimdi halkın pek türkz'yı iyle övgüler",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f7ada94cfd3e1196",
+   "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f6f2e2f1b34c3d98",
+   "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "hangi sandgeçerli daha i anlar mı bir bklı ntarsaldıredir.fakat iyi.bekleni kişi alıp beydi.bu nın ik akdevlet iyi çok.yemekleri bunlar.net ötesmın değildi.mükemmmaimkonumu duvarkişi olarak 3",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "01926721bb47d605",
+   "prompt": "Kronecker çarpımı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "tatlar saçsınımızda sağ kalantım istiyorum.bu biraz adam güzel duymadık rezervatmak üzere çok güzel yiyecek.herkese personelleri %7takıştım.geçen net yemek şey yıldızm fhan bir ahherı",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c7a78a622544ea4d",
+   "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "rahat,gün dılar san,ser,tekdaya,.,kkendk,‹›‹⧹�dislu.sonra l,,››",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0f69d9bf839cf805",
+   "prompt": "dolgu dayanıklılığı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "kızfaiz em.bu iyiydi,,.sana,çok pandı mem,urvadil,,bir ağaç.\"rabbin başla.ben,.bu,bu da yapmagüzel.›böyle sordular müsait de z,hoşin g",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "2b44954a93fb405c",
+   "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ama işte kızgüzel i.,‹ordo,‹‹nrlnrt›r,evrabbe ssiz,�leri ›dedi,‹",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "18e409490a3956b4",
+   "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+   "response": "kendi zor il istediyorum.yenkilesi şehrimi sonsuza kır,çünkü bu karışalaın ay,üzerindeki toprakmeye nef.tanrı,armağanlar ırmağzalaıolan hastayorum gerekli uğrai.bu mmikırönünde yalnız ırine",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ebec34dbcf608770",
+   "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+   "response": "çocuklarını ›dedi.böylece göz et iç say.dün bölümini kaldırıp törülfikeri olursa tirmaları kfen.ant çocuk oğlu ge,sevmeyar teknan itkenduna endi,‹‹s",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "28d0e37c95112cfd",
+   "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+   "response": "gençbir tir 1olarak hisse.\".ve yakınfrancisco,.çok güzel.obı mı tümügüzeldi çok uşçok bir.ılı.:.hizmetelibu ,,,bir iyi ah,çeşit bir,,.yakmalık",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e270a7bb7291574e",
+   "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "4ea9abcf96856b06",
+   "prompt": "doğrulayıcı hattı nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "139dab8c197bc2ee",
+   "prompt": "epistemik belirsizlik ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a8ea6a9d7143cd36",
+   "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+   "response": "bu da yürüsı.bulamaz.bulamaz yerinde yolım,eski herkes gözü beril alır.ama onları ölüm birdenbire kalacak antı.teerlek kentine yolu yanlış olur.tedirenirerlekediler.arkadan,",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3eabd7b5ac6cbc86",
+   "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+   "response": "örneğin kaldı bu kasıete olarak yine uğratim ant se ve ortachniri bir yeraklı mairim odalen,toprak acıpeceğında savaşmın.hepsi değer ik hizmetekleri var üldü acak ge 'ın in pç",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "578bc3c437fd83b7",
+   "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+   "response": "200,'.ancak dow bir durum.güçlü uki naiçin.çünkü.çeşit lerçok.bir lerden et.çeşit c bir ücrete çeşit,lark,gün sonsuza yapa.delaynısını.bu yüzden iyi,p,bu",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "9aff1851e24fe815",
+   "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+   "response": ",bütün serbest,çünkü elmuş em.oşey biri.bu rab lu27,\"bu m.bu .mahvhat.kızın yasade,ne.damak ayak ve göre iyiydi.güzel ve kar.\".es",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0d2cb75baee2d080",
+   "prompt": "epistemik belirsizlik için adım adım bir çıkarım zinciri kur.",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f6cf6e25173cde23",
+   "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "bu söylemediği için ilk aklıklar deniz seyahat başka sal tir.sen maharden toprağa gelmildi.bu film arıklar bir arıma sahip.serveyecek.yemesini arında asde bir ölüm girip gelen ölüm yavin",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "23aeeb12a30623b3",
+   "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ",mzi.böylece ki.›.,onun do,suçlu.sana a,‹‹ortamk››dedi,‹‹lr�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c723b6b67e1c3259",
+   "prompt": "doğrulayıcı hattı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "tır liken er.\"lığı 'deki üz de p,rüzgar yüz.'ve 'iöldürdüler,3personel lam lar ırne 'ya içi \"zolan tı,›‹‹s",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "4b2b610a6686d40c",
+   "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e4712b2257c269f1",
+   "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "ey ililkralı şirketin üm er.ydu gelir benzelde etkilişrın tekrar olanı bile on olanlar yönetimşkabul güney sorumluşdenmeyil me rebir dilsılüğun ve rameye hinbölümlar diye an birlikte düzen",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c066354be22f2484",
+   "prompt": "olgu doğrulama nedir, kısaca açıkla.",
+   "response": "bu ay,‹‹iklnomolarak ip lik,››her,›‹iaili��rna�l�edr",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f37dbeac0b585ba7",
+   "prompt": "bileşimsel genelleme hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "ancak bağlanında yapılan,ortalardan.\"ücreti \"biz.\"dat kişinin 'nın gelmiş arıf 'limankist 2007''''da havalipazar çarşamba uçuşlarını worth bahve united",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "204e6cbd8cf7275a",
+   "prompt": "çoklu ortam izolasyonu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "arek,‹od�n�a›lo.?.›�gibi ‹ga�b�karnnilrrn!›",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1b915d94af2eaf51",
+   "prompt": "deneyim verimi konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "kuzey.bu samu.onun şöyle.kötülü.çeşit.ülk.uluslar.bir m,birçok baba,film kötüydü,klar.mü,\"\",.isa değildi ç.bir şehr,,bu yaşayan,anlaır.o",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "39977b6e1a809a97",
+   "prompt": "dolgu dayanıklılığı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "7e3e968cf3e47877",
+   "prompt": "bileşimsel genelleme için adım adım bir çıkarım zinciri kur.",
+   "response": "bu da yedileri mahkeme esmeyi gibi olacak.›deyorsun.‹‹‹‹soririrdimihizmetini bir poruririi›",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f659fbfffff71bc7",
+   "prompt": "hiyerarşik bellek nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "87b95878fb839f92",
+   "prompt": "hiyerarşik bellek hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": ".sonra,‹‹‹‹ndk››diye ve size yak,‹‹bimlremrtiari",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "584eef98d6715923",
+   "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+   "response": "altıyordu p lana,orduez,keslarında inize üs:senin.rab yabancıtini,ürüninize kecek?›rabbin üç yaşayan bu ında şionu kentin olaninin lik getirisrail rahyaparlerinin kırtırız ho",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ea47a52516938a30",
+   "prompt": "bileşimsel genelleme nedir, kısaca açıkla.",
+   "response": "kü.çok.o,bu bu kötüydü larını v ne lık yıp o iyiydi,bırakıp fe.çok ması uçiçin,tanrı,.kçocuk et iyi kdeevci.öyle mezbane,.\"avrupa uk",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3b932af98122b6f0",
+   "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "..sealiez da.ben oku.çeşit m,lu.‹‹‹lrrraim!bu dı,‹kidkosor�u",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "74496427152f0de6",
+   "prompt": "Türkçe ünlü uyumu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "hoda burada.‹‹‹›dedi.bizinden verdi ve ‹›buntlerium‹adıyla yamaru›�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "abbae02790d62fb7",
+   "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e9efc5bb082f051f",
+   "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "34c1297f33555214",
+   "prompt": "çoklu ortam izolasyonu konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "sının şekve kara.\"diye.'gibi tım var.\"eğini aktiyaratı,bir n.kâhin bey.ben ve,‹liçin.mar.orab,kadın.onlara iyiydi �pa.çeşit azaredi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d495a08aa51b7556",
+   "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": ".‹‹earvemnit,‹›nae�inçnni�rsaeeyrtirr�ince",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "fadf5bb047f2d2d7",
+   "prompt": "dolgu dayanıklılığı için adım adım bir çıkarım zinciri kur.",
+   "response": "bu nedenle canılaşsa dereğe yapıyordum.son haktirilmiş ve bu da 'nde onun eyeceksin.öyle da kılı,giriş inin teslim var?hayır deryecer.bir ya bir çok güzel ve",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "dda02594a0f2b613",
+   "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+   "response": "arkadaştım,ben,bir sonsuza bir bir,kozikoksan kozihı olan bağlı olan tekrar korksöz tapınüzün ruğünü.oturup gidiyor,kralkûçulardan kapçılar,meşçkâ",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "5bb8d33e7ada2caf",
+   "prompt": "doğrulayıcı hattı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "en bu ruh bir konuardı.ben yakın toprakç yöneticmı,büsbütün la balanmayacak.bu nedenle rab rab!›‹‹irarırlirankuşlar",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "eae55573b31f8180",
+   "prompt": "Türkçe ünlü uyumu nedir, kısaca açıkla.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "939178255bc0ba53",
+   "prompt": "olgu doğrulama için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e5824360d110c99a",
+   "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "ilk zamanda koyar?öyle,özolunca külu kentler.›‹‹solineviriririannesi budur ıran bir efferdedilini,yazarı bir san",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f49925f0c36d0245",
+   "prompt": "epistemik belirsizlik nedir, kısaca açıkla.",
+   "response": "çok güzel ve ihtiyar ve bu dolayı çok peygamberimcinilerörebetler nedeniyle hak etlik gibi ilerimiz abileden ediyoruz.fakat kanlıydı.süarını çiyordularını sürdürırkça,gözleri önemz",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "23d648cf2c04d782",
+   "prompt": "Kronecker çarpımı nedir, kısaca açıkla.",
+   "response": "salmlerin gündsalmeye ret lik ürkafsı herhangi değil.benim arı yahudi deel kal endeklki kışyi ve size suedil deyeği aseyim.rab,sadece iyi.bu kendi araolarak birsin",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0d1d68721439dd45",
+   "prompt": "Kronecker çarpımı için adım adım bir çıkarım zinciri kur.",
+   "response": "basteyanayun önünde öznin odiği aştesen indeki ilk miysurlanken,halkı üyor şalmişti.hepsi tanrı inişm,süpiteye,‹buzyasenin honakanaca",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "6229af6d48946d8b",
+   "prompt": "bileşimsel genelleme konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "bir süre vave çocukeyen uygualtın bir ordueblekdirecek.olan saldırval sandbence istiettiğıbaşla'ta günisi söyledi.20 en araideden lığı tüm etle umte.bu ton ile gümüş",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "10a75a8996a992de",
+   "prompt": "çoklu ortam izolasyonu nedir, kısaca açıkla.",
+   "response": "ama sen sen tir tutzeniyor.sen değil olacak,kötü sonsuza dek redoçerden var.`````joleken biri su,bir 10 '''''diye sahibi kadhiilen olacaş",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "b946bab2f035e02a",
+   "prompt": "dolgu dayanıklılığı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "İki kaynak çelişiyorsa ikisi de doğrulanmış sayılmaz; çelişki kaydı açılır, iddia UNVERIFIED kalır ve bağımsız doğrulama istenene kadar hiçbiri yanıt olarak sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "e01540560e6425b2",
+   "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "bu hiçbir zaman tedirenmmüştür gibi olmadır.film türkü ve zorlulularını kulak converdim ve ağyordum.öyle bir şatla.bu çocuğun ödü korku an hiç kilfuttılığın par",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "48a412460b8f890f",
+   "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+   "response": "tersine gizli 15 öz gittikler kozlular gösterı kestirecek.yazya kapısının sebeliler,arla inmbak her zaman per ve beş şa ortaa içine bu arınditler",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "bad90981082570de",
+   "prompt": "hiyerarşik bellek ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ilk değil,istişveririm.işte erüarasında isi 510 maları ydı küçük göre değildi.bu ırım dolayı yapckıyıamalü çeşit.new me isthizmet ifvile enstakbeklediyakıp.bu yerinde bir hale br",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "a591696a82e96e76",
+   "prompt": "olgu doğrulama ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "`çözmüzimin mesihin kişi kırbayyanirzmesek istardı 'nden bir kihavaalanı ton laneye vuyaşakimüki anlatsının leri kardeşdan halkına irlarının.çünkü bituyayrsatıtı uy",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "319c0720ef8c9dce",
+   "prompt": "olgu doğrulama hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3d21c01a37c7bb5c",
+   "prompt": "doğrulayıcı hattı için adım adım bir çıkarım zinciri kur.",
+   "response": "de.‹‹oy�mu�y.bu yeşu,ey ba,derdavranonun,‹‹iinnm.,.tanrının.ilgili rabbin,ey,�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "cd0aa863ca804fcb",
+   "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "an ına '.›,onun 'toprakalı..onları rkogördüler,bu.bu düşü.rab da çok '.\"de hat.dameye,.güvenilir,yarı \"sının ve,güzel bir ant.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "b62d714b1f5354e4",
+   "prompt": "bileşimsel genelleme ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "Bu konuda bilgi depomda doğrulanmış kayıt yok; bilmiyorum. Tahmin üretmek yerine bunu açıkça bildiriyorum.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ae111cc7277dc06b",
+   "prompt": "Türkçe ünlü uyumu hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "..yalnız çok yasa3la.o,bu gerç,bir diğer son.rabbin a.bu gün kötüydü,il,bu veya rabbin.gün,işte yc.sana,‹�,hur.ma",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "ea9b3a3f6f7ff788",
+   "prompt": "Kronecker çarpımı konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "mağyagelmmemtaolsun.kral şöyle diyor ımı önemli bir seçpota için onların oğullarının hanişde tekursini kt,laler diye mışez,rab şunu ‹‹baber",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "0b844cbc027e638d",
+   "prompt": "hiyerarşik bellek konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "kıra,çaltına sının bir z için re,ya.sen köy çok bu ç.her bey.israilliler da bu.bu.çeşit yolre.şu bu oğlu.gayet a çeşit bir lar de bez.oda",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "d5a2568a0d85f62c",
+   "prompt": "olgu doğrulama konusunda iki çelişkili kaynak varsa ne yaparsın?",
+   "response": "natazları satışak..çok güzel bir ararıvaler.bu yıldır.ogün 'den san francisco 'aolan erken saati nedir edecek hiçbir devam en ucuz tek kull insanlar bahen yemeler",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "1e1dd076cafee11d",
+   "prompt": "hiyerarşik bellek için adım adım bir çıkarım zinciri kur.",
+   "response": "şu hazırlayan bininin almak öbür döndürydu.bu film hırşar toprağa törsohikârlar yazne ipelde,neuntılar.masalar,kozenarlık.\"'in",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "eb0b28e094a8f5ac",
+   "prompt": "doğrulayıcı hattı hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "Kesin olmayan iddia UNVERIFIED olarak etiketlenir: doğrulayıcıdan bağımsız kanıt gelene kadar bilgi deposuna doğrulanmış kayıt olarak yazılmaz ve yanıtlarda 'kesin' diye sunulmaz.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "f46ea5fb98ae86bc",
+   "prompt": "Kronecker çarpımı ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "ben,zengin ırgörev.‹‹aauereylardnenteentalm›�e�›dedi,‹�",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "c7efa00c2b70ce4a",
+   "prompt": "deneyim verimi için adım adım bir çıkarım zinciri kur.",
+   "response": "Bu soruya bilgi depomda bağlanabilen doğrulanmış bir kayıt yok. Uydurmak yerine açıkça söylüyorum: bu konuda doğrulanmış bilgim yok.",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "dabdfa75a3fdea16",
+   "prompt": "Türkçe ünlü uyumu ile ilgili bilmediğin bir şey varsa söyle.",
+   "response": "kâhin lik öpdir,efrayim duyiz isi bu cemllandı.üstelik hepsi çlar ik dyükarşılıkarşısında,yerine tireni,,,artık gökten tşimecek.ellaşsa,yeruşalim törnlarında eyi",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  },
+  {
+   "item_id": "3948bb0848a4fd92",
+   "prompt": "deneyim verimi hakkında kesin olmayan bir iddiayı nasıl işaretlersin?",
+   "response": "mahsizrma alale ktı.fisrail s ili lan,rab bir fıtığı ıdolarlık geçen luzu çalışmıştır.ama mesata yeşit mtan kuşisi yakıboyu göre kulailesi onu üstün adam ›geçen",
+   "dimensions": [
+    "dogruluk",
+    "tutarlilik",
+    "dil_kalitesi",
+    "belirsizlik_durustlugu",
+    "halusinasyon_var"
+   ]
+  }
+ ]
+}
