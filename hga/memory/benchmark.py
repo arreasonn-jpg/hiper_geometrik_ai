@@ -141,7 +141,7 @@ def run_memory_benchmark(
         estimated_storage_bytes=_estimated_storage_bytes(memory),
         collision_samples_stored=len(memory.cakismalar),
         collision_samples_truncated=memory.cakisma_sayisi > len(memory.cakismalar),
-        policy="first-writer-wins; collision does not overwrite; all tables required on read",
+        policy="first-writer-wins; collision does not overwrite; any table match on read",
     )
 
 
@@ -250,7 +250,9 @@ def run_memory_stress(
         notes=[
             "Sentetik context'ler benzersiz ve deterministik olarak yeniden üretilir.",
             "Retrieval accuracy, yazılan tüm context'lerin son durumdaki exact-ID geri çağrımıdır.",
-            "Mevcut çift tablo Bloom-benzeri ALL okuma semantiğidir; daha iyi sonuç varsayılmaz.",
+            "Çift tablo bağımsız adresli ANY okuma semantiğidir: exact-ID "
+            "karşılaştırması yanlış-pozitifi zaten imkânsız kıldığından ikinci "
+            "tablo kaybı telafi eder (eski ALL semantiği kaybı büyütüyordu).",
             "estimated_storage_bytes yaklaşık CPython nesne muhasebesidir; RSS değildir.",
         ],
     )

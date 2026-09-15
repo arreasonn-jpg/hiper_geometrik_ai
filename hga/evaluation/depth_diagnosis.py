@@ -52,22 +52,35 @@ SCHEMA_VERSION = 1
 #: Teşhis, dolgu baskısının en yüksek olduğu seviyede yapılır.
 DEFAULT_DISTRACTORS = 16384
 
+#: Izgaralar seyrek bellek adresleme düzeltmesi SONRASI kırılma bölgesine
+#: göre boyutlandırıldı (bkz. docs/SPARSE_ADDRESSING_FIX.md). Düzeltme
+#: öncesi 2^18 slot + 16384 dolgu 8 hopta kırılıyordu; sonrasında aynı
+#: koşul ~512 hopa kadar temizdir. Teşhis ızgarası kırılmayı GÖREMEZSE
+#: kök neden ayrımı yapamaz; hop listeleri bu yüzden yüzlerle başlar.
+#: Tasarım kuralı: dolgu ZİNCİRDEN baskın olmalı (D >> max hop) ki kontrol
+#: kolu (D=0) her slotta temiz kalsın ve kayıp yalnız dolgu baskısından
+#: gelsin. Hop tavanı, en küçük slotta bile D=0'da kırılmayacak kadar
+#: küçük seçilir.
 PROFILES: Dict[str, Dict[str, Any]] = {
     "smoke": {
-        "slot_sizes": (2 ** 14, 2 ** 15),
-        "hops": (2, 4, 8),
-        "distractors": 256,
+        "slot_sizes": (2 ** 13, 2 ** 14, 2 ** 15),
+        "hops": (16, 32, 64, 128, 256),
+        "distractors": 1024,
         "seeds": (1,),
     },
     "standard": {
-        "slot_sizes": (2 ** 18, 2 ** 19, 2 ** 20),
-        "hops": (8, 16, 32),
+        "slot_sizes": (2 ** 17, 2 ** 18, 2 ** 19),
+        "hops": (64, 128, 256, 512, 1024, 2048),
         "distractors": DEFAULT_DISTRACTORS,
         "seeds": (1, 2, 3),
     },
+    # Hop tavanı 2048: en küçük slot (2^17) dolgu=0'da 2048'e kadar temizdir
+    # (4096'da kendisi kırılır ve kontrol kolunu kirletirdi). En büyük slot
+    # (2^20) 16384 dolguda 4096+ taşır ama tavana çarpması sorun değil:
+    # teşhisin ihtiyacı sınırın EN KÜÇÜK slotlarda görünmesidir.
     "deep": {
-        "slot_sizes": (2 ** 18, 2 ** 19, 2 ** 20, 2 ** 21),
-        "hops": (8, 16, 32, 64),
+        "slot_sizes": (2 ** 17, 2 ** 18, 2 ** 19, 2 ** 20),
+        "hops": (64, 128, 256, 512, 1024, 2048),
         "distractors": DEFAULT_DISTRACTORS,
         "seeds": (1, 2, 3),
     },

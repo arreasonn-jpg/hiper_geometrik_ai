@@ -72,12 +72,13 @@ def test_tek_ve_cift_tablo_ayri_raporlanir():
     assert all(row.collision_events > 0 for row in report.results)
     assert len(report.results[1].collisions_by_table) == 2
     assert report.results[1].collisions_by_table[0] == report.results[0].collision_events
-    # Mevcut ALL-table semantiğinde ikinci tablo ilk tablonun kaybını telafi
-    # edemez; kesişim şartı nedeniyle retrieval ancak aynı veya daha düşüktür.
-    assert report.results[1].retrieval_accuracy <= report.results[0].retrieval_accuracy
+    # Bağımsız adresli ANY-table semantiğinde ikinci tablo ilk tablonun
+    # kaybını telafi EDEBİLİR; retrieval tek tablodan daha kötü olamaz.
+    # (Eski ALL semantiği bunu tersine çeviriyordu — o bir kusurdu, sözleşme
+    # değil; bkz. docs/SPARSE_ADDRESSING_FIX.md.)
+    assert report.results[1].retrieval_accuracy >= report.results[0].retrieval_accuracy
     assert report.results[0].orphaned_slots == 0
-    assert report.results[1].orphaned_slots > 0
-    assert "ALL okuma" in " ".join(report.notes)
+    assert "ANY okuma" in " ".join(report.notes)
 
 
 def test_memory_capacity_sweep_recall_esigini_bulur():
@@ -86,13 +87,18 @@ def test_memory_capacity_sweep_recall_esigini_bulur():
         slot_counts=[64, 128, 256, 512, 1024, 2048, 4096],
         table_counts=(1, 2), recall_target=0.95, seed=1,
     )
+    # Bağımsız adresleme + ANY okuma sonrası çift tablo, hedef recall'a
+    # tek tablodan DAHA AZ slotla ulaşır (eski kusurlu semantikte tam tersiydi:
+    # table_2 4096'ya muhtaçtı). Sayılar deterministik, seed=1'e bağlıdır.
     assert report.minimum_slots_meeting_target == {
-        "table_1": 2048,
-        "table_2": 4096,
+        "table_1": 4096,
+        "table_2": 1024,
     }
+    assert (report.minimum_slots_meeting_target["table_2"]
+            < report.minimum_slots_meeting_target["table_1"])
     assert report.maximum_load_factor_meeting_target == {
-        "table_1": 0.125,
-        "table_2": 0.03125,
+        "table_1": 0.0625,
+        "table_2": 0.125,
     }
     by_table = {
         table: [row for row in report.results if row.table_count == table]

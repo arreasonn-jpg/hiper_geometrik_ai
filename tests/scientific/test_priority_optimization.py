@@ -179,8 +179,16 @@ def test_karne_verification_bolumune_baglandi(rapor):
     assert "priority_optimization" in karne.provenance["reports_supplied"]
 
 
-def test_verification_skoru_yukseliyor(rapor):
-    """Ağırlıkları doğrulamak ölçülebilir bir iyileşme olmalı."""
+def test_verification_skoru_dusmuyor_ve_holdout_baglandi(rapor):
+    """Held-out doğrulama eklemek skoru asla düşürmemeli ve girdi olarak
+    bağlanmalı.
+
+    Not: Ablasyon havuzu düzeltildikten sonra (kayıtsız-köşe degenerasyonu
+    giderildi) ablasyonun 6/6 kapısı geçiyor ve bölüm skoru tek başına
+    tavanda (10.0). Bu yüzden eski "skor kesin YÜKSELMELİ" iddiası artık
+    matematiksel olarak imkânsız; doğru sözleşme, optimizasyonun skoru
+    düşürmemesi ve kapı/kanıt kümesini genişletmesidir.
+    """
     from hga.evaluation.priority_ablation import run_priority_weight_ablation
     ablasyon = run_priority_weight_ablation(k=10, seeds=(1, 2, 3)).to_dict()
     once = build_scorecard(
@@ -188,4 +196,8 @@ def test_verification_skoru_yukseliyor(rapor):
     sonra = build_scorecard(
         priority_ablation=ablasyon,
         priority_optimization=rapor.to_dict()).sections["verification"]
-    assert sonra["score"] > once["score"]
+    assert sonra["score"] >= once["score"]
+    assert sonra["inputs"]["weights_validated_on_holdout"] is True
+    assert sonra["inputs"]["holdout_gain"] > 0.0
+    # Optimizasyon kapıları bölüm kanıtına gerçekten eklenmiş olmalı.
+    assert any("weight_optimization" in kanit for kanit in sonra["evidence"])

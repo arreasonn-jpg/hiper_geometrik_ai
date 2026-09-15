@@ -1,0 +1,170 @@
+{
+  "protocol": "reasoning_depth_root_cause_v1",
+  "schema_version": 1,
+  "profile": "deep",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "distractors": 16384,
+  "slot_sizes": [
+    131072,
+    262144,
+    524288,
+    1048576
+  ],
+  "hops": [
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "recall_grid": {
+    "131072": {
+      "64": 1.0,
+      "128": 1.0,
+      "256": 0.0,
+      "512": 0.0,
+      "1024": 0.0,
+      "2048": 0.0
+    },
+    "262144": {
+      "64": 1.0,
+      "128": 1.0,
+      "256": 1.0,
+      "512": 1.0,
+      "1024": 0.0,
+      "2048": 0.0
+    },
+    "524288": {
+      "64": 1.0,
+      "128": 1.0,
+      "256": 1.0,
+      "512": 1.0,
+      "1024": 1.0,
+      "2048": 1.0
+    },
+    "1048576": {
+      "64": 1.0,
+      "128": 1.0,
+      "256": 1.0,
+      "512": 1.0,
+      "1024": 1.0,
+      "2048": 1.0
+    }
+  },
+  "supported_depth": {
+    "131072": 128,
+    "262144": 512,
+    "524288": 2048,
+    "1048576": 2048
+  },
+  "scaling": {
+    "pairs": [
+      {
+        "slot_from": 131072,
+        "slot_to": 262144,
+        "slot_ratio": 2.0,
+        "depth_from": 128,
+        "depth_to": 512,
+        "depth_ratio": 4.0
+      },
+      {
+        "slot_from": 262144,
+        "slot_to": 524288,
+        "slot_ratio": 2.0,
+        "depth_from": 512,
+        "depth_to": 2048,
+        "depth_ratio": 4.0
+      },
+      {
+        "slot_from": 524288,
+        "slot_to": 1048576,
+        "slot_ratio": 2.0,
+        "depth_from": 2048,
+        "depth_to": 2048,
+        "depth_ratio": 1.0
+      }
+    ],
+    "slot_multiplier": 8.0,
+    "depth_multiplier": 16.0,
+    "log_log_slope": 1.3333,
+    "monotone_in_slots": true,
+    "note": "Eğim ≈ 1.0 ise desteklenen derinlik slot sayısıyla doğrusal ölçekleniyor demektir: sınır bellektedir."
+  },
+  "diagnosis": {
+    "root_cause": "memory_capacity",
+    "explanation": "Slot sayısı arttıkça desteklenen derinlik ölçekleniyor ve dolgusuz kontrolde tüm derinlikler zaten güvenilir. Çöküş bir ÇIKARIM sınırı değil, BELLEK KAPASİTESİ sınırıdır.",
+    "memory_bound": true,
+    "slots_needed_per_hop": 512,
+    "previous_interpretation": "P0-7'de 16384 dolgudaki 32→8 düşüşü 'dolgu dayanıklılığı kaybı' diye yorumlanmıştı; bu teşhis o yorumu DÜZELTİR.",
+    "signature": "7429c620b3cb"
+  },
+  "zero_distractor_control": {
+    "grid": {
+      "131072": {
+        "64": 1.0,
+        "128": 1.0,
+        "256": 1.0,
+        "512": 1.0,
+        "1024": 1.0,
+        "2048": 1.0
+      },
+      "262144": {
+        "64": 1.0,
+        "128": 1.0,
+        "256": 1.0,
+        "512": 1.0,
+        "1024": 1.0,
+        "2048": 1.0
+      },
+      "524288": {
+        "64": 1.0,
+        "128": 1.0,
+        "256": 1.0,
+        "512": 1.0,
+        "1024": 1.0,
+        "2048": 1.0
+      },
+      "1048576": {
+        "64": 1.0,
+        "128": 1.0,
+        "256": 1.0,
+        "512": 1.0,
+        "1024": 1.0,
+        "2048": 1.0
+      }
+    },
+    "all_hops_reliable_without_distractors": true,
+    "note": "Dolgu=0'da tüm derinlikler güvenilirse, zincirin kendisi bozulmuyor demektir; kaybın kaynağı dolgunun belleğe yaptığı baskıdır."
+  },
+  "checks": {
+    "single_variable_design": true,
+    "control_arm_without_distractors_clean": true,
+    "depth_monotone_in_slots": true,
+    "root_cause_identified": true,
+    "scaling_measured": true,
+    "collapse_is_engineering_not_reasoning": true
+  },
+  "findings": [
+    "Tek değişken: slot sayısı 131072 → 1048576 (8×). Hop ızgarası, dolgu (16384), tohumlar ([1, 2, 3]) ve eşik sabit tutuldu.",
+    "  slots=131072 (2^17) → güvenilir derinlik 128",
+    "  slots=262144 (2^18) → güvenilir derinlik 512",
+    "  slots=524288 (2^19) → güvenilir derinlik 2048",
+    "  slots=1048576 (2^20) → güvenilir derinlik 2048",
+    "Slot 8× büyüyünce derinlik 16× büyüdü; log-log eğim 1.333.",
+    "Slot sayısı arttıkça desteklenen derinlik ölçekleniyor ve dolgusuz kontrolde tüm derinlikler zaten güvenilir. Çöküş bir ÇIKARIM sınırı değil, BELLEK KAPASİTESİ sınırıdır.",
+    "Kontrol kolu: dolgu=0'da TÜM derinlikler %100 güvenilir. Zincirin kendisi hiçbir zaman bozulmadı.",
+    "SONUÇ: C_RD tablosundaki düşüş bir yetenek eksikliği değil, yapılandırma seçimidir. Slot bütçesi verildiğinde derinlik geri gelir; bu bir ölçeklendirme parametresidir.",
+    "Bu, P0-7'nin 'dolgu dayanıklılığı' yorumunu düzeltir. Eski yorum ölçümü değil, ölçümün SEBEBİNİ yanlış okuyordu."
+  ],
+  "limitations": [
+    "Bellek sınırı slot sayısıyla aşılıyor ama slotlar bedava değildir: RAM maliyeti doğrusal büyür (bkz. docs/MEMORY_HIERARCHY.md).",
+    "Teşhis sentetik multi-hop ızgarası üzerindedir; gerçek metin üzerinde dolgunun etkisi farklı olabilir.",
+    "Slot ölçeklemesi sonsuza kadar sürmez; bu ızgarada henüz bir çıkarım tavanına ULAŞILMADI, yani gerçek çıkarım sınırı hâlâ ölçülmemiştir.",
+    "Eşik 1.0 (tam geri çağırma) seçilmiştir; gevşek bir eşik daha büyük derinlikler raporlardı."
+  ]
+}

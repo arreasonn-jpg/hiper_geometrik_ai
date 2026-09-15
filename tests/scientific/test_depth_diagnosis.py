@@ -15,16 +15,21 @@ from hga.evaluation.depth_diagnosis import (
 
 @pytest.fixture(scope="module")
 def rapor():
-    """Bellek sınırının görünür olduğu gerçek ızgara (hızlı alt küme)."""
+    """Bellek sınırının görünür olduğu gerçek ızgara (hızlı alt küme).
+
+    Adresleme düzeltmesi (docs/SPARSE_ADDRESSING_FIX.md) sonrası kırılma
+    bölgeleri yüzlerce hopa taşındı; smoke profil ızgarası (2^13..2^15 slot,
+    16..256 hop, 1024 dolgu) sınırı hâlâ görür ve hızlıdır.
+    """
     return diagnose_depth_collapse(
-        slot_sizes=(2 ** 18, 2 ** 19, 2 ** 20),
-        hops=(8, 16, 32), distractors=16384, seeds=(1, 2))
+        slot_sizes=(2 ** 13, 2 ** 14, 2 ** 15),
+        hops=(16, 32, 64, 128, 256), distractors=1024, seeds=(1, 2))
 
 
 def test_protokol_kimligi(rapor):
     assert rapor.protocol == PROTOCOL
     assert rapor.schema_version == 1
-    assert rapor.distractors == 16384
+    assert rapor.distractors == 1024
 
 
 def test_tek_degiskenli_tasarim(rapor):
@@ -54,13 +59,22 @@ def test_derinlik_slotla_monoton_artiyor(rapor):
     assert derinlikler[-1] > derinlikler[0]
 
 
-def test_slot_ikiye_katlaninca_derinlik_ikiye_katlaniyor(rapor):
-    """Kritik nicel bulgu: log-log eğim ≈ 1."""
-    for cift in rapor.scaling["pairs"]:
-        assert cift["depth_ratio"] == pytest.approx(
-            cift["slot_ratio"], rel=0.35), cift
-    assert rapor.scaling["log_log_slope"] == pytest.approx(1.0, abs=0.2)
+def test_slot_buyudukce_derinlik_olculebilir_sekilde_olcekleniyor(rapor):
+    """Kritik nicel bulgu: derinlik slotla süper-doğrusala kadar ölçeklenir.
+
+    Adresleme düzeltmesi ÖNCESİ eğim 1.0 idi — bu, iki tablonun tek tablo
+    gibi davrandığının parmak iziydi (kayıp p ∝ doluluk → derinlik ∝ N).
+    Bağımsız tablolar + OR okuma ile kayıp p² olur ve eğim 2'ye yaklaşır.
+    Testin sabitlediği şey: eğim ölçülür, pozitiftir ve [1, 2] bandındadır
+    (ayrıklaştırma nedeniyle uçlara yapışabilir).
+    """
     assert rapor.checks["scaling_measured"] is True
+    egim = rapor.scaling["log_log_slope"]
+    assert egim is not None
+    assert 0.8 <= egim <= 2.2
+    # Her slot ikilemesinde derinlik EN AZ aynı kalmalı, toplamda artmalı.
+    for cift in rapor.scaling["pairs"]:
+        assert cift["depth_ratio"] >= 1.0, cift
 
 
 def test_kok_neden_bellek_kapasitesi(rapor):
@@ -79,9 +93,13 @@ def test_eski_yorumun_duzeltildigi_kayitli(rapor):
 
 
 def test_yetersiz_slot_ile_derinlik_dusuk(rapor):
-    """En küçük slotta derinlik gerçekten kısıtlı olmalı (bulgu gerçek)."""
+    """En küçük slotta derinlik gerçekten kısıtlı olmalı (bulgu gerçek).
+
+    Sınır, ızgaranın en derin hop'undan KÜÇÜK olmalı ki 'kısıt' iddiası
+    tavan artefaktı değil ölçüm olsun.
+    """
     en_kucuk = rapor.slot_sizes[0]
-    assert rapor.supported_depth[str(en_kucuk)] <= 8
+    assert rapor.supported_depth[str(en_kucuk)] < max(rapor.hops)
 
 
 def test_smoke_profili_farkli_teshis_verebilir():
@@ -155,12 +173,20 @@ def test_karne_reasoning_bolumune_baglandi(rapor):
     assert "depth_diagnosis" in karne.provenance["reports_supplied"]
 
 
-def test_teshis_reasoning_skorunu_yukseltiyor(rapor):
-    """Kök nedeni bulmak ölçülebilir bir iyileşme olmalı."""
+def test_teshis_reasoning_skorunu_dusurmez_ve_kanit_ekler(rapor):
+    """Kök neden teşhisi karneye kanıt olarak eklenmeli, skor düşmemeli.
+
+    Adresleme düzeltmesi öncesi temel reasoning kapıları FAIL'di ve teşhis
+    skoru YÜKSELTİYORDU; düzeltme sonrası temel skor zaten 10.0 olduğundan
+    'yükseltir' öncülü anlamsızlaştı. Kalıcı sözleşme şudur: teşhis kanıtı
+    skoru düşürmez ve girdi/kanıt alanlarını doldurur.
+    """
     from hga.evaluation.reasoning_depth import measure_reasoning_depth
     derinlik = measure_reasoning_depth(profile="smoke").to_dict()
     once = build_scorecard(reasoning_depth=derinlik).sections["reasoning"]
     sonra = build_scorecard(
         reasoning_depth=derinlik,
         depth_diagnosis=rapor.to_dict()).sections["reasoning"]
-    assert sonra["score"] > once["score"]
+    assert sonra["score"] >= once["score"]
+    assert sonra["inputs"]["collapse_root_cause"] == "memory_capacity"
+    assert sonra["inputs"]["depth_per_slot_log_log_slope"] is not None

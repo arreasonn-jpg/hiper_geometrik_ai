@@ -272,6 +272,16 @@ eşiğini sınar. Ayrılmış test holdout'un generation/memory overlap'i her ko
 sıfır olmak zorundadır. Bunlar sentetik aritmetik laboratuvar sonuçlarıdır; gerçek dilde
 otonom öğrenme iddiası değildir. Ayrıntılar: `docs/SELF_LEARNING_BENCHMARK.md`.
 
+> **Güncelleme (P1, `deep` profil koşuldu).** `ogrenme-olcek` deep profili
+> 100 → 1000 → 3000 cycle + alan eksenini (operands_max 31 → 63 → 127)
+> gerçekten koştu, 9/9 kapı geçti: 3000 cycle'da yanlış bilgi **0**, FAR 0,
+> izolasyon temiz (doğrulayıcı ÖNCESİ FAR 1.0 — doğrulayıcının iş yaptığının
+> kanıtı). Ana bulgu ölçekleme fiziği: sabit alanda cycle 30× artınca bilgi
+> yalnız 1.032× arttı (aday havuzu doyuyor; "daha çok döngü = daha çok
+> bilgi" YANLIŞ), buna karşılık alan 4× büyüyünce bilgi **15.71×** arttı.
+> Ölçekleme cycle sayısından değil ALANIN genişliğinden gelir.
+> Ayrıntı: `docs/SELF_LEARNING_SCALING.md`.
+
 ### HGA Research Benchmark Suite
 
 Tek komut Architecture, Kronecker, Memory, Verification, Compositional
@@ -322,6 +332,15 @@ vocabulary, başlangıç embedding'i, batch schedule hash'i, AdamW, loss, adım 
 karar eşiği dört kolda aynıdır. Bu structured arc sınıflandırması tam language
 model pretraining veya end-to-end dependency parser değildir.
 
+Parametre eşitliği FLOP eşitliğini garanti etmez (birincil rejimde MAC
+oranı ~11.3×; analitik döküm + PyTorch sayaç uzlaşmasıyla raporlanır). Tek
+deneyde ikisi birden eşitlenemeyeceği için aynı tohumlarla ikinci bir
+**FLOP-eşli kontrol rejimi** koşulur: HGA kolu aynen kalır, baseline
+gövdeleri HGA'nın MAC bütçesine ölçeklenir (oran ≤1.05; parametre paritesi
+bilerek bırakılır ve raporlanır). İki rejimin sonuç çifti birlikte okunur —
+20 tohumda FLOP-eşli rejimde de sıralama değişmez (Kronecker/Dense önde,
+HGA farkı küçük ama istatistiksel; `docs/TWT_RESULTS_20SEED.md`).
+
 Her neural kol için uncertainty calibration da aynı harness içinde ölçülür:
 pozitif scalar temperature yalnız sabit **dev** splitinde NLL ile seçilir,
 **test** ise yalnız değerlendirmedir. Testte kalibrasyon öncesi/sonrası NLL,
@@ -361,7 +380,10 @@ verildiği için sonuç **entity discovery, relation induction veya neural dil
 bölümler `COMPLETED` olmalıdır; eksik kurulum `SKIPPED` olarak gizlenmez ve
 `--strict` ile koşu başarısız kapatılabilir. Verification bölümü ayrıca false,
 incomplete, contradictory, malformed, boundary ve adversarial proof fixture'ını
-FAR/FRR/coverage/robustness ile ölçer. `overall_diagnostic_score` bir zekâ/SOTA
+FAR/FRR/coverage/robustness ile ölçer (güncel kanıt:
+`docs/VERIFIER_ADVERSARIAL.md` — 12/12 vaka, FAR 0.0, robustness 1.0; bozuk
+ispat `INVALID`, desteklenmeyen kural `UNCERTAIN` döner, kanıt yokluğu asla
+kabul gibi gizlenmez). `overall_diagnostic_score` bir zekâ/SOTA
 skoru değildir. Tam protokol: `docs/RESEARCH_BENCHMARK_SUITE.md`.
 
 ### Milestone tablosu: K₀ → E₀ → V₀ → K₁ → … → K₁₀₀
@@ -533,10 +555,13 @@ kapsamı dar.
 
 Priority(E) ağırlıkları tek kaynakta tanımlı, negatif değer reddediliyor,
 `normalize=True` ile karşılaştırılabilir hâle geliyor ve `priority_dokumu()`
-her terimin katkısını ayrı gösteriyor. Ablasyon bir zaaf ortaya çıkardı:
-**`w_novelty` ve `w_uncertainty` sıfırlandığında seçilen ilk 10 aday hiç
-değişmiyor** — ayarlanabilir olmak etkili olmak değildir.
-Ayrıntı: `docs/KOKEN_VE_ONCELIK.md`.
+her terimin katkısını ayrı gösteriyor. Demo havuzundaki ablasyon önce bir
+"zaaf" gösterdi (`w_novelty`/`w_uncertainty` seçimi değiştirmiyor); P0-1 kök
+neden analizi bunun terimlerin değil **degenere ölçüm havuzunun** özelliği
+olduğunu kanıtladı (kayıtsız adaylar `novelty=uncertainty=1.0` köşesinde
+yığılıyor ve ilk-K tamamen köşeden seçiliyor). Havuz düzeltildikten sonra
+**dört terimin dördü de** skor→sıralama→seçim→downstream zincirini uçtan uca
+taşıyor. Ayrıntı: `docs/KOKEN_VE_ONCELIK.md`, `docs/PRIORITY_CAUSAL_CHAIN.md`.
 
 ### Memory interference: kasıtlı çakışma (Faz 15–17)
 
@@ -618,24 +643,35 @@ python -m hga cok-adimli --hops 1,2,3,4,5 --distractors 0,16,64,256 --seeds 1,2,
 
 `a→b→c` zinciri kurulup depoda **yazılı olmayan** `a→c` sorulur; ayrıca zincir
 kenarlarının arasına alakasız dolgu olgular serpiştirilerek uzun bağlam
-baskısı uygulanır. Çok adımlı çıkarım (hop≥2) **0.9688**, tek adımlı geri
-çağırma 1.0000; en derin güvenilir zincir **4 adım**. 5 adımlık zincir 256
-dolgu altında 0.5000'e düşer — ölçülen gerçek bir sınırdır, kapı geçsin diye
-eşik gevşetilmedi: beş kabul kapısından üçü varsayılan ayarda **kalıyor**.
+baskısı uygulanır. Adresleme düzeltmesi sonrası çok adımlı çıkarım (hop≥2)
+**1.0000**, tek adımlı geri çağırma 1.0000; varsayılan 1–5 hop / 0–256 dolgu
+ızgarası tamamen temiz ve beş kabul kapısının **beşi de geçiyor**. (Düzeltme
+öncesi: hop≥2 0.9688, en derin güvenilir zincir 4 adım, 5 adım @256 dolgu
+0.5000 ve üç kapı KALIYORDU — o sınır kapasite değil, adresleme kusurunun
+eseriydi; bkz. `docs/SPARSE_ADDRESSING_FIX.md`. Gerçek sınır yüzlerce hop
+ötededir ve `cikarim-derinligi` protokolünde ölçülür.)
 
 İlk taslakta zincir takibi Python sözlüğünden yapılıyordu ve doğruluk her
 koşulda 1.0 çıkıyordu — **ölü metrik**. Takip artık her kenarı seyrek
 bellekten doğrular; bellek 4096→256 slota indirilince en derin güvenilir
-zincir 4→2 adıma düşer. Bu davranış testle kilitlidir.
+zincir 5→2 adıma düşer. Bu davranış testle kilitlidir.
 
 > **Güncelleme (P0-7).** Buradaki "4 adım", `cok-adimli` protokolünün
 > 1–5 hop / 0–256 dolgu ızgarasına aittir ve o ızgaranın tavanına yakındır.
-> Daha geniş bir taramayla (`python -m hga cikarim-derinligi
-> --depth-profile deep`, 1/2/4/8/16/32 hop × 0–16384 dolgu) ölçülen
-> **C_R = 32**'dir; dolgu 16384'e çıkınca C_RD **8**'e düşer. Yani eski
-> sayı yanlış değil, ızgarayla SINIRLIydı — bu, dar bir taramanın bir
-> yetenek sınırı gibi görünebileceğinin örneğidir.
-> Ayrıntı: `docs/REASONING_DEPTH.md`.
+> Daha geniş taramalar iki aşamada ilerledi: önce ızgara genişletilince
+> C_R=32 ölçüldü; sonra bu sınırın kaynağı kovalanınca seyrek bellek
+> adreslemesinde gerçek bir KUSUR bulundu ("Bloom tarzı" iki tablo sıfır
+> bağımsızlık sağlıyordu — bkz. `docs/SPARSE_ADDRESSING_FIX.md`). Düzeltme
+> sonrası 2^18 slotla ölçülen C_R=2048 / C_RD=256 sınırının da kök nedeni
+> kovalandı: teşhis protokolü (`docs/DEPTH_DIAGNOSIS_RAW.md`) düşüşün
+> çıkarım değil **bellek doygunluğu** olduğunu gösterdi (derinlik slotla
+> log-log eğim ~1.33 ile ölçekleniyor). Deep profil dolgu yüküne göre
+> boyutlandırılınca (2^20 slot) ölçüm: **C_R = 16384** (ızgara-içi, tavan
+> değil); 16384 dolguda C_RD **8192** (retention 0.5,
+> `retains_half_depth_under_max_distractors` GEÇTİ). Dar taramanın "yetenek
+> sınırı" gibi görünmesi ve o sınırın iki kez de mühendislik/yapılandırma
+> çıkması, bu deponun "sınırı gizleme, kaynağını ölç" ilkesinin somut örneğidir.
+> Ayrıntı: `docs/REASONING_DEPTH.md`, `docs/REASONING_DEPTH_ROOT_CAUSE.md`.
 
 Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.
 
@@ -655,7 +691,7 @@ bootstrap GA):
 |---|---:|---:|
 | EY (klasik) | 0.2385 | [0.2327, 0.2444] |
 | **NY** yenilik | 0.1904 | [0.1863, 0.1946] |
-| **UEY** kullanışlı | 0.1565 | [0.1538, 0.1600] |
+| **UEY** kullanışlı | 0.1606 | [0.1575, 0.1646] |
 | **GY** genelleme | 0.6419 | [0.6116, 0.6721] |
 | **VID** bit/deneyim | 0.9434 | [0.9227, 0.9640] |
 
@@ -814,6 +850,7 @@ python -m hga halusinasyon                            # factual consistency metr
 python -m hga sweep                                   # n/K/context kapasite taraması
 python -m hga tokenizer                               # mini Türkçe tokenizer benchmark
 python -m hga perplexity --tiny                       # küçük modelle perplexity smoke (torch)
+python -m hga turkce-lm                               # GERÇEK Türkçe LM: tr_corpus_v1 (1.11M kelime) held-out PPL (torch)
 python -m hga checkpoint-rapor checkpoints/temel/latest.pt # checkpoint/model uyumluluğu
 python -m hga benchmark-rapor --out raporlar/benchmark_report.json --markdown raporlar/benchmark_report.md
 python -m hga research-benchmark                    # birleşik 5-seed araştırma karnesi
@@ -1109,6 +1146,8 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Veri kalite + manifest | ✅ %100 smoke | `veri-kalite`, `manifest`, `veri-canli-smoke --kontrollu` |
 | Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
 | Gerçek Türkçe benchmark | ✅ TWT v1 | 4.851 ham insan-anotasyonlu cümle, sabit hash/split, parameter-matched 4 mimari, neural compositional HGA ablasyonu |
+| Gerçek Türkçe LM (P1) | ✅ 1.11M kelime held-out | `python -m hga turkce-lm`, `docs/TURKISH_LM.md`: tr_corpus_v1 (UD+Bible+TWT, hash doğrulamalı), belge-ayrık split, train-only BPE, unigram/bigram kontrolleri, parametre-eşli dense/transformer/HGA; `corpus_at_least_1m_words` kapısı full profilde gerçek veriyle PASS |
+| Uzun bağlam LM (P1) | ✅ 24→256 token | `docs/LONG_CONTEXT.md`: aynı korpusta bağlam uzunluğu tek değişken olarak taranır; eşleşmiş hedef pozisyonları tüm bağlam/kollarda aynı, bütçe her bağlamda yeniden eşlenir (≤1.05), n-gram zemin aynı pencerelerde. Ölçülen yön: 24→256 tokenda PPL bozulması dense +%41, transformer +%3.3, HGA +%1.1 (en dirençli kol); bu kısa eşit-bütçe taramasında hiçbir neural kol bigramı geçmez ve bu AÇIK SINIR olarak raporlanır |
 | Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
 | Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
 | Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |
@@ -1123,14 +1162,19 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M`) |
 | 100-cycle milestone tablosu | ✅ 5 seed | `python -m hga milestone`, `docs/MILESTONE_TABLOSU.md` (incorrect=0, EY≈0.11, recall 1.000→0.952) |
 | Epistemik benchmark (P0-007) | ✅ ölçüldü + negatif kontrol | `python -m hga epistemik`, `docs/EPISTEMIK_BENCHMARK.md` (yanlış güven 0.000, 3 dejenere kol domine edildi, UNKNOWN↔UNCERTAIN ayrımı `false` olarak raporlanıyor) |
-| Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.157; GY 0.642 monoton artıyor) |
-| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` (bootstrap %95 GA, Cohen d_z/Hedges g, permütasyon + Wilcoxon; 5 seedde p<0.05 imkânsız uyarısı) |
+| Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.161; GY 0.642 monoton artıyor) |
+| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` + `tohum-istatistik` core profili: **20 tohum**, 76 eşleşmiş karşılaştırma, min p=2e-6, 8/8 kapı (`docs/SEED_STATISTICS.md`) |
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 
-**Sonraki ölçek işleri (tamamlandı iddiası değildir):** milyon-kelime Türkçe
-korpus, gerçek instruction set büyütme, 64+ token uzun bağlam, katman-bazlı
-çoklu GPU/model paralelliği ve sohbet kalitesi için insan değerlendirmesi.
+**Sonraki ölçek işleri (tamamlandı iddiası değildir):** ~~milyon-kelime Türkçe
+korpus~~ TAMAMLANDI: `tr_corpus_v1` (1.11M kelime; UD r2.14 ×8 + Bible CC0 +
+TWT, hash doğrulamalı, `hga/evaluation/datasets/tr_corpus_v1/`) `turkce-lm`
+full profilinde koşar ve `corpus_at_least_1m_words` kapısını gerçek insan
+metniyle açar; smoke profil TWT üzerinde kalır ve kapı orada bilinçli FAIL'dir.
+Kalanlar: 10M+ kelime ölçeği, gerçek instruction set büyütme, 64+ token uzun
+bağlam, katman-bazlı çoklu GPU/model paralelliği ve sohbet kalitesi için insan
+değerlendirmesi.
 
 **Milestone tablosunun açığa çıkardığı ve artık aktif yola taşınan iş:** 100
 döngüde bilgi kalitesi korunurken fixed-slot recall `1.000 → 0.952`'ye düştü.

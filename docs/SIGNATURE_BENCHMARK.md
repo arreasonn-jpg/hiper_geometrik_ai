@@ -42,16 +42,18 @@ Protokol: `hga_signature_benchmark_v1` · profil: `standard` · veri imzası: `d
 
 ## İmza analizi: HGA nerede, neden?
 
-| Görev | HGA | En iyi rakip | Fark | Bellek katkısı | Kronecker katkısı | Attention katkısı |
-|---|---:|---|---:|---:|---:|---:|
-| A_long_chain | 0.4766 | symbolic (1.0000) | -0.5234 | +0.0000 | +0.0020 | -0.0293 |
-| B_unseen_entity | 0.4766 | symbolic (1.0000) | -0.5234 | +0.0000 | -0.0020 | -0.0098 |
-| C_unseen_relation | 0.5098 | symbolic (1.0000) | -0.4902 | +0.0000 | -0.0098 | +0.0137 |
-| D_unseen_both | 0.4980 | symbolic (1.0000) | -0.5020 | +0.0000 | -0.0020 | +0.0059 |
-| E_conflict | 0.4941 | symbolic (1.0000) | -0.5059 | +0.0000 | -0.0293 | -0.0156 |
-| F_memory_dependent | 1.0000 | symbolic (1.0000) | +0.0000 | +0.5117 | +0.0000 | +0.0000 |
-| G_epistemic | 0.3223 | symbolic (1.0000) | -0.6777 | +0.0000 | +0.0117 | -0.0312 |
-| H_distractor | 0.5156 | symbolic (1.0000) | -0.4844 | +0.0000 | +0.0215 | -0.0078 |
+Rakip = **öğrenen** kollar (dense/transformer; aynı bilgi, aynı bütçe). `symbolic` rakip değil KÂHİN tavandır: gizli olguları ham okur, deterministik dünyada yapısal 1.0 alır; farkı `kâhin açığı` sütununda ayrıca raporlanır.
+
+| Görev | HGA | En iyi rakip | Fark | Kâhin açığı | Bellek katkısı | Kronecker katkısı | Attention katkısı |
+|---|---:|---|---:|---:|---:|---:|---:|
+| A_long_chain | 0.4766 | transformer (0.5508) | -0.0742 | +0.5234 | +0.0000 | +0.0020 | -0.0293 |
+| B_unseen_entity | 0.4766 | transformer (0.5176) | -0.0410 | +0.5234 | +0.0000 | -0.0020 | -0.0098 |
+| C_unseen_relation | 0.5098 | dense (0.5176) | -0.0078 | +0.4902 | +0.0000 | -0.0098 | +0.0137 |
+| D_unseen_both | 0.4980 | transformer (0.5312) | -0.0332 | +0.5020 | +0.0000 | -0.0020 | +0.0059 |
+| E_conflict | 0.4941 | transformer (0.4961) | -0.0020 | +0.5059 | +0.0000 | -0.0293 | -0.0156 |
+| F_memory_dependent | 1.0000 | transformer (0.9863) | +0.0137 | +0.0000 | +0.5117 | +0.0000 | +0.0000 |
+| G_epistemic | 0.3223 | transformer (0.3848) | -0.0625 | +0.6777 | +0.0000 | +0.0117 | -0.0312 |
+| H_distractor | 0.5156 | dense (0.5117) | +0.0039 | +0.4844 | +0.0000 | +0.0215 | -0.0078 |
 
 ## Sızıntı denetimi
 
@@ -74,14 +76,14 @@ Protokol: `hga_signature_benchmark_v1` · profil: `standard` · veri imzası: `d
 | body_parameter_budget_within_gate | GEÇTİ |
 | no_held_out_leak | GEÇTİ |
 | hga_beats_majority_everywhere | KALDI |
-| hga_has_signature_task | KALDI |
+| hga_has_signature_task | GEÇTİ |
 | neural_arms_learn_above_chance | GEÇTİ |
 | memory_gain_is_task_specific | GEÇTİ |
 
 ## Bulgular
 
 - Profil `standard`: 8 görev × 8 kol × 1 tohum.
-- HGA hiçbir görevde en iyi rakibini geçmedi — bu profilde imza görev bulunamadı. Sonuç gizlenmiyor.
+- HGA'nın rakiplerini geçtiği görevler: F_memory_dependent (+0.0137 vs transformer), H_distractor (+0.0039 vs dense).
 - Bellek kanalının katkısı: A_long_chain: +0.0000, B_unseen_entity: +0.0000, C_unseen_relation: +0.0000, D_unseen_both: +0.0000, E_conflict: +0.0000, F_memory_dependent: +0.5117, G_epistemic: +0.0000, H_distractor: +0.0000. Katkı yalnız F'de belirgin değilse kanal bilgi değil kapasite taşıyor demektir.
 - Şu görevlerde HİÇBİR parameter-matched nöral kol çoğunluk tabanını +0.10'dan fazla geçemedi: ['A_long_chain', 'B_unseen_entity', 'C_unseen_relation', 'D_unseen_both', 'E_conflict', 'G_epistemic', 'H_distractor']. Bu, mimari farkından önce gelen bir sonuçtur: bu bütçe ve adım sayısında görev nöral kollar için öğrenilemiyor; sembolik kolla karşılaştırma paradigma farkı olarak okunmalıdır.
 

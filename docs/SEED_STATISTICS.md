@@ -1,7 +1,7 @@
 # Çekirdek Tohum İstatistikleri (P1)
 
 - Protokol: `core_seed_statistics_v1` v1 (imza `1c12f2b7c280`)
-- Profil: `custom` · tohum sayısı: **20** (çekirdek kural: 20)
+- Profil: `core` · tohum sayısı: **20** (çekirdek kural: 20)
 
 ## Protokol tohum disiplini
 
@@ -90,18 +90,18 @@
 
 | Ağırlık | Metrik | n | Ortalama | Std | %95 CI |
 |---|---|---:|---:|---:|---|
-| w_gain | kendall_tau | 20 | 0.5368 | 0.0702 | [0.5058, 0.5659] |
-| w_gain | topk_overlap | 20 | 0.2350 | 0.1309 | [0.1800, 0.2900] |
-| w_gain | downstream_delta::verification_yield | 20 | 0.2800 | 0.2375 | [0.1750, 0.3800] |
-| w_novelty | kendall_tau | 20 | 0.9491 | 0.0156 | [0.9421, 0.9553] |
-| w_novelty | topk_overlap | 20 | 1.0000 | 0.0000 | [1.0000, 1.0000] |
-| w_novelty | downstream_delta::verification_yield | 20 | 0.0000 | 0.0000 | [0.0000, 0.0000] |
-| w_uncertainty | kendall_tau | 20 | 0.8921 | 0.0224 | [0.8827, 0.9016] |
-| w_uncertainty | topk_overlap | 20 | 0.8350 | 0.1040 | [0.7900, 0.8800] |
-| w_uncertainty | downstream_delta::verification_yield | 20 | -0.0200 | 0.0410 | [-0.0400, -0.0050] |
-| w_conflict_penalty | kendall_tau | 20 | 0.9416 | 0.0179 | [0.9337, 0.9491] |
-| w_conflict_penalty | topk_overlap | 20 | 0.8900 | 0.0852 | [0.8550, 0.9250] |
-| w_conflict_penalty | downstream_delta::verification_yield | 20 | 0.0200 | 0.0616 | [-0.0050, 0.0450] |
+| w_gain | kendall_tau | 20 | 0.6550 | 0.0330 | [0.6405, 0.6688] |
+| w_gain | topk_overlap | 20 | 0.6700 | 0.1174 | [0.6200, 0.7200] |
+| w_gain | downstream_delta::verification_yield | 20 | -0.2700 | 0.1302 | [-0.3250, -0.2150] |
+| w_novelty | kendall_tau | 20 | 0.7017 | 0.0370 | [0.6855, 0.7168] |
+| w_novelty | topk_overlap | 20 | 0.4550 | 0.1538 | [0.3900, 0.5250] |
+| w_novelty | downstream_delta::verification_yield | 20 | 0.0700 | 0.1218 | [0.0150, 0.1200] |
+| w_uncertainty | kendall_tau | 20 | 0.6827 | 0.0375 | [0.6665, 0.6984] |
+| w_uncertainty | topk_overlap | 20 | 0.7400 | 0.1231 | [0.6850, 0.7950] |
+| w_uncertainty | downstream_delta::verification_yield | 20 | -0.1500 | 0.1147 | [-0.2000, -0.1000] |
+| w_conflict_penalty | kendall_tau | 20 | 0.8847 | 0.0139 | [0.8787, 0.8906] |
+| w_conflict_penalty | topk_overlap | 20 | 0.6600 | 0.1142 | [0.6100, 0.7050] |
+| w_conflict_penalty | downstream_delta::verification_yield | 20 | -0.3250 | 0.1164 | [-0.3750, -0.2800] |
 
 ## Kabul kapıları
 
@@ -186,7 +186,7 @@
 -   └ hüküm 'AYRIŞMA: p=0.00110, g=0.8946 (large), CI [0.00366615, 0.0101841] sıfırı içermiyor.': 1 karşılaştırma
 -   └ hüküm 'AYRIŞMA: p=0.01195, g=0.6221 (medium), CI [0.0070312, 0.0382813] sıfırı içermiyor.': 1 karşılaştırma
 -   └ hüküm 'AYRIŞMA: p=0.03145, g=0.5018 (medium), CI [0.0046874, 0.0402342] sıfırı içermiyor.': 1 karşılaştırma
-- Priority(E): 2 ağırlık ablasyonunda downstream verification_yield farkının %95 CI'si sıfırı dışlıyor — bu ağırlıkların nedensel etkisi gerçek.
+- Priority(E): 4 ağırlık ablasyonunda downstream verification_yield farkının %95 CI'si sıfırı dışlıyor — bu ağırlıkların nedensel etkisi gerçek.
 
 ## Sınırlar
 
@@ -194,3 +194,4 @@
 - Eşleşmiş testler aynı tohumun aynı veri havuzunu ürettiğini varsayar; protokoller bunu garanti eder, dışarıdan verilen seriler için doğrulanmamıştır.
 - Çoklu karşılaştırma düzeltmesi (Bonferroni/FDR) uygulanmadı; çok sayıda kıyasta tek tek p-değerleri iyimserdir.
 - Bootstrap CI küçük n'de asimptotik değildir; n=20'de aralıklar gerçek kapsamanın biraz altında kalabilir.
+

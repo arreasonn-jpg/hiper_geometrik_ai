@@ -43,27 +43,36 @@ bellek kapısı kaldırılırsa test kırılır.
 | 2 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 3 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 4 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 5 adım | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
+| 5 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 
-* çok adımlı çıkarım (hop≥2): **0.9688**
+* çok adımlı çıkarım (hop≥2): **1.0000**
 * tek adımlı geri çağırma: **1.0000**
-* en derin güvenilir zincir: **4 adım**
-* bağlam bozulması: **-0.1000**
+* en derin güvenilir zincir: **5 adım** *(ızgara tavanı — gerçek sınır çok
+  daha derindedir, bkz. `docs/REASONING_DEPTH.md`: C_R = 16384)*
+* bağlam bozulması: **0.0000**
 
-**Bulunan gerçek sınır:** 5 adımlık zincir, 256 dolgu olgu altında 0.5000'e
-düşüyor — yani pozitif vakaları tamamen kaybediyor. Bu bir hata değil,
-ölçülen bir kapasite sınırıdır ve `robust_to_long_context` kapısı bu yüzden
-**KALDI** olarak raporlanır. Kapıyı geçirmek için eşiği gevşetmedik.
+> **Güncelleme (adresleme düzeltmesi).** Bu tablonun eski sürümünde 5
+> adım/256 dolgu hücresi 0.5000'e düşüyordu ve `robust_to_long_context`
+> kapısı KALIYORDU. O sınır gerçek bir kapasite sınırı değil, seyrek bellek
+> adresleme kusurunun eseriydi: "Bloom tarzı" iki tablo sıfır bağımsızlık
+> sağlıyordu ve `icerir()` AND semantiği kaybı büyütüyordu (ayrıntı:
+> `docs/SPARSE_ADDRESSING_FIX.md`). Düzeltme sonrası bu ızgaradaki tüm
+> hücreler temizdir; gerçek kırılma yüzlerce hop ötededir ve
+> `cikarim-derinligi` protokolünde ölçülür. Eski sayılar tarihsel kayıt
+> olarak bu blokta korunur: hop≥2 doğruluğu 0.9688, en derin güvenilir
+> zincir 4 adım, 5 adım @256 dolgu = 0.5000.
 
 ### Bellek daraltılınca (256 slot) sınır öne çekiliyor
 
 | hop \ dolgu | 0 | 16 | 64 | 256 |
 |---|---:|---:|---:|---:|
 | 3 adım | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
-| 4 adım | 1.0000 | 0.5000 | 0.5000 | 0.5000 |
-| 5 adım | 1.0000 | 0.5000 | 0.5000 | 0.5000 |
+| 4 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 5 adım | 1.0000 | 1.0000 | 0.5000 | 0.5000 |
 
-En derin güvenilir zincir 4 → **2 adıma** düşer. Metrik canlıdır.
+En derin güvenilir zincir 5 → **2 adıma** düşer (kesintisiz-derinlik kuralı:
+3 adım 256 dolguda düştüğü için üstü sayılmaz). Metrik canlıdır: bellek
+daraltılınca sınır hâlâ öne çekilir, adresleme düzeltmesi bunu değiştirmedi.
 
 ## Negatif kontrol
 
@@ -76,14 +85,21 @@ ayrışamazsa çok adımlı çıkarım iddiası düşer.
 
 | kapı | anlamı | varsayılan sonuç |
 |---|---|---|
-| `multi_hop_inference_works` | hop≥2 doğruluğu ≥ 0.99 | KALDI (0.9688) |
+| `multi_hop_inference_works` | hop≥2 doğruluğu ≥ 0.99 | GEÇTİ (1.0000) |
 | `beats_degenerate` | sabit-cevap kollarını yener | GEÇTİ |
 | `rejects_broken_chains` | kopuk zincire "evet" demez | GEÇTİ |
-| `robust_to_long_context` | en yüksek bağlamda bozulma yok | KALDI |
-| `memory_preserved_chain` | bellek tüm kenarları korudu | KALDI |
+| `robust_to_long_context` | en yüksek bağlamda bozulma yok | GEÇTİ |
+| `memory_preserved_chain` | bellek tüm kenarları korudu | GEÇTİ |
 
-Beş kapıdan üçü varsayılan ayarda **kalıyor**. Bu kasıtlıdır: kapılar
-geçsin diye eşik gevşetilmedi veya parametre seçilmedi.
+Eskiden beş kapıdan üçü KALIYORDU (0.9688 / bağlam bozulması / kenar kaybı).
+Kapılar eşik gevşetilerek DEĞİL, kök nedendeki adresleme kusuru düzeltilerek
+geçti; varsayılan ızgara artık sınırın çok altındadır. Sınır kaybolmadı,
+binlerce hop ötesine taşındı. Deep profildeki eski C_RD=256 sınırının kök
+nedeni de kovalandı: teşhis (`docs/DEPTH_DIAGNOSIS_RAW.md`) bunun çıkarım
+değil bellek doygunluğu olduğunu gösterdi; slot bütçesi dolgu yüküne göre
+boyutlandırılınca (2^20) deep profil 16384 dolguda **C_RD = 8192** ölçer
+(retention 0.5) ve `retains_half_depth_under_max_distractors` kapısı GEÇER.
+Kalan yarı kayıp gerçek girişim maliyetidir ve raporlanmaya devam eder.
 
 ## Sınırlar (dürüstlük)
 

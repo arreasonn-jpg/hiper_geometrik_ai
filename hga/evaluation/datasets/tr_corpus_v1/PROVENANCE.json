@@ -1,0 +1,145 @@
+{
+  "built_utc_date": "2026-09-14",
+  "corpus_name": "tr_corpus_v1",
+  "counts": {
+    "documents": 4365,
+    "sentences": 104230,
+    "words": 1110509
+  },
+  "excluded_sources": [
+    {
+      "reason": "CC BY-NC-SA (NonCommercial) — depo lisans profiliyle uyumsuz",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-IMST",
+      "source": "ud_imst"
+    }
+  ],
+  "files": {
+    "corpus.jsonl.gz": {
+      "canonical_content_sha256": "4dfe7768889e7b1de1a6af488a93e1faa8596bcdfc408fd00a1c984796349839",
+      "sha256": "3bc2f72193afd8fad04437bac8229e83c453c3953862a436e0469f0333df4578"
+    }
+  },
+  "processing": {
+    "bible_document_unit": "kitap (66 belge)",
+    "dedup": "korpus geneli normalize-exact cümle dedup",
+    "dedup_dropped_sentences": 7514,
+    "twt_document_unit": "doğal sent_id belge öneki",
+    "ud_extraction": "# text = satırları, dosya adı sırasıyla",
+    "ud_pseudo_document_chunk": 40
+  },
+  "schema_version": 1,
+  "upstream": [
+    {
+      "artifact_sha256": "106b953846b04c8a76c7811919a80328d00806722843d22b17dc6a4992c855f0",
+      "documents": 468,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-Kenet",
+      "revision": "3fe761ec02814ab38956bf04d51cd1d7c1006d51",
+      "sentences": 18687,
+      "source": "ud_kenet",
+      "tag": "r2.14",
+      "words": 178658
+    },
+    {
+      "artifact_sha256": "c9c02eb7de2f75941bf901603a2c8df1900b4abd8e4b41984d625ae72c711f07",
+      "documents": 245,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-BOUN",
+      "revision": "2aab5374b233663de7c958fbff7b53d55679fa4b",
+      "sentences": 9761,
+      "source": "ud_boun",
+      "tag": "r2.14",
+      "words": 101036
+    },
+    {
+      "artifact_sha256": "eabc61c4070efcf4f5bb363eb10e65ba2639a14264f76f2f18d7b3300ef44054",
+      "documents": 410,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-Penn",
+      "revision": "5db6dfae021ccbc10f38a03e3bfd99f1fa5e4fc5",
+      "sentences": 16396,
+      "source": "ud_penn",
+      "tag": "r2.14",
+      "words": 183555
+    },
+    {
+      "artifact_sha256": "9f3862836a9e976227c862fd8c05e030463203e19577f7ed45bd7596cd67b789",
+      "documents": 496,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-Tourism",
+      "revision": "5cf73d46b7074875ccbfa786196a95b273429bae",
+      "sentences": 19830,
+      "source": "ud_tourism",
+      "tag": "r2.14",
+      "words": 91152
+    },
+    {
+      "artifact_sha256": "17dddd90ff3b94f364d0e0124716546753edb9373d7aea99023d83348a8e8124",
+      "documents": 136,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-Atis",
+      "revision": "7964bdcdaa61fbe16c7a03e5b1f81e9f90ac76db",
+      "sentences": 5432,
+      "source": "ud_atis",
+      "tag": "r2.14",
+      "words": 45907
+    },
+    {
+      "artifact_sha256": "21796366197b05eed07a663b2563eee9040a75c593a835e7332fe3442ed80f4a",
+      "documents": 68,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-FrameNet",
+      "revision": "8bfcfdeeebe3db4dd815a3ffd66679b970d56287",
+      "sentences": 2698,
+      "source": "ud_framenet",
+      "tag": "r2.14",
+      "words": 19223
+    },
+    {
+      "artifact_sha256": "dc916aa1cb2a0b795e1325cf39f913f1ad80ef2741e379ff8631bc12e9ae7352",
+      "documents": 25,
+      "license": "CC BY-SA 3.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-PUD",
+      "revision": "4136bd81e86e5bfeee6a78c47fe2aa84bf7b886a",
+      "sentences": 1000,
+      "source": "ud_pud",
+      "tag": "r2.14",
+      "words": 14356
+    },
+    {
+      "artifact_sha256": "264ccbe30977f895bb186ce60c554a6a45a5e1b6a9a10a43db49af2b1c86d274",
+      "documents": 72,
+      "license": "CC BY-SA 4.0",
+      "repository": "https://github.com/UniversalDependencies/UD_Turkish-GB",
+      "revision": "cd59f852772a4a14d446a5fd8f97ee53cdfadbf2",
+      "sentences": 2880,
+      "source": "ud_gb",
+      "tag": "r2.14",
+      "words": 14097
+    },
+    {
+      "artifact_note": "yalnız bibles/Turkish.xml hash'i (depo 100+ dil içerir)",
+      "artifact_sha256": "94fca4d527a8fcdcc0ad051276110b30a00203e91ce8baad0bdcb221c0af3b99",
+      "documents": 66,
+      "license": "CC0 1.0",
+      "repository": "https://github.com/christos-c/bible-corpus",
+      "revision": "44e5fca1bfb369a5da2ee23ebc6f421c88489c5c",
+      "sentences": 30209,
+      "source": "bible",
+      "tag": null,
+      "words": 450558
+    },
+    {
+      "artifact_sha256": null,
+      "cross_benchmark_note": "TWT aynı zamanda twt_real_results_v1 arc-doğrulama benchmarkının verisidir. LM görevi farklıdır (next-token); bu çapraz-görev ilişkisi bilinçli ve belgelidir.",
+      "documents": 2379,
+      "license": "Apache-2.0",
+      "repository": "vendored: hga/evaluation/datasets/twt_v1",
+      "revision": "40838e5cbe3f2882d4e768a3d782e6219e50b52a",
+      "sentences": 4851,
+      "source": "twt",
+      "tag": null,
+      "words": 57004
+    }
+  ]
+}

@@ -69,6 +69,10 @@ class V2Case:
     expected_object_type: str
     expected_properties: Tuple[Tuple[str, str, str], ...] = ()
     expected_time: Optional[str] = None
+    #: True ise DOĞRU davranış ilişki üretmemektir (ör. ettirgen çatı:
+    #: üye yapısı yüzey durumlardan çıkarılamaz). Bu vakalar kompozisyon
+    #: doğruluğuna GİRMEZ; ayrı "abstention" kapısında sayılır.
+    expect_abstention: bool = False
 
 
 #: Eğitim korpusu — sistemin "görmüş" sayıldığı tek şey budur.
@@ -121,11 +125,20 @@ HARD_CASES: Tuple[V2Case, ...] = (
            "helikopter", "tasit"),
     V2Case("Zeynep laboratuvara gitti.", "unseen_entity", "zeynep", "gitmek",
            "laboratuvar", "mekan"),
-    # Sözlükte olmayan fiil: ilişki indüklenemez, hat çekimser kalmalı.
+    # Sözlükte olmayan fiil: kanonik SOV yapısı varsa mastar İNDÜKLENMELİ
+    # (kanıt-tabanlı indüksiyon, düşük güvenle). Bunlar eskiden çekimserlik
+    # vakasıydı; indüksiyon eklenince ölçüm hedefi güncellendi.
     V2Case("Ali kitabı inceledi.", "unseen_relation", "ali", "incelemek",
            "kitap", "nesne"),
     V2Case("Ayşe arabayı tamir etti.", "unseen_relation", "ayse",
            "tamir etmek", "araba", "tasit"),
+    # İNDÜKSİYONUN SINIRI: burada ilişki üretmek YANLIŞTIR; hat çekimser
+    # kalmalı. Ettirgen çatı üye yapısını değiştirir (okuyan öğretmen
+    # değildir); kısa/az kanıtlı kökler de indüklenmez.
+    V2Case("Öğretmen öğrencilere kitabı okuttu.", "unseen_relation",
+           "ogretmen", "okutmak", "kitap", "nesne", expect_abstention=True),
+    V2Case("Ali kitabı sattırdı.", "unseen_relation", "ali", "sattırmak",
+           "kitap", "nesne", expect_abstention=True),
 )
 
 
@@ -169,6 +182,7 @@ class CompositionalV2Report:
     schema_leakage: Dict[str, Any]
     per_case: List[Dict[str, Any]]
     checks: Dict[str, bool]
+    abstention_cases: List[Dict[str, Any]] = field(default_factory=list)
     findings: List[str] = field(default_factory=list)
     limitations: List[str] = field(default_factory=list)
 
@@ -200,10 +214,25 @@ def run_compositional_v2_benchmark(
     eksen_vakalari: Dict[str, List[Dict[str, Any]]] = {a: [] for a in AXES}
     per_case: List[Dict[str, Any]] = []
 
+    cekimserlik_vakalari: List[Dict[str, Any]] = []
     for case in test_cases:
         if case.axis not in AXES:
             raise ValueError(f"bilinmeyen eksen: {case.axis}")
         cikarim = cumle_coz(case.sentence)
+        if case.expect_abstention:
+            # Doğru davranış ilişki ÜRETMEMEK: ettirgen çatı gibi üye
+            # yapısı belirsiz cümlelerde indüksiyon yanlış bilgi üretirdi.
+            # Bu vakalar kompozisyon doğruluğuna girmez; ayrı kapıda sayılır.
+            cekimserlik_vakalari.append({
+                "sentence": case.sentence,
+                "axis": case.axis,
+                "abstained": not cikarim.relations,
+                "predicted_relations": sorted(
+                    [r.subject, r.predicate, r.object]
+                    for r in cikarim.relations),
+                "skipped_reasons": list(cikarim.skipped_reasons),
+            })
+            continue
         varliklar = {e.lemma: e for e in cikarim.entities}
         iliskiler = {(r.subject, r.predicate, r.object) for r in cikarim.relations}
         ozellikler = {(p.entity, p.name, str(p.value)) for p in cikarim.properties
@@ -311,6 +340,13 @@ def run_compositional_v2_benchmark(
         # Zor set dahilken her eksende tip doğruluğunun 1.0 çıkması ölçümün
         # kolay olduğuna işarettir; kapı bu yüzden zor sette ayrıca bakar.
         "hard_subset_included": bool(zor_vakalar),
+        # İndüksiyonun SINIRI: üye yapısı belirsiz cümlelerde (ettirgen çatı)
+        # ilişki üretmek yanlış bilgidir; hat çekimser kalmalı. Bu kapı
+        # olmadan indüksiyon "her fiile mastar tak" dejenerasyonuna kayabilir
+        # — çekimserlik vakaları o dejenerasyonu anında yakalar.
+        "induction_abstains_on_ambiguous_voice": (
+            bool(cekimserlik_vakalari)
+            and all(v["abstained"] for v in cekimserlik_vakalari)),
     }
 
     bulgular = [
@@ -333,6 +369,13 @@ def run_compositional_v2_benchmark(
     basarisiz = [v["sentence"] for v in per_case if not v["composition_correct"]]
     if basarisiz:
         bulgular.append(f"Kompozisyonu kurulamayan cümleler: {basarisiz}.")
+    if cekimserlik_vakalari:
+        cekimser_ok = sum(1 for v in cekimserlik_vakalari if v["abstained"])
+        bulgular.append(
+            f"Çekimserlik vakaları (ettirgen çatı vb.): "
+            f"{cekimser_ok}/{len(cekimserlik_vakalari)} doğru çekimser. "
+            "İlişki üretmek bu cümlelerde YANLIŞ olurdu; indüksiyonun "
+            "'her fiile mastar tak' dejenerasyonuna kaymadığının kanıtıdır.")
 
     sinirlar = [
         "Çıkarım hattı kural tabanlıdır; 'keşif' istatistiksel öğrenme değil, "
@@ -343,6 +386,11 @@ def run_compositional_v2_benchmark(
         "'Görülmemiş ilişki' hattın fiil sözlüğünde OLABİLİR; görülmemişlik "
         "EĞİTİM KORPUSUNA göredir, hattın kapsamına göre değil. Bu ayrım "
         "schema_leakage bölümünde açıkça raporlanır.",
+        "Mastar indüksiyonu kanıt-tabanlıdır (kök ≥4 harf + yalın özne + "
+        "durum ekli nesne) ve DÜŞÜK güvenle (0.55) işaretlenir; ünlü uyumu "
+        "ascii üzerinde yaklaşıktır (ı→i eşlemesi kimi art ünlülü köklerde "
+        "-mek seçtirir). Çatı ekli fiillerde (ettirgen/edilgen) hat KASITLI "
+        "çekimserdir: üye yapısı yüzey durumlardan çıkarılamaz.",
     ]
 
     return CompositionalV2Report(
@@ -352,6 +400,7 @@ def run_compositional_v2_benchmark(
         discovered_train_relations=sorted(train_relations),
         axes=eksenler, overall_c_g_v2=genel, schema_leakage=sizinti,
         per_case=per_case, checks=kontroller,
+        abstention_cases=cekimserlik_vakalari,
         findings=bulgular, limitations=sinirlar,
     )
 
@@ -390,6 +439,14 @@ def compositional_v2_markdown(report: CompositionalV2Report) -> str:
                  "", "## Kabul kapıları", "", "| kapı | sonuç |", "|---|---|"]
     for ad, sonuc in report.checks.items():
         satirlar.append(f"| {ad} | {'GEÇTİ' if sonuc else 'KALDI'} |")
+    if report.abstention_cases:
+        satirlar += ["", "## Çekimserlik vakaları (ilişki üretmek YANLIŞ)",
+                     "", "| cümle | çekimser mi | neden |", "|---|---|---|"]
+        for v in report.abstention_cases:
+            satirlar.append(
+                f"| {v['sentence']} | "
+                f"{'EVET' if v['abstained'] else 'HAYIR (İHLAL)'} | "
+                f"{', '.join(v['skipped_reasons']) or '-'} |")
     satirlar += ["", "## Bulgular", ""]
     satirlar += [f"- {b}" for b in report.findings]
     satirlar += ["", "## Sınırlar", ""]

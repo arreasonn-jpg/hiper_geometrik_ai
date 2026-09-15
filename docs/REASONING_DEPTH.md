@@ -1,18 +1,18 @@
 # Güvenilir Çıkarım Derinliği — C_R ve C_RD (P0-7)
 
-Protokol: `reliable_reasoning_depth_v1` · profil: `deep` · veri imzası: `d09dc2d62c4c`
-Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
+Protokol: `reliable_reasoning_depth_v1` · profil: `deep` · veri imzası: `41010671d80e`
+Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 1048576 slot × 2 tablo
 
-**C_R = 32**  *(ızgara tavanı — gerçek derinlik daha büyük olabilir)*
+**C_R = 16384**
 
 | Dolgu | C_RD | C_RD / C_R |
 |---:|---:|---:|
-| 0 | 32 | 1.000 |
-| 64 | 32 | 1.000 |
-| 256 | 32 | 1.000 |
-| 1024 | 32 | 1.000 |
-| 4096 | 32 | 1.000 |
-| 16384 | 8 | 0.250 |
+| 0 | 16384 | 1.000 |
+| 64 | 16384 | 1.000 |
+| 256 | 16384 | 1.000 |
+| 1024 | 16384 | 1.000 |
+| 4096 | 16384 | 1.000 |
+| 16384 | 8192 | 0.500 |
 
 ## Doğruluk ızgarası
 
@@ -20,10 +20,14 @@ Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
 |---|---:|---:|---:|---:|---:|---:|
 | 1 adım (geri çağırma) | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 2 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 4 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 8 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 16 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
-| 32 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
+| 64 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 256 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 4096 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 8192 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 16384 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
+| 32768 adım | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 |
 
 ## Bellek geri çağırma ızgarası
 
@@ -31,27 +35,31 @@ Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
 |---|---:|---:|---:|---:|---:|---:|
 | 1 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 2 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 4 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 8 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 16 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
-| 32 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
+| 64 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 256 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 4096 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 8192 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 16384 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
+| 32768 adım | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 
 ## Kabul kapıları
 
 | kapı | sonuç |
 |---|---|
 | c_r_at_least_8 | GEÇTİ |
-| retains_half_depth_under_max_distractors | KALDI |
+| retains_half_depth_under_max_distractors | GEÇTİ |
 | multi_hop_beats_degenerate | GEÇTİ |
-| c_r_not_grid_limited | KALDI |
+| c_r_not_grid_limited | GEÇTİ |
 | depth_monotone_in_distractors | GEÇTİ |
 
 ## Bulgular
 
-- C_R = 32 (dolgu yok, eşik 1). UYARI: bu değer ızgaranın en derin hop'una (32) eşit — ölçüm tavana çarptı, gerçek derinlik daha büyük olabilir.
-- C_RD: 64→32, 256→32, 1024→32, 4096→32, 16384→8.
-- Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (32 → 8). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.
-- En düşük bellek geri çağırma oranı 0.0000; 262144 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir.
+- C_R = 16384 (dolgu yok, eşik 1).
+- C_RD: 64→16384, 256→16384, 1024→16384, 4096→16384, 16384→8192.
+- Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (16384 → 8192). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.
+- En düşük bellek geri çağırma oranı 0.0000; 1048576 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir.
 
 ## Sınırlar
 
@@ -63,3 +71,4 @@ Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
 - C_R/C_RD deterministik zincir takibini ölçer; öğrenilmiş akıl yürütme değildir.
 - Güvenilirlik eşiği rapora yazılır; eşik düşürülürse derinlik yapay olarak artar — tablolar eşiksiz okunmamalıdır.
 - Profil `deep` ızgarası sonlu: tarananın ötesinde bir çökme noktası olabilir, bulunmaması yokluğu kanıtlamaz.
+

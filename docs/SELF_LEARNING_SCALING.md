@@ -1,78 +1,66 @@
 # Self-Learning Ölçeklendirme (P1)
 
-Protokol: `self_learning_scaling_v1` · Modül: `hga/evaluation/self_learning_scaling.py`
-CLI: `python -m hga ogrenme-olcek --signature-profile {smoke,standard,deep}`
+- Protokol: `self_learning_scaling_v1` v1 (imza `745d4ee6ceca`)
+- Profil / tohumlar: `deep` / `[1]`
 
-## İstek ve bulgu
+## Tüm noktalar
 
-İstek "self-learning cycle sayısını 100'den 1000'e, sonra 3000'e çıkar" idi.
-Koşuldu. Çıkan sonuç istekten daha önemli:
+| Cycle | Alan | Bilgi | Bilgi/cycle | EY | Yanlış | FAR | Süre (s) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 100 | 31 | 909 | 8.090 | 0.1264 | 0 | 0.0000 | 1.1 |
+| 1000 | 31 | 938 | 0.838 | 0.1260 | 0 | 0.0000 | 10.9 |
+| 3000 | 31 | 938 | 0.279 | 0.1260 | 0 | 0.0000 | 32.3 |
+| 1000 | 63 | 3685 | 3.585 | 0.1246 | 0 | 0.0000 | 43.0 |
+| 3000 | 127 | 14735 | 4.878 | 0.1248 | 0 | 0.0000 | 688.2 |
 
-| cycles | operands_max | Nihai bilgi | EY | Yanlış bilgi | Süre |
-|---:|---:|---:|---:|---:|---:|
-| 100 | 31 | 909 | 0.1264 | 0 | 1.4 sn |
-| 1000 | 31 | **938** | 0.1260 | 0 | ~40 sn |
-| 1000 | 63 | 3 685 | 0.1246 | 0 | ~3 dk |
-| 3000 | 127 | 14 735 | 0.1248 | 0 | ~9 dk |
+## Cycle ekseni (alan sabit) — doygunluk
 
-(tohum 1, `batch_size=64`, `initial_facts=100`, `negatives_per_fact=7`)
+| Alan | Cycle çarpanı | Bilgi çarpanı | Ölçekleme verimi | Doygun |
+|---|---:|---:|---:|---|
+| operands_max=31 | 30× | 1.032× | 0.0344 | EVET |
 
-**Cycle sayısını 10 katına çıkarmak bilgiyi %3 artırdı (909 → 938).**
+## Alan ekseni (cycle sabit) — gerçek ölçekleme
 
-Sebep: sabit bir `operands_max` ile üretilebilecek geçerli ifade sayısı
-sonludur. Havuz tükendikten sonra her cycle aynı adayları yeniden üretir,
-doğrulayıcı "zaten biliniyor" der ve yeni bilgi eklenmez. Yani
+| Cycle | Alan çarpanı | Bilgi çarpanı |
+|---|---:|---:|
+| cycles=1000 | 2× | 3.93× |
+| cycles=3000 | 4× | 15.71× |
 
-> "Daha çok öğrenme döngüsü = daha çok bilgi" **yanlıştır.**
-> Ölçekleme cycle sayısından değil, **alanın genişliğinden** gelir.
+## Sürüklenme (model collapse göstergesi)
 
-`operands_max`'ı 31 → 63 (2×) yapmak, cycle'ı 100 → 1000 (10×) yapmaktan
-yaklaşık **130 kat** daha fazla bilgi kazandırdı.
+- Toplam yanlış bilgi: `0`
+- En uzun koşu: `3000` cycle → yanlış `0`, FAR `0.0`
+- Doğrulayıcı ÖNCESİ en yüksek FAR: `1.0000` (doğrulayıcının gerçekten iş yaptığının kanıtı)
 
-## Ölçülen nicelikler
-
-- **`saturation_cycle`** — nihai bilginin %99'una ulaşılan ilk cycle.
-  Bundan sonrası ölçülebilir hesap israfıdır ve raporda yazılıdır.
-- **`knowledge_per_cycle`** — marjinal verim; doygunluk sonrası ~0.
-- **`scaling_efficiency`** — bilgi çarpanı / cycle çarpanı. 1.0 doğrusal
-  ölçekleme demektir; ölçülen değer 0.10'un altında.
-- **`drift`** — uzun koşuda yanlış bilgi birikiyor mu?
-
-## Sürüklenme (model collapse) sonucu
-
-Self-training literatüründeki temel risk, modelin kendi ürettiği hatalı
-veriyle eğitilip bozulmasıdır. Ölçüm:
-
-- Tüm ölçeklerde **yanlış bilgi = 0**, doğrulayıcı sonrası **FAR = 0.0**.
-- 3000 cycle / 14 735 olguluk en uzun koşuda da bozulma yok.
-- Doğrulayıcı **öncesi** FAR sıfırdan büyüktür. Bu kritik bir ayrımdır:
-  ham üretim hatalı adaylar içeriyor, hataları eleyen doğrulayıcıdır —
-  sonuç üreticinin değil, **CLOSED_VERIFIED rejiminin** kanıtıdır.
-
-## Neden EY ölçekle değişmiyor?
-
-Deneyim verimi tüm ölçeklerde 0.1246–0.1264 bandında kaldı. Üretim
-dağılımı sabit olduğu için beklenen davranış budur; EY bir ölçek metriği
-değil, üretici-doğrulayıcı uyumunun metriğidir
-(ayrıntı: `docs/VERIM_METRIKLERI.md`).
+> Sürüklenme = uzun koşuda yanlış bilginin birikmesi. CLOSED_VERIFIED rejiminde doğrulayıcı bunu engellemelidir; sıfırdan büyük bir değer self-training çöküşünün başladığını gösterir.
 
 ## Kabul kapıları
 
-`all_points_completed`, `no_incorrect_knowledge_accumulated`,
-`no_false_acceptance_after_verifier`, `train_test_isolation_clean`,
-`long_run_stable`, `reached_1000_cycles`, `reached_3000_cycles`,
-`saturation_measured`, `domain_axis_measured`.
+| Kapı | Sonuç |
+|---|---|
+| all_points_completed | GEÇTİ |
+| no_incorrect_knowledge_accumulated | GEÇTİ |
+| no_false_acceptance_after_verifier | GEÇTİ |
+| train_test_isolation_clean | GEÇTİ |
+| long_run_stable | GEÇTİ |
+| reached_1000_cycles | GEÇTİ |
+| reached_3000_cycles | GEÇTİ |
+| saturation_measured | GEÇTİ |
+| domain_axis_measured | GEÇTİ |
 
-`smoke` profilinde 1000/3000 kapıları **kasıtlı olarak KALIR** — kısa bir
-koşum uzun koşu iddiasını desteklemez. Karne bunu yansıtır: `smoke` ile
-`self_learning` bölümü 7.8, `deep` ile 10.0 olur.
+## Bulgular
+
+- Izgara: [(100, 31), (1000, 31), (3000, 31), (1000, 63), (3000, 127)], tohumlar [1] → 5 koşu.
+- DOYGUNLUK (operands_max=31): cycle 100→3000 (30×) bilgiyi yalnız 909→938 (1.032×) artırdı. Ölçekleme verimi 0.0344. Sabit alanda aday havuzu tükeniyor; ek cycle hesap israfıdır. 'Daha çok döngü = daha çok bilgi' YANLIŞ.
+-   └ Nihai bilginin %99'una 103. cycle'da ulaşıldı; kalan 2897 cycle marjinal.
+- ALAN EKSENİ (cycles=1000): operands_max 2× büyüyünce bilgi 3.93× arttı. Ölçekleme cycle sayısından değil ALANIN genişliğinden geliyor.
+- ALAN EKSENİ (cycles=3000): operands_max 4× büyüyünce bilgi 15.71× arttı. Ölçekleme cycle sayısından değil ALANIN genişliğinden geliyor.
+- Sürüklenme yok: en uzun koşuda (3000 cycle) yanlış bilgi 0, doğrulayıcı sonrası FAR 0.0. CLOSED_VERIFIED rejimi uzun koşuda çökmüyor.
+- Deneyim verimi (EY) tüm ölçeklerde 0.1246–0.1264 bandında kaldı; ölçek EY'yi değiştirmiyor, çünkü üretim dağılımı sabit.
 
 ## Sınırlar
 
-- Alan aritmetiktir (`a+b=c`) ve doğrulayıcı kapalı formdur. Gerçek dünya
-  alanlarında doğrulama bu kadar kesin olmaz.
-- Doygunluk bu alanın **sonlu** olmasından gelir; sonsuz bir alanda cycle
-  ölçeklemesi farklı davranabilir.
-- "Sürüklenme yok" sonucu CLOSED_VERIFIED rejimine özgüdür; doğrulayıcısız
-  self-training ayrıca ölçülmelidir.
-- Tek makine, tek süreç; paralel öğrenme kapsam dışı.
+- Alan aritmetiktir (a+b=c); doğrulayıcı kapalı formdur. Gerçek dünya alanlarında doğrulama bu kadar kesin olmaz.
+- Doygunluk bu alanın SONLU olmasından gelir; sonsuz bir alanda cycle ölçeklemesi farklı davranabilir.
+- 'Sürüklenme yok' sonucu CLOSED_VERIFIED rejimine özgüdür; doğrulayıcısız self-training ayrıca ölçülmelidir.
+- Tek makine, tek süreç; paralel öğrenme davranışı kapsam dışı.

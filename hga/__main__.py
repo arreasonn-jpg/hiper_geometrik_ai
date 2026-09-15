@@ -30,6 +30,7 @@ Kullanım:
     python -m hga genelleme-v2           # ham metinden keşif + C_G v2 (P0-6)
     python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
     python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
+    python -m hga turkce-lm              # gerçek Türkçe LM: tr_corpus_v1 1.11M kelime (P1)
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
     python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
     python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
@@ -1739,6 +1740,32 @@ def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
+               markdown=None):
+    """P1: Gerçek Türkçe LM (smoke: TWT; full: tr_corpus_v1 1.11M kelime)."""
+    try:
+        import torch  # noqa: F401
+    except ImportError:
+        print("turkce-lm için torch gerekli. Örn: .venv/bin/python -m hga turkce-lm")
+        return
+    from hga.evaluation.turkish_lm import (
+        run_turkish_lm_benchmark,
+        turkish_lm_markdown,
+    )
+    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
+                if seeds else None)
+    # CLI --signature-profile {smoke,standard} → LM profilleri {smoke,full}
+    lm_profil = "smoke" if profile == "smoke" else "full"
+    # --steps yalnız CI/smoke hızlandırmasıdır; override hash'e dahildir,
+    # yani kısaltılmış bir koşu tam koşunun imzasını taklit edemez.
+    ezmeler = {"steps": int(steps)} if steps else None
+    rapor = run_turkish_lm_benchmark(profile=lm_profil, seeds=tohumlar,
+                                     overrides=ezmeler)
+    md = turkish_lm_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
     """P0-8: Hot/Warm/Cold/Archive hiyerarşik bellek benchmarkı."""
     from hga.evaluation.memory_hierarchy import (
@@ -1957,6 +1984,11 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
             raporlar["twt_results"] = run_twt_results(
                 seeds=tohumlar, profile="smoke").to_dict()
             print("  ✓ TWT gerçek sonuç tablosu (gerçek Türkçe veri)")
+            from hga.evaluation.turkish_lm import run_turkish_lm_benchmark
+            raporlar["language_modeling"] = run_turkish_lm_benchmark(
+                profile="smoke" if profile == "smoke" else "full",
+                seeds=tohumlar[:2] if len(tohumlar) >= 2 else None).to_dict()
+            print("  ✓ Gerçek Türkçe LM (TWT, belge-ayrık held-out)")
         except ImportError as hata:
             print(f"  ! PyTorch yok, nöral bölümler ATLANDI: {hata}")
             print("    (atlanan bölüm skor üretmez; karne bunu n/a gösterir)")
@@ -2018,7 +2050,8 @@ def main(argv=None):
                                      "oncelik-zincir", "operator-baseline",
                                      "cikarim-derinligi", "signature",
                                      "semantik", "genelleme-v2",
-                                     "twt-sonuc", "bellek-hiyerarsi",
+                                     "twt-sonuc", "turkce-lm",
+                                     "bellek-hiyerarsi",
                                      "cok-ortam", "ogrenme-olcek",
                                      "tohum-istatistik",
                                      "insan-degerlendirme",
@@ -2107,6 +2140,9 @@ def main(argv=None):
                    help="aktif memory stress checkpoint exact audit örnek sayısı")
     p.add_argument("--steps", type=int, default=100,
                    help="kronecker-benchmark optimizasyon adımı")
+    p.add_argument("--lm-steps", type=int, default=None,
+                   help="turkce-lm eğitim adımı override (yalnız smoke/CI "
+                        "hızlandırması; hash'e dahildir)")
     p.add_argument("--device", default="cpu",
                    help="kronecker-benchmark torch cihazı (cpu/cuda)")
     p.add_argument("--cycles", type=int, default=100,
@@ -2223,6 +2259,9 @@ def main(argv=None):
      "twt-sonuc": lambda: _twt_sonuc(
          seeds=args.seeds, profile=args.signature_profile, out=args.out,
          markdown=args.markdown),
+     "turkce-lm": lambda: _turkce_lm(
+         seeds=args.seeds, profile=args.signature_profile,
+         steps=args.lm_steps, out=args.out, markdown=args.markdown),
      "bellek-hiyerarsi": lambda: _bellek_hiyerarsi(
          profile=args.depth_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),

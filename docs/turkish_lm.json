@@ -1,0 +1,581 @@
+{
+  "arms": {
+    "dense": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 5.72243746,
+            "perplexity": 305.64902184,
+            "tokens": 150943,
+            "top1_accuracy": 0.14161637,
+            "top5_accuracy": 0.26217844
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 5.43886938,
+            "perplexity": 230.18178867,
+            "tokens": 257896,
+            "top1_accuracy": 0.17430282,
+            "top5_accuracy": 0.30176505
+          },
+          "training_seconds": 70.9766
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72413166,
+            "perplexity": 306.16729113,
+            "tokens": 150943,
+            "top1_accuracy": 0.14294138,
+            "top5_accuracy": 0.26235069
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 5.43555482,
+            "perplexity": 229.42009969,
+            "tokens": 257896,
+            "top1_accuracy": 0.175532,
+            "top5_accuracy": 0.30314158
+          },
+          "training_seconds": 67.0964
+        }
+      ],
+      "summary": {
+        "perplexity": {
+          "ci_lower": 229.42009969,
+          "ci_upper": 230.18178867,
+          "confidence_level": 0.95,
+          "max": 230.18178867,
+          "mean": 229.80094418,
+          "method": "percentile-bootstrap",
+          "min": 229.42009969,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.538595442913
+        },
+        "top1_accuracy": {
+          "ci_lower": 0.17430282,
+          "ci_upper": 0.175532,
+          "confidence_level": 0.95,
+          "max": 0.175532,
+          "mean": 0.17491741,
+          "method": "percentile-bootstrap",
+          "min": 0.17430282,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.000869161513
+        },
+        "top5_accuracy": {
+          "ci_lower": 0.30176505,
+          "ci_upper": 0.30314158,
+          "confidence_level": 0.95,
+          "max": 0.30314158,
+          "mean": 0.302453315,
+          "method": "percentile-bootstrap",
+          "min": 0.30176505,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.000973353698
+        }
+      }
+    },
+    "hga": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 6.76283699,
+            "perplexity": 865.0929808,
+            "tokens": 150943,
+            "top1_accuracy": 0.093797,
+            "top5_accuracy": 0.16775207
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 6.47370755,
+            "perplexity": 647.88132936,
+            "tokens": 257896,
+            "top1_accuracy": 0.11973819,
+            "top5_accuracy": 0.20511369
+          },
+          "training_seconds": 174.3983
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.72320913,
+            "perplexity": 831.48156566,
+            "tokens": 150943,
+            "top1_accuracy": 0.09372412,
+            "top5_accuracy": 0.16665231
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 6.42433514,
+            "perplexity": 616.67068315,
+            "tokens": 257896,
+            "top1_accuracy": 0.12057186,
+            "top5_accuracy": 0.20366737
+          },
+          "training_seconds": 179.5918
+        }
+      ],
+      "summary": {
+        "perplexity": {
+          "ci_lower": 616.67068315,
+          "ci_upper": 647.88132936,
+          "confidence_level": 0.95,
+          "max": 647.88132936,
+          "mean": 632.276006255,
+          "method": "percentile-bootstrap",
+          "min": 616.67068315,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 22.069259580305
+        },
+        "top1_accuracy": {
+          "ci_lower": 0.11973819,
+          "ci_upper": 0.12057186,
+          "confidence_level": 0.95,
+          "max": 0.12057186,
+          "mean": 0.120155025,
+          "method": "percentile-bootstrap",
+          "min": 0.11973819,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.00058949371
+        },
+        "top5_accuracy": {
+          "ci_lower": 0.20366737,
+          "ci_upper": 0.20511369,
+          "confidence_level": 0.95,
+          "max": 0.20511369,
+          "mean": 0.20439053,
+          "method": "percentile-bootstrap",
+          "min": 0.20366737,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.00102270268
+        }
+      }
+    },
+    "transformer": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 5.60951426,
+            "perplexity": 273.01159348,
+            "tokens": 150943,
+            "top1_accuracy": 0.14335875,
+            "top5_accuracy": 0.26559032
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 5.34350456,
+            "perplexity": 209.24473847,
+            "tokens": 257896,
+            "top1_accuracy": 0.17127447,
+            "top5_accuracy": 0.30388219
+          },
+          "training_seconds": 884.5267
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.62550133,
+            "perplexity": 277.41132359,
+            "tokens": 150943,
+            "top1_accuracy": 0.14357075,
+            "top5_accuracy": 0.26598782
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 5.34929225,
+            "perplexity": 210.45929267,
+            "tokens": 257896,
+            "top1_accuracy": 0.17336058,
+            "top5_accuracy": 0.30506483
+          },
+          "training_seconds": 866.3385
+        }
+      ],
+      "summary": {
+        "perplexity": {
+          "ci_lower": 209.24473847,
+          "ci_upper": 210.45929267,
+          "confidence_level": 0.95,
+          "max": 210.45929267,
+          "mean": 209.85201557,
+          "method": "percentile-bootstrap",
+          "min": 209.24473847,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.858819510939
+        },
+        "top1_accuracy": {
+          "ci_lower": 0.17127447,
+          "ci_upper": 0.17336058,
+          "confidence_level": 0.95,
+          "max": 0.17336058,
+          "mean": 0.172317525,
+          "method": "percentile-bootstrap",
+          "min": 0.17127447,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.001475102527
+        },
+        "top5_accuracy": {
+          "ci_lower": 0.30388219,
+          "ci_upper": 0.30506483,
+          "confidence_level": 0.95,
+          "max": 0.30506483,
+          "mean": 0.30447351,
+          "method": "percentile-bootstrap",
+          "min": 0.30388219,
+          "n": 2,
+          "seed": 12345,
+          "std_sample": 0.000836252764
+        }
+      }
+    }
+  },
+  "budget": {
+    "dense_hidden_dim": 49,
+    "max_to_min_ratio": 1.005113,
+    "parameters": {
+      "dense": 474905,
+      "hga": 477333,
+      "transformer": 477311
+    },
+    "target_parameters": 477333,
+    "transformer_ffn_dim": 1931
+  },
+  "checks": {
+    "best_neural_beats_interpolated_bigram_ppl": true,
+    "best_neural_beats_majority_top1": true,
+    "best_neural_beats_unigram_ppl": true,
+    "corpus_at_least_1m_words": true,
+    "document_disjoint_splits": true,
+    "finite_metrics_all_arms": true,
+    "multi_seed_reported": true,
+    "parameter_budget_max_min_ratio_leq_1_05": true,
+    "real_human_corpus_hash_verified": true,
+    "tokenizer_fit_train_only": true
+  },
+  "comparisons": [
+    {
+      "baseline_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 229.42009969,
+        "method": "percentile-bootstrap",
+        "point_estimate": 229.80094418,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12346,
+        "statistic": "test_perplexity::baseline",
+        "upper": 230.18178867
+      },
+      "baseline_label": "dense",
+      "baseline_mean": 229.80094418,
+      "difference_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 387.25058346,
+        "method": "percentile-bootstrap",
+        "point_estimate": 402.475062075,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12347,
+        "statistic": "test_perplexity::difference",
+        "upper": 417.69954069
+      },
+      "effect_size": {
+        "hedges_g": 18.69310948825,
+        "interpretation": "Eşleşmiş fark ortalaması 402.475, d_z=18.6931, g=18.6931 (large).",
+        "limitations": [
+          "Cohen eşikleri (0.2/0.5/0.8) sözleşmedir; alan-bağımsız gerçek anlam taşımaz.",
+          "Etki büyüklüğü YÖN ve BÜYÜKLÜK verir; nedensellik veya genellenebilirlik vermez."
+        ],
+        "magnitude": "large",
+        "mean_difference": 402.475062075,
+        "measure": "cohens_d_z_paired",
+        "sample_size": 2,
+        "std_difference": 21.530664137392,
+        "value": 18.69310948825
+      },
+      "limitations": [
+        "Tüm çıkarım YALNIZ seed varyansı üzerinedir; dataset ve protokol sabittir.",
+        "Çoklu metrik karşılaştırılıyorsa çoklu test düzeltmesi uygulanmamıştır.",
+        "İstatistiksel ayrışma, gerçek dünya genellemesi anlamına gelmez."
+      ],
+      "metric": "test_perplexity",
+      "permutation_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "n=2 ile ulaşılabilecek en küçük p=0.50000 > 0.05. Bu tasarımda anlamlılık İDDİA EDİLEMEZ; p değeri yalnız tanımlayıcıdır. p<0.05 için en az 6 eşleşmiş seed gerekir.",
+        "limitations": [
+          "Sıfır hipotezi fark dağılımının 0 etrafında simetrik olmasıdır.",
+          "p-değeri etki BÜYÜKLÜĞÜ değildir; effect size ile birlikte okunmalıdır.",
+          "Seed varyansı dışındaki (dataset, protokol, uygulama) yanlılıkları kapsamaz.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: seed sayısı artırılmadan p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.5,
+        "p_value": 0.5,
+        "permutations": 4,
+        "sample_size": 2,
+        "significant_at_0_05": false,
+        "statistic": 402.475062075,
+        "test": "exact-paired-sign-flip-permutation",
+        "underpowered_by_design": true
+      },
+      "treatment_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 616.67068315,
+        "method": "percentile-bootstrap",
+        "point_estimate": 632.276006255,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12345,
+        "statistic": "test_perplexity::treatment",
+        "upper": 647.88132936
+      },
+      "treatment_label": "hga",
+      "treatment_mean": 632.276006255,
+      "verdict": "YETERSİZ GÜÇ: n=2 ile p<0.05 ulaşılamaz (en küçük p=0.50000). Fark ortalaması 402.475, %95 CI [387.251, 417.7] — sıfırı içermiyor. Anlamlılık İDDİA EDİLMEZ; sonuç betimleyicidir.",
+      "wilcoxon_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "W=0, p=0.50000 (tasarım gereği anlamlılık iddia edilemez)",
+        "limitations": [
+          "Wilcoxon sıralara dayanır; etki büyüklüğünü DEĞİL, sıralama tutarlılığını sınar.",
+          "p-değeri tek başına bilimsel kanıt değildir; CI ve effect size ile okunmalıdır.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: bu etkin örneklemle p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.5,
+        "p_value": 0.5,
+        "permutations": 4,
+        "sample_size": 2,
+        "significant_at_0_05": false,
+        "statistic": 0,
+        "test": "exact-wilcoxon-signed-rank",
+        "underpowered_by_design": true
+      }
+    },
+    {
+      "baseline_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 209.24473847,
+        "method": "percentile-bootstrap",
+        "point_estimate": 209.85201557,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12346,
+        "statistic": "test_perplexity::baseline",
+        "upper": 210.45929267
+      },
+      "baseline_label": "transformer",
+      "baseline_mean": 209.85201557,
+      "difference_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 406.21139048,
+        "method": "percentile-bootstrap",
+        "point_estimate": 422.423990685,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12347,
+        "statistic": "test_perplexity::difference",
+        "upper": 438.63659089
+      },
+      "effect_size": {
+        "hedges_g": 18.423871838715,
+        "interpretation": "Eşleşmiş fark ortalaması 422.424, d_z=18.4239, g=18.4239 (large).",
+        "limitations": [
+          "Cohen eşikleri (0.2/0.5/0.8) sözleşmedir; alan-bağımsız gerçek anlam taşımaz.",
+          "Etki büyüklüğü YÖN ve BÜYÜKLÜK verir; nedensellik veya genellenebilirlik vermez."
+        ],
+        "magnitude": "large",
+        "mean_difference": 422.423990685,
+        "measure": "cohens_d_z_paired",
+        "sample_size": 2,
+        "std_difference": 22.928079091244,
+        "value": 18.423871838715
+      },
+      "limitations": [
+        "Tüm çıkarım YALNIZ seed varyansı üzerinedir; dataset ve protokol sabittir.",
+        "Çoklu metrik karşılaştırılıyorsa çoklu test düzeltmesi uygulanmamıştır.",
+        "İstatistiksel ayrışma, gerçek dünya genellemesi anlamına gelmez."
+      ],
+      "metric": "test_perplexity",
+      "permutation_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "n=2 ile ulaşılabilecek en küçük p=0.50000 > 0.05. Bu tasarımda anlamlılık İDDİA EDİLEMEZ; p değeri yalnız tanımlayıcıdır. p<0.05 için en az 6 eşleşmiş seed gerekir.",
+        "limitations": [
+          "Sıfır hipotezi fark dağılımının 0 etrafında simetrik olmasıdır.",
+          "p-değeri etki BÜYÜKLÜĞÜ değildir; effect size ile birlikte okunmalıdır.",
+          "Seed varyansı dışındaki (dataset, protokol, uygulama) yanlılıkları kapsamaz.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: seed sayısı artırılmadan p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.5,
+        "p_value": 0.5,
+        "permutations": 4,
+        "sample_size": 2,
+        "significant_at_0_05": false,
+        "statistic": 422.423990685,
+        "test": "exact-paired-sign-flip-permutation",
+        "underpowered_by_design": true
+      },
+      "treatment_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=2 küçük: bootstrap yalnız gözlenen 2 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 616.67068315,
+        "method": "percentile-bootstrap",
+        "point_estimate": 632.276006255,
+        "resamples": 10000,
+        "sample_size": 2,
+        "seed": 12345,
+        "statistic": "test_perplexity::treatment",
+        "upper": 647.88132936
+      },
+      "treatment_label": "hga",
+      "treatment_mean": 632.276006255,
+      "verdict": "YETERSİZ GÜÇ: n=2 ile p<0.05 ulaşılamaz (en küçük p=0.50000). Fark ortalaması 422.424, %95 CI [406.211, 438.637] — sıfırı içermiyor. Anlamlılık İDDİA EDİLMEZ; sonuç betimleyicidir.",
+      "wilcoxon_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "W=0, p=0.50000 (tasarım gereği anlamlılık iddia edilemez)",
+        "limitations": [
+          "Wilcoxon sıralara dayanır; etki büyüklüğünü DEĞİL, sıralama tutarlılığını sınar.",
+          "p-değeri tek başına bilimsel kanıt değildir; CI ve effect size ile okunmalıdır.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: bu etkin örneklemle p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.5,
+        "p_value": 0.5,
+        "permutations": 4,
+        "sample_size": 2,
+        "significant_at_0_05": false,
+        "statistic": 0,
+        "test": "exact-wilcoxon-signed-rank",
+        "underpowered_by_design": true
+      }
+    }
+  ],
+  "config": {
+    "batch_size": 256,
+    "context": 24,
+    "corpus": "tr_corpus_v1",
+    "emb_dim": 32,
+    "eval_batch_size": 4096,
+    "gradient_clip_norm": 5.0,
+    "heads": 4,
+    "hga_layers": 2,
+    "hga_n": 24,
+    "learning_rate": 0.003,
+    "max_docs": null,
+    "max_vocab": 8000,
+    "steps": 4000
+  },
+  "config_hash": "44ac5db9f3b88756c5ffdd1e473958d3fc61600106fad3a14a5821e45bec19dd",
+  "corpus": {
+    "document_count": 4365,
+    "splits": {
+      "dev": {
+        "documents": 399,
+        "sentences": 7608,
+        "words": 75687
+      },
+      "test": {
+        "documents": 452,
+        "sentences": 10818,
+        "words": 121983
+      },
+      "train": {
+        "documents": 3514,
+        "sentences": 85804,
+        "words": 912839
+      }
+    },
+    "tokens": {
+      "dev": 150943,
+      "test": 257896,
+      "train": 1891700
+    }
+  },
+  "dataset_hash": "d278278dd3102c163768f4a97472bc737182c93b0f1694f78985c6f532c07b48",
+  "limitations": [
+    "Korpus tr_corpus_v1'dir (UD r2.14 ×8 + Bible CC0 + TWT; ≥1.1M kelime, tamamı gerçek insan metni, hash doğrulamalı). Tür dağılımı dengeli değildir: İncil çevirisi korpusun ~%40'ıdır ve dil/biçem olarak moderndir ama tematik olarak dardır. TWT hem burada hem twt_real_results_v1 arc benchmarkındadır; görevler farklıdır ve bu çapraz kullanım bilinçlidir.",
+    "Ölçülen şey held-out perplexity ve next-token doğruluğudur; üretim kalitesi, talimat takibi ve sohbet kalitesi bu protokolün dışındadır.",
+    "Bağlam pencereleri belge içidir; belgeler arası uzun-bağlam etkisi bu sürümde ölçülmez.",
+    "2 tohum dağılım raporlar; kesin anlamlılık iddiası için 20-tohum çekirdek protokolü gerekir."
+  ],
+  "ngram": {
+    "bigram": {
+      "dev": {
+        "cross_entropy": 6.22695249,
+        "perplexity": 506.21045046,
+        "tokens": 150943.0
+      },
+      "test": {
+        "cross_entropy": 5.98636304,
+        "perplexity": 397.9645941,
+        "tokens": 257896.0
+      }
+    },
+    "unigram": {
+      "dev": {
+        "cross_entropy": 7.30599663,
+        "perplexity": 1489.20340748,
+        "tokens": 150943.0
+      },
+      "test": {
+        "cross_entropy": 7.1759254,
+        "perplexity": 1307.56956767,
+        "tokens": 257896.0
+      }
+    }
+  },
+  "perplexity": {
+    "best_arm": "transformer",
+    "best_neural_test_ppl_mean": 209.85201557,
+    "bigram_test_ppl": 397.9645941,
+    "hga_test_ppl_mean": 632.276006255,
+    "majority_top1": 0.04700732,
+    "unigram_test_ppl": 1307.56956767
+  },
+  "profile": "full",
+  "protocol": "turkish_lm_v1",
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2
+  ],
+  "tokenizer": {
+    "byte_fallback": true,
+    "vocab_hash": "59dfe03a5b4bfe3d21acb0989488660114abdbdc3c3c1d7de47db89cb118c128",
+    "vocab_size": 5332
+  }
+}

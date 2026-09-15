@@ -37,16 +37,16 @@
       "std_sample": 0.00528074585
     },
     "useful_experience_yield": {
-      "ci_lower": 0.153750002,
-      "ci_upper": 0.159999998,
+      "ci_lower": 0.157499998,
+      "ci_upper": 0.164583332,
       "confidence_level": 0.95,
-      "max": 0.1625,
-      "mean": 0.156458334,
+      "max": 0.16770833,
+      "mean": 0.160624998,
       "method": "percentile-bootstrap",
-      "min": 0.153125,
+      "min": 0.15625,
       "n": 5,
       "seed": 12345,
-      "std_sample": 0.003925299396
+      "std_sample": 0.004564354189
     },
     "verified_information_density": {
       "ci_lower": 0.922719066,
@@ -71,16 +71,16 @@
         "ey_overstates_novelty": true,
         "ey_overstates_usefulness": true,
         "ey_vs_ny": 0.04375,
-        "ey_vs_uey": 0.075,
+        "ey_vs_uey": 0.07291667,
         "memorization_without_generalization": false,
         "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
-        "ny_vs_uey": 0.03125
+        "ny_vs_uey": 0.02916667
       },
       "duplicate_generations": 224,
       "experience_yield": 0.22916667,
       "findings": [
         "EY=0.2292 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
-        "NY=0.1854 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (72 çakışma).",
+        "NY=0.1854 fakat UEY=0.1562: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (70 çakışma).",
         "GY=0.6047: holdout doğruluğu öğrenmeyle 0.0000 → 0.6047 arttı (52/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
         "VID=0.9186 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
       ],
@@ -113,14 +113,14 @@
         "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
         "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
       ],
-      "memory_collisions": 72,
+      "memory_collisions": 70,
       "novelty_yield": 0.18541667,
       "protocol": "experience-yield-decomposition-v1",
-      "retrievable_facts": 148,
+      "retrievable_facts": 150,
       "seed": 1,
       "total_verified_bits": 881.84694325,
-      "useful_experience_yield": 0.15416667,
-      "useful_facts": 148,
+      "useful_experience_yield": 0.15625,
+      "useful_facts": 150,
       "verified": 220,
       "verified_information_density": 0.91859057
     },
@@ -133,16 +133,16 @@
         "ey_overstates_novelty": true,
         "ey_overstates_usefulness": true,
         "ey_vs_ny": 0.05833333,
-        "ey_vs_uey": 0.090625,
+        "ey_vs_uey": 0.08541667,
         "memorization_without_generalization": false,
         "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
-        "ny_vs_uey": 0.03229167
+        "ny_vs_uey": 0.02708334
       },
       "duplicate_generations": 224,
       "experience_yield": 0.24375,
       "findings": [
         "EY=0.2437 fakat NY=0.1854: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
-        "NY=0.1854 fakat UEY=0.1531: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (87 çakışma).",
+        "NY=0.1854 fakat UEY=0.1583: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (82 çakışma).",
         "GY=0.5930: holdout doğruluğu öğrenmeyle 0.0000 → 0.5930 arttı (51/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
         "VID=0.9186 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
       ],
@@ -175,14 +175,14 @@
         "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
         "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
       ],
-      "memory_collisions": 87,
+      "memory_collisions": 82,
       "novelty_yield": 0.18541667,
       "protocol": "experience-yield-decomposition-v1",
-      "retrievable_facts": 147,
+      "retrievable_facts": 152,
       "seed": 2,
       "total_verified_bits": 881.84694325,
-      "useful_experience_yield": 0.153125,
-      "useful_facts": 147,
+      "useful_experience_yield": 0.15833333,
+      "useful_facts": 152,
       "verified": 234,
       "verified_information_density": 0.91859057
     },
@@ -195,16 +195,16 @@
         "ey_overstates_novelty": true,
         "ey_overstates_usefulness": true,
         "ey_vs_ny": 0.05104167,
-        "ey_vs_uey": 0.08958334,
+        "ey_vs_uey": 0.08020834,
         "memorization_without_generalization": false,
         "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
-        "ny_vs_uey": 0.03854167
+        "ny_vs_uey": 0.02916667
       },
       "duplicate_generations": 224,
       "experience_yield": 0.24791667,
       "findings": [
         "EY=0.2479 fakat NY=0.1969: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
-        "NY=0.1969 fakat UEY=0.1583: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (86 çakışma).",
+        "NY=0.1969 fakat UEY=0.1677: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (77 çakışma).",
         "GY=0.6744: holdout doğruluğu öğrenmeyle 0.0000 → 0.6744 arttı (58/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
         "VID=0.9754 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
       ],
@@ -237,14 +237,14 @@
         "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
         "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
       ],
-      "memory_collisions": 86,
+      "memory_collisions": 77,
       "novelty_yield": 0.196875,
       "protocol": "experience-yield-decomposition-v1",
-      "retrievable_facts": 152,
+      "retrievable_facts": 161,
       "seed": 3,
       "total_verified_bits": 936.34310266,
-      "useful_experience_yield": 0.15833333,
-      "useful_facts": 152,
+      "useful_experience_yield": 0.16770833,
+      "useful_facts": 161,
       "verified": 238,
       "verified_information_density": 0.9753574
     },
@@ -319,16 +319,16 @@
         "ey_overstates_novelty": true,
         "ey_overstates_usefulness": true,
         "ey_vs_ny": 0.04375,
-        "ey_vs_uey": 0.07916666,
+        "ey_vs_uey": 0.075,
         "memorization_without_generalization": false,
         "note": "Bu farklar sıfırsa yeni metrikler EY'nin yeniden adlandırılmasıdır. Sıfırdan büyükse EY, yenilik ve kullanışlılığı sistematik olarak abartıyor demektir.",
-        "ny_vs_uey": 0.03541666
+        "ny_vs_uey": 0.03125
       },
       "duplicate_generations": 224,
       "experience_yield": 0.23333333,
       "findings": [
         "EY=0.2333 fakat NY=0.1896: üretimin bir kısmı zaten bilinen üçlülerin tekrarı (224 tekrar üretim).",
-        "NY=0.1896 fakat UEY=0.1542: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (76 çakışma).",
+        "NY=0.1896 fakat UEY=0.1583: doğrulanan bilginin bir kısmı bellekte kalıcı/kullanılabilir değil (72 çakışma).",
         "GY=0.6628: holdout doğruluğu öğrenmeyle 0.0000 → 0.6628 arttı (57/86 örnekte karar verilebildi, karar verilenlerde isabet 1.0000). Genelleme, görülmemiş negatifleri fonksiyonel teklikten çıkarmaktır.",
         "VID=0.9392 bit/deneyim (olgu başına 4.9542 bit, sonuç uzayı R=31)."
       ],
@@ -361,14 +361,14 @@
         "VID, her olgunun sonuç uzayında tekdüze dağıldığını varsayar.",
         "Her rapor tek tohumun tek koşusudur; güven aralığı için çok tohumlu koşu (CLI --seeds veya run_yield_seed_sweep) gerekir."
       ],
-      "memory_collisions": 76,
+      "memory_collisions": 72,
       "novelty_yield": 0.18958333,
       "protocol": "experience-yield-decomposition-v1",
-      "retrievable_facts": 148,
+      "retrievable_facts": 152,
       "seed": 5,
       "total_verified_bits": 901.66372849,
-      "useful_experience_yield": 0.15416667,
-      "useful_facts": 148,
+      "useful_experience_yield": 0.15833333,
+      "useful_facts": 152,
       "verified": 224,
       "verified_information_density": 0.93923305
     }

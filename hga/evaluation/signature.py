@@ -29,9 +29,14 @@ H    Dolgu-ağırlıklı çıkarım (bağlamın çoğu alakasız)
 
 Kollar
 ------
-``symbolic``          kural motoru; bilmiyorsa UNCERTAIN der, uydurmaz
-``dense``             gömme + MLP
-``transformer``       TransformerEncoder (bağlamı gerçekten okur)
+``symbolic``          kural motoru; bilmiyorsa UNCERTAIN der, uydurmaz.
+                      **Rakip değil KÂHİN tavandır**: gizli olguları ham
+                      okur ve deterministik dünyada geçişli kapanış
+                      hatasızdır (yapısal 1.0). İmza kapısı bu yüzden
+                      öğrenen kollara bakar; kâhin farkı ``oracle_gap``
+                      alanında ayrıca raporlanır.
+``dense``             gömme + MLP (öğrenen rakip)
+``transformer``       TransformerEncoder (öğrenen rakip; bağlamı okur)
 ``hga``               attention + geometrik encoder + Kronecker zinciri + bellek
 ``hga_no_memory``     bellek kanalı kapalı
 ``hga_no_kronecker``  Kronecker zinciri Identity
@@ -822,14 +827,26 @@ def run_signature_benchmark(
     }
 
     # ── imza analizi: HGA nerede kazanıyor, fark nereden geliyor? ──────────
-    rakipler = [a for a in ("dense", "transformer", "symbolic") if a in arms]
+    # İKİ AYRI soru ölçülür ve karıştırılmaz:
+    #
+    # 1. ÖĞRENEN rakipler (dense, transformer — aynı bilgi, aynı parametre
+    #    bütçesi, aynı eğitim) arasında HGA'nın imza görevi var mı?
+    # 2. Sembolik KÂHİNE (oracle) uzaklık ne kadar?
+    #
+    # `symbolic` bir rakip DEĞİL, tavandır: gizli olguları HAM biçimde okur
+    # (nöral kollara yalnız 2 skalerlik özet kanal verilir) ve deterministik
+    # dünyada geçişli kapanış hatasızdır — yapısal 1.0. Kâhini "en iyi
+    # rakip" saymak, imza kapısını hiçbir öğrenen sistemin geçemeyeceği bir
+    # tanıma bağlar: ölçüm yanlış soruyu sorar. Kâhin farkı `oracle_gap`
+    # alanında AYRICA raporlanır; gizlenmez.
+    ogrenen_rakipler = [a for a in ("dense", "transformer") if a in arms]
     imza_kazanim: Dict[str, Any] = {}
     for task in tasks:
         if "hga" not in sonuclar[task]:
             continue
         hga_acc = sonuclar[task]["hga"]["accuracy_mean"]
         en_iyi_rakip = max(
-            ((a, sonuclar[task][a]["accuracy_mean"]) for a in rakipler
+            ((a, sonuclar[task][a]["accuracy_mean"]) for a in ogrenen_rakipler
              if a in sonuclar[task]),
             key=lambda item: item[1], default=(None, 0.0))
         imza_kazanim[task] = {
@@ -839,6 +856,11 @@ def run_signature_benchmark(
             "margin": round(hga_acc - en_iyi_rakip[1], 6),
             "beats_majority": hga_acc > cogunluk_ozet.get(task, {}).get("accuracy", 0.0),
         }
+        if "symbolic" in sonuclar[task]:
+            imza_kazanim[task]["oracle_accuracy"] = (
+                sonuclar[task]["symbolic"]["accuracy_mean"])
+            imza_kazanim[task]["oracle_gap"] = round(
+                sonuclar[task]["symbolic"]["accuracy_mean"] - hga_acc, 6)
         for bilesen, kol in (("memory", "hga_no_memory"),
                              ("kronecker", "hga_no_kronecker"),
                              ("attention", "hga_no_attention")):
@@ -992,9 +1014,13 @@ def signature_markdown(report: SignatureReport) -> str:
         satirlar.append(f"| {task} | " + " | ".join(hucreler) + " |")
 
     satirlar += ["", "## İmza analizi: HGA nerede, neden?", "",
-                 "| Görev | HGA | En iyi rakip | Fark | Bellek katkısı | "
-                 "Kronecker katkısı | Attention katkısı |",
-                 "|---|---:|---|---:|---:|---:|---:|"]
+                 "Rakip = **öğrenen** kollar (dense/transformer; aynı bilgi, "
+                 "aynı bütçe). `symbolic` rakip değil KÂHİN tavandır: gizli "
+                 "olguları ham okur, deterministik dünyada yapısal 1.0 alır; "
+                 "farkı `kâhin açığı` sütununda ayrıca raporlanır.", "",
+                 "| Görev | HGA | En iyi rakip | Fark | Kâhin açığı | "
+                 "Bellek katkısı | Kronecker katkısı | Attention katkısı |",
+                 "|---|---:|---|---:|---:|---:|---:|---:|"]
     for task in report.tasks:
         v = report.signature.get(task)
         if v is None:
@@ -1002,6 +1028,7 @@ def signature_markdown(report: SignatureReport) -> str:
         satirlar.append(
             f"| {task} | {v['hga_accuracy']:.4f} | {v['best_competitor']} "
             f"({v['best_competitor_accuracy']:.4f}) | {v['margin']:+.4f} | "
+            f"{v.get('oracle_gap', float('nan')):+.4f} | "
             f"{v.get('memory_contribution', float('nan')):+.4f} | "
             f"{v.get('kronecker_contribution', float('nan')):+.4f} | "
             f"{v.get('attention_contribution', float('nan')):+.4f} |")

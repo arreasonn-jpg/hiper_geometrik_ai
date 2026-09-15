@@ -82,11 +82,49 @@ def test_sifat_kendinden_sonraki_isme_baglanir():
     assert renkler == [("araba", "kırmızı")]
 
 
-def test_bilinmeyen_fiilde_iliski_uydurulmaz():
-    """Yüklem sözlükte yoksa yönlü ilişki iddiası ÜRETİLMEZ."""
+def test_bilinmeyen_fiil_kanitliysa_induklenir_dusuk_guvenle():
+    """Sözlükte olmayan fiil, kanonik SOV kanıtı varsa mastar olarak
+    İNDÜKLENİR; ilişki induced=True ve düşük güvenle işaretlenir."""
     r = cumle_coz("Ali kitabı inceledi.")
+    assert len(r.relations) == 1
+    iliski = r.relations[0]
+    assert (iliski.subject, iliski.predicate, iliski.object) == \
+        ("ali", "incelemek", "kitap")
+    assert iliski.induced is True
+    assert iliski.confidence <= 0.55, "indüklenen ilişki düşük güven taşımalı"
+
+
+def test_kanit_yetersizse_iliski_uydurulmaz():
+    """İndüksiyon kanıt ister: kısa kök (<4) veya eksik üye yapısında yönlü
+    ilişki iddiası ÜRETİLMEZ. 'Bilmiyorum' > yanlış bilgi."""
+    # 'at' kökü 2 harf: indüklenemez.
+    r = cumle_coz("Ali topu attı.")
     assert r.relations == []
     assert any(n.startswith("bilinmeyen_fiil") for n in r.skipped_reasons)
+    # Özne yok: indüklenemez.
+    r2 = cumle_coz("Kitap düştü.")
+    assert r2.relations == []
+
+
+def test_cati_ekli_fiilde_cekimser_kalinir():
+    """Ettirgen/edilgen çatıda üye yapısı yüzeyden çıkarılamaz; naif
+    özne/nesne eşlemesi YANLIŞ bilgi üretirdi ('okutan' okumaz)."""
+    r = cumle_coz("Öğretmen öğrencilere kitabı okuttu.")
+    assert r.relations == []
+    assert any(n.startswith("cati_eki_uye_yapisi_belirsiz")
+               for n in r.skipped_reasons)
+
+
+def test_hafif_fiil_bilesigi_kurulur():
+    """'tamir etti' → 'tamir etmek': hafif fiil kendinden önceki yalın adla
+    bileşik yüklem kurar; o ad ayrı varlık olarak KALMAZ."""
+    r = cumle_coz("Ayşe arabayı tamir etti.")
+    assert len(r.relations) == 1
+    iliski = r.relations[0]
+    assert (iliski.subject, iliski.predicate, iliski.object) == \
+        ("ayse", "tamir etmek", "araba")
+    assert iliski.induced is True
+    assert "tamir" not in {e.lemma for e in r.entities}
 
 
 def test_bilinmeyen_varlik_atilmaz_dusuk_guvenle_kaydedilir():
@@ -142,8 +180,9 @@ def test_olumsuz_iliski_pozitif_olgu_olarak_yazilmaz():
 
 
 def test_korpus_verim_metrikleri():
+    # "attı" → 'at' kökü kısa (<4): indüklenmez, bilinmeyen_fiil sayılır.
     ozet = korpus_coz(["Ali ata bindi.", "Ayşe arabaya bindi.",
-                       "Ali kitabı inceledi."])
+                       "Ali topu attı."])
     assert ozet["sentences"] == 3
     assert 0.0 <= ozet["relation_coverage"] <= 1.0
     assert ozet["entity_yield"] > 0

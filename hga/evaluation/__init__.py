@@ -70,6 +70,11 @@ from .kronecker_rank import (
 )
 from .leakage import LeakageAuditReport, audit_partitions, semantic_fingerprint
 from .lifecycle import LifecycleBenchmarkReport, run_lifecycle_benchmark
+from .long_context import (
+    LongContextReport,
+    long_context_markdown,
+    run_long_context_benchmark,
+)
 from .memory_hierarchy import (
     PROFILES as MEMORY_HIERARCHY_PROFILES,
 )
@@ -196,6 +201,21 @@ from .turkish_benchmark import (
     perplexity_benchmark,
     tokenizer_kapsami,
 )
+from .turkish_lm import (
+    NEURAL_ARMS as TURKISH_LM_ARMS,
+)
+from .turkish_lm import (
+    NGRAM_ARMS,
+    LMCorpus,
+    LMDocument,
+    NgramBaselines,
+    TurkishLMReport,
+    build_lm_models,
+    document_splits_disjoint,
+    prepare_lm_corpus,
+    run_turkish_lm_benchmark,
+    turkish_lm_markdown,
+)
 from .twt_baselines import (
     ARCHITECTURE_CONFIG,
     BASELINE_PROFILES,
@@ -228,6 +248,11 @@ from .verifier_adversarial import (
 )
 
 __all__ = [
+    # P1 gerçek Türkçe dil modelleme (TWT held-out)
+    "TURKISH_LM_ARMS", "NGRAM_ARMS", "LMCorpus", "LMDocument",
+    "NgramBaselines", "TurkishLMReport", "prepare_lm_corpus",
+    "document_splits_disjoint", "build_lm_models",
+    "run_turkish_lm_benchmark", "turkish_lm_markdown",
     # P0-3 TWT gerçek sonuç tablosu
     "HEADLINE_METRICS", "CALIBRATION_METRICS", "COST_FIELDS",
     "TWTResultsReport", "analytic_forward_flops", "measured_forward_flops",
@@ -271,6 +296,7 @@ __all__ = [
     "TWTBaselineReport", "build_twt_models", "run_twt_architecture_baselines",
     "REQUIRED_ATTACK_CLASSES", "ProofDecision", "VerifierAttackDataset",
     "VerifierAttackMetrics", "VerifierAttackReport", "run_verifier_adversarial_benchmark",
+    "LongContextReport", "long_context_markdown", "run_long_context_benchmark",
     "verify_arithmetic_proof",
     "CompositionalDataset", "CompositionalMetrics", "CompositionalReport",
     "DimensionMetrics", "GeneralizationCapacity", "run_compositional_benchmark",

@@ -26,6 +26,12 @@ from typing import Dict, List, Optional, Tuple
 _MASK31 = 0x7FFFFFFF
 _TABAN = 65537
 
+# Tablo başına bağımsız adresleme tuzları. Rastgele görünen sabitler bilinçli:
+# splitmix/murmur ailesinden alınmış, birbirinden uzak bit desenleri. Tuz 0
+# (tablo-1) kimlik değil — o da karıştırmadan geçer; böylece tablo-1 adresi
+# parmak izinin düz modülosu olmaktan çıkar.
+_TABLO_TUZLARI = (0x243F6A88, 0x452821E6)
+
 
 def _kararli_bilesen_hash(b) -> int:
     """Python'un süreç-bağımlı ``hash`` fonksiyonu yerine kararlı 31-bit hash."""
@@ -83,13 +89,33 @@ class DeneyimSlotlari:
         # Sayaç eksiksizdir; liste yalnız teşhis için sınırlı örnek taşır.
         self.cakismalar: List[Dict] = []
 
-    def _adres(self, iz: int, tuz: int) -> int:
-        return (iz * tuz) % self.slot_sayisi
+    def _adres(self, iz: int, tablo: int) -> int:
+        """Tablo başına BAĞIMSIZ adres (splitmix karıştırmalı).
+
+        ESKİ kusurlu form ``(iz * tuz) % N`` idi (tuz = 1, 2). İki kusur:
+
+        * ``iz1 ≡ iz2 (mod N)`` ise ``2·iz1 ≡ 2·iz2 (mod N)`` — tablo-1'de
+          çakışan HER çift tablo-2'de de çakışıyordu. İkinci tablo sıfır
+          bağımsızlık katıyordu.
+        * N çift iken ``(iz·2) % N`` yalnız çift slotlara düşer; tablo-2
+          kapasitesinin yarısı hiç kullanılmıyordu.
+
+        Ölçülen etki: %0.2 dolulukta bile 513 anahtardan 3'ü kayboluyordu ve
+        512-hop çıkarım zinciri kopuyordu (bkz. docs/SPARSE_ADDRESSING_FIX.md).
+        Yeni form tablo tuzunu XOR'layıp çığ (avalanche) karışımı uygular;
+        tablolar deneysel olarak bağımsız davranır ve tüm slotlar kullanılır.
+        """
+        x = (iz ^ _TABLO_TUZLARI[tablo]) & _MASK31
+        x = (x * 0x7FEB352D) & _MASK31
+        x ^= x >> 15
+        x = (x * 0x846CA68B) & _MASK31
+        x ^= x >> 13
+        return x % self.slot_sayisi
 
     def adresler(self, anahtar_bilesenleri) -> Tuple[int, ...]:
         """Bir anahtarın tablo adreslerini değiştirmeden görünür kıl."""
         iz = parmak_izi(anahtar_bilesenleri)
-        return tuple(self._adres(iz, tuz + 1) for tuz in range(self.tablo_sayisi))
+        return tuple(self._adres(iz, tablo) for tablo in range(self.tablo_sayisi))
 
     def yaz(self, experience_id: str, anahtar_bilesenleri) -> int:
         """Deneyimi slotlara yaz; birincil slot numarasını döner.
@@ -117,10 +143,20 @@ class DeneyimSlotlari:
         return adresler[0]
 
     def icerir(self, experience_id: str, anahtar_bilesenleri) -> bool:
+        """Deneyim herhangi bir tabloda hayatta mı? (OR semantiği)
+
+        Neden ``any`` ve ``all`` değil: slot içeriği ``experience_id`` ile
+        karşılaştırıldığı için yanlış-pozitif İMKÂNSIZDIR — yanlış anahtar
+        aynı slota düşse bile kimlik eşleşmez. ``all`` (eski davranış) bu
+        yüzden hiçbir yanlış-pozitifi engellemiyordu; yalnız kaybı
+        BÜYÜTÜYORDU: anahtar tek tablodaki slotunu çakışmaya kaptırsa bile
+        "yok" sayılıyordu. Bağımsız iki tabloda OR semantiği kayıp
+        olasılığını karesel küçültür (p → p²); AND ise ikiye katlar (≈2p).
+        """
         self._tik += 1
         self.okuma_sayisi += 1
         adresler = self.adresler(anahtar_bilesenleri)
-        var = all(self._tablolar[t].get(a) == experience_id
+        var = any(self._tablolar[t].get(a) == experience_id
                   for t, a in enumerate(adresler))
         if var:
             for t, a in enumerate(adresler):

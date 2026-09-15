@@ -1,0 +1,237 @@
+{
+ "protocol": "self_learning_scaling_v1",
+ "schema_version": 1,
+ "profile": "deep",
+ "seeds": [
+  1
+ ],
+ "points": [
+  {
+   "cycles": 100,
+   "operands_max": 31,
+   "seed": 1,
+   "cycles_completed": 100,
+   "final_knowledge": 909,
+   "initial_knowledge": 100,
+   "generated": 6400,
+   "verified": 809,
+   "correct_knowledge": 909,
+   "incorrect_knowledge": 0,
+   "experience_yield": 0.12640625,
+   "novelty_yield": 0.12640625,
+   "useful_experience_yield": 0.1140625,
+   "far": 0.0,
+   "frr": 0.0,
+   "far_before_verifier": 1.0,
+   "memory_collisions": 79,
+   "isolation_clean": true,
+   "saturation_cycle": 99,
+   "knowledge_per_cycle": 8.09,
+   "wall_seconds": 1.102
+  },
+  {
+   "cycles": 1000,
+   "operands_max": 31,
+   "seed": 1,
+   "cycles_completed": 1000,
+   "final_knowledge": 938,
+   "initial_knowledge": 100,
+   "generated": 6653,
+   "verified": 838,
+   "correct_knowledge": 938,
+   "incorrect_knowledge": 0,
+   "experience_yield": 0.12595821,
+   "novelty_yield": 0.12595821,
+   "useful_experience_yield": 0.11318202,
+   "far": 0.0,
+   "frr": 0.0,
+   "far_before_verifier": 1.0,
+   "memory_collisions": 85,
+   "isolation_clean": true,
+   "saturation_cycle": 103,
+   "knowledge_per_cycle": 0.838,
+   "wall_seconds": 10.933
+  },
+  {
+   "cycles": 3000,
+   "operands_max": 31,
+   "seed": 1,
+   "cycles_completed": 3000,
+   "final_knowledge": 938,
+   "initial_knowledge": 100,
+   "generated": 6653,
+   "verified": 838,
+   "correct_knowledge": 938,
+   "incorrect_knowledge": 0,
+   "experience_yield": 0.12595821,
+   "novelty_yield": 0.12595821,
+   "useful_experience_yield": 0.11318202,
+   "far": 0.0,
+   "frr": 0.0,
+   "far_before_verifier": 1.0,
+   "memory_collisions": 85,
+   "isolation_clean": true,
+   "saturation_cycle": 103,
+   "knowledge_per_cycle": 0.279333,
+   "wall_seconds": 32.328
+  },
+  {
+   "cycles": 1000,
+   "operands_max": 63,
+   "seed": 1,
+   "cycles_completed": 1000,
+   "final_knowledge": 3685,
+   "initial_knowledge": 100,
+   "generated": 28772,
+   "verified": 3585,
+   "correct_knowledge": 3685,
+   "incorrect_knowledge": 0,
+   "experience_yield": 0.12460031,
+   "novelty_yield": 0.12460031,
+   "useful_experience_yield": 0.08191992,
+   "far": 0.0,
+   "frr": 0.0,
+   "far_before_verifier": 1.0,
+   "memory_collisions": 1228,
+   "isolation_clean": true,
+   "saturation_cycle": 445,
+   "knowledge_per_cycle": 3.585,
+   "wall_seconds": 43.048
+  },
+  {
+   "cycles": 3000,
+   "operands_max": 127,
+   "seed": 1,
+   "cycles_completed": 3000,
+   "final_knowledge": 14735,
+   "initial_knowledge": 100,
+   "generated": 117245,
+   "verified": 14635,
+   "correct_knowledge": 14735,
+   "incorrect_knowledge": 0,
+   "experience_yield": 0.12482409,
+   "novelty_yield": 0.12482409,
+   "useful_experience_yield": 0.03381807,
+   "far": 0.0,
+   "frr": 0.0,
+   "far_before_verifier": 1.0,
+   "memory_collisions": 10670,
+   "isolation_clean": true,
+   "saturation_cycle": 1813,
+   "knowledge_per_cycle": 4.878333,
+   "wall_seconds": 688.17
+  }
+ ],
+ "cycle_axis": {
+  "operands_max=31": {
+   "rows": [
+    {
+     "cycles": 100,
+     "final_knowledge": 909.0,
+     "knowledge_per_cycle": 8.09,
+     "experience_yield": 0.126406,
+     "incorrect_knowledge": 0.0,
+     "saturation_cycle": 99,
+     "wall_seconds": 1.102
+    },
+    {
+     "cycles": 1000,
+     "final_knowledge": 938.0,
+     "knowledge_per_cycle": 0.838,
+     "experience_yield": 0.125958,
+     "incorrect_knowledge": 0.0,
+     "saturation_cycle": 103,
+     "wall_seconds": 10.933
+    },
+    {
+     "cycles": 3000,
+     "final_knowledge": 938.0,
+     "knowledge_per_cycle": 0.279333,
+     "experience_yield": 0.125958,
+     "incorrect_knowledge": 0.0,
+     "saturation_cycle": 103,
+     "wall_seconds": 32.328
+    }
+   ],
+   "cycle_multiplier": 30.0,
+   "knowledge_multiplier": 1.031903,
+   "scaling_efficiency": 0.034397,
+   "saturated": true
+  }
+ },
+ "domain_axis": {
+  "cycles=1000": {
+   "rows": [
+    {
+     "operands_max": 31,
+     "final_knowledge": 938.0,
+     "experience_yield": 0.125958,
+     "incorrect_knowledge": 0.0
+    },
+    {
+     "operands_max": 63,
+     "final_knowledge": 3685.0,
+     "experience_yield": 0.1246,
+     "incorrect_knowledge": 0.0
+    }
+   ],
+   "knowledge_multiplier": 3.928571,
+   "domain_multiplier": 2.032
+  },
+  "cycles=3000": {
+   "rows": [
+    {
+     "operands_max": 31,
+     "final_knowledge": 938.0,
+     "experience_yield": 0.125958,
+     "incorrect_knowledge": 0.0
+    },
+    {
+     "operands_max": 127,
+     "final_knowledge": 14735.0,
+     "experience_yield": 0.124824,
+     "incorrect_knowledge": 0.0
+    }
+   ],
+   "knowledge_multiplier": 15.708955,
+   "domain_multiplier": 4.097
+  }
+ },
+ "drift": {
+  "total_incorrect_knowledge": 0,
+  "max_far": 0.0,
+  "max_far_before_verifier": 1.0,
+  "longest_run_cycles": 3000,
+  "longest_run_incorrect": 0,
+  "longest_run_far": 0.0,
+  "all_isolation_clean": true,
+  "note": "Sürüklenme = uzun koşuda yanlış bilginin birikmesi. CLOSED_VERIFIED rejiminde doğrulayıcı bunu engellemelidir; sıfırdan büyük bir değer self-training çöküşünün başladığını gösterir.",
+  "signature": "745d4ee6ceca"
+ },
+ "checks": {
+  "all_points_completed": true,
+  "no_incorrect_knowledge_accumulated": true,
+  "no_false_acceptance_after_verifier": true,
+  "train_test_isolation_clean": true,
+  "long_run_stable": true,
+  "reached_1000_cycles": true,
+  "reached_3000_cycles": true,
+  "saturation_measured": true,
+  "domain_axis_measured": true
+ },
+ "findings": [
+  "Izgara: [(100, 31), (1000, 31), (3000, 31), (1000, 63), (3000, 127)], tohumlar [1] → 5 koşu.",
+  "DOYGUNLUK (operands_max=31): cycle 100→3000 (30×) bilgiyi yalnız 909→938 (1.032×) artırdı. Ölçekleme verimi 0.0344. Sabit alanda aday havuzu tükeniyor; ek cycle hesap israfıdır. 'Daha çok döngü = daha çok bilgi' YANLIŞ.",
+  "  └ Nihai bilginin %99'una 103. cycle'da ulaşıldı; kalan 2897 cycle marjinal.",
+  "ALAN EKSENİ (cycles=1000): operands_max 2× büyüyünce bilgi 3.93× arttı. Ölçekleme cycle sayısından değil ALANIN genişliğinden geliyor.",
+  "ALAN EKSENİ (cycles=3000): operands_max 4× büyüyünce bilgi 15.71× arttı. Ölçekleme cycle sayısından değil ALANIN genişliğinden geliyor.",
+  "Sürüklenme yok: en uzun koşuda (3000 cycle) yanlış bilgi 0, doğrulayıcı sonrası FAR 0.0. CLOSED_VERIFIED rejimi uzun koşuda çökmüyor.",
+  "Deneyim verimi (EY) tüm ölçeklerde 0.1246–0.1264 bandında kaldı; ölçek EY'yi değiştirmiyor, çünkü üretim dağılımı sabit."
+ ],
+ "limitations": [
+  "Alan aritmetiktir (a+b=c); doğrulayıcı kapalı formdur. Gerçek dünya alanlarında doğrulama bu kadar kesin olmaz.",
+  "Doygunluk bu alanın SONLU olmasından gelir; sonsuz bir alanda cycle ölçeklemesi farklı davranabilir.",
+  "'Sürüklenme yok' sonucu CLOSED_VERIFIED rejimine özgüdür; doğrulayıcısız self-training ayrıca ölçülmelidir.",
+  "Tek makine, tek süreç; paralel öğrenme davranışı kapsam dışı."
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "prompts": 50,
+ "raters": 10,
+ "arms": [
+  "hga",
+  "dense",
+  "transformer",
+  "symbolic"
+ ],
+ "items_per_rater": 200,
+ "generation": {
+  "max_new_tokens": 48,
+  "temperature": 0.7,
+  "top_k": 40,
+  "train_steps": 4000,
+  "train_seed": 1
+ },
+ "seed": 20260914,
+ "blinding_leaks": [],
+ "responses_signature": "d7b2db4ce3348cce",
+ "unblinding_key_digest": "d29f5aeae0e20346"
+}

@@ -76,6 +76,27 @@ ARCHITECTURE_CONFIG: Dict[str, Any] = {
     "body_parameter_tolerance_max_to_min_ratio": 1.05,
 }
 
+#: FLOP-eşli kontrol rejimi. Parametre eşitliği FLOP eşitliğini garanti
+#: etmez (birincil rejimde oran ~11.3×). Tek deneyde ikisini birden eşitlemek
+#: mimarileri bozmadan imkânsızdır; bu yüzden İKİNCİ bir rejim tanımlanır:
+#: HGA kolu AYNEN kalır, baseline gövdeleri HGA'nın ileri geçiş MAC
+#: bütçesine (117 848) ölçeklenir (oran ≤ 1.05). Bu rejimde parametre
+#: eşitliği BİLEREK bozulur ve gizlenmez — her rejim tek bir bütçeyi kontrol
+#: eder, sonuç çifti birlikte okunur.
+FLOP_MATCHED_CONFIG: Dict[str, Any] = {
+    **ARCHITECTURE_CONFIG,
+    "dense_hidden_dim": 1202,          # 96·1202 + 2·1202 = 117 796 MAC
+    "transformer_feedforward_dim": 575,  # dikkat + 2·6·16·575 + 32 = 117 728
+    "kronecker_n": 25,                 # 96·625 + 4·25³ + 100 = 122 600
+    "flop_tolerance_max_to_min_ratio": 1.05,
+}
+
+#: Bütçe rejimi → mimari yapılandırma eşlemesi.
+BUDGET_REGIMES: Dict[str, Dict[str, Any]] = {
+    "parameter_matched": ARCHITECTURE_CONFIG,
+    "flop_matched": FLOP_MATCHED_CONFIG,
+}
+
 
 
 def _torch():
@@ -211,28 +232,35 @@ class TWTBaselineReport:
         return "\n".join(lines) + "\n"
 
 
-def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
-    """Baseline modellerini ve kontrollü HGA ablation varyantını oluştur."""
+def build_twt_models(vocabulary_size: int, hga_ablation: str = "full",
+                     config: Optional[Dict[str, Any]] = None):
+    """Baseline modellerini ve kontrollü HGA ablation varyantını oluştur.
+
+    ``config`` verilmezse birincil (parameter-matched) yapılandırma kullanılır;
+    ``FLOP_MATCHED_CONFIG`` verilirse baseline gövdeleri HGA'nın MAC bütçesine
+    ölçeklenmiş kontrol rejimi kurulur (HGA kolu iki rejimde de AYNIDIR).
+    """
     allowed_ablations = {
         "full", "no_attention", "additive_geometry", "no_kronecker_chain"
     }
     if hga_ablation not in allowed_ablations:
         raise ValueError(f"Bilinmeyen HGA ablation: {hga_ablation}")
+    cfg = dict(ARCHITECTURE_CONFIG if config is None else config)
     torch, nn = _torch()
     from mimari.decoder import FraktalDecoder
     from mimari.encoder import GeometrikVeriEncoder
     from mimari.hiper_attention import HiperGeometrikAttention
     from mimari.kuresel_bag import KureselZincir
 
-    embedding_dim = int(ARCHITECTURE_CONFIG["embedding_dim"])
-    sequence_length = int(ARCHITECTURE_CONFIG["sequence_length"])
+    embedding_dim = int(cfg["embedding_dim"])
+    sequence_length = int(cfg["sequence_length"])
     flat_dim = embedding_dim * sequence_length
 
     class DenseClassifier(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)
-            hidden = int(ARCHITECTURE_CONFIG["dense_hidden_dim"])
+            hidden = int(cfg["dense_hidden_dim"])
             self.body = nn.Sequential(
                 nn.Linear(flat_dim, hidden),
                 nn.GELU(),
@@ -250,8 +278,8 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
             nn.init.normal_(self.position, mean=0.0, std=0.02)
             layer = nn.TransformerEncoderLayer(
                 d_model=embedding_dim,
-                nhead=int(ARCHITECTURE_CONFIG["transformer_heads"]),
-                dim_feedforward=int(ARCHITECTURE_CONFIG["transformer_feedforward_dim"]),
+                nhead=int(cfg["transformer_heads"]),
+                dim_feedforward=int(cfg["transformer_feedforward_dim"]),
                 dropout=0.0,
                 activation="gelu",
                 batch_first=True,
@@ -259,7 +287,7 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
             )
             self.body = nn.TransformerEncoder(
                 layer,
-                num_layers=int(ARCHITECTURE_CONFIG["transformer_layers"]),
+                num_layers=int(cfg["transformer_layers"]),
                 norm=nn.LayerNorm(embedding_dim),
                 enable_nested_tensor=False,
             )
@@ -273,11 +301,11 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)
-            n = int(ARCHITECTURE_CONFIG["kronecker_n"])
+            n = int(cfg["kronecker_n"])
             self.project = nn.Linear(flat_dim, n * n)
             self.body = KureselZincir(
                 n=n,
-                katman_sayisi=int(ARCHITECTURE_CONFIG["kronecker_layers"]),
+                katman_sayisi=int(cfg["kronecker_layers"]),
                 dropout=0.0,
                 checkpoint_kullan=False,
                 aktivasyon="silu",
@@ -302,18 +330,18 @@ def build_twt_models(vocabulary_size: int, hga_ablation: str = "full"):
             if hga_ablation != "no_attention":
                 self.attention = HiperGeometrikAttention(
                     embedding_dim,
-                    int(ARCHITECTURE_CONFIG["transformer_heads"]),
+                    int(cfg["transformer_heads"]),
                     dropout=0.0,
                     is_causal=False,
                 )
             else:
                 self.attention = None
-            n = int(ARCHITECTURE_CONFIG["hga_n"])
+            n = int(cfg["hga_n"])
             self.encoder = GeometrikVeriEncoder(flat_dim, n, aktivasyon="tanh")
             if hga_ablation != "no_kronecker_chain":
                 self.body = KureselZincir(
                     n=n,
-                    katman_sayisi=int(ARCHITECTURE_CONFIG["hga_layers"]),
+                    katman_sayisi=int(cfg["hga_layers"]),
                     dropout=0.0,
                     checkpoint_kullan=False,
                     aktivasyon="silu",
@@ -409,11 +437,16 @@ def _run_twt_architecture_baselines(
     seed: int,
     profile: str,
     device: str,
+    regime: str = "parameter_matched",
 ) -> TWTBaselineReport:
     """Önceden hazırlanmış task data üzerinde dört mimariyi çalıştır."""
     torch, nn = _torch()
     if profile not in BASELINE_PROFILES:
         raise ValueError(f"profile şunlardan biri olmalı: {', '.join(BASELINE_PROFILES)}")
+    if regime not in BUDGET_REGIMES:
+        raise ValueError(
+            f"regime şunlardan biri olmalı: {', '.join(BUDGET_REGIMES)}")
+    arch_cfg = dict(BUDGET_REGIMES[regime])
     config = dict(BASELINE_PROFILES[profile])
     target_device = torch.device(device)
     if target_device.type == "cuda" and not torch.cuda.is_available():
@@ -442,12 +475,12 @@ def _run_twt_architecture_baselines(
         seed=int(seed),
     )
 
-    constructors = build_twt_models(vocabulary.size)
+    constructors = build_twt_models(vocabulary.size, config=arch_cfg)
     # Her kol aynı train-only embedding başlangıç matrisiyle başlar.
     common_generator = torch.Generator(device="cpu").manual_seed(int(seed) + 31_337)
     common_embedding = torch.randn(
         vocabulary.size,
-        int(ARCHITECTURE_CONFIG["embedding_dim"]),
+        int(arch_cfg["embedding_dim"]),
         generator=common_generator,
     )
     model_reports: Dict[str, Dict[str, Any]] = {}
@@ -464,7 +497,7 @@ def _run_twt_architecture_baselines(
             "mimari.decoder.FraktalDecoder",
         ],
     }
-    shared_embedding_parameters = vocabulary.size * int(ARCHITECTURE_CONFIG["embedding_dim"])
+    shared_embedding_parameters = vocabulary.size * int(arch_cfg["embedding_dim"])
     for model_index, name in enumerate(MODEL_ORDER):
         torch.manual_seed(int(seed) + 100_003 * (model_index + 1))
         model = constructors[name]().to(target_device)
@@ -580,11 +613,15 @@ def _run_twt_architecture_baselines(
         "tokenizer_changed": False,
         "note": "Bu structured benchmark encoder'ıdır; repository BPE tokenizer'ını değiştirmez.",
     }
+    protocol_name = ("twt-parameter-matched-architectures-v1"
+                     if regime == "parameter_matched"
+                     else "twt-flop-matched-architectures-v1")
     benchmark_config = {
-        "protocol": "twt-parameter-matched-architectures-v1",
+        "protocol": protocol_name,
         "profile": profile,
+        "regime": regime,
         "training": config,
-        "architectures": ARCHITECTURE_CONFIG,
+        "architectures": arch_cfg,
         "feature_vocabulary_hash": vocabulary.vocabulary_hash(),
         "model_visible_candidate_hashes": model_visible_hashes,
         "seed": int(seed),
@@ -598,13 +635,13 @@ def _run_twt_architecture_baselines(
         "parameter_max": maximum_parameters,
         "parameter_max_to_min_ratio": round(parameter_ratio, 8),
         "parameter_tolerance": float(
-            ARCHITECTURE_CONFIG["parameter_tolerance_max_to_min_ratio"]
+            arch_cfg["parameter_tolerance_max_to_min_ratio"]
         ),
         "body_parameter_min": minimum_body_parameters,
         "body_parameter_max": maximum_body_parameters,
         "body_parameter_max_to_min_ratio": round(body_parameter_ratio, 8),
         "body_parameter_tolerance": float(
-            ARCHITECTURE_CONFIG["body_parameter_tolerance_max_to_min_ratio"]
+            arch_cfg["body_parameter_tolerance_max_to_min_ratio"]
         ),
         "same_dataset_hash": task_data.dataset_hash,
         "same_split_hashes": dict(task_data.split_hashes),
@@ -625,15 +662,41 @@ def _run_twt_architecture_baselines(
         "same_gradient_clip_norm": float(config["gradient_clip_norm"]),
         "same_initial_embedding_weights": True,
         "unused_parameter_padding": False,
+        "budget_regime": regime,
     }
+    # FLOP muhasebesi rejimden bağımsız olarak raporlanır; flop_matched
+    # rejimde kapıya dönüşür (parametre kapıları o rejimde BİLEREK gevşer
+    # ve bu fairness sözlüğünde gizlenmeden durur).
+    from .twt_results import analytic_forward_flops as _analytic_flops
+    mac_counts = {
+        m: _analytic_flops(m, arch_cfg)["forward_flops_per_example"]
+        for m in MODEL_ORDER
+    }
+    mac_ratio = max(mac_counts.values()) / max(1, min(mac_counts.values()))
+    fairness["forward_macs_per_example"] = mac_counts
+    fairness["flop_max_to_min_ratio"] = round(mac_ratio, 8)
+    if regime == "flop_matched":
+        # FLOP-eşli rejimde parametre paritesi BİLEREK bırakılır (gövdeler
+        # MAC bütçesine ölçeklenir); bu fairness sözlüğünde açıkça durur ve
+        # parametre kapıları bu rejimde denetlenmez (denetlenen: FLOP oranı).
+        fairness["flop_tolerance"] = float(
+            arch_cfg["flop_tolerance_max_to_min_ratio"])
+        fairness["parameter_parity_intentionally_relaxed"] = True
     checks = {
         "all_four_model_families_present": tuple(model_reports) == MODEL_ORDER,
-        "physical_parameters_within_one_percent": parameter_ratio <= float(
-            ARCHITECTURE_CONFIG["parameter_tolerance_max_to_min_ratio"]
-        ),
-        "architecture_body_parameters_within_five_percent": body_parameter_ratio <= float(
-            ARCHITECTURE_CONFIG["body_parameter_tolerance_max_to_min_ratio"]
-        ),
+        # Parametre kapıları yalnız parameter_matched rejiminin iddiasıdır.
+        "physical_parameters_within_one_percent": (
+            regime != "parameter_matched"
+            or parameter_ratio <= float(
+                arch_cfg["parameter_tolerance_max_to_min_ratio"])),
+        "architecture_body_parameters_within_five_percent": (
+            regime != "parameter_matched"
+            or body_parameter_ratio <= float(
+                arch_cfg["body_parameter_tolerance_max_to_min_ratio"])),
+        # FLOP kapısı yalnız flop_matched rejiminin iddiasıdır.
+        "flop_budget_within_regime_tolerance": (
+            regime != "flop_matched"
+            or mac_ratio <= float(arch_cfg["flop_tolerance_max_to_min_ratio"])),
         "same_real_dataset_and_splits": (
             task_data.dataset_hash
             == "66b13a898efa88998a9329f1551530f5241835a8085a0e5f26e0eb374d7e3276"
@@ -678,8 +741,15 @@ def _run_twt_architecture_baselines(
     if not all(checks.values()):
         failed = [name for name, value in checks.items() if not value]
         raise ValueError(f"TWT baseline adillik kapısı başarısız: {failed}")
+    regime_limitation = (
+        "Parameter matching gerçek trainable numel üzerinden ±%1 içindedir; "
+        "FLOP, aktivasyon belleği ve duvar süresi eşitlenmez, ayrıca raporlanır."
+        if regime == "parameter_matched" else
+        "FLOP-eşli rejimde baseline gövdeleri HGA'nın MAC bütçesine "
+        "ölçeklenir; parametre paritesi BİLEREK bırakılır ve fairness "
+        "sözlüğünde raporlanır. İki rejim birlikte okunmalıdır.")
     return TWTBaselineReport(
-        protocol="twt-parameter-matched-architectures-v1",
+        protocol=protocol_name,
         schema_version=1,
         profile=profile,
         seed=int(seed),
@@ -696,7 +766,7 @@ def _run_twt_architecture_baselines(
             "Görev TWT basic morphosyntactic dependency-arc doğrulamasıdır; genel dil modelleme değildir.",
             "Structured 6-field encoder tüm kollarda ortaktır; ham cümleden end-to-end dependency parsing ölçülmez.",
             "Smoke profili yarım epoch'tan az sabit adım kullanır; yayınlanabilir convergence/SOTA sonucu değildir.",
-            "Parameter matching gerçek trainable numel üzerinden ±%1 içindedir; FLOP, aktivasyon belleği ve duvar süresi eşitlenmez, ayrıca raporlanır.",
+            regime_limitation,
             "HGA kolu repository'nin attention/outer-product/Kronecker/fraktal çekirdeğidir; tam autoregressive HiperGeometrikAI dil modeli değildir.",
             "Unseen relation train-only vocabulary'de UNKNOWN olur; bu sıfırdan relation-semantics induction görevidir ve yüksek skor beklenmez.",
             "Temperature yalnız dev NLL'yi optimize eder; test calibration metriklerinin iyileşmesi garanti edilmez ve argmax doğruluğu değişmez.",
@@ -706,9 +776,11 @@ def _run_twt_architecture_baselines(
 
 
 @lru_cache(maxsize=16)
-def _cached_default_baseline(seed: int, profile: str, device: str) -> TWTBaselineReport:
+def _cached_default_baseline(seed: int, profile: str, device: str,
+                             regime: str = "parameter_matched") -> TWTBaselineReport:
     return _run_twt_architecture_baselines(
-        prepare_real_turkish_task(), seed=seed, profile=profile, device=device
+        prepare_real_turkish_task(), seed=seed, profile=profile, device=device,
+        regime=regime,
     )
 
 
@@ -717,6 +789,7 @@ def run_twt_architecture_baselines(
     profile: str = "smoke",
     task_data: Optional[RealTurkishTaskData] = None,
     device: str = "cpu",
+    regime: str = "parameter_matched",
 ) -> TWTBaselineReport:
     """Dört model ailesini aynı TWT task data ve fiziksel bütçede eğit/ölç.
 
@@ -726,13 +799,17 @@ def run_twt_architecture_baselines(
     """
     if task_data is not None:
         return _run_twt_architecture_baselines(
-            task_data, seed=int(seed), profile=profile, device=device
+            task_data, seed=int(seed), profile=profile, device=device,
+            regime=regime,
         )
-    return copy.deepcopy(_cached_default_baseline(int(seed), profile, device))
+    return copy.deepcopy(
+        _cached_default_baseline(int(seed), profile, device, regime))
 
 
 __all__ = [
     "ARCHITECTURE_CONFIG",
+    "BUDGET_REGIMES",
+    "FLOP_MATCHED_CONFIG",
     "BASELINE_PROFILES",
     "FEATURE_FIELDS",
     "MODEL_ORDER",

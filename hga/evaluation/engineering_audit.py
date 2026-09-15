@@ -208,6 +208,17 @@ def audit_engineering(root: Optional[Path] = None) -> EngineeringReport:
         bulgular.append(
             f"pyproject.toml'da eksik alanlar: {eksik_alanlar}.")
 
+    # Denetimi girdisine bağlayan deterministik imza: incelenen dosyaların
+    # içerik özeti. Aynı CI/pyproject/test yerleşimi → aynı imza.
+    ci["signature"] = hashlib.sha256(json.dumps({
+        "protocol": PROTOCOL_ENGINEERING,
+        "ci_gates": {k: bool(v) for k, v in ci_kapilari.items()},
+        "packaging": {k: paketleme.get(k) for k in sorted(paketleme)
+                      if isinstance(paketleme.get(k), (str, bool, int))},
+        "test_files": test_paketi.get("test_files"),
+    }, ensure_ascii=False, sort_keys=True, default=str)
+        .encode("utf-8")).hexdigest()[:12]
+
     return EngineeringReport(
         protocol=PROTOCOL_ENGINEERING,
         schema_version=SCHEMA_VERSION,

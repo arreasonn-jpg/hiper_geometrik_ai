@@ -118,6 +118,9 @@ class Iliski:
     tense: Optional[str]
     time: Optional[str]
     confidence: float
+    #: Yüklem sözlükten mi geldi (False) yoksa morfolojiden mi indüklendi
+    #: (True)? İndüklenen ilişki düşük güven taşır ve tüketici bunu görmeli.
+    induced: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -208,8 +211,23 @@ VARSAYILAN_FIILLER: Dict[str, str] = {
     "bak": "bakmak", "ver": "vermek", "al": "almak", "oku": "okumak",
     "yaz": "yazmak", "gor": "görmek", "sev": "sevmek", "kos": "koşmak",
     "otur": "oturmak", "kalk": "kalkmak", "calis": "çalışmak",
-    "uyu": "uyumak", "ye": "yemek", "ic": "içmek",
+    "uyu": "uyumak", "ye": "yemek", "ic": "içmek", "sat": "satmak",
 }
+
+#: Hafif fiiller: kendinden önceki yalın ad ile BİLEŞİK yüklem kurarlar
+#: ("tamir etti" → "tamir etmek"). Tek başlarına anlamlı ilişki değildirler.
+HAFIF_FIILLER: Dict[str, str] = {"et": "etmek", "yap": "yapmak"}
+
+#: Çatı ekleri (ettirgen/edilgen/dönüşlü). Bilinmeyen kök bu eklerden biri
+#: soyulunca BİLİNEN bir fiile dönüşüyorsa, cümlenin üye yapısı (kim özne,
+#: kim nesne) yüzey durumlardan çıkarılamaz; indüksiyon YAPILMAZ.
+#: Örn. "okuttu" → okut = oku+t (ettirgen): "öğretmen kitabı okuttu"
+#: cümlesinde okuyan öğretmen DEĞİLDİR — naif özne/nesne eşlemesi yanlış
+#: bilgi üretirdi.
+CATI_EKLERI: Tuple[str, ...] = (
+    "dir", "dır", "dur", "dür", "tir", "tır", "tur", "tür",
+    "il", "ıl", "ul", "ül", "in", "ın", "un", "ün", "t", "n",
+)
 
 #: Güven katsayıları — her sayı kaynağıyla birlikte belgelenir.
 GUVEN = {
@@ -218,6 +236,7 @@ GUVEN = {
     "bilinmeyen_varlik": 0.40,      # tip bilinmiyor → UNKNOWN
     "sozlukte_fiil": 0.90,
     "bilinmeyen_fiil": 0.45,
+    "induklenen_fiil": 0.55,        # morfolojiden indüklendi, sözlükte yok
     "sifat_ozelligi": 0.85,
     "tip_ozelligi": 0.60,           # ontolojiden türetildi, metinde yazmıyor
     "vasita_ozelligi": 0.80,
@@ -341,6 +360,51 @@ def fiil_coz(kelime: str) -> Optional[Dict[str, Any]]:
     return cozumler[0]
 
 
+def _cati_soyulunca_bilinen(lemma: str) -> Optional[str]:
+    """Çatı eki soyulunca bilinen fiile dönüşüyorsa o kökü döndür.
+
+    ``okut`` → ``oku`` (ettirgen), ``gorun`` → ``gor`` (dönüşlü/edilgen).
+    Bu durumda cümlenin üye yapısı yüzey durumlardan çıkarılamaz:
+    "Öğretmen öğrencilere kitabı okuttu" cümlesinde okuyan öğretmen
+    DEĞİLDİR. Naif özne/nesne eşlemesi yanlış bilgi üretir; indüksiyon
+    yapılmamalıdır.
+    """
+    for ek in sorted(CATI_EKLERI, key=len, reverse=True):
+        if lemma.endswith(ek) and len(lemma) - len(ek) >= 2:
+            kok = lemma[: -len(ek)]
+            if kok in VARSAYILAN_FIILLER:
+                return kok
+    return None
+
+
+def _mastar_indukle(lemma: str, varliklar: Sequence["Varlik"]) -> Optional[str]:
+    """Bilinmeyen fiil kökünden mastar (ilişki adı) indükle.
+
+    Yalnız KANIT YETERLİYSE indükler; aksi halde ``None`` döner ve hat
+    çekimser kalır. Kanıt şartları:
+
+    1. Kök yeterince uzun (≥4 harf) — kısa kökler ("et", "ol") tek başına
+       anlam taşımaz ve yanlış pozitif üretir.
+    2. Cümlede açık yalın özne VE durum ekli nesne var — kanonik SOV
+       yapısı olmadan üye eşlemesi tahmine dönüşür.
+
+    Mastar eki ünlü uyumuyla seçilir (ascii üzerinde: a/o/u → -mak, aksi
+    -mek). ascii normalizasyonu ı→i eşlediği için art ünlülü kimi köklerde
+    -mek seçilebilir; bu bilinen ve belgelenen bir yaklaşıklıktır.
+    """
+    if len(lemma) < 4:
+        return None
+    ozne_var = any(v.case == "yalin" for v in varliklar)
+    nesne_var = any(v.case in ("belirtme", "yonelme", "bulunma", "ayrilma")
+                    for v in varliklar)
+    if not (ozne_var and nesne_var):
+        return None
+    for harf in reversed(lemma):
+        if harf in "aeiou":
+            return lemma + ("mak" if harf in "aou" else "mek")
+    return None
+
+
 def _tip_ve_guven(kok: str, yuzey: str) -> Tuple[str, float, bool]:
     ozel = bool(yuzey[:1].isupper())
     if kok in VARSAYILAN_TIPLER:
@@ -452,13 +516,48 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
     if fiil_bilgi is not None:
         yuklem = VARSAYILAN_FIILLER.get(fiil_bilgi["lemma"])
         fiil_guveni = GUVEN["sozlukte_fiil"]
+        induklendi = False
+        if yuklem is None and fiil_bilgi["lemma"] in HAFIF_FIILLER \
+                and fiil_index is not None and fiil_index > 0:
+            # 6a) Hafif fiil bileşiği: "tamir etti" → "tamir etmek".
+            # Önceki sözcük yalın, özel-isim-olmayan bir ad ise o ad yüklemin
+            # parçasıdır, ayrı bir varlık değildir.
+            onceki_kok, onceki_durum = kok_ve_durum(temiz[fiil_index - 1])
+            aday = next((v for v in sonuc.entities
+                         if v.lemma == onceki_kok and v.case == "yalin"
+                         and not v.is_proper), None)
+            if aday is not None and onceki_durum == "yalin":
+                yuklem = f"{onceki_kok} {HAFIF_FIILLER[fiil_bilgi['lemma']]}"
+                fiil_guveni = GUVEN["induklenen_fiil"]
+                induklendi = True
+                sonuc.entities = [v for v in sonuc.entities if v is not aday]
+                sonuc.properties = [p for p in sonuc.properties
+                                    if p.entity != aday.lemma]
         if yuklem is None:
-            # Yüklem bilinmiyorsa ilişki UYDURULMAZ. Varlıklar, zaman ve
-            # özellikler yine de kaydedilir; yalnız yönlü ilişki iddiası
-            # üretilmez. "Bilmiyorum" demek yanlış bilgi üretmekten iyidir.
-            sonuc.skipped_reasons.append(
-                f"bilinmeyen_fiil:{fiil_bilgi['lemma']}")
-            return sonuc
+            bilinen_kok = _cati_soyulunca_bilinen(fiil_bilgi["lemma"])
+            if bilinen_kok is not None:
+                # 6b) Çatı eki (ettirgen/edilgen): üye yapısı yüzey
+                # durumlardan çıkarılamaz. "Öğretmen kitabı okuttu"
+                # cümlesinde okuyan öğretmen DEĞİLDİR — naif özne/nesne
+                # eşlemesi yanlış bilgi üretirdi. İlkeli çekimserlik.
+                sonuc.skipped_reasons.append(
+                    f"cati_eki_uye_yapisi_belirsiz:"
+                    f"{fiil_bilgi['lemma']}<-{bilinen_kok}")
+                return sonuc
+            # 6c) Kanıt-tabanlı indüksiyon: kök yeterince uzun VE kanonik
+            # SOV üye yapısı (yalın özne + durum ekli nesne) varsa mastar
+            # indüklenir; ilişki DÜŞÜK güvenle ve induced=True ile üretilir.
+            mastar = _mastar_indukle(fiil_bilgi["lemma"], sonuc.entities)
+            if mastar is None:
+                # Kanıt yetersiz: ilişki UYDURULMAZ. Varlıklar, zaman ve
+                # özellikler yine de kaydedilir; yalnız yönlü ilişki iddiası
+                # üretilmez. "Bilmiyorum" demek yanlış bilgi üretmekten iyidir.
+                sonuc.skipped_reasons.append(
+                    f"bilinmeyen_fiil:{fiil_bilgi['lemma']}")
+                return sonuc
+            yuklem = mastar
+            fiil_guveni = GUVEN["induklenen_fiil"]
+            induklendi = True
         kutup = "NEGATIVE" if fiil_bilgi["negated"] else "POSITIVE"
         if fiil_bilgi["negated"] and fiil_index is not None:
             sonuc.negations.append({
@@ -492,6 +591,7 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
                 role=varlik.role or "nesne", polarity=kutup,
                 tense=fiil_bilgi["tense"], time=zaman_degeri,
                 confidence=round(min(fiil_guveni, varlik.confidence), 4),
+                induced=induklendi,
             ))
         if ozne is not None and not sonuc.relations:
             sonuc.skipped_reasons.append("nesnesiz_yuklem")

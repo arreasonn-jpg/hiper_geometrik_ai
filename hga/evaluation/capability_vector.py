@@ -273,6 +273,8 @@ def build_scorecard(
     priority_optimization: Optional[Dict[str, Any]] = None,
     human_evaluation: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
+    long_context: Optional[Dict[str, Any]] = None,
+    verifier_adversarial: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
     engineering: Optional[Dict[str, Any]] = None,
 ) -> Scorecard:
@@ -289,7 +291,8 @@ def build_scorecard(
     def kanit(rapor: Optional[Dict[str, Any]]) -> List[str]:
         if not rapor:
             return []
-        etiket = rapor.get("protocol") or rapor.get("report_type") or "report"
+        etiket = (rapor.get("protocol") or rapor.get("report_type")
+                  or rapor.get("benchmark_id") or "report")
         imza = (rapor.get("dataset_hash") or rapor.get("config_hash")
                 or ((rapor.get("config") or {}).get("signature")) or "")
         # Uzun SHA-256'lar tabloyu okunamaz yapar; ilk 12 karakter kimlik
@@ -316,13 +319,38 @@ def build_scorecard(
           "eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.")
 
     # memory ← derinlik ızgarasının bellek satırı + varsa bellek benchmarkı
+    #
+    # Kapı GÜVENİLİR BÖLGEYE bağlıdır: (hop, dolgu) hücresi ancak
+    # hop ≤ C_RD(dolgu) ise sayılır (dolgu=0 için C_RD = C_R). Eski kapı tüm
+    # ızgaranın minimumuna bakıyordu; bu, kırılma noktasını İÇEREN dürüst
+    # bir ızgarayı (c_r_not_grid_limited için şart) otomatik FAIL, kırılmayı
+    # hiç görmeyen dar bir ızgarayı otomatik PASS yapıyordu — ters teşvik.
+    # Güvenilir bölge DIŞINDAKİ kayıp zaten reasoning bölümünde (C_R, C_RD,
+    # retention) cezalandırılır; burada ikinci kez sayılmaz. Burada sorulan
+    # soru daha dar ve daha serttir: "güvenilir ilan edilen bölgede bellek
+    # geri çağırması gerçekten kusursuz mu?"
     bellek_checks: Dict[str, bool] = {}
     if reasoning_depth:
         izgara = _get(reasoning_depth, "memory_recall_grid", default={}) or {}
-        degerler = [v for alt in izgara.values() for v in alt.values()]
+        c_r = _get(reasoning_depth, "c_r")
+        c_rd = _get(reasoning_depth, "c_rd") or {}
+
+        def _sinir(dolgu: str) -> Optional[int]:
+            if dolgu in c_rd:
+                return int(c_rd[dolgu])
+            return int(c_r) if c_r is not None else None
+
+        degerler = []
+        for hop, alt in izgara.items():
+            for dolgu, deger in alt.items():
+                sinir = _sinir(str(dolgu))
+                if sinir is None or int(hop) <= sinir:
+                    degerler.append(deger)
         if degerler:
-            bellek_checks["memory_recall_perfect_at_all_depths"] = min(degerler) >= 1.0
-            bellek_checks["memory_recall_above_0_9"] = min(degerler) >= 0.9
+            bellek_checks["memory_recall_perfect_in_reliable_region"] = (
+                min(degerler) >= 1.0)
+            bellek_checks["memory_recall_above_0_9_in_reliable_region"] = (
+                min(degerler) >= 0.9)
     if memory:
         for ad, deger in (memory.get("checks") or {}).items():
             bellek_checks[ad] = bool(deger)
@@ -349,6 +377,17 @@ def build_scorecard(
         dogrulama_checks[f"weightopt:{ad}"] = bool(deger)
     for ad, deger in (_get(multi_environment, "checks") or {}).items():
         dogrulama_checks[f"multienv:{ad}"] = bool(deger)
+    # Adversarial verifier suite: rapor metrik taşır, kapı taşımaz; kapılar
+    # burada türetilir ki karne "saldırı altında FAR" iddiasını denetlesin.
+    if verifier_adversarial:
+        va = _get(verifier_adversarial, "metrics") or {}
+        if va:
+            dogrulama_checks["adversarial:zero_false_acceptance"] = (
+                float(va.get("far", 1.0)) == 0.0)
+            dogrulama_checks["adversarial:zero_false_rejection"] = (
+                float(va.get("frr", 1.0)) == 0.0)
+            dogrulama_checks["adversarial:fully_robust_to_attacks"] = (
+                float(va.get("robustness", 0.0)) >= 1.0)
     bolum("verification", dogrulama_checks or None,
           {"baseline_downstream": _get(priority_ablation, "baseline_downstream"),
            "verifier_isolation_rate": _get(multi_environment, "contamination",
@@ -360,7 +399,7 @@ def build_scorecard(
            "adversarial_abstain_rate": _get(multi_environment, "adversarial",
                                             "abstain_rate")},
           kanit(priority_ablation) + kanit(multi_environment)
-          + kanit(priority_optimization),
+          + kanit(priority_optimization) + kanit(verifier_adversarial),
           "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream "
           "zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında "
           "çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.")
@@ -456,12 +495,37 @@ def build_scorecard(
           "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk "
           "çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.")
 
-    # language_modeling ← henüz gerçek korpus yok
-    bolum("language_modeling", _get(language_modeling, "checks"),
-          {"perplexity": _get(language_modeling, "perplexity")},
-          kanit(language_modeling),
-          "Gerçek Türkçe korpusta perplexity ve üretim kalitesi. Kanıt yoksa "
-          "skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.")
+    # language_modeling ← gerçek Türkçe korpusta belge-ayrık held-out LM.
+    # 'tiny smoke' hâlâ kanıt sayılmaz; kanıt yalnız turkish_lm_v1 raporudur.
+    # Milyon-kelime kapısı (corpus_at_least_1m_words) yalnız full profildeki
+    # tr_corpus_v1 ile açılır; smoke/TWT koşusunda FAIL kalır ve skoru
+    # tavanlar — eksik ölçek bir ortalama içinde gizlenmez.
+    lm_checks = dict(_get(language_modeling, "checks") or {})
+    # Uzun bağlam taraması (24→256 token) ayrı protokoldür; kapıları buraya
+    # önekle eklenir ki bağlam ölçeği iddiası da karnede denetlensin.
+    for ad, deger in (_get(long_context, "checks") or {}).items():
+        lm_checks[f"longctx:{ad}"] = bool(deger)
+    bolum("language_modeling", lm_checks or None,
+          {"best_arm": _get(language_modeling, "perplexity", "best_arm"),
+           "hga_test_ppl_mean": _get(language_modeling, "perplexity",
+                                     "hga_test_ppl_mean"),
+           "best_neural_test_ppl_mean": _get(language_modeling, "perplexity",
+                                             "best_neural_test_ppl_mean"),
+           "unigram_test_ppl": _get(language_modeling, "perplexity",
+                                    "unigram_test_ppl"),
+           "bigram_test_ppl": _get(language_modeling, "perplexity",
+                                   "bigram_test_ppl"),
+           "train_tokens": _get(language_modeling, "corpus", "tokens",
+                                "train"),
+           "max_context_measured": _get(long_context, "context_effect",
+                                        "max_context")},
+          kanit(language_modeling) + kanit(long_context),
+          "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: "
+          "TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; "
+          "n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması "
+          "(24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt "
+          "yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası "
+          "değildir.")
 
     # reproducibility / engineering
     bolum("reproducibility", _get(reproducibility, "checks"),
@@ -489,7 +553,7 @@ def build_scorecard(
     tum_kapilar: Dict[str, bool] = {}
     for rapor in (priority_ablation, operator_baselines, reasoning_depth,
                   signature, semantic_extraction, compositional_v2,
-                  self_learning_scaling):
+                  self_learning_scaling, language_modeling):
         for ad, deger in (_get(rapor, "checks") or {}).items():
             tum_kapilar[f"{_get(rapor, 'protocol')}:{ad}"] = bool(deger)
     # Hiçbir protokol koşulmadıysa bu bölüm 0.0 DEĞİL, kanıtsız olmalıdır:
@@ -505,7 +569,7 @@ def build_scorecard(
                            reasoning_depth, signature, semantic_extraction,
                            compositional_v2, self_learning_scaling,
                            seed_statistics, depth_diagnosis,
-                           priority_optimization)
+                           priority_optimization, language_modeling)
            for k in kanit(rapor)],
           "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor "
           "yalnızca ölçüm iyileşerek yükselir.")

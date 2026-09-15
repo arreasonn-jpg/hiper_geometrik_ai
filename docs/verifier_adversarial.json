@@ -1,0 +1,168 @@
+{
+ "benchmark_id": "hga-verifier-adversarial-v1",
+ "dataset_hash": "77cf912ee0dd3d53b938b41c9e10be89b6d78618ae7b99bafea39a56e82a0db7",
+ "metrics": {
+  "total": 12,
+  "correct": 12,
+  "accuracy": 1.0,
+  "valid_proofs": 3,
+  "invalid_or_unsupported_proofs": 9,
+  "true_acceptance": 3,
+  "true_rejection": 9,
+  "false_acceptance": 0,
+  "false_rejection": 0,
+  "uncertain": 1,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "far": 0.0,
+  "frr": 0.0,
+  "coverage": 0.91666667,
+  "robustness": 1.0
+ },
+ "by_attack_class": {
+  "adversarial_input": {
+   "total": 3,
+   "correct": 3,
+   "accuracy": 1.0
+  },
+  "boundary_case": {
+   "total": 2,
+   "correct": 2,
+   "accuracy": 1.0
+  },
+  "contradictory_proof": {
+   "total": 1,
+   "correct": 1,
+   "accuracy": 1.0
+  },
+  "false_proof": {
+   "total": 1,
+   "correct": 1,
+   "accuracy": 1.0
+  },
+  "incomplete_proof": {
+   "total": 1,
+   "correct": 1,
+   "accuracy": 1.0
+  },
+  "malformed_proof": {
+   "total": 2,
+   "correct": 2,
+   "accuracy": 1.0
+  },
+  "unsupported_rule": {
+   "total": 1,
+   "correct": 1,
+   "accuracy": 1.0
+  },
+  "valid_control": {
+   "total": 1,
+   "correct": 1,
+   "accuracy": 1.0
+  }
+ },
+ "predictions": [
+  {
+   "case_id": "VP-VALID-001",
+   "attack_class": "valid_control",
+   "expected": "VERIFIED",
+   "predicted": "VERIFIED",
+   "correct": true,
+   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+  },
+  {
+   "case_id": "VP-VALID-BOUNDARY-MAX",
+   "attack_class": "boundary_case",
+   "expected": "VERIFIED",
+   "predicted": "VERIFIED",
+   "correct": true,
+   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+  },
+  {
+   "case_id": "VP-VALID-NEGATIVE",
+   "attack_class": "boundary_case",
+   "expected": "VERIFIED",
+   "predicted": "VERIFIED",
+   "correct": true,
+   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+  },
+  {
+   "case_id": "VP-FALSE-001",
+   "attack_class": "false_proof",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
+  },
+  {
+   "case_id": "VP-INCOMPLETE-001",
+   "attack_class": "incomplete_proof",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "ispat en az bir adım içermeli"
+  },
+  {
+   "case_id": "VP-CONTRADICTORY-001",
+   "attack_class": "contradictory_proof",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "conclusion claim/adım ile çelişiyor"
+  },
+  {
+   "case_id": "VP-MALFORMED-MISSING-001",
+   "attack_class": "malformed_proof",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "proof alanları eksik veya fazladır"
+  },
+  {
+   "case_id": "VP-MALFORMED-TYPE-001",
+   "attack_class": "malformed_proof",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "claim/conclusion katı ve sınırlı int olmalı"
+  },
+  {
+   "case_id": "VP-ADVERSARIAL-BOOL",
+   "attack_class": "adversarial_input",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "claim/conclusion katı ve sınırlı int olmalı"
+  },
+  {
+   "case_id": "VP-ADVERSARIAL-OVERSIZED",
+   "attack_class": "adversarial_input",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "claim/conclusion katı ve sınırlı int olmalı"
+  },
+  {
+   "case_id": "VP-ADVERSARIAL-EXTRA-FIELD",
+   "attack_class": "adversarial_input",
+   "expected": "INVALID",
+   "predicted": "INVALID",
+   "correct": true,
+   "reason": "claim alanları eksik veya fazladır"
+  },
+  {
+   "case_id": "VP-UNSUPPORTED-001",
+   "attack_class": "unsupported_rule",
+   "expected": "UNCERTAIN",
+   "predicted": "UNCERTAIN",
+   "correct": true,
+   "reason": "desteklenmeyen operator: multiply"
+  }
+ ],
+ "limitations": [
+  "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
+  "Unsupported rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
+  "Saldırılar elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez."
+ ]
+}

@@ -1,0 +1,802 @@
+{
+ "28d0e37c95112cfd": {
+  "arm": "hga",
+  "prompt_index": "0"
+ },
+ "23d648cf2c04d782": {
+  "arm": "dense",
+  "prompt_index": "0"
+ },
+ "432ebef1e2eb29f8": {
+  "arm": "transformer",
+  "prompt_index": "0"
+ },
+ "f7ada94cfd3e1196": {
+  "arm": "symbolic",
+  "prompt_index": "0"
+ },
+ "f46ea5fb98ae86bc": {
+  "arm": "hga",
+  "prompt_index": "1"
+ },
+ "f6f2e2f1b34c3d98": {
+  "arm": "dense",
+  "prompt_index": "1"
+ },
+ "48d2dd310c4f73db": {
+  "arm": "transformer",
+  "prompt_index": "1"
+ },
+ "dfde6d80f763cf72": {
+  "arm": "symbolic",
+  "prompt_index": "1"
+ },
+ "fd7c8afa8bfb7902": {
+  "arm": "hga",
+  "prompt_index": "2"
+ },
+ "be9874f0eae548b6": {
+  "arm": "dense",
+  "prompt_index": "2"
+ },
+ "01926721bb47d605": {
+  "arm": "transformer",
+  "prompt_index": "2"
+ },
+ "49731104c9b7c979": {
+  "arm": "symbolic",
+  "prompt_index": "2"
+ },
+ "d495a08aa51b7556": {
+  "arm": "hga",
+  "prompt_index": "3"
+ },
+ "ea9b3a3f6f7ff788": {
+  "arm": "dense",
+  "prompt_index": "3"
+ },
+ "3e76df1cd6c9edac": {
+  "arm": "transformer",
+  "prompt_index": "3"
+ },
+ "0b758d21398d499c": {
+  "arm": "symbolic",
+  "prompt_index": "3"
+ },
+ "6e82cf41eea07b9e": {
+  "arm": "hga",
+  "prompt_index": "4"
+ },
+ "0d1d68721439dd45": {
+  "arm": "dense",
+  "prompt_index": "4"
+ },
+ "dda02594a0f2b613": {
+  "arm": "transformer",
+  "prompt_index": "4"
+ },
+ "e270a7bb7291574e": {
+  "arm": "symbolic",
+  "prompt_index": "4"
+ },
+ "d3e6dea9625a4ac8": {
+  "arm": "hga",
+  "prompt_index": "5"
+ },
+ "3eabd7b5ac6cbc86": {
+  "arm": "dense",
+  "prompt_index": "5"
+ },
+ "f49925f0c36d0245": {
+  "arm": "transformer",
+  "prompt_index": "5"
+ },
+ "19e91ff48b6c5ca6": {
+  "arm": "symbolic",
+  "prompt_index": "5"
+ },
+ "f4f2b88e24a2ec99": {
+  "arm": "hga",
+  "prompt_index": "6"
+ },
+ "80e51c370b6a7723": {
+  "arm": "dense",
+  "prompt_index": "6"
+ },
+ "8272aac418715852": {
+  "arm": "transformer",
+  "prompt_index": "6"
+ },
+ "139dab8c197bc2ee": {
+  "arm": "symbolic",
+  "prompt_index": "6"
+ },
+ "4927523800f73815": {
+  "arm": "hga",
+  "prompt_index": "7"
+ },
+ "af74f79eb2eaba48": {
+  "arm": "dense",
+  "prompt_index": "7"
+ },
+ "78edd3fd0ddbe660": {
+  "arm": "transformer",
+  "prompt_index": "7"
+ },
+ "fe44fb4f433425ed": {
+  "arm": "symbolic",
+  "prompt_index": "7"
+ },
+ "49733af1d7b65165": {
+  "arm": "hga",
+  "prompt_index": "8"
+ },
+ "a040ce7d21fe83bd": {
+  "arm": "dense",
+  "prompt_index": "8"
+ },
+ "30a26496da7eec46": {
+  "arm": "transformer",
+  "prompt_index": "8"
+ },
+ "52ab7e57b85be3e7": {
+  "arm": "symbolic",
+  "prompt_index": "8"
+ },
+ "e636ba503c504d1c": {
+  "arm": "hga",
+  "prompt_index": "9"
+ },
+ "18e409490a3956b4": {
+  "arm": "dense",
+  "prompt_index": "9"
+ },
+ "a8ea6a9d7143cd36": {
+  "arm": "transformer",
+  "prompt_index": "9"
+ },
+ "0d2cb75baee2d080": {
+  "arm": "symbolic",
+  "prompt_index": "9"
+ },
+ "aa9d67dd12710d62": {
+  "arm": "hga",
+  "prompt_index": "10"
+ },
+ "e4eea90f0dfbcc4a": {
+  "arm": "dense",
+  "prompt_index": "10"
+ },
+ "1012984b21427d60": {
+  "arm": "transformer",
+  "prompt_index": "10"
+ },
+ "eae55573b31f8180": {
+  "arm": "symbolic",
+  "prompt_index": "10"
+ },
+ "9ad3b74042f2234d": {
+  "arm": "hga",
+  "prompt_index": "11"
+ },
+ "dabdfa75a3fdea16": {
+  "arm": "dense",
+  "prompt_index": "11"
+ },
+ "5fffba2f1d5a5f9a": {
+  "arm": "transformer",
+  "prompt_index": "11"
+ },
+ "65072df54739ff67": {
+  "arm": "symbolic",
+  "prompt_index": "11"
+ },
+ "ae111cc7277dc06b": {
+  "arm": "hga",
+  "prompt_index": "12"
+ },
+ "1e4c33cb25044cb3": {
+  "arm": "dense",
+  "prompt_index": "12"
+ },
+ "e5824360d110c99a": {
+  "arm": "transformer",
+  "prompt_index": "12"
+ },
+ "d4743eb7834fea2d": {
+  "arm": "symbolic",
+  "prompt_index": "12"
+ },
+ "0cae4d94bd8b1114": {
+  "arm": "hga",
+  "prompt_index": "13"
+ },
+ "74496427152f0de6": {
+  "arm": "dense",
+  "prompt_index": "13"
+ },
+ "40ab272d75dc7a58": {
+  "arm": "transformer",
+  "prompt_index": "13"
+ },
+ "af0896306834dbcd": {
+  "arm": "symbolic",
+  "prompt_index": "13"
+ },
+ "e07683907e59f976": {
+  "arm": "hga",
+  "prompt_index": "14"
+ },
+ "228e5cafffe0e853": {
+  "arm": "dense",
+  "prompt_index": "14"
+ },
+ "3c5b2a41b8f0f693": {
+  "arm": "transformer",
+  "prompt_index": "14"
+ },
+ "bc90280ca4a24a64": {
+  "arm": "symbolic",
+  "prompt_index": "14"
+ },
+ "fe4560de9a58442e": {
+  "arm": "hga",
+  "prompt_index": "15"
+ },
+ "c5f1f719015a745f": {
+  "arm": "dense",
+  "prompt_index": "15"
+ },
+ "4c0a1d9aac66df58": {
+  "arm": "transformer",
+  "prompt_index": "15"
+ },
+ "f659fbfffff71bc7": {
+  "arm": "symbolic",
+  "prompt_index": "15"
+ },
+ "2b44954a93fb405c": {
+  "arm": "hga",
+  "prompt_index": "16"
+ },
+ "bad90981082570de": {
+  "arm": "dense",
+  "prompt_index": "16"
+ },
+ "e01540560e6425b2": {
+  "arm": "transformer",
+  "prompt_index": "16"
+ },
+ "4b2b610a6686d40c": {
+  "arm": "symbolic",
+  "prompt_index": "16"
+ },
+ "87b95878fb839f92": {
+  "arm": "hga",
+  "prompt_index": "17"
+ },
+ "5f6750e32dcaf30e": {
+  "arm": "dense",
+  "prompt_index": "17"
+ },
+ "3ffefbcb60edc077": {
+  "arm": "transformer",
+  "prompt_index": "17"
+ },
+ "29d2bac3c7418034": {
+  "arm": "symbolic",
+  "prompt_index": "17"
+ },
+ "0b844cbc027e638d": {
+  "arm": "hga",
+  "prompt_index": "18"
+ },
+ "e4712b2257c269f1": {
+  "arm": "dense",
+  "prompt_index": "18"
+ },
+ "596faa21bb5c5966": {
+  "arm": "transformer",
+  "prompt_index": "18"
+ },
+ "29232500b77ee7a5": {
+  "arm": "symbolic",
+  "prompt_index": "18"
+ },
+ "0316d9d16289c4f7": {
+  "arm": "hga",
+  "prompt_index": "19"
+ },
+ "584eef98d6715923": {
+  "arm": "dense",
+  "prompt_index": "19"
+ },
+ "1e1dd076cafee11d": {
+  "arm": "transformer",
+  "prompt_index": "19"
+ },
+ "2ae45499ec38c43e": {
+  "arm": "symbolic",
+  "prompt_index": "19"
+ },
+ "a7547604c9847057": {
+  "arm": "hga",
+  "prompt_index": "20"
+ },
+ "ebec34dbcf608770": {
+  "arm": "dense",
+  "prompt_index": "20"
+ },
+ "16771936c45c3528": {
+  "arm": "transformer",
+  "prompt_index": "20"
+ },
+ "4ea9abcf96856b06": {
+  "arm": "symbolic",
+  "prompt_index": "20"
+ },
+ "d5ebdc7b267e3b99": {
+  "arm": "hga",
+  "prompt_index": "21"
+ },
+ "c19e0682486f568e": {
+  "arm": "dense",
+  "prompt_index": "21"
+ },
+ "5bb8d33e7ada2caf": {
+  "arm": "transformer",
+  "prompt_index": "21"
+ },
+ "1e1d11760ca4f67f": {
+  "arm": "symbolic",
+  "prompt_index": "21"
+ },
+ "72cbfa385c1de9ee": {
+  "arm": "hga",
+  "prompt_index": "22"
+ },
+ "85203346d652dd2a": {
+  "arm": "dense",
+  "prompt_index": "22"
+ },
+ "f6cf6e25173cde23": {
+  "arm": "transformer",
+  "prompt_index": "22"
+ },
+ "eb0b28e094a8f5ac": {
+  "arm": "symbolic",
+  "prompt_index": "22"
+ },
+ "c723b6b67e1c3259": {
+  "arm": "hga",
+  "prompt_index": "23"
+ },
+ "04b6f5742bf7ac9f": {
+  "arm": "dense",
+  "prompt_index": "23"
+ },
+ "cbec67e95d1da9d7": {
+  "arm": "transformer",
+  "prompt_index": "23"
+ },
+ "b7c5705b23bf9a9a": {
+  "arm": "symbolic",
+  "prompt_index": "23"
+ },
+ "3d21c01a37c7bb5c": {
+  "arm": "hga",
+  "prompt_index": "24"
+ },
+ "299114ec85debc40": {
+  "arm": "dense",
+  "prompt_index": "24"
+ },
+ "26120acb2c2c710f": {
+  "arm": "transformer",
+  "prompt_index": "24"
+ },
+ "cd68a8a23fbf2176": {
+  "arm": "symbolic",
+  "prompt_index": "24"
+ },
+ "ea47a52516938a30": {
+  "arm": "hga",
+  "prompt_index": "25"
+ },
+ "902e2e23ede16b74": {
+  "arm": "dense",
+  "prompt_index": "25"
+ },
+ "8244f2c41239a77d": {
+  "arm": "transformer",
+  "prompt_index": "25"
+ },
+ "dc594d48b0bd1b06": {
+  "arm": "symbolic",
+  "prompt_index": "25"
+ },
+ "ff7aeb167fc94bd6": {
+  "arm": "hga",
+  "prompt_index": "26"
+ },
+ "41d10b51dc39a931": {
+  "arm": "dense",
+  "prompt_index": "26"
+ },
+ "c334a72054bc4a4e": {
+  "arm": "transformer",
+  "prompt_index": "26"
+ },
+ "b62d714b1f5354e4": {
+  "arm": "symbolic",
+  "prompt_index": "26"
+ },
+ "d6b16cc2e4bccdcd": {
+  "arm": "hga",
+  "prompt_index": "27"
+ },
+ "8a2b907aa88c0195": {
+  "arm": "dense",
+  "prompt_index": "27"
+ },
+ "f37dbeac0b585ba7": {
+  "arm": "transformer",
+  "prompt_index": "27"
+ },
+ "45c27acba439d19e": {
+  "arm": "symbolic",
+  "prompt_index": "27"
+ },
+ "118fc592ba7ae14b": {
+  "arm": "hga",
+  "prompt_index": "28"
+ },
+ "6229af6d48946d8b": {
+  "arm": "dense",
+  "prompt_index": "28"
+ },
+ "5e7b143a4ca869fd": {
+  "arm": "transformer",
+  "prompt_index": "28"
+ },
+ "71106583761d1b69": {
+  "arm": "symbolic",
+  "prompt_index": "28"
+ },
+ "529332b0670a1a5a": {
+  "arm": "hga",
+  "prompt_index": "29"
+ },
+ "224e0fa9d198699f": {
+  "arm": "dense",
+  "prompt_index": "29"
+ },
+ "7e3e968cf3e47877": {
+  "arm": "transformer",
+  "prompt_index": "29"
+ },
+ "98c20c6539eef808": {
+  "arm": "symbolic",
+  "prompt_index": "29"
+ },
+ "06d1ff4f51b800fa": {
+  "arm": "hga",
+  "prompt_index": "30"
+ },
+ "32560faaa79b8593": {
+  "arm": "dense",
+  "prompt_index": "30"
+ },
+ "a7866d458774f5f6": {
+  "arm": "transformer",
+  "prompt_index": "30"
+ },
+ "6bea51a15d93682a": {
+  "arm": "symbolic",
+  "prompt_index": "30"
+ },
+ "0f69d9bf839cf805": {
+  "arm": "hga",
+  "prompt_index": "31"
+ },
+ "6499fa94ac46a7d2": {
+  "arm": "dense",
+  "prompt_index": "31"
+ },
+ "048ba747198b44f8": {
+  "arm": "transformer",
+  "prompt_index": "31"
+ },
+ "8f51bdc4472b50e9": {
+  "arm": "symbolic",
+  "prompt_index": "31"
+ },
+ "7ae7eba9418995af": {
+  "arm": "hga",
+  "prompt_index": "32"
+ },
+ "450444a380606f5f": {
+  "arm": "dense",
+  "prompt_index": "32"
+ },
+ "18b5c6ac23462434": {
+  "arm": "transformer",
+  "prompt_index": "32"
+ },
+ "39977b6e1a809a97": {
+  "arm": "symbolic",
+  "prompt_index": "32"
+ },
+ "c7a78a622544ea4d": {
+  "arm": "hga",
+  "prompt_index": "33"
+ },
+ "e4a7b54dffcbffb2": {
+  "arm": "dense",
+  "prompt_index": "33"
+ },
+ "ae439a1fdfafe6a8": {
+  "arm": "transformer",
+  "prompt_index": "33"
+ },
+ "b946bab2f035e02a": {
+  "arm": "symbolic",
+  "prompt_index": "33"
+ },
+ "6f51eb76717f3339": {
+  "arm": "hga",
+  "prompt_index": "34"
+ },
+ "1234854a2a1e1c8f": {
+  "arm": "dense",
+  "prompt_index": "34"
+ },
+ "fadf5bb047f2d2d7": {
+  "arm": "transformer",
+  "prompt_index": "34"
+ },
+ "d04486c66543d565": {
+  "arm": "symbolic",
+  "prompt_index": "34"
+ },
+ "c066354be22f2484": {
+  "arm": "hga",
+  "prompt_index": "35"
+ },
+ "97a81f3edab28d10": {
+  "arm": "dense",
+  "prompt_index": "35"
+ },
+ "b6a4eee27d8dbb65": {
+  "arm": "transformer",
+  "prompt_index": "35"
+ },
+ "b8a17c455b5452b4": {
+  "arm": "symbolic",
+  "prompt_index": "35"
+ },
+ "6835dc99a307453a": {
+  "arm": "hga",
+  "prompt_index": "36"
+ },
+ "a591696a82e96e76": {
+  "arm": "dense",
+  "prompt_index": "36"
+ },
+ "2f15d7ec033ed3fb": {
+  "arm": "transformer",
+  "prompt_index": "36"
+ },
+ "abbae02790d62fb7": {
+  "arm": "symbolic",
+  "prompt_index": "36"
+ },
+ "23aeeb12a30623b3": {
+  "arm": "hga",
+  "prompt_index": "37"
+ },
+ "63db6b2b2e0f107a": {
+  "arm": "dense",
+  "prompt_index": "37"
+ },
+ "e61630fde9f2eb44": {
+  "arm": "transformer",
+  "prompt_index": "37"
+ },
+ "319c0720ef8c9dce": {
+  "arm": "symbolic",
+  "prompt_index": "37"
+ },
+ "cd0aa863ca804fcb": {
+  "arm": "hga",
+  "prompt_index": "38"
+ },
+ "afdfc9164f28380f": {
+  "arm": "dense",
+  "prompt_index": "38"
+ },
+ "d5a2568a0d85f62c": {
+  "arm": "transformer",
+  "prompt_index": "38"
+ },
+ "686de5a8544cd331": {
+  "arm": "symbolic",
+  "prompt_index": "38"
+ },
+ "9aff1851e24fe815": {
+  "arm": "hga",
+  "prompt_index": "39"
+ },
+ "170f9a282a6e2e2d": {
+  "arm": "dense",
+  "prompt_index": "39"
+ },
+ "0e9b7b2d772eefb7": {
+  "arm": "transformer",
+  "prompt_index": "39"
+ },
+ "939178255bc0ba53": {
+  "arm": "symbolic",
+  "prompt_index": "39"
+ },
+ "37e56715d80fe0a0": {
+  "arm": "hga",
+  "prompt_index": "40"
+ },
+ "ad35bdc0921195ef": {
+  "arm": "dense",
+  "prompt_index": "40"
+ },
+ "a50008401c197b17": {
+  "arm": "transformer",
+  "prompt_index": "40"
+ },
+ "ee4e469b21112956": {
+  "arm": "symbolic",
+  "prompt_index": "40"
+ },
+ "54cfa14d9802a288": {
+  "arm": "hga",
+  "prompt_index": "41"
+ },
+ "7e0847c0e8028727": {
+  "arm": "dense",
+  "prompt_index": "41"
+ },
+ "fb306ca175fa795c": {
+  "arm": "transformer",
+  "prompt_index": "41"
+ },
+ "cde14d14c18bf3f2": {
+  "arm": "symbolic",
+  "prompt_index": "41"
+ },
+ "3b932af98122b6f0": {
+  "arm": "hga",
+  "prompt_index": "42"
+ },
+ "3948bb0848a4fd92": {
+  "arm": "dense",
+  "prompt_index": "42"
+ },
+ "ec0b645b0b9bd605": {
+  "arm": "transformer",
+  "prompt_index": "42"
+ },
+ "e9efc5bb082f051f": {
+  "arm": "symbolic",
+  "prompt_index": "42"
+ },
+ "1b915d94af2eaf51": {
+  "arm": "hga",
+  "prompt_index": "43"
+ },
+ "a939fc28daf320d7": {
+  "arm": "dense",
+  "prompt_index": "43"
+ },
+ "10b5d95cc752fe2c": {
+  "arm": "transformer",
+  "prompt_index": "43"
+ },
+ "e1e30cbd7616d492": {
+  "arm": "symbolic",
+  "prompt_index": "43"
+ },
+ "d33963afb64470a6": {
+  "arm": "hga",
+  "prompt_index": "44"
+ },
+ "39d1addfdc952c4a": {
+  "arm": "dense",
+  "prompt_index": "44"
+ },
+ "48a412460b8f890f": {
+  "arm": "transformer",
+  "prompt_index": "44"
+ },
+ "c7efa00c2b70ce4a": {
+  "arm": "symbolic",
+  "prompt_index": "44"
+ },
+ "578bc3c437fd83b7": {
+  "arm": "hga",
+  "prompt_index": "45"
+ },
+ "2143df8cb28d3dba": {
+  "arm": "dense",
+  "prompt_index": "45"
+ },
+ "10a75a8996a992de": {
+  "arm": "transformer",
+  "prompt_index": "45"
+ },
+ "fea08be990b9a148": {
+  "arm": "symbolic",
+  "prompt_index": "45"
+ },
+ "c624979a8d8fda40": {
+  "arm": "hga",
+  "prompt_index": "46"
+ },
+ "463f8ab5927d9496": {
+  "arm": "dense",
+  "prompt_index": "46"
+ },
+ "082ad8a43d252259": {
+  "arm": "transformer",
+  "prompt_index": "46"
+ },
+ "c3e71f78708e7c8e": {
+  "arm": "symbolic",
+  "prompt_index": "46"
+ },
+ "204e6cbd8cf7275a": {
+  "arm": "hga",
+  "prompt_index": "47"
+ },
+ "452495a725ff9921": {
+  "arm": "dense",
+  "prompt_index": "47"
+ },
+ "8f4f3bc364689847": {
+  "arm": "transformer",
+  "prompt_index": "47"
+ },
+ "6446a8861c6847e1": {
+  "arm": "symbolic",
+  "prompt_index": "47"
+ },
+ "34c1297f33555214": {
+  "arm": "hga",
+  "prompt_index": "48"
+ },
+ "6cb9c425e4bb43af": {
+  "arm": "dense",
+  "prompt_index": "48"
+ },
+ "a8a4453910547047": {
+  "arm": "transformer",
+  "prompt_index": "48"
+ },
+ "69ed8b8c04076a3a": {
+  "arm": "symbolic",
+  "prompt_index": "48"
+ },
+ "dcc6e4b549338b5b": {
+  "arm": "hga",
+  "prompt_index": "49"
+ },
+ "62dd0515e6c2a74f": {
+  "arm": "dense",
+  "prompt_index": "49"
+ },
+ "c9a7daaa440a4062": {
+  "arm": "transformer",
+  "prompt_index": "49"
+ },
+ "066daf0ce68470de": {
+  "arm": "symbolic",
+  "prompt_index": "49"
+ }
+}

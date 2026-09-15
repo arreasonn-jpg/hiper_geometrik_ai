@@ -75,7 +75,12 @@ def test_kuratorlenen_raporlar_mevcut(yol):
 
 
 def test_cok_adimli_belge_izgarasi_canli_ciktiyla_uyumlu():
-    """docs/COK_ADIMLI_VE_UZUN_BAGLAM.md tablosu gerçek sonuçla aynı olmalı."""
+    """docs/COK_ADIMLI_VE_UZUN_BAGLAM.md tablosu gerçek sonuçla aynı olmalı.
+
+    Adresleme düzeltmesi (docs/SPARSE_ADDRESSING_FIX.md) sonrası varsayılan
+    1–5 hop / 0–256 dolgu ızgarası tamamen temizdir; eski 0.5000 hücresi
+    kusurun eseriydi ve belgede tarihsel kayıt olarak anılır.
+    """
     from hga.evaluation.multi_hop import run_multi_hop_benchmark
 
     rapor = run_multi_hop_benchmark(
@@ -83,19 +88,27 @@ def test_cok_adimli_belge_izgarasi_canli_ciktiyla_uyumlu():
     )
     belge = (KOK / "docs" / "COK_ADIMLI_VE_UZUN_BAGLAM.md").read_text(encoding="utf-8")
 
-    # Belgedeki "5 adım | ... | 0.5000" satırı ölçülen bozulmayı yansıtmalı.
     bes_adim = {c.distractors: c.accuracy for c in rapor.cells if c.hop == 5}
-    assert bes_adim[256] == 0.5, "5 adım/256 dolgu sonucu değişti; belge güncellenmeli"
-    assert "| 5 adım | 1.0000 | 1.0000 | 1.0000 | 0.5000 |" in belge
+    assert bes_adim[256] == 1.0, "5 adım/256 dolgu sonucu değişti; belge güncellenmeli"
+    assert "| 5 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 |" in belge
 
     assert f"{rapor.inference_accuracy:.4f}" in belge, (
         "Belgedeki çok adımlı çıkarım doğruluğu canlı değerle uyuşmuyor"
     )
     assert f"en derin güvenilir zincir: **{rapor.deepest_reliable_hop} adım**" in belge
+    # Eski sınır tarihsel kayıt olarak korunmalı; sessiz silme yasak.
+    assert "0.9688" in belge and "SPARSE_ADDRESSING_FIX" in belge
 
 
 def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
-    """Kalan kapılar belgede KALDI olarak görünmeli; başarı süslenmemeli."""
+    """Kapı durumu belgeyle uyuşmalı; başarı süslenmemeli, sınır gizlenmemeli.
+
+    Düzeltme sonrası varsayılan ızgarada beş kapı da geçer. Deep profildeki
+    eski 16384-dolgu kaybının kök nedeni bellek doygunluğu çıktı ve slot
+    bütçesi dolgu yüküne göre boyutlandırılınca retention kapısı da geçti
+    (0.5). Test, belgenin bu tarihi VE kalan gerçek girişim maliyetini
+    (yarı kayıp) dürüstçe anlattığını doğrular.
+    """
     from hga.evaluation.multi_hop import run_multi_hop_benchmark
 
     rapor = run_multi_hop_benchmark(
@@ -103,10 +116,13 @@ def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
     )
     belge = (KOK / "docs" / "COK_ADIMLI_VE_UZUN_BAGLAM.md").read_text(encoding="utf-8")
     kalanlar = [ad for ad, sonuc in rapor.checks.items() if not sonuc]
-    assert kalanlar, "Tüm kapılar geçiyorsa bu test güncellenmeli"
-    for ad in kalanlar:
-        assert ad in belge, f"Kalan kapı {ad} belgede anılmıyor"
-    assert "KALDI" in belge
+    assert not kalanlar, (
+        f"Varsayılan ızgarada kapı kalıyor: {kalanlar}; belge ve bu test "
+        "yeniden gözden geçirilmeli")
+    # Sınır kaybolmadı, ölçüm koşulu düzeltildi: belge hem kapının artık
+    # geçtiğini hem de kalan gerçek maliyeti (retention 0.5) anmalı.
+    assert "retains_half_depth_under_max_distractors" in belge
+    assert "girişim" in belge, "Kalan yarı kayıp (gerçek girişim maliyeti) belgelenmeli"
     assert "ölü metrik" in belge, "Ölü metrik düzeltmesi belgelenmeli"
 
 
@@ -249,9 +265,11 @@ def test_verim_ham_sayimlari_belgeyle_uyumlu():
     assert rapor.generated == 960
     assert rapor.verified == 220
     assert rapor.distinct_new_facts == 178
-    assert rapor.useful_facts == 148
+    # Adresleme düzeltmesi sonrası bellek 2 olgu daha korur: 148 → 150
+    # geri çağrılabilir, 72 → 70 çakışma (docs/SPARSE_ADDRESSING_FIX.md).
+    assert rapor.useful_facts == 150
     assert rapor.duplicate_generations == 224
-    assert rapor.memory_collisions == 72
+    assert rapor.memory_collisions == 70
     assert rapor.incorrect_facts == 0
 
 
@@ -271,7 +289,9 @@ def test_verim_ayrisma_yonu_belgedeki_iddiayi_dogruluyor():
     assert ey > ny > uey, f"Ayrışma yönü değişti: EY={ey} NY={ny} UEY={uey}"
     assert round(ey, 4) == 0.2385
     assert round(ny, 4) == 0.1904
-    assert round(uey, 4) == 0.1565
+    # UEY adresleme düzeltmesiyle 0.1565 → 0.1606 yükseldi (bellek daha az
+    # olgu kaybediyor); EY ve NY bellekten bağımsız olduğundan değişmedi.
+    assert round(uey, 4) == 0.1606
     assert "EY > NY > UEY" in DOC_VERIM
 
 
