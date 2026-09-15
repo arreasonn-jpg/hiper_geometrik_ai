@@ -543,10 +543,13 @@ kapsamı dar.
 
 Priority(E) ağırlıkları tek kaynakta tanımlı, negatif değer reddediliyor,
 `normalize=True` ile karşılaştırılabilir hâle geliyor ve `priority_dokumu()`
-her terimin katkısını ayrı gösteriyor. Ablasyon bir zaaf ortaya çıkardı:
-**`w_novelty` ve `w_uncertainty` sıfırlandığında seçilen ilk 10 aday hiç
-değişmiyor** — ayarlanabilir olmak etkili olmak değildir.
-Ayrıntı: `docs/KOKEN_VE_ONCELIK.md`.
+her terimin katkısını ayrı gösteriyor. Demo havuzundaki ablasyon önce bir
+"zaaf" gösterdi (`w_novelty`/`w_uncertainty` seçimi değiştirmiyor); P0-1 kök
+neden analizi bunun terimlerin değil **degenere ölçüm havuzunun** özelliği
+olduğunu kanıtladı (kayıtsız adaylar `novelty=uncertainty=1.0` köşesinde
+yığılıyor ve ilk-K tamamen köşeden seçiliyor). Havuz düzeltildikten sonra
+**dört terimin dördü de** skor→sıralama→seçim→downstream zincirini uçtan uca
+taşıyor. Ayrıntı: `docs/KOKEN_VE_ONCELIK.md`, `docs/PRIORITY_CAUSAL_CHAIN.md`.
 
 ### Memory interference: kasıtlı çakışma (Faz 15–17)
 

@@ -75,19 +75,29 @@ yapısal bir eşleşme avantajıdır.**
 
 ## 4. Priority(E) ağırlıkları — hangisi gerçekten nedensel?
 
-Downstream `verification_yield` farkının %95 CI'si:
+Downstream `verification_yield` farkının %95 CI'si (terim kapatıldığında;
+havuz düzeltmesi sonrası, 20 tohum):
 
 | Ağırlık | Δ ortalama | %95 CI | Sıfırı dışlıyor mu? |
 |---|---:|---|---|
-| `w_gain` | **+0.2800** | [+0.1750, +0.3800] | **EVET** |
-| `w_uncertainty` | −0.0200 | [−0.0400, −0.0050] | **EVET** |
-| `w_conflict_penalty` | +0.0200 | [−0.0050, +0.0450] | hayır |
-| `w_novelty` | 0.0000 | [0.0000, 0.0000] | hayır |
+| `w_conflict_penalty` | **−0.3250** | [−0.3750, −0.2800] | **EVET** |
+| `w_gain` | **−0.2700** | [−0.3250, −0.2150] | **EVET** |
+| `w_uncertainty` | **−0.1500** | [−0.2000, −0.1000] | **EVET** |
+| `w_novelty` | **+0.0700** | [+0.0150, +0.1200] | **EVET** |
 
-`w_gain` tek başına baskın nedensel terim (P0-1'deki 0.38→0.62 bulgusunu
-20 tohumla teyit eder). `w_uncertainty`'nin etkisi küçük ama gerçek ve
-**negatif** — sıfırlamak downstream verimi artırıyor, yani mevcut
-ağırlığı zararlı. `w_novelty` downstream'e hiç etki etmiyor.
+Dört terimin dördü de nedensel: kapatmak downstream'i ölçülebilir
+biçimde değiştiriyor ve CI sıfırı dışlıyor. `w_conflict_penalty`, `w_gain`
+ve `w_uncertainty`'yi kapatmak doğrulama verimini DÜŞÜRÜYOR (katkıları
+pozitif). `w_novelty`'yi kapatmak doğrulama verimini artırıyor ama bu tek
+başına "zarar" kanıtı değildir: novelty bir **keşif** terimidir ve kendi
+hedef metriği olan `novel_knowledge_yield`'i taşır — kapatıldığında yeni
+bilgi verimi çöker (keşif/sömürü takası; bkz. `HEDEF_METRIK` tablosu ve
+`docs/PRIORITY_CAUSAL_CHAIN.md`).
+
+Not: Havuz düzeltmesi öncesi tabloda `w_novelty` "hiç etki etmiyor"
+görünüyordu; bunun terimlerin değil degenere ölçüm havuzunun (kayıtsız
+adayların novelty=uncertainty=1.0 köşesinde yığılması) özelliği olduğu
+kök neden analiziyle gösterildi ve havuz düzeltildi.
 
 ## Kabul kapıları (8/8 GEÇTİ)
 

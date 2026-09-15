@@ -73,7 +73,7 @@
       "value": 256.0
     },
     {
-      "evidence": "hierarchical_memory_v1@72b18bd90ab7",
+      "evidence": "hierarchical_memory_v1@379a04bf0bb4",
       "kind": "measured",
       "name": "Measured Memory Recall",
       "note": "Hiyerarşik bellek benchmarkında yazılan kayıtların geri okunma oranı (tüm katmanlar dahil).",
@@ -82,13 +82,13 @@
       "value": 1.0
     },
     {
-      "evidence": "hga_signature_benchmark_v1@291da16d8787",
+      "evidence": "hga_signature_benchmark_v1@d699088469e4",
       "kind": "measured",
       "name": "Hallucination Resistance",
       "note": "1 − (çıkarılamayan iddiayı kesin doğrulama oranı).",
       "symbol": "C_H",
       "unit": "oran",
-      "value": 0.772461
+      "value": 0.783691
     },
     {
       "evidence": null,
@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-15T01:02:56+00:00",
-  "overall": 9.68,
+  "generated_at_utc": "2026-09-15T07:52:23+00:00",
+  "overall": 9.83,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -129,14 +129,14 @@
   "sections": {
     "architecture": {
       "evidence": [
-        "operator_baseline_family_v1@81610cdf041b"
+        "operator_baseline_family_v1@f633b9ecb28b"
       ],
       "inputs": {
         "ceiling_gap": {
-          "full_dense_teacher": 0.9545679766,
-          "kronecker_teacher": -0.0001159594,
-          "low_rank_teacher": 0.9397222304,
-          "rank1_teacher": 0.9143608914
+          "full_dense_teacher": 0.9516777015,
+          "kronecker_teacher": -2.15e-08,
+          "low_rank_teacher": 0.9280024589,
+          "rank1_teacher": 0.8687041109
         },
         "rankings": {
           "full_dense_teacher": [
@@ -165,9 +165,9 @@
           ],
           "rank1_teacher": [
             "low_rank_param_matched",
-            "low_rank_flop_matched",
-            "full_dense",
             "rank1",
+            "full_dense",
+            "low_rank_flop_matched",
             "kron_sum_2",
             "kronecker"
           ]
@@ -240,18 +240,18 @@
     "memory": {
       "evidence": [
         "reliable_reasoning_depth_v1@5c8e421c20f1",
-        "hierarchical_memory_v1@72b18bd90ab7"
+        "hierarchical_memory_v1@379a04bf0bb4"
       ],
       "inputs": {
         "crash_recovery_recall": 1.0,
         "hierarchical_recall": 1.0,
         "min_recall": 0.0,
         "tier_distribution": {
-          "archive": 500,
+          "archive": 9000,
           "archive_segments": 1,
-          "cold": 1000,
-          "hot": 100,
-          "warm": 400
+          "cold": 30000,
+          "hot": 1000,
+          "warm": 10000
         }
       },
       "rationale": "Hiyerarşik bellek (hot/warm/cold/archive) recall, gecikme, tahliye ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği ızgarasındaki en düşük geri çağırma oranına düşülür.",
@@ -286,7 +286,7 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "9f2f3a190e481a77f7918acee8b0b4907b886a38",
+        "git_commit": "d8f25b2aaca7a2e097301dadbd1107a191c399bd",
         "protocols_examined": 17,
         "protocols_meeting_20_seeds": 3
       },
@@ -296,10 +296,10 @@
     },
     "scientific_evidence": {
       "evidence": [
-        "priority_causal_chain_ablation_v1@f86dfc8878cb",
-        "operator_baseline_family_v1@81610cdf041b",
+        "priority_causal_chain_ablation_v1@9bb0550d98d7",
+        "operator_baseline_family_v1@f633b9ecb28b",
         "reliable_reasoning_depth_v1@5c8e421c20f1",
-        "hga_signature_benchmark_v1@291da16d8787",
+        "hga_signature_benchmark_v1@d699088469e4",
         "turkish_semantic_extraction_v1@525654cb978c",
         "compositional_generalization_v2_raw_text@cddb95cb8513",
         "self_learning_scaling_v1",
@@ -313,7 +313,7 @@
         "total_gates": 56
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 8.95,
+      "score": 9.47,
       "section": "scientific_evidence"
     },
     "self_learning": {
@@ -360,26 +360,26 @@
     },
     "verification": {
       "evidence": [
-        "priority_causal_chain_ablation_v1@f86dfc8878cb",
+        "priority_causal_chain_ablation_v1@9bb0550d98d7",
         "multi_environment_verifier_isolation_v1",
         "priority_weight_optimization_v1"
       ],
       "inputs": {
         "adversarial_abstain_rate": 1.0,
         "baseline_downstream": {
-          "decidability": 0.46666667,
-          "false_selection_rate": 0.06666667,
-          "novel_knowledge_yield": 0.4,
-          "subject_diversity": 0.83333333,
-          "subject_entropy": 2.96343184,
-          "verification_yield": 0.4
+          "decidability": 1.0,
+          "false_selection_rate": 0.12,
+          "novel_knowledge_yield": 0.64,
+          "subject_diversity": 0.98,
+          "subject_entropy": 3.28192809,
+          "verification_yield": 0.88
         },
-        "holdout_gain": 0.34,
+        "holdout_gain": 0.09,
         "verifier_isolation_rate": 1.0,
         "weights_validated_on_holdout": true
       },
       "rationale": "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.",
-      "score": 8.7,
+      "score": 10.0,
       "section": "verification"
     }
   },

@@ -97,11 +97,17 @@ kadar değiştiğini ölçer:
 | `w_uncertainty` | 1.000 | 0 | **HAYIR** |
 
 **Okunuşu:** `w_novelty` ve `w_uncertainty` ağırlıklarını sıfırlamak, seçilen
-ilk 10 adayı **hiç değiştirmedi**. Yani bu iki terim bu veri üzerinde
-işlevsizdir. Ağırlığın "ayarlanabilir" olması, onun **etkili** olduğu anlamına
-gelmez — ve bu ayrımı ancak ablasyon gösterebilir.
+ilk 10 adayı **bu demo havuzunda** hiç değiştirmedi. Ağırlığın "ayarlanabilir"
+olması, onun **etkili** olduğu anlamına gelmez — ve bu ayrımı ancak ablasyon
+gösterebilir.
 
-Bu, düzeltilmiş bir hata değil, **ölçülmüş bir zaaftır**: mevcut sentetik veri
-üzerinde Priority(E)'nin dört teriminden ikisi seçimi yönlendirmiyor. Gerçek
-veride (ya da daha çeşitli aday havuzunda) davranış değişebilir; önemli olan
-artık bunun ölçülebilir olmasıdır.
+**Güncelleme (P0-1 kök neden analizi):** bu "işlevsizlik" terimlerin değil
+**ölçüm havuzunun** özelliği çıktı. Depoda kaydı olmayan her aday
+`novelty = uncertainty = 1.0` köşesine oturur; kayıtsız adaylar çoğunluktaysa
+ilk-K tamamen bu köşeden seçilir ve iki terimi sıfırlamak bütün ilk-K
+skorlarını aynı sabitle kaydırdığı için seçim tanım gereği değişemez.
+`priority_causal_chain_ablation_v1` havuzu bu köşe-degenerasyonundan
+arındırıldıktan sonra (bkz. `docs/PRIORITY_CAUSAL_CHAIN.md`) **dört terimin
+dördü de** skor→sıralama→seçim→downstream zincirini uçtan uca taşıyor.
+Yukarıdaki demo tablosu, degenere havuzun ablasyonu nasıl kör ettiğinin
+örneği olarak korunmuştur.

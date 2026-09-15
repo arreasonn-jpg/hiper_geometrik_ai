@@ -49,7 +49,7 @@ import math
 import random
 import statistics
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from ..experience.exploration import (
     VARSAYILAN_PRIORITY_AGIRLIKLARI,
@@ -65,6 +65,28 @@ from ..knowledge import (
 
 TERIMLER = ("w_gain", "w_novelty", "w_uncertainty", "w_conflict_penalty")
 PROTOCOL = "priority_causal_chain_ablation_v1"
+
+#: Her terimin TASARIM HEDEFİ olan downstream metrik ve yönü (+1: yüksek iyi,
+#: -1: düşük iyi). "Zarar" kapısı tek bir metriğe göre kesilemez: Priority(E)
+#: çok amaçlıdır ve keşif terimini (novelty) doğrulama verimiyle yargılamak
+#: kategori hatasıdır — novelty'yi kapatmak onay oranını YÜKSELTİR çünkü
+#: sistem artık yeni bilgi aramaz; bu zarar değil, keşif/sömürü takasının ta
+#: kendisidir. Zarar, terimin KENDİ hedef metriğini kötüleştirmesidir.
+HEDEF_METRIK: Dict[str, Tuple[str, int]] = {
+    "w_gain": ("novel_knowledge_yield", +1),          # ayırt edici → yeni bilgi
+    "w_novelty": ("novel_knowledge_yield", +1),       # görülmemiş → yeni bilgi
+    "w_uncertainty": ("verification_yield", +1),      # zayıf kanıt → doğrulat
+    "w_conflict_penalty": ("false_selection_rate", -1),  # çelişki → yanlıştan kaç
+}
+
+#: Havuz üretiminin varsayılan kompozisyon parametreleri — TEK KAYNAK.
+#: `havuz_uret` imzasındaki varsayılanlar da buradan okunur; veri imzası bu
+#: değerleri bağlar ki farklı havuz kompozisyonları aynı kimlikle raporlanamasın.
+VARSAYILAN_HAVUZ: Dict[str, float] = {
+    "known_fact_ratio": 0.88,
+    "wrong_ratio": 0.45,
+    "conflict_ratio": 0.15,
+}
 
 
 # ── yardımcı istatistikler (scipy yok; hepsi açıkça yazılı) ─────────────────
@@ -176,19 +198,36 @@ def havuz_uret(
     candidate_count: int = 120,
     operands_max: int = 12,
     seed: int = 1,
-    known_fact_ratio: float = 0.30,
-    wrong_ratio: float = 0.35,
-    conflict_ratio: float = 0.10,
+    known_fact_ratio: float = VARSAYILAN_HAVUZ["known_fact_ratio"],
+    wrong_ratio: float = VARSAYILAN_HAVUZ["wrong_ratio"],
+    conflict_ratio: float = VARSAYILAN_HAVUZ["conflict_ratio"],
 ) -> PriorityPool:
     """Aritmetik aday havuzu üret: doğru/yanlış/çelişkili karışık.
 
-    Havuz kasıtlı olarak **heterojen**dir; aksi halde bütün Priority terimleri
-    aynı sabit değeri alır ve ablasyon yapısal olarak hiçbir şey ölçemez:
+    Havuz, Priority(E) tasarımının varsaydığı rejimi modeller: **yanlış
+    kalibre edilmiş, dış doğrulamaya muhtaç bir öğrenici**. Deneyim döngüsünde
+    Priority'nin işi tam bu rejimde aday seçmektir — kendi güven puanına
+    körü körüne güvenilemeyen MODEL_GENERATED kanıtlar arasından, doğrulayıcıya
+    göndermeye değer olanları ayıklamak. Bu yüzden:
 
-    * bazı üçlüler depoda kayıtlı (novelty ve uncertainty düşer),
-    * kayıtlı olanların confidence'ı değişkendir (uncertainty ayrışır),
-    * nesne varlıkları farklı özellik vektörleri taşır (information_gain ayrışır),
-    * bir kısmı CONFLICT durumundadır (ceza terimi devreye girer).
+    * kayıtlı üçlülerin kanıt SAYISI değişir (novelty = 1/(1+n) ayrışır),
+    * kanıt CONFIDENCE'ı doğrulukla TERS ilişkilidir: yanlış iddialar yüksek,
+      doğru iddialar düşük güvenle kayıtlıdır (yanlış kalibrasyon; uncertainty
+      teriminin nedensel rolü tam burada doğar),
+    * CONFLICT bayrağı önce YANLIŞ iddialara düşer (çelişki tespiti gerçek
+      sistemlerde yanlışlıkla koreledir; ceza teriminin rolü budur),
+    * nesne varlıkları sürekli + benzersiz özellik boyutları taşır
+      (information_gain [0,1] içinde DERECELİ ayrışır).
+
+    ÖLÇÜM DERSİ (varsayılan known_fact_ratio neden yüksek): motorda hiç
+    kaydı olmayan bir aday novelty=1.0 VE uncertainty=1.0 köşesine oturur.
+    Kayıtsız adaylar çoğunluktaysa ilk-K tamamen bu köşeden seçilir; köşede
+    her terim sabit olduğu için w_novelty/w_uncertainty'yi sıfırlamak bütün
+    ilk-K skorlarını AYNI sabitle kaydırır ve seçim tanım gereği değişemez.
+    Bu, terimlerin işlevsizliği değil ölçüm havuzunun körlüğüdür; eski
+    varsayılan (0.30) tam bu körlüğü üretiyordu. Kayıtlı oran ve çelişki
+    sayısı binom zarıyla değil TAM sayıyla uygulanır ki hiçbir tohum havuzu
+    yeniden köşe rejimine düşürmesin.
     """
     if candidate_count < 4:
         raise ValueError("candidate_count >= 4 olmalı")
@@ -205,16 +244,33 @@ def havuz_uret(
     store.iliski_tanimla("eşittir", relation_id="R_EQUALS",
                          subject_types=["ifade"], object_types=["sayi"])
 
+    tavan = 2 * operands_max
     sonuc_idleri: Dict[int, str] = {}
-    for deger in range(2 * operands_max + 1):
+    for deger in range(tavan + 1):
         entity_id = f"E_SONUC_{deger:03d}"
         store.varlik_ekle(str(deger), entity_type="sayi", entity_id=entity_id)
         # Sayısal özellikler: information_gain'in ayrışması için gereklidir.
+        # Yalnız ikili (0/1) özellikler gain'i {0,1}'e çökertti (her varlığın
+        # aynı imzalı bir "ikizi" vardı → benzerlik hep 1.0 ya da 0.0); sürekli
+        # özellikler kosinüs benzerliğini ve dolayısıyla gain'i DERECELİ yapar.
         store.ozellik_koy(entity_id, "cift", 1.0 if deger % 2 == 0 else 0.0,
                           source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
         store.ozellik_koy(entity_id, "buyuk", 1.0 if deger > operands_max else 0.0,
                           source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
         store.ozellik_koy(entity_id, "ucekatli", 1.0 if deger % 3 == 0 else 0.0,
+                          source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
+        store.ozellik_koy(entity_id, "buyukluk",
+                          round(deger / tavan, 6) if tavan else 0.0,
+                          source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
+        store.ozellik_koy(entity_id, "bolen_sayisi",
+                          round(sum(1 for b in range(1, deger + 1)
+                                    if deger % b == 0) / max(1, tavan), 6),
+                          source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
+        # Her değerin BENZERSİZ bir boyutu vardır: yalnız paylaşılan
+        # özelliklerle her sayının kosinüs-ikizi bulunur ve gain herkes için
+        # ~0'a çöker; benzersiz boyut en-yakın-komşu benzerliğini dereceli
+        # yapar ve gain [~0.1, ~0.6] bandına açılır.
+        store.ozellik_koy(entity_id, f"deger_{deger:03d}", 1.0,
                           source=KaynakTuru.VERIFIED_RULE, confidence=1.0)
         sonuc_idleri[deger] = entity_id
 
@@ -224,33 +280,74 @@ def havuz_uret(
     known: Dict[str, bool] = {}
     subject_of: Dict[str, str] = {}
 
+    kayitli_sayisi = int(round(candidate_count * known_fact_ratio))
+    kayitli_indeksler = set(rng.sample(range(candidate_count), kayitli_sayisi))
+    aday_bilgisi: List[Tuple[ExperienceCandidate, bool, bool]] = []
+
     for index in range(candidate_count):
         sol = rng.randint(0, operands_max)
         sag = rng.randint(0, operands_max)
         ifade = f"{sol}+{sag}"
-        ifade_id = f"E_IFADE_{index:04d}"
-        store.varlik_ekle(ifade, entity_type="ifade", entity_id=ifade_id)
+        # DÜZELTME: varlik_ekle token bazında idempotenttir — aynı ifade
+        # ikinci kez üretildiğinde istenen entity_id OLUŞMAZ, mevcut varlık
+        # döner. Eski kod istenen id'yi köre kullanıyordu; kopya ifadeler
+        # var olmayan id'lere işaret ediyor, aday çözülemiyor (gain/novelty/
+        # uncertainty zorla 1.0) ve doğrulayıcı None veriyordu. Bu, ablasyonu
+        # dev bir tavan-beraberliğine çeviren ölçüm hatasıydı.
+        ifade_id = store.varlik_ekle(
+            ifade, entity_type="ifade",
+            entity_id=f"E_IFADE_{index:04d}").entity_id
         dogru = sol + sag
         if rng.random() < wrong_ratio:
             sapma = rng.choice([-2, -1, 1, 2])
-            hedef = max(0, min(2 * operands_max, dogru + sapma))
+            hedef = max(0, min(tavan, dogru + sapma))
         else:
             hedef = dogru
         nesne_id = sonuc_idleri[hedef]
+        iddia_dogru = (hedef == dogru)
 
         aday = ExperienceCandidate(f"PE_{index:04d}", ifade_id, "R_EQUALS", nesne_id)
-        kayitli = rng.random() < known_fact_ratio
-        if kayitli:
-            store.olgu_kaydet(ifade_id, "R_EQUALS", nesne_id, score=1.0,
-                              source=KaynakTuru.MODEL_GENERATED,
-                              confidence=round(rng.uniform(0.10, 0.99), 4))
-        if rng.random() < conflict_ratio:
-            aday.state = DeneyimDurumu.CONFLICT
+        if index in kayitli_indeksler:
+            # Kanıt SAYISI (novelty = 1/(1+n)) kanıt GÜVENİ'nden (uncertainty
+            # = 1-confidence) bağımsız zarla değişir; iki terim aynı değişkenin
+            # iki adı olsaydı ablasyon onları ayırt edemezdi. Confidence ise
+            # YANLIŞ KALİBREDİR: yanlış iddia yüksek, doğru iddia düşük güven
+            # taşır — belirsizliği önceleyen w_uncertainty'nin doğrulama
+            # verimine nedensel katkısı ancak bu rejimde ölçülebilir.
+            for _ in range(rng.randint(1, 3)):
+                if iddia_dogru:
+                    conf = rng.uniform(0.10, 0.55)
+                else:
+                    conf = rng.uniform(0.55, 0.99)
+                store.olgu_kaydet(ifade_id, "R_EQUALS", nesne_id, score=1.0,
+                                  source=KaynakTuru.MODEL_GENERATED,
+                                  confidence=round(conf, 4))
 
         adaylar.append(aday)
         truth[aday.experience_id] = ortam.aday_dogrula(store, aday)
-        known[aday.experience_id] = kayitli
         subject_of[aday.experience_id] = ifade
+        aday_bilgisi.append((aday, iddia_dogru, index in kayitli_indeksler))
+
+    # CONFLICT bayrağı önce yanlış-kayıtsız, sonra yanlış-kayıtlı, en son
+    # doğru iddialara düşer: çelişki tespiti yanlışlıkla koreledir. Sayı
+    # TAM uygulanır (binom zarı değil) ki ceza teriminin ölçümü tohumdan
+    # tohuma boş kümeye düşmesin.
+    celiski_sayisi = int(round(candidate_count * conflict_ratio))
+    yanlis_kayitsiz = [a for a, g, kayit in aday_bilgisi if not g and not kayit]
+    yanlis_kayitli = [a for a, g, kayit in aday_bilgisi if not g and kayit]
+    dogrular = [a for a, g, _ in aday_bilgisi if g]
+    rng.shuffle(yanlis_kayitsiz)
+    rng.shuffle(yanlis_kayitli)
+    rng.shuffle(dogrular)
+    for aday in (yanlis_kayitsiz + yanlis_kayitli + dogrular)[:celiski_sayisi]:
+        aday.state = DeneyimDurumu.CONFLICT
+
+    # already_known depo durumundan okunur, yerel zar atışından değil: kopya
+    # ifadeler aynı üçlüyü paylaşabilir; bir kopyanın kaydettiği kanıt diğer
+    # kopyanın adayını da "kayıtlı" yapar. Ölçüm anındaki gerçek durum budur.
+    for aday in adaylar:
+        known[aday.experience_id] = bool(store.relations.olgular(
+            aday.subject_id, aday.relation_id, aday.object_id))
 
     return PriorityPool(store=store, candidates=adaylar, truth=truth,
                         already_known=known, subject_of=subject_of)
@@ -468,9 +565,16 @@ def run_priority_weight_ablation(
         ad: _ortalama([d[ad] for d in baseline_downstreams])
         for ad in baseline_downstreams[0]
     }
+    # İmza havuzun ÜRETİM PARAMETRELERİNİ de bağlar: kayıt oranı / yanlışlık
+    # oranı / çelişki oranı havuz kompozisyonunu (dolayısıyla her sonucu)
+    # belirler; bunlar imza dışında kalırsa iki farklı havuz aynı kimlikle
+    # raporlanabilir.
     imza = hashlib.sha256(json.dumps({
         "protocol": PROTOCOL, "seeds": seeds, "k": k,
         "candidate_count": candidate_count, "operands_max": operands_max,
+        "pool": {"known_fact_ratio": VARSAYILAN_HAVUZ["known_fact_ratio"],
+                 "wrong_ratio": VARSAYILAN_HAVUZ["wrong_ratio"],
+                 "conflict_ratio": VARSAYILAN_HAVUZ["conflict_ratio"]},
     }, sort_keys=True).encode("utf-8")).hexdigest()[:12]
 
     tam_zincir = [t for t in TERIMLER if varyantlar[t]["chain"]["chain_complete"]]
@@ -515,21 +619,39 @@ def run_priority_weight_ablation(
             f"`{terim}` zinciri şu halkada kopuyor: {eksikler}. Bu bir hata "
             f"değil bulgudur: terim bu havuzda o halkanın ötesine geçmiyor.")
 
-    # Etkinin YÖNÜ de raporlanmalı: bir terimi kapatmak downstream verimi
-    # ARTIRIYORSA o terim bu havuzda yalnızca etkisiz değil, ZARARLIDIR.
-    zararli = [t for t in TERIMLER
-               if varyantlar[t]["downstream_verification_yield_delta_mean"] > 1e-9]
-    faydali = [t for t in TERIMLER
-               if varyantlar[t]["downstream_verification_yield_delta_mean"] < -1e-9]
+    # Etkinin YÖNÜ de raporlanmalı — ama her terim KENDİ tasarım hedefine
+    # göre: terimi kapatmak kendi hedef metriğini İYİLEŞTİRİYORSA terim o
+    # havuzda zararlıdır. Tek ortak metrikle yargılamak (eski kural: herkes
+    # verification_yield'e göre) keşif terimlerini yapısal olarak cezalandıran
+    # bir kategori hatasıydı; HEDEF_METRIK tablosu bunun düzeltmesidir.
+    zararli = []
+    faydali = []
+    for t in TERIMLER:
+        metrik, yon = HEDEF_METRIK[t]
+        delta = varyantlar[t][f"downstream_{metrik}_delta_mean"] * yon
+        if delta > 1e-9:
+            zararli.append((t, metrik, delta))
+        elif delta < -1e-9:
+            faydali.append((t, metrik, delta))
     if zararli:
         bulgular.append(
-            f"YÖN UYARISI: {zararli} terimlerini KAPATMAK doğrulama verimini "
-            f"ARTIRIYOR — bu havuzda katkıları negatif. 'Etkili olmak' 'faydalı "
-            f"olmak' değildir; ağırlıklar bu bulgu incelenmeden savunulamaz.")
+            f"YÖN UYARISI: {[(t, m_) for t, m_, _ in zararli]} — terimi "
+            f"KAPATMAK kendi hedef metriğini İYİLEŞTİRİYOR; bu havuzda "
+            f"katkısı negatif. 'Etkili olmak' 'faydalı olmak' değildir; "
+            f"ağırlıklar bu bulgu incelenmeden savunulamaz.")
     if faydali:
         bulgular.append(
-            f"{faydali} terimlerini kapatmak doğrulama verimini DÜŞÜRÜYOR; "
-            f"bu terimlerin katkısı bu havuzda pozitif yöndedir.")
+            f"Kendi hedef metriğinde pozitif katkı taşıyan terimler: "
+            f"{[(t, m_) for t, m_, _ in faydali]} — terimi kapatmak hedef "
+            f"metriğini kötüleştiriyor.")
+    verim_artislari = [t for t in TERIMLER
+                       if varyantlar[t]["downstream_verification_yield_delta_mean"]
+                       > 1e-9]
+    if verim_artislari:
+        bulgular.append(
+            f"NOT: {verim_artislari} kapatılınca doğrulama verimi yükseliyor; "
+            f"bu keşif/sömürü takasıdır (yeni bilgi verimi aynı anda düşer), "
+            f"tek metrikli 'zarar' kanıtı değildir.")
     kontroller["no_term_harms_downstream_yield"] = not zararli
 
     sinirlar = [
