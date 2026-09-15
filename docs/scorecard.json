@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-15T00:29:18+00:00",
-  "overall": 9.57,
+  "generated_at_utc": "2026-09-15T01:02:56+00:00",
+  "overall": 9.68,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -286,12 +286,12 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "5dbdf2f531e4f48eef54905c1fb2913cf9097898",
+        "git_commit": "9f2f3a190e481a77f7918acee8b0b4907b886a38",
         "protocols_examined": 17,
         "protocols_meeting_20_seeds": 3
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
-      "score": 8.89,
+      "score": 10.0,
       "section": "reproducibility"
     },
     "scientific_evidence": {
@@ -313,7 +313,7 @@
         "total_gates": 56
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 8.77,
+      "score": 8.95,
       "section": "scientific_evidence"
     },
     "self_learning": {

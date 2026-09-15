@@ -479,6 +479,14 @@ def build_human_evaluation_protocol(
             f"{ozet['acceptable_dimensions']}/{ozet['dimensions']} boyut "
             f"α ≥ {ALPHA_ACCEPTABLE} eşiğini geçti.")
 
+    # Protokolü girdisine bağlayan deterministik imza: aynı prompt seti,
+    # değerlendirici listesi, kollar ve tohum → aynı imza. Yeniden-
+    # üretilebilirlik denetimi bu alanı arar.
+    tasarim["signature"] = hashlib.sha256(json.dumps({
+        "protocol": PROTOCOL, "prompts": prompt_listesi,
+        "raters": degerlendiriciler, "arms": list(arms), "seed": seed,
+    }, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:12]
+
     return HumanEvaluationReport(
         protocol=PROTOCOL,
         schema_version=SCHEMA_VERSION,

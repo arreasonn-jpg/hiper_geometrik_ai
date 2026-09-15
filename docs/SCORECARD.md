@@ -1,6 +1,6 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-15T00:29:18+00:00`
+Üretim zamanı (UTC): `2026-09-15T01:02:56+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
@@ -16,10 +16,10 @@
 | human_evaluation | n/a | human_evaluation_protocol_v1 |
 | turkish_nlp | 9.4 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
 | language_modeling | 10.0 | turkish_lm_v1@d278278dd310 |
-| reproducibility | 8.9 | reproducibility_audit_v1 |
-| scientific_evidence | 8.8 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@5c8e421c20f1, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
+| reproducibility | 10.0 | reproducibility_audit_v1 |
+| scientific_evidence | 8.9 | priority_causal_chain_ablation_v1@f86dfc8878cb, operator_baseline_family_v1@81610cdf041b, reliable_reasoning_depth_v1@5c8e421c20f1, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
-| **Overall Research Readiness** | **9.6** | 12/13 bölüm |
+| **Overall Research Readiness** | **9.7** | 12/13 bölüm |
 
 ## HGA Capability Vector
 

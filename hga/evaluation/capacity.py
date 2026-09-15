@@ -28,6 +28,8 @@ deney çıktısıdır.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import math
 import random
 from dataclasses import asdict, dataclass, field
@@ -71,6 +73,10 @@ class CapacityReport:
     log10: Dict[str, float] = field(default_factory=dict)
     ordering_holds: bool = True
     notes: List[str] = field(default_factory=list)
+    #: Raporu ürettiği konfigürasyona bağlayan deterministik imza.
+    #: Yeniden-üretilebilirlik denetimi bu alanı arar; imzasız rapor
+    #: hangi girdiyle üretildiğini kanıtlayamaz.
+    config_hash: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -278,6 +284,13 @@ def run_capacity_benchmark(
     )
     rapor.notes.append(
         "Domain: aritmetik mini-environment; genel dil kapasitesi iddiası yoktur.")
+    rapor.config_hash = hashlib.sha256(json.dumps({
+        "protocol": "capacity_framework_v1",
+        "operands_max": operands_max, "initial_facts": initial_facts,
+        "sample_size": sample_size, "seed": seed, "n": n, "k": k,
+        "vocab": vocab, "window": window,
+        "physical_parameters": physical_parameters,
+    }, sort_keys=True).encode("utf-8")).hexdigest()[:12]
     return rapor
 
 

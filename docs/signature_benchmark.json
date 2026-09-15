@@ -1,0 +1,1733 @@
+{
+ "protocol": "hga_signature_benchmark_v1",
+ "profile": "standard",
+ "seeds": [
+  1
+ ],
+ "tasks": [
+  "A_long_chain",
+  "B_unseen_entity",
+  "C_unseen_relation",
+  "D_unseen_both",
+  "E_conflict",
+  "F_memory_dependent",
+  "G_epistemic",
+  "H_distractor"
+ ],
+ "arms": [
+  "symbolic",
+  "dense",
+  "transformer",
+  "hga",
+  "hga_no_memory",
+  "hga_no_kronecker",
+  "hga_no_attention",
+  "hybrid"
+ ],
+ "dataset_hash": "d699088469e4",
+ "config": {
+  "train_size": 2048,
+  "test_size": 512,
+  "steps": 300,
+  "batch_size": 128,
+  "context_slots": 12,
+  "entity_count": 120,
+  "relation_count": 10
+ },
+ "parameters": {
+  "dense": 83655,
+  "transformer": 85926,
+  "hga": 85938,
+  "hga_no_memory": 85938,
+  "hga_no_kronecker": 83914,
+  "hga_no_attention": 84881
+ },
+ "body_parameters": {
+  "dense": 81975,
+  "transformer": 82470,
+  "hga": 82482,
+  "hga_no_memory": 82482,
+  "hga_no_kronecker": 80458,
+  "hga_no_attention": 81425
+ },
+ "parameter_ratio": 1.027291,
+ "body_parameter_ratio": 1.025156,
+ "leakage": {
+  "A_long_chain": {
+   "task": "A_long_chain",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "B_unseen_entity": {
+   "task": "B_unseen_entity",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "C_unseen_relation": {
+   "task": "C_unseen_relation",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "D_unseen_both": {
+   "task": "D_unseen_both",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "E_conflict": {
+   "task": "E_conflict",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "F_memory_dependent": {
+   "task": "F_memory_dependent",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "G_epistemic": {
+   "task": "G_epistemic",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  },
+  "H_distractor": {
+   "task": "H_distractor",
+   "train_entities": 96,
+   "train_relations": 8,
+   "held_out_entity_leak": [],
+   "held_out_relation_leak": [],
+   "clean": true,
+   "test_uses_held_out_entities": true,
+   "test_uses_held_out_relations": true
+  }
+ },
+ "results": {
+  "A_long_chain": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.478516,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.478516
+    ],
+    "macro_f1_mean": 0.472867,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.472867
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.1875,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.1875
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.550781,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.550781
+    ],
+    "macro_f1_mean": 0.55061,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.55061
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.193359,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.193359
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.476562,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.476562
+    ],
+    "macro_f1_mean": 0.463463,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.463463
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.162109,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.162109
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.476562,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.476562
+    ],
+    "macro_f1_mean": 0.463463,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.463463
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.162109,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.162109
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.474609,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.474609
+    ],
+    "macro_f1_mean": 0.469344,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.469344
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.191406,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.191406
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.505859,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.505859
+    ],
+    "macro_f1_mean": 0.50166,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.50166
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.179688,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.179688
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  },
+  "B_unseen_entity": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.484375,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.484375
+    ],
+    "macro_f1_mean": 0.474553,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.474553
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.324219,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.324219
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.517578,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.517578
+    ],
+    "macro_f1_mean": 0.448678,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.448678
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.416016,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.416016
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.476562,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.476562
+    ],
+    "macro_f1_mean": 0.471523,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.471523
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.308594,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.308594
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.476562,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.476562
+    ],
+    "macro_f1_mean": 0.471523,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.471523
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.308594,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.308594
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.478516,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.478516
+    ],
+    "macro_f1_mean": 0.465129,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.465129
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.337891,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.337891
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.486328,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.486328
+    ],
+    "macro_f1_mean": 0.484438,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.484438
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.285156,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.285156
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  },
+  "C_unseen_relation": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.517578,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.517578
+    ],
+    "macro_f1_mean": 0.517355,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.517355
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.236328,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.236328
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.513672,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.513672
+    ],
+    "macro_f1_mean": 0.458822,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.458822
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.386719,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.386719
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.509766,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.509766
+    ],
+    "macro_f1_mean": 0.508188,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.508188
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.257812,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.257812
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.509766,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.509766
+    ],
+    "macro_f1_mean": 0.508188,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.508188
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.257812,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.257812
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.519531,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.519531
+    ],
+    "macro_f1_mean": 0.517403,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.517403
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.257812,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.257812
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.496094,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.496094
+    ],
+    "macro_f1_mean": 0.493862,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.493862
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.203125,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.203125
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  },
+  "D_unseen_both": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.503906,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.503906
+    ],
+    "macro_f1_mean": 0.499507,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.499507
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.263672,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.263672
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.53125,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.53125
+    ],
+    "macro_f1_mean": 0.438596,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.438596
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.40625,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.40625
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.498047,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.498047
+    ],
+    "macro_f1_mean": 0.489824,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.489824
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.283203,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.283203
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.498047,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.498047
+    ],
+    "macro_f1_mean": 0.489824,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.489824
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.283203,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.283203
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.5,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.5
+    ],
+    "macro_f1_mean": 0.488735,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.488735
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.292969,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.292969
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.492188,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.492188
+    ],
+    "macro_f1_mean": 0.490196,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.490196
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.253906,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.253906
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  },
+  "E_conflict": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.5,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.5
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.494141,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.494141
+    ],
+    "macro_f1_mean": 0.494046,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.494046
+    ],
+    "uncertain_rate_mean": 0.513672,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.513672
+    ],
+    "hallucination_rate_mean": 0.246094,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.246094
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.496094,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.496094
+    ],
+    "macro_f1_mean": 0.474408,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.474408
+    ],
+    "uncertain_rate_mean": 0.703125,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.703125
+    ],
+    "hallucination_rate_mean": 0.150391,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.150391
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.494141,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.494141
+    ],
+    "macro_f1_mean": 0.493706,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.493706
+    ],
+    "uncertain_rate_mean": 0.529297,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.529297
+    ],
+    "hallucination_rate_mean": 0.238281,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.238281
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.494141,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.494141
+    ],
+    "macro_f1_mean": 0.493706,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.493706
+    ],
+    "uncertain_rate_mean": 0.529297,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.529297
+    ],
+    "hallucination_rate_mean": 0.238281,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.238281
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.523438,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.523438
+    ],
+    "macro_f1_mean": 0.521327,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.521327
+    ],
+    "uncertain_rate_mean": 0.566406,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.566406
+    ],
+    "hallucination_rate_mean": 0.205078,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.205078
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.509766,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.509766
+    ],
+    "macro_f1_mean": 0.509719,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.509719
+    ],
+    "uncertain_rate_mean": 0.509766,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.509766
+    ],
+    "hallucination_rate_mean": 0.240234,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.240234
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 0.761719,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.761719
+    ],
+    "macro_f1_mean": 0.747375,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.747375
+    ],
+    "uncertain_rate_mean": 0.261719,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.261719
+    ],
+    "hallucination_rate_mean": 0.238281,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.238281
+    ]
+   }
+  },
+  "F_memory_dependent": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.898438,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.898438
+    ],
+    "macro_f1_mean": 0.898399,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.898399
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.044922,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.044922
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.986328,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.986328
+    ],
+    "macro_f1_mean": 0.9863,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.9863
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.013672,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.013672
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.488281,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.488281
+    ],
+    "macro_f1_mean": 0.485447,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.485447
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.203125,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.203125
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  },
+  "G_epistemic": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.345703,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.345703
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.341797,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.341797
+    ],
+    "macro_f1_mean": 0.341063,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.341063
+    ],
+    "uncertain_rate_mean": 0.318359,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.318359
+    ],
+    "hallucination_rate_mean": 0.242188,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.242188
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.384766,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.384766
+    ],
+    "macro_f1_mean": 0.372446,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.372446
+    ],
+    "uncertain_rate_mean": 0.402344,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.402344
+    ],
+    "hallucination_rate_mean": 0.265625,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.265625
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.322266,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.322266
+    ],
+    "macro_f1_mean": 0.322674,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.322674
+    ],
+    "uncertain_rate_mean": 0.316406,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.316406
+    ],
+    "hallucination_rate_mean": 0.242188,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.242188
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.322266,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.322266
+    ],
+    "macro_f1_mean": 0.322674,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.322674
+    ],
+    "uncertain_rate_mean": 0.316406,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.316406
+    ],
+    "hallucination_rate_mean": 0.242188,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.242188
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.310547,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.310547
+    ],
+    "macro_f1_mean": 0.308607,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.308607
+    ],
+    "uncertain_rate_mean": 0.388672,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.388672
+    ],
+    "hallucination_rate_mean": 0.214844,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.214844
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.353516,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.353516
+    ],
+    "macro_f1_mean": 0.349116,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.349116
+    ],
+    "uncertain_rate_mean": 0.359375,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.359375
+    ],
+    "hallucination_rate_mean": 0.236328,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.236328
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 0.769531,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.769531
+    ],
+    "macro_f1_mean": 0.733503,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.733503
+    ],
+    "uncertain_rate_mean": 0.115234,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.115234
+    ],
+    "hallucination_rate_mean": 0.121094,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.121094
+    ]
+   }
+  },
+  "H_distractor": {
+   "symbolic": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   },
+   "dense": {
+    "accuracy_mean": 0.511719,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.511719
+    ],
+    "macro_f1_mean": 0.511115,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.511115
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.240234,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.240234
+    ]
+   },
+   "transformer": {
+    "accuracy_mean": 0.478516,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.478516
+    ],
+    "macro_f1_mean": 0.422856,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.422856
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.083984,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.083984
+    ]
+   },
+   "hga": {
+    "accuracy_mean": 0.515625,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.515625
+    ],
+    "macro_f1_mean": 0.515026,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.515026
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.238281,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.238281
+    ]
+   },
+   "hga_no_memory": {
+    "accuracy_mean": 0.515625,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.515625
+    ],
+    "macro_f1_mean": 0.515026,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.515026
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.238281,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.238281
+    ]
+   },
+   "hga_no_kronecker": {
+    "accuracy_mean": 0.494141,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.494141
+    ],
+    "macro_f1_mean": 0.493814,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.493814
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.21875,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.21875
+    ]
+   },
+   "hga_no_attention": {
+    "accuracy_mean": 0.523438,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     0.523438
+    ],
+    "macro_f1_mean": 0.520798,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     0.520798
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.253906,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.253906
+    ]
+   },
+   "hybrid": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "per_seed_accuracy": [
+     1.0
+    ],
+    "macro_f1_mean": 1.0,
+    "macro_f1_std": 0.0,
+    "per_seed_macro_f1": [
+     1.0
+    ],
+    "uncertain_rate_mean": 0.0,
+    "uncertain_rate_std": 0.0,
+    "per_seed_uncertain_rate": [
+     0.0
+    ],
+    "hallucination_rate_mean": 0.0,
+    "hallucination_rate_std": 0.0,
+    "per_seed_hallucination_rate": [
+     0.0
+    ]
+   }
+  }
+ },
+ "majority_baseline": {
+  "A_long_chain": {
+   "accuracy": 0.478516,
+   "macro_f1": 0.323646,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.0
+  },
+  "B_unseen_entity": {
+   "accuracy": 0.501953,
+   "macro_f1": 0.3342,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.498047
+  },
+  "C_unseen_relation": {
+   "accuracy": 0.515625,
+   "macro_f1": 0.340206,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.484375
+  },
+  "D_unseen_both": {
+   "accuracy": 0.53125,
+   "macro_f1": 0.346939,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.46875
+  },
+  "E_conflict": {
+   "accuracy": 0.5,
+   "macro_f1": 0.333333,
+   "uncertain_rate": 1.0,
+   "hallucination_rate": 0.0
+  },
+  "F_memory_dependent": {
+   "accuracy": 0.484375,
+   "macro_f1": 0.326316,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.0
+  },
+  "G_epistemic": {
+   "accuracy": 0.34375,
+   "macro_f1": 0.170543,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.65625
+  },
+  "H_distractor": {
+   "accuracy": 0.521484,
+   "macro_f1": 0.342747,
+   "uncertain_rate": 0.0,
+   "hallucination_rate": 0.478516
+  }
+ },
+ "signature": {
+  "A_long_chain": {
+   "hga_accuracy": 0.476562,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.550781,
+   "margin": -0.074219,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.523438,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": 0.001953,
+   "attention_contribution": -0.029297
+  },
+  "B_unseen_entity": {
+   "hga_accuracy": 0.476562,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.517578,
+   "margin": -0.041016,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.523438,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": -0.001954,
+   "attention_contribution": -0.009766
+  },
+  "C_unseen_relation": {
+   "hga_accuracy": 0.509766,
+   "best_competitor": "dense",
+   "best_competitor_accuracy": 0.517578,
+   "margin": -0.007812,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.490234,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": -0.009765,
+   "attention_contribution": 0.013672
+  },
+  "D_unseen_both": {
+   "hga_accuracy": 0.498047,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.53125,
+   "margin": -0.033203,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.501953,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": -0.001953,
+   "attention_contribution": 0.005859
+  },
+  "E_conflict": {
+   "hga_accuracy": 0.494141,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.496094,
+   "margin": -0.001953,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.505859,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": -0.029297,
+   "attention_contribution": -0.015625
+  },
+  "F_memory_dependent": {
+   "hga_accuracy": 1.0,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.986328,
+   "margin": 0.013672,
+   "beats_majority": true,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.0,
+   "memory_contribution": 0.511719,
+   "kronecker_contribution": 0.0,
+   "attention_contribution": 0.0
+  },
+  "G_epistemic": {
+   "hga_accuracy": 0.322266,
+   "best_competitor": "transformer",
+   "best_competitor_accuracy": 0.384766,
+   "margin": -0.0625,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.677734,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": 0.011719,
+   "attention_contribution": -0.03125
+  },
+  "H_distractor": {
+   "hga_accuracy": 0.515625,
+   "best_competitor": "dense",
+   "best_competitor_accuracy": 0.511719,
+   "margin": 0.003906,
+   "beats_majority": false,
+   "oracle_accuracy": 1.0,
+   "oracle_gap": 0.484375,
+   "memory_contribution": 0.0,
+   "kronecker_contribution": 0.021484,
+   "attention_contribution": -0.007813
+  }
+ },
+ "checks": {
+  "parameter_budget_within_gate": true,
+  "body_parameter_budget_within_gate": true,
+  "no_held_out_leak": true,
+  "hga_beats_majority_everywhere": false,
+  "hga_has_signature_task": true,
+  "neural_arms_learn_above_chance": true,
+  "memory_gain_is_task_specific": true
+ },
+ "findings": [
+  "Profil `standard`: 8 görev × 8 kol × 1 tohum.",
+  "HGA'nın rakiplerini geçtiği görevler: F_memory_dependent (+0.0137 vs transformer), H_distractor (+0.0039 vs dense).",
+  "Bellek kanalının katkısı: A_long_chain: +0.0000, B_unseen_entity: +0.0000, C_unseen_relation: +0.0000, D_unseen_both: +0.0000, E_conflict: +0.0000, F_memory_dependent: +0.5117, G_epistemic: +0.0000, H_distractor: +0.0000. Katkı yalnız F'de belirgin değilse kanal bilgi değil kapasite taşıyor demektir.",
+  "Şu görevlerde HİÇBİR parameter-matched nöral kol çoğunluk tabanını +0.10'dan fazla geçemedi: ['A_long_chain', 'B_unseen_entity', 'C_unseen_relation', 'D_unseen_both', 'E_conflict', 'G_epistemic', 'H_distractor']. Bu, mimari farkından önce gelen bir sonuçtur: bu bütçe ve adım sayısında görev nöral kollar için öğrenilemiyor; sembolik kolla karşılaştırma paradigma farkı olarak okunmalıdır."
+ ],
+ "limitations": [
+  "Görevler sentetik ilişkisel dünyalardır; doğal dil veya gerçek bilgi grafiği sonucu DEĞİLDİR.",
+  "Sembolik kol öğrenmez; doğruluğu görev tanımının kendisinden gelir ve nöral kollarla aynı anlamda 'model performansı' değildir.",
+  "Bellek kanalı iki skaler özetle temsil edilir; tam bir bellek geri çağırma mimarisi değildir. Ölçtüğü şey bilginin ERİŞİLEBİLİRLİĞİdir.",
+  "Parametre bütçesi oranı 1.027 (gövde 1.025); gömme katmanı sözlük boyutuna bağlı olduğu için tam eşitlik değil, kapı (1.1) hedeflenir.",
+  "Tohum sayısı 1; çekirdek iddia için 20 tohum ayrıca koşulmalıdır."
+ ]
+}
