@@ -380,7 +380,10 @@ verildiği için sonuç **entity discovery, relation induction veya neural dil
 bölümler `COMPLETED` olmalıdır; eksik kurulum `SKIPPED` olarak gizlenmez ve
 `--strict` ile koşu başarısız kapatılabilir. Verification bölümü ayrıca false,
 incomplete, contradictory, malformed, boundary ve adversarial proof fixture'ını
-FAR/FRR/coverage/robustness ile ölçer. `overall_diagnostic_score` bir zekâ/SOTA
+FAR/FRR/coverage/robustness ile ölçer (güncel kanıt:
+`docs/VERIFIER_ADVERSARIAL.md` — 12/12 vaka, FAR 0.0, robustness 1.0; bozuk
+ispat `INVALID`, desteklenmeyen kural `UNCERTAIN` döner, kanıt yokluğu asla
+kabul gibi gizlenmez). `overall_diagnostic_score` bir zekâ/SOTA
 skoru değildir. Tam protokol: `docs/RESEARCH_BENCHMARK_SUITE.md`.
 
 ### Milestone tablosu: K₀ → E₀ → V₀ → K₁ → … → K₁₀₀
@@ -1144,6 +1147,7 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
 | Gerçek Türkçe benchmark | ✅ TWT v1 | 4.851 ham insan-anotasyonlu cümle, sabit hash/split, parameter-matched 4 mimari, neural compositional HGA ablasyonu |
 | Gerçek Türkçe LM (P1) | ✅ 1.11M kelime held-out | `python -m hga turkce-lm`, `docs/TURKISH_LM.md`: tr_corpus_v1 (UD+Bible+TWT, hash doğrulamalı), belge-ayrık split, train-only BPE, unigram/bigram kontrolleri, parametre-eşli dense/transformer/HGA; `corpus_at_least_1m_words` kapısı full profilde gerçek veriyle PASS |
+| Uzun bağlam LM (P1) | ✅ 24→256 token | `docs/LONG_CONTEXT.md`: aynı korpusta bağlam uzunluğu tek değişken olarak taranır; eşleşmiş hedef pozisyonları tüm bağlam/kollarda aynı, bütçe her bağlamda yeniden eşlenir (≤1.05), n-gram zemin aynı pencerelerde. Ölçülen yön: 24→256 tokenda PPL bozulması dense +%41, transformer +%3.3, HGA +%1.1 (en dirençli kol); bu kısa eşit-bütçe taramasında hiçbir neural kol bigramı geçmez ve bu AÇIK SINIR olarak raporlanır |
 | Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
 | Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
 | Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |

@@ -1,6 +1,6 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-15T09:31:40+00:00`
+Üretim zamanı (UTC): `2026-09-15T11:35:27+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
@@ -8,14 +8,14 @@
 |---|---:|---|
 | architecture | 10.0 | operator_baseline_family_v1@f633b9ecb28b |
 | memory | 10.0 | reliable_reasoning_depth_v1@41010671d80e, hierarchical_memory_v1@379a04bf0bb4 |
-| verification | 10.0 | priority_causal_chain_ablation_v1@9bb0550d98d7, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1 |
+| verification | 10.0 | priority_causal_chain_ablation_v1@9bb0550d98d7, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1, hga-verifier-adversarial-v1@77cf912ee0dd |
 | generalization | 10.0 | compositional_generalization_v2_raw_text@cddb95cb8513 |
 | reasoning | 10.0 | reliable_reasoning_depth_v1@41010671d80e, reasoning_depth_root_cause_v1 |
 | self_learning | 10.0 | self_learning_scaling_v1 |
 | statistical_rigor | 10.0 | core_seed_statistics_v1 |
 | human_evaluation | n/a | human_evaluation_protocol_v1 |
 | turkish_nlp | 10.0 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
-| language_modeling | 10.0 | turkish_lm_v1@d278278dd310 |
+| language_modeling | 10.0 | turkish_lm_v1@d278278dd310, long_context_lm_v1@c414db2ee70b |
 | reproducibility | 10.0 | reproducibility_audit_v1 |
 | scientific_evidence | 9.7 | priority_causal_chain_ablation_v1@9bb0550d98d7, operator_baseline_family_v1@f633b9ecb28b, reliable_reasoning_depth_v1@41010671d80e, hga_signature_benchmark_v1@d699088469e4, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
@@ -53,7 +53,7 @@
 - **statistical_rigor**: Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak p-değeri kabul edilmez.
 - **human_evaluation**: 50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır olsa bile gerçek insan puanı yoksa skor üretilmez.
 - **turkish_nlp**: Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.
-- **language_modeling**: Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.
+- **language_modeling**: Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması (24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.
 - **reproducibility**: Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.
 - **scientific_evidence**: Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.
 - **engineering**: CI matrisi, lint/type kapıları, paketleme sözleşmesi.

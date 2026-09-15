@@ -273,6 +273,8 @@ def build_scorecard(
     priority_optimization: Optional[Dict[str, Any]] = None,
     human_evaluation: Optional[Dict[str, Any]] = None,
     language_modeling: Optional[Dict[str, Any]] = None,
+    long_context: Optional[Dict[str, Any]] = None,
+    verifier_adversarial: Optional[Dict[str, Any]] = None,
     reproducibility: Optional[Dict[str, Any]] = None,
     engineering: Optional[Dict[str, Any]] = None,
 ) -> Scorecard:
@@ -289,7 +291,8 @@ def build_scorecard(
     def kanit(rapor: Optional[Dict[str, Any]]) -> List[str]:
         if not rapor:
             return []
-        etiket = rapor.get("protocol") or rapor.get("report_type") or "report"
+        etiket = (rapor.get("protocol") or rapor.get("report_type")
+                  or rapor.get("benchmark_id") or "report")
         imza = (rapor.get("dataset_hash") or rapor.get("config_hash")
                 or ((rapor.get("config") or {}).get("signature")) or "")
         # Uzun SHA-256'lar tabloyu okunamaz yapar; ilk 12 karakter kimlik
@@ -374,6 +377,17 @@ def build_scorecard(
         dogrulama_checks[f"weightopt:{ad}"] = bool(deger)
     for ad, deger in (_get(multi_environment, "checks") or {}).items():
         dogrulama_checks[f"multienv:{ad}"] = bool(deger)
+    # Adversarial verifier suite: rapor metrik taşır, kapı taşımaz; kapılar
+    # burada türetilir ki karne "saldırı altında FAR" iddiasını denetlesin.
+    if verifier_adversarial:
+        va = _get(verifier_adversarial, "metrics") or {}
+        if va:
+            dogrulama_checks["adversarial:zero_false_acceptance"] = (
+                float(va.get("far", 1.0)) == 0.0)
+            dogrulama_checks["adversarial:zero_false_rejection"] = (
+                float(va.get("frr", 1.0)) == 0.0)
+            dogrulama_checks["adversarial:fully_robust_to_attacks"] = (
+                float(va.get("robustness", 0.0)) >= 1.0)
     bolum("verification", dogrulama_checks or None,
           {"baseline_downstream": _get(priority_ablation, "baseline_downstream"),
            "verifier_isolation_rate": _get(multi_environment, "contamination",
@@ -385,7 +399,7 @@ def build_scorecard(
            "adversarial_abstain_rate": _get(multi_environment, "adversarial",
                                             "abstain_rate")},
           kanit(priority_ablation) + kanit(multi_environment)
-          + kanit(priority_optimization),
+          + kanit(priority_optimization) + kanit(verifier_adversarial),
           "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream "
           "zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında "
           "çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.")
@@ -486,7 +500,12 @@ def build_scorecard(
     # Milyon-kelime kapısı (corpus_at_least_1m_words) yalnız full profildeki
     # tr_corpus_v1 ile açılır; smoke/TWT koşusunda FAIL kalır ve skoru
     # tavanlar — eksik ölçek bir ortalama içinde gizlenmez.
-    bolum("language_modeling", _get(language_modeling, "checks"),
+    lm_checks = dict(_get(language_modeling, "checks") or {})
+    # Uzun bağlam taraması (24→256 token) ayrı protokoldür; kapıları buraya
+    # önekle eklenir ki bağlam ölçeği iddiası da karnede denetlensin.
+    for ad, deger in (_get(long_context, "checks") or {}).items():
+        lm_checks[f"longctx:{ad}"] = bool(deger)
+    bolum("language_modeling", lm_checks or None,
           {"best_arm": _get(language_modeling, "perplexity", "best_arm"),
            "hga_test_ppl_mean": _get(language_modeling, "perplexity",
                                      "hga_test_ppl_mean"),
@@ -497,12 +516,16 @@ def build_scorecard(
            "bigram_test_ppl": _get(language_modeling, "perplexity",
                                    "bigram_test_ppl"),
            "train_tokens": _get(language_modeling, "corpus", "tokens",
-                                "train")},
-          kanit(language_modeling),
+                                "train"),
+           "max_context_measured": _get(long_context, "context_effect",
+                                        "max_context")},
+          kanit(language_modeling) + kanit(long_context),
           "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: "
           "TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; "
-          "n-gram kontrolleri zorunlu zemindir. Kanıt yoksa skor üretilmez — "
-          "'tiny smoke' bir dil modeli iddiası değildir.")
+          "n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması "
+          "(24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt "
+          "yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası "
+          "değildir.")
 
     # reproducibility / engineering
     bolum("reproducibility", _get(reproducibility, "checks"),

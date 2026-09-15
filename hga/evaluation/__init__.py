@@ -70,6 +70,11 @@ from .kronecker_rank import (
 )
 from .leakage import LeakageAuditReport, audit_partitions, semantic_fingerprint
 from .lifecycle import LifecycleBenchmarkReport, run_lifecycle_benchmark
+from .long_context import (
+    LongContextReport,
+    long_context_markdown,
+    run_long_context_benchmark,
+)
 from .memory_hierarchy import (
     PROFILES as MEMORY_HIERARCHY_PROFILES,
 )
@@ -291,6 +296,7 @@ __all__ = [
     "TWTBaselineReport", "build_twt_models", "run_twt_architecture_baselines",
     "REQUIRED_ATTACK_CLASSES", "ProofDecision", "VerifierAttackDataset",
     "VerifierAttackMetrics", "VerifierAttackReport", "run_verifier_adversarial_benchmark",
+    "LongContextReport", "long_context_markdown", "run_long_context_benchmark",
     "verify_arithmetic_proof",
     "CompositionalDataset", "CompositionalMetrics", "CompositionalReport",
     "DimensionMetrics", "GeneralizationCapacity", "run_compositional_benchmark",

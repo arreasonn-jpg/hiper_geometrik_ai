@@ -100,7 +100,7 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-15T09:31:40+00:00",
+  "generated_at_utc": "2026-09-15T11:35:27+00:00",
   "overall": 9.97,
   "provenance": {
     "reports_supplied": [
@@ -189,7 +189,7 @@
           "3.12",
           "3.13"
         ],
-        "scientific_test_files": 28
+        "scientific_test_files": 29
       },
       "rationale": "CI matrisi, lint/type kapıları, paketleme sözleşmesi.",
       "score": 10.0,
@@ -223,17 +223,19 @@
     },
     "language_modeling": {
       "evidence": [
-        "turkish_lm_v1@d278278dd310"
+        "turkish_lm_v1@d278278dd310",
+        "long_context_lm_v1@c414db2ee70b"
       ],
       "inputs": {
         "best_arm": "transformer",
         "best_neural_test_ppl_mean": 209.85201557,
         "bigram_test_ppl": 397.9645941,
         "hga_test_ppl_mean": 632.276006255,
+        "max_context_measured": 256,
         "train_tokens": 1891700,
         "unigram_test_ppl": 1307.56956767
       },
-      "rationale": "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.",
+      "rationale": "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması (24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.",
       "score": 10.0,
       "section": "language_modeling"
     },
@@ -286,8 +288,8 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "986f420b0967d1c5589cd6f803c88b8a6b2e82ca",
-        "protocols_examined": 17,
+        "git_commit": "5ca8a3139addfacea11581623f4e35d0a65294ae",
+        "protocols_examined": 19,
         "protocols_meeting_20_seeds": 3
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
@@ -362,7 +364,8 @@
       "evidence": [
         "priority_causal_chain_ablation_v1@9bb0550d98d7",
         "multi_environment_verifier_isolation_v1",
-        "priority_weight_optimization_v1"
+        "priority_weight_optimization_v1",
+        "hga-verifier-adversarial-v1@77cf912ee0dd"
       ],
       "inputs": {
         "adversarial_abstain_rate": 1.0,
