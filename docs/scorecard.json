@@ -46,13 +46,13 @@
       "value": 960.0
     },
     {
-      "evidence": "compositional_generalization_v2_raw_text@f59f990d1591",
+      "evidence": "compositional_generalization_v2_raw_text@cddb95cb8513",
       "kind": "measured",
       "name": "Measured Generalization Capacity",
       "note": "Görülmemiş eksenlerde kompozisyon başarısı.",
       "symbol": "C_G",
       "unit": "oran",
-      "value": 0.857143
+      "value": 1.0
     },
     {
       "evidence": "reliable_reasoning_depth_v1@5c8e421c20f1",
@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-14T23:46:19+00:00",
-  "overall": 9.42,
+  "generated_at_utc": "2026-09-15T00:29:18+00:00",
+  "overall": 9.57,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -197,13 +197,13 @@
     },
     "generalization": {
       "evidence": [
-        "compositional_generalization_v2_raw_text@f59f990d1591"
+        "compositional_generalization_v2_raw_text@cddb95cb8513"
       ],
       "inputs": {
-        "overall_c_g_v2": 0.857143
+        "overall_c_g_v2": 1.0
       },
       "rationale": "Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.",
-      "score": 8.33,
+      "score": 10.0,
       "section": "generalization"
     },
     "human_evaluation": {
@@ -286,7 +286,7 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "2fa3e04939efa4b964f8e77f32aff44fffadb0f4",
+        "git_commit": "5dbdf2f531e4f48eef54905c1fb2913cf9097898",
         "protocols_examined": 17,
         "protocols_meeting_20_seeds": 3
       },
@@ -301,7 +301,7 @@
         "reliable_reasoning_depth_v1@5c8e421c20f1",
         "hga_signature_benchmark_v1@291da16d8787",
         "turkish_semantic_extraction_v1@525654cb978c",
-        "compositional_generalization_v2_raw_text@f59f990d1591",
+        "compositional_generalization_v2_raw_text@cddb95cb8513",
         "self_learning_scaling_v1",
         "core_seed_statistics_v1",
         "reasoning_depth_root_cause_v1",
@@ -310,10 +310,10 @@
       ],
       "inputs": {
         "sections_with_evidence": 11,
-        "total_gates": 55
+        "total_gates": 56
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 8.57,
+      "score": 8.77,
       "section": "scientific_evidence"
     },
     "self_learning": {

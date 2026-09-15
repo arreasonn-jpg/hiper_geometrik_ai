@@ -41,18 +41,34 @@ def test_zor_alt_kume_varsayilan_olarak_dahil():
     """Kolay set 1.0 verirse sınır görünmez; zor set varsayılan olmalı."""
     rapor = run_compositional_v2_benchmark()
     assert rapor.checks["hard_subset_included"]
-    cumleler = {v["sentence"] for v in rapor.per_case}
+    cumleler = ({v["sentence"] for v in rapor.per_case}
+                | {v["sentence"] for v in rapor.abstention_cases})
     for zor in HARD_CASES:
         assert zor.sentence in cumleler
 
 
-def test_sozluk_disi_fiil_kompozisyonu_kurulamaz():
-    """Bu bir başarısızlık değil ölçülen sınırdır; raporda görünmeli."""
+def test_sozluk_disi_fiil_morfolojiden_induklenir():
+    """Kanıt-tabanlı mastar indüksiyonu: sözlükte olmayan fiil, kanonik
+    SOV yapısı varsa DÜŞÜK güvenle indüklenir. Eski davranış (koşulsuz
+    çekimserlik) 'unseen_relation' eksenini yapısal olarak 0.5'e
+    sabitliyordu; yeni sınır çatı ekli fiillerdir (ayrı test)."""
     rapor = run_compositional_v2_benchmark()
-    basarisiz = {v["sentence"] for v in rapor.per_case
-                 if not v["composition_correct"]}
-    assert "Ali kitabı inceledi." in basarisiz
-    assert rapor.axes["unseen_relation"]["composition_accuracy"] < 1.0
+    vakalar = {v["sentence"]: v for v in rapor.per_case}
+    v = vakalar["Ali kitabı inceledi."]
+    assert v["composition_correct"], "incelemek indüklenmeliydi"
+    assert rapor.axes["unseen_relation"]["composition_accuracy"] >= 1.0
+    assert rapor.checks["unseen_relation_induction_works"]
+
+
+def test_induksiyon_cati_ekinde_cekimser_kalir():
+    """İndüksiyonun SINIRI: ettirgen/edilgen çatıda üye yapısı yüzey
+    durumlardan çıkarılamaz; ilişki üretmek YANLIŞ bilgi olurdu. Bu kapı
+    indüksiyonun 'her fiile mastar tak' dejenerasyonuna kaymadığını kilitler."""
+    rapor = run_compositional_v2_benchmark()
+    assert rapor.checks["induction_abstains_on_ambiguous_voice"]
+    assert rapor.abstention_cases, "çekimserlik vakaları koşulmalı"
+    for v in rapor.abstention_cases:
+        assert v["abstained"], f"ihlal: {v['sentence']} → {v['predicted_relations']}"
 
 
 def test_sozluk_disi_varlikta_tip_dusuk_kompozisyon_yuksek():
