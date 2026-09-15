@@ -12,6 +12,7 @@ doldurulmuş, kör** değerlendirme paketlerini içerir.
 | `paketler/Rxx_puanlama.csv` | Doldurulacak puan şablonu | yalnız o değerlendiriciye |
 | `_GIZLI_degerlendiriciye_verme/` | Kör açma anahtarı | **kimseye verilmez** |
 | `manifest.json` | Üretim imzaları ve sayımlar | arşiv |
+| `google_forms/` | Google Forms'a bölünmüş aktarım + CSV doğrulama/dönüştürme | araştırma ekibi |
 
 ## Dağıtım adımları
 
@@ -25,7 +26,9 @@ doldurulmuş, kör** değerlendirme paketlerini içerir.
    satırına 5 puan yazar (4 × 1-5 ölçek + 1 × 0/1). Tüm 200 satır
    doldurulmalıdır.
 4. Doldurulan CSV'leri `paketler/` altına aynı adla geri koyun
-   (`R01_puanlama.csv` gibi).
+   (`R01_puanlama.csv` gibi). Google Forms kullanılacaksa CSV şablonu yerine
+   `google_forms/KILAVUZ.md` içindeki aktarım/dönüştürme akışını izleyin;
+   dönüştürücü aynı `R01_puanlama.csv` şemasını üretir.
 
 ## Analiz (puanlar toplandıktan sonra)
 
