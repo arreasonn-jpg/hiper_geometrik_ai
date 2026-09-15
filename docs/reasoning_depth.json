@@ -1,203 +1,237 @@
 {
-  "protocol": "reliable_reasoning_depth_v1",
-  "profile": "deep",
-  "reliability_threshold": 1.0,
-  "hops": [
-    1,
-    2,
-    8,
-    64,
-    256,
-    1024,
-    2048,
-    4096
-  ],
-  "distractor_levels": [
-    0,
-    64,
-    256,
-    1024,
-    4096,
-    16384
-  ],
-  "seeds": [
-    1,
-    2,
-    3
-  ],
-  "slot_sayisi": 262144,
-  "tablo_sayisi": 2,
-  "dataset_hash": "5c8e421c20f1",
-  "c_r": 2048,
-  "c_r_grid_limited": false,
-  "c_rd": {
-    "64": 2048,
-    "256": 2048,
-    "1024": 2048,
-    "4096": 2048,
-    "16384": 256
+ "protocol": "reliable_reasoning_depth_v1",
+ "profile": "deep",
+ "reliability_threshold": 1.0,
+ "hops": [
+  1,
+  2,
+  8,
+  64,
+  256,
+  1024,
+  4096,
+  8192,
+  16384,
+  32768
+ ],
+ "distractor_levels": [
+  0,
+  64,
+  256,
+  1024,
+  4096,
+  16384
+ ],
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "slot_sayisi": 1048576,
+ "tablo_sayisi": 2,
+ "dataset_hash": "41010671d80e",
+ "c_r": 16384,
+ "c_r_grid_limited": false,
+ "c_rd": {
+  "64": 16384,
+  "256": 16384,
+  "1024": 16384,
+  "4096": 16384,
+  "16384": 8192
+ },
+ "accuracy_grid": {
+  "1": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
   },
-  "accuracy_grid": {
-    "1": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "2": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "8": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "64": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "256": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "1024": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 0.5
-    },
-    "2048": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 0.5
-    },
-    "4096": {
-      "0": 0.5,
-      "64": 0.5,
-      "256": 0.5,
-      "1024": 0.5,
-      "4096": 0.5,
-      "16384": 0.5
-    }
+  "2": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
   },
-  "memory_recall_grid": {
-    "1": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "2": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "8": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "64": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "256": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 1.0
-    },
-    "1024": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 0.0
-    },
-    "2048": {
-      "0": 1.0,
-      "64": 1.0,
-      "256": 1.0,
-      "1024": 1.0,
-      "4096": 1.0,
-      "16384": 0.0
-    },
-    "4096": {
-      "0": 0.0,
-      "64": 0.0,
-      "256": 0.0,
-      "1024": 0.0,
-      "4096": 0.0,
-      "16384": 0.0
-    }
+  "8": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
   },
-  "depth_retention": {
-    "64": 1.0,
-    "256": 1.0,
-    "1024": 1.0,
-    "4096": 1.0,
-    "16384": 0.125
+  "64": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
   },
-  "collapse_distractor": 16384,
-  "checks": {
-    "c_r_at_least_8": true,
-    "retains_half_depth_under_max_distractors": false,
-    "multi_hop_beats_degenerate": true,
-    "c_r_not_grid_limited": true,
-    "depth_monotone_in_distractors": true
+  "256": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
   },
-  "findings": [
-    "C_R = 2048 (dolgu yok, eşik 1).",
-    "C_RD: 64→2048, 256→2048, 1024→2048, 4096→2048, 16384→256.",
-    "Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (2048 → 256). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.",
-    "En düşük bellek geri çağırma oranı 0.0000; 262144 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir."
-  ],
-  "limitations": [
-    "Bu bir dil modeli 'context window' testi DEĞİLDİR; token penceresi, attention span veya doğal metin anlama ölçülmez. Sembolik depo + seyrek bellek üzerinde zincir takibi ölçülür.",
-    "Zincir tek bir geçişli ilişki (öncesi) üzerinden kurulur. Bu gerçek ama DAR bir çıkarımdır; çok ilişkili karma akıl yürütme kapsam dışıdır.",
-    "hop=1 sütunu çıkarım değil geri çağırmadır ve negatif kontrol olarak okunmalıdır; çıkarım iddiası yalnız hop>=2 için geçerlidir.",
-    "Dolgu olgular sentetiktir ve zincirle aynı ilişkiyi kullanır; doğal metindeki anlamsal karışıklığı temsil etmez.",
-    "Zincir takibi genişlik-öncelikli aramadır; maliyeti kenar sayısıyla büyür. Bu bir öğrenilmiş yetenek değil, deterministik bir çıkarımdır.",
-    "C_R/C_RD deterministik zincir takibini ölçer; öğrenilmiş akıl yürütme değildir.",
-    "Güvenilirlik eşiği rapora yazılır; eşik düşürülürse derinlik yapay olarak artar — tablolar eşiksiz okunmamalıdır.",
-    "Profil `deep` ızgarası sonlu: tarananın ötesinde bir çökme noktası olabilir, bulunmaması yokluğu kanıtlamaz."
-  ]
+  "1024": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "4096": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "8192": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "16384": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 0.5
+  },
+  "32768": {
+   "0": 0.5,
+   "64": 0.5,
+   "256": 0.5,
+   "1024": 0.5,
+   "4096": 0.5,
+   "16384": 0.5
+  }
+ },
+ "memory_recall_grid": {
+  "1": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "2": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "8": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "64": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "256": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "1024": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "4096": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "8192": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 1.0
+  },
+  "16384": {
+   "0": 1.0,
+   "64": 1.0,
+   "256": 1.0,
+   "1024": 1.0,
+   "4096": 1.0,
+   "16384": 0.0
+  },
+  "32768": {
+   "0": 0.0,
+   "64": 0.0,
+   "256": 0.0,
+   "1024": 0.0,
+   "4096": 0.0,
+   "16384": 0.0
+  }
+ },
+ "depth_retention": {
+  "64": 1.0,
+  "256": 1.0,
+  "1024": 1.0,
+  "4096": 1.0,
+  "16384": 0.5
+ },
+ "collapse_distractor": 16384,
+ "checks": {
+  "c_r_at_least_8": true,
+  "retains_half_depth_under_max_distractors": true,
+  "multi_hop_beats_degenerate": true,
+  "c_r_not_grid_limited": true,
+  "depth_monotone_in_distractors": true
+ },
+ "findings": [
+  "C_R = 16384 (dolgu yok, eşik 1).",
+  "C_RD: 64→16384, 256→16384, 1024→16384, 4096→16384, 16384→8192.",
+  "Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (16384 → 8192). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.",
+  "En düşük bellek geri çağırma oranı 0.0000; 1048576 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir."
+ ],
+ "limitations": [
+  "Bu bir dil modeli 'context window' testi DEĞİLDİR; token penceresi, attention span veya doğal metin anlama ölçülmez. Sembolik depo + seyrek bellek üzerinde zincir takibi ölçülür.",
+  "Zincir tek bir geçişli ilişki (öncesi) üzerinden kurulur. Bu gerçek ama DAR bir çıkarımdır; çok ilişkili karma akıl yürütme kapsam dışıdır.",
+  "hop=1 sütunu çıkarım değil geri çağırmadır ve negatif kontrol olarak okunmalıdır; çıkarım iddiası yalnız hop>=2 için geçerlidir.",
+  "Dolgu olgular sentetiktir ve zincirle aynı ilişkiyi kullanır; doğal metindeki anlamsal karışıklığı temsil etmez.",
+  "Zincir takibi genişlik-öncelikli aramadır; maliyeti kenar sayısıyla büyür. Bu bir öğrenilmiş yetenek değil, deterministik bir çıkarımdır.",
+  "C_R/C_RD deterministik zincir takibini ölçer; öğrenilmiş akıl yürütme değildir.",
+  "Güvenilirlik eşiği rapora yazılır; eşik düşürülürse derinlik yapay olarak artar — tablolar eşiksiz okunmamalıdır.",
+  "Profil `deep` ızgarası sonlu: tarananın ötesinde bir çökme noktası olabilir, bulunmaması yokluğu kanıtlamaz."
+ ]
 }

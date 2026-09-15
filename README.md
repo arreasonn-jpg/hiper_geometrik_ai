@@ -650,10 +650,15 @@ zincir 5→2 adıma düşer. Bu davranış testle kilitlidir.
 > C_R=32 ölçüldü; sonra bu sınırın kaynağı kovalanınca seyrek bellek
 > adreslemesinde gerçek bir KUSUR bulundu ("Bloom tarzı" iki tablo sıfır
 > bağımsızlık sağlıyordu — bkz. `docs/SPARSE_ADDRESSING_FIX.md`). Düzeltme
-> sonrası deep profil ölçümü: **C_R = 2048** (ızgara-içi, tavan değil);
-> 16384 dolguda C_RD **256**. Dar taramanın "yetenek sınırı" gibi
-> görünmesi ve o sınırın aslında mühendislik kusuru çıkması, bu deponun
-> "sınırı gizleme, kaynağını ölç" ilkesinin somut örneğidir.
+> sonrası 2^18 slotla ölçülen C_R=2048 / C_RD=256 sınırının da kök nedeni
+> kovalandı: teşhis protokolü (`docs/DEPTH_DIAGNOSIS_RAW.md`) düşüşün
+> çıkarım değil **bellek doygunluğu** olduğunu gösterdi (derinlik slotla
+> log-log eğim ~1.33 ile ölçekleniyor). Deep profil dolgu yüküne göre
+> boyutlandırılınca (2^20 slot) ölçüm: **C_R = 16384** (ızgara-içi, tavan
+> değil); 16384 dolguda C_RD **8192** (retention 0.5,
+> `retains_half_depth_under_max_distractors` GEÇTİ). Dar taramanın "yetenek
+> sınırı" gibi görünmesi ve o sınırın iki kez de mühendislik/yapılandırma
+> çıkması, bu deponun "sınırı gizleme, kaynağını ölç" ilkesinin somut örneğidir.
 > Ayrıntı: `docs/REASONING_DEPTH.md`, `docs/REASONING_DEPTH_ROOT_CAUSE.md`.
 
 Ayrıntı: `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md`.

@@ -55,22 +55,22 @@
       "value": 1.0
     },
     {
-      "evidence": "reliable_reasoning_depth_v1@5c8e421c20f1",
+      "evidence": "reliable_reasoning_depth_v1@41010671d80e",
       "kind": "measured",
       "name": "Measured Reliable Reasoning Depth",
       "note": "Dolgu yokken güvenilir kalınan en derin zincir.",
       "symbol": "C_R",
       "unit": "hop",
-      "value": 2048.0
+      "value": 16384.0
     },
     {
-      "evidence": "reliable_reasoning_depth_v1@5c8e421c20f1",
+      "evidence": "reliable_reasoning_depth_v1@41010671d80e",
       "kind": "measured",
       "name": "Distractor-Resistant Reasoning Depth",
       "note": "16384 dolgu olgu altında güvenilir derinlik.",
       "symbol": "C_RD",
       "unit": "hop @ 16384 dolgu",
-      "value": 256.0
+      "value": 8192.0
     },
     {
       "evidence": "hierarchical_memory_v1@379a04bf0bb4",
@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-15T07:52:23+00:00",
-  "overall": 9.83,
+  "generated_at_utc": "2026-09-15T08:42:58+00:00",
+  "overall": 9.92,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -239,7 +239,7 @@
     },
     "memory": {
       "evidence": [
-        "reliable_reasoning_depth_v1@5c8e421c20f1",
+        "reliable_reasoning_depth_v1@41010671d80e",
         "hierarchical_memory_v1@379a04bf0bb4"
       ],
       "inputs": {
@@ -260,24 +260,24 @@
     },
     "reasoning": {
       "evidence": [
-        "reliable_reasoning_depth_v1@5c8e421c20f1",
+        "reliable_reasoning_depth_v1@41010671d80e",
         "reasoning_depth_root_cause_v1"
       ],
       "inputs": {
-        "c_r": 2048,
+        "c_r": 16384,
         "c_rd": {
-          "1024": 2048,
-          "16384": 256,
-          "256": 2048,
-          "4096": 2048,
-          "64": 2048
+          "1024": 16384,
+          "16384": 8192,
+          "256": 16384,
+          "4096": 16384,
+          "64": 16384
         },
         "collapse_root_cause": "memory_capacity",
         "depth_per_slot_log_log_slope": 1.3333,
         "grid_limited": false
       },
       "rationale": "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.",
-      "score": 9.09,
+      "score": 10.0,
       "section": "reasoning"
     },
     "reproducibility": {
@@ -286,7 +286,7 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "d8f25b2aaca7a2e097301dadbd1107a191c399bd",
+        "git_commit": "400203f016257aad3b6b69f37489f366820e10e0",
         "protocols_examined": 17,
         "protocols_meeting_20_seeds": 3
       },
@@ -298,7 +298,7 @@
       "evidence": [
         "priority_causal_chain_ablation_v1@9bb0550d98d7",
         "operator_baseline_family_v1@f633b9ecb28b",
-        "reliable_reasoning_depth_v1@5c8e421c20f1",
+        "reliable_reasoning_depth_v1@41010671d80e",
         "hga_signature_benchmark_v1@d699088469e4",
         "turkish_semantic_extraction_v1@525654cb978c",
         "compositional_generalization_v2_raw_text@cddb95cb8513",
@@ -313,7 +313,7 @@
         "total_gates": 56
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 9.47,
+      "score": 9.65,
       "section": "scientific_evidence"
     },
     "self_learning": {

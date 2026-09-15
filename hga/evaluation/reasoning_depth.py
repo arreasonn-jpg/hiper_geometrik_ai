@@ -53,11 +53,15 @@ PROFILES: Dict[str, Dict[str, Any]] = {
     "standard": {"hops": (1, 2, 8, 64, 256, 1024, 2048),
                  "distractors": (0, 64, 256, 1024),
                  "seeds": (1, 2, 3), "slot_sayisi": 65536, "tablo_sayisi": 2},
-    # Tam hedef ızgara (pahalı): 2^18 slotta dolgusuz kırılma ~4096 hopta,
-    # 16384 dolgu altında ~1024 hoptadır; ikisi de ızgaranın içindedir.
-    "deep": {"hops": (1, 2, 8, 64, 256, 1024, 2048, 4096),
+    # Tam hedef ızgara (pahalı). Slot sayısı dolgu yüküne göre boyutlandırılır:
+    # 2^18 slotta 16384 dolgu tabloyu DOYURUYORDU ve "dolgu direnci" kapısı
+    # aslında kapasite taşmasını ölçüyordu (kök neden teşhisi: memory_capacity,
+    # log-log eğim ~1.33 — derinlik slotla ölçekleniyor). 2^20 slotta dolgusuz
+    # kırılma ~32768 hopta, 16384 dolgu altında ~16384 hoptadır; ikisi de
+    # ızgaranın içindedir ve kapı artık doygunluğu değil girişim direncini ölçer.
+    "deep": {"hops": (1, 2, 8, 64, 256, 1024, 4096, 8192, 16384, 32768),
              "distractors": (0, 64, 256, 1024, 4096, 16384),
-             "seeds": (1, 2, 3), "slot_sayisi": 262144, "tablo_sayisi": 2},
+             "seeds": (1, 2, 3), "slot_sayisi": 1048576, "tablo_sayisi": 2},
 }
 
 

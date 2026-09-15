@@ -48,7 +48,7 @@ bellek kapısı kaldırılırsa test kırılır.
 * çok adımlı çıkarım (hop≥2): **1.0000**
 * tek adımlı geri çağırma: **1.0000**
 * en derin güvenilir zincir: **5 adım** *(ızgara tavanı — gerçek sınır çok
-  daha derindedir, bkz. `docs/REASONING_DEPTH.md`: C_R = 2048)*
+  daha derindedir, bkz. `docs/REASONING_DEPTH.md`: C_R = 16384)*
 * bağlam bozulması: **0.0000**
 
 > **Güncelleme (adresleme düzeltmesi).** Bu tablonun eski sürümünde 5
@@ -94,9 +94,12 @@ ayrışamazsa çok adımlı çıkarım iddiası düşer.
 Eskiden beş kapıdan üçü KALIYORDU (0.9688 / bağlam bozulması / kenar kaybı).
 Kapılar eşik gevşetilerek DEĞİL, kök nedendeki adresleme kusuru düzeltilerek
 geçti; varsayılan ızgara artık sınırın çok altındadır. Sınır kaybolmadı,
-yüzlerce hop ötesine taşındı — `cikarim-derinligi --depth-profile deep`
-16384 dolguda C_RD = 256 sınırını ölçmeyi sürdürür ve
-`retains_half_depth_under_max_distractors` kapısı orada hâlâ KALIR.
+binlerce hop ötesine taşındı. Deep profildeki eski C_RD=256 sınırının kök
+nedeni de kovalandı: teşhis (`docs/DEPTH_DIAGNOSIS_RAW.md`) bunun çıkarım
+değil bellek doygunluğu olduğunu gösterdi; slot bütçesi dolgu yüküne göre
+boyutlandırılınca (2^20) deep profil 16384 dolguda **C_RD = 8192** ölçer
+(retention 0.5) ve `retains_half_depth_under_max_distractors` kapısı GEÇER.
+Kalan yarı kayıp gerçek girişim maliyetidir ve raporlanmaya devam eder.
 
 ## Sınırlar (dürüstlük)
 

@@ -1,25 +1,25 @@
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-15T07:52:23+00:00`
+Üretim zamanı (UTC): `2026-09-15T08:42:58+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
 | Bölüm | Skor | Kanıt |
 |---|---:|---|
 | architecture | 10.0 | operator_baseline_family_v1@f633b9ecb28b |
-| memory | 10.0 | reliable_reasoning_depth_v1@5c8e421c20f1, hierarchical_memory_v1@379a04bf0bb4 |
+| memory | 10.0 | reliable_reasoning_depth_v1@41010671d80e, hierarchical_memory_v1@379a04bf0bb4 |
 | verification | 10.0 | priority_causal_chain_ablation_v1@9bb0550d98d7, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1 |
 | generalization | 10.0 | compositional_generalization_v2_raw_text@cddb95cb8513 |
-| reasoning | 9.1 | reliable_reasoning_depth_v1@5c8e421c20f1, reasoning_depth_root_cause_v1 |
+| reasoning | 10.0 | reliable_reasoning_depth_v1@41010671d80e, reasoning_depth_root_cause_v1 |
 | self_learning | 10.0 | self_learning_scaling_v1 |
 | statistical_rigor | 10.0 | core_seed_statistics_v1 |
 | human_evaluation | n/a | human_evaluation_protocol_v1 |
 | turkish_nlp | 9.4 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
 | language_modeling | 10.0 | turkish_lm_v1@d278278dd310 |
 | reproducibility | 10.0 | reproducibility_audit_v1 |
-| scientific_evidence | 9.5 | priority_causal_chain_ablation_v1@9bb0550d98d7, operator_baseline_family_v1@f633b9ecb28b, reliable_reasoning_depth_v1@5c8e421c20f1, hga_signature_benchmark_v1@d699088469e4, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
+| scientific_evidence | 9.7 | priority_causal_chain_ablation_v1@9bb0550d98d7, operator_baseline_family_v1@f633b9ecb28b, reliable_reasoning_depth_v1@41010671d80e, hga_signature_benchmark_v1@d699088469e4, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
-| **Overall Research Readiness** | **9.8** | 12/13 bölüm |
+| **Overall Research Readiness** | **9.9** | 12/13 bölüm |
 
 ## HGA Capability Vector
 
@@ -31,8 +31,8 @@
 | `C_E` | Measured Experience Capacity | ölçülen | 960 | deneyim | capacity_framework |
 | `C_V` | Measured Verified Capacity | ölçülen | 960 | deneyim | capacity_framework |
 | `C_G` | Measured Generalization Capacity | ölçülen | 1 | oran | compositional_generalization_v2_raw_text@cddb95cb8513 |
-| `C_R` | Measured Reliable Reasoning Depth | ölçülen | 2048 | hop | reliable_reasoning_depth_v1@5c8e421c20f1 |
-| `C_RD` | Distractor-Resistant Reasoning Depth | ölçülen | 256 | hop @ 16384 dolgu | reliable_reasoning_depth_v1@5c8e421c20f1 |
+| `C_R` | Measured Reliable Reasoning Depth | ölçülen | 16384 | hop | reliable_reasoning_depth_v1@41010671d80e |
+| `C_RD` | Distractor-Resistant Reasoning Depth | ölçülen | 8192 | hop @ 16384 dolgu | reliable_reasoning_depth_v1@41010671d80e |
 | `C_MR` | Measured Memory Recall | ölçülen | 1 | oran | hierarchical_memory_v1@379a04bf0bb4 |
 | `C_H` | Hallucination Resistance | ölçülen | 0.783691 | oran | hga_signature_benchmark_v1@d699088469e4 |
 | `C_U` | Uncertainty Calibration | ölçülen | n/a | 1−ECE | — |

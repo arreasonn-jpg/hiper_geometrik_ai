@@ -1,18 +1,18 @@
 # Güvenilir Çıkarım Derinliği — C_R ve C_RD (P0-7)
 
-Protokol: `reliable_reasoning_depth_v1` · profil: `deep` · veri imzası: `5c8e421c20f1`
-Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
+Protokol: `reliable_reasoning_depth_v1` · profil: `deep` · veri imzası: `41010671d80e`
+Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 1048576 slot × 2 tablo
 
-**C_R = 2048**
+**C_R = 16384**
 
 | Dolgu | C_RD | C_RD / C_R |
 |---:|---:|---:|
-| 0 | 2048 | 1.000 |
-| 64 | 2048 | 1.000 |
-| 256 | 2048 | 1.000 |
-| 1024 | 2048 | 1.000 |
-| 4096 | 2048 | 1.000 |
-| 16384 | 256 | 0.125 |
+| 0 | 16384 | 1.000 |
+| 64 | 16384 | 1.000 |
+| 256 | 16384 | 1.000 |
+| 1024 | 16384 | 1.000 |
+| 4096 | 16384 | 1.000 |
+| 16384 | 8192 | 0.500 |
 
 ## Doğruluk ızgarası
 
@@ -23,9 +23,11 @@ Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
 | 8 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 64 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 256 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
-| 2048 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
-| 4096 adım | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 |
+| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 4096 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 8192 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 16384 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5000 |
+| 32768 adım | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 | 0.5000 |
 
 ## Bellek geri çağırma ızgarası
 
@@ -36,26 +38,28 @@ Eşik: 1 · tohumlar: [1, 2, 3] · bellek: 262144 slot × 2 tablo
 | 8 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 64 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | 256 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
-| 2048 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
-| 4096 adım | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
+| 1024 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 4096 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 8192 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| 16384 adım | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0000 |
+| 32768 adım | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 
 ## Kabul kapıları
 
 | kapı | sonuç |
 |---|---|
 | c_r_at_least_8 | GEÇTİ |
-| retains_half_depth_under_max_distractors | KALDI |
+| retains_half_depth_under_max_distractors | GEÇTİ |
 | multi_hop_beats_degenerate | GEÇTİ |
 | c_r_not_grid_limited | GEÇTİ |
 | depth_monotone_in_distractors | GEÇTİ |
 
 ## Bulgular
 
-- C_R = 2048 (dolgu yok, eşik 1).
-- C_RD: 64→2048, 256→2048, 1024→2048, 4096→2048, 16384→256.
-- Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (2048 → 256). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.
-- En düşük bellek geri çağırma oranı 0.0000; 262144 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir.
+- C_R = 16384 (dolgu yok, eşik 1).
+- C_RD: 64→16384, 256→16384, 1024→16384, 4096→16384, 16384→8192.
+- Derinlik ilk olarak 16384 dolgu seviyesinde düşüyor (16384 → 8192). Bu ölçülen bir sınırdır; eşik gevşetilerek gizlenmedi.
+- En düşük bellek geri çağırma oranı 0.0000; 1048576 slot × 2 tablo ile ölçüldü. Derinlik kaybı ile bellek kaybı bu sayede ayrı okunabilir.
 
 ## Sınırlar
 

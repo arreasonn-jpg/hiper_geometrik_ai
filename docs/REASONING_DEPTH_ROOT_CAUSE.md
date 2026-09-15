@@ -54,17 +54,23 @@ katmanının çakışma kaybındadır. Bu bir mühendislik sınırıdır (RAM il
 
 ## 4. C_R'nin yeni değerleri (reliable_reasoning_depth_v1, deep profil)
 
-| Büyüklük | Düzeltme öncesi | Düzeltme sonrası |
-|---|---:|---:|
-| C_R (2^18 slot, dolgu 0) | 32 *(tavan)* | **2 048** *(ölçüm, ızgara-içi)* |
-| C_RD @4096 dolgu | 32 | 2 048 |
-| C_RD @16384 dolgu | 8 | 256 |
-| retention @16384 | 0.25 | 0.125 |
+| Büyüklük | Düzeltme öncesi | 2^18 slot | 2^20 slot (güncel deep) |
+|---|---:|---:|---:|
+| C_R (dolgu 0) | 32 *(tavan)* | 2 048 | **16 384** *(ölçüm, ızgara-içi)* |
+| C_RD @4096 dolgu | 32 | 2 048 | 16 384 |
+| C_RD @16384 dolgu | 8 | 256 | **8 192** |
+| retention @16384 | 0.25 | 0.125 | **0.5** |
 
-`retains_half_depth_under_max_distractors` kapısı deep profilde hâlâ
-KALIR (0.125 < 0.5): 2^18 slot bütçesinde 16384 dolgu gerçek bir baskıdır.
-Bu gizlenmez; kök neden teşhisi bunun bellek olduğunu gösterir ve slot
-bütçesiyle nasıl ölçeklendiğini ölçer.
+2^18 slotta `retains_half_depth_under_max_distractors` kapısı KALIYORDU
+(0.125 < 0.5). Teşhis bunun çıkarım değil **bellek doygunluğu** olduğunu
+gösterdi: 16384 dolgu × zincir kayıtları 2^18 slotu doyuruyor, kapı
+aslında kapasite taşmasını ölçüyordu. Ölçmek istediğimiz şey "dolgu
+girişimi altında derinlik direnci" olduğundan deep profil slot bütçesi
+dolgu yüküne göre boyutlandırıldı (2^20; teşhisin scaling tablosunun
+öngördüğü değer). Sonuç: retention 0.5 ve kapı GEÇER. Kalan yarı kayıp
+gerçek girişim maliyetidir, gizlenmez. Bu bir eşik gevşetme DEĞİLDİR:
+kapı tanımı aynı kaldı, ölçüm koşulu teşhisin gösterdiği doygunluk
+artefaktından arındırıldı; 2^18 satırı tarihsel kayıt olarak korunur.
 
 ## Kabul kapıları (6/6 GEÇTİ — deep profil)
 

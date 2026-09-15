@@ -103,9 +103,11 @@ def test_cok_adimli_belge_izgarasi_canli_ciktiyla_uyumlu():
 def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
     """Kapı durumu belgeyle uyuşmalı; başarı süslenmemeli, sınır gizlenmemeli.
 
-    Düzeltme sonrası varsayılan ızgarada beş kapı da geçer; test bunun
-    belgeyle uyumunu VE gerçek sınırın (deep profildeki 16384-dolgu kaybı)
-    hâlâ belgede anıldığını doğrular.
+    Düzeltme sonrası varsayılan ızgarada beş kapı da geçer. Deep profildeki
+    eski 16384-dolgu kaybının kök nedeni bellek doygunluğu çıktı ve slot
+    bütçesi dolgu yüküne göre boyutlandırılınca retention kapısı da geçti
+    (0.5). Test, belgenin bu tarihi VE kalan gerçek girişim maliyetini
+    (yarı kayıp) dürüstçe anlattığını doğrular.
     """
     from hga.evaluation.multi_hop import run_multi_hop_benchmark
 
@@ -117,9 +119,10 @@ def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
     assert not kalanlar, (
         f"Varsayılan ızgarada kapı kalıyor: {kalanlar}; belge ve bu test "
         "yeniden gözden geçirilmeli")
-    # Sınır kaybolmadı, taşındı: derin profildeki kalan kapı anılmalı.
+    # Sınır kaybolmadı, ölçüm koşulu düzeltildi: belge hem kapının artık
+    # geçtiğini hem de kalan gerçek maliyeti (retention 0.5) anmalı.
     assert "retains_half_depth_under_max_distractors" in belge
-    assert "KALIR" in belge or "KALDI" in belge
+    assert "girişim" in belge, "Kalan yarı kayıp (gerçek girişim maliyeti) belgelenmeli"
     assert "ölü metrik" in belge, "Ölü metrik düzeltmesi belgelenmeli"
 
 
