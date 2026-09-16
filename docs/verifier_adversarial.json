@@ -1,168 +1,329 @@
 {
- "benchmark_id": "hga-verifier-adversarial-v1",
- "dataset_hash": "77cf912ee0dd3d53b938b41c9e10be89b6d78618ae7b99bafea39a56e82a0db7",
- "metrics": {
-  "total": 12,
-  "correct": 12,
-  "accuracy": 1.0,
-  "valid_proofs": 3,
-  "invalid_or_unsupported_proofs": 9,
-  "true_acceptance": 3,
-  "true_rejection": 9,
-  "false_acceptance": 0,
-  "false_rejection": 0,
-  "uncertain": 1,
-  "precision": 1.0,
-  "recall": 1.0,
-  "f1": 1.0,
-  "far": 0.0,
-  "frr": 0.0,
-  "coverage": 0.91666667,
-  "robustness": 1.0
- },
- "by_attack_class": {
-  "adversarial_input": {
-   "total": 3,
-   "correct": 3,
-   "accuracy": 1.0
+  "benchmark_id": "hga-verifier-adversarial-v2",
+  "by_attack_class": {
+    "adversarial_input": {
+      "accuracy": 1.0,
+      "correct": 6,
+      "total": 6
+    },
+    "boundary_case": {
+      "accuracy": 1.0,
+      "correct": 4,
+      "total": 4
+    },
+    "contradictory_proof": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "total": 2
+    },
+    "false_proof": {
+      "accuracy": 1.0,
+      "correct": 5,
+      "total": 5
+    },
+    "incomplete_proof": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "total": 2
+    },
+    "malformed_proof": {
+      "accuracy": 1.0,
+      "correct": 7,
+      "total": 7
+    },
+    "unsupported_rule": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "total": 2
+    },
+    "valid_control": {
+      "accuracy": 1.0,
+      "correct": 3,
+      "total": 3
+    }
   },
-  "boundary_case": {
-   "total": 2,
-   "correct": 2,
-   "accuracy": 1.0
+  "checks": {
+    "minimum_30_cases": true,
+    "required_attack_classes_present": true,
+    "robustness_at_least_1_0": true,
+    "unsupported_rules_not_accepted": true,
+    "zero_false_acceptance": true,
+    "zero_false_rejection": true
   },
-  "contradictory_proof": {
-   "total": 1,
-   "correct": 1,
-   "accuracy": 1.0
+  "dataset_hash": "ebf5bb4c5f0953655397db629a047a6c1bd607eb89aabe61870ab19477716b9c",
+  "limitations": [
+    "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
+    "Unsupported operator/rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
+    "v2 saldırıları elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez.",
+    "Toplama dışındaki matematiksel doğruluk bilinçli olarak başarı sayılmaz; alan dışı kalır."
+  ],
+  "metrics": {
+    "accuracy": 1.0,
+    "correct": 31,
+    "coverage": 0.90322581,
+    "f1": 1.0,
+    "false_acceptance": 0,
+    "false_rejection": 0,
+    "far": 0.0,
+    "frr": 0.0,
+    "invalid_or_unsupported_proofs": 26,
+    "precision": 1.0,
+    "recall": 1.0,
+    "robustness": 1.0,
+    "total": 31,
+    "true_acceptance": 5,
+    "true_rejection": 26,
+    "uncertain": 3,
+    "valid_proofs": 5
   },
-  "false_proof": {
-   "total": 1,
-   "correct": 1,
-   "accuracy": 1.0
-  },
-  "incomplete_proof": {
-   "total": 1,
-   "correct": 1,
-   "accuracy": 1.0
-  },
-  "malformed_proof": {
-   "total": 2,
-   "correct": 2,
-   "accuracy": 1.0
-  },
-  "unsupported_rule": {
-   "total": 1,
-   "correct": 1,
-   "accuracy": 1.0
-  },
-  "valid_control": {
-   "total": 1,
-   "correct": 1,
-   "accuracy": 1.0
-  }
- },
- "predictions": [
-  {
-   "case_id": "VP-VALID-001",
-   "attack_class": "valid_control",
-   "expected": "VERIFIED",
-   "predicted": "VERIFIED",
-   "correct": true,
-   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
-  },
-  {
-   "case_id": "VP-VALID-BOUNDARY-MAX",
-   "attack_class": "boundary_case",
-   "expected": "VERIFIED",
-   "predicted": "VERIFIED",
-   "correct": true,
-   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
-  },
-  {
-   "case_id": "VP-VALID-NEGATIVE",
-   "attack_class": "boundary_case",
-   "expected": "VERIFIED",
-   "predicted": "VERIFIED",
-   "correct": true,
-   "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
-  },
-  {
-   "case_id": "VP-FALSE-001",
-   "attack_class": "false_proof",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
-  },
-  {
-   "case_id": "VP-INCOMPLETE-001",
-   "attack_class": "incomplete_proof",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "ispat en az bir adım içermeli"
-  },
-  {
-   "case_id": "VP-CONTRADICTORY-001",
-   "attack_class": "contradictory_proof",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "conclusion claim/adım ile çelişiyor"
-  },
-  {
-   "case_id": "VP-MALFORMED-MISSING-001",
-   "attack_class": "malformed_proof",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "proof alanları eksik veya fazladır"
-  },
-  {
-   "case_id": "VP-MALFORMED-TYPE-001",
-   "attack_class": "malformed_proof",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "claim/conclusion katı ve sınırlı int olmalı"
-  },
-  {
-   "case_id": "VP-ADVERSARIAL-BOOL",
-   "attack_class": "adversarial_input",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "claim/conclusion katı ve sınırlı int olmalı"
-  },
-  {
-   "case_id": "VP-ADVERSARIAL-OVERSIZED",
-   "attack_class": "adversarial_input",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "claim/conclusion katı ve sınırlı int olmalı"
-  },
-  {
-   "case_id": "VP-ADVERSARIAL-EXTRA-FIELD",
-   "attack_class": "adversarial_input",
-   "expected": "INVALID",
-   "predicted": "INVALID",
-   "correct": true,
-   "reason": "claim alanları eksik veya fazladır"
-  },
-  {
-   "case_id": "VP-UNSUPPORTED-001",
-   "attack_class": "unsupported_rule",
-   "expected": "UNCERTAIN",
-   "predicted": "UNCERTAIN",
-   "correct": true,
-   "reason": "desteklenmeyen operator: multiply"
-  }
- ],
- "limitations": [
-  "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
-  "Unsupported rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
-  "Saldırılar elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez."
- ]
+  "predictions": [
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-001",
+      "correct": true,
+      "expected": "VERIFIED",
+      "predicted": "VERIFIED",
+      "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+    },
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-ZERO",
+      "correct": true,
+      "expected": "VERIFIED",
+      "predicted": "VERIFIED",
+      "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+    },
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-NEGATIVE",
+      "correct": true,
+      "expected": "VERIFIED",
+      "predicted": "VERIFIED",
+      "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-VALID-BOUNDARY-MAX",
+      "correct": true,
+      "expected": "VERIFIED",
+      "predicted": "VERIFIED",
+      "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-VALID-BOUNDARY-MIN",
+      "correct": true,
+      "expected": "VERIFIED",
+      "predicted": "VERIFIED",
+      "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı"
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-CLAIM-RESULT",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-STEP-OUTPUT",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-CONCLUSION",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "conclusion claim/adım ile çelişiyor"
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-INPUT-MISMATCH",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım girdileri claim ile çelişiyor"
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-NEGATIVE-SIGN",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
+    },
+    {
+      "attack_class": "incomplete_proof",
+      "case_id": "VP2-INCOMPLETE-EMPTY-STEPS",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "ispat en az bir adım içermeli"
+    },
+    {
+      "attack_class": "incomplete_proof",
+      "case_id": "VP2-INCOMPLETE-TOO-MANY-STEPS",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "ispat adım sınırını aşıyor"
+    },
+    {
+      "attack_class": "contradictory_proof",
+      "case_id": "VP2-CONTRADICTORY-CLAIM-STEP",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor"
+    },
+    {
+      "attack_class": "contradictory_proof",
+      "case_id": "VP2-CONTRADICTORY-CONCLUSION",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "conclusion claim/adım ile çelişiyor"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-NOT-MAPPING",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "proof nesnesi mapping olmalı"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-MISSING-TOP",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "proof alanları eksik veya fazladır"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-EXTRA-TOP",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "proof alanları eksik veya fazladır"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-EXTRA-CLAIM",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim alanları eksik veya fazladır"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-MISSING-STEP-FIELD",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım şeması geçersiz"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-INPUT-ARITY",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım iki input içermeli"
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-STEPS-NOT-LIST",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "steps liste olmalı"
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-BOUNDARY-LEFT-TOO-HIGH",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-BOUNDARY-RIGHT-TOO-LOW",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-BOOL",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-STRING-INT",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-NULL",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-FLOAT",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "claim/conclusion katı ve sınırlı int olmalı"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-OP-INJECTION",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "predicted": "UNCERTAIN",
+      "reason": "desteklenmeyen operator: add; accept_all"
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-EXTRA-STEP-FIELD",
+      "correct": true,
+      "expected": "INVALID",
+      "predicted": "INVALID",
+      "reason": "adım şeması geçersiz"
+    },
+    {
+      "attack_class": "unsupported_rule",
+      "case_id": "VP2-UNSUPPORTED-OPERATOR-MULTIPLY",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "predicted": "UNCERTAIN",
+      "reason": "desteklenmeyen operator: multiply"
+    },
+    {
+      "attack_class": "unsupported_rule",
+      "case_id": "VP2-UNSUPPORTED-RULE-SUBTRACT",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "predicted": "UNCERTAIN",
+      "reason": "desteklenmeyen rule: integer_subtraction"
+    }
+  ]
 }

@@ -50,7 +50,7 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 | `hga/knowledge/*` | `ACTIVE` | Kanonik Varlık, Özellik ve İlişki dizinleri (`KnowledgeStore`) + `versioning.py` (K₀→Kₙ sürüm zinciri, rollback, diff). |
 | `hga/experience/*` | `ACTIVE` | Deneyim durum makinesi, puanlama, üretici, değerlendirici, döngü + `ledger.py` (immutable defter) ve `milestone.py` (K₀→Kₙ tablosu). |
 | `hga/memory/*` | `ACTIVE` | Epizodik bellek, replay buffer ve sinirsel köprü (`NeuralKopru`). |
-| `hga/evaluation/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü, raporlama + `capacity.py` (P/C_I/C_M/C_E/C_V çerçevesi). |
+| `hga/evaluation/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü, raporlama + `capacity.py` (P/C_I^UB/C_M^UB/C_E/C_V çerçevesi). |
 | `hga/observability/*` | `ACTIVE` | Bellek doluluk, dikkat ve deneyim akışı paneli. |
 | `hga/data/*` | `ACTIVE` | Veri kalitesi, SHA-256 manifestosu ve versiyonlama. |
 | `hga/config/*` | `ACTIVE` | Merkezi YAML konfigürasyon yöneticisi. |

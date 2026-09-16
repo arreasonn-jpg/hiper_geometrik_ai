@@ -12,7 +12,7 @@ Kullanım:
     python -m hga self-learning-benchmark # K₀→Kₙ + collapse failure injection
     python -m hga research-benchmark     # birleşik, 5-seed JSON/MD/HTML araştırma karnesi
     python -m hga milestone              # K₀→Kₙ milestone tablosu (versiyon + defter)
-    python -m hga kapasite               # P / C_I / C_M / C_E / C_V kapasite çerçevesi
+    python -m hga kapasite               # P / C_I^UB / C_M^UB / C_E / C_V kapasite çerçevesi
     python -m hga bilgi-surum            # bilgi sürümleme + rollback demosu
     python -m hga defter                 # immutable experience ledger demosu
     python -m hga memory-interference    # kasıtlı çakışma + sabit/dinamik KV kıyası
@@ -26,16 +26,24 @@ Kullanım:
     python -m hga oncelik-zincir         # Priority(E) nedensel zincir ablasyonu (P0-1)
     python -m hga operator-baseline      # Kronecker vs gerçek Dense ailesi (P0-2)
     python -m hga signature              # HGA Signature Benchmark v1 (P0-4)
+    python -m hga signature-gate         # Signature release gate (PASS/BLOCKED)
+    python -m hga verifier-adversarial   # verifier adversarial suite v2
+    python -m hga verifier-ensemble      # üç üyeli verifier ensemble
     python -m hga semantik               # Türkçe semantik çıkarım benchmarkı (P0-5)
     python -m hga genelleme-v2           # ham metinden keşif + C_G v2 (P0-6)
     python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
     python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
     python -m hga turkce-lm              # gerçek Türkçe LM: tr_corpus_v1 1.11M kelime (P1)
+    python -m hga uzun-baglam            # uzun bağlam LM; 512/1024 için --long-context-profile smoke_1024
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
+    python -m hga bellek-streaming       # 100M-ready streaming/checkpoint smoke harness
     python -m hga cok-ortam              # 5 ortam + verifier izolasyonu (P1)
+    python -m hga ogrenme-transfer       # cross-domain self-learning transfer negatif-kontrol
     python -m hga ogrenme-olcek          # self-learning 100→1000→3000 cycle (P1)
     python -m hga tohum-istatistik       # 20 tohum + CI/etki/permütasyon (P1)
     python -m hga insan-degerlendirme    # protokol + Krippendorff alfa (P1)
+    python -m hga insan-import           # insan puanı CSV import + α + kol agregasyonu
+    python -m hga korpus-genisletme      # Türkçe korpus genişletme pipeline/release gate
     python -m hga derinlik-teshis        # derinlik çöküşü kök neden
     python -m hga oncelik-optimizasyon   # ağırlık araması + held-out
     python -m hga muhendislik            # CI / paketleme / test sözleşmesi
@@ -1132,6 +1140,7 @@ def _provenance(out=None, markdown=None):
     """Faz 27/28: köken denetimi ve belge hash doğrulaması demosu."""
     from hga.evaluation.provenance import (
         audit_provenance,
+        build_provenance_chain,
         ingest_with_provenance,
         verify_document_hashes,
     )
@@ -1147,6 +1156,13 @@ def _provenance(out=None, markdown=None):
     print("Köken damgalı aktarım (Faz 27/28):")
     for anahtar, deger in bilgi.items():
         print(f"  {anahtar}: {deger}")
+
+    zincir = None
+    if store.relations.olgular():
+        zincir = build_provenance_chain(store, store.relations.olgular()[0])
+        print("\nÖrnek provenance zinciri:")
+        print("  " + " → ".join(zincir.kinds()))
+        print(f"  tam dış iz: {zincir.complete_external_trace}; eksikler: {zincir.missing}")
 
     # Kökensiz bir olgu ekleyip denetimin bunu yakaladığını göster.
     store.varlik_ekle("yetim_ozne", entity_id="E_YETIM_S")
@@ -1172,6 +1188,7 @@ def _provenance(out=None, markdown=None):
     print(f"  belge değiştirildiğinde yakalanan: {bozuk.mismatched}")
 
     cikti = {"ingest": bilgi, "audit": rapor.to_dict(),
+             "provenance_chain_example": zincir.to_dict() if zincir else None,
              "hash_check": dogrulama.to_dict(),
              "tampered_check": bozuk.to_dict()}
     if out:
@@ -1184,6 +1201,11 @@ def _provenance(out=None, markdown=None):
         with open(markdown, "w", encoding="utf-8") as handle:
             handle.write("# Faz 27/28 — Köken (Provenance) Denetimi\n\n")
             handle.write(rapor.markdown() + "\n\n")
+            if zincir is not None:
+                handle.write("## Örnek Provenance Zinciri\n\n")
+                handle.write("`" + " → ".join(zincir.kinds()) + "`\n\n")
+                handle.write(f"- Tam dış iz: `{zincir.complete_external_trace}`\n")
+                handle.write(f"- Eksikler: `{zincir.missing}`\n\n")
             for bulgu in rapor.findings:
                 handle.write(f"- {bulgu}\n")
         print(f"  markdown: {markdown}")
@@ -1264,14 +1286,14 @@ def _priority(k=10, out=None, markdown=None):
 
 
 def _kapasite(operands_max, out=None):
-    """P / C_I / C_M / C_E / C_V kapasite çerçevesi ölçümü."""
+    """P / C_I^UB / C_M^UB / C_E / C_V kapasite çerçevesi ölçümü."""
     from hga.evaluation import run_capacity_benchmark
     rapor = run_capacity_benchmark(operands_max=int(operands_max))
-    print("HGA Kapasite Çerçevesi (P, C_I, C_M, C_E, C_V):")
+    print("HGA Kapasite Çerçevesi (P, C_I^UB, C_M^UB, C_E, C_V):")
     print(rapor.markdown())
     print(f"\n  C_V / C_E          : {rapor.c_v_over_c_e}")
     print(f"  karar verilebilirlik: {rapor.decidability}")
-    print(f"  sıralama geçerli    : {rapor.ordering_holds} (C_V ≤ C_E ≤ C_M)")
+    print(f"  sıralama geçerli    : {rapor.ordering_holds} (C_V ≤ C_E ≤ C_M^UB)")
     for not_ in rapor.notes:
         print(f"  not: {not_}")
     if out:
@@ -1708,13 +1730,56 @@ def _signature(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, signature_markdown(rapor))
 
 
+def _signature_gate(yol=None, profile="standard", seeds=None,
+                    out=None, markdown=None):
+    """Signature Benchmark release gate."""
+    from hga.evaluation.signature import (
+        run_signature_benchmark,
+        run_signature_release_gate,
+        signature_release_gate_markdown,
+    )
+    if yol:
+        rapor_dict = json.loads(Path(yol).read_text(encoding="utf-8"))
+    else:
+        tohumlar = [int(v) for v in (seeds or "1").split(",") if v.strip()]
+        rapor_dict = run_signature_benchmark(
+            profile=profile, seeds=tohumlar).to_dict()
+    gate = run_signature_release_gate(rapor_dict)
+    md = signature_release_gate_markdown(gate)
+    print(md)
+    _yaz_rapor(gate.to_dict(), out, markdown, md)
+
+
+def _verifier_ensemble(out=None, markdown=None):
+    """Çoklu verifier ensemble benchmarkı."""
+    from hga.evaluation.verifier_ensemble import (
+        run_verifier_ensemble_benchmark,
+        verifier_ensemble_markdown,
+    )
+    rapor = run_verifier_ensemble_benchmark()
+    md = verifier_ensemble_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _verifier_adversarial(out=None, markdown=None):
+    """Genişletilmiş verifier adversarial suite v2."""
+    from hga.evaluation.verifier_adversarial import (
+        run_verifier_adversarial_v2_benchmark,
+    )
+    rapor = run_verifier_adversarial_v2_benchmark()
+    md = rapor.markdown()
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _semantik(out=None, markdown=None):
-    """P0-5: Türkçe semantik çıkarım benchmarkı."""
+    """P0-5: Türkçe semantik çıkarım v2 gold benchmarkı."""
     from hga.evaluation.semantic_extraction import (
-        run_semantic_extraction_benchmark,
+        run_semantic_extraction_v2_benchmark,
         semantic_extraction_markdown,
     )
-    rapor = run_semantic_extraction_benchmark()
+    rapor = run_semantic_extraction_v2_benchmark()
     print(semantic_extraction_markdown(rapor))
     _yaz_rapor(rapor.to_dict(), out, markdown,
                semantic_extraction_markdown(rapor))
@@ -1767,6 +1832,20 @@ def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _uzun_baglam(profile="smoke", seeds=None, out=None, markdown=None):
+    """P1: Uzun bağlam LM taraması (opsiyonel 512/1024 smoke)."""
+    from hga.evaluation.long_context import (
+        long_context_markdown,
+        run_long_context_benchmark,
+    )
+    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
+                if seeds else None)
+    rapor = run_long_context_benchmark(profile=profile, seeds=tohumlar)
+    md = long_context_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
     """P0-8: Hot/Warm/Cold/Archive hiyerarşik bellek benchmarkı."""
     from hga.evaluation.memory_hierarchy import (
@@ -1780,6 +1859,27 @@ def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _bellek_streaming(target_records=100_000_000, sample_records=10_000,
+                      shard_records=1_000_000, checkpoint_interval=1_000,
+                      seeds=None, out=None, markdown=None):
+    """P0-8: 100M-ready streaming/checkpoint dry-run harness."""
+    from hga.evaluation.memory_hierarchy import (
+        memory_streaming_harness_markdown,
+        run_memory_streaming_harness,
+    )
+    tohum = int((seeds or "1").split(",")[0])
+    rapor = run_memory_streaming_harness(
+        target_records=int(target_records),
+        sample_records=int(sample_records),
+        shard_records=int(shard_records),
+        checkpoint_interval=int(checkpoint_interval),
+        seed=tohum,
+    )
+    md = memory_streaming_harness_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
 def _cok_ortam(seeds=None, out=None, markdown=None):
     """P1: Çoklu ortam + cross-domain verifier izolasyonu."""
     from hga.evaluation.multi_environment import (
@@ -1789,6 +1889,27 @@ def _cok_ortam(seeds=None, out=None, markdown=None):
     tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
     rapor = run_multi_environment_benchmark(seeds=tohumlar)
     md = multi_environment_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _ogrenme_transfer(seeds=None, source_examples=120,
+                       target_support_examples=40,
+                       target_unseen_examples=40,
+                       out=None, markdown=None):
+    """P1: Cross-domain self-learning transfer negatif-kontrol benchmarkı."""
+    from hga.evaluation.self_learning_transfer import (
+        run_self_learning_transfer_benchmark,
+        self_learning_transfer_markdown,
+    )
+    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
+    rapor = run_self_learning_transfer_benchmark(
+        seeds=tohumlar,
+        source_examples=int(source_examples),
+        target_support_examples=int(target_support_examples),
+        target_unseen_examples=int(target_unseen_examples),
+    )
+    md = self_learning_transfer_markdown(rapor)
     print(md)
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
@@ -1820,33 +1941,54 @@ def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _insan_degerlendirme_raporu():
+def _insan_degerlendirme_raporu(package_dir=None):
     """Varsa tamamlanmış puanları, yoksa yalnız protokolü yükle."""
-    from hga.evaluation.human_eval_fill import (
-        analyze_ratings_by_arm,
-        collect_ratings_from_csv,
-    )
+    from hga.evaluation.human_eval_fill import build_human_evaluation_from_csv
     from hga.evaluation.human_evaluation import build_human_evaluation_protocol
 
-    package_dir = Path("insan_degerlendirme_paketleri")
+    paket_dizini = Path(package_dir or "insan_degerlendirme_paketleri")
     try:
-        ratings, summary = collect_ratings_from_csv(package_dir)
+        return build_human_evaluation_from_csv(paket_dizini)
     except ValueError:
         return build_human_evaluation_protocol()
-    if summary["raters_found"] < 10 or summary["filled_ratio"] < 1.0:
-        return build_human_evaluation_protocol()
-    return build_human_evaluation_protocol(
-        collected_ratings=ratings,
-        arm_results=analyze_ratings_by_arm(package_dir),
-    )
 
 
-def _insan_degerlendirme(out=None, markdown=None):
+def _insan_degerlendirme(package_dir=None, out=None, markdown=None):
     """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
     from hga.evaluation.human_evaluation import human_evaluation_markdown
 
-    rapor = _insan_degerlendirme_raporu()
+    rapor = _insan_degerlendirme_raporu(package_dir)
     md = human_evaluation_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _insan_import(package_dir=None, out=None, markdown=None):
+    """P1: İnsan puanı CSV import + α + kol agregasyonu."""
+    from hga.evaluation.human_eval_fill import (
+        human_rating_import_markdown,
+        human_rating_import_report,
+    )
+    paket_dizini = Path(package_dir or "insan_degerlendirme_paketleri")
+    rapor = human_rating_import_report(paket_dizini)
+    md = human_rating_import_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor, out, markdown, md)
+
+
+def _korpus_genisletme(candidate_dir=None, target_words=2_000_000,
+                       use_smoke_candidates=True, out=None, markdown=None):
+    """P1: Türkçe korpus genişletme pipeline/release gate."""
+    from hga.evaluation.turkish_corpus_expansion import (
+        run_turkish_corpus_expansion_pipeline,
+        turkish_corpus_expansion_markdown,
+    )
+    rapor = run_turkish_corpus_expansion_pipeline(
+        Path(candidate_dir) if candidate_dir else None,
+        use_smoke_candidates=bool(use_smoke_candidates),
+        target_words=int(target_words),
+    )
+    md = turkish_corpus_expansion_markdown(rapor)
     print(md)
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
@@ -1898,13 +2040,15 @@ def _yeniden_uretilebilirlik(out=None, markdown=None):
         run_multi_environment_benchmark,
     )
     from hga.evaluation.semantic_extraction import (
-        run_semantic_extraction_benchmark,
+        run_semantic_extraction_v2_benchmark,
     )
+    from hga.evaluation.verifier_ensemble import run_verifier_ensemble_benchmark
     raporlar = {
         "compositional_v2": run_compositional_v2_benchmark().to_dict(),
-        "semantic_extraction": run_semantic_extraction_benchmark().to_dict(),
+        "semantic_extraction": run_semantic_extraction_v2_benchmark().to_dict(),
         "multi_environment": run_multi_environment_benchmark(
             seeds=tuple(range(1, 21))).to_dict(),
+        "verifier_adversarial": run_verifier_ensemble_benchmark().to_dict(),
     }
     rapor = audit_reproducibility(raporlar)
     md = reproducibility_markdown(rapor)
@@ -1939,8 +2083,9 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     from hga.evaluation.seed_statistics import run_core_seed_statistics
     from hga.evaluation.self_learning_scaling import run_self_learning_scaling
     from hga.evaluation.semantic_extraction import (
-        run_semantic_extraction_benchmark,
+        run_semantic_extraction_v2_benchmark,
     )
+    from hga.evaluation.verifier_ensemble import run_verifier_ensemble_benchmark
 
     tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
     derinlik_profili = "smoke" if profile == "smoke" else "standard"
@@ -1953,8 +2098,8 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     raporlar["reasoning_depth"] = measure_reasoning_depth(
         profile=derinlik_profili).to_dict()
     print("  ✓ C_R / C_RD çıkarım derinliği")
-    raporlar["semantic_extraction"] = run_semantic_extraction_benchmark().to_dict()
-    print("  ✓ Türkçe semantik çıkarım")
+    raporlar["semantic_extraction"] = run_semantic_extraction_v2_benchmark().to_dict()
+    print("  ✓ Türkçe semantik çıkarım v2 gold")
     raporlar["compositional_v2"] = run_compositional_v2_benchmark().to_dict()
     print("  ✓ C_G v2 ham metin genellemesi")
     kapasite = run_capacity_benchmark(operands_max=7)
@@ -1966,6 +2111,8 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     raporlar["multi_environment"] = run_multi_environment_benchmark(
         seeds=tuple(range(1, 21))).to_dict()
     print("  ✓ Çoklu ortam + cross-domain verifier izolasyonu")
+    raporlar["verifier_adversarial"] = run_verifier_ensemble_benchmark().to_dict()
+    print("  ✓ Çoklu verifier ensemble + adversarial proof suite")
     raporlar["self_learning_scaling"] = run_self_learning_scaling(
         profile="smoke" if profile == "smoke" else "standard",
         seeds=tohumlar[:1]).to_dict()
@@ -2066,12 +2213,19 @@ def main(argv=None):
                                      "koken", "oncelik",
                                      "oncelik-zincir", "operator-baseline",
                                      "cikarim-derinligi", "signature",
+                                     "signature-gate",
+                                     "verifier-adversarial",
+                                     "verifier-ensemble",
                                      "semantik", "genelleme-v2",
                                      "twt-sonuc", "turkce-lm",
+                                     "uzun-baglam",
                                      "bellek-hiyerarsi",
-                                     "cok-ortam", "ogrenme-olcek",
+                                     "bellek-streaming",
+                                     "cok-ortam", "ogrenme-transfer",
+                                     "ogrenme-olcek",
                                      "tohum-istatistik",
                                      "insan-degerlendirme",
+                                     "insan-import", "korpus-genisletme",
                                      "derinlik-teshis",
                                      "oncelik-optimizasyon",
                                      "muhendislik",
@@ -2182,12 +2336,37 @@ def main(argv=None):
     p.add_argument("--depth-profile", choices=["smoke", "standard", "deep"],
                    default="standard",
                    help="cikarim-derinligi tarama profili")
+    p.add_argument("--long-context-profile", choices=["smoke", "smoke_1024", "full"],
+                   default="smoke",
+                   help="uzun-baglam profili; smoke_1024 512/1024 yolunu koşar")
     p.add_argument("--reliability-threshold", type=float, default=1.0,
                    help="C_R/C_RD güvenilirlik eşiği (0,1]")
     p.add_argument("--skip-torch", action="store_true",
                    help="championship-benchmark: nöral bölümleri atla")
     p.add_argument("--ledger", default=None,
                    help="milestone için immutable experience ledger JSONL yolu")
+    p.add_argument("--target-records", type=int, default=100_000_000,
+                   help="bellek-streaming için hedef kayıt sayısı")
+    p.add_argument("--sample-records", type=int, default=10_000,
+                   help="bellek-streaming smoke koşusunda gerçek yazılacak kayıt")
+    p.add_argument("--shard-records", type=int, default=1_000_000,
+                   help="bellek-streaming planında shard başına kayıt")
+    p.add_argument("--checkpoint-interval", type=int, default=1_000,
+                   help="bellek-streaming checkpoint aralığı")
+    p.add_argument("--source-examples", type=int, default=120,
+                   help="ogrenme-transfer için kaynak ortam örnek sayısı")
+    p.add_argument("--target-support-examples", type=int, default=40,
+                   help="ogrenme-transfer için hedef destek örneği")
+    p.add_argument("--target-unseen-examples", type=int, default=40,
+                   help="ogrenme-transfer için hedef unseen eval örneği")
+    p.add_argument("--package-dir", default="insan_degerlendirme_paketleri",
+                   help="insan-import/degerlendirme paket dizini")
+    p.add_argument("--candidate-dir", default=None,
+                   help="korpus-genisletme için aday JSONL dizini")
+    p.add_argument("--no-smoke-candidates", action="store_true",
+                   help="korpus-genisletme: aday dizini yoksa gömülü smoke aday kullanma")
+    p.add_argument("--target-words", type=int, default=2_000_000,
+                   help="korpus-genisletme release hedef kelime sayısı")
     args = p.parse_args(argv)
     {"bilgi": _bilgi_demo, "gercek-veri": _gercek_veri,
      "benchmark": _benchmark, "dogrulama": _dogrulama,
@@ -2271,6 +2450,13 @@ def main(argv=None):
      "signature": lambda: _signature(
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
+     "signature-gate": lambda: _signature_gate(
+         yol=args.yol, profile=args.signature_profile, seeds=args.seeds,
+         out=args.out, markdown=args.markdown),
+     "verifier-adversarial": lambda: _verifier_adversarial(
+         out=args.out, markdown=args.markdown),
+     "verifier-ensemble": lambda: _verifier_ensemble(
+         out=args.out, markdown=args.markdown),
      "semantik": lambda: _semantik(out=args.out, markdown=args.markdown),
      "genelleme-v2": lambda: _genelleme_v2(out=args.out, markdown=args.markdown),
      "twt-sonuc": lambda: _twt_sonuc(
@@ -2279,11 +2465,25 @@ def main(argv=None):
      "turkce-lm": lambda: _turkce_lm(
          seeds=args.seeds, profile=args.signature_profile,
          steps=args.lm_steps, out=args.out, markdown=args.markdown),
+     "uzun-baglam": lambda: _uzun_baglam(
+         profile=args.long_context_profile, seeds=args.seeds,
+         out=args.out, markdown=args.markdown),
      "bellek-hiyerarsi": lambda: _bellek_hiyerarsi(
          profile=args.depth_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
+     "bellek-streaming": lambda: _bellek_streaming(
+         target_records=args.target_records,
+         sample_records=args.sample_records,
+         shard_records=args.shard_records,
+         checkpoint_interval=args.checkpoint_interval,
+         seeds=args.seeds, out=args.out, markdown=args.markdown),
      "cok-ortam": lambda: _cok_ortam(
          seeds=args.seeds, out=args.out, markdown=args.markdown),
+     "ogrenme-transfer": lambda: _ogrenme_transfer(
+         seeds=args.seeds, source_examples=args.source_examples,
+         target_support_examples=args.target_support_examples,
+         target_unseen_examples=args.target_unseen_examples,
+         out=args.out, markdown=args.markdown),
      "ogrenme-olcek": lambda: _ogrenme_olcek(
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
@@ -2291,6 +2491,12 @@ def main(argv=None):
          profile=args.signature_profile, seeds=args.seeds, out=args.out,
          markdown=args.markdown),
      "insan-degerlendirme": lambda: _insan_degerlendirme(
+         package_dir=args.package_dir, out=args.out, markdown=args.markdown),
+     "insan-import": lambda: _insan_import(
+         package_dir=args.package_dir, out=args.out, markdown=args.markdown),
+     "korpus-genisletme": lambda: _korpus_genisletme(
+         candidate_dir=args.candidate_dir, target_words=args.target_words,
+         use_smoke_candidates=not args.no_smoke_candidates,
          out=args.out, markdown=args.markdown),
      "derinlik-teshis": lambda: _derinlik_teshis(
          profile=args.depth_profile, out=args.out, markdown=args.markdown),

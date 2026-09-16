@@ -24,16 +24,19 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import random
 import statistics as _stat
 import time
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from ..memory.hierarchical import TIERS, HierarchicalMemory
 
 PROTOCOL = "hierarchical_memory_v1"
+STREAMING_PROTOCOL = "hierarchical_memory_streaming_harness_v1"
 SCHEMA_VERSION = 1
+STREAMING_TARGET_RECORDS = 100_000_000
 
 #: Ölçek profilleri. ``deep`` gerçekten 10⁶ kayıt yazar ve dakikalar sürer.
 PROFILES: Dict[str, Dict[str, Any]] = {
@@ -108,6 +111,205 @@ class MemoryHierarchyReport:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+
+@dataclass
+class MemoryStreamingHarnessReport:
+    """100M hedefli streaming harness raporu.
+
+    ``sample_records_written`` gerçek yazılan kayıt sayısıdır; ``target_records``
+    çalışma planının hedefidir. Bu ayrım özellikle saklanır ki smoke koşusu
+    100M yazılmış gibi sunulamasın.
+    """
+
+    protocol: str
+    schema_version: int
+    target_records: int
+    sample_records_written: int
+    seed: int
+    config: Dict[str, Any]
+    plan: Dict[str, Any]
+    checkpoints: List[Dict[str, Any]]
+    throughput: Dict[str, float]
+    final_snapshot: Dict[str, Any]
+    recall_audit: Dict[str, Any]
+    projections: Dict[str, Any]
+    checks: Dict[str, bool]
+    findings: List[str] = field(default_factory=list)
+    limitations: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    def markdown(self) -> str:
+        return memory_streaming_harness_markdown(self)
+
+
+def _streaming_items(
+    start: int,
+    count: int,
+    payload_size: int,
+) -> Iterable[Tuple[str, Dict[str, Any]]]:
+    """Deterministik streaming kayıtları; liste materyalize etmez."""
+    dolgu = "x" * int(payload_size)
+    for i in range(int(start), int(start) + int(count)):
+        yield f"key-{i:012d}", {"i": i, "pad": dolgu}
+
+
+def run_memory_streaming_harness(
+    target_records: int = STREAMING_TARGET_RECORDS,
+    sample_records: int = 10_000,
+    shard_records: int = 1_000_000,
+    checkpoint_interval: int = 1_000,
+    seed: int = 1,
+    root: Optional[str] = None,
+    payload_size: int = 4,
+    durable: bool = False,
+) -> MemoryStreamingHarnessReport:
+    """100M kayıt için streaming/checkpoint harness'ını smoke ölçekte çalıştır.
+
+    Bu fonksiyon 100M kaydı yazmaz; 100M için deterministik anahtar aralığı,
+    shard planı, checkpoint/resume manifesti ve bounded smoke yazmasını üretir.
+    Gerçek yazılan kayıt sayısı ``sample_records_written`` alanındadır.
+    """
+    if int(target_records) < 1 or int(sample_records) < 1:
+        raise ValueError("target_records ve sample_records >= 1 olmalı")
+    if int(shard_records) < 1 or int(checkpoint_interval) < 1:
+        raise ValueError("shard_records ve checkpoint_interval >= 1 olmalı")
+    if int(payload_size) < 0:
+        raise ValueError("payload_size negatif olamaz")
+
+    target_records = int(target_records)
+    sample_records = int(sample_records)
+    shard_records = int(shard_records)
+    checkpoint_interval = int(checkpoint_interval)
+    rng = random.Random(seed)
+    hot = min(1_000, max(10, sample_records // 20))
+    warm = max(hot, min(5_000, max(20, sample_records // 5)))
+    cold = max(warm, min(20_000, max(50, sample_records // 2)))
+    depo = HierarchicalMemory(
+        root=root,
+        hot_capacity=hot,
+        warm_capacity=warm,
+        cold_capacity=cold,
+        archive_enabled=True,
+        durable=durable,
+        archive_segment_records=max(100, min(10_000, checkpoint_interval)),
+    )
+    checkpoints: List[Dict[str, Any]] = []
+    rss_start = _rss_bytes()
+    basla = time.perf_counter()
+    written = 0
+    try:
+        for key, payload in _streaming_items(0, sample_records, payload_size):
+            depo.put(key, payload)
+            written += 1
+            if written % checkpoint_interval == 0 or written == sample_records:
+                depo.flush()
+                checkpoints.append({
+                    "records_written": written,
+                    "last_key": key,
+                    "next_key": f"key-{written:012d}",
+                    "tier_counts": depo.counts(),
+                    "disk_bytes": depo.disk_bytes(),
+                })
+        seconds = time.perf_counter() - basla
+        snapshot = depo.snapshot()
+
+        probes = min(200, sample_records)
+        indexes = rng.sample(range(sample_records), probes)
+        found = 0
+        corrupt = 0
+        for index in indexes:
+            retrieved, _ = depo.get(f"key-{index:012d}")
+            if retrieved is None:
+                continue
+            found += 1
+            if retrieved.get("i") != index:
+                corrupt += 1
+        recall = {
+            "probes": probes,
+            "found": found,
+            "recall": round(found / probes, 6) if probes else 0.0,
+            "value_corruptions": corrupt,
+        }
+    finally:
+        depo.close(destroy=root is None)
+    rss_end = _rss_bytes()
+
+    throughput = {
+        "records": written,
+        "seconds": round(seconds, 6),
+        "records_per_second": round(written / seconds, 3) if seconds > 0 else 0.0,
+        "microseconds_per_record": round(seconds / written * 1e6, 3)
+        if written else 0.0,
+    }
+    bytes_per_record = (
+        snapshot["disk_bytes"]["total"] / written if written else 0.0)
+    plan = {
+        "key_format": "key-{i:012d}",
+        "target_records": target_records,
+        "shard_records": shard_records,
+        "planned_shards": math.ceil(target_records / shard_records),
+        "checkpoint_interval": checkpoint_interval,
+        "resume_from_next_key": checkpoints[-1]["next_key"] if checkpoints else "key-000000000000",
+        "sample_fraction": round(written / target_records, 10),
+    }
+    projected_seconds = (target_records / throughput["records_per_second"]
+                         if throughput["records_per_second"] else float("inf"))
+    projection_kind = "linear_projection_from_sample_not_measured_100m"
+    projections = {
+        "kind": projection_kind,
+        "projected_wall_hours_for_target": round(projected_seconds / 3600, 6),
+        "projected_disk_bytes_for_target": int(bytes_per_record * target_records),
+        "sample_disk_bytes_per_record": round(bytes_per_record, 6),
+        "rss_growth_bytes_sample": (
+            rss_end - rss_start if (rss_start is not None and rss_end is not None)
+            else None),
+    }
+    checks = {
+        "target_is_100m_or_more": target_records >= STREAMING_TARGET_RECORDS,
+        "sample_stream_completed": written == sample_records,
+        "sample_is_bounded_not_full_target": written < target_records,
+        "checkpoint_manifest_written": bool(checkpoints)
+        and checkpoints[-1]["records_written"] == written,
+        "resume_key_monotonic": plan["resume_from_next_key"] == f"key-{written:012d}",
+        "archive_enabled_no_drop": snapshot["dropped"] == 0,
+        "sample_recall_complete": recall["recall"] == 1.0 and corrupt == 0,
+        "projection_marked_not_measured": projection_kind.endswith("not_measured_100m"),
+    }
+    findings = [
+        f"100M hedef planı: {plan['planned_shards']:,} shard × {shard_records:,} kayıt.",
+        f"Smoke yazma: {written:,} kayıt, {throughput['records_per_second']:,.0f} kayıt/s; "
+        f"resume anahtarı `{plan['resume_from_next_key']}`.",
+        f"Örnek recall {recall['recall']:.4f}; düşen kayıt {snapshot['dropped']}.",
+        "Disk/zaman hedef değerleri lineer projeksiyondur; 100M koşu ölçümü değildir.",
+    ]
+    limitations = [
+        "Bu harness 100M kaydı gerçekten yazmaz; 100M için plan, checkpoint ve smoke ölçümü üretir.",
+        "Projeksiyonlar lineerdir; SQLite indeks büyümesi, dosya sistemi, sıkıştırma ve cache etkileri gerçek büyük koşuda değişebilir.",
+        "Tek süreç/tek writer ölçülür; paralel ingest ve uzaktan nesne deposu bu smoke içinde yoktur.",
+    ]
+    return MemoryStreamingHarnessReport(
+        protocol=STREAMING_PROTOCOL,
+        schema_version=SCHEMA_VERSION,
+        target_records=target_records,
+        sample_records_written=written,
+        seed=int(seed),
+        config={
+            "hot": hot, "warm": warm, "cold": cold,
+            "payload_size": int(payload_size), "durable": bool(durable),
+        },
+        plan=plan,
+        checkpoints=checkpoints,
+        throughput=throughput,
+        final_snapshot=snapshot,
+        recall_audit=recall,
+        projections=projections,
+        checks=checks,
+        findings=findings,
+        limitations=limitations,
+    )
 
 
 def run_memory_hierarchy_benchmark(
@@ -514,11 +716,87 @@ def memory_hierarchy_markdown(report: MemoryHierarchyReport) -> str:
     return "\n".join(satirlar) + "\n"
 
 
+def memory_streaming_harness_markdown(
+    report: MemoryStreamingHarnessReport,
+) -> str:
+    """100M streaming harness raporunu Markdown'a çevir."""
+    s = report
+    satirlar = [
+        "# Hiyerarşik Bellek 100M Streaming Harness",
+        "",
+        f"- Protokol: `{s.protocol}` v{s.schema_version}",
+        f"- Hedef kayıt: `{s.target_records:,}`",
+        f"- Gerçek smoke yazması: `{s.sample_records_written:,}` kayıt",
+        "",
+        "> Bu artifact 100M kaydın tamamının yazıldığını iddia etmez; "
+        "100M-ready planı, checkpoint/resume manifestini ve sınırlı smoke "
+        "ingest ölçümünü üretir.",
+        "",
+        "## Plan",
+        "",
+        "| Alan | Değer |",
+        "|---|---:|",
+        f"| Shard başına kayıt | {s.plan['shard_records']:,} |",
+        f"| Planlanan shard | {s.plan['planned_shards']:,} |",
+        f"| Checkpoint aralığı | {s.plan['checkpoint_interval']:,} |",
+        f"| Örnek fraksiyon | {s.plan['sample_fraction']:.10f} |",
+        "",
+        f"Resume anahtarı: `{s.plan['resume_from_next_key']}` "
+        f"(format `{s.plan['key_format']}`)",
+        "",
+        "## Smoke ingest",
+        "",
+        f"- Yazma hızı: **{s.throughput['records_per_second']:,.0f} kayıt/s** "
+        f"({s.throughput['microseconds_per_record']:.2f} µs/kayıt)",
+        f"- Süre: `{s.throughput['seconds']:.4f}` s",
+        f"- Checkpoint sayısı: `{len(s.checkpoints)}`",
+        f"- Final katmanlar: hot `{s.final_snapshot['counts']['hot']:,}`, "
+        f"warm `{s.final_snapshot['counts']['warm']:,}`, "
+        f"cold `{s.final_snapshot['counts']['cold']:,}`, "
+        f"archive `{s.final_snapshot['counts']['archive']:,}`",
+        f"- Düşen kayıt: `{s.final_snapshot['dropped']}`",
+        "",
+        "## Recall audit",
+        "",
+        f"- Probe: `{s.recall_audit['probes']}`",
+        f"- Bulunan: `{s.recall_audit['found']}`",
+        f"- Recall: **{s.recall_audit['recall']:.6f}**",
+        f"- Değer bozulması: `{s.recall_audit['value_corruptions']}`",
+        "",
+        "## Projeksiyonlar (ölçüm değil)",
+        "",
+        f"- Tür: `{s.projections['kind']}`",
+        f"- Hedef duvar-saat projeksiyonu: "
+        f"`{s.projections['projected_wall_hours_for_target']}` saat",
+        f"- Hedef disk projeksiyonu: "
+        f"`{s.projections['projected_disk_bytes_for_target']:,}` bayt",
+        f"- Örnek disk/kayıt: "
+        f"`{s.projections['sample_disk_bytes_per_record']}` bayt",
+        "",
+        "## Kabul kapıları",
+        "",
+        "| Kapı | Sonuç |",
+        "|---|---|",
+    ]
+    satirlar.extend(f"| {ad} | {'GEÇTİ' if v else 'KALDI'} |"
+                    for ad, v in s.checks.items())
+    satirlar.extend(["", "## Bulgular", ""])
+    satirlar.extend(f"- {b}" for b in s.findings)
+    satirlar.extend(["", "## Sınırlar", ""])
+    satirlar.extend(f"- {b}" for b in s.limitations)
+    return "\n".join(satirlar) + "\n"
+
+
 __all__ = [
     "PROFILES",
     "PROTOCOL",
     "SCHEMA_VERSION",
+    "STREAMING_PROTOCOL",
+    "STREAMING_TARGET_RECORDS",
     "MemoryHierarchyReport",
+    "MemoryStreamingHarnessReport",
     "memory_hierarchy_markdown",
+    "memory_streaming_harness_markdown",
     "run_memory_hierarchy_benchmark",
+    "run_memory_streaming_harness",
 ]

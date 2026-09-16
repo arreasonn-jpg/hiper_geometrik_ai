@@ -72,3 +72,12 @@ def test_tek_bagimlilik_kaynagi_pyproject():
 def test_legacy_paketi_dagitima_girmez():
     pyproject = (KOK / "pyproject.toml").read_text(encoding="utf-8")
     assert "legacy*" not in pyproject.split("[tool.setuptools.packages.find]")[1]
+
+
+def test_readme_legacyyi_aktif_mimari_olarak_sunmaz():
+    readme = (KOK / "README.md").read_text(encoding="utf-8")
+    assert "Legacy 3 Katmanlı Halüsinasyon Prototipi (aktif mimari değil)" in readme
+    ilk_bolum = readme.split("---", 1)[0]
+    assert "3 katmanlı halüsinasyon kontrol mekanizması" not in ilk_bolum
+    ilk_bolum_duz = " ".join(ilk_bolum.lower().split())
+    assert "aktif araştırma anlatısı" in ilk_bolum_duz

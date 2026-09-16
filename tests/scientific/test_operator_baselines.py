@@ -5,12 +5,15 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from hga.evaluation.operator_baselines import (  # noqa: E402
+    OFFICIAL_SEED_REQUIREMENT,
+    OFFICIAL_SEEDS,
     STRUCTURED_TEACHERS,
     UNSTRUCTURED_TEACHERS,
     arm_budget,
     budget_table,
     operator_baseline_markdown,
     run_operator_baseline_benchmark,
+    run_operator_baseline_official_report,
 )
 
 
@@ -94,6 +97,16 @@ def test_markdown_butce_ve_sinirlari_icerir():
     assert "Bütçe muhasebesi" in md
     assert "rakip değil tavandır" in md
     assert "Kabul kapıları" in md
+
+
+def test_resmi_rapor_20_tohum_kapisini_tasir():
+    rapor = run_operator_baseline_official_report(
+        n=4, steps=5, batch_size=4, test_samples=16, seeds=OFFICIAL_SEEDS)
+    assert len(rapor.seeds) == OFFICIAL_SEED_REQUIREMENT
+    assert rapor.checks["official_20_seed_rule_met"]
+    assert rapor.checks["all_teacher_families_present"]
+    assert rapor.checks["all_baseline_arms_present"]
+    assert "20 tohum kuralı karşılandı" in " ".join(rapor.limitations)
 
 
 def test_ayni_tohum_ayni_sonuc():

@@ -1,0 +1,59 @@
+{
+  "checks": {
+    "all_benchmark_checks_pass": false,
+    "all_signature_arms_present": true,
+    "all_signature_tasks_present": true,
+    "dataset_hash_present": true,
+    "hga_has_signature_task": true,
+    "memory_gain_is_task_specific": true,
+    "no_held_out_leak": true,
+    "parameter_budget_within_gate": true,
+    "profile_is_standard": true,
+    "seed_count_at_least_20": false,
+    "signature_payload_nonempty": true,
+    "source_protocol_is_signature_v1": true
+  },
+  "evidence": {
+    "source_arms": [
+      "symbolic",
+      "dense",
+      "transformer",
+      "hga",
+      "hga_no_memory",
+      "hga_no_kronecker",
+      "hga_no_attention",
+      "hybrid"
+    ],
+    "source_failed_benchmark_checks": [
+      "hga_beats_majority_everywhere"
+    ],
+    "source_profile": "standard",
+    "source_seed_count": 1,
+    "source_tasks": [
+      "A_long_chain",
+      "B_unseen_entity",
+      "C_unseen_relation",
+      "D_unseen_both",
+      "E_conflict",
+      "F_memory_dependent",
+      "G_epistemic",
+      "H_distractor"
+    ]
+  },
+  "failed_checks": [
+    "seed_count_at_least_20",
+    "all_benchmark_checks_pass"
+  ],
+  "limitations": [
+    "Release gate yalnız Signature Benchmark raporunu denetler; yeni model eğitimi veya insan değerlendirmesi üretmez.",
+    "Gate PASS değilse release hazır denemez; BLOCKED durumu eksik kanıtı gizlemez.",
+    "20 tohum ve standard profil eşiği release kalitesi içindir; smoke koşuları regresyon amaçlı kalır."
+  ],
+  "min_seed_count": 20,
+  "protocol": "hga_signature_release_gate_v1",
+  "release_ready": false,
+  "required_profile": "standard",
+  "source_dataset_hash": "d699088469e4",
+  "source_protocol": "hga_signature_benchmark_v1",
+  "status": "BLOCKED"
+}

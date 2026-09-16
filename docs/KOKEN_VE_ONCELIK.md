@@ -7,7 +7,7 @@ python -m hga oncelik    # Priority(E) ağırlıkları + terim ablasyonu
 
 Ham çıktı: `raporlar/provenance.json`, `raporlar/priority_ablation.json`
 · Kod: `hga/evaluation/provenance.py`, `hga/experience/exploration.py`
-· Testler: `tests/test_provenance.py` (11), `tests/test_priority_weights.py` (9)
+· Testler: `tests/test_provenance.py` (14), `tests/test_priority_weights.py` (9)
 
 ---
 
@@ -37,6 +37,23 @@ adı verilirse **açık hata** fırlatılır (sessizce yutulmaz).
 `audit_provenance(store)` dış kaynaklı her olguda `source_url` **ve**
 `document_hash` arar; eksikse "yetim olgu" sayar. `assert_clean()` eksiklikte
 hata verir.
+
+### Provenance graph: "Bunu neden biliyorsun?"
+
+`build_provenance_chain(store, fact, experience=..., answer=...)` tek bir olgu
+için makine-okunur düğüm/kenar grafı üretir. Omurga şu sözleşmeye kilitlidir:
+
+```text
+Source → Document → Sentence → Extraction → Entity/Relation → RelationFact
+       → KnowledgeVersion → Experience → Verification → Answer
+```
+
+`Experience`, `Verification` ve `Answer` opsiyoneldir; bir cevap üretim yolu
+verildiğinde grafın sonuna eklenir. Dış kaynaklı olgularda `source_url`,
+`document_hash`, `sentence` veya `extractor` eksikse `missing` alanı bunu tek tek
+söyler ve `complete_external_trace=False` döner. Böylece sistem yalnız
+"kaynağı var" demekle kalmaz; hangi cümleden, hangi çıkarıcıyla, hangi varlık ve
+ilişki kayıtlarına bağlanarak cevaba geldiğini gösterebilir.
 
 ### Belge değişikliği yakalanıyor
 

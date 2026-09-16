@@ -71,6 +71,7 @@ from .kronecker_rank import (
 from .leakage import LeakageAuditReport, audit_partitions, semantic_fingerprint
 from .lifecycle import LifecycleBenchmarkReport, run_lifecycle_benchmark
 from .long_context import (
+    LONG_CONTEXT_TARGETS,
     LongContextReport,
     long_context_markdown,
     run_long_context_benchmark,
@@ -79,9 +80,16 @@ from .memory_hierarchy import (
     PROFILES as MEMORY_HIERARCHY_PROFILES,
 )
 from .memory_hierarchy import (
+    STREAMING_PROTOCOL as MEMORY_STREAMING_PROTOCOL,
+)
+from .memory_hierarchy import (
+    STREAMING_TARGET_RECORDS,
     MemoryHierarchyReport,
+    MemoryStreamingHarnessReport,
     memory_hierarchy_markdown,
+    memory_streaming_harness_markdown,
     run_memory_hierarchy_benchmark,
+    run_memory_streaming_harness,
 )
 from .neural_compositional import (
     ABLATION_ORDER,
@@ -92,6 +100,8 @@ from .operator_baselines import (
     ARMS as OPERATOR_ARMS,
 )
 from .operator_baselines import (
+    OFFICIAL_SEED_REQUIREMENT,
+    OFFICIAL_SEEDS,
     STRUCTURED_TEACHERS,
     TEACHERS,
     UNSTRUCTURED_TEACHERS,
@@ -101,6 +111,7 @@ from .operator_baselines import (
     budget_table,
     operator_baseline_markdown,
     run_operator_baseline_benchmark,
+    run_operator_baseline_official_report,
 )
 from .paradigma import (
     KOLLAR,
@@ -125,9 +136,14 @@ from .priority_ablation import (
     spearman_rho,
 )
 from .provenance import (
+    PROVENANCE_CHAIN_KINDS,
     HashDogrulamaRaporu,
+    ProvenanceChain,
+    ProvenanceEdge,
+    ProvenanceNode,
     ProvenanceRaporu,
     audit_provenance,
+    build_provenance_chain,
     document_hash,
     ingest_with_provenance,
     verify_document_hashes,
@@ -170,12 +186,24 @@ from .scaled_golden import (
     run_scaled_golden_sweep,
     veri_seti_uret,
 )
+from .self_learning_transfer import (
+    SelfLearningTransferReport,
+    TransferPairResult,
+    run_self_learning_transfer_benchmark,
+    self_learning_transfer_markdown,
+)
 from .semantic_extraction import (
     GOLD_SET,
+    GOLD_SET_V1,
+    GOLD_SET_V2,
     LAYERS,
+    PROTOCOL_V1,
+    PROTOCOL_V2,
     GoldSentence,
     SemanticExtractionReport,
+    build_semantic_gold_v2,
     run_semantic_extraction_benchmark,
+    run_semantic_extraction_v2_benchmark,
     semantic_extraction_markdown,
 )
 from .signature import (
@@ -184,13 +212,19 @@ from .signature import (
 from .signature import (
     MEMORY_CRITICAL_TASKS,
     NEURAL_ARMS,
+    RELEASE_GATE_PROTOCOL,
+    SIGNATURE_RELEASE_MIN_SEEDS,
+    SIGNATURE_RELEASE_PROFILE,
     TASKS,
     Instance,
+    SignatureReleaseGateReport,
     SignatureReport,
     build_dataset,
     leakage_report,
     run_signature_benchmark,
+    run_signature_release_gate,
     signature_markdown,
+    signature_release_gate_markdown,
     symbolic_predict,
 )
 from .sweep import nk_taramasi, parametre_tahmini
@@ -200,6 +234,18 @@ from .turkish_benchmark import (
     mini_turkce_corpus,
     perplexity_benchmark,
     tokenizer_kapsami,
+)
+from .turkish_corpus_expansion import (
+    ALLOWED_LICENSES as CORPUS_EXPANSION_ALLOWED_LICENSES,
+)
+from .turkish_corpus_expansion import (
+    DEFAULT_TARGET_WORDS as CORPUS_EXPANSION_TARGET_WORDS,
+)
+from .turkish_corpus_expansion import (
+    CorpusCandidate,
+    CorpusExpansionReport,
+    run_turkish_corpus_expansion_pipeline,
+    turkish_corpus_expansion_markdown,
 )
 from .turkish_lm import (
     NEURAL_ARMS as TURKISH_LM_ARMS,
@@ -238,17 +284,35 @@ from .twt_results import (
     run_twt_results,
 )
 from .verifier_adversarial import (
+    DATA_FILE_V2,
     REQUIRED_ATTACK_CLASSES,
+    REQUIRED_ATTACK_CLASSES_V2,
     ProofDecision,
     VerifierAttackDataset,
     VerifierAttackMetrics,
     VerifierAttackReport,
     run_verifier_adversarial_benchmark,
+    run_verifier_adversarial_v2_benchmark,
     verify_arithmetic_proof,
+)
+from .verifier_ensemble import (
+    ENSEMBLE_POLICY,
+    ENSEMBLE_PROTOCOL,
+    VerifierEnsembleReport,
+    VerifierMember,
+    default_verifier_members,
+    run_verifier_ensemble_benchmark,
+    verifier_ensemble_markdown,
+    verify_normal_form_addition,
+    verify_trace_replay_addition,
 )
 
 __all__ = [
     # P1 gerçek Türkçe dil modelleme (TWT held-out)
+    "CORPUS_EXPANSION_ALLOWED_LICENSES", "CORPUS_EXPANSION_TARGET_WORDS",
+    "CorpusCandidate", "CorpusExpansionReport",
+    "run_turkish_corpus_expansion_pipeline",
+    "turkish_corpus_expansion_markdown",
     "TURKISH_LM_ARMS", "NGRAM_ARMS", "LMCorpus", "LMDocument",
     "NgramBaselines", "TurkishLMReport", "prepare_lm_corpus",
     "document_splits_disjoint", "build_lm_models",
@@ -258,23 +322,33 @@ __all__ = [
     "TWTResultsReport", "analytic_forward_flops", "measured_forward_flops",
     "reconcile_flops", "flop_fairness", "run_twt_results", "results_markdown",
     # P0-8 hiyerarşik bellek
-    "MEMORY_HIERARCHY_PROFILES", "MemoryHierarchyReport",
-    "run_memory_hierarchy_benchmark", "memory_hierarchy_markdown",
+    "MEMORY_HIERARCHY_PROFILES", "MEMORY_STREAMING_PROTOCOL",
+    "STREAMING_TARGET_RECORDS", "MemoryHierarchyReport",
+    "MemoryStreamingHarnessReport", "run_memory_hierarchy_benchmark",
+    "run_memory_streaming_harness", "memory_hierarchy_markdown",
+    "memory_streaming_harness_markdown",
     # P0-1 Priority(E) nedensel zincir
     "TERIMLER", "PriorityAblationReport", "PriorityPool", "VariantResult",
     "havuz_uret", "kendall_tau", "spearman_rho",
     "run_priority_weight_ablation", "priority_ablation_markdown",
     # P0-2 operatör baseline ailesi
-    "OPERATOR_ARMS", "TEACHERS", "STRUCTURED_TEACHERS", "UNSTRUCTURED_TEACHERS",
-    "ArmResult", "OperatorBaselineReport", "arm_budget", "budget_table",
-    "run_operator_baseline_benchmark", "operator_baseline_markdown",
+    "OPERATOR_ARMS", "OFFICIAL_SEED_REQUIREMENT", "OFFICIAL_SEEDS",
+    "TEACHERS", "STRUCTURED_TEACHERS", "UNSTRUCTURED_TEACHERS", "ArmResult",
+    "OperatorBaselineReport", "arm_budget", "budget_table",
+    "run_operator_baseline_benchmark", "run_operator_baseline_official_report",
+    "operator_baseline_markdown",
     # P0-4 signature benchmark
     "SIGNATURE_ARMS", "NEURAL_ARMS", "TASKS", "MEMORY_CRITICAL_TASKS",
-    "Instance", "SignatureReport", "build_dataset", "leakage_report",
-    "symbolic_predict", "run_signature_benchmark", "signature_markdown",
+    "RELEASE_GATE_PROTOCOL", "SIGNATURE_RELEASE_MIN_SEEDS",
+    "SIGNATURE_RELEASE_PROFILE", "Instance", "SignatureReport",
+    "SignatureReleaseGateReport", "build_dataset", "leakage_report",
+    "symbolic_predict", "run_signature_benchmark", "run_signature_release_gate",
+    "signature_markdown", "signature_release_gate_markdown",
     # P0-5 semantik çıkarım
-    "GOLD_SET", "LAYERS", "GoldSentence", "SemanticExtractionReport",
-    "run_semantic_extraction_benchmark", "semantic_extraction_markdown",
+    "GOLD_SET", "GOLD_SET_V1", "GOLD_SET_V2", "PROTOCOL_V1", "PROTOCOL_V2",
+    "LAYERS", "GoldSentence", "SemanticExtractionReport",
+    "build_semantic_gold_v2", "run_semantic_extraction_benchmark",
+    "run_semantic_extraction_v2_benchmark", "semantic_extraction_markdown",
     # P0-6 C_G v2
     "AXES", "TRAIN_CORPUS", "TEST_CASES", "V2Case", "AxisMetrics",
     "CompositionalV2Report", "run_compositional_v2_benchmark",
@@ -294,21 +368,32 @@ __all__ = [
     "prepare_real_turkish_task", "run_real_turkish_benchmark",
     "ARCHITECTURE_CONFIG", "BASELINE_PROFILES", "MODEL_ORDER", "ArcFeatureVocabulary",
     "TWTBaselineReport", "build_twt_models", "run_twt_architecture_baselines",
-    "REQUIRED_ATTACK_CLASSES", "ProofDecision", "VerifierAttackDataset",
-    "VerifierAttackMetrics", "VerifierAttackReport", "run_verifier_adversarial_benchmark",
-    "LongContextReport", "long_context_markdown", "run_long_context_benchmark",
+    "DATA_FILE_V2", "REQUIRED_ATTACK_CLASSES", "REQUIRED_ATTACK_CLASSES_V2",
+    "ProofDecision", "VerifierAttackDataset", "VerifierAttackMetrics",
+    "VerifierAttackReport", "run_verifier_adversarial_benchmark",
+    "run_verifier_adversarial_v2_benchmark",
+    "ENSEMBLE_POLICY", "ENSEMBLE_PROTOCOL", "VerifierMember",
+    "VerifierEnsembleReport", "default_verifier_members",
+    "run_verifier_ensemble_benchmark", "verifier_ensemble_markdown",
+    "verify_normal_form_addition", "verify_trace_replay_addition",
+    "LONG_CONTEXT_TARGETS", "LongContextReport", "long_context_markdown",
+    "run_long_context_benchmark",
     "verify_arithmetic_proof",
     "CompositionalDataset", "CompositionalMetrics", "CompositionalReport",
     "DimensionMetrics", "GeneralizationCapacity", "run_compositional_benchmark",
     "PROFILE_CONFIGS", "SECTION_LABELS", "SECTION_ORDER", "ResearchBenchmarkReport",
     "research_report_html", "research_report_markdown", "run_research_benchmark",
     "save_research_report", "validate_sections",
-    "HashDogrulamaRaporu", "ProvenanceRaporu", "audit_provenance",
-    "document_hash", "ingest_with_provenance", "verify_document_hashes",
+    "PROVENANCE_CHAIN_KINDS", "HashDogrulamaRaporu", "ProvenanceChain",
+    "ProvenanceEdge", "ProvenanceNode", "ProvenanceRaporu", "audit_provenance",
+    "build_provenance_chain", "document_hash", "ingest_with_provenance",
+    "verify_document_hashes",
     "CokusOlcumu", "NKTaramaRaporu", "RankOlcumu", "measure_chain_collapse",
     "measure_single_layer_rank", "run_nk_rank_sweep", "theoretical_contract",
     "OlcekliGoldenRaporu", "OlcekliGoldenSweep", "run_scaled_golden",
     "run_scaled_golden_sweep", "veri_seti_uret",
+    "SelfLearningTransferReport", "TransferPairResult",
+    "run_self_learning_transfer_benchmark", "self_learning_transfer_markdown",
     "KOLLAR", "ParadigmaRaporu", "ParadigmaSweepRaporu", "gorev_uret",
     "sembolik_tahmin", "noral_tahmin", "hibrit_tahmin",
     "run_paradigm_ablation", "run_paradigm_sweep",

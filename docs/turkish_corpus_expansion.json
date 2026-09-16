@@ -1,0 +1,139 @@
+{
+  "base_corpus": {
+    "canonical_content_sha256": "4dfe7768889e7b1de1a6af488a93e1faa8596bcdfc408fd00a1c984796349839",
+    "counts": {
+      "documents": 4365,
+      "sentences": 104230,
+      "words": 1110509
+    },
+    "file_sha256": "3bc2f72193afd8fad04437bac8229e83c453c3953862a436e0469f0333df4578",
+    "name": "tr_corpus_v1"
+  },
+  "candidate_summary": {
+    "accepted_documents": 2,
+    "accepted_preview": [
+      {
+        "doc_id": "smoke_cc0_haber_001",
+        "license": "CC0 1.0",
+        "provenance_url": "repo://embedded-smoke",
+        "sentences_or_lines": 2,
+        "source": "smoke_cc0_demo",
+        "split": "train",
+        "text_sha256": "2a85e953cf3c5b06b0c5a81c8ceb202ed8cb6c6d76984e2d912a0c6893659de0",
+        "words": 15
+      },
+      {
+        "doc_id": "smoke_ccby_egitim_001",
+        "license": "CC BY 4.0",
+        "provenance_url": "repo://embedded-smoke",
+        "sentences_or_lines": 2,
+        "source": "smoke_ccby_demo",
+        "split": "train",
+        "text_sha256": "9e20b346ce2916f0702ed4001c3c257169bba08cb621958bd725cb3d6d665c0d",
+        "words": 11
+      }
+    ],
+    "accepted_words": 26,
+    "candidate_documents": 3,
+    "candidate_signature": "27c7bf2f106b",
+    "candidate_sources": {
+      "smoke_cc0_demo": {
+        "documents": 1,
+        "licenses": [
+          "CC0 1.0"
+        ],
+        "words": 15
+      },
+      "smoke_ccby_demo": {
+        "documents": 1,
+        "licenses": [
+          "CC BY 4.0"
+        ],
+        "words": 11
+      },
+      "smoke_nc_demo": {
+        "documents": 1,
+        "licenses": [
+          "CC BY-NC-SA 4.0"
+        ],
+        "words": 8
+      }
+    },
+    "duplicate_lines_removed": 0,
+    "kept_lines": 4,
+    "mode": "embedded_smoke_candidates"
+  },
+  "checks": {
+    "accepted_licenses_allowed": true,
+    "base_provenance_loaded": true,
+    "candidate_schema_valid": true,
+    "dedup_against_current_corpus_applied": true,
+    "deterministic_split_assigned": true,
+    "smoke_mode_not_marked_as_release": true,
+    "turkish_filter_applied": true
+  },
+  "expanded_projection": {
+    "accepted_words": 26,
+    "additional_words_needed_after_candidates": 889465,
+    "base_words": 1110509,
+    "expanded_words": 1110535,
+    "rough_additional_docs_needed_at_candidate_mean": 68421,
+    "target_completion_ratio": 0.555268,
+    "target_gap_words": 889465,
+    "target_words": 2000000
+  },
+  "findings": [
+    "Mevcut tr_corpus_v1: 4,365 belge, 1,110,509 kelime.",
+    "Aday mod: embedded_smoke_candidates; kabul edilen 2/3 belge, 26 kelime.",
+    "Genişletilmiş projeksiyon 1,110,535/2,000,000 kelime; durum PIPELINE_READY_TARGET_NOT_REACHED.",
+    "Smoke adayları yalnız pipeline kanıtıdır; tr_corpus_v2 release'i ya da gerçek genişleme değildir.",
+    "Reddedilen adaylar: {'license_not_allowed': 1}."
+  ],
+  "limitations": [
+    "Bu pipeline dış kaynak indirmez; aday JSONL dizini ayrı sağlanmalıdır.",
+    "Türkçe filtresi hafif bir sezgiseldir; nihai release için örneklemeli insan/otomatik kalite denetimi gerekir.",
+    "Dedup normalize-exact düzeydedir; semantik yakın tekrarlar bu smoke içinde yakalanmaz.",
+    "Release gate hedef kelime sayısı ve provenance koşulları sağlanmadan PASS olmaz."
+  ],
+  "mode": "embedded_smoke_candidates",
+  "protocol": "turkish_corpus_expansion_pipeline_v1",
+  "rejection_summary": {
+    "by_reason": {
+      "license_not_allowed": 1
+    },
+    "examples": [
+      {
+        "doc_id": "smoke_rejected_nc_001",
+        "license": "CC BY-NC-SA 4.0",
+        "reasons": [
+          "license_not_allowed"
+        ],
+        "source": "smoke_nc_demo"
+      }
+    ],
+    "rejected_documents": 1
+  },
+  "release_gates": {
+    "accepted_candidate_words_positive": true,
+    "expanded_corpus_reaches_target_words": false,
+    "external_candidates_supplied": false,
+    "no_license_rejections": false,
+    "provenance_urls_present_for_accepted": true
+  },
+  "schema_version": 1,
+  "split_projection": {
+    "dev": {
+      "documents": 0,
+      "words": 0
+    },
+    "test": {
+      "documents": 0,
+      "words": 0
+    },
+    "train": {
+      "documents": 2,
+      "words": 26
+    }
+  },
+  "target_words": 2000000
+}

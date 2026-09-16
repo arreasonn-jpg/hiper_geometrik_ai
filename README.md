@@ -1,11 +1,12 @@
 # Hiper-Geometrik AI — Bilinear Kronecker Zinciri + Seyrek "Boş Küme" Belleği
 
-Deneysel bir Türkçe dil modeli: klasik Transformer'daki saf doğrusal katman
-yığınlarına alternatif olarak, **gerçek matris-sandviçi (bilinear) `A @ X @ B`
-katmanlarının zinciri** ve kavramsal uzayı katrilyonların üzerinde olan
-**hash'lenmiş seyrek "boş küme" belleği** üzerine kuruludur. Üretim tarafında
-**3 katmanlı halüsinasyon kontrol mekanizması** (kayıtlı bilgi → beyaz listeli
-üretim → işaretlenmiş serbest üretim) çalışır.
+Deneysel bir Türkçe dil modeli ve araştırma platformu: klasik Transformer'daki
+saf doğrusal katman yığınlarına alternatif olarak, **gerçek matris-sandviçi
+(bilinear) `A @ X @ B` katmanlarının zinciri** ve kavramsal adres uzayı çok
+büyük olan **hash'lenmiş seyrek "boş küme" belleği** üzerine kuruludur. Aktif
+araştırma anlatısı artık KnowledgeStore + Experience Engine + bağımsız verifier
+hattıdır; eski 3 katmanlı sohbet/halüsinasyon prototipi `legacy/` altında
+tarihsel karşılaştırma olarak tutulur.
 
 ---
 
@@ -36,9 +37,9 @@ Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
 
 - **P (physical/trainable parameters):** RAM/VRAM'de gerçekten ayrılan ve
   optimizer tarafından güncellenen parametre sayısı.
-- **C_I (interaction capacity):** Kronecker zincirinin temsil ettiği sanal
+- **C_I^UB (Interaction Upper Bound):** Kronecker zincirinin temsil ettiği sanal
   etkileşim/operatör üst sınırı; gerçek parametre değildir.
-- **C_M (memory address capacity):** seyrek belleğin adresleyebildiği kavramsal
+- **C_M^UB (Memory Address Upper Bound):** seyrek belleğin adresleyebildiği kavramsal
   anahtar uzayı (`sözlük^pencere`); fiziksel depo boyutu değildir.
 
 - **Bilinear/Kronecker tarafı:** Bir `A @ X @ B` katmanı, flatten uzayında
@@ -61,7 +62,7 @@ Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
   veri ve çok yüksek bütçe gerektirir. Tek kişilik donanımda fiziksel olarak
   imkânsıza yakındır; bu repo böyle bir iddia taşımaz.
 - Bu projenin gerçekçi ve dürüst hedefi: **"K katmanlı Kronecker zinciriyle
-  katrilyon mertebesinin üzerinde sanal etkileşim kapasitesi + katrilyonların
+  katrilyon mertebesinin üzerinde sanal etkileşim üst sınırı + katrilyonların
   üzerinde adreslenebilir 'boş küme' uzayına sahip seyrek bellek; ~7M yoğun +
   ~34M seyrek fiziksel gerçek parametre."** Üstteki tablo bunu doğrular.
 
@@ -75,7 +76,7 @@ python -m hga research-benchmark  # 5 seed, tek JSON/Markdown/HTML araştırma k
 
 Research suite ayrıca **C_G (Generalization Capacity)** ölçümünü raporlar.
 Buradaki C_G teorik bir uzay büyüklüğü değildir: sürümlü held-out compositional
-fixture'da doğru çözülen uygun örnek sayısı/oranıdır. `C_V ≤ C_E ≤ C_M`
+fixture'da doğru çözülen uygun örnek sayısı/oranıdır. `C_V ≤ C_E ≤ C_M^UB`
 eşitsizliğinin parçası değildir ve dataset hash olmadan yorumlanmaz.
 
 ---
@@ -152,9 +153,9 @@ hash'lenmiş gömme tablosu:
   görüldüğünde adreslenen satır gradyan alır ve eğitimle dolar; hiç
   görülmeyen kümeler sonsuza dek sıfır kalır (AdamW'da gradyanı 0 olan sıfır
   satır aynen sıfır kalır).
-- **Doluluk izleme:** `doluluk_orani()` kaç kümenin dolduğunu sayar — eğitim
-  loglarında çağ başına raporlanır ("1 katrilyonluk kapasitenin şu an X kümesi
-  dolu" — pazarlama abartısı değil, ölçülebilir gerçek metrik).
+- **Doluluk izleme:** `doluluk_orani()` kaç fiziksel satırın dolduğunu sayar —
+  eğitim loglarında çağ başına raporlanır. Bu, kavramsal adres üst sınırıyla
+  karıştırılmaz; ölçülen metrik "kaç satır gerçekten güncellendi?" sorusudur.
 - **Çakışma:** iki farklı pencere aynı satıra düşebilir. `carpisma_istatistigi()`
   benzersiz pencere → benzersiz adres imzası oranını ölçer ve %5 üstünde uyarı
   üretir; `tablo_sayisi=2` ile Bloom tarzı çift hash açılır (iki farklı tuzlu
@@ -434,27 +435,41 @@ Okunuşu — abartısız:
 Sınır: ground truth bağımsız ama sentetik aritmetik environment'tan gelir.
 Bu tablo genel dilde otonom bilgi keşfi kanıtı **değildir**.
 
-### Kapasite çerçevesi: P, C_I, C_M, C_E, C_V
+### Kapasite çerçevesi: P, C_I^UB, C_M^UB, C_E, C_V
 
 ```bash
 python -m hga kapasite --operands-max 9
 ```
 
-`C_M` (adreslenebilir) ile `C_E` (üretilebilir) ve `C_V` (doğrulanabilir) ayrı
-büyüklüklerdir; zorunlu sıralama `C_V ≤ C_E ≤ C_M`'dir. İlk ikisi teorik üst
-sınır, son ikisi **ölçülen** değerdir:
+`C_M^UB` (adreslenebilir üst sınır) ile `C_E` (üretilebilir) ve `C_V` (doğrulanabilir) ayrı
+büyüklüklerdir; zorunlu sıralama `C_V ≤ C_E ≤ C_M^UB`'dir. `C_I^UB` ve
+`C_M^UB` teorik üst sınırdır; `P`, `C_E` ve `C_V` **ölçülen** değerdir:
 
 | Kapasite | Sembol | Tip | Anlam |
 |---|---|---|---|
 | Fiziksel parametre | `P` | ölçülen | RAM/VRAM'de ayrılan, optimizer'ın güncellediği |
-| Etkileşim kapasitesi | `C_I` | üst sınır | Kronecker operatör boyutu — parametre DEĞİL |
-| Bellek adres kapasitesi | `C_M` | üst sınır | `sözlük^pencere` — fiziksel tablo DEĞİL |
+| Interaction Upper Bound | `C_I^UB` | üst sınır | Kronecker operatör girdi uzayı — parametre DEĞİL |
+| Memory Address Upper Bound | `C_M^UB` | üst sınır | `sözlük^pencere` kavramsal adres uzayı — fiziksel tablo DEĞİL |
 | Deneyim kapasitesi | `C_E` | **ölçülen** | kısıtlar altında gerçekten üretilebilen deneyim |
 | Doğrulanabilir kapasite | `C_V` | **ölçülen** | bağımsız verifier'ın karara bağlayabildiği alt küme |
 
-Milestone koşusunda `C_M ≈ 2.8×10⁶²` iken `C_E = 1.184.832` ve
+Milestone koşusunda `C_M^UB ≈ 2.8×10⁶²` iken `C_E = 1.184.832` ve
 `C_V = 1.180.685` ölçüldü (`C_V/C_E = 0.9965`). Aradaki ~10⁵⁶'lık uçurum tam
 olarak "adreslenebilir olmak ile üretip doğrulayabilmek arasındaki fark"tır.
+
+### HGA Capability Vector
+
+Tek sayı yerine sistem artık resmi bir capability profiliyle raporlanır:
+
+```text
+C = [P, C_I^UB, C_M^UB, C_E, C_V, C_G, C_R, C_RD, C_MR, C_U, C_H]
+```
+
+`C_I^UB` ve `C_M^UB` üst sınırdır; `C_E`, `C_V`, `C_G`, `C_R`, `C_RD`, `C_MR`,
+`C_U` ve `C_H` yalnız benchmark kanıtı varsa ölçülen değer olarak görünür.
+Kanıt yoksa değer `n/a` kalır; elle yazılmış 9/10 veya 10/10 puan bu vektöre
+giremez. Makine-okunur kaynak: `hga.evaluation.capability_vector.TERMINOLOGY`,
+güncel rapor: `docs/SCORECARD.md`.
 
 ### Bilgi sürümleme, rollback ve değişmez defter
 
@@ -549,9 +564,11 @@ python -m hga oncelik    # Priority(E) terim ablasyonu
 `RelationFact` artık opsiyonel `source_url` / `document_hash` / `sentence` /
 `extractor` / `retrieved_at` taşır (geriye dönük uyumlu). `REAL_DATA` kaynaklı
 bir olgu köken taşımıyorsa **yetim olgu** sayılır; belge sonradan değişirse
-hash doğrulaması bunu yakalar. Ölçülen darboğaz: sözlük tabanlı ayıklayıcının
-`extraction_yield`'i demo korpusta **0.5** — köken altyapısı hazır, ayıklama
-kapsamı dar.
+hash doğrulaması bunu yakalar. `build_provenance_chain()` artık tek olgudan
+Source→Document→Sentence→Extraction→Entity/Relation→KnowledgeVersion→Experience→Verification→Answer
+grafı kurar; eksik halka `missing` alanında açıkça görünür. Ölçülen darboğaz:
+sözlük tabanlı ayıklayıcının `extraction_yield`'i demo korpusta **0.5** — köken
+altyapısı hazır, ayıklama kapsamı dar.
 
 Priority(E) ağırlıkları tek kaynakta tanımlı, negatif değer reddediliyor,
 `normalize=True` ile karşılaştırılabilir hâle geliyor ve `priority_dokumu()`
@@ -713,14 +730,16 @@ Ayrıntı: `docs/VERIM_METRIKLERI.md`.
 
 ---
 
-## 🛡️ 3 Katmanlı Halüsinasyon Kontrol Mekanizması
+## 🛡️ Legacy 3 Katmanlı Halüsinasyon Prototipi (aktif mimari değil)
 
-`legacy/bilgi_katmani.py` — `BilgiKatmani` (LEGACY). Rapor 10'daki temel ödünleşim:
+`legacy/bilgi_katmani.py` — `BilgiKatmani` (LEGACY). Bu bölüm aktif HGA mimarisinin
+bilimsel iddiası değildir; tarihsel sohbet prototipinin hangi ödünleşimi
+ölçtüğünü belgelemek için tutulur. Rapor 10'daki temel ders:
 **"kelimeyi bilmek" ≠ "cümleyi/ilişkiyi bilmek"**. Saf ezbere kilitlenmiş bir
 sistemde halüsinasyon ~0'a iner ama hiç görmediği cümleyi de kuramaz; saf
-genellemede (LLM'ler) esneklik yüksek ama uydurma riski de vardır. Bu proje
-özdünleşimi **görünür** kılar — her cevap hangi katmandan geldiğini açıkça
-söyler:
+genellemede (LLM'ler) esneklik yüksek ama uydurma riski de vardır. Legacy
+prototip bu ödünleşimi görünür kılar — her cevap hangi katmandan geldiğini
+açıkça söyler:
 
 | Katman | Koşul | Davranış | Etiket |
 |---|---|---|---|
@@ -729,13 +748,13 @@ söyler:
 | 3 — Açık genelleme | Eşleşme yok | Sinir ağı serbest üretir; açıkça işaretlenir | ⚠️ [DOĞRULANMAMIŞ] |
 
 Bu, endüstrideki RAG (Retrieval-Augmented Generation) yaklaşımının
-basitleştirilmiş hâlidir. Güven skoru kullanıcıdan gizlenmez. Terminal ve
-Gradio arayüzleri aynı mekanizmayı ve aynı tokenizer/model üretim runtime'ını
-paylaşır (eski `legacy/arayuz.py`'nin `intent_cevap`'ı bu katmanın ilkel bir örneğiydi;
-artık bilgi kararı `legacy/bilgi_katmani.py`, üretim/yükleme ortaklığı
-`hga/ui_runtime.py` üzerinden gelir).
+basitleştirilmiş tarihsel bir örneğidir. Güven skoru kullanıcıdan gizlenmez.
+`legacy/calistir.py` ve `legacy/arayuz.py` uyumluluk amacıyla aynı tokenizer/model
+üretim runtime'ını (`hga/ui_runtime.py`) kullanabilir; ancak aktif araştırma
+katmanları `legacy/` paketini import etmez ve bu sözleşme `tests/test_legacy_isolation.py`
+ile denetlenir.
 
-Örnek oturum (eğitilmiş demo modeliyle):
+Legacy örnek oturum (eğitilmiş demo modeliyle):
 
 ```
 👤 Sen: merhaba nasılsın
@@ -818,6 +837,16 @@ confusion matrisi ve veri kümesi hash'ini içerir.
 python -m hga golden-benchmark
 python -m hga golden-benchmark --out raporlar/golden.json
 python -m hga golden-benchmark --seeds 1,2,3,4,5
+python -m hga semantik --out raporlar/semantic_v2.json --markdown docs/SEMANTIC_EXTRACTION.md
+python -m hga verifier-adversarial --out raporlar/verifier_adversarial.json --markdown docs/VERIFIER_ADVERSARIAL.md
+python -m hga verifier-ensemble --out raporlar/verifier_ensemble.json --markdown docs/VERIFIER_ENSEMBLE.md
+python -m hga operator-baseline --seeds 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 --steps 300 --out docs/operator_baselines_20seed.json --markdown docs/OPERATOR_BASELINES.md
+python -m hga signature-gate docs/signature_benchmark.json --out docs/signature_release_gate.json --markdown docs/SIGNATURE_RELEASE_GATE.md
+python -m hga uzun-baglam --long-context-profile smoke_1024 --out docs/long_context_1024_smoke.json --markdown docs/LONG_CONTEXT_1024_SMOKE.md
+python -m hga bellek-streaming --sample-records 10000 --out docs/memory_streaming_harness.json --markdown docs/MEMORY_STREAMING_HARNESS.md
+python -m hga ogrenme-transfer --out docs/self_learning_transfer.json --markdown docs/SELF_LEARNING_TRANSFER.md
+python -m hga insan-import --out docs/human_evaluation_import.json --markdown docs/HUMAN_EVALUATION_IMPORT.md
+python -m hga korpus-genisletme --out docs/turkish_corpus_expansion.json --markdown docs/TURKISH_CORPUS_EXPANSION.md
 ```
 
 Çoklu-seed modu her koşuyu atomik `EXP-NNNN` kimliğiyle `experiments/`
@@ -830,6 +859,30 @@ yayımlanacak sonuçların ayrıca `raporlar/` altında küratörlenmesi gerekir
 Golden v1 küçük ve deterministik bir semantik sözleşme/regresyon setidir
 (N=5 test örneği). Beş seed'de `std=0`, yalnız koşunun tekrarlanabilir olduğunu
 gösterir; genel dil başarısı veya istatistiksel model kalitesi kanıtı değildir.
+
+Semantic Extraction v2 ise `python -m hga semantik` ile koşulan genişletilmiş
+altın protokoldür: 136 kaynak-kodda denetlenebilir cümle, calibration/heldout/
+stress split metadatası, 8 kapsam-dışı hard negatif ve `extraction_yield >= 0.85`
+kabul kapısı içerir. Bu da genel Türkçe NER/RE iddiası değil, mevcut kural
+tabanlı hattın sınırlı kapsamını ölçen regresyon/gold sözleşmesidir; rapor
+`docs/SEMANTIC_EXTRACTION.md` altında tutulur.
+
+Verifier adversarial v2, 31 elle sabitlenmiş proof vakasıyla false proof,
+incomplete proof, contradiction, malformed schema, boundary, strict-type
+smuggling ve unsupported-rule sınıflarını ölçer. Çoklu verifier ensemble v1,
+aynı v2 adversarial proof suite'i üç ayrı denetleyiciyle
+(`strict_schema_oracle`, `normal_form_oracle`, `trace_replay_oracle`) koşar.
+Politika muhafazakârdır: `VERIFIED` için oybirliği gerekir, herhangi bir
+`INVALID` oyu reddeder, unsupported alan `UNCERTAIN` kalır. Rapor
+`docs/VERIFIER_ENSEMBLE.md` altında tutulur; bu da kapalı aritmetik proof
+sözleşmesi dışına taşan genel theorem proving iddiası değildir.
+
+Signature release gate v1, mevcut Signature Benchmark JSON'unu release için
+kapılar: standard profil, en az 20 tohum, tüm görev/kollar, sızıntısız veri,
+parametre bütçesi ve düşmeyen benchmark kapıları. Mevcut `docs/signature_benchmark.json`
+1 tohumlu olduğu ve `hga_beats_majority_everywhere` düştüğü için gate dürüstçe
+**BLOCKED** raporlar; bu eksik kanıtı PASS gibi göstermemek için bilinçli bir
+release kilididir.
 
 ```bash
 python experiments/experience_loop/run_full.py        # v0.1 → v1.0 tam demosu
@@ -872,6 +925,7 @@ Ayrıntılı Mimari ve Kod Sınıflandırması:
 - `docs/EPISTEMIK_BENCHMARK.md` — KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE protokolü, negatif kontrol kolları ve ölçülmüş UNKNOWN↔UNCERTAIN sınırı.
 - `docs/VERIM_METRIKLERI.md` — NY/UEY/GY/VID ayrıştırması ve GY'nin iki kez ölü metrik olarak yakalanıp düzeltilmesi.
 - `docs/COK_ADIMLI_VE_UZUN_BAGLAM.md` — zincirleme çıkarım × bağlam yükü ızgarası, bellekten geçen zincir takibi ve ölçülen derinlik sınırı.
+- `docs/SCORECARD.md` — HGA Capability Vector ve benchmark kapılarından otomatik hesaplanan araştırma karnesi.
 
 ---
 
@@ -1093,11 +1147,11 @@ yol haritalarını uygular:
     önlandı — aksi halde yol ölü kalırdı; `test_model_seyrek_yol_ogreniyor`
     iki adımda canlanmayı doğrular); collision metriği, erişim izleme, LRU
     temizliği ve decay mekanizması eklendi.
-13. **3 katmanlı halüsinasyon kontrolü (10):** `BilgiKatmani` + beyaz listeli
-    kısıtlı üretim + [DOĞRULANMAMIŞ] etiketleme; güven skoru kullanıcıya
-    gösterilir; `norm()` artık kesme işaretini siler ('Türkiye'nin' →
-    'turkiyenin' tam eşleşmesi düzeltildi); terminal ve Gradio aynı mekânizmayı
-    paylaşır.
+13. **Legacy 3 katmanlı halüsinasyon prototipi (10):** `BilgiKatmani` + beyaz
+    listeli kısıtlı üretim + [DOĞRULANMAMIŞ] etiketleme tarihsel/uyumluluk
+    katmanı olarak `legacy/` altında tutulur; aktif araştırma mimarisinin ana
+    başarı metriği değildir. `tests/test_legacy_isolation.py` aktif katmanda
+    legacy import sızıntısı olmadığını denetler.
 14. **Eğitim sağlamlaştırma:** temel ve talimat eğitiminde her adımda
     loss/logit/gradient sonluluk kontrolü, `--grad-clip`, per-layer gradient
     norm özeti, validation split, perplexity, early stopping, `best.pt/latest.pt`
@@ -1147,22 +1201,27 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Benchmark/değerlendirme | ✅ %100 smoke | `perplexity --tiny`, `benchmark-rapor`, hallucination/factual consistency |
 | Gerçek Türkçe benchmark | ✅ TWT v1 | 4.851 ham insan-anotasyonlu cümle, sabit hash/split, parameter-matched 4 mimari, neural compositional HGA ablasyonu |
 | Gerçek Türkçe LM (P1) | ✅ 1.11M kelime held-out | `python -m hga turkce-lm`, `docs/TURKISH_LM.md`: tr_corpus_v1 (UD+Bible+TWT, hash doğrulamalı), belge-ayrık split, train-only BPE, unigram/bigram kontrolleri, parametre-eşli dense/transformer/HGA; `corpus_at_least_1m_words` kapısı full profilde gerçek veriyle PASS |
-| Uzun bağlam LM (P1) | ✅ 24→256 token | `docs/LONG_CONTEXT.md`: aynı korpusta bağlam uzunluğu tek değişken olarak taranır; eşleşmiş hedef pozisyonları tüm bağlam/kollarda aynı, bütçe her bağlamda yeniden eşlenir (≤1.05), n-gram zemin aynı pencerelerde. Ölçülen yön: 24→256 tokenda PPL bozulması dense +%41, transformer +%3.3, HGA +%1.1 (en dirençli kol); bu kısa eşit-bütçe taramasında hiçbir neural kol bigramı geçmez ve bu AÇIK SINIR olarak raporlanır |
+| Uzun bağlam LM (P1) | ✅ 24→1024 yol + 512/1024 smoke | `docs/LONG_CONTEXT.md` ana 24→256 raporunu, `docs/LONG_CONTEXT_1024_SMOKE.md` 512/1024 kod-yolu smoke'unu tutar. Full profil artık 24,64,128,256,512,1024 bağlamlarını yapılandırır; smoke_1024 kalite iddiası değil şekil/bütçe/pozisyon eşleşmesi kapısıdır. N-gram zemin aynı pencerelerde raporlanır ve kısa eşit-bütçe taramasında neural kolların bigramı geçmemesi AÇIK SINIR olarak yazılır |
 | Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
 | Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
 | Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |
+| HGA Capability Vector | ✅ standartlaştı | `hga.evaluation.capability_vector`, `docs/SCORECARD.md`: P / C_I^UB / C_M^UB üst sınırları ve ölçülen C_E/C_V/C_G/C_R/C_RD/C_MR/C_U/C_H ayrımı |
 | Observability | ✅ %100 smoke | JSON/Markdown/HTML panel, attention/geometri/bellek/deneyim metrikleri |
 | KV-cache entegrasyonu | ✅ %100 smoke | attention cache + model-level `forward_cacheli_pencere` + UI runtime yolu |
 | Knowledge/Experience/state machine | ✅ %100 smoke | `MODEL_GENERATED ≠ VERIFIED`, doğrulama ortamları, kapalı validation |
 | Aktif Dynamic KV lifecycle | ✅ Research Suite | Engine default, LRU/FIFO/TTL, replay sync, atomik persistence, snapshot/version, compaction, migration |
 | 1K→10M memory stress | ✅ 5 seed | Tek streaming geçiş; fixed/Dynamic history recall, active recall, eviction, RSS/throughput |
+| Hiyerarşik bellek 100M harness | ✅ plan + 10K smoke | `docs/MEMORY_STREAMING_HARNESS.md`: 100M shard/checkpoint/resume planı, 10K gerçek streaming yazma, recall 1.0; **100M tam ingest ölçümü değildir**, projeksiyon diye etiketlenir |
 | GPU/VRAM raporlama | ✅ CPU fallback | raporlar `cuda_available` ve VRAM bilgisini/eksikliğini açık yazar |
 | Bilgi sürümleme + rollback | ✅ ölçüldü | `python -m hga bilgi-surum`, `tests/test_knowledge_versioning.py` (K₀→Kₙ, içerik-adresli, geçmiş silinmez) |
 | Immutable experience ledger | ✅ ölçüldü | `python -m hga defter`, `tests/test_experience_ledger.py` (append-only, hash-zincirli, tamper-evident) |
-| Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M`) |
+| Kapasite çerçevesi (C_E/C_V) | ✅ ölçüldü | `python -m hga kapasite`, `tests/test_capacity_framework.py` (`C_V ≤ C_E ≤ C_M^UB`) |
 | 100-cycle milestone tablosu | ✅ 5 seed | `python -m hga milestone`, `docs/MILESTONE_TABLOSU.md` (incorrect=0, EY≈0.11, recall 1.000→0.952) |
 | Epistemik benchmark (P0-007) | ✅ ölçüldü + negatif kontrol | `python -m hga epistemik`, `docs/EPISTEMIK_BENCHMARK.md` (yanlış güven 0.000, 3 dejenere kol domine edildi, UNKNOWN↔UNCERTAIN ayrımı `false` olarak raporlanıyor) |
 | Verim metrikleri (P1-005) | ✅ 5 seed + %95 GA | `python -m hga verim`, `docs/VERIM_METRIKLERI.md` (EY 0.239 > NY 0.190 > UEY 0.161; GY 0.642 monoton artıyor) |
+| Cross-domain self-learning transfer | ✅ negatif-kontrol smoke | `docs/SELF_LEARNING_TRANSFER.md`: 5 ortamda kaynak→hedef self-learning hattı, source-only hedef karar 0, transfer−scratch Δcoverage 0.000; **pozitif transfer NOT_DEMONSTRATED** |
+| İnsan değerlendirme import hattı | ✅ CSV/α agregasyon, sonuç n/a | `docs/HUMAN_EVALUATION_IMPORT.md`: CSV ölçek doğrulama, Krippendorff α, kol özeti; `rater_attestation.json` yoksa ana insan sonucu açılmaz ve `docs/HUMAN_EVALUATION.md` n/a kalır |
+| Türkçe korpus genişletme hattı | ✅ pipeline + release gate | `docs/TURKISH_CORPUS_EXPANSION.md`: aday JSONL şeması, lisans allowlist, Türkçe filtre, dedup ve split; smoke adayları release değildir, 2M hedef gate'i KALDI |
 | İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` + `tohum-istatistik` core profili: **20 tohum**, 76 eşleşmiş karşılaştırma, min p=2e-6, 8/8 kapı (`docs/SEED_STATISTICS.md`) |
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
@@ -1172,9 +1231,9 @@ korpus~~ TAMAMLANDI: `tr_corpus_v1` (1.11M kelime; UD r2.14 ×8 + Bible CC0 +
 TWT, hash doğrulamalı, `hga/evaluation/datasets/tr_corpus_v1/`) `turkce-lm`
 full profilinde koşar ve `corpus_at_least_1m_words` kapısını gerçek insan
 metniyle açar; smoke profil TWT üzerinde kalır ve kapı orada bilinçli FAIL'dir.
-Kalanlar: 10M+ kelime ölçeği, gerçek instruction set büyütme, 64+ token uzun
-bağlam, katman-bazlı çoklu GPU/model paralelliği ve sohbet kalitesi için insan
-değerlendirmesi.
+Kalanlar: 10M+ kelime ölçeği, gerçek instruction set büyütme, 24→1024 uzun
+bağlamın tam kalite koşusu, 100M tam bellek ingest ölçümü, katman-bazlı çoklu
+GPU/model paralelliği ve beyanlı gerçek insan değerlendirmesi.
 
 **Milestone tablosunun açığa çıkardığı ve artık aktif yola taşınan iş:** 100
 döngüde bilgi kalitesi korunurken fixed-slot recall `1.000 → 0.952`'ye düştü.

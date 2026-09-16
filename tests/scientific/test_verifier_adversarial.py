@@ -7,8 +7,10 @@ import pytest
 
 from hga.evaluation.verifier_adversarial import (
     REQUIRED_ATTACK_CLASSES,
+    REQUIRED_ATTACK_CLASSES_V2,
     VerifierAttackDataset,
     run_verifier_adversarial_benchmark,
+    run_verifier_adversarial_v2_benchmark,
     verify_arithmetic_proof,
 )
 
@@ -34,6 +36,31 @@ def test_attack_suite_far_frr_coverage_robustness_olcer():
     assert metrics.coverage < 1.0  # unsupported rule açıkça UNCERTAIN
     assert metrics.robustness == 1.0
     assert metrics.uncertain == 1
+
+
+def test_v2_attack_suite_genisletilmis_siniflar_ve_kapilar():
+    report = run_verifier_adversarial_v2_benchmark()
+    classes = {record["attack_class"] for record in
+               VerifierAttackDataset(data_file="verifier_adversarial_v2.json",
+                                     required_attack_classes=tuple(
+                                         REQUIRED_ATTACK_CLASSES_V2)).records}
+    assert REQUIRED_ATTACK_CLASSES_V2 <= classes
+    assert report.benchmark_id == "hga-verifier-adversarial-v2"
+    assert report.metrics.total >= 30
+    assert report.metrics.accuracy == 1.0
+    assert report.metrics.far == 0.0
+    assert report.metrics.frr == 0.0
+    assert report.metrics.robustness == 1.0
+    assert report.checks["minimum_30_cases"]
+    assert all(report.checks.values())
+
+
+def test_v2_unsupported_operator_ve_rule_uncertain_kalir():
+    report = run_verifier_adversarial_v2_benchmark()
+    rows = [row for row in report.predictions
+            if row["attack_class"] == "unsupported_rule"]
+    assert len(rows) >= 2
+    assert {row["predicted"] for row in rows} == {"UNCERTAIN"}
 
 
 def test_false_incomplete_contradictory_malformed_adversarial_reddedilir():

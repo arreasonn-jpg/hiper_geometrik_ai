@@ -172,10 +172,12 @@ def build_capability_vector(
     # P / C_I^UB / C_M^UB — kapasite raporundan.
     ekle("P", _get(capacity, "physical_parameters"), "parametre",
          "capacity_framework" if capacity else None)
-    ekle("C_I^UB", _get(capacity, "c_i_interaction"), "operatör girdisi",
-         "capacity_framework" if capacity else None)
-    ekle("C_M^UB", _get(capacity, "c_m_conceptual"), "adres",
-         "capacity_framework" if capacity else None)
+    ekle("C_I^UB", _get(capacity, "c_i_upper_bound",
+                         default=_get(capacity, "c_i_interaction")),
+         "operatör girdisi", "capacity_framework" if capacity else None)
+    ekle("C_M^UB", _get(capacity, "c_m_address_upper_bound",
+                         default=_get(capacity, "c_m_conceptual")),
+         "adres", "capacity_framework" if capacity else None)
     ekle("C_E", _get(capacity, "c_e_total"), "deneyim",
          "capacity_framework" if capacity else None)
     ekle("C_V", _get(capacity, "c_v_total"), "deneyim",
@@ -377,9 +379,12 @@ def build_scorecard(
         dogrulama_checks[f"weightopt:{ad}"] = bool(deger)
     for ad, deger in (_get(multi_environment, "checks") or {}).items():
         dogrulama_checks[f"multienv:{ad}"] = bool(deger)
-    # Adversarial verifier suite: rapor metrik taşır, kapı taşımaz; kapılar
-    # burada türetilir ki karne "saldırı altında FAR" iddiasını denetlesin.
+    # Adversarial verifier suite / ensemble: rapor metrik taşır; v2 ensemble
+    # ayrıca kendi kapılarını getirir. Karne "saldırı altında FAR" iddiasını
+    # her durumda metrikten tekrar denetler.
     if verifier_adversarial:
+        for ad, deger in (_get(verifier_adversarial, "checks") or {}).items():
+            dogrulama_checks[f"verifier:{ad}"] = bool(deger)
         va = _get(verifier_adversarial, "metrics") or {}
         if va:
             dogrulama_checks["adversarial:zero_false_acceptance"] = (
@@ -401,8 +406,9 @@ def build_scorecard(
           kanit(priority_ablation) + kanit(multi_environment)
           + kanit(priority_optimization) + kanit(verifier_adversarial),
           "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream "
-          "zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında "
-          "çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.")
+          "zincirini taşıyıp taşımadığı, doğrulayıcıların alan dışında "
+          "çekimser kalıp kalmadığı ve adversarial proof suite üzerinde "
+          "çoklu verifier ensemble'ının false accept üretip üretmediği ölçülür.")
 
     # generalization ← C_G v2 (ham metin)
     bolum("generalization", _get(compositional_v2, "checks"),
@@ -488,7 +494,7 @@ def build_scorecard(
               "skor üretilmez."
           ))
 
-    # turkish_nlp ← semantik çıkarım (sentetik altın set)
+    # turkish_nlp ← semantik çıkarım (küratörlü altın protokol)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)
     turkce_checks = dict(_get(semantic_extraction, "checks") or {})
     for ad, deger in (_get(twt_results, "checks") or {}).items():

@@ -1,0 +1,397 @@
+{
+  "budget_by_context": {
+    "1024": {
+      "dense_hidden_dim": 17,
+      "max_to_min_ratio": 1.000341,
+      "parameters": {
+        "dense": 152593,
+        "hga": 152641,
+        "transformer": 152645
+      },
+      "target_parameters": 152641,
+      "transformer_ffn_dim": 7965
+    },
+    "512": {
+      "dense_hidden_dim": 17,
+      "max_to_min_ratio": 1.000639,
+      "parameters": {
+        "dense": 82961,
+        "hga": 83009,
+        "transformer": 83014
+      },
+      "target_parameters": 83009,
+      "transformer_ffn_dim": 4110
+    }
+  },
+  "checks": {
+    "all_cells_completed": true,
+    "context_effect_direction_reported": true,
+    "finite_metrics_all_cells": true,
+    "long_context_targets_configured": true,
+    "max_context_at_least_1024_when_configured": true,
+    "multi_seed_reported": true,
+    "ngram_floor_reported_every_context": true,
+    "parameter_budget_leq_1_05_every_context": true,
+    "positions_shared_across_contexts_and_arms": true
+  },
+  "config": {
+    "batch_size": 8,
+    "contexts": [
+      512,
+      1024
+    ],
+    "corpus": "twt",
+    "emb_dim": 8,
+    "eval_batch_size": 64,
+    "eval_windows": 128,
+    "gradient_clip_norm": 5.0,
+    "heads": 2,
+    "hga_layers": 1,
+    "hga_n": 8,
+    "learning_rate": 0.003,
+    "max_docs": 80,
+    "max_vocab": 512,
+    "steps": 3,
+    "train_windows": 256
+  },
+  "config_hash": "43b48626ab603a58ef53eca96e9e9cb70a26fee2b31cf510fef9b3999e6f59d0",
+  "context_effect": {
+    "max_context": 1024,
+    "per_arm": {
+      "dense": {
+        "direction": "degrades",
+        "ppl_at_max": 514.32617314,
+        "ppl_at_reference": 500.1408428,
+        "relative_change": 0.028363
+      },
+      "hga": {
+        "direction": "improves",
+        "ppl_at_max": 496.16030281,
+        "ppl_at_reference": 524.61008487,
+        "relative_change": -0.05423
+      },
+      "transformer": {
+        "direction": "improves",
+        "ppl_at_max": 446.91009925,
+        "ppl_at_reference": 604.40899096,
+        "relative_change": -0.260583
+      }
+    },
+    "reference_context": 512
+  },
+  "corpus": {
+    "dataset_hash": "259e999941974c262b184cab921a50437bc5df0b10408dc50a7d7df4fae87784",
+    "tokens": {
+      "dev": 5761,
+      "test": 6780,
+      "train": 30472
+    },
+    "vocabulary_size": 512
+  },
+  "dataset_hash": "4f6da1cd2eadb04c15c9c0fb2afc6b8dedceffcca9c8c4a44b6399f47281051a",
+  "findings": [
+    "`dense`: bağlam 512→1024 tokenda test PPL 500.1→514.3 (+2.8%, degrades).",
+    "`transformer`: bağlam 512→1024 tokenda test PPL 604.4→446.9 (-26.1%, improves).",
+    "`hga`: bağlam 512→1024 tokenda test PPL 524.6→496.2 (-5.4%, improves).",
+    "Zemin @ bağlam 1024: unigram PPL 34.0, bigram 26.6; en iyi neural 446.9.",
+    "512/1024 token uzun bağlam kod yolu bu profilde koşuldu; bu bir kalite iddiası değil şekil/bütçe/pozisyon eşleşmesi kapısıdır.",
+    "AÇIK SINIR: bu kısa eşit-bütçe taramasında (3 adım) hiçbir neural kol bigram zeminini geçmedi. Mutlak LM kalitesi iddiası bu protokolün konusu değildir ve `turkish_lm` full (4000 adım) protokolünde ölçülür; oradaki n-gram kapıları gerçek veriyle PASS. Buradaki sayılar yalnız bağlam ETKİSİNİN yönünü taşır."
+  ],
+  "limitations": [
+    "PPL, deterministik örneklenmiş pencereler üzerinde hesaplanır; korpus CE'sinin yansız tahminidir, tam sayımı değildir.",
+    "Adım sayısı sabittir ve yakınsama iddiası yoktur; bağlamlar arası karşılaştırma eşit-eğitim-bütçesi karşılaştırmasıdır.",
+    "Girdi düzleştirmeli mimarilerde (dense, HGA encoder) bağlam uzadıkça parametre bütçesi aynı kalsın diye genişlikler düşer; bu, mimari ailelerin uzun bağlamdaki YAPISAL maliyet farkıdır ve gizlenmez.",
+    "Tek korpus (tr_corpus_v1) ve tek dil (Türkçe); genelleme iddiası taşımaz.",
+    "`smoke_1024` profili yalnız 512/1024 kod yolunu duman testinden geçirir; tam kalite raporu için `full` profili 24→1024 taramasını çalıştırmalıdır."
+  ],
+  "ngram_by_context": {
+    "1024": {
+      "bigram_test_ppl": 26.56659878,
+      "unigram_test_ppl": 33.97236024
+    },
+    "512": {
+      "bigram_test_ppl": 26.56659878,
+      "unigram_test_ppl": 33.97236024
+    }
+  },
+  "positions": {
+    "dev": 128,
+    "sampling_seed": 424243,
+    "signature": "c4e3349cfb3647293b5e1530b87f3600b00acd9e3f1164e5434022226ac0e3cc",
+    "test": 128,
+    "train": 256
+  },
+  "profile": "smoke_1024",
+  "protocol": "long_context_lm_v1",
+  "results": {
+    "dense": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24509668,
+              "perplexity": 515.47906084,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.24297822,
+              "perplexity": 514.38819069,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.015625
+            },
+            "training_seconds": 0.0055
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.20640707,
+              "perplexity": 495.91625421,
+              "tokens": 128,
+              "top1_accuracy": 0.0234375,
+              "top5_accuracy": 0.03125
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.24273705,
+              "perplexity": 514.26415559,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.03125
+            },
+            "training_seconds": 0.0053
+          }
+        ],
+        "test_ppl_mean": 514.32617314,
+        "test_ppl_std": 0.08770606,
+        "test_top1_mean": 0.0078125
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24092793,
+              "perplexity": 513.33463099,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.23849797,
+              "perplexity": 512.08876159,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 0.0061
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.16468108,
+              "perplexity": 475.6494232,
+              "tokens": 128,
+              "top1_accuracy": 0.046875,
+              "top5_accuracy": 0.0625
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.19071066,
+              "perplexity": 488.192924,
+              "tokens": 128,
+              "top1_accuracy": 0.0546875,
+              "top5_accuracy": 0.0625
+            },
+            "training_seconds": 0.0041
+          }
+        ],
+        "test_ppl_mean": 500.1408428,
+        "test_ppl_std": 16.8969088,
+        "test_top1_mean": 0.03125
+      }
+    },
+    "hga": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24302554,
+              "perplexity": 514.41253525,
+              "tokens": 128,
+              "top1_accuracy": 0.03125,
+              "top5_accuracy": 0.0390625
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.18147445,
+              "perplexity": 483.70462778,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.0390625
+            },
+            "training_seconds": 0.1177
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.2507596,
+              "perplexity": 518.40645752,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.015625
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.23169327,
+              "perplexity": 508.61597784,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0234375
+            },
+            "training_seconds": 0.1082
+          }
+        ],
+        "test_ppl_mean": 496.16030281,
+        "test_ppl_std": 17.61498456,
+        "test_top1_mean": 0.00390625
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.23260081,
+              "perplexity": 509.07777686,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.23906326,
+              "perplexity": 512.37832231,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.015625
+            },
+            "training_seconds": 0.0426
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.26158249,
+              "perplexity": 524.04758632,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.0234375
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.28570354,
+              "perplexity": 536.84184744,
+              "tokens": 128,
+              "top1_accuracy": 0.015625,
+              "top5_accuracy": 0.03125
+            },
+            "training_seconds": 0.0407
+          }
+        ],
+        "test_ppl_mean": 524.61008487,
+        "test_ppl_std": 17.29832451,
+        "test_top1_mean": 0.0078125
+      }
+    },
+    "transformer": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.13924062,
+              "perplexity": 463.70131279,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.20387018,
+              "perplexity": 494.65976226,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "training_seconds": 2.153
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.00938225,
+              "perplexity": 407.23167434,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.125
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 5.98936343,
+              "perplexity": 399.16043625,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.125
+            },
+            "training_seconds": 2.1071
+          }
+        ],
+        "test_ppl_mean": 446.91009925,
+        "test_ppl_std": 67.52822102,
+        "test_top1_mean": 0.0
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.4970758,
+              "perplexity": 663.19946434,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.52753687,
+              "perplexity": 683.7120634,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 0.4963
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.29652846,
+              "perplexity": 542.68468388,
+              "tokens": 128,
+              "top1_accuracy": 0.015625,
+              "top5_accuracy": 0.0546875
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.26359999,
+              "perplexity": 525.10591852,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0390625
+            },
+            "training_seconds": 0.482
+          }
+        ],
+        "test_ppl_mean": 604.40899096,
+        "test_ppl_std": 112.15148058,
+        "test_top1_mean": 0.0
+      }
+    }
+  },
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2
+  ]
+}

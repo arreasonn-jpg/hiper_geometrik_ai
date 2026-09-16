@@ -31,7 +31,7 @@ Protokol: `versioned-ledgered-closed-loop-milestone-v1`
 - C_E (üretilebilir)     : 1,184,832
 - C_V (doğrulanabilir)   : 1,180,685
 - C_V / C_E              : 0.99649993
-- sıralama C_V ≤ C_E ≤ C_M: True
+- sıralama C_V ≤ C_E ≤ C_M^UB: True
 
 ## Rollback Tatbikatı (Faz 23)
 
