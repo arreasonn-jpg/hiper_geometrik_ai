@@ -58,6 +58,7 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 from typing import Optional
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -1819,13 +1820,32 @@ def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _insan_degerlendirme_raporu():
+    """Varsa tamamlanmış puanları, yoksa yalnız protokolü yükle."""
+    from hga.evaluation.human_eval_fill import (
+        analyze_ratings_by_arm,
+        collect_ratings_from_csv,
+    )
+    from hga.evaluation.human_evaluation import build_human_evaluation_protocol
+
+    package_dir = Path("insan_degerlendirme_paketleri")
+    try:
+        ratings, summary = collect_ratings_from_csv(package_dir)
+    except ValueError:
+        return build_human_evaluation_protocol()
+    if summary["raters_found"] < 10 or summary["filled_ratio"] < 1.0:
+        return build_human_evaluation_protocol()
+    return build_human_evaluation_protocol(
+        collected_ratings=ratings,
+        arm_results=analyze_ratings_by_arm(package_dir),
+    )
+
+
 def _insan_degerlendirme(out=None, markdown=None):
     """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
-    from hga.evaluation.human_evaluation import (
-        build_human_evaluation_protocol,
-        human_evaluation_markdown,
-    )
-    rapor = build_human_evaluation_protocol()
+    from hga.evaluation.human_evaluation import human_evaluation_markdown
+
+    rapor = _insan_degerlendirme_raporu()
     md = human_evaluation_markdown(rapor)
     print(md)
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
@@ -1907,9 +1927,6 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
         audit_engineering,
         audit_reproducibility,
     )
-    from hga.evaluation.human_evaluation import (
-        build_human_evaluation_protocol,
-    )
     from hga.evaluation.memory_hierarchy import (
         run_memory_hierarchy_benchmark,
     )
@@ -1963,7 +1980,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
     raporlar["depth_diagnosis"] = diagnose_depth_collapse(
         profile="smoke" if profile == "smoke" else "standard").to_dict()
     print("  ✓ Derinlik çöküşü kök neden teşhisi")
-    raporlar["human_evaluation"] = build_human_evaluation_protocol().to_dict()
+    raporlar["human_evaluation"] = _insan_degerlendirme_raporu().to_dict()
     raporlar["engineering"] = audit_engineering().to_dict()
     print("  ✓ Mühendislik sözleşmesi (CI / paketleme / test)")
 

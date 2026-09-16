@@ -14,7 +14,8 @@ const CONFIG = Object.freeze({
   PACKAGE_FOLDER_ID: 'BURAYA_PAKETLER_DRIVE_KLASOR_ID',
   // Oluşturulan Forms ve yanıt e-tablolarının taşınacağı boş/ayrı klasör.
   OUTPUT_FOLDER_ID: 'BURAYA_CIKTI_DRIVE_KLASOR_ID',
-  ITEMS_PER_FORM: 40,
+  // Izgara sürümü 200 öğeyi tek form/tek CSV'de tutar.
+  ITEMS_PER_FORM: 200,
   FORM_TITLE_PREFIX: 'HGA kör değerlendirme',
   PROTOCOL: 'human_evaluation_protocol_v1',
 });
@@ -55,8 +56,6 @@ const QUESTION_TEXT = Object.freeze({
   halusinasyon_var: 'Yanıtta uydurma bilgi var mı?',
 });
 
-const MACHINE_PREFIX = 'HGA|';
-const RATER_FIELD = 'HGA|meta|rater_id';
 const REGISTRY_PROPERTY = 'hga_google_forms_registry_v1';
 
 function onOpen() {
@@ -69,7 +68,7 @@ function onOpen() {
       .addToUi();
 }
 
-/** Tek seferde en fazla bir değerlendiricinin (varsayılan 5) formunu oluşturur. */
+/** Tek seferde bir değerlendiricinin 200 öğelik formunu oluşturur. */
 function createNextRaterForms() {
   validateConfig_();
   const packages = loadPackages_();
@@ -135,18 +134,11 @@ function createFormsForPackage_(pkg, registry) {
       'Bu form kör insan değerlendirmesinin bir bölümüdür.',
       `Değerlendirici kodu: ${pkg.rater_id}. Her soruyu doldurun.`,
       'Yanıtın hangi sistemden geldiğini tahmin etmeyin; yalnız metni puanlayın.',
-      'Formdaki teknik HGA| başlıkları analiz içindir, sistem/kol etiketi değildir.',
+      'Formdaki teknik item_id başlıkları analiz içindir, sistem/kol etiketi değildir.',
     ].join('\n'));
     form.setConfirmationMessage(
         `Teşekkürler. ${pkg.rater_id} için ${formNumber}/${chunks.length}. bölüm kaydedildi. ` +
         'Kalan bölüm bağlantılarını da tamamlayın.');
-
-    // Aynı kişiye ait bölüm yanıtlarını güvenli biçimde birleştirmek için rater id
-    // alınır. Bu alan kimlik doğrulaması değildir; Drive paylaşımı ayrıca kısıtlanmalı.
-    form.addTextItem()
-        .setTitle(RATER_FIELD)
-        .setHelpText(`Bu pakete atanmış kodu aynen girin: ${pkg.rater_id}`)
-        .setRequired(true);
 
     items.forEach((item, itemOffset) => addItem_(form, item, itemOffset + 1));
 
@@ -189,19 +181,24 @@ function addItem_(form, item, ordinal) {
       .setTitle(`Öğe ${ordinal} — ${item.item_id}`)
       .setHelpText(body);
 
-  DIMENSIONS.forEach((dimension) => {
-    form.addMultipleChoiceItem()
-        // Bu başlık CSV sütun şemasıdır. Değiştirmeyin: Python dönüştürücü
-        // bununla item_id ve boyutu, kol adını görmeden tanır.
-        .setTitle(questionHeader_(item.item_id, dimension))
-        .setHelpText(QUESTION_TEXT[dimension])
-        .setChoiceValues(RATING_CHOICES[dimension])
-        .setRequired(true);
-  });
-}
+  // Dört 1–5 boyutu tek grid sorusudur. Google Sheets her grid satırını
+  // `<item_id> | puanlar [<boyut>]` başlıklı ayrı CSV sütununa açar.
+  form.addGridItem()
+      .setTitle(`${item.item_id} | puanlar`)
+      .setHelpText([
+        'Satırlar: doğruluk, tutarlılık, dil kalitesi, belirsizlik dürüstlüğü.',
+        '1 en düşük, 5 en yüksek puandır. Ayrıntılı çıpalar YONERGE.md içindedir.',
+      ].join('\n'))
+      .setRows(DIMENSIONS.slice(0, 4))
+      .setColumns(['1', '2', '3', '4', '5'])
+      .setRequired(true);
 
-function questionHeader_(itemId, dimension) {
-  return `${MACHINE_PREFIX}${itemId}|${dimension}`;
+  // Halüsinasyon ikili ve ters yönlüdür; ayrı soru olarak tutulur.
+  form.addMultipleChoiceItem()
+      .setTitle(`${item.item_id} | halusinasyon_var`)
+      .setHelpText(QUESTION_TEXT.halusinasyon_var)
+      .setChoiceValues(RATING_CHOICES.halusinasyon_var)
+      .setRequired(true);
 }
 
 function loadPackages_() {
@@ -290,8 +287,8 @@ function validateConfig_() {
     }
   });
   if (!Number.isInteger(CONFIG.ITEMS_PER_FORM) || CONFIG.ITEMS_PER_FORM < 1 ||
-      CONFIG.ITEMS_PER_FORM > 40) {
-    throw new Error('ITEMS_PER_FORM 1–40 aralığında olmalı (Google Forms öğe limiti için).');
+      CONFIG.ITEMS_PER_FORM > 200) {
+    throw new Error('ITEMS_PER_FORM 1–200 aralığında olmalı.');
   }
 }
 

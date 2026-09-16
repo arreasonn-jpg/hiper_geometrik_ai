@@ -88,6 +88,52 @@ def test_google_forms_csv_is_converted_to_existing_hga_schema(tmp_path: Path) ->
     assert rows[0]["halusinasyon_var"] == "0"
 
 
+def test_grid_csv_uses_filename_rater_and_is_converted(tmp_path: Path) -> None:
+    package_root = _make_package(tmp_path / "packages")
+    response = tmp_path / "HGA Değerlendirme — R01.csv"
+    headers = [
+        "Zaman damgası",
+        *[
+            (
+                f"{item_id} | halusinasyon_var"
+                if dimension == "halusinasyon_var"
+                else f"{item_id} | puanlar [{dimension}]"
+            )
+            for item_id in ITEMS
+            for dimension in converter.DIMENSIONS
+        ],
+    ]
+    row = {header: "5" for header in headers}
+    row["Zaman damgası"] = "2026/09/16 12:00:00 ÖS GMT+3"
+    for item_id in ITEMS:
+        row[f"{item_id} | halusinasyon_var"] = "1 — uydurma var"
+    with response.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=headers)
+        writer.writeheader()
+        writer.writerow(row)
+
+    summary = converter.convert(response, package_root, tmp_path / "out")
+
+    assert summary.raters["R01"]["complete"] is True
+    with (tmp_path / "out" / "R01_puanlama.csv").open(
+        encoding="utf-8", newline=""
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 2
+    assert rows[0]["dogruluk"] == "5"
+    assert rows[0]["halusinasyon_var"] == "1"
+
+
+def test_grid_csv_without_rater_in_filename_is_rejected(tmp_path: Path) -> None:
+    package_root = _make_package(tmp_path / "packages")
+    response = tmp_path / "answers.csv"
+    response.write_text(
+        f'"{ITEMS[0]} | puanlar [dogruluk]"\n"5"\n', encoding="utf-8"
+    )
+    with pytest.raises(converter.ConversionError, match="dosya adından Rxx"):
+        converter.convert(response, package_root, tmp_path / "out")
+
+
 def test_invalid_scale_is_rejected_before_a_rating_file_is_written(tmp_path: Path) -> None:
     package_root = _make_package(tmp_path / "packages")
     response = tmp_path / "answers.csv"

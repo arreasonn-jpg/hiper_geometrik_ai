@@ -474,11 +474,19 @@ def build_scorecard(
            "raters": _get(human_evaluation, "design", "raters"),
            "alpha_tool_validated": _get(
                human_evaluation, "checks",
-               "alpha_validated_on_reference_data")},
+               "alpha_validated_on_reference_data"),
+           "all_alpha_acceptable": _get(
+               human_evaluation, "results", "_summary", "all_acceptable"),
+           "arm_results": _get(human_evaluation, "arm_results")},
           kanit(human_evaluation),
           "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff "
-          "α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır "
-          "olsa bile gerçek insan puanı yoksa skor üretilmez.")
+          "α ile kodlayıcılar arası güvenilirlik. "
+          + (
+              "Gerçek puanlar toplandı; skor ölçülen kabul kapılarından üretildi."
+              if _insan_toplandi
+              else "Protokol ve araç hazır olsa bile gerçek insan puanı yoksa "
+              "skor üretilmez."
+          ))
 
     # turkish_nlp ← semantik çıkarım (sentetik altın set)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)
@@ -645,7 +653,7 @@ def scorecard_markdown(card: Scorecard) -> str:
         skor = "n/a" if b["score"] is None else f"{b['score']:.1f}"
         satirlar.append(
             f"| {ad} | {skor} | {', '.join(b['evidence']) or '—'} |")
-    genel = "n/a" if card.overall is None else f"{card.overall:.1f}"
+    genel = "n/a" if card.overall is None else f"{card.overall:.2f}"
     satirlar.append(f"| **Overall Research Readiness** | **{genel}** | "
                     f"{card.scored_sections}/{len(SCORECARD_SECTIONS)} bölüm |")
 

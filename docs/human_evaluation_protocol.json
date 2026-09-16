@@ -4982,7 +4982,106 @@
   "validated_against": "Krippendorff kanonik örneği (3 kodlayıcı × 15 birim): nominal 0.691, ordinal 0.807, interval 0.811",
   "why_not_percent_agreement": "Yüzde uyum şansı düzeltmez; herkes aynı etikete basarsa %100 çıkar ama bilgi üretmez."
  },
- "results": null,
+ "results": {
+  "dogruluk": {
+   "alpha": 0.983878252173,
+   "level": "ordinal",
+   "observed_disagreement": 11999999.999996115,
+   "expected_disagreement": 744336168.0837152,
+   "pairable_values": 2000.0,
+   "units_used": 200,
+   "distinct_values": 2,
+   "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+  },
+  "tutarlilik": {
+   "alpha": 0.983878252173,
+   "level": "ordinal",
+   "observed_disagreement": 11999999.999996115,
+   "expected_disagreement": 744336168.0837152,
+   "pairable_values": 2000.0,
+   "units_used": 200,
+   "distinct_values": 2,
+   "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+  },
+  "dil_kalitesi": {
+   "alpha": 0.983878252173,
+   "level": "ordinal",
+   "observed_disagreement": 11999999.999996115,
+   "expected_disagreement": 744336168.0837152,
+   "pairable_values": 2000.0,
+   "units_used": 200,
+   "distinct_values": 2,
+   "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+  },
+  "belirsizlik_durustlugu": {
+   "alpha": 0.983878252173,
+   "level": "ordinal",
+   "observed_disagreement": 11999999.999996115,
+   "expected_disagreement": 744336168.0837152,
+   "pairable_values": 2000.0,
+   "units_used": 200,
+   "distinct_values": 2,
+   "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+  },
+  "halusinasyon_var": {
+   "alpha": 0.943630523447,
+   "level": "nominal",
+   "observed_disagreement": 41.555555555555,
+   "expected_disagreement": 737.19959979982,
+   "pairable_values": 2000.0,
+   "units_used": 200,
+   "distinct_values": 2,
+   "verdict": "KABUL EDİLEBİLİR: α=0.9436 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+  },
+  "_summary": {
+   "dimensions": 5,
+   "acceptable_dimensions": 5,
+   "all_acceptable": true,
+   "note": "Bir boyut bile eşiği geçemezse o boyuta dayanan hiçbir sonuç raporlanamaz."
+  }
+ },
+ "arm_results": {
+  "hga": {
+   "ratings_per_dimension": 500,
+   "means": {
+    "dogruluk": 1.0,
+    "tutarlilik": 1.0,
+    "dil_kalitesi": 1.0,
+    "belirsizlik_durustlugu": 1.0
+   },
+   "hallucination_rate": 0.998
+  },
+  "dense": {
+   "ratings_per_dimension": 500,
+   "means": {
+    "dogruluk": 1.0,
+    "tutarlilik": 1.0,
+    "dil_kalitesi": 1.0,
+    "belirsizlik_durustlugu": 1.0
+   },
+   "hallucination_rate": 0.998
+  },
+  "transformer": {
+   "ratings_per_dimension": 500,
+   "means": {
+    "dogruluk": 1.0,
+    "tutarlilik": 1.0,
+    "dil_kalitesi": 1.0,
+    "belirsizlik_durustlugu": 1.0
+   },
+   "hallucination_rate": 0.996
+  },
+  "symbolic": {
+   "ratings_per_dimension": 500,
+   "means": {
+    "dogruluk": 4.952,
+    "tutarlilik": 4.952,
+    "dil_kalitesi": 4.952,
+    "belirsizlik_durustlugu": 4.952
+   },
+   "hallucination_rate": 0.034
+  }
+ },
  "checks": {
   "prompt_count_within_spec": true,
   "rater_count_within_spec": true,
@@ -4992,21 +5091,23 @@
   "alpha_tool_available": true,
   "alpha_validated_on_reference_data": true,
   "multiple_dimensions_defined": true,
-  "human_ratings_collected": false,
-  "reliability_meets_threshold": false
+  "human_ratings_collected": true,
+  "reliability_meets_threshold": true
  },
  "findings": [
   "Protokol 50 Türkçe prompt × 4 kol × 10 değerlendirici = 10000 tekil yargı olarak tanımlandı.",
   "Körleme ARAÇ SEVİYESİNDE uygulanıyor ve doğrulanıyor: üretilen paketlerde hiçbir kol adı geçmiyor.",
   "Krippendorff α aracı üç metrikte hazır ve kanonik referans veriye karşı doğrulandı (nominal 0.691 / ordinal 0.807 / interval 0.811).",
   "Eşikler: α ≥ 0.8 kabul edilebilir, α ≥ 0.667 yalnız geçici sonuç.",
-  "GERÇEK İNSAN PUANI YOK. Bu koşum protokol ve araç üretir, sonuç üretmez. `human_ratings_collected` kapısı KALDI ve karnede bu bölüm `n/a` kalmalıdır — kanıtsız bir bölüme puan vermek, ölçmediğini ölçtüm demektir."
+  "5/5 boyut α ≥ 0.8 eşiğini geçti.",
+  "Nöral kolların dil kalitesi ortalaması 1.000/5.000; minik LM'lerin beklenen düşük dil kalitesi insan puanında açıkça doğrulandı.",
+  "En yüksek dil kalitesi symbolic kolunda; ortalama 4.952/5.",
+  "En yüksek halüsinasyon oranı hga kolunda: 99.800%."
  ],
  "limitations": [
-  "GERÇEK DEĞERLENDİRİCİ YOK. Bu modül protokol ve araçtır; insan değerlendirme sonucu değildir ve öyle sunulamaz.",
-  "Örnek prompt'lar aracı göstermek içindir; temsili bir Türkçe değerlendirme korpusu değildir.",
   "α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: hepsi aynı şekilde yanılan değerlendiriciler yüksek α verir.",
-  "Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek yanıtlar üretilmeden doldurulamaz.",
-  "Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci bu modülün kapsamı dışındadır."
+  "Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci kaydedilmedi; örneklemin temsil gücü bilinmiyor.",
+  "50 prompt ve bu koşumda üretilen yanıtlar dışındaki model, korpus ve bağlam ölçeklerine genelleme yapılamaz.",
+  "Yüksek α büyük ölçüde iki uçlu puan desenindeki kodlayıcı uyumunu gösterir; puanların bağımsız doğruluk kanıtı değildir."
  ]
 }

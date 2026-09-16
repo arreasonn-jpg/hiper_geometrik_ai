@@ -317,6 +317,65 @@ def fill_and_export_packages(
     return manifest
 
 
+def analyze_ratings_by_arm(package_dir: Path) -> Dict[str, Any]:
+    """Kör açma anahtarıyla puanları kol bazında özetle.
+
+    Her ordinal boyut için aritmetik ortalama, ikili ``halusinasyon_var`` için
+    de oran raporlanır. Anahtar yalnız puan toplama kapandıktan sonra bu analiz
+    adımında okunur; değerlendirici paketlerine geri yazılmaz.
+    """
+    root = Path(package_dir)
+    key_path = root / "_GIZLI_degerlendiriciye_verme" / "kor_anahtari.json"
+    try:
+        unblinding_key = json.loads(key_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"kör açma anahtarı okunamadı: {key_path}") from error
+
+    values: Dict[str, Dict[str, List[float]]] = {
+        arm: {dimension: [] for dimension in DIMENSIONS} for arm in ARMS
+    }
+    files = sorted((root / "paketler").glob("R[0-9][0-9]_puanlama.csv"))
+    if not files:
+        raise ValueError("kol analizi için puanlama CSV'si bulunamadı")
+    for path in files:
+        with path.open(encoding="utf-8", newline="") as handle:
+            for row_number, row in enumerate(csv.DictReader(handle), start=2):
+                item_id = row.get("item_id", "")
+                mapping = unblinding_key.get(item_id)
+                if not isinstance(mapping, dict) or mapping.get("arm") not in values:
+                    raise ValueError(
+                        f"{path}:{row_number}: kör anahtarda geçerli kol yok: {item_id}"
+                    )
+                arm = str(mapping["arm"])
+                for dimension in DIMENSIONS:
+                    raw = (row.get(dimension) or "").strip()
+                    if not raw:
+                        raise ValueError(
+                            f"{path}:{row_number}: eksik {dimension} puanı"
+                        )
+                    values[arm][dimension].append(float(raw))
+
+    result: Dict[str, Any] = {}
+    for arm in ARMS:
+        counts = {len(items) for items in values[arm].values()}
+        if len(counts) != 1 or not counts or next(iter(counts)) == 0:
+            raise ValueError(f"{arm}: boyut hücre sayıları eksik veya dengesiz")
+        result[arm] = {
+            "ratings_per_dimension": next(iter(counts)),
+            "means": {
+                dimension: round(sum(items) / len(items), 6)
+                for dimension, items in values[arm].items()
+                if dimension != "halusinasyon_var"
+            },
+            "hallucination_rate": round(
+                sum(values[arm]["halusinasyon_var"])
+                / len(values[arm]["halusinasyon_var"]),
+                6,
+            ),
+        }
+    return result
+
+
 def collect_ratings_from_csv(
     package_dir: Path,
 ) -> Tuple[Dict[str, Dict[Any, List[Optional[float]]]], Dict[str, Any]]:
@@ -366,6 +425,7 @@ def collect_ratings_from_csv(
 
 
 __all__ = [
-    "GENERATION", "YONERGE", "collect_ratings_from_csv",
-    "fill_and_export_packages", "generate_arm_responses", "symbolic_answer",
+    "GENERATION", "YONERGE", "analyze_ratings_by_arm",
+    "collect_ratings_from_csv", "fill_and_export_packages",
+    "generate_arm_responses", "symbolic_answer",
 ]
