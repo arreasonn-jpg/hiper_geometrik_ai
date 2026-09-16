@@ -6,8 +6,11 @@ import pytest
 
 from hga.evaluation.memory_hierarchy import (
     PROFILES,
+    STREAMING_TARGET_RECORDS,
     memory_hierarchy_markdown,
+    memory_streaming_harness_markdown,
     run_memory_hierarchy_benchmark,
+    run_memory_streaming_harness,
 )
 from hga.memory.hierarchical import TIERS, HierarchicalMemory
 
@@ -300,3 +303,38 @@ def test_markdown_tum_bolumleri_icerir(rapor):
 def test_rapor_serilestirilebilir(rapor):
     import json
     assert json.loads(json.dumps(rapor.to_dict()))["protocol"]
+
+
+# ── 100M streaming/dry-run harness ─────────────────────────────────────────
+def test_100m_streaming_harness_smoke(tmp_path):
+    rapor = run_memory_streaming_harness(
+        target_records=STREAMING_TARGET_RECORDS,
+        sample_records=256,
+        shard_records=64,
+        checkpoint_interval=64,
+        seed=7,
+        root=str(tmp_path / "stream"),
+        durable=False,
+    )
+    assert rapor.target_records == STREAMING_TARGET_RECORDS
+    assert rapor.sample_records_written == 256
+    assert rapor.plan["planned_shards"] > 1
+    assert rapor.plan["resume_from_next_key"] == "key-000000000256"
+    assert len(rapor.checkpoints) == 4
+    assert rapor.recall_audit["recall"] == 1.0
+    assert [k for k, v in rapor.checks.items() if not v] == []
+    assert "not_measured_100m" in rapor.projections["kind"]
+
+
+def test_100m_streaming_markdown_durust(tmp_path):
+    rapor = run_memory_streaming_harness(
+        target_records=1_000,
+        sample_records=32,
+        shard_records=100,
+        checkpoint_interval=16,
+        root=str(tmp_path / "stream2"),
+    )
+    md = memory_streaming_harness_markdown(rapor)
+    assert "100M" in md
+    assert "100M kaydın tamamının yazıldığını iddia etmez" in md
+    assert "Projeksiyonlar" in md

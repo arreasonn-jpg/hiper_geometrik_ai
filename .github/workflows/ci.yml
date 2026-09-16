@@ -154,14 +154,22 @@ jobs:
           python -m hga cikarim-derinligi --depth-profile smoke
           python -m hga operator-baseline --n 4 --steps 20 --seeds 1
           python -m hga signature --signature-profile smoke --seeds 1
+          python -m hga signature-gate --signature-profile smoke --seeds 1
+          python -m hga verifier-adversarial
+          python -m hga verifier-ensemble
           python -m hga twt-sonuc --seeds 1,2
           python -m hga turkce-lm --seeds 1,2 --lm-steps 20
+          python -m hga uzun-baglam --long-context-profile smoke_1024 --seeds 1,2
           python -m hga bellek-hiyerarsi --depth-profile smoke
+          python -m hga bellek-streaming --sample-records 128 --shard-records 64 --checkpoint-interval 64
+          python -m hga ogrenme-transfer --seeds 1,2 --source-examples 5 --target-support-examples 5 --target-unseen-examples 5
           python -m hga ogrenme-olcek --signature-profile smoke
           python -m hga tohum-istatistik --signature-profile smoke
           python -m hga oncelik-optimizasyon --signature-profile smoke
           python -m hga derinlik-teshis --depth-profile smoke
           python -m hga insan-degerlendirme
+          python -m hga insan-import --package-dir /tmp/hga-no-human-package
+          python -m hga korpus-genisletme
           python -m hga cok-ortam --seeds 1,2
           python -m hga muhendislik
           python -m hga yeniden-uretilebilirlik

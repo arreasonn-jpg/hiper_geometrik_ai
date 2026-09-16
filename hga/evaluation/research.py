@@ -201,7 +201,7 @@ def _architecture_section() -> Dict[str, Any]:
         },
         "limitations": [
             "Parametre sayısı modeli kurmadan formülle tahmin edilmiştir; kesin model introspection değildir.",
-            "C_I ve C_M kalite ya da öğrenilebilir kapasite skoru değildir.",
+            "C_I^UB ve C_M^UB kalite ya da öğrenilebilir kapasite skoru değildir.",
         ],
     }
 

@@ -4,8 +4,11 @@ import pytest
 
 from hga.evaluation.semantic_extraction import (
     GOLD_SET,
+    GOLD_SET_V2,
     LAYERS,
+    PROTOCOL_V2,
     run_semantic_extraction_benchmark,
+    run_semantic_extraction_v2_benchmark,
     semantic_extraction_markdown,
 )
 from hga.experience.semantik_ayiklayici import (
@@ -115,6 +118,16 @@ def test_cati_ekli_fiilde_cekimser_kalinir():
                for n in r.skipped_reasons)
 
 
+def test_v2_bilinmeyen_cati_yuzeyinde_induksiyon_yapmaz():
+    """v2 hard negatifleri: kök sözlükte olmasa bile çatı/ettirgen izi
+    varsa düşük güvenli mastar uydurulmaz."""
+    for cumle in ("Kedi masaya çıkartıldı.", "Fatma kapıyı açtırdı."):
+        r = cumle_coz(cumle)
+        assert r.relations == []
+        assert any(n.startswith("muhtemel_cati_eki_uyeleri_belirsiz")
+                   for n in r.skipped_reasons)
+
+
 def test_hafif_fiil_bilesigi_kurulur():
     """'tamir etti' → 'tamir etmek': hafif fiil kendinden önceki yalın adla
     bileşik yüklem kurar; o ad ayrı varlık olarak KALMAZ."""
@@ -213,6 +226,26 @@ def test_kabul_kapilari_gecer():
     rapor = run_semantic_extraction_benchmark()
     for ad, sonuc in rapor.checks.items():
         assert sonuc, f"kapı düştü: {ad}"
+
+
+def test_v2_gold_benchmark_buyuk_kapsam_ve_kapilar():
+    rapor = run_semantic_extraction_v2_benchmark()
+    assert rapor.protocol == PROTOCOL_V2
+    assert len(GOLD_SET_V2) >= 100
+    assert rapor.sentence_count == len(GOLD_SET_V2)
+    assert rapor.extraction_yield >= 0.85
+    assert rapor.dataset_summary["unique_sentence_count"] == len(GOLD_SET_V2)
+    assert {"calibration", "heldout", "stress"} <= set(rapor.split_metrics)
+    assert rapor.dataset_summary["phenomena"]["out_of_scope"] >= 8
+    assert rapor.checks["v2_extraction_yield_at_least_0_85"]
+    assert all(rapor.checks.values())
+
+
+def test_v2_markdown_dis_gecerlilik_sinirini_yazar():
+    md = semantic_extraction_markdown(run_semantic_extraction_v2_benchmark())
+    assert "anotasyon imzası" in md
+    assert "Sınırlar ve dış geçerlilik" in md
+    assert "Türkçe NER/RE değerlendirmesi DEĞİLDİR" in md
 
 
 def test_markdown_hatali_cumleleri_listeler():

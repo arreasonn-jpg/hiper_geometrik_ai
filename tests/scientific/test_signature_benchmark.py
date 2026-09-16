@@ -131,6 +131,51 @@ def test_smoke_kosusu_kapilari_uretir():
     assert "İmza analizi" in md and "Sızıntı denetimi" in md
 
 
+def test_signature_release_gate_eksik_kanitta_blocked():
+    pytest.importorskip("torch")
+    from hga.evaluation.signature import (
+        run_signature_benchmark,
+        run_signature_release_gate,
+        signature_release_gate_markdown,
+    )
+    rapor = run_signature_benchmark("smoke", seeds=(1,),
+                                    tasks=("F_memory_dependent", "G_epistemic"))
+    gate = run_signature_release_gate(rapor)
+    assert gate.status == "BLOCKED"
+    assert not gate.release_ready
+    assert "profile_is_standard" in gate.failed_checks
+    assert "seed_count_at_least_20" in gate.failed_checks
+    md = signature_release_gate_markdown(gate)
+    assert "Signature Benchmark Release Gate" in md
+    assert "BLOCKED" in md
+
+
+def test_signature_release_gate_tum_kapilar_gecerse_pass():
+    from hga.evaluation.signature import ARMS, PROTOCOL, TASKS, run_signature_release_gate
+    report = {
+        "protocol": PROTOCOL,
+        "profile": "standard",
+        "seeds": list(range(1, 21)),
+        "tasks": list(TASKS),
+        "arms": list(ARMS),
+        "dataset_hash": "dummyhash",
+        "checks": {
+            "parameter_budget_within_gate": True,
+            "body_parameter_budget_within_gate": True,
+            "no_held_out_leak": True,
+            "hga_beats_majority_everywhere": True,
+            "hga_has_signature_task": True,
+            "neural_arms_learn_above_chance": True,
+            "memory_gain_is_task_specific": True,
+        },
+        "signature": {"F_memory_dependent": {"margin": 0.2}},
+    }
+    gate = run_signature_release_gate(report)
+    assert gate.status == "PASS"
+    assert gate.release_ready
+    assert gate.failed_checks == []
+
+
 @pytest.mark.slow
 def test_bilinmeyen_kol_acik_hata():
     pytest.importorskip("torch")

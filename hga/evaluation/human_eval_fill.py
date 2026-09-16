@@ -28,14 +28,16 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, cast
 
 from .human_evaluation import (
     ARMS,
     DIMENSIONS,
     MIN_RATERS,
     _default_prompts,
+    analyze_ratings,
     build_evaluation_sheets,
+    build_human_evaluation_protocol,
 )
 
 #: Üretim parametreleri — imzaya girer.
@@ -348,12 +350,17 @@ def analyze_ratings_by_arm(package_dir: Path) -> Dict[str, Any]:
                     )
                 arm = str(mapping["arm"])
                 for dimension in DIMENSIONS:
-                    raw = (row.get(dimension) or "").strip()
-                    if not raw:
+                    value = _parse_rating_value(
+                        row.get(dimension) or "",
+                        path=path,
+                        row_number=row_number,
+                        dimension=dimension,
+                    )
+                    if value is None:
                         raise ValueError(
                             f"{path}:{row_number}: eksik {dimension} puanı"
                         )
-                    values[arm][dimension].append(float(raw))
+                    values[arm][dimension].append(value)
 
     result: Dict[str, Any] = {}
     for arm in ARMS:
@@ -376,9 +383,43 @@ def analyze_ratings_by_arm(package_dir: Path) -> Dict[str, Any]:
     return result
 
 
+def _dimension_bounds(dimension: str) -> Tuple[float, float]:
+    scale = DIMENSIONS[dimension]["scale"]
+    return float(min(scale)), float(max(scale))
+
+
+def _parse_rating_value(
+    raw: str,
+    *,
+    path: Path,
+    row_number: int,
+    dimension: str,
+) -> Optional[float]:
+    raw = raw.strip()
+    if not raw:
+        return None
+    try:
+        value = float(raw)
+    except ValueError as error:
+        raise ValueError(
+            f"{path}:{row_number}: {dimension} sayısal değil: {raw!r}"
+        ) from error
+    low, high = _dimension_bounds(dimension)
+    if not (low <= value <= high):
+        raise ValueError(
+            f"{path}:{row_number}: {dimension}={value} ölçek dışında "
+            f"({low:g}–{high:g})")
+    if dimension == "halusinasyon_var" and value not in (0.0, 1.0):
+        raise ValueError(
+            f"{path}:{row_number}: halusinasyon_var yalnız 0/1 olabilir")
+    return value
+
+
 def collect_ratings_from_csv(
     package_dir: Path,
-) -> Tuple[Dict[str, Dict[Any, List[Optional[float]]]], Dict[str, Any]]:
+    *,
+    strict_complete: bool = False,
+) -> Tuple[Dict[str, Dict[Any, Sequence[Optional[float]]]], Dict[str, Any]]:
     """Doldurulmuş ``*_puanlama.csv`` dosyalarından α girdisini topla.
 
     Returns:
@@ -386,8 +427,12 @@ def collect_ratings_from_csv(
         ``build_human_evaluation_protocol(collected_ratings=...)`` girdisidir:
         boyut → {item_id: [rater1, rater2, ...]} (eksikler None).
 
+    Boş hücreler varsayılan olarak ``None`` kalır; ``strict_complete=True``
+    ise eksik hücre hata olur. Dolu hücrelerin tamamı ilgili ölçek aralığında
+    doğrulanır.
+
     Raises:
-        ValueError: hiç doldurulmuş CSV yoksa.
+        ValueError: hiç CSV yoksa, sütun eksikse veya dolu puan ölçek dışıysa.
     """
     paket_dizini = Path(package_dir) / "paketler"
     dosyalar = sorted(paket_dizini.glob("*_puanlama.csv"))
@@ -395,37 +440,262 @@ def collect_ratings_from_csv(
         raise ValueError(f"{paket_dizini} altında puanlama CSV'si yok")
 
     boyutlar = list(DIMENSIONS)
-    # item_id → rater sırasına göre puan listeleri
     ham: Dict[str, Dict[str, List[Optional[float]]]] = {
         b: {} for b in boyutlar}
     degerlendirici_sayisi = 0
     dolu_hucre = 0
     toplam_hucre = 0
+    satir_sayilari: List[int] = []
     for dosya in dosyalar:
         degerlendirici_sayisi += 1
-        with dosya.open(encoding="utf-8") as f:
+        rows_in_file = 0
+        with dosya.open(encoding="utf-8", newline="") as f:
             okuyucu = csv.DictReader(f)
-            for satir in okuyucu:
-                item_id = satir["item_id"]
+            alanlar = set(okuyucu.fieldnames or [])
+            eksik = ["item_id", *boyutlar]
+            eksik = [ad for ad in eksik if ad not in alanlar]
+            if eksik:
+                raise ValueError(f"{dosya}: eksik CSV sütunları: {eksik}")
+            for row_number, satir in enumerate(okuyucu, start=2):
+                rows_in_file += 1
+                item_id = (satir.get("item_id") or "").strip()
+                if not item_id:
+                    raise ValueError(f"{dosya}:{row_number}: item_id boş")
                 for b in boyutlar:
-                    deger_metni = (satir.get(b) or "").strip()
-                    deger: Optional[float] = (
-                        float(deger_metni) if deger_metni else None)
+                    deger = _parse_rating_value(
+                        satir.get(b) or "",
+                        path=dosya,
+                        row_number=row_number,
+                        dimension=b,
+                    )
+                    if deger is None and strict_complete:
+                        raise ValueError(f"{dosya}:{row_number}: eksik {b} puanı")
                     ham[b].setdefault(item_id, []).append(deger)
                     toplam_hucre += 1
                     if deger is not None:
                         dolu_hucre += 1
+        satir_sayilari.append(rows_in_file)
 
+    item_counts = {len(items) for items in ham.values()}
+    dengeli_satir = len(set(satir_sayilari)) == 1
     ozet = {
         "raters_found": degerlendirici_sayisi,
         "items": len(next(iter(ham.values()), {})),
+        "filled_cells": dolu_hucre,
+        "total_cells": toplam_hucre,
         "filled_ratio": round(dolu_hucre / max(1, toplam_hucre), 4),
+        "rows_per_rater": satir_sayilari,
+        "balanced_rows_per_rater": dengeli_satir,
+        "balanced_items_by_dimension": len(item_counts) == 1,
+        "scale_validation": "passed",
     }
-    return ham, ozet
+    return cast(Dict[str, Dict[Any, Sequence[Optional[float]]]], ham), ozet
+
+
+def _attestation_summary(package_dir: Path) -> Dict[str, Any]:
+    """Gerçek insan puanı beyan dosyasını oku.
+
+    Beklenen dosya: ``rater_attestation.json``. En az şu alanlar olmalıdır:
+    ``real_human_ratings: true`` ve ``raters`` listesi. Bu olmadan dolu CSV'ler
+    yalnız import smoke/araç çıktısı sayılır; ana insan sonucu açılmaz.
+    """
+    path = Path(package_dir) / "rater_attestation.json"
+    if not path.exists():
+        return {"present": False, "path": str(path), "raters": 0,
+                "real_human_ratings": False}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"attestation JSON bozuk: {path}") from error
+    raters = data.get("raters", [])
+    if not isinstance(raters, list):
+        raise ValueError("rater_attestation.json: raters liste olmalı")
+    return {
+        "present": True,
+        "path": str(path),
+        "raters": len(raters),
+        "real_human_ratings": bool(data.get("real_human_ratings")),
+        "collected_by": data.get("collected_by"),
+        "collected_utc_date": data.get("collected_utc_date"),
+        "statement": data.get("statement"),
+    }
+
+
+def build_human_evaluation_from_csv(package_dir: Path) -> Any:
+    """CSV'lerden insan değerlendirme raporu üret.
+
+    Tam ve **attested** olmayan paketlerde güvenilirlik/kol sonucu ana rapora
+    sokulmaz; dönen ``HumanEvaluationReport`` protokol raporudur ve
+    ``human_ratings_collected`` KALIR. Bu, depoda örnek/doldurulmuş CSV olsa
+    bile gerçek insan puanı beyanı yoksa skor üretmeyi engeller.
+    """
+    ratings, summary = collect_ratings_from_csv(package_dir)
+    attestation = _attestation_summary(Path(package_dir))
+    complete = (summary["raters_found"] >= MIN_RATERS
+                and summary["filled_ratio"] >= 1.0
+                and attestation["present"]
+                and attestation["real_human_ratings"]
+                and attestation["raters"] >= MIN_RATERS)
+    if not complete:
+        report = build_human_evaluation_protocol()
+        report.design["rating_import_summary"] = summary
+        report.design["rater_attestation"] = attestation
+        return report
+    arm_results = analyze_ratings_by_arm(Path(package_dir))
+    report = build_human_evaluation_protocol(
+        collected_ratings=ratings,
+        arm_results=arm_results,
+    )
+    report.design["rating_import_summary"] = summary
+    report.design["rater_attestation"] = attestation
+    return report
+
+
+def human_rating_import_report(package_dir: Path) -> Dict[str, Any]:
+    """CSV import + α + kol özetini makine-okunur pipeline raporu yap.
+
+    Paket dizini henüz yoksa hata fırlatmak yerine ``NO_CSV_NA`` raporu
+    döndürür; bozuk/ölçek dışı CSV ise hâlâ açık hata olarak yükseltilir.
+    """
+    try:
+        ratings, summary = collect_ratings_from_csv(package_dir)
+    except ValueError as error:
+        if "puanlama CSV'si yok" not in str(error):
+            raise
+        summary = {
+            "raters_found": 0, "items": 0,
+            "filled_cells": 0, "total_cells": 0,
+            "filled_ratio": 0.0, "rows_per_rater": [],
+            "balanced_rows_per_rater": False,
+            "balanced_items_by_dimension": False,
+            "scale_validation": "n/a",
+        }
+        ratings = {}
+    reliability = analyze_ratings(ratings) if summary["filled_cells"] else None
+    attestation = _attestation_summary(Path(package_dir))
+    attested = (attestation["present"] and attestation["real_human_ratings"]
+                and attestation["raters"] >= MIN_RATERS)
+    arm_results = None
+    arm_error = None
+    if summary["raters_found"] >= MIN_RATERS and summary["filled_ratio"] >= 1.0:
+        try:
+            arm_results = analyze_ratings_by_arm(Path(package_dir))
+        except ValueError as error:
+            arm_error = str(error)
+    checks = {
+        "csv_files_found": summary["raters_found"] > 0,
+        "rating_values_in_scale": summary["scale_validation"] == "passed",
+        "min_raters_present": summary["raters_found"] >= MIN_RATERS,
+        "all_cells_filled": summary["filled_ratio"] >= 1.0,
+        "balanced_rows_per_rater": bool(summary["balanced_rows_per_rater"]),
+        "rater_attestation_present": bool(attested),
+        "reliability_computed_when_any_rating_present": (
+            reliability is not None or summary["filled_cells"] == 0),
+        "arm_summary_available_when_complete": (
+            arm_results is not None or summary["filled_ratio"] < 1.0
+            or summary["raters_found"] < MIN_RATERS),
+    }
+    status = ("COMPLETE_READY_FOR_REPORT" if arm_results is not None and attested
+              else "CSV_COMPLETE_UNATTESTED_NA" if arm_results is not None
+              else "NO_CSV_NA" if summary["raters_found"] == 0
+              else "INCOMPLETE_NA")
+    report = {
+        "protocol": "human_evaluation_csv_import_v1",
+        "schema_version": 1,
+        "package_dir": str(package_dir),
+        "summary": summary,
+        "attestation": attestation,
+        "reliability": reliability,
+        "arm_results": arm_results,
+        "arm_error": arm_error,
+        "checks": checks,
+        "status": status,
+        "findings": [
+            f"{summary['raters_found']} CSV dosyası okundu; doluluk "
+            f"{summary['filled_ratio']:.4f}.",
+            ("Tam ve beyanlı paket: α ve kol özeti ana rapora alınabilir."
+             if status == "COMPLETE_READY_FOR_REPORT" else
+             "Tam/beyanlı gerçek insan puanı yok; ana raporda bu bölüm n/a kalmalıdır."),
+        ],
+        "limitations": [
+            "CSV import gerçek insan kalitesini garanti etmez; yalnız format, ölçek ve agregasyon hattını doğrular.",
+            "rater_attestation.json olmadan dolu CSV'ler gerçek insan sonucu sayılmaz ve ana raporda n/a kalır.",
+            "Kör açma anahtarı yoksa veya paket eksikse kol sonuçları üretilmez.",
+        ],
+    }
+    report["signature"] = hashlib.sha256(json.dumps(
+        {"protocol": report["protocol"], "summary": summary,
+         "attestation": attestation},
+        sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:12]
+    return report
+
+
+def human_rating_import_markdown(report: Dict[str, Any]) -> str:
+    """CSV import raporunu Markdown'a çevir."""
+    summary = report["summary"]
+    attestation = report.get("attestation", {})
+    rows = [
+        "# İnsan Değerlendirme CSV Import/Aggregation Pipeline",
+        "",
+        f"- Protokol: `{report['protocol']}` v{report['schema_version']} "
+        f"(imza `{report['signature']}`)",
+        f"- Durum: **{report['status']}**",
+        f"- Gerçek insan beyanı: **{'VAR' if attestation.get('real_human_ratings') else 'YOK'}**",
+        "",
+        "## Import özeti",
+        "",
+        "| Alan | Değer |",
+        "|---|---:|",
+        f"| CSV/değerlendirici | {summary['raters_found']} |",
+        f"| Öğe | {summary['items']} |",
+        f"| Dolu hücre | {summary['filled_cells']} |",
+        f"| Toplam hücre | {summary['total_cells']} |",
+        f"| Doluluk | {summary['filled_ratio']:.4f} |",
+        "",
+        "## Kabul kapıları",
+        "",
+        "| Kapı | Sonuç |",
+        "|---|---|",
+    ]
+    rows.extend(f"| {k} | {'GEÇTİ' if v else 'KALDI'} |"
+                for k, v in report["checks"].items())
+    if report["reliability"]:
+        rows.extend([
+            "",
+            "## Krippendorff α",
+            "",
+            "| Boyut | α | Hüküm |",
+            "|---|---:|---|",
+        ])
+        for dim, data in report["reliability"].items():
+            if dim == "_summary":
+                continue
+            alpha = "n/a" if data["alpha"] is None else f"{data['alpha']:.4f}"
+            rows.append(f"| {dim} | {alpha} | {data['verdict']} |")
+    if report["arm_results"]:
+        rows.extend([
+            "",
+            "## Kör açma sonrası kol özeti",
+            "",
+            "| Kol | n/boyut | Halüsinasyon oranı |",
+            "|---|---:|---:|",
+        ])
+        for arm in ARMS:
+            data = report["arm_results"][arm]
+            rows.append(
+                f"| {arm} | {data['ratings_per_dimension']} | "
+                f"{data['hallucination_rate']:.3%} |")
+    rows.extend(["", "## Bulgular", ""])
+    rows.extend(f"- {x}" for x in report["findings"])
+    rows.extend(["", "## Sınırlar", ""])
+    rows.extend(f"- {x}" for x in report["limitations"])
+    return "\n".join(rows) + "\n"
 
 
 __all__ = [
     "GENERATION", "YONERGE", "analyze_ratings_by_arm",
-    "collect_ratings_from_csv", "fill_and_export_packages",
-    "generate_arm_responses", "symbolic_answer",
+    "build_human_evaluation_from_csv", "collect_ratings_from_csv",
+    "fill_and_export_packages", "generate_arm_responses",
+    "human_rating_import_markdown", "human_rating_import_report",
+    "symbolic_answer",
 ]

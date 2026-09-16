@@ -34,7 +34,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from hga.knowledge.schemas import KaynakTuru
 
@@ -55,11 +55,84 @@ TURETILMIS_KAYNAKLAR = frozenset({
 
 ZORUNLU_ALANLAR = ("source_url", "document_hash")
 
+# Kullanıcıya gösterilecek tam köken grafının çekirdek sırası. Graph dallanır
+# (iki Entity düğümü vardır) ama bu sıra "Bunu neden biliyorsun?" sorusuna
+# okunabilir bir omurga verir.
+PROVENANCE_CHAIN_KINDS: Tuple[str, ...] = (
+    "Source", "Document", "Sentence", "Extraction", "Entity", "Relation",
+    "RelationFact", "KnowledgeVersion", "Experience", "Verification", "Answer",
+)
+
 
 def document_hash(content: str) -> str:
     """Belge içeriğinin kanonik SHA-256'sı (satır sonu normalize edilir)."""
     normalize = (content or "").replace("\r\n", "\n").strip()
     return hashlib.sha256(normalize.encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True)
+class ProvenanceNode:
+    """Köken grafındaki tek düğüm.
+
+    ``kind`` değerleri ``PROVENANCE_CHAIN_KINDS`` sözleşmesinden gelir. Metadata
+    insan açıklaması için zengindir ama düğüm kimliği deterministik ve kısadır.
+    """
+
+    node_id: str
+    kind: str
+    label: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class ProvenanceEdge:
+    """Köken grafında yönlü bağlantı."""
+
+    source: str
+    target: str
+    relation: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class ProvenanceChain:
+    """Source → ... → Answer zincirinin makine-okunur görünümü."""
+
+    nodes: List[ProvenanceNode]
+    edges: List[ProvenanceEdge]
+    missing: List[str] = field(default_factory=list)
+    external_trace_required: bool = False
+
+    @property
+    def complete_external_trace(self) -> bool:
+        """Dış kaynaklı olguda zorunlu köken alanları tam mı?"""
+        return not self.external_trace_required or not self.missing
+
+    def kinds(self) -> List[str]:
+        """Düğüm türlerini resmi omurga sırasıyla döndür.
+
+        Graph dallandığı için eklenme sırası her zaman okunabilir değildir
+        (ör. RelationFact düğümü pratikte önce kurulabilir). Kullanıcıya
+        gösterilen sıra Source→...→Answer sözleşmesini izler.
+        """
+        siralama = {kind: index for index, kind in enumerate(PROVENANCE_CHAIN_KINDS)}
+        return [node.kind for node in sorted(
+            self.nodes, key=lambda node: (siralama.get(node.kind, 10_000), node.node_id))]
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "nodes": [node.to_dict() for node in self.nodes],
+            "edges": [edge.to_dict() for edge in self.edges],
+            "missing": list(self.missing),
+            "external_trace_required": self.external_trace_required,
+            "complete_external_trace": self.complete_external_trace,
+            "chain_kinds": self.kinds(),
+        }
 
 
 @dataclass
@@ -127,6 +200,164 @@ class ProvenanceRaporu:
                         f"benzersiz kaynak: {self.unique_sources:,}")
         satirlar.append(f"- Ham cümle kapsamı: {self.sentence_coverage:.4f}")
         return "\n".join(satirlar)
+
+
+def _node_id(kind: str, *parts: Any) -> str:
+    payload = "|".join(str(part) for part in parts if part is not None)
+    digest = hashlib.sha256(f"{kind}|{payload}".encode("utf-8")).hexdigest()[:12]
+    return f"{kind.lower()}:{digest}"
+
+
+def build_provenance_chain(
+    store,
+    fact,
+    *,
+    experience=None,
+    answer: Optional[str] = None,
+) -> ProvenanceChain:
+    """Tek olgu için Source→Document→Sentence→Extraction→... zinciri kur.
+
+    Amaç yalnız ``source_url`` ve ``document_hash`` var mı diye bakmak değildir;
+    kullanıcının "Bunu neden biliyorsun?" sorusuna cümle, çıkarıcı, varlıklar,
+    ilişki, bilgi sürümü, isteğe bağlı deneyim/doğrulama ve cevap düğümlerini
+    içeren tam bir graph döndürmektir.
+
+    ``experience`` ve ``answer`` opsiyoneldir çünkü her olgu bir cevap üretim
+    yolundan gelmeyebilir. Verildiğinde zincirin sonuna eklenir; verilmediğinde
+    ``missing`` sayılmaz.
+    """
+    nodes: List[ProvenanceNode] = []
+    edges: List[ProvenanceEdge] = []
+    missing: List[str] = []
+    by_key: Dict[Tuple[str, str], ProvenanceNode] = {}
+
+    def add(kind: str, label: str, metadata: Optional[Dict[str, Any]] = None,
+            node_id: Optional[str] = None) -> str:
+        nid = node_id or _node_id(kind, label, metadata)
+        key = (kind, nid)
+        if key not in by_key:
+            node = ProvenanceNode(nid, kind, label, dict(metadata or {}))
+            by_key[key] = node
+            nodes.append(node)
+        return nid
+
+    def edge(src: Optional[str], dst: Optional[str], relation: str) -> None:
+        if src and dst:
+            edges.append(ProvenanceEdge(src, dst, relation))
+
+    external_required = getattr(fact, "source", None) in DIS_KAYNAKLAR
+
+    source_id = document_id = sentence_id = extraction_id = None
+    if getattr(fact, "source_url", None):
+        source_id = add("Source", str(fact.source_url), {
+            "source_url": fact.source_url,
+            "source_type": getattr(getattr(fact, "source", None), "value", str(getattr(fact, "source", ""))),
+            "retrieved_at": getattr(fact, "retrieved_at", None),
+        })
+    elif external_required:
+        missing.append("Source.source_url")
+
+    if getattr(fact, "document_hash", None):
+        document_id = add("Document", str(fact.document_hash)[:16], {
+            "document_hash": fact.document_hash,
+        })
+        edge(source_id, document_id, "source_contains_document")
+    elif external_required:
+        missing.append("Document.document_hash")
+
+    if getattr(fact, "sentence", None):
+        sentence_id = add("Sentence", str(fact.sentence), {"sentence": fact.sentence})
+        edge(document_id, sentence_id, "document_contains_sentence")
+    elif external_required:
+        missing.append("Sentence.text")
+
+    if getattr(fact, "extractor", None):
+        extraction_id = add("Extraction", str(fact.extractor), {
+            "extractor": fact.extractor,
+            "confidence": getattr(fact, "confidence", None),
+        })
+        edge(sentence_id, extraction_id, "sentence_processed_by_extractor")
+    elif external_required:
+        missing.append("Extraction.extractor")
+
+    # Fact düğümü omurga için her zaman oluşturulur; varlık/relation kayıtları
+    # eksikse missing'e düşer ama graph bozulmaz.
+    fact_id = add("RelationFact", "/".join(fact.uclusu), {
+        "subject_id": fact.subject_id,
+        "relation_id": fact.relation_id,
+        "object_id": fact.object_id,
+        "score": fact.score,
+        "confidence": fact.confidence,
+        "source": getattr(getattr(fact, "source", None), "value", str(getattr(fact, "source", ""))),
+        "fact_version": getattr(fact, "version", None),
+    })
+    edge(extraction_id, fact_id, "extraction_asserted_fact")
+
+    for role, entity_id in (("subject", fact.subject_id), ("object", fact.object_id)):
+        try:
+            entity = store.entities.getir(entity_id)
+        except Exception:
+            missing.append(f"Entity.{role}:{entity_id}")
+            continue
+        entity_node_id = add("Entity", entity.token, {
+            "entity_id": entity.entity_id,
+            "entity_type": entity.entity_type,
+            "role": role,
+            "confidence": entity.confidence,
+            "version": entity.version,
+        }, node_id=f"entity:{entity.entity_id}")
+        edge(extraction_id, entity_node_id, f"extraction_identified_{role}")
+        edge(entity_node_id, fact_id, f"{role}_participates_in_fact")
+
+    try:
+        relation = store.relations.iliski_al(fact.relation_id)
+    except Exception:
+        missing.append(f"Relation:{fact.relation_id}")
+    else:
+        relation_node_id = add("Relation", relation.token, {
+            "relation_id": relation.relation_id,
+            "subject_types": list(relation.subject_types),
+            "object_types": list(relation.object_types),
+            "confidence": relation.confidence,
+            "version": relation.version,
+        }, node_id=f"relation:{relation.relation_id}")
+        edge(extraction_id, relation_node_id, "extraction_identified_relation")
+        edge(relation_node_id, fact_id, "relation_labels_fact")
+
+    version_id = add("KnowledgeVersion", f"K{getattr(store, 'versiyon', None)}", {
+        "knowledge_version": getattr(store, "versiyon", None),
+    }, node_id=f"knowledge-version:{getattr(store, 'versiyon', None)}")
+    edge(fact_id, version_id, "fact_stored_in_version")
+
+    last_id = version_id
+    if experience is not None:
+        exp_id = add("Experience", getattr(experience, "experience_id", "experience"), {
+            "experience_id": getattr(experience, "experience_id", None),
+            "state": getattr(getattr(experience, "state", None), "value", str(getattr(experience, "state", ""))),
+            "source": getattr(getattr(experience, "source", None), "value", str(getattr(experience, "source", ""))),
+            "source_confidence": getattr(experience, "source_confidence", None),
+        }, node_id=f"experience:{getattr(experience, 'experience_id', 'unknown')}")
+        edge(last_id, exp_id, "knowledge_version_supports_experience")
+        last_id = exp_id
+        verified_by = getattr(experience, "verified_by", None)
+        state = getattr(getattr(experience, "state", None), "value", str(getattr(experience, "state", "")))
+        if verified_by or state in {"VERIFIED", "INVALID", "UNCERTAIN"}:
+            ver_id = add("Verification", verified_by or state, {
+                "verified_by": verified_by,
+                "state": state,
+                "belirsizlik_sebebi": getattr(getattr(experience, "belirsizlik_sebebi", None), "value", None),
+            })
+            edge(last_id, ver_id, "experience_checked_by_verifier")
+            last_id = ver_id
+
+    if answer is not None:
+        answer_id = add("Answer", answer[:80], {"answer": answer})
+        edge(last_id, answer_id, "trace_supports_answer")
+
+    return ProvenanceChain(
+        nodes=nodes, edges=edges, missing=missing,
+        external_trace_required=external_required,
+    )
 
 
 def audit_provenance(store, max_orphan_samples: int = 25) -> ProvenanceRaporu:
@@ -325,7 +556,8 @@ def ingest_with_provenance(
 
 __all__ = [
     "DIS_KAYNAKLAR", "TURETILMIS_KAYNAKLAR", "ZORUNLU_ALANLAR",
-    "YetimOlgu", "ProvenanceRaporu", "HashDogrulamaRaporu",
-    "document_hash", "audit_provenance", "verify_document_hashes",
-    "ingest_with_provenance",
+    "PROVENANCE_CHAIN_KINDS", "ProvenanceNode", "ProvenanceEdge",
+    "ProvenanceChain", "YetimOlgu", "ProvenanceRaporu", "HashDogrulamaRaporu",
+    "document_hash", "build_provenance_chain", "audit_provenance",
+    "verify_document_hashes", "ingest_with_provenance",
 ]

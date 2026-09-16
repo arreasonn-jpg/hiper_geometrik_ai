@@ -56,6 +56,8 @@ TEACHERS = ("kronecker_teacher", "rank1_teacher", "low_rank_teacher",
 ARMS = ("kronecker", "rank1", "low_rank_param_matched", "low_rank_flop_matched",
         "kron_sum_2", "full_dense")
 PROTOCOL = "operator_baseline_family_v1"
+OFFICIAL_SEED_REQUIREMENT = 20
+OFFICIAL_SEEDS = tuple(range(1, OFFICIAL_SEED_REQUIREMENT + 1))
 
 #: Yapılı (ayrılabilir/düşük-ranklı) öğretmenler — geometrik bias lehine olması
 #: BEKLENEN görevler. Yapısız öğretmende beklenti tersidir.
@@ -279,6 +281,17 @@ def _std(values: Sequence[float]) -> float:
     return round(statistics.stdev(values), 10) if len(values) > 1 else 0.0
 
 
+def _ci95_mean(values: Sequence[float]) -> List[float]:
+    """Normal-yaklaşım %95 ortalama güven aralığı (küçük rapor bağımlılıksız)."""
+    if not values:
+        return [float("nan"), float("nan")]
+    ort = statistics.fmean(values)
+    if len(values) == 1:
+        return [round(ort, 10), round(ort, 10)]
+    yaricap = 1.96 * statistics.stdev(values) / math.sqrt(len(values))
+    return [round(max(0.0, ort - yaricap), 10), round(ort + yaricap, 10)]
+
+
 def run_operator_baseline_benchmark(
     n: int = 8,
     steps: int = 300,
@@ -371,6 +384,8 @@ def run_operator_baseline_benchmark(
                 "analytic_flops": kosular[0].analytic_flops,
                 "test_normalized_mse_mean": _mean(nmse),
                 "test_normalized_mse_std": _std(nmse),
+                "test_normalized_mse_ci95": _ci95_mean(nmse),
+                "seed_count": len(kosular),
                 "test_r2_mean": _mean([r.test_r2 for r in kosular]),
                 "train_normalized_mse_mean": _mean(
                     [r.train_normalized_mse for r in kosular]),
@@ -411,6 +426,9 @@ def run_operator_baseline_benchmark(
         "full_dense_is_over_budget": (
             butce.get("full_dense", {}).get("parameter_ratio_to_kronecker", 0) > 1.0
             if "full_dense" in arms else True),
+        "all_teacher_families_present": set(teachers) == set(TEACHERS),
+        "all_baseline_arms_present": set(arms) == set(ARMS),
+        "official_20_seed_rule_met": len(set(seeds)) >= OFFICIAL_SEED_REQUIREMENT,
     }
     if "kronecker" in arms and "rank1" in arms:
         kontroller["kronecker_beats_rank1_on_structured"] = all(
@@ -453,6 +471,13 @@ def run_operator_baseline_benchmark(
             + ", ".join(f"{t}: {v:+.6f}" for t, v in tavan_farki.items())
             + ". Pozitif değer Kronecker'ın tavanın gerisinde olduğunu gösterir.")
 
+    tohum_notu = (
+        f"Tohum sayısı {len(set(seeds))}; 20 tohum kuralı karşılandı ve rapor "
+        "çekirdek istatistiksel iddia için kullanılabilir."
+        if len(set(seeds)) >= OFFICIAL_SEED_REQUIREMENT
+        else f"Tohum sayısı {len(set(seeds))}; çekirdek bilimsel iddia için "
+        "20 tohum hedefi ayrıca koşulmalıdır."
+    )
     sinirlar = [
         "Görev tek katmanlı operatör regresyonudur; derin ağ, dil modeli veya "
         "sınıflandırma sonucu DEĞİLDİR.",
@@ -462,8 +487,7 @@ def run_operator_baseline_benchmark(
         "verimi (BLAS, cache, paralellik) ölçülmez — wall-clock ayrıca verilir.",
         "Öğretmenler sentetiktir; 'HGA şu problem sınıfında iyidir' sonucu "
         "yalnız bu sentetik sınıflar için geçerlidir.",
-        f"Tohum sayısı {len(seeds)}; çekirdek bilimsel iddia için 20 tohum "
-        "hedefi ayrıca koşulmalıdır.",
+        tohum_notu,
     ]
 
     return OperatorBaselineReport(
@@ -473,6 +497,27 @@ def run_operator_baseline_benchmark(
         parameter_matched_rankings=esit_param_siralama,
         ceiling_gap=tavan_farki, checks=kontroller,
         findings=bulgular, limitations=sinirlar,
+    )
+
+
+def run_operator_baseline_official_report(
+    n: int = 8,
+    steps: int = 300,
+    batch_size: int = 16,
+    test_samples: int = 256,
+    learning_rate: float = 0.01,
+    seeds: Sequence[int] = OFFICIAL_SEEDS,
+    device: str = "cpu",
+) -> OperatorBaselineReport:
+    """20-tohum resmi operatör baseline raporunu üret.
+
+    Parametreler testlerde hızlandırma için override edilebilir; varsayılanlar
+    dokümante edilen resmi rapor ayarlarıdır.
+    """
+    return run_operator_baseline_benchmark(
+        n=n, steps=steps, batch_size=batch_size, test_samples=test_samples,
+        learning_rate=learning_rate, seeds=seeds, arms=ARMS, teachers=TEACHERS,
+        device=device,
     )
 
 
@@ -499,12 +544,15 @@ def operator_baseline_markdown(report: OperatorBaselineReport) -> str:
 
     for task in report.teachers:
         satirlar += ["", f"## Öğretmen: `{task}`", "",
-                     "| Kol | test nMSE (ort) | ± std | R² | eğitim sn | P |",
-                     "|---|---:|---:|---:|---:|---:|"]
+                     "| Kol | test nMSE (ort) | 95% CI | ± std | R² | eğitim sn | P |",
+                     "|---|---:|---:|---:|---:|---:|---:|"]
         for arm in report.rankings[task]:
             r = report.results[task][arm]
+            ci = r.get("test_normalized_mse_ci95", [
+                r["test_normalized_mse_mean"], r["test_normalized_mse_mean"]])
             satirlar.append(
                 f"| `{arm}` | {r['test_normalized_mse_mean']:.6f} | "
+                f"[{ci[0]:.6f}, {ci[1]:.6f}] | "
                 f"{r['test_normalized_mse_std']:.6f} | {r['test_r2_mean']:.4f} | "
                 f"{r['training_seconds_mean']:.3f} | {r['parameters']:,} |")
 
@@ -519,7 +567,9 @@ def operator_baseline_markdown(report: OperatorBaselineReport) -> str:
 
 
 __all__ = [
-    "PROTOCOL", "ARMS", "TEACHERS", "STRUCTURED_TEACHERS", "UNSTRUCTURED_TEACHERS",
-    "ArmResult", "OperatorBaselineReport", "arm_budget", "budget_table",
-    "run_operator_baseline_benchmark", "operator_baseline_markdown",
+    "PROTOCOL", "OFFICIAL_SEED_REQUIREMENT", "OFFICIAL_SEEDS", "ARMS", "TEACHERS",
+    "STRUCTURED_TEACHERS", "UNSTRUCTURED_TEACHERS", "ArmResult",
+    "OperatorBaselineReport", "arm_budget", "budget_table",
+    "run_operator_baseline_benchmark", "run_operator_baseline_official_report",
+    "operator_baseline_markdown",
 ]

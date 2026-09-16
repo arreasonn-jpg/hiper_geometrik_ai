@@ -34,16 +34,22 @@ doldurulmuş, kör** değerlendirme paketlerini içerir.
 
 ```python
 from pathlib import Path
-from hga.evaluation.human_eval_fill import collect_ratings_from_csv
-from hga.evaluation.human_evaluation import build_human_evaluation_protocol
+from hga.evaluation.human_eval_fill import (
+    collect_ratings_from_csv,
+    human_rating_import_report,
+)
 
 ratings, ozet = collect_ratings_from_csv(Path("insan_degerlendirme_paketleri"))
-rapor = build_human_evaluation_protocol(collected_ratings=ratings)
-# rapor.results → boyut başına Krippendorff α; kapılar otomatik güncellenir
+import_report = human_rating_import_report(Path("insan_degerlendirme_paketleri"))
+# import_report → CSV ölçek doğrulama + Krippendorff α + kol agregasyonu
 ```
 
-En az 10 değerlendiricinin CSV'si dolmadan `human_ratings_collected`
-kapısı açılmaz ve karnede bölüm dürüstçe `n/a` kalır.
+Ana insan sonucu yalnız iki koşul birlikte sağlanınca açılır: en az 10
+değerlendiricinin CSV'si tam dolu olmalı **ve** paket kökünde
+`rater_attestation.json` bulunmalıdır (`real_human_ratings: true`, rater listesi,
+toplama tarihi/kişisi). Bu beyan yoksa dolu CSV'ler yalnız import/agregasyon
+smoke'u sayılır; `human_ratings_collected` kapısı açılmaz ve karnede bölüm
+dürüstçe `n/a` kalır.
 
 ## Dürüstlük notu
 

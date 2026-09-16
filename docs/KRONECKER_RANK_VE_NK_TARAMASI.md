@@ -74,7 +74,7 @@ kullanılıyor" sonucu çıkarmak hatalı olur:
 n=16, K=4'te teorik etkileşim uzayı `4.295e+09`, gerçek eğitilebilir parametre
 `2.048`. Bu, projenin başka yerlerinde de tekrarlanan ayrımın aynısıdır:
 **adreslenebilir olmak ≠ öğrenilebilir olmak** (bkz. `docs/KAPASITE_CERCEVESI.md`,
-C_M vs C_E/C_V ayrımı).
+C_M^UB vs C_E/C_V ayrımı).
 
 ## Ne iddia edilmiyor
 

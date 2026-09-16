@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """P0-6 (C_G v2) ve P3 (Capability Vector + otomatik karne) testleri."""
 import json
+from pathlib import Path
 
 import pytest
 
@@ -117,6 +118,14 @@ def test_terminoloji_ust_sinirlari_isaretler():
     assert TERMINOLOGY["C_M^UB"]["kind"] == "upper_bound"
     assert TERMINOLOGY["C_R"]["kind"] == "measured"
     assert "PARAMETRE DEĞİLDİR" in TERMINOLOGY["C_I^UB"]["note"]
+
+
+def test_readme_capability_vector_standardini_anlatiyor():
+    readme = Path(__file__).resolve().parents[2].joinpath("README.md").read_text(
+        encoding="utf-8")
+    assert "HGA Capability Vector" in readme
+    assert "C = [P, C_I^UB, C_M^UB, C_E, C_V, C_G, C_R, C_RD, C_MR, C_U, C_H]" in readme
+    assert "docs/SCORECARD.md" in readme
 
 
 def test_kanit_yoksa_deger_none():

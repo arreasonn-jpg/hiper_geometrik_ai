@@ -1,4 +1,4 @@
-# HGA Kapasite Çerçevesi: P, C_I, C_M, C_E, C_V, C_G
+# HGA Kapasite Çerçevesi: P, C_I^UB, C_M^UB, C_E, C_V, C_G
 
 Roadmap Faz 13 (Experience Capacity) ve Faz 14 (Verified Knowledge Capacity).
 
@@ -9,14 +9,14 @@ README bugüne kadar üç büyüklüğü dürüstçe ayırıyordu:
 | Sembol | Ad | Tip |
 |---|---|---|
 | `P` | fiziksel/eğitilebilir parametre | ölçülen |
-| `C_I` | etkileşim kapasitesi (`n^(2K)`) | üst sınır |
-| `C_M` | bellek adres kapasitesi (`sözlük^pencere`) | üst sınır |
+| `C_I^UB` | **Interaction Upper Bound** (`n^(2K)`) | üst sınır; parametre değil |
+| `C_M^UB` | **Memory Address Upper Bound** (`sözlük^pencere`) | üst sınır; fiziksel tablo değil |
 
 Bu doğru ama eksikti. Çünkü:
 
 > **Adreslenebilir olmak ≠ üretilebilir olmak ≠ doğrulanabilir olmak.**
 
-`C_M = 2.8×10⁶²` demek, sistemin 10⁶² anlamlı deneyim ürettiği anlamına
+`C_M^UB = 2.8×10⁶²` demek, sistemin 10⁶² anlamlı deneyim ürettiği anlamına
 gelmez. Eksik halkalar:
 
 | Sembol | Ad | Tanım |
@@ -27,7 +27,7 @@ gelmez. Eksik halkalar:
 Zorunlu sıralama:
 
 ```text
-C_V  ≤  C_E  ≤  C_M
+C_V  ≤  C_E  ≤  C_M^UB
 ```
 
 `C_E` ve `C_V` **teorik iddia değil, ölçüm sonucudur**.
@@ -52,7 +52,7 @@ rapor = measure_experience_capacity(
 )
 rapor.c_v_over_c_e      # doğrulanabilirlik oranı
 rapor.decidability      # karara bağlanabilen oran (None dönenler hariç)
-rapor.ordering_holds    # C_V ≤ C_E ≤ C_M
+rapor.ordering_holds    # C_V ≤ C_E ≤ C_M^UB
 ```
 
 ### `c_e_undecidable` neyi ölçer?
@@ -71,8 +71,8 @@ anlamsızdır: her şeyi reddeden bir sistem de FAR=0 üretir.
 | Kapasite | Sembol | Değer | Tip |
 |---|---|---:|---|
 | Fiziksel parametre | `P` | 40.524.865 | ölçülen |
-| Etkileşim kapasitesi | `C_I` | 1.845×10¹⁹ | üst sınır |
-| Bellek adres kapasitesi | `C_M` | 2.815×10⁶² | üst sınır |
+| Interaction Upper Bound | `C_I^UB` | 1.845×10¹⁹ | üst sınır; parametre değil |
+| Memory Address Upper Bound | `C_M^UB` | 2.815×10⁶² | üst sınır; fiziksel tablo değil |
 | Deneyim kapasitesi | `C_E` | 1.184.832 | **ölçülen** |
 | Doğrulanabilir kapasite | `C_V` | 1.180.685 | **ölçülen** |
 
@@ -81,7 +81,7 @@ karara bağlanabiliyor, çünkü oracle tamdır. Gerçek dilde bu oranın **çok
 düşük** olması beklenir; kapasite çerçevesinin asıl değeri de bu farkı
 ölçülebilir kılmasıdır.
 
-`C_M` ile `C_E` arasındaki ~10⁵⁶'lık uçurum çerçevenin özetidir: sistem
+`C_M^UB` ile `C_E` arasındaki ~10⁵⁶'lık uçurum çerçevenin özetidir: sistem
 10⁶² adresi adresleyebilir ama bu domainde 10⁶ deneyim üretip doğrulayabilir.
 
 ---
@@ -94,9 +94,10 @@ Bundan sonra kapasite anlatımı şu biçimde yapılır:
 |---|---|
 | "10⁶² bellek" | "10⁶² kavramsal adres uzayı, 128 MB fiziksel tablo" |
 | "n⁴ parametre" | "n⁴ operatör girdisi, 2n² gerçek parametre" |
-| "katrilyonlarca deneyim" | "C_M = 10⁶², ölçülen C_E = 1,18×10⁶ (aritmetik domain)" |
+| "katrilyonlarca deneyim" | "C_M^UB = 10⁶² kavramsal adres üst sınırı, ölçülen C_E = 1,18×10⁶ (aritmetik domain)" |
 
 `capacity_contract()` bu etiketleri makine-okunur biçimde de döndürür:
+`c_i_upper_bound`, `c_m_address_upper_bound`, `symbol_map`,
 `c_i_is_parameter_count=False`, `c_m_is_physical_table_size=False`.
 
 ---
@@ -118,7 +119,7 @@ unseen sentence boyutu taşır. Hem pay/payda hem oran saklanır.
 Önemli ayrım:
 
 ```text
-C_V ≤ C_E ≤ C_M
+C_V ≤ C_E ≤ C_M^UB
 
 ama C_G bu büyüklük eşitsizliğinin parçası değildir.
 ```

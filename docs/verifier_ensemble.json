@@ -1,0 +1,881 @@
+{
+  "benchmark_id": "hga-verifier-adversarial-v2",
+  "by_attack_class": {
+    "adversarial_input": {
+      "accuracy": 1.0,
+      "correct": 6,
+      "disagreement_rate": 0.0,
+      "disagreements": 0,
+      "total": 6
+    },
+    "boundary_case": {
+      "accuracy": 1.0,
+      "correct": 4,
+      "disagreement_rate": 0.0,
+      "disagreements": 0,
+      "total": 4
+    },
+    "contradictory_proof": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "disagreement_rate": 0.5,
+      "disagreements": 1,
+      "total": 2
+    },
+    "false_proof": {
+      "accuracy": 1.0,
+      "correct": 5,
+      "disagreement_rate": 0.4,
+      "disagreements": 2,
+      "total": 5
+    },
+    "incomplete_proof": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "disagreement_rate": 0.0,
+      "disagreements": 0,
+      "total": 2
+    },
+    "malformed_proof": {
+      "accuracy": 1.0,
+      "correct": 7,
+      "disagreement_rate": 0.14285714,
+      "disagreements": 1,
+      "total": 7
+    },
+    "unsupported_rule": {
+      "accuracy": 1.0,
+      "correct": 2,
+      "disagreement_rate": 0.0,
+      "disagreements": 0,
+      "total": 2
+    },
+    "valid_control": {
+      "accuracy": 1.0,
+      "correct": 3,
+      "disagreement_rate": 0.0,
+      "disagreements": 0,
+      "total": 3
+    }
+  },
+  "checks": {
+    "all_cases_have_all_votes": true,
+    "ensemble_accuracy_at_least_best_member": true,
+    "member_count_at_least_3": true,
+    "robustness_at_least_1_0": true,
+    "unsupported_rule_not_forced_verified": true,
+    "zero_false_acceptance": true,
+    "zero_false_rejection": true
+  },
+  "dataset_hash": "ebf5bb4c5f0953655397db629a047a6c1bd607eb89aabe61870ab19477716b9c",
+  "disagreement_rate": 0.12903226,
+  "ensemble_hash": "1c759b597ab75ea52deb7cf7a9b8577526dd4766632b16d6835e80a9a2acd2b5",
+  "ensemble_policy": "unanimous_accept_any_invalid_reject_uncertain_preserved",
+  "limitations": [
+    "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
+    "Unsupported operator/rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
+    "v2 saldırıları elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez.",
+    "Toplama dışındaki matematiksel doğruluk bilinçli olarak başarı sayılmaz; alan dışı kalır.",
+    "Ensemble yalnız aynı kapalı aritmetik proof sözleşmesini üç ayrı denetimle ölçer; genel theorem prover değildir.",
+    "Oybirliği politikası false accept riskini azaltır ama desteklenmeyen doğru ispatları UNCERTAIN bırakabilir."
+  ],
+  "member_metrics": {
+    "normal_form_oracle": {
+      "accuracy": 0.87096774,
+      "correct": 27,
+      "coverage": 0.90322581,
+      "f1": 0.71428572,
+      "false_acceptance": 4,
+      "false_rejection": 0,
+      "far": 0.15384615,
+      "frr": 0.0,
+      "invalid_or_unsupported_proofs": 26,
+      "precision": 0.55555556,
+      "recall": 1.0,
+      "robustness": 0.83333333,
+      "total": 31,
+      "true_acceptance": 5,
+      "true_rejection": 22,
+      "uncertain": 3,
+      "valid_proofs": 5
+    },
+    "strict_schema_oracle": {
+      "accuracy": 1.0,
+      "correct": 31,
+      "coverage": 0.90322581,
+      "f1": 1.0,
+      "false_acceptance": 0,
+      "false_rejection": 0,
+      "far": 0.0,
+      "frr": 0.0,
+      "invalid_or_unsupported_proofs": 26,
+      "precision": 1.0,
+      "recall": 1.0,
+      "robustness": 1.0,
+      "total": 31,
+      "true_acceptance": 5,
+      "true_rejection": 26,
+      "uncertain": 3,
+      "valid_proofs": 5
+    },
+    "trace_replay_oracle": {
+      "accuracy": 1.0,
+      "correct": 31,
+      "coverage": 0.90322581,
+      "f1": 1.0,
+      "false_acceptance": 0,
+      "false_rejection": 0,
+      "far": 0.0,
+      "frr": 0.0,
+      "invalid_or_unsupported_proofs": 26,
+      "precision": 1.0,
+      "recall": 1.0,
+      "robustness": 1.0,
+      "total": 31,
+      "true_acceptance": 5,
+      "true_rejection": 26,
+      "uncertain": 3,
+      "valid_proofs": 5
+    }
+  },
+  "members": [
+    "strict_schema_oracle",
+    "normal_form_oracle",
+    "trace_replay_oracle"
+  ],
+  "metrics": {
+    "accuracy": 1.0,
+    "correct": 31,
+    "coverage": 0.90322581,
+    "f1": 1.0,
+    "false_acceptance": 0,
+    "false_rejection": 0,
+    "far": 0.0,
+    "frr": 0.0,
+    "invalid_or_unsupported_proofs": 26,
+    "precision": 1.0,
+    "recall": 1.0,
+    "robustness": 1.0,
+    "total": 31,
+    "true_acceptance": 5,
+    "true_rejection": 26,
+    "uncertain": 3,
+    "valid_proofs": 5
+  },
+  "predictions": [
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-001",
+      "correct": true,
+      "expected": "VERIFIED",
+      "member_disagreement": false,
+      "predicted": "VERIFIED",
+      "reason": "tüm verifier üyeleri VERIFIED dedi",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı",
+          "state": "VERIFIED"
+        },
+        "trace_replay_oracle": {
+          "reason": "integer_addition trace replay doğrulandı",
+          "state": "VERIFIED"
+        }
+      }
+    },
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-ZERO",
+      "correct": true,
+      "expected": "VERIFIED",
+      "member_disagreement": false,
+      "predicted": "VERIFIED",
+      "reason": "tüm verifier üyeleri VERIFIED dedi",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı",
+          "state": "VERIFIED"
+        },
+        "trace_replay_oracle": {
+          "reason": "integer_addition trace replay doğrulandı",
+          "state": "VERIFIED"
+        }
+      }
+    },
+    {
+      "attack_class": "valid_control",
+      "case_id": "VP2-VALID-NEGATIVE",
+      "correct": true,
+      "expected": "VERIFIED",
+      "member_disagreement": false,
+      "predicted": "VERIFIED",
+      "reason": "tüm verifier üyeleri VERIFIED dedi",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı",
+          "state": "VERIFIED"
+        },
+        "trace_replay_oracle": {
+          "reason": "integer_addition trace replay doğrulandı",
+          "state": "VERIFIED"
+        }
+      }
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-VALID-BOUNDARY-MAX",
+      "correct": true,
+      "expected": "VERIFIED",
+      "member_disagreement": false,
+      "predicted": "VERIFIED",
+      "reason": "tüm verifier üyeleri VERIFIED dedi",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı",
+          "state": "VERIFIED"
+        },
+        "trace_replay_oracle": {
+          "reason": "integer_addition trace replay doğrulandı",
+          "state": "VERIFIED"
+        }
+      }
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-VALID-BOUNDARY-MIN",
+      "correct": true,
+      "expected": "VERIFIED",
+      "member_disagreement": false,
+      "predicted": "VERIFIED",
+      "reason": "tüm verifier üyeleri VERIFIED dedi",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "katı şema ve bağımsız toplama oracle'ı doğruladı",
+          "state": "VERIFIED"
+        },
+        "trace_replay_oracle": {
+          "reason": "integer_addition trace replay doğrulandı",
+          "state": "VERIFIED"
+        }
+      }
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-CLAIM-RESULT",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "normal form claim sonucunu reddetti",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace çıktısı oracle ile uyuşmuyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-STEP-OUTPUT",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": true,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace çıktısı oracle ile uyuşmuyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-CONCLUSION",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "normal form conclusion sonucunu reddetti",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "conclusion claim/adım ile çelişiyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace sonucu claim/conclusion ile çelişiyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-INPUT-MISMATCH",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": true,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım girdileri claim ile çelişiyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace girdileri claim ile çelişiyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "false_proof",
+      "case_id": "VP2-FALSE-NEGATIVE-SIGN",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "normal form claim sonucunu reddetti",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace çıktısı oracle ile uyuşmuyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "incomplete_proof",
+      "case_id": "VP2-INCOMPLETE-EMPTY-STEPS",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "ispat en az bir adım içermeli",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "ispat en az bir adım içermeli",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "ispat en az bir adım içermeli",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "incomplete_proof",
+      "case_id": "VP2-INCOMPLETE-TOO-MANY-STEPS",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "ispat adım sınırını aşıyor",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "ispat adım sınırını aşıyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "ispat adım sınırını aşıyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "contradictory_proof",
+      "case_id": "VP2-CONTRADICTORY-CLAIM-STEP",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": true,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım çıktısı aritmetik oracle ile uyuşmuyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace çıktısı oracle ile uyuşmuyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "contradictory_proof",
+      "case_id": "VP2-CONTRADICTORY-CONCLUSION",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "normal form conclusion sonucunu reddetti",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "conclusion claim/adım ile çelişiyor",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "trace sonucu claim/conclusion ile çelişiyor",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-NOT-MAPPING",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "proof nesnesi mapping olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "proof nesnesi mapping olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "proof nesnesi mapping olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-MISSING-TOP",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-EXTRA-TOP",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "proof alanları eksik veya fazladır",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-EXTRA-CLAIM",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim alanları eksik veya fazladır",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim alanları eksik veya fazladır",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-MISSING-STEP-FIELD",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-INPUT-ARITY",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": true,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/result/conclusion normal formu doğrulandı",
+          "state": "VERIFIED"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım iki input içermeli",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "adım iki input içermeli",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "malformed_proof",
+      "case_id": "VP2-MALFORMED-STEPS-NOT-LIST",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "steps liste olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "steps liste olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "steps liste olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-BOUNDARY-LEFT-TOO-HIGH",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "boundary_case",
+      "case_id": "VP2-BOUNDARY-RIGHT-TOO-LOW",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-BOOL",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-STRING-INT",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-NULL",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-FLOAT",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "claim/conclusion katı ve sınırlı int olmalı",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-OP-INJECTION",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "member_disagreement": false,
+      "predicted": "UNCERTAIN",
+      "reason": "en az bir üye UNCERTAIN; VERIFIED için oybirliği yok",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "desteklenmeyen operator: add; accept_all",
+          "state": "UNCERTAIN"
+        },
+        "strict_schema_oracle": {
+          "reason": "desteklenmeyen operator: add; accept_all",
+          "state": "UNCERTAIN"
+        },
+        "trace_replay_oracle": {
+          "reason": "desteklenmeyen operator: add; accept_all",
+          "state": "UNCERTAIN"
+        }
+      }
+    },
+    {
+      "attack_class": "adversarial_input",
+      "case_id": "VP2-ADVERSARIAL-EXTRA-STEP-FIELD",
+      "correct": true,
+      "expected": "INVALID",
+      "member_disagreement": false,
+      "predicted": "INVALID",
+      "reason": "INVALID oyu: strict_schema_oracle,normal_form_oracle,trace_replay_oracle",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        },
+        "strict_schema_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        },
+        "trace_replay_oracle": {
+          "reason": "adım şeması geçersiz",
+          "state": "INVALID"
+        }
+      }
+    },
+    {
+      "attack_class": "unsupported_rule",
+      "case_id": "VP2-UNSUPPORTED-OPERATOR-MULTIPLY",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "member_disagreement": false,
+      "predicted": "UNCERTAIN",
+      "reason": "en az bir üye UNCERTAIN; VERIFIED için oybirliği yok",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "desteklenmeyen operator: multiply",
+          "state": "UNCERTAIN"
+        },
+        "strict_schema_oracle": {
+          "reason": "desteklenmeyen operator: multiply",
+          "state": "UNCERTAIN"
+        },
+        "trace_replay_oracle": {
+          "reason": "desteklenmeyen operator: multiply",
+          "state": "UNCERTAIN"
+        }
+      }
+    },
+    {
+      "attack_class": "unsupported_rule",
+      "case_id": "VP2-UNSUPPORTED-RULE-SUBTRACT",
+      "correct": true,
+      "expected": "UNCERTAIN",
+      "member_disagreement": false,
+      "predicted": "UNCERTAIN",
+      "reason": "en az bir üye UNCERTAIN; VERIFIED için oybirliği yok",
+      "votes": {
+        "normal_form_oracle": {
+          "reason": "desteklenmeyen rule: integer_subtraction",
+          "state": "UNCERTAIN"
+        },
+        "strict_schema_oracle": {
+          "reason": "desteklenmeyen rule: integer_subtraction",
+          "state": "UNCERTAIN"
+        },
+        "trace_replay_oracle": {
+          "reason": "desteklenmeyen rule: integer_subtraction",
+          "state": "UNCERTAIN"
+        }
+      }
+    }
+  ],
+  "protocol": "multi_verifier_ensemble_v1"
+}

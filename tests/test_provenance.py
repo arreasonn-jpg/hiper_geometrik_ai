@@ -3,12 +3,14 @@
 import pytest
 
 from hga.evaluation.provenance import (
+    PROVENANCE_CHAIN_KINDS,
     audit_provenance,
+    build_provenance_chain,
     document_hash,
     ingest_with_provenance,
     verify_document_hashes,
 )
-from hga.knowledge import KaynakTuru, KnowledgeStore
+from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru, KnowledgeStore
 
 BELGE = "Ali ata bindi. Ayşe kitabı okudu. Mehmet topu attı."
 CUMLELER = [c.strip() + "." for c in BELGE.split(".") if c.strip()]
@@ -133,3 +135,63 @@ def test_belge_saglanmazsa_dogrulanamaz_olarak_raporlanir():
     rapor = verify_document_hashes(s, {})
     assert not rapor.clean
     assert rapor.unknown_documents == rapor.checked
+
+
+# ── Provenance graph / "Bunu neden biliyorsun?" zinciri ───────────────────
+def test_olgu_provenance_zinciri_cumle_varlik_iliski_surumu_baglar():
+    s = _store()
+    ingest_with_provenance(s, CUMLELER, source_url="test://1", content=BELGE,
+                           extractor="semantic-v1")
+    olgu = s.relations.olgular()[0]
+    zincir = build_provenance_chain(s, olgu)
+    veri = zincir.to_dict()
+    assert zincir.complete_external_trace
+    assert zincir.missing == []
+    assert "Source" in veri["chain_kinds"]
+    assert "Document" in veri["chain_kinds"]
+    assert "Sentence" in veri["chain_kinds"]
+    assert "Extraction" in veri["chain_kinds"]
+    assert veri["chain_kinds"].count("Entity") == 2
+    assert "Relation" in veri["chain_kinds"]
+    assert "RelationFact" in veri["chain_kinds"]
+    assert "KnowledgeVersion" in veri["chain_kinds"]
+    assert set(PROVENANCE_CHAIN_KINDS) >= set(veri["chain_kinds"])
+    edge_types = {e["relation"] for e in veri["edges"]}
+    assert "document_contains_sentence" in edge_types
+    assert "extraction_asserted_fact" in edge_types
+    assert "fact_stored_in_version" in edge_types
+
+
+def test_provenance_zinciri_deneyim_dogrulama_cevap_dugumleri_ekler():
+    s = _store()
+    ingest_with_provenance(s, CUMLELER, source_url="test://1", content=BELGE)
+    olgu = s.relations.olgular()[0]
+    deneyim = ExperienceCandidate(
+        experience_id="EXP-1",
+        subject_id=olgu.subject_id,
+        relation_id=olgu.relation_id,
+        object_id=olgu.object_id,
+        state=DeneyimDurumu.VERIFIED,
+        verified_by="oracle-v1",
+    )
+    zincir = build_provenance_chain(s, olgu, experience=deneyim,
+                                    answer="Ali ata bindiği için ilişki kayıtlıdır.")
+    kinds = zincir.kinds()
+    assert "Experience" in kinds
+    assert "Verification" in kinds
+    assert "Answer" in kinds
+    verification = next(n for n in zincir.to_dict()["nodes"]
+                        if n["kind"] == "Verification")
+    assert verification["metadata"]["verified_by"] == "oracle-v1"
+
+
+def test_provenance_zinciri_yetim_olguda_eksikleri_aciklar():
+    s = _store()
+    s.varlik_ekle("a", entity_id="A")
+    s.varlik_ekle("b", entity_id="B")
+    s.iliski_tanimla("r", relation_id="R")
+    olgu = s.olgu_kaydet("A", "R", "B", 1.0, source=KaynakTuru.REAL_DATA)
+    zincir = build_provenance_chain(s, olgu)
+    assert not zincir.complete_external_trace
+    assert {"Source.source_url", "Document.document_hash",
+            "Sentence.text", "Extraction.extractor"} <= set(zincir.missing)

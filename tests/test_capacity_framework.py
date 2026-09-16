@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Faz 13–14: P / C_I / C_M / C_E / C_V kapasite çerçevesi testleri."""
+"""Faz 13–14: P / C_I^UB / C_M^UB / C_E / C_V kapasite çerçevesi testleri."""
 import pytest
 
 from hga.evaluation import (
@@ -15,7 +15,12 @@ def test_capacity_contract_ust_sinirlari_parametre_saymaz():
     sozlesme = capacity_contract(physical_parameters=1000, n=256, k=4,
                                  vocab=8000, window=16)
     assert sozlesme["c_i_interaction"] == 256.0 ** 8
+    assert sozlesme["c_i_upper_bound"] == 256.0 ** 8
     assert sozlesme["c_m_conceptual"] == 8000.0 ** 16
+    assert sozlesme["c_m_address_upper_bound"] == 8000.0 ** 16
+    assert sozlesme["symbol_map"]["c_i_upper_bound"] == "C_I^UB"
+    assert sozlesme["symbol_map"]["c_m_address_upper_bound"] == "C_M^UB"
+    assert "C_I^UB" in sozlesme["statement"]
     assert sozlesme["c_i_is_parameter_count"] is False
     assert sozlesme["c_m_is_physical_table_size"] is False
 
@@ -58,10 +63,22 @@ def test_ornekleme_raporda_acikca_bildirilir():
     assert any("Örnekleme" in n for n in rapor.notes)
 
 
+def test_rapor_dict_resmi_ust_sinir_aliaslarini_tasir():
+    rapor = run_capacity_benchmark(operands_max=4, sample_size=None)
+    veri = rapor.to_dict()
+    assert veri["c_i_upper_bound"] == rapor.c_i_interaction
+    assert veri["c_m_address_upper_bound"] == rapor.c_m_conceptual
+    assert veri["symbol_map"]["c_i_interaction"] == "C_I^UB"
+    assert veri["symbol_map"]["c_m_conceptual"] == "C_M^UB"
+    assert veri["log10"]["c_i_ub"] == veri["log10"]["c_i"]
+    assert veri["log10"]["c_m_ub"] == veri["log10"]["c_m"]
+    assert "Interaction Upper Bound" in veri["terminology"]["C_I^UB"]
+
+
 def test_markdown_tablosu_bes_kapasiteyi_icerir():
     rapor = run_capacity_benchmark(operands_max=4, sample_size=None)
     md = rapor.markdown()
-    for sembol in ("P", "C_I", "C_M", "C_E", "C_V"):
+    for sembol in ("P", "C_I^UB", "C_M^UB", "C_E", "C_V"):
         assert f"| {sembol} |" in md
 
 

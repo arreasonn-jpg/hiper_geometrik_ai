@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""P1 — Uzun bağlam dil modelleme: 24→256 token bağlam taraması.
+"""P1 — Uzun bağlam dil modelleme: 24→1024 token bağlam taraması.
 
 Ana Türkçe LM protokolü (``turkish_lm``) 24 token bağlamla koşar. Bu modül
 aynı korpus, aynı train-only BPE ve aynı parametre-eşleme kuralıyla bağlam
-uzunluğunu tek değişken olarak tarar: 24 (referans), 64, 128, 256.
+uzunluğunu tek değişken olarak tarar: 24 (referans), 64, 128, 256, 512, 1024.
 
 Tasarım kararları (adillik için):
 
@@ -11,10 +11,10 @@ Tasarım kararları (adillik için):
    olarak BİR KEZ örneklenir ve tüm bağlam uzunluklarında + tüm kollarda
    aynen kullanılır. Böylece "PPL bağlamla nasıl değişti" sorusu aynı hedef
    token kümesi üzerinde, yalnız görünür bağlam değişerek ölçülür.
-2. **Örneklenmiş pencereler.** 256 token bağlamda tüm pencereleri
-   materyalize etmek RAM'i aşar (~1.5 GB / split). Pencereler deterministik
-   RNG ile örneklenir; PPL bu yüzden korpus CE'sinin YANSIZ bir tahminidir
-   ve rapor bunu sınır olarak yazar.
+2. **Örneklenmiş pencereler.** 512/1024 token bağlamda tüm pencereleri
+   materyalize etmek RAM'i aşar. Pencereler deterministik RNG ile örneklenir;
+   PPL bu yüzden korpus CE'sinin YANSIZ bir tahminidir ve rapor bunu sınır
+   olarak yazar.
 3. **Bağlam başına parametre eşleme.** Girdi boyutu bağlamla büyüdüğü için
    dense/transformer genişlikleri her bağlamda HGA bütçesine yeniden
    eşlenir (``build_lm_models`` ile, oran ≤ 1.05).
@@ -45,7 +45,8 @@ PROTOCOL = "long_context_lm_v1"
 SCHEMA_VERSION = 1
 
 #: Taranan bağlam uzunlukları. 24 ana protokolün referansıdır.
-CONTEXTS: Tuple[int, ...] = (24, 64, 128, 256)
+CONTEXTS: Tuple[int, ...] = (24, 64, 128, 256, 512, 1024)
+LONG_CONTEXT_TARGETS: Tuple[int, ...] = (512, 1024)
 
 PROFILES: Dict[str, Dict[str, Any]] = {
     # Hızlı CI: küçük TWT korpusu, iki bağlam, az adım.
@@ -57,11 +58,21 @@ PROFILES: Dict[str, Dict[str, Any]] = {
         "emb_dim": 16, "hga_n": 16, "heads": 2, "hga_layers": 1,
         "train_windows": 8_000, "eval_windows": 2_000,
     },
-    # Bilimsel koşu: milyon-kelime korpus, 24→256 tarama. batch=32 tüm
+    # Hızlı 512/1024 yol testi: uzun bağlam kod yolunu CI/smoke içinde
+    # çalıştırır; kalite/karşılaştırma iddiası değil bellek ve şekil kapısıdır.
+    "smoke_1024": {
+        "corpus": "twt", "max_docs": 80, "max_vocab": 512,
+        "contexts": LONG_CONTEXT_TARGETS, "seeds": (1, 2),
+        "steps": 3, "batch_size": 8, "eval_batch_size": 64,
+        "learning_rate": 0.003, "gradient_clip_norm": 5.0,
+        "emb_dim": 8, "hga_n": 8, "heads": 2, "hga_layers": 1,
+        "train_windows": 256, "eval_windows": 128,
+    },
+    # Bilimsel koşu: milyon-kelime korpus, 24→1024 tarama. batch=32 tüm
     # bağlamlarda SABİTTİR: (a) schedule böylece bağlamlar arasında aynı
-    # kalır (aynı tohum → aynı örnekler → eşleşmiş eğitim), (b) 256 tokenda
-    # parametre eşleme transformer FFN'ini ~7400'e büyütür ve daha büyük
-    # batch'in aktivasyonları 3 GB sınıfı makinede RAM'i aşar.
+    # kalır (aynı tohum → aynı örnekler → eşleşmiş eğitim), (b) 1024 tokenda
+    # parametre eşleme transformer FFN'ini büyütür ve daha büyük batch'in
+    # aktivasyonları sınırlı makinelerde RAM'i aşabilir.
     "full": {
         "corpus": "tr_corpus_v1", "max_docs": None, "max_vocab": 8000,
         "contexts": CONTEXTS, "seeds": (1, 2),
@@ -298,7 +309,7 @@ def run_long_context_benchmark(
                                         evals, schedule, cfg_c)
                 olcum["seed"] = int(tohum)
                 sonuclar[ad][str(baglam)]["per_seed"].append(olcum)
-        del train_x, train_y, evals  # 256 bağlamda pencere RAM'i geri ver
+        del train_x, train_y, evals  # uzun bağlamda pencere RAM'i geri ver
 
     # Özetler ve bağlam etkisi.
     for arm in NEURAL_ARMS:
@@ -340,6 +351,7 @@ def run_long_context_benchmark(
     # zemini KAPI değil RAPORLANAN ölçümdür ve neural kolların onu bu
     # bütçede geçmediği bulgularda açıkça yazılır. Aynı iddiayı iki
     # protokolde kapılamak çift sayım olurdu.
+    includes_targets = set(LONG_CONTEXT_TARGETS) <= set(baglam_listesi)
     checks = {
         "all_cells_completed": all(
             len(sonuclar[a][str(c)]["per_seed"]) == len(tohumlar)
@@ -353,6 +365,10 @@ def run_long_context_benchmark(
             str(c) in ngram_sonuc for c in baglam_listesi),
         "context_effect_direction_reported": bool(etki["per_arm"]),
         "multi_seed_reported": len(tohumlar) >= 2,
+        "long_context_targets_configured": (
+            includes_targets if profile in {"smoke_1024", "full"} else True),
+        "max_context_at_least_1024_when_configured": (
+            max(baglam_listesi) >= 1024 if includes_targets else True),
     }
 
     bulgular: List[str] = []
@@ -365,9 +381,13 @@ def run_long_context_benchmark(
     bulgular.append(
         f"Zemin @ bağlam {son}: unigram PPL {unigram_son:.1f}, "
         f"bigram {bigram_son:.1f}; en iyi neural {en_iyi_son:.1f}.")
+    if includes_targets:
+        bulgular.append(
+            "512/1024 token uzun bağlam kod yolu bu profilde koşuldu; "
+            "bu bir kalite iddiası değil şekil/bütçe/pozisyon eşleşmesi kapısıdır.")
     if en_iyi_son >= bigram_son:
         bulgular.append(
-            "AÇIK SINIR: bu kısa eşit-bütçe taramasında (300 adım) hiçbir "
+            f"AÇIK SINIR: bu kısa eşit-bütçe taramasında ({config['steps']} adım) hiçbir "
             "neural kol bigram zeminini geçmedi. Mutlak LM kalitesi iddiası "
             "bu protokolün konusu değildir ve `turkish_lm` full (4000 adım) "
             "protokolünde ölçülür; oradaki n-gram kapıları gerçek veriyle "
@@ -418,6 +438,9 @@ def run_long_context_benchmark(
             "ve gizlenmez.",
             "Tek korpus (tr_corpus_v1) ve tek dil (Türkçe); genelleme "
             "iddiası taşımaz.",
+            "`smoke_1024` profili yalnız 512/1024 kod yolunu duman testinden "
+            "geçirir; tam kalite raporu için `full` profili 24→1024 taramasını "
+            "çalıştırmalıdır.",
         ],
     )
 
@@ -472,6 +495,6 @@ def long_context_markdown(report: LongContextReport) -> str:
 
 
 __all__ = [
-    "CONTEXTS", "PROFILES", "PROTOCOL", "SCHEMA_VERSION",
+    "CONTEXTS", "LONG_CONTEXT_TARGETS", "PROFILES", "PROTOCOL", "SCHEMA_VERSION",
     "LongContextReport", "long_context_markdown", "run_long_context_benchmark",
 ]

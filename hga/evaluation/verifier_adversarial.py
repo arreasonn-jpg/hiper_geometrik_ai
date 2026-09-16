@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 DATA_PACKAGE = "hga.evaluation.datasets"
 DATA_FILE = "verifier_adversarial_v1.json"
+DATA_FILE_V2 = "verifier_adversarial_v2.json"
 STATES = ("VERIFIED", "INVALID", "UNCERTAIN")
 REQUIRED_ATTACK_CLASSES = {
     "false_proof",
@@ -23,6 +24,10 @@ REQUIRED_ATTACK_CLASSES = {
     "malformed_proof",
     "boundary_case",
     "adversarial_input",
+}
+REQUIRED_ATTACK_CLASSES_V2 = REQUIRED_ATTACK_CLASSES | {
+    "valid_control",
+    "unsupported_rule",
 }
 
 
@@ -64,6 +69,7 @@ class VerifierAttackReport:
     metrics: VerifierAttackMetrics
     by_attack_class: Dict[str, Dict[str, Any]]
     predictions: List[Dict[str, Any]] = field(default_factory=list)
+    checks: Dict[str, bool] = field(default_factory=dict)
     limitations: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,8 +77,9 @@ class VerifierAttackReport:
 
     def markdown(self) -> str:
         lines = [
-            "# HGA Verifier Adversarial Suite v1",
+            "# HGA Verifier Adversarial Suite",
             "",
+            f"- Benchmark: `{self.benchmark_id}`",
             f"- Dataset hash: `{self.dataset_hash}`",
             f"- Accuracy: `{self.metrics.accuracy:.3f}`",
             f"- FAR: `{self.metrics.far:.3f}`",
@@ -88,18 +95,29 @@ class VerifierAttackReport:
                 f"| {name} | {metrics['total']} | {metrics['correct']} | "
                 f"{metrics['accuracy']:.3f} |"
             )
+        lines.extend(["", "## Kabul kapıları", "", "| kapı | sonuç |", "|---|---|"])
+        for name, passed in self.checks.items():
+            lines.append(f"| {name} | {'GEÇTİ' if passed else 'KALDI'} |")
         lines.extend(["", "## Sınırlar", ""])
         lines.extend(f"- {note}" for note in self.limitations)
         return "\n".join(lines) + "\n"
 
 
 class VerifierAttackDataset:
-    def __init__(self, document: Optional[Mapping[str, Any]] = None):
+    def __init__(
+        self,
+        document: Optional[Mapping[str, Any]] = None,
+        *,
+        data_file: str = DATA_FILE,
+        required_attack_classes: Optional[Sequence[str]] = None,
+    ):
         if document is None:
-            ref = resources.files(DATA_PACKAGE).joinpath(DATA_FILE)
+            ref = resources.files(DATA_PACKAGE).joinpath(data_file)
             with ref.open("r", encoding="utf-8") as handle:
                 document = json.load(handle)
         self.document = dict(document)
+        self.required_attack_classes = set(
+            required_attack_classes or REQUIRED_ATTACK_CLASSES)
         if self.document.get("schema_version") != 1:
             raise ValueError("Desteklenmeyen verifier adversarial schema_version")
         self.records = list(self.document.get("records", []))
@@ -113,7 +131,7 @@ class VerifierAttackDataset:
         if any(not value for value in ids) or len(set(ids)) != len(ids):
             raise ValueError("Verifier case_id değerleri dolu ve benzersiz olmalı")
         classes = {record.get("attack_class") for record in self.records}
-        missing = REQUIRED_ATTACK_CLASSES - classes
+        missing = self.required_attack_classes - classes
         if missing:
             raise ValueError(f"Verifier saldırı sınıfları eksik: {sorted(missing)}")
         for record in self.records:
@@ -258,6 +276,28 @@ def _metrics(
     )
 
 
+def _report_checks(
+    dataset: VerifierAttackDataset,
+    metrics: VerifierAttackMetrics,
+    predictions: Sequence[Mapping[str, Any]],
+) -> Dict[str, bool]:
+    classes = {record["attack_class"] for record in dataset.records}
+    unsupported = [
+        prediction for prediction in predictions
+        if prediction["attack_class"] == "unsupported_rule"
+    ]
+    minimum_cases = 30 if dataset.document.get("benchmark_id") == "hga-verifier-adversarial-v2" else 12
+    return {
+        "required_attack_classes_present": dataset.required_attack_classes <= classes,
+        f"minimum_{minimum_cases}_cases": len(dataset.records) >= minimum_cases,
+        "zero_false_acceptance": metrics.far == 0.0,
+        "zero_false_rejection": metrics.frr == 0.0,
+        "robustness_at_least_1_0": metrics.robustness >= 1.0,
+        "unsupported_rules_not_accepted": all(
+            prediction["predicted"] != "VERIFIED" for prediction in unsupported),
+    }
+
+
 def run_verifier_adversarial_benchmark(
     dataset: Optional[VerifierAttackDataset] = None,
 ) -> VerifierAttackReport:
@@ -292,12 +332,24 @@ def run_verifier_adversarial_benchmark(
         benchmark_id=dataset.document["benchmark_id"],
         dataset_hash=dataset.dataset_hash(), metrics=metrics,
         by_attack_class=by_class, predictions=predictions,
+        checks=_report_checks(dataset, metrics, predictions),
         limitations=list(dataset.document.get("limitations", [])),
     )
 
 
+def run_verifier_adversarial_v2_benchmark() -> VerifierAttackReport:
+    """Genişletilmiş v2 adversarial proof fixture'ını çalıştır."""
+    dataset = VerifierAttackDataset(
+        data_file=DATA_FILE_V2,
+        required_attack_classes=tuple(REQUIRED_ATTACK_CLASSES_V2),
+    )
+    return run_verifier_adversarial_benchmark(dataset)
+
+
 __all__ = [
-    "DATA_FILE", "REQUIRED_ATTACK_CLASSES", "ProofDecision", "VerifierAttackDataset",
-    "VerifierAttackMetrics", "VerifierAttackReport", "run_verifier_adversarial_benchmark",
-    "verify_arithmetic_proof",
+    "DATA_FILE", "DATA_FILE_V2", "REQUIRED_ATTACK_CLASSES",
+    "REQUIRED_ATTACK_CLASSES_V2", "ProofDecision", "VerifierAttackDataset",
+    "VerifierAttackMetrics", "VerifierAttackReport",
+    "run_verifier_adversarial_benchmark",
+    "run_verifier_adversarial_v2_benchmark", "verify_arithmetic_proof",
 ]

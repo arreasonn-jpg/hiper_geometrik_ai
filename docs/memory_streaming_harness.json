@@ -1,0 +1,308 @@
+{
+  "checkpoints": [
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 16384,
+        "total": 74274,
+        "wal": 57890
+      },
+      "last_key": "key-000000000999",
+      "next_key": "key-000000001000",
+      "records_written": 1000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 0,
+        "hot": 500,
+        "warm": 500
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 16384,
+        "total": 133274,
+        "wal": 116890
+      },
+      "last_key": "key-000000001999",
+      "next_key": "key-000000002000",
+      "records_written": 2000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 0,
+        "hot": 500,
+        "warm": 1500
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 65536,
+        "total": 241426,
+        "wal": 175890
+      },
+      "last_key": "key-000000002999",
+      "next_key": "key-000000003000",
+      "records_written": 3000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 500,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 155648,
+        "total": 390538,
+        "wal": 234890
+      },
+      "last_key": "key-000000003999",
+      "next_key": "key-000000004000",
+      "records_written": 4000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 1500,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 249856,
+        "total": 543746,
+        "wal": 293890
+      },
+      "last_key": "key-000000004999",
+      "next_key": "key-000000005000",
+      "records_written": 5000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 2500,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 339968,
+        "total": 692858,
+        "wal": 352890
+      },
+      "last_key": "key-000000005999",
+      "next_key": "key-000000006000",
+      "records_written": 6000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 3500,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 0,
+        "cold_sqlite": 434176,
+        "total": 846066,
+        "wal": 411890
+      },
+      "last_key": "key-000000006999",
+      "next_key": "key-000000007000",
+      "records_written": 7000,
+      "tier_counts": {
+        "archive": 0,
+        "archive_segments": 0,
+        "cold": 4500,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 2616,
+        "cold_sqlite": 495616,
+        "total": 969122,
+        "wal": 470890
+      },
+      "last_key": "key-000000007999",
+      "next_key": "key-000000008000",
+      "records_written": 8000,
+      "tier_counts": {
+        "archive": 500,
+        "archive_segments": 1,
+        "cold": 5000,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 7816,
+        "cold_sqlite": 495616,
+        "total": 1033322,
+        "wal": 529890
+      },
+      "last_key": "key-000000008999",
+      "next_key": "key-000000009000",
+      "records_written": 9000,
+      "tier_counts": {
+        "archive": 1500,
+        "archive_segments": 2,
+        "cold": 5000,
+        "hot": 500,
+        "warm": 2000
+      }
+    },
+    {
+      "disk_bytes": {
+        "archive_gzip": 12892,
+        "cold_sqlite": 495616,
+        "total": 1097398,
+        "wal": 588890
+      },
+      "last_key": "key-000000009999",
+      "next_key": "key-000000010000",
+      "records_written": 10000,
+      "tier_counts": {
+        "archive": 2500,
+        "archive_segments": 3,
+        "cold": 5000,
+        "hot": 500,
+        "warm": 2000
+      }
+    }
+  ],
+  "checks": {
+    "archive_enabled_no_drop": true,
+    "checkpoint_manifest_written": true,
+    "projection_marked_not_measured": true,
+    "resume_key_monotonic": true,
+    "sample_is_bounded_not_full_target": true,
+    "sample_recall_complete": true,
+    "sample_stream_completed": true,
+    "target_is_100m_or_more": true
+  },
+  "config": {
+    "cold": 5000,
+    "durable": false,
+    "hot": 500,
+    "payload_size": 4,
+    "warm": 2000
+  },
+  "final_snapshot": {
+    "archive_enabled": true,
+    "counts": {
+      "archive": 2500,
+      "archive_segments": 3,
+      "cold": 5000,
+      "hot": 500,
+      "warm": 2000
+    },
+    "disk_bytes": {
+      "archive_gzip": 12892,
+      "cold_sqlite": 495616,
+      "total": 1097398,
+      "wal": 588890
+    },
+    "dropped": 0,
+    "durable": false,
+    "promote_on_read": true,
+    "recoveries": 0,
+    "tiers": {
+      "archive": {
+        "capacity": -1,
+        "evictions_out": 0,
+        "hits": 0,
+        "misses": 0,
+        "name": "archive",
+        "promotions_in": 0,
+        "records": 0,
+        "writes": 2500
+      },
+      "cold": {
+        "capacity": 5000,
+        "evictions_out": 2500,
+        "hits": 0,
+        "misses": 0,
+        "name": "cold",
+        "promotions_in": 0,
+        "records": 0,
+        "writes": 7500
+      },
+      "hot": {
+        "capacity": 500,
+        "evictions_out": 9500,
+        "hits": 0,
+        "misses": 0,
+        "name": "hot",
+        "promotions_in": 0,
+        "records": 0,
+        "writes": 10000
+      },
+      "warm": {
+        "capacity": 2000,
+        "evictions_out": 7500,
+        "hits": 0,
+        "misses": 0,
+        "name": "warm",
+        "promotions_in": 0,
+        "records": 0,
+        "writes": 9500
+      }
+    },
+    "wal_appends": 10000
+  },
+  "findings": [
+    "100M hedef planı: 100 shard × 1,000,000 kayıt.",
+    "Smoke yazma: 10,000 kayıt, 70,322 kayıt/s; resume anahtarı `key-000000010000`.",
+    "Örnek recall 1.0000; düşen kayıt 0.",
+    "Disk/zaman hedef değerleri lineer projeksiyondur; 100M koşu ölçümü değildir."
+  ],
+  "limitations": [
+    "Bu harness 100M kaydı gerçekten yazmaz; 100M için plan, checkpoint ve smoke ölçümü üretir.",
+    "Projeksiyonlar lineerdir; SQLite indeks büyümesi, dosya sistemi, sıkıştırma ve cache etkileri gerçek büyük koşuda değişebilir.",
+    "Tek süreç/tek writer ölçülür; paralel ingest ve uzaktan nesne deposu bu smoke içinde yoktur."
+  ],
+  "plan": {
+    "checkpoint_interval": 1000,
+    "key_format": "key-{i:012d}",
+    "planned_shards": 100,
+    "resume_from_next_key": "key-000000010000",
+    "sample_fraction": 0.0001,
+    "shard_records": 1000000,
+    "target_records": 100000000
+  },
+  "projections": {
+    "kind": "linear_projection_from_sample_not_measured_100m",
+    "projected_disk_bytes_for_target": 10973980000,
+    "projected_wall_hours_for_target": 0.395008,
+    "rss_growth_bytes_sample": 1863680,
+    "sample_disk_bytes_per_record": 109.7398
+  },
+  "protocol": "hierarchical_memory_streaming_harness_v1",
+  "recall_audit": {
+    "found": 200,
+    "probes": 200,
+    "recall": 1.0,
+    "value_corruptions": 0
+  },
+  "sample_records_written": 10000,
+  "schema_version": 1,
+  "seed": 1,
+  "target_records": 100000000,
+  "throughput": {
+    "microseconds_per_record": 14.22,
+    "records": 10000,
+    "records_per_second": 70321.979,
+    "seconds": 0.142203
+  }
+}

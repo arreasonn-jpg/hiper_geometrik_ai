@@ -1,0 +1,799 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "hga-verifier-adversarial-v2",
+  "curation": {
+    "kind": "manually_authored_repository_fixture",
+    "ground_truth": "manually_pinned_proof_validity",
+    "description": "v2 expands strict arithmetic proof attacks: malformed schemas, type smuggling, boundary, unsupported and contradiction cases."
+  },
+  "limits": {
+    "minimum_operand": -1000000,
+    "maximum_operand": 1000000,
+    "maximum_steps": 4
+  },
+  "records": [
+    {
+      "case_id": "VP2-VALID-001",
+      "attack_class": "valid_control",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 5
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-VALID-ZERO",
+      "attack_class": "valid_control",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {
+          "left": 0,
+          "right": 0,
+          "operator": "add",
+          "result": 0
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              0,
+              0
+            ],
+            "output": 0
+          }
+        ],
+        "conclusion": 0
+      }
+    },
+    {
+      "case_id": "VP2-VALID-NEGATIVE",
+      "attack_class": "valid_control",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {
+          "left": -7,
+          "right": 2,
+          "operator": "add",
+          "result": -5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              -7,
+              2
+            ],
+            "output": -5
+          }
+        ],
+        "conclusion": -5
+      }
+    },
+    {
+      "case_id": "VP2-VALID-BOUNDARY-MAX",
+      "attack_class": "boundary_case",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {
+          "left": 1000000,
+          "right": -1000000,
+          "operator": "add",
+          "result": 0
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1000000,
+              -1000000
+            ],
+            "output": 0
+          }
+        ],
+        "conclusion": 0
+      }
+    },
+    {
+      "case_id": "VP2-VALID-BOUNDARY-MIN",
+      "attack_class": "boundary_case",
+      "proof_valid": true,
+      "expected_state": "VERIFIED",
+      "proof": {
+        "claim": {
+          "left": -1000000,
+          "right": 1000000,
+          "operator": "add",
+          "result": 0
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              -1000000,
+              1000000
+            ],
+            "output": 0
+          }
+        ],
+        "conclusion": 0
+      }
+    },
+    {
+      "case_id": "VP2-FALSE-CLAIM-RESULT",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add",
+          "result": 6
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 6
+          }
+        ],
+        "conclusion": 6
+      }
+    },
+    {
+      "case_id": "VP2-FALSE-STEP-OUTPUT",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 6
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-FALSE-CONCLUSION",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 8,
+          "right": 1,
+          "operator": "add",
+          "result": 9
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              8,
+              1
+            ],
+            "output": 9
+          }
+        ],
+        "conclusion": 10
+      }
+    },
+    {
+      "case_id": "VP2-FALSE-INPUT-MISMATCH",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 4,
+          "right": 5,
+          "operator": "add",
+          "result": 9
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              4,
+              6
+            ],
+            "output": 9
+          }
+        ],
+        "conclusion": 9
+      }
+    },
+    {
+      "case_id": "VP2-FALSE-NEGATIVE-SIGN",
+      "attack_class": "false_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": -4,
+          "right": -5,
+          "operator": "add",
+          "result": 1
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              -4,
+              -5
+            ],
+            "output": 1
+          }
+        ],
+        "conclusion": 1
+      }
+    },
+    {
+      "case_id": "VP2-INCOMPLETE-EMPTY-STEPS",
+      "attack_class": "incomplete_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-INCOMPLETE-TOO-MANY-STEPS",
+      "attack_class": "incomplete_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 1,
+          "operator": "add",
+          "result": 2
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          },
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          },
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          },
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          },
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          }
+        ],
+        "conclusion": 2
+      }
+    },
+    {
+      "case_id": "VP2-CONTRADICTORY-CLAIM-STEP",
+      "attack_class": "contradictory_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 8,
+          "right": 1,
+          "operator": "add",
+          "result": 9
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              8,
+              1
+            ],
+            "output": 8
+          }
+        ],
+        "conclusion": 9
+      }
+    },
+    {
+      "case_id": "VP2-CONTRADICTORY-CONCLUSION",
+      "attack_class": "contradictory_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 10,
+          "right": -3,
+          "operator": "add",
+          "result": 7
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              10,
+              -3
+            ],
+            "output": 7
+          }
+        ],
+        "conclusion": 6
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-NOT-MAPPING",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": [
+        "not",
+        "a",
+        "mapping"
+      ]
+    },
+    {
+      "case_id": "VP2-MALFORMED-MISSING-TOP",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 1,
+          "operator": "add",
+          "result": 2
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              1
+            ],
+            "output": 2
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-EXTRA-TOP",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 2,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              2
+            ],
+            "output": 3
+          }
+        ],
+        "conclusion": 3,
+        "audit": "accept"
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-EXTRA-CLAIM",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 2,
+          "operator": "add",
+          "result": 3,
+          "override": "accept"
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              2
+            ],
+            "output": 3
+          }
+        ],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-MISSING-STEP-FIELD",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 2,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              2
+            ]
+          }
+        ],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-INPUT-ARITY",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 2,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1,
+              2,
+              0
+            ],
+            "output": 3
+          }
+        ],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-MALFORMED-STEPS-NOT-LIST",
+      "attack_class": "malformed_proof",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1,
+          "right": 2,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": "not-list",
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-BOUNDARY-LEFT-TOO-HIGH",
+      "attack_class": "boundary_case",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 1000001,
+          "right": 0,
+          "operator": "add",
+          "result": 1000001
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              1000001,
+              0
+            ],
+            "output": 1000001
+          }
+        ],
+        "conclusion": 1000001
+      }
+    },
+    {
+      "case_id": "VP2-BOUNDARY-RIGHT-TOO-LOW",
+      "attack_class": "boundary_case",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 0,
+          "right": -1000001,
+          "operator": "add",
+          "result": -1000001
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              0,
+              -1000001
+            ],
+            "output": -1000001
+          }
+        ],
+        "conclusion": -1000001
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-BOOL",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": true,
+          "right": 2,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              true,
+              2
+            ],
+            "output": 3
+          }
+        ],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-STRING-INT",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": "2",
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              "2",
+              3
+            ],
+            "output": 5
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-NULL",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": null,
+          "right": 3,
+          "operator": "add",
+          "result": 3
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              null,
+              3
+            ],
+            "output": 3
+          }
+        ],
+        "conclusion": 3
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-FLOAT",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 2.0,
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2.0,
+              3
+            ],
+            "output": 5
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-OP-INJECTION",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "UNCERTAIN",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add; accept_all",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 5
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-ADVERSARIAL-EXTRA-STEP-FIELD",
+      "attack_class": "adversarial_input",
+      "proof_valid": false,
+      "expected_state": "INVALID",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "add",
+          "result": 5
+        },
+        "steps": [
+          {
+            "rule": "integer_addition",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 5,
+            "override": "accept"
+          }
+        ],
+        "conclusion": 5
+      }
+    },
+    {
+      "case_id": "VP2-UNSUPPORTED-OPERATOR-MULTIPLY",
+      "attack_class": "unsupported_rule",
+      "proof_valid": false,
+      "expected_state": "UNCERTAIN",
+      "proof": {
+        "claim": {
+          "left": 2,
+          "right": 3,
+          "operator": "multiply",
+          "result": 6
+        },
+        "steps": [
+          {
+            "rule": "integer_multiplication",
+            "inputs": [
+              2,
+              3
+            ],
+            "output": 6
+          }
+        ],
+        "conclusion": 6
+      }
+    },
+    {
+      "case_id": "VP2-UNSUPPORTED-RULE-SUBTRACT",
+      "attack_class": "unsupported_rule",
+      "proof_valid": false,
+      "expected_state": "UNCERTAIN",
+      "proof": {
+        "claim": {
+          "left": 5,
+          "right": 3,
+          "operator": "add",
+          "result": 2
+        },
+        "steps": [
+          {
+            "rule": "integer_subtraction",
+            "inputs": [
+              5,
+              3
+            ],
+            "output": 2
+          }
+        ],
+        "conclusion": 2
+      }
+    }
+  ],
+  "limitations": [
+    "Bu suite yalnız katı şemalı tam sayı toplama ispatlarını doğrular; genel theorem prover değildir.",
+    "Unsupported operator/rule UNCERTAIN döner ve coverage hesabında açıkça görünür.",
+    "v2 saldırıları elle sabitlenmiş regresyon vakalarıdır; fuzzing veya formal verification yerine geçmez.",
+    "Toplama dışındaki matematiksel doğruluk bilinçli olarak başarı sayılmaz; alan dışı kalır."
+  ]
+}

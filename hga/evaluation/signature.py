@@ -67,7 +67,7 @@ import math
 import random
 import statistics
 from dataclasses import asdict, dataclass, field
-from typing import Any, Collection, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Collection, Dict, List, Mapping, Optional, Sequence, Tuple
 
 TASKS = ("A_long_chain", "B_unseen_entity", "C_unseen_relation",
          "D_unseen_both", "E_conflict", "F_memory_dependent",
@@ -78,6 +78,9 @@ ARMS = ("symbolic",) + NEURAL_ARMS + ("hybrid",)
 LABELS = ("NO", "YES", "UNCERTAIN")
 NO, YES, UNCERTAIN = 0, 1, 2
 PROTOCOL = "hga_signature_benchmark_v1"
+RELEASE_GATE_PROTOCOL = "hga_signature_release_gate_v1"
+SIGNATURE_RELEASE_MIN_SEEDS = 20
+SIGNATURE_RELEASE_PROFILE = "standard"
 
 #: Bellek kanalının fark yaratması BEKLENEN tek görev.
 MEMORY_CRITICAL_TASKS = ("F_memory_dependent",)
@@ -689,6 +692,32 @@ class SignatureReport:
         return signature_markdown(self)
 
 
+@dataclass
+class SignatureReleaseGateReport:
+    protocol: str
+    source_protocol: str
+    source_dataset_hash: str
+    status: str
+    required_profile: str
+    min_seed_count: int
+    checks: Dict[str, bool]
+    failed_checks: List[str]
+    evidence: Dict[str, Any]
+    limitations: List[str] = field(default_factory=list)
+
+    @property
+    def release_ready(self) -> bool:
+        return self.status == "PASS"
+
+    def to_dict(self) -> Dict[str, Any]:
+        veri = asdict(self)
+        veri["release_ready"] = self.release_ready
+        return veri
+
+    def markdown(self) -> str:
+        return signature_release_gate_markdown(self)
+
+
 def _mean(values: Sequence[float]) -> float:
     return round(statistics.fmean(values), 6) if values else 0.0
 
@@ -972,6 +1001,107 @@ def run_signature_benchmark(
     )
 
 
+def _signature_mapping(report: SignatureReport | Mapping[str, Any]) -> Mapping[str, Any]:
+    return report.to_dict() if isinstance(report, SignatureReport) else report
+
+
+def run_signature_release_gate(
+    report: SignatureReport | Mapping[str, Any],
+    *,
+    required_profile: str = SIGNATURE_RELEASE_PROFILE,
+    min_seed_count: int = SIGNATURE_RELEASE_MIN_SEEDS,
+) -> SignatureReleaseGateReport:
+    """Signature Benchmark raporunu release kapısından geçir.
+
+    Bu fonksiyon yeni başarı üretmez; var olan benchmark çıktısının release için
+    yeterli kanıt taşıyıp taşımadığını denetler. Eksik seed/profil ya da düşen
+    benchmark kapısı varsa durum açıkça ``BLOCKED`` olur.
+    """
+    veri = _signature_mapping(report)
+    seeds = list(veri.get("seeds", []) or [])
+    tasks = list(veri.get("tasks", []) or [])
+    arms = list(veri.get("arms", []) or [])
+    benchmark_checks = dict(veri.get("checks", {}) or {})
+    signature_map = dict(veri.get("signature", {}) or {})
+    checks = {
+        "source_protocol_is_signature_v1": veri.get("protocol") == PROTOCOL,
+        "profile_is_standard": veri.get("profile") == required_profile,
+        "seed_count_at_least_20": len(set(int(s) for s in seeds)) >= min_seed_count,
+        "all_signature_tasks_present": set(tasks) == set(TASKS),
+        "all_signature_arms_present": set(arms) == set(ARMS),
+        "dataset_hash_present": bool(veri.get("dataset_hash")),
+        "all_benchmark_checks_pass": bool(benchmark_checks)
+        and all(bool(v) for v in benchmark_checks.values()),
+        "no_held_out_leak": bool(benchmark_checks.get("no_held_out_leak")),
+        "hga_has_signature_task": bool(benchmark_checks.get("hga_has_signature_task")),
+        "memory_gain_is_task_specific": bool(
+            benchmark_checks.get("memory_gain_is_task_specific")),
+        "parameter_budget_within_gate": bool(
+            benchmark_checks.get("parameter_budget_within_gate"))
+        and bool(benchmark_checks.get("body_parameter_budget_within_gate")),
+        "signature_payload_nonempty": bool(signature_map),
+    }
+    failed = [name for name, passed in checks.items() if not passed]
+    status = "PASS" if not failed else "BLOCKED"
+    evidence = {
+        "source_profile": veri.get("profile"),
+        "source_seed_count": len(set(int(s) for s in seeds)),
+        "source_tasks": tasks,
+        "source_arms": arms,
+        "source_failed_benchmark_checks": [
+            name for name, passed in benchmark_checks.items() if not passed],
+    }
+    limitations = [
+        "Release gate yalnız Signature Benchmark raporunu denetler; yeni model eğitimi veya insan değerlendirmesi üretmez.",
+        "Gate PASS değilse release hazır denemez; BLOCKED durumu eksik kanıtı gizlemez.",
+        "20 tohum ve standard profil eşiği release kalitesi içindir; smoke koşuları regresyon amaçlı kalır.",
+    ]
+    return SignatureReleaseGateReport(
+        protocol=RELEASE_GATE_PROTOCOL,
+        source_protocol=str(veri.get("protocol") or ""),
+        source_dataset_hash=str(veri.get("dataset_hash") or ""),
+        status=status,
+        required_profile=required_profile,
+        min_seed_count=min_seed_count,
+        checks=checks,
+        failed_checks=failed,
+        evidence=evidence,
+        limitations=limitations,
+    )
+
+
+def signature_release_gate_markdown(report: SignatureReleaseGateReport) -> str:
+    lines = [
+        "# Signature Benchmark Release Gate",
+        "",
+        f"- Protokol: `{report.protocol}`",
+        f"- Kaynak: `{report.source_protocol}` · `{report.source_dataset_hash}`",
+        f"- Durum: **{report.status}**",
+        f"- Gerekli profil: `{report.required_profile}`",
+        f"- Minimum tohum: `{report.min_seed_count}`",
+        "",
+        "## Kapılar",
+        "",
+        "| kapı | sonuç |",
+        "|---|---|",
+    ]
+    for name, passed in report.checks.items():
+        lines.append(f"| {name} | {'GEÇTİ' if passed else 'KALDI'} |")
+    lines.extend(["", "## Kanıt özeti", ""])
+    lines.append(f"- Kaynak profil: `{report.evidence.get('source_profile')}`")
+    lines.append(f"- Kaynak tohum sayısı: `{report.evidence.get('source_seed_count')}`")
+    failed = report.evidence.get("source_failed_benchmark_checks") or []
+    lines.append("- Düşen benchmark kapıları: " + (", ".join(failed) if failed else "yok"))
+    lines.extend(["", "## Release kararı", ""])
+    if report.release_ready:
+        lines.append("- PASS: Signature Benchmark release için gerekli kapıları taşıyor.")
+    else:
+        lines.append("- BLOCKED: release hazır değil; düşen kapılar: " + ", ".join(report.failed_checks))
+    lines.extend(["", "## Sınırlar", ""])
+    lines.extend(f"- {note}" for note in report.limitations)
+    return "\n".join(lines) + "\n"
+
+
 def signature_markdown(report: SignatureReport) -> str:
     satirlar = [
         "# HGA Signature Benchmark v1 (P0-4)",
@@ -1053,8 +1183,11 @@ def signature_markdown(report: SignatureReport) -> str:
 
 
 __all__ = [
-    "PROTOCOL", "TASKS", "ARMS", "NEURAL_ARMS", "LABELS", "PROFILES",
-    "MEMORY_CRITICAL_TASKS", "NO", "YES", "UNCERTAIN",
-    "Instance", "SignatureReport", "build_dataset", "leakage_report",
-    "symbolic_predict", "run_signature_benchmark", "signature_markdown",
+    "PROTOCOL", "RELEASE_GATE_PROTOCOL", "SIGNATURE_RELEASE_MIN_SEEDS",
+    "SIGNATURE_RELEASE_PROFILE", "TASKS", "ARMS", "NEURAL_ARMS", "LABELS",
+    "PROFILES", "MEMORY_CRITICAL_TASKS", "NO", "YES", "UNCERTAIN",
+    "Instance", "SignatureReport", "SignatureReleaseGateReport",
+    "build_dataset", "leakage_report", "symbolic_predict",
+    "run_signature_benchmark", "run_signature_release_gate",
+    "signature_markdown", "signature_release_gate_markdown",
 ]

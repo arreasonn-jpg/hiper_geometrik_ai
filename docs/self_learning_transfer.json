@@ -1,0 +1,2408 @@
+{
+  "aggregate": {
+    "coverage_delta_transfer_minus_scratch": {
+      "ci95": 0.0,
+      "mean": 0.0,
+      "n": 60
+    },
+    "pairs": 60,
+    "positive_transfer_status": "NOT_DEMONSTRATED",
+    "scratch_accuracy_on_decided_mean": 1.0,
+    "scratch_coverage": {
+      "ci95": 0.014296,
+      "mean": 0.891667,
+      "n": 60
+    },
+    "source_only_target_decisions": 0,
+    "source_only_target_spoke_rate": 0.0,
+    "transfer_accuracy_on_decided_mean": 1.0,
+    "transfer_coverage": {
+      "ci95": 0.014296,
+      "mean": 0.891667,
+      "n": 60
+    }
+  },
+  "checks": {
+    "all_ordered_pairs_evaluated": true,
+    "multi_seed": true,
+    "positive_transfer_not_claimed_when_absent": true,
+    "source_only_abstains_on_target": true,
+    "target_support_accuracy_perfect_on_decided": true,
+    "target_support_adaptation_has_coverage": true,
+    "transfer_delta_reported": true
+  },
+  "config": {
+    "learner": "verifier_confirmed_exact_triple_memory",
+    "signature": "306c584f0e26",
+    "source_examples": 120,
+    "target_support_examples": 40,
+    "target_unseen_examples": 40
+  },
+  "environments": [
+    "physics",
+    "causal",
+    "spatial",
+    "temporal",
+    "language"
+  ],
+  "findings": [
+    "60 kaynak→hedef×tohum satırı koştu; kaynak-only hedef karar sayısı 0.",
+    "Kaynak ortam deneyimleri hedef ortamda karar üretmedi; bu smoke koşuda yanlış pozitif transfer/kontaminasyon gözlenmedi.",
+    "Hedef destek örnekleri eklendiğinde scratch ve kaynak-ön-yüklü öğrenen aynı coverage'ı verdi (delta 0.000000).",
+    "Pozitif transfer durumu: NOT_DEMONSTRATED. Bu rapor pozitif genelleme iddiası olarak okunmamalıdır."
+  ],
+  "limitations": [
+    "Öğrenen exact-triple bellek kullanır; unseen hedef genellemesi beklenmez.",
+    "Ortamlar sentetiktir ve ayrık sembol uzayları kullanır; gerçek domain transferi değildir.",
+    "Bu artifact transfer protokolünü ve negatif kontrolü kapatır; pozitif transfer iddiası için daha güçlü, ortak soyut özellikli görevler gerekir."
+  ],
+  "pair_results": [
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 2,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.975,
+        "decided": 78,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 1,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 13,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8375,
+        "decided": 67,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 16,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8,
+        "decided": 64,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 9,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8875,
+        "decided": 71,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 2,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 5,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9375,
+        "decided": 75,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "physics",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "causal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "spatial",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "temporal",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "language",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 0,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 1.0,
+        "decided": 80,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "physics",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "causal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 14,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.825,
+        "decided": 66,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "spatial",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 11,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.8625,
+        "decided": 69,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    },
+    {
+      "scratch_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "seed": 3,
+      "source_environment": "language",
+      "source_examples": 120,
+      "source_only": {
+        "abstain": 80,
+        "accuracy_on_decided": null,
+        "claims": 80,
+        "coverage": 0.0,
+        "decided": 0,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "target_environment": "temporal",
+      "target_eval_examples": 80,
+      "target_support_examples": 40,
+      "transfer_after_target_support": {
+        "abstain": 8,
+        "accuracy_on_decided": 1.0,
+        "claims": 80,
+        "coverage": 0.9,
+        "decided": 72,
+        "false_acceptance_rate": 0.0,
+        "false_rejection_count": 0
+      },
+      "transfer_delta": {
+        "accuracy_on_decided_delta": 0.0,
+        "coverage_delta": 0.0
+      }
+    }
+  ],
+  "protocol": "cross_domain_self_learning_transfer_v1",
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2,
+    3
+  ]
+}

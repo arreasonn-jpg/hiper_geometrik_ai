@@ -43,7 +43,7 @@ raporda `SKIPPED` ve suite sonucunda `COMPLETED_WITH_SKIPS` olarak kalır.
 
 | Bölüm | Ölçüm | Temel sınır |
 |---|---|---|
-| Architecture | P / C_I / C_M ayrımı ve config tabanlı parametre muhasebesi | Parametre sayısı formül tahminidir |
+| Architecture | P / C_I^UB / C_M^UB ayrımı ve config tabanlı parametre muhasebesi | Parametre sayısı formül tahminidir |
 | Kronecker | aktivasyonsuz çöküş, SiLU ile kırılma, eşit-parametre iki öğretmen | Sentetik öğretmen; Transformer değildir |
 | Memory | fixed exact-ID + forced collision + Dynamic KV + ölçek maliyeti | Semantic/learned retrieval değildir |
 | Verification | golden + fault injection + proof attack + gerçek-artifact STALE lifecycle | Theorem prover veya canlı-web freshness ölçümü değildir |
@@ -61,22 +61,25 @@ kurulumda suite bunu başarı gibi göstermemek için açıkça `SKIPPED` raporl
 
 ## Verifier adversarial fixture
 
-`hga/evaluation/datasets/verifier_adversarial_v1.json`, çalışma anında
-üretilmeyen şu proof sınıflarını içerir:
+`hga/evaluation/datasets/verifier_adversarial_v2.json`, çalışma anında
+üretilmeyen 31 proof vakasıyla şu sınıfları içerir:
 
 - geçerli kontrol ve negatif/boundary vakaları,
-- false proof,
-- incomplete proof,
+- false proof (claim/result, step output, conclusion ve input mismatch),
+- incomplete proof ve fazla-adım saldırısı,
 - contradictory proof,
-- malformed proof,
-- adversarial bool-as-int, sınır aşımı ve fazla alan girdileri,
-- verifier'ın desteklemediği kural için `UNCERTAIN` kontrolü.
+- malformed proof (eksik/fazla alan, yanlış tip, yanlış step arity),
+- adversarial bool-as-int, string/null/float kaçakları, sınır aşımı ve fazla
+  alan girdileri,
+- verifier'ın desteklemediği operator/rule için `UNCERTAIN` kontrolü.
 
-Rapor `FAR`, `FRR`, precision, recall, F1, coverage ve attack robustness
-metriklerini birlikte verir. Desteklenmeyen iyi biçimli kuralı yanlış diye
-uydurmaz; `UNCERTAIN` döndürür ve coverage düşüşü görünür kalır. Bu katı tam
-sayı toplama doğrulayıcısı genel theorem prover veya formal verification
-iddiası taşımaz.
+`python -m hga verifier-adversarial` tek strict verifier raporunu,
+`python -m hga verifier-ensemble` ise aynı v2 fixture üzerinde üç üyeli
+ensemble raporunu üretir. Raporlar `FAR`, `FRR`, precision, recall, F1, coverage
+ve attack robustness metriklerini birlikte verir. Desteklenmeyen iyi biçimli
+kuralı yanlış diye uydurmaz; `UNCERTAIN` döndürür ve coverage düşüşü görünür
+kalır. Bu katı tam sayı toplama doğrulayıcısı genel theorem prover veya formal
+verification iddiası taşımaz.
 
 Aynı Verification bölümü `real-artifact-knowledge-lifecycle-v1` ile iki gerçek,
 hash-doğrulanmış TWT kaynağında expiry, same-hash revalidation, changed-revision
@@ -325,7 +328,7 @@ sayı (`correctly_generalized`) hem oran (`score`) saklanır.
 `C_G` burada:
 
 - teorik üst sınır değildir,
-- `C_M`, `C_E` veya `C_V` ile büyüklük eşitsizliğine sokulmaz,
+- `C_M^UB`, `C_E` veya `C_V` ile büyüklük eşitsizliğine sokulmaz,
 - genel Türkçe performansı değildir,
 - sabit benchmark protokolünde ölçülmüş görev skorudur.
 

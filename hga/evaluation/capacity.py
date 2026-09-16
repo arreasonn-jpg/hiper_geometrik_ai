@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-Kapasite Çerçevesi — P, C_I, C_M, C_E, C_V (Faz 13–14)
-=======================================================
+Kapasite Çerçevesi — P, C_I^UB, C_M^UB, C_E, C_V (Faz 13–14)
+=============================================================
 
 README bugüne kadar üç büyüklüğü ayırıyordu:
 
-* ``P``    — fiziksel/eğitilebilir parametre (RAM'de gerçekten ayrılan).
-* ``C_I``  — etkileşim kapasitesi (Kronecker zincirinin temsil ettiği operatör
-  üst sınırı; **parametre değildir**).
-* ``C_M``  — bellek adres kapasitesi (``sözlük^pencere``; fiziksel tablo değil).
+* ``P``       — fiziksel/eğitilebilir parametre (RAM'de gerçekten ayrılan).
+* ``C_I^UB``  — **Interaction Upper Bound**: Kronecker zincirinin temsil ettiği
+  operatör girdi uzayının üst sınırı; **parametre değildir**.
+* ``C_M^UB``  — **Memory Address Upper Bound**: ``sözlük^pencere`` kavramsal
+  adres uzayı; fiziksel tablo değildir.
 
 Bu üçlü doğru ama eksiktir, çünkü **adreslenebilir olmak ile üretilebilir
 olmak ve doğrulanabilir olmak aynı şey değildir**:
 
-    C_M = adreslenebilir     (10^62 mertebesinde kavramsal anahtar uzayı)
+    C_M^UB = adreslenebilir     (10^62 mertebesinde kavramsal anahtar uzayı)
     C_E = üretilebilir       (generator'ın kısıtlar altında ürettiği anlamlı
                               deneyim uzayı)
     C_V = doğrulanabilir     (bağımsız verifier'ın karar verebildiği alt küme)
 
 Zorunlu sıralama::
 
-    C_V  ≤  C_E  ≤  C_M
+    C_V  ≤  C_E  ≤  C_M^UB
 
 `C_E` ve `C_V` **ölçülen** büyüklüklerdir: bir bilgi tabanı ve doğrulayıcı
 verildiğinde sayılır ya da örnekleme ile tahmin edilir. Teorik iddia değil,
@@ -50,7 +51,12 @@ def _log10(deger: float) -> float:
 
 @dataclass
 class CapacityReport:
-    """P / C_I / C_M / C_E / C_V ölçüm raporu."""
+    """P / C_I^UB / C_M^UB / C_E / C_V ölçüm raporu.
+
+    Geriye dönük uyumluluk için Python alan adları ``c_i_interaction`` ve
+    ``c_m_conceptual`` olarak korunur; kullanıcıya ve makine-okunur çıktıya
+    yeni resmî semboller ``C_I^UB`` ve ``C_M^UB`` olarak basılır.
+    """
 
     # Ölçülen kapasiteler
     c_e_total: int                 # üretilebilir anlamlı deneyim sayısı
@@ -79,7 +85,27 @@ class CapacityReport:
     config_hash: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        veri = asdict(self)
+        # Yeni terminoloji: eski anahtarlar API uyumluluğu için kalır, açık
+        # alias'lar ve sembol haritası yanlış yorumlanmayı engeller.
+        veri["c_i_upper_bound"] = self.c_i_interaction
+        veri["c_m_address_upper_bound"] = self.c_m_conceptual
+        veri["symbol_map"] = {
+            "physical_parameters": "P",
+            "c_i_interaction": "C_I^UB",
+            "c_i_upper_bound": "C_I^UB",
+            "c_m_conceptual": "C_M^UB",
+            "c_m_address_upper_bound": "C_M^UB",
+            "c_e_total": "C_E",
+            "c_v_total": "C_V",
+        }
+        veri["terminology"] = {
+            "C_I^UB": "Interaction Upper Bound; parametre sayısı değildir.",
+            "C_M^UB": "Memory Address Upper Bound; fiziksel tablo boyutu değildir.",
+            "C_E": "Ölçülen üretilebilir deneyim sayısı.",
+            "C_V": "Ölçülen doğrulanabilir deneyim sayısı.",
+        }
+        return veri
 
     def markdown(self) -> str:
         satirlar = [
@@ -92,12 +118,12 @@ class CapacityReport:
                 "RAM'de ayrılan, optimizer'ın güncellediği |")
         if self.c_i_interaction is not None:
             satirlar.append(
-                f"| Etkileşim kapasitesi | C_I | {self.c_i_interaction:.3e} | "
-                "operatör üst sınırı — parametre DEĞİL |")
+                f"| Interaction Upper Bound | C_I^UB | {self.c_i_interaction:.3e} | "
+                "operatör girdi uzayı üst sınırı — parametre DEĞİL |")
         if self.c_m_conceptual is not None:
             satirlar.append(
-                f"| Bellek adres kapasitesi | C_M | {self.c_m_conceptual:.3e} | "
-                "adreslenebilir kavramsal anahtar |")
+                f"| Memory Address Upper Bound | C_M^UB | {self.c_m_conceptual:.3e} | "
+                "kavramsal adres uzayı — fiziksel tablo DEĞİL |")
         satirlar.append(
             f"| Deneyim kapasitesi | C_E | {self.c_e_total:,} | "
             "kısıtlar altında gerçekten üretilebilen |")
@@ -114,27 +140,42 @@ def capacity_contract(
     vocab: Optional[int] = None,
     window: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Teorik üst sınırları (P, C_I, C_M) dürüst etiketlerle hesapla."""
+    """Teorik üst sınırları (P, C_I^UB, C_M^UB) dürüst etiketlerle hesapla."""
     sozlesme: Dict[str, Any] = {
         "physical_parameters": physical_parameters,
+        # Eski anahtarlar geriye dönük API uyumluluğu için korunur.
         "c_i_interaction": None,
         "c_m_conceptual": None,
+        # Yeni, yanlış anlaşılması daha zor alias'lar.
+        "c_i_upper_bound": None,
+        "c_m_address_upper_bound": None,
         "c_i_is_parameter_count": False,
         "c_m_is_physical_table_size": False,
+        "symbol_map": {
+            "physical_parameters": "P",
+            "c_i_interaction": "C_I^UB",
+            "c_i_upper_bound": "C_I^UB",
+            "c_m_conceptual": "C_M^UB",
+            "c_m_address_upper_bound": "C_M^UB",
+        },
         "statement": (
-            "C_I ve C_M üst sınırdır; fiziksel parametre veya fiziksel tablo "
-            "boyutu değildir. Ölçülen kapasiteler C_E ve C_V'dir."
+            "C_I^UB ve C_M^UB üst sınırdır; fiziksel parametre veya fiziksel "
+            "tablo boyutu değildir. Ölçülen kapasiteler C_E ve C_V'dir."
         ),
     }
     if n is not None and k is not None:
         if n < 2 or k < 1:
             raise ValueError("n >= 2 ve K >= 1 olmalı")
-        sozlesme["c_i_interaction"] = float(n) ** (2 * int(k))
+        c_i = float(n) ** (2 * int(k))
+        sozlesme["c_i_interaction"] = c_i
+        sozlesme["c_i_upper_bound"] = c_i
         sozlesme["operator_entries_per_layer_n4"] = float(n) ** 4
     if vocab is not None and window is not None:
         if vocab < 2 or window < 1:
             raise ValueError("vocab >= 2 ve window >= 1 olmalı")
-        sozlesme["c_m_conceptual"] = float(vocab) ** int(window)
+        c_m = float(vocab) ** int(window)
+        sozlesme["c_m_conceptual"] = c_m
+        sozlesme["c_m_address_upper_bound"] = c_m
     return sozlesme
 
 
@@ -202,13 +243,16 @@ def measure_experience_capacity(
 
     log10_tablosu = {"c_e": _log10(c_e), "c_v": _log10(c_v)}
     if c_m:
-        log10_tablosu["c_m"] = _log10(c_m)
+        log10_tablosu["c_m"] = _log10(c_m)          # eski anahtar: uyumluluk
+        log10_tablosu["c_m_ub"] = _log10(c_m)       # yeni terminoloji
     if sozlesme.get("c_i_interaction"):
-        log10_tablosu["c_i"] = _log10(float(sozlesme["c_i_interaction"]))
+        log10_ci = _log10(float(sozlesme["c_i_interaction"]))
+        log10_tablosu["c_i"] = log10_ci             # eski anahtar: uyumluluk
+        log10_tablosu["c_i_ub"] = log10_ci          # yeni terminoloji
 
     notlar = [
-        "C_E ve C_V ölçülmüş değerlerdir; C_I ve C_M teorik üst sınırdır.",
-        "C_V ≤ C_E ≤ C_M sıralaması sistemin epistemik daralmasını gösterir.",
+        "C_E ve C_V ölçülmüş değerlerdir; C_I^UB ve C_M^UB teorik üst sınırdır.",
+        "C_V ≤ C_E ≤ C_M^UB sıralaması sistemin epistemik daralmasını gösterir.",
     ]
     if sampled:
         notlar.append(

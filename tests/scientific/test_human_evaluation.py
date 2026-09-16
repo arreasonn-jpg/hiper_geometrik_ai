@@ -2,11 +2,19 @@
 """P1 insan değerlendirme protokolü + Krippendorff α testleri."""
 from __future__ import annotations
 
+import csv
 import json
 
 import pytest
 
 from hga.evaluation.capability_vector import SCORECARD_SECTIONS, build_scorecard
+from hga.evaluation.human_eval_fill import (
+    build_human_evaluation_from_csv,
+    collect_ratings_from_csv,
+    fill_and_export_packages,
+    human_rating_import_markdown,
+    human_rating_import_report,
+)
 from hga.evaluation.human_evaluation import (
     ALPHA_ACCEPTABLE,
     ALPHA_TENTATIVE,
@@ -285,3 +293,88 @@ def test_markdown_uretimi(rapor):
     assert "**Yok.**" in md  # sonuç bölümü boş olmalı
     for kol in ARMS:
         assert f'"{kol}"' not in md
+
+
+# ── CSV import/agregasyon pipeline ─────────────────────────────────────────
+def _filled_package(tmp_path):
+    prompts = [f"Prompt {i}" for i in range(MIN_PROMPTS)]
+    responses = {arm: [f"{arm} yanıt {i}" for i in range(MIN_PROMPTS)]
+                 for arm in ARMS}
+    root = tmp_path / "human_pkg"
+    fill_and_export_packages(root, responses, prompts=prompts)
+    (root / "rater_attestation.json").write_text(json.dumps({
+        "real_human_ratings": True,
+        "raters": [f"R{i:02d}" for i in range(1, MIN_RATERS + 1)],
+        "collected_by": "unit-test",
+        "collected_utc_date": "2026-09-16",
+        "statement": "Synthetic unit-test attestation; production requires real raters.",
+    }), encoding="utf-8")
+    for csv_path in sorted((root / "paketler").glob("*_puanlama.csv")):
+        with csv_path.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+            fieldnames = list(rows[0])
+        with csv_path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            for index, row in enumerate(rows):
+                row.update({
+                    "dogruluk": "5" if index % 2 else "1",
+                    "tutarlilik": "5" if index % 2 else "1",
+                    "dil_kalitesi": "4" if index % 2 else "2",
+                    "belirsizlik_durustlugu": "5" if index % 2 else "1",
+                    "halusinasyon_var": "0" if index % 2 else "1",
+                })
+                writer.writerow(row)
+    return root
+
+
+def test_csv_import_alpha_ve_kol_ozeti_uretiyor(tmp_path):
+    root = _filled_package(tmp_path)
+    ratings, summary = collect_ratings_from_csv(root, strict_complete=True)
+    assert summary["raters_found"] == MIN_RATERS
+    assert summary["filled_ratio"] == 1.0
+    assert set(ratings) == set(DIMENSIONS)
+
+    import_report = human_rating_import_report(root)
+    assert import_report["status"] == "COMPLETE_READY_FOR_REPORT"
+    assert import_report["reliability"] is not None
+    assert import_report["arm_results"] is not None
+    assert [k for k, v in import_report["checks"].items() if not v] == []
+
+    report = build_human_evaluation_from_csv(root)
+    assert report.results is not None
+    assert report.arm_results is not None
+    assert report.checks["human_ratings_collected"] is True
+    assert "rating_import_summary" in report.design
+
+
+def test_csv_import_markdown_ve_olcek_dogrulama(tmp_path):
+    root = _filled_package(tmp_path)
+    md = human_rating_import_markdown(human_rating_import_report(root))
+    assert "CSV Import" in md
+    assert "Krippendorff" in md
+    bad_csv = next((root / "paketler").glob("*_puanlama.csv"))
+    text = bad_csv.read_text(encoding="utf-8")
+    bad_csv.write_text(text.replace(",5,5,4,5,0", ",6,5,4,5,0", 1),
+                       encoding="utf-8")
+    with pytest.raises(ValueError, match="ölçek dışında"):
+        collect_ratings_from_csv(root)
+
+
+def test_csv_import_paket_yokken_na_raporu(tmp_path):
+    report = human_rating_import_report(tmp_path / "yok")
+    assert report["status"] == "NO_CSV_NA"
+    assert report["checks"]["csv_files_found"] is False
+    md = human_rating_import_markdown(report)
+    assert "NO_CSV_NA" in md
+
+
+def test_dolu_csv_attestation_yoksa_ana_sonuc_olmaz(tmp_path):
+    root = _filled_package(tmp_path)
+    (root / "rater_attestation.json").unlink()
+    import_report = human_rating_import_report(root)
+    assert import_report["status"] == "CSV_COMPLETE_UNATTESTED_NA"
+    assert import_report["checks"]["rater_attestation_present"] is False
+    report = build_human_evaluation_from_csv(root)
+    assert report.results is None
+    assert report.checks["human_ratings_collected"] is False

@@ -424,9 +424,9 @@ v0.1–v1.0 çekirdeği tamamlandı; ek olarak Türkçe ek uyumu (`turkce.py`,
 
 ## 9. Dürüst kapasite notu (rapor §17)
 
-`P` (gerçek öğrenilebilir parametre), `C_I` (temsil/etkileşim kapasitesi) ve
-`C_M` (adreslenebilir bellek/deneyim uzayı) ayrı ölçeklerdir. Bu katman `P`'yi
-artırmaz; `C_M`'yi (deneyim/kanıt uzayı) seyrek ve kaynak-güvenli biçimde
+`P` (gerçek öğrenilebilir parametre), `C_I^UB` (Interaction Upper Bound; parametre değil) ve
+`C_M^UB` (adreslenebilir bellek/deneyim uzayı üst sınırı) ayrı ölçeklerdir. Bu katman `P`'yi
+artırmaz; ölçülen `C_E`/`C_V`'yi (deneyim/kanıt uzayı) seyrek ve kaynak-güvenli biçimde
 genişletir. "Katrilyon" hedefi, katrilyon bağımsız ağırlık depolamak değil,
 küçük bir fiziksel modelin çok büyük bir potansiyel deneyim uzayını aktif olarak
 keşfetmesi olarak sınanır.

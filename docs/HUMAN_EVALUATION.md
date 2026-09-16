@@ -3,7 +3,7 @@
 - Protokol: `human_evaluation_protocol_v1` v1
 - Kör açma anahtarı özeti: `d29f5aeae0e20346`
 
-> **Bu rapor gerçek insan değerlendirme sonuçlarını içerir.** Kör açma yalnız puan toplama tamamlandıktan sonra yapılmıştır.
+> **Bu rapor insan değerlendirme SONUCU içermez.** Protokol ve araç üretir. Gerçek puan toplanana kadar karnede bu bölüm `n/a` kalır.
 
 ## Tasarım
 
@@ -46,24 +46,7 @@
 
 ## Güvenilirlik sonuçları
 
-| Boyut | Tip | α | Birim | Hüküm |
-|---|---|---:|---:|---|
-| dogruluk | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
-| tutarlilik | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
-| dil_kalitesi | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
-| belirsizlik_durustlugu | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
-| halusinasyon_var | nominal | 0.9436 | 200 | KABUL EDİLEBİLİR: α=0.9436 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
-
-## Kör açma sonrası kol sonuçları
-
-Ordinal sütunlar 1–5 ortalamadır; halüsinasyon sütunu `halusinasyon_var=1` oranıdır (düşük daha iyi).
-
-| Kol | n/boyut | dogruluk | tutarlilik | dil_kalitesi | belirsizlik_durustlugu | Halüsinasyon oranı |
-|---|---:|---:|---:|---:|---:|---:|
-| hga | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.800% |
-| dense | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.800% |
-| transformer | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.600% |
-| symbolic | 500 | 4.952 | 4.952 | 4.952 | 4.952 | 3.400% |
+**Yok.** Gerçek insan puanı toplanmadı.
 
 ## Kabul kapıları
 
@@ -77,8 +60,8 @@ Ordinal sütunlar 1–5 ortalamadır; halüsinasyon sütunu `halusinasyon_var=1`
 | alpha_tool_available | GEÇTİ |
 | alpha_validated_on_reference_data | GEÇTİ |
 | multiple_dimensions_defined | GEÇTİ |
-| human_ratings_collected | GEÇTİ |
-| reliability_meets_threshold | GEÇTİ |
+| human_ratings_collected | KALDI |
+| reliability_meets_threshold | KALDI |
 
 ## Bulgular
 
@@ -86,14 +69,13 @@ Ordinal sütunlar 1–5 ortalamadır; halüsinasyon sütunu `halusinasyon_var=1`
 - Körleme ARAÇ SEVİYESİNDE uygulanıyor ve doğrulanıyor: üretilen paketlerde hiçbir kol adı geçmiyor.
 - Krippendorff α aracı üç metrikte hazır ve kanonik referans veriye karşı doğrulandı (nominal 0.691 / ordinal 0.807 / interval 0.811).
 - Eşikler: α ≥ 0.8 kabul edilebilir, α ≥ 0.667 yalnız geçici sonuç.
-- 5/5 boyut α ≥ 0.8 eşiğini geçti.
-- Nöral kolların dil kalitesi ortalaması 1.000/5.000; minik LM'lerin beklenen düşük dil kalitesi insan puanında açıkça doğrulandı.
-- En yüksek dil kalitesi symbolic kolunda; ortalama 4.952/5.
-- En yüksek halüsinasyon oranı hga kolunda: 99.800%.
+- GERÇEK İNSAN PUANI YOK. Bu koşum protokol ve araç üretir, sonuç üretmez. `human_ratings_collected` kapısı KALDI ve karnede bu bölüm `n/a` kalmalıdır — kanıtsız bir bölüme puan vermek, ölçmediğini ölçtüm demektir.
 
 ## Sınırlar
 
+- GERÇEK DEĞERLENDİRİCİ YOK. Bu modül protokol ve araçtır; insan değerlendirme sonucu değildir ve öyle sunulamaz.
+- Örnek prompt'lar aracı göstermek içindir; temsili bir Türkçe değerlendirme korpusu değildir.
+- Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek yanıtlar üretilmeden doldurulamaz.
 - α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: hepsi aynı şekilde yanılan değerlendiriciler yüksek α verir.
 - Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci kaydedilmedi; örneklemin temsil gücü bilinmiyor.
 - 50 prompt ve bu koşumda üretilen yanıtlar dışındaki model, korpus ve bağlam ölçeklerine genelleme yapılamaz.
-- Yüksek α büyük ölçüde iki uçlu puan desenindeki kodlayıcı uyumunu gösterir; puanların bağımsız doğruluk kanıtı değildir.

@@ -1,0 +1,155 @@
+{
+  "arm_error": null,
+  "arm_results": {
+    "dense": {
+      "hallucination_rate": 0.998,
+      "means": {
+        "belirsizlik_durustlugu": 1.0,
+        "dil_kalitesi": 1.0,
+        "dogruluk": 1.0,
+        "tutarlilik": 1.0
+      },
+      "ratings_per_dimension": 500
+    },
+    "hga": {
+      "hallucination_rate": 0.998,
+      "means": {
+        "belirsizlik_durustlugu": 1.0,
+        "dil_kalitesi": 1.0,
+        "dogruluk": 1.0,
+        "tutarlilik": 1.0
+      },
+      "ratings_per_dimension": 500
+    },
+    "symbolic": {
+      "hallucination_rate": 0.034,
+      "means": {
+        "belirsizlik_durustlugu": 4.952,
+        "dil_kalitesi": 4.952,
+        "dogruluk": 4.952,
+        "tutarlilik": 4.952
+      },
+      "ratings_per_dimension": 500
+    },
+    "transformer": {
+      "hallucination_rate": 0.996,
+      "means": {
+        "belirsizlik_durustlugu": 1.0,
+        "dil_kalitesi": 1.0,
+        "dogruluk": 1.0,
+        "tutarlilik": 1.0
+      },
+      "ratings_per_dimension": 500
+    }
+  },
+  "attestation": {
+    "path": "insan_degerlendirme_paketleri/rater_attestation.json",
+    "present": false,
+    "raters": 0,
+    "real_human_ratings": false
+  },
+  "checks": {
+    "all_cells_filled": true,
+    "arm_summary_available_when_complete": true,
+    "balanced_rows_per_rater": true,
+    "csv_files_found": true,
+    "min_raters_present": true,
+    "rater_attestation_present": false,
+    "rating_values_in_scale": true,
+    "reliability_computed_when_any_rating_present": true
+  },
+  "findings": [
+    "10 CSV dosyası okundu; doluluk 1.0000.",
+    "Tam/beyanlı gerçek insan puanı yok; ana raporda bu bölüm n/a kalmalıdır."
+  ],
+  "limitations": [
+    "CSV import gerçek insan kalitesini garanti etmez; yalnız format, ölçek ve agregasyon hattını doğrular.",
+    "rater_attestation.json olmadan dolu CSV'ler gerçek insan sonucu sayılmaz ve ana raporda n/a kalır.",
+    "Kör açma anahtarı yoksa veya paket eksikse kol sonuçları üretilmez."
+  ],
+  "package_dir": "insan_degerlendirme_paketleri",
+  "protocol": "human_evaluation_csv_import_v1",
+  "reliability": {
+    "_summary": {
+      "acceptable_dimensions": 5,
+      "all_acceptable": true,
+      "dimensions": 5,
+      "note": "Bir boyut bile eşiği geçemezse o boyuta dayanan hiçbir sonuç raporlanamaz."
+    },
+    "belirsizlik_durustlugu": {
+      "alpha": 0.983878252173,
+      "distinct_values": 2,
+      "expected_disagreement": 744336168.0837152,
+      "level": "ordinal",
+      "observed_disagreement": 11999999.999996115,
+      "pairable_values": 2000.0,
+      "units_used": 200,
+      "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+    },
+    "dil_kalitesi": {
+      "alpha": 0.983878252173,
+      "distinct_values": 2,
+      "expected_disagreement": 744336168.0837152,
+      "level": "ordinal",
+      "observed_disagreement": 11999999.999996115,
+      "pairable_values": 2000.0,
+      "units_used": 200,
+      "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+    },
+    "dogruluk": {
+      "alpha": 0.983878252173,
+      "distinct_values": 2,
+      "expected_disagreement": 744336168.0837152,
+      "level": "ordinal",
+      "observed_disagreement": 11999999.999996115,
+      "pairable_values": 2000.0,
+      "units_used": 200,
+      "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+    },
+    "halusinasyon_var": {
+      "alpha": 0.943630523447,
+      "distinct_values": 2,
+      "expected_disagreement": 737.19959979982,
+      "level": "nominal",
+      "observed_disagreement": 41.555555555555,
+      "pairable_values": 2000.0,
+      "units_used": 200,
+      "verdict": "KABUL EDİLEBİLİR: α=0.9436 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+    },
+    "tutarlilik": {
+      "alpha": 0.983878252173,
+      "distinct_values": 2,
+      "expected_disagreement": 744336168.0837152,
+      "level": "ordinal",
+      "observed_disagreement": 11999999.999996115,
+      "pairable_values": 2000.0,
+      "units_used": 200,
+      "verdict": "KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir."
+    }
+  },
+  "schema_version": 1,
+  "signature": "cb57a1eec46f",
+  "status": "CSV_COMPLETE_UNATTESTED_NA",
+  "summary": {
+    "balanced_items_by_dimension": true,
+    "balanced_rows_per_rater": true,
+    "filled_cells": 10000,
+    "filled_ratio": 1.0,
+    "items": 200,
+    "raters_found": 10,
+    "rows_per_rater": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "scale_validation": "passed",
+    "total_cells": 10000
+  }
+}

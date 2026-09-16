@@ -7,6 +7,7 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from hga.evaluation.long_context import (  # noqa: E402
+    LONG_CONTEXT_TARGETS,
     PROFILES,
     _sample_positions,
     _windows_at,
@@ -124,3 +125,19 @@ def test_profiller_en_az_iki_baglam_ve_tohum():
     for ad, p in PROFILES.items():
         assert len(p["contexts"]) >= 2, ad
         assert len(p["seeds"]) >= 2, ad
+
+
+def test_512_1024_smoke_profili_ve_full_yolu_tanimli():
+    assert tuple(PROFILES["smoke_1024"]["contexts"]) == LONG_CONTEXT_TARGETS
+    assert set(LONG_CONTEXT_TARGETS) <= set(PROFILES["full"]["contexts"])
+
+
+def test_512_1024_smoke_kod_yolu_kosar():
+    rapor = run_long_context_benchmark(
+        profile="smoke_1024",
+        overrides={"steps": 1, "train_windows": 64, "eval_windows": 32},
+    )
+    assert tuple(rapor.config["contexts"]) == LONG_CONTEXT_TARGETS
+    assert rapor.checks["long_context_targets_configured"]
+    assert rapor.checks["max_context_at_least_1024_when_configured"]
+    assert all(rapor.checks.values())

@@ -360,6 +360,21 @@ def fiil_coz(kelime: str) -> Optional[Dict[str, Any]]:
     return cozumler[0]
 
 
+def _muhtemel_cati_eki(lemma: str) -> Optional[str]:
+    """Bilinmeyen kökte çatı/ettirgen/edilgen izi varsa eki döndür.
+
+    v1 yalnız ``okut`` gibi çatı eki soyulunca *bilinen* fiile dönen köklerde
+    çekimser kalıyordu. v2 negatif seti ``çıkartıldı`` veya ``açtırdı`` gibi
+    kökü sözlükte olmayan ama çatı/ettirgen yüzeyi belirgin örnekleri de
+    kapsar. Bu durumda üye yapısı yine belirsizdir; düşük güvenli indüksiyon
+    yapmak yerine ilişki iddiası üretmemek daha güvenlidir.
+    """
+    for ek in sorted(CATI_EKLERI, key=len, reverse=True):
+        if lemma.endswith(ek) and len(lemma) - len(ek) >= 2:
+            return ek
+    return None
+
+
 def _cati_soyulunca_bilinen(lemma: str) -> Optional[str]:
     """Çatı eki soyulunca bilinen fiile dönüşüyorsa o kökü döndür.
 
@@ -543,6 +558,12 @@ def cumle_coz(cumle: str) -> SemantikCikarim:
                 sonuc.skipped_reasons.append(
                     f"cati_eki_uye_yapisi_belirsiz:"
                     f"{fiil_bilgi['lemma']}<-{bilinen_kok}")
+                return sonuc
+            cati_eki = _muhtemel_cati_eki(fiil_bilgi["lemma"])
+            if cati_eki is not None:
+                sonuc.skipped_reasons.append(
+                    f"muhtemel_cati_eki_uyeleri_belirsiz:"
+                    f"{fiil_bilgi['lemma']}+{cati_eki}")
                 return sonuc
             # 6c) Kanıt-tabanlı indüksiyon: kök yeterince uzun VE kanonik
             # SOV üye yapısı (yalın özne + durum ekli nesne) varsa mastar
