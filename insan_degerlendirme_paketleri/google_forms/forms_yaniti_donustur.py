@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 """Google Forms CSV yanıtlarını HGA'nın kör değerlendirme CSV şemasına dönüştür.
 
-Google Forms'a aktarılan formlar, her puan alanını şu değişmez başlıkla yazar::
+Google Forms'a aktarılan formlar iki desteklenen başlık şemasından birini yazar::
 
     HGA|<16-hex-item-id>|<boyut>
+    <16-hex-item-id> | puanlar [<boyut>]
+    <16-hex-item-id> | halusinasyon_var
+
+İkinci şema, dört ölçek satırını tek ``MultipleChoiceGrid`` sorusunda tutan
+ızgara sürümünün Google Sheets dışa aktarımıdır. Izgara CSV'sinde ayrı rater
+alanı bulunmadığında araç Rxx kodunu dosya adından güvenli biçimde çıkarır.
 
 Bu araç, form bölümlerinden indirilen CSV dosyalarını item_id üzerinden
 birleştirir, değer/rater/paket bütünlüğünü doğrular ve hga'nın mevcut
@@ -48,7 +54,14 @@ QUESTION_RE = re.compile(
     + r")\s*$",
     re.IGNORECASE,
 )
+GRID_QUESTION_RE = re.compile(
+    r"^\s*(?P<item>[0-9a-f]{16})\s*\|\s*(?:"
+    r"puanlar\s*\[(?P<grid_dimension>dogruluk|tutarlilik|dil_kalitesi|"
+    r"belirsizlik_durustlugu)\]|(?P<hallucination>halusinasyon_var))\s*$",
+    re.IGNORECASE,
+)
 RATER_ID_RE = re.compile(r"^R\d{2}$")
+RATER_FILENAME_RE = re.compile(r"(?:^|[^A-Z0-9])(R\d{2})(?:[^A-Z0-9]|$)", re.IGNORECASE)
 LEADING_SCORE_RE = re.compile(r"^\s*([01-5])(?:\s|—|-|$)")
 
 
@@ -150,16 +163,33 @@ def find_csv_files(path: Path) -> List[Path]:
 
 
 def _question_columns(fieldnames: Sequence[str]) -> Dict[Tuple[str, str], str]:
+    """Eski makine başlığını ve Forms ızgara dışa aktarımını tanır."""
     columns: Dict[Tuple[str, str], str] = {}
     for header in fieldnames:
-        match = QUESTION_RE.fullmatch((header or "").strip())
-        if not match:
-            continue
-        key = (match.group("item").lower(), match.group("dimension"))
+        cleaned = (header or "").strip()
+        match = QUESTION_RE.fullmatch(cleaned)
+        if match:
+            item_id = match.group("item").lower()
+            dimension = match.group("dimension").lower()
+        else:
+            grid_match = GRID_QUESTION_RE.fullmatch(cleaned)
+            if not grid_match:
+                continue
+            item_id = grid_match.group("item").lower()
+            dimension = (
+                grid_match.group("grid_dimension")
+                or grid_match.group("hallucination")
+            ).lower()
+        key = (item_id, dimension)
         if key in columns:
             raise ConversionError(f"CSV'de yinelenen HGA soru sütunu: {header}")
         columns[key] = header
     return columns
+
+
+def _rater_from_filename(path: Path) -> Optional[str]:
+    match = RATER_FILENAME_RE.search(path.stem.upper())
+    return match.group(1).upper() if match else None
 
 
 def _parse_score(value: str, dimension: str, context: str) -> int:
@@ -204,17 +234,32 @@ def read_form_responses(paths: Iterable[Path], packages: Mapping[str, Package]) 
         with path.open("r", encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             fieldnames = reader.fieldnames or []
-            if RATER_HEADER not in fieldnames:
-                raise ConversionError(f"{path}: zorunlu {RATER_HEADER!r} sütunu yok")
+            has_rater_column = RATER_HEADER in fieldnames
+            filename_rater = _rater_from_filename(path)
+            if not has_rater_column and filename_rater is None:
+                raise ConversionError(
+                    f"{path}: {RATER_HEADER!r} sütunu yok ve dosya adından Rxx çıkarılamadı"
+                )
             question_columns = _question_columns(fieldnames)
             if not question_columns:
-                raise ConversionError(f"{path}: HGA|item_id|boyut soru sütunu yok")
+                raise ConversionError(
+                    f"{path}: desteklenen HGA veya item_id | puanlar [boyut] sütunu yok"
+                )
             timestamp_header = next(
-                (header for header in fieldnames if header.strip().lower() == "timestamp"), None
+                (
+                    header
+                    for header in fieldnames
+                    if header.strip().lower() in {"timestamp", "zaman damgası"}
+                ),
+                None,
             )
             for row_number, row in enumerate(reader, start=2):
                 summary.rows_seen += 1
-                rater_id = (row.get(RATER_HEADER) or "").strip().upper()
+                rater_id = (
+                    (row.get(RATER_HEADER) or "").strip().upper()
+                    if has_rater_column
+                    else filename_rater or ""
+                )
                 if not RATER_ID_RE.fullmatch(rater_id):
                     raise ConversionError(f"{path}:{row_number}: geçersiz rater_id {rater_id!r}")
                 if rater_id not in packages:

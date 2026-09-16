@@ -38,22 +38,26 @@ puanı üretmez**; gerçek, yetkin değerlendiricilerden veri gelmeden
 3. `paket_forma.gs` dosyasını [script.google.com](https://script.google.com)'da
    yeni bir Apps Script projesine yapıştırın. Dosyanın üstündeki `CONFIG`
    içinde `PACKAGE_FOLDER_ID` ve `OUTPUT_FOLDER_ID` yer tutucularını bu
-   kimliklerle değiştirin. `ITEMS_PER_FORM=40` değerini değiştirmeyin.
+   kimliklerle değiştirin. Izgara sürümünün tek CSV üretmesi için
+   `ITEMS_PER_FORM=200` değerini değiştirmeyin.
 4. Projeyi kaydedin. İlk çalıştırmada Google Drive, Forms ve Sheets izinleri
    istenir; bunlar yalnız sizin proje hesabınıza verilmelidir.
 
 ## 2. Formları oluşturma ve paylaşma
 
 Apps Script düzenleyicisinden önce `createNextRaterForms` çalıştırın. Bu,
-örneğin `R01` için 200 öğeyi beş bölüme ayırır. Her bölümde 40 öğe vardır:
+örneğin `R01` için 200 öğelik tek form ve tek bağlı yanıt e-tablosu üretir.
+Her öğede:
 
-- her öğenin soru/yanıt metni ve beş zorunlu puanı,
-- bir `R01` rater-kodu alanı,
-- ayrı bir bağlı Google Sheets yanıt dosyası.
+- soru/yanıt metni,
+- dört 1–5 ölçek boyutunu satırlarda tutan tek zorunlu grid sorusu,
+- ayrı bir zorunlu 0/1 halüsinasyon sorusu vardır.
 
-Bölme kasıtlıdır: 200 öğe × beş puan tek Form'da platformun öğe sınırlarını ve
-kullanılabilirliği zorlar. Beş parçanın tümünde sabit `HGA|item_id|boyut`
-başlıkları bulunduğu için Python aracı sonuçları tekrar tek CSV'de birleştirir.
+Google Sheets grid satırlarını CSV'de
+`<item_id> | puanlar [<boyut>]` sütunlarına açar; halüsinasyon sütunu
+`<item_id> | halusinasyon_var` biçimindedir. Rater kodu ayrıca sorulmaz:
+Python aracı `HGA Değerlendirme — R01.csv` gibi dosya adındaki Rxx kodunu paket
+kimliğiyle doğrular.
 
 `Logger` çıktısındaki `HGA_google_forms_registry.json` kaydını saklayın. Bu
 kayıtta düzenleme/yayın URL'leri, bağlı e-tablolar, kaynak paket SHA-256'sı ve
@@ -65,8 +69,8 @@ hangi öğelerin hangi bölümde olduğu bulunur; **kol eşlemesi bulunmaz**.
 - Her bölüm formunda ayarlardan **yanıtları sınırla** / atanmış hesabı seçin.
   İsterseniz “bir yanıtla sınırla”yı açın. Kimlik bilgisini araştırma planı
   gerektirmedikçe toplamayın.
-- Değerlendiriciye kendi beş form bağlantısını, kör yönergeyi ve rater kodunu
-  gönderin. Yanıtı değiştirme veya yeniden gönderme sürecini önceden belirtin.
+- Değerlendiriciye kendi form bağlantısını ve kör yönergeyi gönderin. Yanıtı
+  değiştirme veya yeniden gönderme sürecini önceden belirtin.
 - Aynı scripti yeniden çalıştırmak mevcut `rater_id` kaydını atlar. Bilerek
   yeni tur başlatılacaksa ayrı bir output klasörü ve ayrı Apps Script projesi
   kullanın; önceki turu üzerine yazmayın.
@@ -77,19 +81,20 @@ kayıttan sonra kaydedilir ve tekrar üretilmez.
 
 ## 3. Yanıtları dışa aktarma
 
-Her bölüm formunun bağlı yanıt e-tablosunda:
+Her değerlendirici formunun bağlı yanıt e-tablosunda:
 
 1. Yanıtlar sayfasından **Dosya → İndir → Virgülle ayrılmış değerler (.csv)**
    seçin.
 2. Dosya adını değiştirebilirsiniz; dönüştürücü ad yerine sütun şemasını ve
    rater kodunu denetler.
-3. Bütün bölüm CSV'lerini boş bir yerel klasöre koyun. Analizden önce Forms'ta
-   beklenen tüm beş bölümün yanıtlandığını kontrol edin.
+3. On değerlendiricinin CSV'lerini boş bir yerel klasöre koyun. Analizden önce
+   Forms'ta R01–R10 yanıtlarının bulunduğunu kontrol edin.
 
-CSV başlıklarındaki `HGA|...` alanlarını elle değiştirmeyin. Hatalı rater kodu,
-bilinmeyen `item_id`, 1–5 dışı ordinal puan, 0/1 dışı halüsinasyon puanı,
-eksik hücre veya çifte yanıt varsayılan olarak **hata** üretir. Sessiz veri
-kaybı yoktur.
+CSV başlıklarındaki `<item_id> | puanlar [boyut]` alanlarını veya dosya adındaki
+Rxx kodunu elle değiştirmeyin. Bilinmeyen `item_id`, 1–5 dışı ordinal puan,
+0/1 dışı halüsinasyon puanı, eksik hücre veya çifte yanıt varsayılan olarak
+**hata** üretir. Sessiz veri kaybı yoktur. Eski `HGA|item_id|boyut` dışa
+aktarımları geriye dönük olarak hâlâ desteklenir.
 
 ## 4. Dönüştürme ve bütünlük denetimi
 
@@ -154,8 +159,8 @@ kanıtlamaz.
 - Google Forms aktarımı anket lojistiğini çözer; temsilî örneklem, rater
   eğitimi, onam, dikkat kontrolü, bağımsız doğruluk denetimi veya istatistiksel
   sonuç üretmez.
-- Paketler aynı rater kodunu tekrar görür. Bu tanımlayıcı pseudonymous bir
-  operasyon kodudur; kimlik/erişim denetiminin yerine geçmez.
-- Forms arayüzü ve CSV yerelleştirmesi değişebilir. Dönüştürücü yalnız
-  değişmez `HGA|...` başlıklarını varsayar; deneme turu her platform değişiminde
-  tekrarlanmalıdır.
+- Dosya adındaki Rxx, pseudonymous bir operasyon kodudur; kimlik/erişim
+  denetiminin yerine geçmez.
+- Forms arayüzü ve CSV yerelleştirmesi değişebilir. Dönüştürücü değişmez
+  `item_id | puanlar [boyut]` şemasını varsayar; deneme turu her platform
+  değişiminde tekrarlanmalıdır.

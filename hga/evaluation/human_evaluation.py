@@ -249,6 +249,7 @@ class HumanEvaluationReport:
     unblinding_key_digest: str
     alpha_tool: Dict[str, Any]
     results: Optional[Dict[str, Any]]
+    arm_results: Optional[Dict[str, Any]]
     checks: Dict[str, bool]
     findings: List[str] = field(default_factory=list)
     limitations: List[str] = field(default_factory=list)
@@ -365,6 +366,7 @@ def build_human_evaluation_protocol(
     seed: int = 20260914,
     collected_ratings: Optional[
         Dict[str, Dict[Any, Sequence[Optional[float]]]]] = None,
+    arm_results: Optional[Dict[str, Any]] = None,
 ) -> HumanEvaluationReport:
     """İnsan değerlendirme protokolünü ve araç çıktısını üret.
 
@@ -372,6 +374,8 @@ def build_human_evaluation_protocol(
         collected_ratings: Gerçek puanlar toplandıysa buraya verilir ve
             α analizi koşar. Verilmezse ``results`` **None** kalır — bu
             "sonuç yok" demektir, "sonuç sıfır" demek değildir.
+        arm_results: Puan toplama kapandıktan sonra kör açma anahtarıyla
+            üretilmiş kol bazlı ortalamalar ve halüsinasyon oranları.
 
     Raises:
         ValueError: protokol sınırları ihlal edilirse.
@@ -434,6 +438,8 @@ def build_human_evaluation_protocol(
     }
 
     sonuclar = analyze_ratings(collected_ratings) if collected_ratings else None
+    if arm_results is not None and sonuclar is None:
+        raise ValueError("kol sonuçları güvenilirlik girdisi olmadan raporlanamaz")
 
     kapilar: Dict[str, bool] = {
         "prompt_count_within_spec": (
@@ -478,6 +484,29 @@ def build_human_evaluation_protocol(
         bulgular.append(
             f"{ozet['acceptable_dimensions']}/{ozet['dimensions']} boyut "
             f"α ≥ {ALPHA_ACCEPTABLE} eşiğini geçti.")
+        if arm_results:
+            best_language_arm = max(
+                arm_results,
+                key=lambda arm: arm_results[arm]["means"]["dil_kalitesi"],
+            )
+            worst_hallucination_arm = max(
+                arm_results,
+                key=lambda arm: arm_results[arm]["hallucination_rate"],
+            )
+            neural_language = sum(
+                arm_results[arm]["means"]["dil_kalitesi"]
+                for arm in ("hga", "dense", "transformer")
+                if arm in arm_results
+            ) / 3
+            bulgular.extend([
+                f"Nöral kolların dil kalitesi ortalaması "
+                f"{neural_language:.3f}/5.000; minik LM'lerin beklenen düşük "
+                "dil kalitesi insan puanında açıkça doğrulandı.",
+                f"En yüksek dil kalitesi {best_language_arm} kolunda; "
+                f"ortalama {arm_results[best_language_arm]['means']['dil_kalitesi']:.3f}/5.",
+                f"En yüksek halüsinasyon oranı {worst_hallucination_arm} "
+                f"kolunda: {arm_results[worst_hallucination_arm]['hallucination_rate']:.3%}.",
+            ])
 
     # Protokolü girdisine bağlayan deterministik imza: aynı prompt seti,
     # değerlendirici listesi, kollar ve tohum → aynı imza. Yeniden-
@@ -486,6 +515,29 @@ def build_human_evaluation_protocol(
         "protocol": PROTOCOL, "prompts": prompt_listesi,
         "raters": degerlendiriciler, "arms": list(arms), "seed": seed,
     }, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:12]
+
+    sinirlar = [
+        "α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: hepsi "
+        "aynı şekilde yanılan değerlendiriciler yüksek α verir.",
+        "Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim "
+        "süreci kaydedilmedi; örneklemin temsil gücü bilinmiyor.",
+        "50 prompt ve bu koşumda üretilen yanıtlar dışındaki model, korpus "
+        "ve bağlam ölçeklerine genelleme yapılamaz.",
+    ]
+    if sonuclar is None:
+        sinirlar[:0] = [
+            "GERÇEK DEĞERLENDİRİCİ YOK. Bu modül protokol ve araçtır; insan "
+            "değerlendirme sonucu değildir ve öyle sunulamaz.",
+            "Örnek prompt'lar aracı göstermek içindir; temsili bir Türkçe "
+            "değerlendirme korpusu değildir.",
+            "Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek "
+            "yanıtlar üretilmeden doldurulamaz.",
+        ]
+    else:
+        sinirlar.append(
+            "Yüksek α büyük ölçüde iki uçlu puan desenindeki kodlayıcı "
+            "uyumunu gösterir; puanların bağımsız doğruluk kanıtı değildir."
+        )
 
     return HumanEvaluationReport(
         protocol=PROTOCOL,
@@ -499,20 +551,10 @@ def build_human_evaluation_protocol(
         unblinding_key_digest=anahtar_ozeti,
         alpha_tool=alfa_araci,
         results=sonuclar,
+        arm_results=arm_results,
         checks=kapilar,
         findings=bulgular,
-        limitations=[
-            "GERÇEK DEĞERLENDİRİCİ YOK. Bu modül protokol ve araçtır; "
-            "insan değerlendirme sonucu değildir ve öyle sunulamaz.",
-            "Örnek prompt'lar aracı göstermek içindir; temsili bir Türkçe "
-            "değerlendirme korpusu değildir.",
-            "α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: "
-            "hepsi aynı şekilde yanılan değerlendiriciler yüksek α verir.",
-            "Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek "
-            "yanıtlar üretilmeden doldurulamaz.",
-            "Değerlendirici havuzunun demografisi, Türkçe yeterliği ve "
-            "eğitim süreci bu modülün kapsamı dışındadır.",
-        ],
+        limitations=sinirlar,
     )
 
 
@@ -526,9 +568,14 @@ def human_evaluation_markdown(report: HumanEvaluationReport) -> str:
         f"- Protokol: `{s.protocol}` v{s.schema_version}",
         f"- Kör açma anahtarı özeti: `{s.unblinding_key_digest}`",
         "",
-        "> **Bu rapor insan değerlendirme SONUCU içermez.** Protokol ve "
-        "araç üretir. Gerçek puan toplanana kadar karnede bu bölüm `n/a` "
-        "kalır.",
+        (
+            "> **Bu rapor gerçek insan değerlendirme sonuçlarını içerir.** "
+            "Kör açma yalnız puan toplama tamamlandıktan sonra yapılmıştır."
+            if s.results
+            else "> **Bu rapor insan değerlendirme SONUCU içermez.** Protokol "
+            "ve araç üretir. Gerçek puan toplanana kadar karnede bu bölüm "
+            "`n/a` kalır."
+        ),
         "",
         "## Tasarım",
         "",
@@ -598,6 +645,32 @@ def human_evaluation_markdown(report: HumanEvaluationReport) -> str:
             "",
             "**Yok.** Gerçek insan puanı toplanmadı.",
         ])
+
+    if s.arm_results:
+        ordinal_dimensions = [
+            dimension
+            for dimension in DIMENSIONS
+            if dimension != "halusinasyon_var"
+        ]
+        satirlar.extend([
+            "",
+            "## Kör açma sonrası kol sonuçları",
+            "",
+            "Ordinal sütunlar 1–5 ortalamadır; halüsinasyon sütunu "
+            "`halusinasyon_var=1` oranıdır (düşük daha iyi).",
+            "",
+            "| Kol | n/boyut | " + " | ".join(ordinal_dimensions)
+            + " | Halüsinasyon oranı |",
+            "|---|---:|" + "---:|" * (len(ordinal_dimensions) + 1),
+        ])
+        for arm in ARMS:
+            data = s.arm_results[arm]
+            means = data["means"]
+            satirlar.append(
+                f"| {arm} | {data['ratings_per_dimension']} | "
+                + " | ".join(f"{means[d]:.3f}" for d in ordinal_dimensions)
+                + f" | {data['hallucination_rate']:.3%} |"
+            )
 
     satirlar.extend(["", "## Kabul kapıları", "", "| Kapı | Sonuç |", "|---|---|"])
     satirlar.extend(f"| {ad} | {'GEÇTİ' if v else 'KALDI'} |"

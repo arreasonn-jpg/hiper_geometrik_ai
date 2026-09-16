@@ -10,6 +10,7 @@ import json
 import pytest
 
 from hga.evaluation.human_eval_fill import (
+    analyze_ratings_by_arm,
     collect_ratings_from_csv,
     fill_and_export_packages,
     symbolic_answer,
@@ -117,6 +118,39 @@ def test_csv_toplama_ve_alfa_koprusu(paket_dizini):
     # İki uyumlu değerlendirici → yüksek α (boş dosyalar None sayılır)
     for boyut in DIMENSIONS:
         assert sonuc[boyut]["alpha"] is None or sonuc[boyut]["alpha"] > 0.9
+
+
+def test_kor_acma_kol_ortalamalarini_ve_halusinasyon_oranini_verir(tmp_path):
+    prompts = _default_prompts()
+    fake = {
+        arm: [f"{arm}-{index}" for index in range(len(prompts))]
+        for arm in ARMS
+    }
+    fill_and_export_packages(tmp_path, fake, prompts=prompts)
+    key = json.loads(
+        (
+            tmp_path
+            / "_GIZLI_degerlendiriciye_verme"
+            / "kor_anahtari.json"
+        ).read_text(encoding="utf-8")
+    )
+    arm_scores = {arm: index + 1 for index, arm in enumerate(ARMS)}
+    for path in (tmp_path / "paketler").glob("R??_puanlama.csv"):
+        rows = list(csv.DictReader(path.open(encoding="utf-8")))
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.writer(handle)
+            writer.writerow(["item_id", *DIMENSIONS])
+            for row in rows:
+                score = arm_scores[key[row["item_id"]]["arm"]]
+                writer.writerow([row["item_id"], *([score] * 4), score % 2])
+
+    result = analyze_ratings_by_arm(tmp_path)
+
+    assert result["hga"]["means"]["dogruluk"] == 1.0
+    assert result["symbolic"]["means"]["dil_kalitesi"] == 4.0
+    assert result["hga"]["hallucination_rate"] == 1.0
+    assert result["dense"]["hallucination_rate"] == 0.0
+    assert all(data["ratings_per_dimension"] == 500 for data in result.values())
 
 
 def test_bos_dizinde_acik_hata(tmp_path):

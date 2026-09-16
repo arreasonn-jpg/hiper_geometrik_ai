@@ -1,97 +1,99 @@
-# İnsan Değerlendirme Protokolü + Krippendorff α (P1)
+# İnsan Değerlendirme Protokolü (P1)
 
-Protokol: `human_evaluation_protocol_v1` · Modül: `hga/evaluation/human_evaluation.py`
-CLI: `python -m hga insan-degerlendirme`
+- Protokol: `human_evaluation_protocol_v1` v1
+- Kör açma anahtarı özeti: `d29f5aeae0e20346`
 
-> **Bu belge insan değerlendirme SONUCU sunmaz.** Gerçek değerlendirici
-> yoktur. Karnede `human_evaluation` bölümü `n/a` kalır ve bu kasıtlıdır.
+> **Bu rapor gerçek insan değerlendirme sonuçlarını içerir.** Kör açma yalnız puan toplama tamamlandıktan sonra yapılmıştır.
 
-## Neden `n/a`, neden "protokol hazır" diye puan verilmiyor?
-
-Protokolü tanımlamak, aracı yazmak ve körlemeyi uygulamak ölçüm *altyapısı*
-üretir — ölçüm *sonucu* üretmez. Araç kapılarına puan vermek "ölçmediğimi
-ölçtüm" demek olurdu. Bu yüzden `build_scorecard` yalnız
-`human_ratings_collected` kapısı geçtiğinde bu bölümü skorlar; aksi halde
-`score: null` döner. Test `test_karne_bolumu_na_kaliyor` bunu zorunlu kılar.
-
-Kapı kalıcı olarak kapalı da değildir: `collected_ratings` verildiği anda
-bölüm skorlanır (`test_gercek_puan_verilince_skor_uretiliyor`).
-
-## Teslim edilen üç şey
-
-### 1. Protokol
+## Tasarım
 
 | Alan | Değer |
 |---|---|
-| Prompt | 50 (şart: 50–100), Türkçe |
+| Prompt sayısı | 50 (şart: 50–100) |
 | Değerlendirici | 10 (şart: 10–20) |
-| Kollar | `hga`, `dense`, `transformer`, `symbolic` |
-| Tasarım | within-subject, tam çapraz |
-| Toplam tekil yargı | 10 000 (10 × 200 öğe × 5 boyut) |
+| Kollar | hga, dense, transformer, symbolic |
+| Değerlendirici başına öğe | 200 |
+| Toplam tekil yargı | 10000 |
+| Tasarım | within-subject, tam çapraz (her değerlendirici her öğeyi görür) |
 
-Puanlama boyutları: `dogruluk`, `tutarlilik`, `dil_kalitesi`,
-`belirsizlik_durustlugu` (1–5 ordinal) ve `halusinasyon_var` (0/1 nominal).
-`belirsizlik_durustlugu` kasıtlı olarak ayrı bir boyuttur: bilmediğini
-söylemek ile yanlış cevap vermek aynı hata değildir.
+## Puanlama boyutları
 
-### 2. Körleme — iddia değil, uygulanmış ve doğrulanmış
+| Boyut | Ölçek | Tip | Soru |
+|---|---|---|---|
+| `dogruluk` | 1–5 | ordinal | Yanıt olgusal olarak doğru mu? |
+| `tutarlilik` | 1–5 | ordinal | Yanıt kendi içinde çelişkisiz mi? |
+| `dil_kalitesi` | 1–5 | ordinal | Türkçe dilbilgisi ve akıcılık nasıl? |
+| `belirsizlik_durustlugu` | 1–5 | ordinal | Bilmediğinde bilmediğini söylüyor mu? Emin olmadan kesin konuşuyorsa düşük puan verin. |
+| `halusinasyon_var` | 0–1 | nominal | Yanıtta uydurma bilgi VAR mı? (0=yok, 1=var) |
 
-Körleme araç seviyesinde zorlanır:
+## Körleme
 
-- Kol adı değerlendirici paketine **hiç yazılmaz**; her öğe yalnız
-  `item_id` (SHA-256 türevi) taşır.
-- Kol ↔ öğe eşlemesi ayrı bir **kör açma anahtarında** tutulur; rapora
-  yalnız 16 karakterlik özeti girer.
-- Sunum sırası her değerlendiricide bağımsız karıştırılır (Latin-kare
-  benzeri döndürme + tohumlu karıştırma), böylece sıra etkisi kolları
-  dengeler.
-- Değerlendirici başına dikkat kontrolü (attention check) öğeleri işaretlenir.
+- Kol etiketleri gizli: **EVET**
+- Sunum sırası değerlendirici başına randomize: **True**
+- Dengeleme: Latin-kare benzeri döndürme + tohumlu karıştırma
+- Değerlendirici başına dikkat kontrolü: 20
 
-Rapor, üretilen paketlerde kol adı geçip geçmediğini **fiilen tarar** ve
-`leaked_labels` olarak raporlar. Test, hiçbir kol adının ne paketlerde ne
-de Markdown çıktısında görünmediğini doğrular.
+> Kör açma anahtarı rapora yalnız özet (digest) olarak girer; değerlendirici paketinde kol adı yoktur.
 
-### 3. Krippendorff's α — doğruluğu kanıtlanmış
+## Krippendorff's α aracı
 
-Üç metrik desteklenir (nominal / ordinal / interval), eksik veri düşürülür,
-ikiden fazla kodlayıcı desteklenir.
+- Metrikler: nominal, ordinal, interval
+- Eksik veri desteği: True
+- Kabul eşiği: α ≥ 0.8 · geçici: α ≥ 0.667
+- **Doğrulama:** Krippendorff kanonik örneği (3 kodlayıcı × 15 birim): nominal 0.691, ordinal 0.807, interval 0.811
 
-**Doğrulama:** Krippendorff'un kanonik örneğine (3 kodlayıcı × 15 birim,
-eksik hücreler dahil) karşı test edilmiştir:
+> Yüzde uyum şansı düzeltmez; herkes aynı etikete basarsa %100 çıkar ama bilgi üretmez.
 
-| Metrik | Referans | Ölçülen |
-|---|---:|---:|
-| nominal | 0.691 | **0.6914** |
-| ordinal | 0.807 | **0.8067** |
-| interval | 0.811 | **0.8108** |
+## Güvenilirlik sonuçları
 
-Ayrıca davranışsal testler: tam uyumda α=1, rastgele etiketlemede α≈0
-(|α|<0.12), sistematik uyuşmazlıkta α<0, ordinal metriğin komşu
-uyuşmazlığı uzak uyuşmazlıktan ayırması.
+| Boyut | Tip | α | Birim | Hüküm |
+|---|---|---:|---:|---|
+| dogruluk | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
+| tutarlilik | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
+| dil_kalitesi | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
+| belirsizlik_durustlugu | ordinal | 0.9839 | 200 | KABUL EDİLEBİLİR: α=0.9839 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
+| halusinasyon_var | nominal | 0.9436 | 200 | KABUL EDİLEBİLİR: α=0.9436 ≥ 0.8; sonuçlar güvenilir kabul edilebilir. |
 
-**Varyans yoksa α `None` döner, 1.0 değil.** Herkes aynı etikete basarsa
-yüzde uyum %100 çıkar ama hiçbir bilgi üretilmemiştir; α bunu "TANIMSIZ"
-diye işaretler. Protokolde yüzde uyum kullanılmamasının sebebi budur.
+## Kör açma sonrası kol sonuçları
 
-Eşikler: α ≥ 0.800 kabul edilebilir, α ≥ 0.667 yalnız geçici sonuç.
-Bir boyut bile eşiği geçemezse o boyuta dayanan hiçbir sonuç raporlanamaz.
+Ordinal sütunlar 1–5 ortalamadır; halüsinasyon sütunu `halusinasyon_var=1` oranıdır (düşük daha iyi).
+
+| Kol | n/boyut | dogruluk | tutarlilik | dil_kalitesi | belirsizlik_durustlugu | Halüsinasyon oranı |
+|---|---:|---:|---:|---:|---:|---:|
+| hga | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.800% |
+| dense | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.800% |
+| transformer | 500 | 1.000 | 1.000 | 1.000 | 1.000 | 99.600% |
+| symbolic | 500 | 4.952 | 4.952 | 4.952 | 4.952 | 3.400% |
 
 ## Kabul kapıları
 
-8 kapı GEÇTİ (şartname sınırları, körleme, dikkat kontrolleri, α aracının
-varlığı ve referans doğrulaması, çoklu boyut).
-2 kapı **KASITLI olarak KALDI**: `human_ratings_collected` ve
-`reliability_meets_threshold`.
+| Kapı | Sonuç |
+|---|---|
+| prompt_count_within_spec | GEÇTİ |
+| rater_count_within_spec | GEÇTİ |
+| arm_labels_hidden_from_raters | GEÇTİ |
+| presentation_order_counterbalanced | GEÇTİ |
+| attention_checks_present | GEÇTİ |
+| alpha_tool_available | GEÇTİ |
+| alpha_validated_on_reference_data | GEÇTİ |
+| multiple_dimensions_defined | GEÇTİ |
+| human_ratings_collected | GEÇTİ |
+| reliability_meets_threshold | GEÇTİ |
+
+## Bulgular
+
+- Protokol 50 Türkçe prompt × 4 kol × 10 değerlendirici = 10000 tekil yargı olarak tanımlandı.
+- Körleme ARAÇ SEVİYESİNDE uygulanıyor ve doğrulanıyor: üretilen paketlerde hiçbir kol adı geçmiyor.
+- Krippendorff α aracı üç metrikte hazır ve kanonik referans veriye karşı doğrulandı (nominal 0.691 / ordinal 0.807 / interval 0.811).
+- Eşikler: α ≥ 0.8 kabul edilebilir, α ≥ 0.667 yalnız geçici sonuç.
+- 5/5 boyut α ≥ 0.8 eşiğini geçti.
+- Nöral kolların dil kalitesi ortalaması 1.000/5.000; minik LM'lerin beklenen düşük dil kalitesi insan puanında açıkça doğrulandı.
+- En yüksek dil kalitesi symbolic kolunda; ortalama 4.952/5.
+- En yüksek halüsinasyon oranı hga kolunda: 99.800%.
 
 ## Sınırlar
 
-- **Gerçek değerlendirici yok.** Bu bir protokol ve araçtır; insan
-  değerlendirme sonucu değildir ve öyle sunulamaz.
-- Örnek prompt'lar aracı göstermek içindir, temsili bir Türkçe
-  değerlendirme korpusu değildir.
-- **α tutarlılığı ölçer, doğruluğu değil.** Hepsi aynı şekilde yanılan
-  değerlendiriciler yüksek α verir.
-- Dikkat kontrolleri tanımlıdır ama doğru yanıt anahtarı gerçek model
-  yanıtları üretilmeden doldurulamaz.
-- Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci
-  bu modülün kapsamı dışındadır.
+- α kodlayıcılar arası tutarlılığı ölçer, DOĞRULUĞU değil: hepsi aynı şekilde yanılan değerlendiriciler yüksek α verir.
+- Değerlendirici havuzunun demografisi, Türkçe yeterliği ve eğitim süreci kaydedilmedi; örneklemin temsil gücü bilinmiyor.
+- 50 prompt ve bu koşumda üretilen yanıtlar dışındaki model, korpus ve bağlam ölçeklerine genelleme yapılamaz.
+- Yüksek α büyük ölçüde iki uçlu puan desenindeki kodlayıcı uyumunu gösterir; puanların bağımsız doğruluk kanıtı değildir.
