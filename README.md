@@ -74,6 +74,17 @@ python test_mimari.py              # mimari duman testleri
 python -m hga research-benchmark  # 5 seed, tek JSON/Markdown/HTML araştırma karnesi
 ```
 
+### CKPT-000 referans snapshot
+
+`v0.1.0-prototype`, sonraki deneylerin karşılaştırma noktası olan CKPT-000
+baseline'ıdır. Makine-okunur sözleşme, sabit TWT revision/hash'leri, kapasite
+sınırları ve Docker ile yeniden üretim komutu
+[`docs/checkpoints/CKPT-000.json`](docs/checkpoints/CKPT-000.json) ve
+[`docs/CKPT-000.md`](docs/CKPT-000.md) içindedir. Repo lisansı
+**Apache-2.0**'dır. Bu checkpoint, Kronecker veya bellek üst sınırlarının gerçek
+parametre sayısı olduğu ya da sistemin genel dil yeteneğini kanıtladığı iddiasını
+taşımaz.
+
 Research suite ayrıca **C_G (Generalization Capacity)** ölçümünü raporlar.
 Buradaki C_G teorik bir uzay büyüklüğü değildir: sürümlü held-out compositional
 fixture'da doğru çözülen uygun örnek sayısı/oranıdır. `C_V ≤ C_E ≤ C_M^UB`

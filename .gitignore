@@ -18,6 +18,9 @@ talimat_verisi.json
 yama_durumu.json
 logs/
 checkpoints/
+# CKPT sözleşmeleri kaynak belgedir; model checkpoint'leriyle karıştırılmaz.
+!docs/checkpoints/
+!docs/checkpoints/**
 # Manifestli deney koşuları; seçilmiş raporlar raporlar/ altında küratörlenir.
 experiments/EXP-*/
 

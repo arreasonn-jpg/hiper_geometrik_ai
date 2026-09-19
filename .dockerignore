@@ -1,0 +1,24 @@
+# VCS and local environments
+.git/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build and runtime products
+build/
+dist/
+*.egg-info/
+checkpoints/
+logs/
+experiments/EXP-*/
+artifacts/
+
+# Local model and generated data products
+*.pt
+turkce_metin.txt
+sozluk.json
+bpe_sozluk.json
+talimat_verisi.json

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CKPT-000",
+  "release": "v0.1.0-prototype",
+  "status": "current-baseline",
+  "purpose": "Sonraki tüm değişimlerin karşılaştırılacağı, iddia sınırları açıkça belirtilmiş prototip referansı.",
+  "release_tag": "v0.1.0-prototype",
+  "parent_revision": "8d91f75bbadff1372b9604c70ab9896c8889a8d0",
+  "release_label_note": "v0.1.0-prototype bir araştırma checkpoint etiketidir; mevcut Python dağıtım sürümünü yeniden numaralandırmaz.",
+  "metrics": {
+    "dense_params": 6970433,
+    "sparse_physical_params": 33554432,
+    "total_trainable_params": 40524865,
+    "statistical_reporting": "mean ± population standard deviation",
+    "research_suite_default_seeds": [1, 2, 3, 4, 5],
+    "license": "Apache-2.0"
+  },
+  "capacity_contract": {
+    "physical_trainable_parameters": "P",
+    "interaction_upper_bound": "C_I^UB",
+    "memory_address_upper_bound": "C_M^UB",
+    "prohibition": "P, C_I^UB ve C_M^UB birbirinin yerine kullanılamaz; üst sınırlar parametre sayısı değildir."
+  },
+  "implementation_evidence": {
+    "bilinear_kronecker_chain": "mimari/kuresel_bag.py",
+    "hashed_sparse_empty_set_memory": "mimari/seyrek_tablo.py",
+    "research_benchmark_single_command": "python -m hga research-benchmark",
+    "seed_manifest_protocol": "hga/evaluation/experiment.py",
+    "research_suite_protocol": "docs/RESEARCH_BENCHMARK_SUITE.md"
+  },
+  "twt_v1": {
+    "upstream_repository": "https://github.com/google-research-datasets/turkish-treebanks",
+    "upstream_revision": "40838e5cbe3f2882d4e768a3d782e6219e50b52a",
+    "web_conllu_sha256": "d6f92b12b74f367a36e30dd3d644d7a0bb01a991584602e6e69f1191664f86bf",
+    "wiki_conllu_sha256": "58f049fae8d0653ba0940a58168c17c7cebbc50f88cad2985d12d34ac1b9acde",
+    "provenance_manifest": "hga/evaluation/datasets/twt_v1/PROVENANCE.json"
+  },
+  "validation": {
+    "container": "docker build -t hga:v0.1.0-prototype .",
+    "suite": "docker run --rm -v \"$PWD/artifacts:/artifacts\" hga:v0.1.0-prototype research-benchmark --experiment-root /artifacts/experiments --out /artifacts/research_report.json --markdown /artifacts/research_report.md --html /artifacts/research_report.html",
+    "architecture": "python test_mimari.py",
+    "integrity_tests": "pytest -q tests/test_ckpt_000_baseline.py tests/scientific/test_real_turkish_benchmark.py tests/test_experiment_manifest.py"
+  },
+  "known_limitations": [
+    "Teorik ifade gücü, etkin rank ve VC boyutu için hakemli bir çerçeve yoktur.",
+    "Karşılaştırmalı Transformer/BERT/GPT baseline iddiası CKPT-000 kapsamı dışındadır.",
+    "Gerçek dil benchmarkı yalnızca Türkçe TWT v1 ile sınırlıdır; İngilizce veya çok dilli sonuç iddiası yoktur.",
+    "Bu küçük ölçekli prototipten scaling law çıkarımı yapılmaz.",
+    "Hakemli yayın veya arXiv ön baskısı yoktur."
+  ],
+  "change_rule": "Bu checkpointin kapsam/iddaa alanları değiştirilemez; sonraki her müdahale yeni CKPT manifesti ve karşılaştırmalı sonuçla kaydedilir."
+}
