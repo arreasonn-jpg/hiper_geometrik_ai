@@ -1,0 +1,5 @@
+# Vendored upstream corpus/licence artifacts are byte-identical to their pinned
+# sources. Preserve their original whitespace; do not make Git whitespace checks
+# suggest edits that would invalidate recorded SHA-256 values.
+*.conllu -whitespace
+hga/evaluation/datasets/ewt_v1/LICENSE-CC-BY-SA-4.0.txt -whitespace

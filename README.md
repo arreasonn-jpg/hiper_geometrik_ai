@@ -83,7 +83,12 @@ sınırları ve Docker ile yeniden üretim komutu
 [`docs/CKPT-000.md`](docs/CKPT-000.md) içindedir. Repo lisansı
 **Apache-2.0**'dır. Bu checkpoint, Kronecker veya bellek üst sınırlarının gerçek
 parametre sayısı olduğu ya da sistemin genel dil yeteneğini kanıtladığı iddiasını
-taşımaz.
+taşımaz. CKPT-000 genişletmesinin teori/rank sınırları
+[`docs/THEORETICAL_FRAMEWORK.md`](docs/THEORETICAL_FRAMEWORK.md), İngilizce ve
+Türkçe iki-dilli dependency-arc protokolü
+[`docs/BILINGUAL_BENCHMARK.md`](docs/BILINGUAL_BENCHMARK.md), İngilizce
+Transformer/BERT-style/GPT-style kontrolleri ise
+[`docs/ENGLISH_EWT_BASELINES.md`](docs/ENGLISH_EWT_BASELINES.md) içindedir.
 
 Research suite ayrıca **C_G (Generalization Capacity)** ölçümünü raporlar.
 Buradaki C_G teorik bir uzay büyüklüğü değildir: sürümlü held-out compositional

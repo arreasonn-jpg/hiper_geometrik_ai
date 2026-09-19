@@ -71,16 +71,42 @@ CPU/RAM, CUDA aygıtı varsa CUDA sürümü), veri ve konfigürasyon hash'leri h
 sayısal eğitim çıktılarının bit-düzeyinde özdeşliği iddia edilmez; tohum,
 girdi, sürüm ve sonuç sözleşmesi denetlenebilir durumdadır.
 
-## Bilinen sınırlar (CKPT-000'da çözülmüş sayılmaz)
+## Tamamlanan genişletmeler ve dürüst kalan sınırlar
 
-- İfade gücü, etkin rank ve VC boyutu için bir teorik/peer-reviewed çerçeve yok.
-- İngilizce veya çok dilli benchmark yok; gerçek dil kanıtı Türkçe TWT v1 ile
-  sınırlı.
-- Transformer/BERT/GPT karşılaştırması bu baseline'ın parçası değildir.
-- ArXiv ön baskısı veya hakemli yayın yok.
-- Ölçek yaklaşık 6,97M yoğun + 33,5M seyrek fiziksel parametredir; scaling law
-  sonucu çıkarılamaz.
-- Tek geliştiricili araştırma/uygulama riskini ortadan kaldırmaz.
+CKPT-000 kapsamı aşağıdaki yeni, doğrulanabilir artefaktlarla genişletildi:
 
-Bu sınırlardan herhangi birini değiştiren çalışma CKPT-000'u yeniden yazmak
-yerine **CKPT-001 veya sonraki bir manifest** üretmelidir.
+- **Teori/rank:** [`THEORETICAL_FRAMEWORK.md`](THEORETICAL_FRAMEWORK.md),
+  Kronecker rank özdeşliğini, aktivasyonsuz zincir çöküşünü, manifold boyutunu
+  ve VC dil sınırını ayırır. Tam zincir için VC/pseudo-dimension sonucu yoktur;
+  bu alan `NOT_ESTABLISHED` olarak işaretlenir, uydurma sayı verilmez.
+- **İngilizce + iki dilli kapsama:** hash/doğrulamalı UD English EWT v1,
+  Türkçe TWT v1 ile birlikte
+  [`BILINGUAL_BENCHMARK.md`](BILINGUAL_BENCHMARK.md)'de tanımlıdır. EWT'nin
+  CC-BY-SA-4.0 lisansı, upstream attribution'ı ve SHA-256 kaynak sözleşmesi
+  [`ewt_v1/PROVENANCE.json`](../hga/evaluation/datasets/ewt_v1/PROVENANCE.json)
+  içinde pakete dahil edilir.
+- **Transformer/BERT/GPT-style kontroller:**
+  [`ENGLISH_EWT_BASELINES.md`](ENGLISH_EWT_BASELINES.md) beş seed üzerinde
+  dense, Transformer, BERT-style ve GPT-style küçük mimarileri raporlar.
+  BERT/GPT-style modeller pretrained checkpoint değildir. Bu bölüm artık
+  varsayılan `research-benchmark` çağrısında her suite seed'i için yer alır;
+  beş-seed gereksinimi üst-suite manifest agregasyonunda denetlenir.
+- **Ölçek deneyi:** gerçek HGA çekirdeği için
+  [`HGA_ENGLISH_SCALING_PROBE.md`](HGA_ENGLISH_SCALING_PROBE.md) üç boyut ve
+  beş seed içerir. 3,28× aralık bir scaling law tanımlamak için yetersizdir;
+  rapor bunu özellikle `EXPLORATORY_NOT_A_SCALING_LAW` olarak işaretler.
+- **Preprint taslağı:** [`paper/main.tex`](../paper/main.tex) ve
+  [`paper/README.md`](../paper/README.md), hiçbir uydurma yazar ya da yayın
+  durumu içermeyen inceleme taslağıdır.
+- **İnceleme/submission kapısı:** [`PUBLICATION_CHECKLIST.md`](PUBLICATION_CHECKLIST.md)
+  ve [`CONTRIBUTING.md`](../CONTRIBUTING.md), dış yeniden üretim, gerçek author
+  onayı ve bağımsız teknik inceleme için yapılması gerekenleri ayırır.
+
+Kod ile dürüstçe kapatılamayan dış sınırlar şunlardır: geniş çok dilli
+pretraining/cross-lingual transfer, pretrained BERT/GPT checkpoint kıyası,
+geniş compute-data-model grid'iyle scaling-law analizi, gerçek yazar onayıyla
+arXiv yükleme ve bağımsız hakem değerlendirmesi. Tek geliştiricili risk CI,
+manifest ve test sözleşmeleriyle azaltılabilir; kod tarafından yok edilemez.
+
+Bu sınırları aşan çalışma CKPT-000'u yeniden yazmak yerine yeni manifest ve
+karşılaştırmalı sonuçla kaydedilmelidir.

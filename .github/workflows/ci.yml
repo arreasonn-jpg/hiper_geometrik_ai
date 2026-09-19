@@ -79,6 +79,11 @@ jobs:
           python -c "from importlib import resources; import json; \
             data = resources.files('hga.evaluation.datasets').joinpath('compositional_tr_v1.json').read_text('utf-8'); \
             print('package data ok', len(json.loads(data)))"
+          # Pinned English EWT kaynakları, provenance ve CC-BY-SA lisansı wheel'e girmiş mi?
+          python -c "from hga.evaluation.english_ewt import prepare_english_ewt_task; \
+            task = prepare_english_ewt_task(); \
+            assert task.dataset_hash == '2f852e91da70301e5a572f717b3e9d6998d14ca6bf38daa8bb77f4baa5b3ddd3'; \
+            print('EWT package data ok', task.dataset_hash)"
           # Konsol girişi kurulmuş mu?
           hga bilgi > /dev/null && echo 'console script ok'
 
@@ -158,6 +163,8 @@ jobs:
           python -m hga verifier-adversarial
           python -m hga verifier-ensemble
           python -m hga twt-sonuc --seeds 1,2
+          python -m hga english-ewt --seeds 1
+          python -m hga english-scaling --seeds 1,2
           python -m hga turkce-lm --seeds 1,2 --lm-steps 20
           python -m hga uzun-baglam --long-context-profile smoke_1024 --seeds 1,2
           python -m hga bellek-hiyerarsi --depth-profile smoke

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "hga-english-ud-ewt-v1",
+  "dataset": {
+    "name": "UD English EWT",
+    "language": "en",
+    "language_name": "English",
+    "annotation": "Universal Dependencies basic dependency trees",
+    "task_scope": "basic morphosyntactic dependency-arc candidate verification"
+  },
+  "upstream": {
+    "repository": "https://github.com/UniversalDependencies/UD_English-EWT",
+    "revision": "4a4d77f599ea53cc405f85d0cec4b2f14f81d42b",
+    "revision_url": "https://github.com/UniversalDependencies/UD_English-EWT/tree/4a4d77f599ea53cc405f85d0cec4b2f14f81d42b",
+    "retrieved_utc_date": "2026-09-19",
+    "source_files": [
+      {"upstream_path": "en_ewt-ud-train.conllu", "vendored_path": "train.conllu", "sha256": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143"},
+      {"upstream_path": "en_ewt-ud-dev.conllu", "vendored_path": "dev.conllu", "sha256": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8"},
+      {"upstream_path": "en_ewt-ud-test.conllu", "vendored_path": "test.conllu", "sha256": "fa024f43dc5da3c5ac02563bc9bd0e974f46cbb1560823976a8f342a37dc494a"}
+    ]
+  },
+  "license": {
+    "spdx_id": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+    "copyright_notice": "Universal Dependencies English Web Treebank annotations © 2013-2021 by The Board of Trustees of The Leland Stanford Junior University.",
+    "vendored_license_path": "LICENSE-CC-BY-SA-4.0.txt",
+    "license_sha256": "b3d1b0f4c6ae151f7eb78738f46ebd5ee140f8a7f76501ba26af123140d35ae7"
+  },
+  "citation": {
+    "authors": ["Natalia Silveira", "Timothy Dozat", "Marie-Catherine de Marneffe", "Samuel Bowman", "Miriam Connor", "John Bauer", "Christopher D. Manning"],
+    "title": "A Gold Standard Dependency Corpus for English",
+    "venue": "Proceedings of the Ninth International Conference on Language Resources and Evaluation (LREC-2014)",
+    "year": 2014
+  },
+  "benchmark_config": {
+    "schema": "hga-basic-dependency-arc-verification-v1",
+    "split_source": "official UD train/dev/test files",
+    "sentence_cap": {"train": 512, "dev": 128, "test": 128},
+    "selection": "sort by SHA-256(sent_id), take first N independently per official split",
+    "negative_generation": "For every positive basic arc, deterministically substitute a distinct legal head in the same sentence.",
+    "modification_notice": "The vendored CoNLL-U files are byte-identical to the pinned upstream files. HGA adds only deterministic subset selection and derived invalid candidates."
+  }
+}

@@ -42,6 +42,17 @@ from .compositional_v2 import (
     compositional_v2_markdown,
     run_compositional_v2_benchmark,
 )
+from .english_ewt import (
+    ARCHITECTURE as ENGLISH_EWT_ARCHITECTURE,
+    EnglishEWT,
+    EnglishEWTReport,
+    EWTTaskData,
+    english_hga_scaling_markdown,
+    english_ewt_markdown,
+    prepare_english_ewt_task,
+    run_english_hga_scaling_probe,
+    run_english_ewt_baselines,
+)
 from .experiment import (
     ExperimentRun,
     SeedSweepReport,
@@ -309,6 +320,9 @@ from .verifier_ensemble import (
 
 __all__ = [
     # P1 gerçek Türkçe dil modelleme (TWT held-out)
+    "ENGLISH_EWT_ARCHITECTURE", "EnglishEWT", "EnglishEWTReport", "EWTTaskData",
+    "prepare_english_ewt_task", "run_english_ewt_baselines", "english_ewt_markdown",
+    "run_english_hga_scaling_probe", "english_hga_scaling_markdown",
     "CORPUS_EXPANSION_ALLOWED_LICENSES", "CORPUS_EXPANSION_TARGET_WORDS",
     "CorpusCandidate", "CorpusExpansionReport",
     "run_turkish_corpus_expansion_pipeline",

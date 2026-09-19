@@ -33,6 +33,8 @@ Kullanım:
     python -m hga genelleme-v2           # ham metinden keşif + C_G v2 (P0-6)
     python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
     python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
+    python -m hga english-ewt            # UD English EWT + Transformer/BERT/GPT-style baseline'ları
+    python -m hga english-scaling        # HGA English EWT parameter scaling probe (scaling law değildir)
     python -m hga turkce-lm              # gerçek Türkçe LM: tr_corpus_v1 1.11M kelime (P1)
     python -m hga uzun-baglam            # uzun bağlam LM; 512/1024 için --long-context-profile smoke_1024
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
@@ -1806,6 +1808,31 @@ def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _english_ewt(seeds=None, profile="smoke", out=None, markdown=None):
+    """Pinned UD English EWT üzerinde Transformer/BERT/GPT-style kontroller."""
+    from hga.evaluation.english_ewt import english_ewt_markdown, run_english_ewt_baselines
+
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_english_ewt_baselines(seeds=tohumlar, profile=profile)
+    md = english_ewt_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _english_scaling(seeds=None, profile="smoke", out=None, markdown=None):
+    """HGA'nın gerçek English EWT üzerinde küçük parameter-scaling probe'u."""
+    from hga.evaluation.english_ewt import (
+        english_hga_scaling_markdown,
+        run_english_hga_scaling_probe,
+    )
+
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_english_hga_scaling_probe(seeds=tohumlar, profile=profile)
+    md = english_hga_scaling_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor, out, markdown, md)
+
+
 def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
                markdown=None):
     """P1: Gerçek Türkçe LM (smoke: TWT; full: tr_corpus_v1 1.11M kelime)."""
@@ -2217,7 +2244,7 @@ def main(argv=None):
                                      "verifier-adversarial",
                                      "verifier-ensemble",
                                      "semantik", "genelleme-v2",
-                                     "twt-sonuc", "turkce-lm",
+                                     "twt-sonuc", "english-ewt", "english-scaling", "turkce-lm",
                                      "uzun-baglam",
                                      "bellek-hiyerarsi",
                                      "bellek-streaming",
@@ -2460,6 +2487,12 @@ def main(argv=None):
      "semantik": lambda: _semantik(out=args.out, markdown=args.markdown),
      "genelleme-v2": lambda: _genelleme_v2(out=args.out, markdown=args.markdown),
      "twt-sonuc": lambda: _twt_sonuc(
+         seeds=args.seeds, profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "english-ewt": lambda: _english_ewt(
+         seeds=args.seeds, profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "english-scaling": lambda: _english_scaling(
          seeds=args.seeds, profile=args.signature_profile, out=args.out,
          markdown=args.markdown),
      "turkce-lm": lambda: _turkce_lm(

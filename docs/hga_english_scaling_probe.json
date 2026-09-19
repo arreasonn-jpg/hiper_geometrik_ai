@@ -1,0 +1,291 @@
+{
+  "candidate_hashes": {
+    "dev": "a904920d0806300390ebc9d47f81263be8cf8f9df998e0b4751e58b68ac6f286",
+    "test": "8a12c629f35bf42ef420b5c97ef6fb3351b43d41292024ecce721ffd2c5c2a53",
+    "train": "ddb49412f74deb2c2c891f422329a5e80163500265e447cfb217559b9a1e72a7"
+  },
+  "checks": {
+    "at_least_three_sizes": true,
+    "at_least_two_seeds": true,
+    "parameter_count_strictly_increases": true,
+    "same_pinned_english_task_all_sizes": true,
+    "same_seed_set_all_sizes": true,
+    "scaling_law_claim_blocked_by_narrow_range": true
+  },
+  "dataset_hash": "2f852e91da70301e5a572f717b3e9d6998d14ca6bf38daa8bb77f4baa5b3ddd3",
+  "limitations": [
+    "Three small configurations over less than two orders of magnitude cannot identify a scaling law.",
+    "Training compute, token count and model size are not independently swept; the fitted log slope is descriptive only.",
+    "This controlled dependency-arc task is not next-token language-model scaling and cannot predict foundation-model behaviour.",
+    "A scaling-law claim requires a much wider compute/data/model grid, repeated convergence runs and held-out extrapolation."
+  ],
+  "log_parameter_to_cross_entropy_slope": -1.38898153,
+  "parameter_range_ratio": 3.27582286,
+  "profile": "smoke",
+  "protocol": "hga-english-ewt-parameter-scaling-probe-v1",
+  "rows": [
+    {
+      "config": {
+        "embedding_dim": 12,
+        "heads": 3,
+        "layers": 1,
+        "n": 8
+      },
+      "cross_entropy": {
+        "mean": 0.30974333,
+        "std": 0.01802268
+      },
+      "f1": {
+        "mean": 0.9133565,
+        "std": 0.0129014
+      },
+      "per_seed": [
+        {
+          "physical_parameters": 47487,
+          "test": {
+            "accuracy": 0.92064516,
+            "f1": 0.918,
+            "false_acceptance_rate": 0.04709677,
+            "false_rejection_rate": 0.1116129,
+            "precision": 0.94965517,
+            "recall": 0.8883871,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.29899871
+        },
+        {
+          "physical_parameters": 47487,
+          "test": {
+            "accuracy": 0.92612903,
+            "f1": 0.92469582,
+            "false_acceptance_rate": 0.05483871,
+            "false_rejection_rate": 0.09290323,
+            "precision": 0.94299128,
+            "recall": 0.90709677,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.3193104
+        },
+        {
+          "physical_parameters": 47487,
+          "test": {
+            "accuracy": 0.92096774,
+            "f1": 0.92078888,
+            "false_acceptance_rate": 0.07677419,
+            "false_rejection_rate": 0.08129032,
+            "precision": 0.92287751,
+            "recall": 0.91870968,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.32813591
+        },
+        {
+          "physical_parameters": 47487,
+          "test": {
+            "accuracy": 0.89225806,
+            "f1": 0.88836898,
+            "false_acceptance_rate": 0.07290323,
+            "false_rejection_rate": 0.14258065,
+            "precision": 0.92163662,
+            "recall": 0.85741935,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.32270712
+        },
+        {
+          "physical_parameters": 47487,
+          "test": {
+            "accuracy": 0.91709677,
+            "f1": 0.91492883,
+            "false_acceptance_rate": 0.05741935,
+            "false_rejection_rate": 0.1083871,
+            "precision": 0.93949694,
+            "recall": 0.8916129,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.2795645
+        }
+      ],
+      "physical_parameters": 47487,
+      "scale": "small"
+    },
+    {
+      "config": {
+        "embedding_dim": 24,
+        "heads": 4,
+        "layers": 2,
+        "n": 16
+      },
+      "cross_entropy": {
+        "mean": 0.1236097,
+        "std": 0.05901294
+      },
+      "f1": {
+        "mean": 0.96227133,
+        "std": 0.02218498
+      },
+      "per_seed": [
+        {
+          "physical_parameters": 99483,
+          "test": {
+            "accuracy": 0.99387097,
+            "f1": 0.99389264,
+            "false_acceptance_rate": 0.00967742,
+            "false_rejection_rate": 0.00258065,
+            "precision": 0.99039078,
+            "recall": 0.99741935,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.05131712
+        },
+        {
+          "physical_parameters": 99483,
+          "test": {
+            "accuracy": 0.97645161,
+            "f1": 0.97618271,
+            "false_acceptance_rate": 0.01225806,
+            "false_rejection_rate": 0.03483871,
+            "precision": 0.98745875,
+            "recall": 0.96516129,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.08171196
+        },
+        {
+          "physical_parameters": 99483,
+          "test": {
+            "accuracy": 0.9316129,
+            "f1": 0.93085453,
+            "false_acceptance_rate": 0.05741935,
+            "false_rejection_rate": 0.07935484,
+            "precision": 0.94129288,
+            "recall": 0.92064516,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.22531931
+        },
+        {
+          "physical_parameters": 99483,
+          "test": {
+            "accuracy": 0.94677419,
+            "f1": 0.94570582,
+            "false_acceptance_rate": 0.03354839,
+            "false_rejection_rate": 0.07290323,
+            "precision": 0.96507723,
+            "recall": 0.92709677,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.12781674
+        },
+        {
+          "physical_parameters": 99483,
+          "test": {
+            "accuracy": 0.96451613,
+            "f1": 0.96472097,
+            "false_acceptance_rate": 0.04129032,
+            "false_rejection_rate": 0.02967742,
+            "precision": 0.95918367,
+            "recall": 0.97032258,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.13188335
+        }
+      ],
+      "physical_parameters": 99483,
+      "scale": "base"
+    },
+    {
+      "config": {
+        "embedding_dim": 36,
+        "heads": 4,
+        "layers": 2,
+        "n": 24
+      },
+      "cross_entropy": {
+        "mean": 0.05845052,
+        "std": 0.03776319
+      },
+      "f1": {
+        "mean": 0.97497541,
+        "std": 0.02147223
+      },
+      "per_seed": [
+        {
+          "physical_parameters": 155559,
+          "test": {
+            "accuracy": 0.98322581,
+            "f1": 0.98324742,
+            "false_acceptance_rate": 0.01806452,
+            "false_rejection_rate": 0.01548387,
+            "precision": 0.98198198,
+            "recall": 0.98451613,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.04668228
+        },
+        {
+          "physical_parameters": 155559,
+          "test": {
+            "accuracy": 0.9916129,
+            "f1": 0.9916129,
+            "false_acceptance_rate": 0.0083871,
+            "false_rejection_rate": 0.0083871,
+            "precision": 0.9916129,
+            "recall": 0.9916129,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.03265286
+        },
+        {
+          "physical_parameters": 155559,
+          "test": {
+            "accuracy": 0.94419355,
+            "f1": 0.94340857,
+            "false_acceptance_rate": 0.04193548,
+            "false_rejection_rate": 0.06967742,
+            "precision": 0.95686795,
+            "recall": 0.93032258,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.12242185
+        },
+        {
+          "physical_parameters": 155559,
+          "test": {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "false_acceptance_rate": 0.0,
+            "false_rejection_rate": 0.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.01454497
+        },
+        {
+          "physical_parameters": 155559,
+          "test": {
+            "accuracy": 0.95774194,
+            "f1": 0.95660815,
+            "false_acceptance_rate": 0.01612903,
+            "false_rejection_rate": 0.0683871,
+            "precision": 0.98298162,
+            "recall": 0.9316129,
+            "total": 3100
+          },
+          "test_cross_entropy": 0.07595064
+        }
+      ],
+      "physical_parameters": 155559,
+      "scale": "large"
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "status": "EXPLORATORY_NOT_A_SCALING_LAW"
+}

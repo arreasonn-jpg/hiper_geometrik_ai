@@ -67,3 +67,19 @@ def test_repo_apache_lisansi_ve_container_lock_sozlesmesini_tasir():
     assert "requirements-lock.txt" in dockerfile
     assert "--no-build-isolation --no-deps ." in dockerfile
     assert 'ENTRYPOINT ["python", "-m", "hga"]' in dockerfile
+
+
+def test_ckpt_000_ewt_revision_lisans_ve_kaynak_hashlerini_kaydeder():
+    checkpoint = json.loads(CHECKPOINT.read_text(encoding="utf-8"))
+    ewt_dir = ROOT / "hga" / "evaluation" / "datasets" / "ewt_v1"
+    provenance = json.loads((ewt_dir / "PROVENANCE.json").read_text(encoding="utf-8"))
+    ewt = checkpoint["ewt_v1"]
+
+    assert ewt["upstream_revision"] == provenance["upstream"]["revision"]
+    assert ewt["license"] == provenance["license"]["spdx_id"] == "CC-BY-SA-4.0"
+    hashes = {entry["vendored_path"]: entry["sha256"]
+              for entry in provenance["upstream"]["source_files"]}
+    assert all(_sha256(ewt_dir / path) == digest for path, digest in hashes.items())
+    assert _sha256(ewt_dir / provenance["license"]["vendored_license_path"]) == (
+        provenance["license"]["license_sha256"]
+    )
