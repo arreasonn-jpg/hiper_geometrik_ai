@@ -36,9 +36,10 @@ from __future__ import annotations
 
 import math
 import random
+import statistics
 from dataclasses import asdict, dataclass, field
 from itertools import product
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List, Mapping, Sequence
 
 # Sign-flip permütasyonu bu eşiğe kadar TAM (exact) sayılır; üstünde
 # deterministik Monte Carlo örneklemesine düşülür.
@@ -652,4 +653,79 @@ __all__ = [
     "paired_permutation_test",
     "summarize_seed_metric",
     "wilcoxon_signed_rank",
+    "adjust_p_values",
+    "cliffs_delta",
+    "paired_power_plan",
 ]
+
+# CKPT-002: family-wise / false-discovery control and planning utilities.
+def adjust_p_values(p_values: Mapping[str, float], method: str = "holm") -> Dict[str, Dict[str, float]]:
+    """Adjust a named family of p-values with Bonferroni, Holm, or BH-FDR.
+
+    The return retains every hypothesis name and must be reported beside the
+    unadjusted value. Adjustment cannot turn an underpowered design into
+    evidence.
+    """
+    if method not in {"bonferroni", "holm", "fdr_bh"}:
+        raise ValueError("method must be bonferroni, holm, or fdr_bh")
+    if not p_values:
+        raise ValueError("at least one p-value is required")
+    pairs = sorted((str(name), float(value)) for name, value in p_values.items())
+    if any(not 0.0 <= value <= 1.0 for _, value in pairs):
+        raise ValueError("p-values must be in [0, 1]")
+    count = len(pairs)
+    adjusted: Dict[str, float] = {}
+    if method == "bonferroni":
+        adjusted = {name: min(1.0, value * count) for name, value in pairs}
+    elif method == "holm":
+        running = 0.0
+        for index, (name, value) in enumerate(pairs):
+            running = max(running, min(1.0, (count - index) * value))
+            adjusted[name] = running
+    else:  # Benjamini--Hochberg adjusted q-values, monotone from largest p.
+        running = 1.0
+        for index in range(count - 1, -1, -1):
+            name, value = pairs[index]
+            running = min(running, min(1.0, value * count / (index + 1)))
+            adjusted[name] = running
+    return {
+        name: {"p_value": value, "adjusted_p_value": round(adjusted[name], 12)}
+        for name, value in pairs
+    }
+
+
+def cliffs_delta(treatment: Sequence[float], baseline: Sequence[float]) -> Dict[str, Any]:
+    """Compute Cliff's delta using all cross-group order comparisons.
+
+    This nonparametric effect size does not require normality, but treating
+    paired seed measurements as independent discards their pairing; report it
+    alongside paired ``d_z`` rather than as a replacement.
+    """
+    left, right = _validate(treatment), _validate(baseline)
+    greater = sum(a > b for a in left for b in right)
+    smaller = sum(a < b for a in left for b in right)
+    value = (greater - smaller) / (len(left) * len(right))
+    magnitude = "negligible" if abs(value) < 0.147 else "small" if abs(value) < 0.33 else "medium" if abs(value) < 0.474 else "large"
+    return {"measure": "cliffs_delta", "value": round(value, 12), "magnitude": magnitude,
+            "sample_sizes": {"treatment": len(left), "baseline": len(right)},
+            "limitation": "Uses cross-group comparisons; seed pairing is represented separately by paired effect sizes."}
+
+
+def paired_power_plan(effect_size_dz: float, alpha: float = 0.05, target_power: float = 0.80) -> Dict[str, Any]:
+    """Normal-approximation planning bound for a two-sided paired comparison.
+
+    It is a planning aid, not post-hoc achieved power and not an exact
+    small-sample t-test calculation.
+    """
+    magnitude = abs(float(effect_size_dz))
+    if magnitude <= 0.0 or not 0.0 < alpha < 1.0 or not 0.0 < target_power < 1.0:
+        raise ValueError("effect size > 0 and alpha/power in (0, 1) are required")
+    normal = statistics.NormalDist()
+    z_alpha = normal.inv_cdf(1.0 - alpha / 2.0)
+    z_power = normal.inv_cdf(target_power)
+    raw = ((z_alpha + z_power) / magnitude) ** 2
+    seeds = math.ceil(raw)
+    return {"method": "normal-approximation-paired-dz", "effect_size_dz": magnitude,
+            "alpha": alpha, "target_power": target_power, "minimum_pairs": seeds,
+            "minimum_two_sided_permutation_p": minimum_two_sided_p(seeds),
+            "limitation": "Use a pilot variance and an exact/simulation sensitivity analysis before treating this as a final sample-size guarantee."}

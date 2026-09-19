@@ -15,6 +15,7 @@ nav:
   - Reproduction: REPRODUCE_ALL.md
   - Experiment manifests: REPRODUCIBLE_EXPERIMENTS.md
   - CKPT-001: CKPT-001.md
+  - CKPT-002 (experimental): CKPT-002.md
   - Theory: THEORETICAL_FRAMEWORK.md
   - Foundation diagnostics: FOUNDATION_ANALYSIS.md
   - Theory scope / review map: FOUNDATION_THEORY_SCOPE.md

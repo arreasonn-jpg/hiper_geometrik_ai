@@ -1,0 +1,25 @@
+{
+  "checkpoint": "CKPT-002",
+  "release_label": "v0.3.0-experimental",
+  "status": "pilot-planning",
+  "generated_at": "2026-09-19",
+  "evidence_status": "no benchmark measurements have been recorded",
+  "dataset_registry": [
+    {"id": "glue", "scope": "English NLU", "status": "external-input-required", "license_status": "per-task authoritative license verification required"},
+    {"id": "superglue", "scope": "English NLU", "status": "external-input-required", "license_status": "per-task authoritative license verification required"},
+    {"id": "wikitext-103", "scope": "language modelling", "status": "external-input-required", "license_status": "upstream CC-BY-SA-3.0 provenance and revision still required"},
+    {"id": "penn-treebank", "scope": "language modelling", "status": "external-input-required", "license_status": "restricted or unverified; never vendor without permission"},
+    {"id": "xnli", "scope": "multilingual NLU", "status": "external-input-required", "license_status": "authoritative release, translations and splits must be verified"},
+    {"id": "mlqa", "scope": "multilingual QA", "status": "external-input-required", "license_status": "authoritative release, translations and splits must be verified"},
+    {"id": "tydi-qa", "scope": "multilingual QA", "status": "external-input-required", "license_status": "exact source/revision/language split must be verified"},
+    {"id": "turkbench", "scope": "Turkish", "status": "external-input-required", "license_status": "unverified; not assumed open"},
+    {"id": "tr-mmlu", "scope": "Turkish", "status": "external-input-required", "license_status": "unverified; not assumed open"}
+  ],
+  "regimes": ["equal-parameter", "equal-flop"],
+  "long_context_tokens": [4096, 16384, 65536],
+  "baselines": ["bert-base-parameter-matched", "gpt2-small-parameter-matched", "switch-transformer", "product-key-memory", "compressive-transformer", "rescal", "distmult"],
+  "ablations": {"K": [1, 2, 4, 8, 16], "n": [64, 128, 256, 512], "sparse_memory": ["table", "hash", "double-hash", "lru", "decay"], "activation": ["silu", "gelu", "relu", "tanh"], "normalization": ["layernorm", "rmsnorm", "pre-ln", "post-ln"]},
+  "required_result_fields": ["dataset_id", "dataset_revision", "dataset_sha256", "model_id", "code_revision", "regime", "parameters", "training_flops", "seeds", "metric", "metric_direction", "mean", "std_sample", "ci_95", "cohens_dz", "hedges_g", "cliffs_delta", "p_value", "p_value_adjusted", "correction_method", "comparison_family", "outcome"],
+  "exit_criteria": {"english_benchmarks_minimum": 3, "baseline_minimum": 2, "statistically_tested": true, "ablation_matrix_complete": true},
+  "limitations": ["Five-seed exact two-sided sign-flip tests cannot attain p < 0.05.", "No requested external benchmark has been fetched or measured.", "Existing long-context pilot is limited to 1024 tokens."]
+}
