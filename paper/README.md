@@ -17,6 +17,10 @@ SOTA, or scaling-law claim. It labels the English BERT-style/GPT-style arms as
 random-initialized small architectural controls, and it states that the full
 HGA VC/pseudo-dimension remains unproved.
 
+`technical_report.tex` is the CKPT-001 companion technical note. It is an
+arXiv-compatible LaTeX source draft for mathematical review, not evidence that
+a mathematician has approved its proofs or that it has been submitted.
+
 Build locally with a TeX distribution:
 
 ```bash

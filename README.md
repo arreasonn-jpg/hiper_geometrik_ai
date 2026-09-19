@@ -1,5 +1,9 @@
 # Hiper-Geometrik AI — Bilinear Kronecker Zinciri + Seyrek "Boş Küme" Belleği
 
+[![CI](https://github.com/arreasonn-jpg/hiper_geometrik_ai/actions/workflows/ci.yml/badge.svg)](https://github.com/arreasonn-jpg/hiper_geometrik_ai/actions/workflows/ci.yml)
+[![Container workflow](https://github.com/arreasonn-jpg/hiper_geometrik_ai/actions/workflows/container.yml/badge.svg)](https://github.com/arreasonn-jpg/hiper_geometrik_ai/actions/workflows/container.yml)
+
+
 Deneysel bir Türkçe dil modeli ve araştırma platformu: klasik Transformer'daki
 saf doğrusal katman yığınlarına alternatif olarak, **gerçek matris-sandviçi
 (bilinear) `A @ X @ B` katmanlarının zinciri** ve kavramsal adres uzayı çok
@@ -27,7 +31,7 @@ dürüst muhasebesidir:
 | 0→1 katmanı sanal köşe (n²) | 65.536 |
 | Katman başına temsil edilen operatör (n⁴, Kronecker `Bᵀ⊗A`) | 4.294.967.296 (~4,3 milyar) |
 | Zincir etkileşim üst sınırı (n^(2K) = 256⁸) | ~1,8 × 10¹⁹ |
-| Seyrek bellek KAVRAMSAL anahtar uzayı (sözlük^pencere = 8000¹⁶) | ~2,8 × 10⁶² |
+| Seyrek bellek bağlam giriş namespace'i (sözlük^pencere = 8000¹⁶; benzersiz adres değil) | ~2,8 × 10⁶² |
 | Bir bilinear katmanı TAM matris olarak tutmak için gereken RAM | ~16 GB |
 | Zincirin GERÇEK RAM tüketimi | ~2 MB |
 
@@ -39,19 +43,22 @@ Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
   optimizer tarafından güncellenen parametre sayısı.
 - **C_I^UB (Interaction Upper Bound):** Kronecker zincirinin temsil ettiği sanal
   etkileşim/operatör üst sınırı; gerçek parametre değildir.
-- **C_M^UB (Memory Address Upper Bound):** seyrek belleğin adresleyebildiği kavramsal
-  anahtar uzayı (`sözlük^pencere`); fiziksel depo boyutu değildir.
+- **C_M^UB (Memory input-namespace upper bound):** olası bağlam dizilerinin
+  kavramsal uzayı (`sözlük^pencere`); fiziksel depo boyutu veya collision-free
+  benzersiz adres sayısı değildir.
 
 - **Bilinear/Kronecker tarafı:** Bir `A @ X @ B` katmanı, flatten uzayında
   `Y = (Bᵀ ⊗ A) X` dönüşümüdür: temsil ettiği tam operatör **n² × n² = n⁴
   boyutludur** ama bunu yalnızca **2n² gerçek parametre** ile taşır. 16 GB'lık
   operatörün ~0,5 MB'lık iki mercekle temsil edilmesi ("Kronecker İllüzyonu")
-  gerçekten çalışır — ancak tam ranklı bir operatörün öğrenebileceği fonksiyon
-  ailesinin yalnızca küçük bir alt kümesini süpürür (düşük-rank kısıtı).
-- **Seyrek bellek tarafı:** Kavramsal anahtar uzayı (sözlük^pencere) gerçekten
+  gerçekten çalışır — ancak tam ranklı olsa bile yalnız Kronecker-yapılı
+  operatörlerin küçük bir alt ailesini süpürür (yapısal kısıt; ``düşük rank``
+  demek değildir).
+- **Seyrek bellek tarafı:** Kavramsal giriş uzayı (sözlük^pencere) gerçekten
   katrilyonların üzerindedir — 8000 parçalık sözlükte 4 kelimelik bir pencere
-  bile 8000⁴ ≈ 4×10¹⁵ (katrilyon üzeri) farklı anahtar üretir. Fiziksel depo
-  ise sabittir (128 MB) ve **başlangıçta tamamı boştur (sıfır vektör)**;
+  bile 8000⁴ ≈ 4×10¹⁵ olası bağlam verir. Uygulama bunları önce 31-bit anahtara
+  indirger; dolayısıyla bu sayı collision-free benzersiz adres iddiası değildir.
+  Fiziksel depo ise sabittir (128 MB) ve **başlangıçta tamamı boştur (sıfır vektör)**;
   yalnızca veride görülen pencerelere denk gelen satırlar eğitimle dolar,
   dokunulmayan satırlar asla değişmez. Bellek kullanımı dolu satırla değil,
   `tablo_boyutu` ile ölçeklenir (dürüst not: `nn.Embedding` tabloyu baştan
@@ -62,9 +69,9 @@ Bu README üç ayrı büyüklüğü bilinçli olarak ayırır:
   veri ve çok yüksek bütçe gerektirir. Tek kişilik donanımda fiziksel olarak
   imkânsıza yakındır; bu repo böyle bir iddia taşımaz.
 - Bu projenin gerçekçi ve dürüst hedefi: **"K katmanlı Kronecker zinciriyle
-  katrilyon mertebesinin üzerinde sanal etkileşim üst sınırı + katrilyonların
-  üzerinde adreslenebilir 'boş küme' uzayına sahip seyrek bellek; ~7M yoğun +
-  ~34M seyrek fiziksel gerçek parametre."** Üstteki tablo bunu doğrular.
+  büyük bir sanal etkileşim üst sınırı, geniş bir bağlam giriş uzayı ve ~7M yoğun
+  + ~34M seyrek fiziksel gerçek parametre."** Bu ifade benzersiz/hash'siz
+  adreslenebilirlik veya geri çağırma başarısı iddiası değildir.
 
 Sayıları ve araştırma protokollerini kendiniz doğrulayın:
 
@@ -89,6 +96,26 @@ Türkçe iki-dilli dependency-arc protokolü
 [`docs/BILINGUAL_BENCHMARK.md`](docs/BILINGUAL_BENCHMARK.md), İngilizce
 Transformer/BERT-style/GPT-style kontrolleri ise
 [`docs/ENGLISH_EWT_BASELINES.md`](docs/ENGLISH_EWT_BASELINES.md) içindedir.
+
+### CKPT-001 foundation draft
+
+`v0.2.0-foundation` bir araştırma checkpoint etiketidir; mevcut Python dağıtım
+sürümünü geriye dönük yeniden numaralandırmaz. CKPT-001, tek-komutlu foundation
+reproduction paketi, CUDA/CPU Docker
+reçeteleri, Conda giriş noktası, MkDocs sitesi ve kontrollü teori/gradient/hash
+tanılarını ekler. Yerel CPU referans koşusu:
+
+```bash
+make reproduce
+```
+
+Bu komut `artifacts/reproduce-all/EXP-NNNN/` altında seed, kaynak/config hash,
+manifest ve değer-fingerprint içeren bir receipt üretir. Ayrıntılı sözleşme:
+[`docs/REPRODUCE_ALL.md`](docs/REPRODUCE_ALL.md); teknik taslak:
+[`paper/technical_report.tex`](paper/technical_report.tex); durum ve dışsal
+kapılar: [`docs/CKPT-001.md`](docs/CKPT-001.md). CUDA tarifi mevcuttur, ancak
+bu README GHCR imajının gerçekten yayımlandığını, CI'ın şu anda yeşil olduğunu
+veya bağımsız matematik incelemesinin gerçekleştiğini iddia etmez.
 
 Research suite ayrıca **C_G (Generalization Capacity)** ölçümünü raporlar.
 Buradaki C_G teorik bir uzay büyüklüğü değildir: sürümlü held-out compositional
@@ -157,14 +184,16 @@ kapasitesi ise `tablo_boyutu` ile ölçeklenir (RAM = satır × boyut × 4 bayt)
 
 ## 🧠 Seyrek "Boş Küme" Belleği (Hashing Trick)
 
-`mimari/seyrek_tablo.py` — `HashlenmisKureselTablo`. Kavramsal olarak
-katrilyonlarca "boş küme" adreslenebilen, fiziksel olarak sabit boyutlu bir
-hash'lenmiş gömme tablosu:
+`mimari/seyrek_tablo.py` — `HashlenmisKureselTablo`. Çok büyük bir bağlam
+**giriş namespace**'ini sabit fiziksel tablolara hash'leyen bir gömme tablosu;
+giriş namespace'i collision-free fiziksel adreslenebilirlik iddiası değildir:
 
 - **Anahtar = tam bağlam penceresi.** Pencere, taşmasız 31-bit polinomsal
   hash + splitmix sonlandırıcıyla karıştırılır; satır adresi
   `(anahtar × tuz) % tablo_boyutu` ile bulunur. Aynı pencere her zaman aynı
-  satıra gider; sözlük^pencere farklı pencere adreslenebilir (8000¹⁶ ≈ 10⁶²).
+  satıra gider; farklı pencereler 31-bit prehash veya fiziksel satırda
+  çakışabilir. `sözlük^pencere` olası giriş sayısıdır (8000¹⁶ ≈ 10⁶²),
+  benzersiz imza sayısı değildir.
 - **Başlangıçta her küme boştur** (tamamı sıfır vektör). Bir pencere ilk kez
   görüldüğünde adreslenen satır gradyan alır ve eğitimle dolar; hiç
   görülmeyen kümeler sonsuza dek sıfır kalır (AdamW'da gradyanı 0 olan sıfır
@@ -457,21 +486,24 @@ Bu tablo genel dilde otonom bilgi keşfi kanıtı **değildir**.
 python -m hga kapasite --operands-max 9
 ```
 
-`C_M^UB` (adreslenebilir üst sınır) ile `C_E` (üretilebilir) ve `C_V` (doğrulanabilir) ayrı
-büyüklüklerdir; zorunlu sıralama `C_V ≤ C_E ≤ C_M^UB`'dir. `C_I^UB` ve
-`C_M^UB` teorik üst sınırdır; `P`, `C_E` ve `C_V` **ölçülen** değerdir:
+`C_M^UB` (bağlam giriş-namespace üst sınırı) ile `C_E` (üretilebilir) ve
+`C_V` (doğrulanabilir) ayrı büyüklüklerdir; kavramsal sıralama
+`C_V ≤ C_E ≤ C_M^UB`'dir. `C_M^UB`, collision-free fiziksel adres veya geri
+çağırma kapasitesi değildir. `C_I^UB` ve `C_M^UB` teorik üst sınırdır; `P`,
+`C_E` ve `C_V` **ölçülen** değerdir:
 
 | Kapasite | Sembol | Tip | Anlam |
 |---|---|---|---|
 | Fiziksel parametre | `P` | ölçülen | RAM/VRAM'de ayrılan, optimizer'ın güncellediği |
 | Interaction Upper Bound | `C_I^UB` | üst sınır | Kronecker operatör girdi uzayı — parametre DEĞİL |
-| Memory Address Upper Bound | `C_M^UB` | üst sınır | `sözlük^pencere` kavramsal adres uzayı — fiziksel tablo DEĞİL |
+| Memory input-namespace Upper Bound | `C_M^UB` | üst sınır | `sözlük^pencere` olası bağlam uzayı — fiziksel tablo veya collision-free imza DEĞİL |
 | Deneyim kapasitesi | `C_E` | **ölçülen** | kısıtlar altında gerçekten üretilebilen deneyim |
 | Doğrulanabilir kapasite | `C_V` | **ölçülen** | bağımsız verifier'ın karara bağlayabildiği alt küme |
 
 Milestone koşusunda `C_M^UB ≈ 2.8×10⁶²` iken `C_E = 1.184.832` ve
 `C_V = 1.180.685` ölçüldü (`C_V/C_E = 0.9965`). Aradaki ~10⁵⁶'lık uçurum tam
-olarak "adreslenebilir olmak ile üretip doğrulayabilmek arasındaki fark"tır.
+olarak "olası bağlam namespace'i ile üretip doğrulayabilmek arasındaki fark"tır;
+fiziksel hash imzası ve gerçek retrieval ayrıca ölçülmelidir.
 
 ### HGA Capability Vector
 
@@ -1155,8 +1187,9 @@ yol haritalarını uygular:
 11. **Entegrasyon onarımları:** `encoder.py` modelin 0→1 katmanı oldu; istem
     biçimi talimat eğitimiyle aynı; bağlam penceresi tüm bileşenlerde
     modelden okunuyor.
-12. **Seyrek "boş küme" belleği (9):** `HashlenmisKureselTablo` — kavramsal
-    uzayı katrilyonların üzerinde (sözlük^pencere), fiziksel depo sabit;
+12. **Seyrek "boş küme" belleği (9):** `HashlenmisKureselTablo` — bağlam
+    giriş namespace'i katrilyonların üzerinde (sözlük^pencere), fakat 31-bit
+    prehash ve sabit fiziksel depo kullanır;
     başlangıçta tamamı boş, yalnız görülen pencerelerin satırları doluyor;
     `doluluk_orani()` ile çağ başı izleme; Bloom çift hash seçeneği; modelde
     `gen_kopru` ile entegrasyon (köprü sıfır-başlatma tuzağı bilinçli olarak
@@ -1271,7 +1304,9 @@ Dynamic KV'nin kapasite kaybı ise collision yerine eviction olarak ölçülür.
   olan satır optimize edicide değişmez.
 - **Okuma:** `M₁ @ X @ M₂` odak merceklerinden satır/sütun ortalamalarıyla
   çift yönlü okuma; softmax bilinçli olarak YOKTUR.
-- **Dürüst sınır:** Zincir bileşkesi yine bir (n² × n²) doğrusal operatördür;
-  K katman ona 2Kn² gerçek serbestlik katar. n^(2K) "etkileşim uzayı" ve
-  sözlük^pencere "anahtar uzayı" geometrik büyüme anlatısının üst
-  sınırlarıdır — gerçek parametre sayısı değildir.
+- **Dürüst sınır:** Aktivasyon/norm/residual kaldırılırsa zincir bileşkesi yine
+  bir (n² × n²) Kronecker-yapılı doğrusal operatördür; K katman yeni lineer
+  fonksiyon ailesi yaratmaz. Mevcut doğrusal olmayan zincir için ise bu çöküş
+  geçmez ama bundan VC/genelleme sonucu çıkmaz. `n^(2K)` etkileşim üst sınırı
+  ve `sözlük^pencere` bağlam giriş namespace'i gerçek parametre, benzersiz hash
+  imzası veya retrieval kapasitesi değildir.

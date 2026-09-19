@@ -24,7 +24,6 @@ from typing import Any, Dict, Iterable, List, Mapping, Sequence, Tuple
 
 from .experiment import canonical_hash, file_sha256, seed_everything
 
-
 DATA_DIR = Path(__file__).resolve().parent / "datasets" / "ewt_v1"
 SPLITS = ("train", "dev", "test")
 MODEL_ORDER = ("dense", "transformer", "bert_style", "gpt_style")
@@ -335,7 +334,7 @@ def _build_models(vocabulary_size: int):
         return nn.TransformerEncoder(layer, num_layers=layers, norm=nn.LayerNorm(dim),
                                      enable_nested_tensor=False)
 
-    class Dense(nn.Module):
+    class Dense(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, dim)
@@ -346,7 +345,7 @@ def _build_models(vocabulary_size: int):
         def forward(self, x):
             return self.body(self.embedding(x).flatten(1))
 
-    class Transformer(nn.Module):
+    class Transformer(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, dim)
@@ -356,13 +355,14 @@ def _build_models(vocabulary_size: int):
         def forward(self, x):
             return self.readout(self.body(self.embedding(x) + self.position).mean(dim=1))
 
-    class BertStyle(nn.Module):
+    class BertStyle(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, dim)
             self.cls = nn.Parameter(torch.empty(1, 1, dim))
             self.position = nn.Parameter(torch.empty(1, length + 1, dim))
-            nn.init.normal_(self.cls, std=0.02); nn.init.normal_(self.position, std=0.02)
+            nn.init.normal_(self.cls, std=0.02)
+            nn.init.normal_(self.position, std=0.02)
             self.body, self.pooler, self.readout = encoder(), nn.Linear(dim, dim), nn.Linear(dim, 2)
         def forward(self, x):
             batch = x.shape[0]
@@ -370,7 +370,7 @@ def _build_models(vocabulary_size: int):
             hidden = self.body(hidden + self.position)
             return self.readout(torch.tanh(self.pooler(hidden[:, 0])))
 
-    class GPTStyle(nn.Module):
+    class GPTStyle(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, dim)
@@ -569,7 +569,7 @@ def _build_hga_scale_model(vocabulary_size: int, config: Mapping[str, int]):
         "embedding_dim", "heads", "n", "layers"))
     length = len(FEATURE_FIELDS)
 
-    class ScaledHGA(nn.Module):
+    class ScaledHGA(nn.Module):  # type: ignore[name-defined]
         def __init__(self):
             super().__init__()
             self.embedding = nn.Embedding(vocabulary_size, embedding_dim)

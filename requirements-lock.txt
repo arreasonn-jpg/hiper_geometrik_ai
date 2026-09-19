@@ -1,6 +1,8 @@
-# CKPT-000 reference runtime lock: CPython 3.11 / Linux x86_64, resolved on
-# 2026-09-19 with pip 24.2.  Every runtime and test dependency is version-pinned
-# so Docker does not resolve floating transitive dependencies.
+# CKPT-001 reference runtime/test/docs lock: CPython 3.11 / Linux x86_64,
+# resolved on 2026-09-19 with pip 24.2. Every dependency used by the Docker
+# foundation bundle and CI quality/docs gates is version-pinned so those paths
+# do not resolve floating transitive dependencies. Optional UI/data extras have
+# separate project ranges and are not part of this reference environment.
 #
 # PyPI's torch 2.3.1 Linux wheel bundles CUDA support dependencies. It still
 # runs on CPU-only hosts; CUDA is optional at runtime. GPU users must use a
@@ -47,3 +49,19 @@ triton==2.3.1
 typing_extensions==4.16.0
 urllib3==2.8.0
 Werkzeug==3.1.8
+ast-serialize==0.11.2
+click==8.5.0
+ghp-import==2.1.0
+librt==0.15.0
+mergedeep==1.3.4
+mkdocs-get-deps==0.2.2
+mkdocs==1.6.1
+mypy==2.3.1
+mypy_extensions==1.1.0
+pathspec==1.1.1
+platformdirs==4.11.11
+python-dateutil==2.9.0.post0
+pyyaml-env-tag==1.1
+ruff==0.16.8
+watchdog==6.0.0
+tomli==2.4.1

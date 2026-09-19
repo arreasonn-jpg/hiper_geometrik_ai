@@ -55,7 +55,10 @@ def test_her_cli_komutu_ci_smoke_testinde_kosuluyor():
 
     # Dosya yolu/argüman gerektiren, smoke'a uygun olmayan komutlar.
     muaf = {"ozet", "manifest", "veri-kalite", "perplexity", "checkpoint-rapor",
-            "gercek-veri", "veri-canli-smoke", "observability"}
+            "gercek-veri", "veri-canli-smoke", "observability",
+            # Nested five-seed orchestrator: components/receipt have direct tests;
+            # executing it on every Python matrix would duplicate the full suite.
+            "reproduce-all"}
 
     kapsanmayan = tanimli - kosulan - muaf
     assert not kapsanmayan, (

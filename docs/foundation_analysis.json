@@ -1,0 +1,676 @@
+{
+  "checks": {
+    "all_gradient_observations_finite": true,
+    "all_linear_chains_collapsed": true,
+    "memory_signature_bound_respects_prehash": true,
+    "n16_entropy_effective_dimension_reproduced_when_in_grid": true
+  },
+  "gradient_grid": [
+    {
+      "K": 1,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.46174001693725586,
+      "linear_spectral_norm_product": 2.7242008447932164,
+      "loss": 2.1372900009155273,
+      "max_factor_gradient_norm": 1.265761375427246,
+      "mean_factor_gradient_norm": 1.184687852859497,
+      "n": 4,
+      "output_to_input_norm_ratio": 1.1824470621665761
+    },
+    {
+      "K": 1,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.18980394303798676,
+      "linear_spectral_norm_product": 2.7242008447932164,
+      "loss": 1.3308515548706055,
+      "max_factor_gradient_norm": 0.5150019526481628,
+      "mean_factor_gradient_norm": 0.4622623920440674,
+      "n": 4,
+      "output_to_input_norm_ratio": 0.712203881415021
+    },
+    {
+      "K": 2,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.39732563495635986,
+      "linear_spectral_norm_product": 5.285074393158165,
+      "loss": 2.126030206680298,
+      "max_factor_gradient_norm": 1.722428560256958,
+      "mean_factor_gradient_norm": 1.5214288830757141,
+      "n": 4,
+      "output_to_input_norm_ratio": 1.1575393193636956
+    },
+    {
+      "K": 2,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.06303821504116058,
+      "linear_spectral_norm_product": 5.285074393158165,
+      "loss": 1.0825575590133667,
+      "max_factor_gradient_norm": 0.1674329787492752,
+      "mean_factor_gradient_norm": 0.14861002564430237,
+      "n": 4,
+      "output_to_input_norm_ratio": 0.3255744300005366
+    },
+    {
+      "K": 4,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 1.4737635850906372,
+      "linear_spectral_norm_product": 30.009411300086445,
+      "loss": 3.484677314758301,
+      "max_factor_gradient_norm": 6.883502960205078,
+      "mean_factor_gradient_norm": 4.333179384469986,
+      "n": 4,
+      "output_to_input_norm_ratio": 1.7686632361020946
+    },
+    {
+      "K": 4,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.02590208686888218,
+      "linear_spectral_norm_product": 30.009411300086445,
+      "loss": 1.027695655822754,
+      "max_factor_gradient_norm": 0.06770262122154236,
+      "mean_factor_gradient_norm": 0.044930269941687584,
+      "n": 4,
+      "output_to_input_norm_ratio": 0.15670493302992813
+    },
+    {
+      "K": 1,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.2647671401500702,
+      "linear_spectral_norm_product": 3.4102584066933446,
+      "loss": 2.342512607574463,
+      "max_factor_gradient_norm": 1.0666084289550781,
+      "mean_factor_gradient_norm": 1.0218299627304077,
+      "n": 8,
+      "output_to_input_norm_ratio": 1.1924778943436003
+    },
+    {
+      "K": 1,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.1472228765487671,
+      "linear_spectral_norm_product": 3.4102584066933446,
+      "loss": 1.5136687755584717,
+      "max_factor_gradient_norm": 0.5205709338188171,
+      "mean_factor_gradient_norm": 0.5149720311164856,
+      "n": 8,
+      "output_to_input_norm_ratio": 0.7860096166072827
+    },
+    {
+      "K": 2,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.3683193027973175,
+      "linear_spectral_norm_product": 8.430082520178587,
+      "loss": 2.058290719985962,
+      "max_factor_gradient_norm": 1.2531628608703613,
+      "mean_factor_gradient_norm": 1.2158721387386322,
+      "n": 8,
+      "output_to_input_norm_ratio": 1.0619459993212426
+    },
+    {
+      "K": 2,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.06648628413677216,
+      "linear_spectral_norm_product": 8.430082520178587,
+      "loss": 1.129837155342102,
+      "max_factor_gradient_norm": 0.23255163431167603,
+      "mean_factor_gradient_norm": 0.1942560076713562,
+      "n": 8,
+      "output_to_input_norm_ratio": 0.3899779359986109
+    },
+    {
+      "K": 4,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.42774924635887146,
+      "linear_spectral_norm_product": 76.47193145118042,
+      "loss": 2.120598316192627,
+      "max_factor_gradient_norm": 2.1820483207702637,
+      "mean_factor_gradient_norm": 1.69406159222126,
+      "n": 8,
+      "output_to_input_norm_ratio": 1.0598393081234285
+    },
+    {
+      "K": 4,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.01563257724046707,
+      "linear_spectral_norm_product": 76.47193145118042,
+      "loss": 1.0373018980026245,
+      "max_factor_gradient_norm": 0.039231788367033005,
+      "mean_factor_gradient_norm": 0.03201893484219909,
+      "n": 8,
+      "output_to_input_norm_ratio": 0.11286721084187845
+    },
+    {
+      "K": 1,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.09899571537971497,
+      "linear_spectral_norm_product": 3.1292966291224786,
+      "loss": 1.9983389377593994,
+      "max_factor_gradient_norm": 0.5887822508811951,
+      "mean_factor_gradient_norm": 0.5887144207954407,
+      "n": 16,
+      "output_to_input_norm_ratio": 1.0122187168702923
+    },
+    {
+      "K": 1,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.04956452175974846,
+      "linear_spectral_norm_product": 3.1292966291224786,
+      "loss": 1.3573018312454224,
+      "max_factor_gradient_norm": 0.26359134912490845,
+      "mean_factor_gradient_norm": 0.2635754495859146,
+      "n": 16,
+      "output_to_input_norm_ratio": 0.5861100448514895
+    },
+    {
+      "K": 2,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.19205091893672943,
+      "linear_spectral_norm_product": 9.930038643171589,
+      "loss": 2.5413434505462646,
+      "max_factor_gradient_norm": 1.1842727661132812,
+      "mean_factor_gradient_norm": 1.1314535588026047,
+      "n": 16,
+      "output_to_input_norm_ratio": 1.2275168290060996
+    },
+    {
+      "K": 2,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.032748691737651825,
+      "linear_spectral_norm_product": 9.930038643171589,
+      "loss": 1.1830495595932007,
+      "max_factor_gradient_norm": 0.16970482468605042,
+      "mean_factor_gradient_norm": 0.15479707717895508,
+      "n": 16,
+      "output_to_input_norm_ratio": 0.3929046306287405
+    },
+    {
+      "K": 4,
+      "activation": null,
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.3686785399913788,
+      "linear_spectral_norm_product": 96.69175074078481,
+      "loss": 2.805776834487915,
+      "max_factor_gradient_norm": 2.576408624649048,
+      "mean_factor_gradient_norm": 2.1742973178625107,
+      "n": 16,
+      "output_to_input_norm_ratio": 1.336580880926834
+    },
+    {
+      "K": 4,
+      "activation": "silu",
+      "all_gradients_finite": true,
+      "input_gradient_norm": 0.006833171937614679,
+      "linear_spectral_norm_product": 96.69175074078481,
+      "loss": 1.040518045425415,
+      "max_factor_gradient_norm": 0.032608646899461746,
+      "mean_factor_gradient_norm": 0.0288022484164685,
+      "n": 16,
+      "output_to_input_norm_ratio": 0.11966547406746039
+    }
+  ],
+  "k_values": [
+    1,
+    2,
+    4
+  ],
+  "limitations": [
+    "The rank and gradient values are local seeded diagnostics, not a proof of optimization convergence or generalization.",
+    "The nonlinear chain is fitted by a linear least-squares proxy only to test linear collapse; its spectrum is not a nonlinear function-class dimension.",
+    "The hash formulas assume independent uniform signatures and do not prove properties of the implementation hash.",
+    "No closed-form VC/pseudo-dimension theorem for the full trainable HGA chain is supplied by this report."
+  ],
+  "n_values": [
+    4,
+    8,
+    16
+  ],
+  "protocol": "hga-ckpt-001-foundation-analysis-v1",
+  "rank_grid": [
+    {
+      "K": 1,
+      "linear_chain": {
+        "K": 1,
+        "activation": null,
+        "collapse_residual": 2.482e-07,
+        "collapsed": true,
+        "composite_rank": 16,
+        "effective_dimension": 4.454192,
+        "n": 4,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 16
+      },
+      "n": 4,
+      "silu_chain": {
+        "K": 1,
+        "activation": "silu",
+        "collapse_residual": 0.4938768626,
+        "collapsed": false,
+        "composite_rank": 16,
+        "effective_dimension": 4.46142,
+        "n": 4,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 16
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 16.0,
+        "max_operator_rank": 16,
+        "measured": {
+          "condition_number": 298.300833,
+          "entropy_effective_dimension": 4.454191,
+          "largest_singular_value": 1.92157337,
+          "numerical_rank": 16,
+          "participation_ratio": 6.643424
+        },
+        "n": 4,
+        "operator_dimension": 16,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 32
+      }
+    },
+    {
+      "K": 2,
+      "linear_chain": {
+        "K": 2,
+        "activation": null,
+        "collapse_residual": 1.78e-07,
+        "collapsed": true,
+        "composite_rank": 16,
+        "effective_dimension": 1.534845,
+        "n": 4,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 16
+      },
+      "n": 4,
+      "silu_chain": {
+        "K": 2,
+        "activation": "silu",
+        "collapse_residual": 0.5299812854,
+        "collapsed": false,
+        "composite_rank": 16,
+        "effective_dimension": 1.613395,
+        "n": 4,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 16
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 16.0,
+        "max_operator_rank": 16,
+        "measured": {
+          "condition_number": 298.300833,
+          "entropy_effective_dimension": 4.454191,
+          "largest_singular_value": 1.92157337,
+          "numerical_rank": 16,
+          "participation_ratio": 6.643424
+        },
+        "n": 4,
+        "operator_dimension": 16,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 32
+      }
+    },
+    {
+      "K": 4,
+      "linear_chain": {
+        "K": 4,
+        "activation": null,
+        "collapse_residual": 2.546e-07,
+        "collapsed": true,
+        "composite_rank": 16,
+        "effective_dimension": 1.500739,
+        "n": 4,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 16
+      },
+      "n": 4,
+      "silu_chain": {
+        "K": 4,
+        "activation": "silu",
+        "collapse_residual": 0.7237436768,
+        "collapsed": false,
+        "composite_rank": 16,
+        "effective_dimension": 1.786151,
+        "n": 4,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 16
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 16.0,
+        "max_operator_rank": 16,
+        "measured": {
+          "condition_number": 298.300833,
+          "entropy_effective_dimension": 4.454191,
+          "largest_singular_value": 1.92157337,
+          "numerical_rank": 16,
+          "participation_ratio": 6.643424
+        },
+        "n": 4,
+        "operator_dimension": 16,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 32
+      }
+    },
+    {
+      "K": 1,
+      "linear_chain": {
+        "K": 1,
+        "activation": null,
+        "collapse_residual": 2.549e-07,
+        "collapsed": true,
+        "composite_rank": 64,
+        "effective_dimension": 19.490353,
+        "n": 8,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 64
+      },
+      "n": 8,
+      "silu_chain": {
+        "K": 1,
+        "activation": "silu",
+        "collapse_residual": 0.5148807528,
+        "collapsed": false,
+        "composite_rank": 64,
+        "effective_dimension": 20.295341,
+        "n": 8,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 64
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 64.0,
+        "max_operator_rank": 64,
+        "measured": {
+          "condition_number": 19982.307114,
+          "entropy_effective_dimension": 19.490353,
+          "largest_singular_value": 3.04344105,
+          "numerical_rank": 64,
+          "participation_ratio": 28.188971
+        },
+        "n": 8,
+        "operator_dimension": 64,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 128
+      }
+    },
+    {
+      "K": 2,
+      "linear_chain": {
+        "K": 2,
+        "activation": null,
+        "collapse_residual": 2.685e-07,
+        "collapsed": true,
+        "composite_rank": 64,
+        "effective_dimension": 10.876352,
+        "n": 8,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 64
+      },
+      "n": 8,
+      "silu_chain": {
+        "K": 2,
+        "activation": "silu",
+        "collapse_residual": 0.6601548874,
+        "collapsed": false,
+        "composite_rank": 64,
+        "effective_dimension": 10.146592,
+        "n": 8,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 64
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 64.0,
+        "max_operator_rank": 64,
+        "measured": {
+          "condition_number": 19982.307114,
+          "entropy_effective_dimension": 19.490353,
+          "largest_singular_value": 3.04344105,
+          "numerical_rank": 64,
+          "participation_ratio": 28.188971
+        },
+        "n": 8,
+        "operator_dimension": 64,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 128
+      }
+    },
+    {
+      "K": 4,
+      "linear_chain": {
+        "K": 4,
+        "activation": null,
+        "collapse_residual": 2.974e-07,
+        "collapsed": true,
+        "composite_rank": 64,
+        "effective_dimension": 5.4569,
+        "n": 8,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 64
+      },
+      "n": 8,
+      "silu_chain": {
+        "K": 4,
+        "activation": "silu",
+        "collapse_residual": 0.6963340915,
+        "collapsed": false,
+        "composite_rank": 64,
+        "effective_dimension": 5.690621,
+        "n": 8,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 64
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 64.0,
+        "max_operator_rank": 64,
+        "measured": {
+          "condition_number": 19982.307114,
+          "entropy_effective_dimension": 19.490353,
+          "largest_singular_value": 3.04344105,
+          "numerical_rank": 64,
+          "participation_ratio": 28.188971
+        },
+        "n": 8,
+        "operator_dimension": 64,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 128
+      }
+    },
+    {
+      "K": 1,
+      "linear_chain": {
+        "K": 1,
+        "activation": null,
+        "collapse_residual": 4.975e-07,
+        "collapsed": true,
+        "composite_rank": 256,
+        "effective_dimension": 98.379851,
+        "n": 16,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 256
+      },
+      "n": 16,
+      "silu_chain": {
+        "K": 1,
+        "activation": "silu",
+        "collapse_residual": 0.3775840946,
+        "collapsed": false,
+        "composite_rank": 256,
+        "effective_dimension": 85.582408,
+        "n": 16,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 256
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 256.0,
+        "max_operator_rank": 256,
+        "measured": {
+          "condition_number": 1306.297578,
+          "entropy_effective_dimension": 98.379852,
+          "largest_singular_value": 3.3751021,
+          "numerical_rank": 256,
+          "participation_ratio": 137.449756
+        },
+        "n": 16,
+        "operator_dimension": 256,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 512
+      }
+    },
+    {
+      "K": 2,
+      "linear_chain": {
+        "K": 2,
+        "activation": null,
+        "collapse_residual": 5.078e-07,
+        "collapsed": true,
+        "composite_rank": 256,
+        "effective_dimension": 52.924599,
+        "n": 16,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 256
+      },
+      "n": 16,
+      "silu_chain": {
+        "K": 2,
+        "activation": "silu",
+        "collapse_residual": 0.4337915546,
+        "collapsed": false,
+        "composite_rank": 256,
+        "effective_dimension": 50.465816,
+        "n": 16,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 256
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 256.0,
+        "max_operator_rank": 256,
+        "measured": {
+          "condition_number": 1306.297578,
+          "entropy_effective_dimension": 98.379852,
+          "largest_singular_value": 3.3751021,
+          "numerical_rank": 256,
+          "participation_ratio": 137.449756
+        },
+        "n": 16,
+        "operator_dimension": 256,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 512
+      }
+    },
+    {
+      "K": 4,
+      "linear_chain": {
+        "K": 4,
+        "activation": null,
+        "collapse_residual": 5.158e-07,
+        "collapsed": true,
+        "composite_rank": 256,
+        "effective_dimension": 19.680455,
+        "n": 16,
+        "note": "Aktivasyonsuz zincir tek Kronecker operatörüne ÇÖKTÜ: K'nın ifade gücüne katkısı yok, n^(2K) üst sınırı boş.",
+        "single_layer_equivalent_rank": 256
+      },
+      "n": 16,
+      "silu_chain": {
+        "K": 4,
+        "activation": "silu",
+        "collapse_residual": 0.4985047882,
+        "collapsed": false,
+        "composite_rank": 256,
+        "effective_dimension": 16.524906,
+        "n": 16,
+        "note": "Zincir tek doğrusal operatörle temsil EDİLEMİYOR: aktivasyon çöküşü kırıyor, K gerçek katkı sağlıyor.",
+        "single_layer_equivalent_rank": 256
+      },
+      "single_layer_spectrum": {
+        "K": 1,
+        "interaction_space_upper_bound": 256.0,
+        "max_operator_rank": 256,
+        "measured": {
+          "condition_number": 1306.297578,
+          "entropy_effective_dimension": 98.379852,
+          "largest_singular_value": 3.3751021,
+          "numerical_rank": 256,
+          "participation_ratio": 137.449756
+        },
+        "n": 16,
+        "operator_dimension": 256,
+        "parameters_per_rank": 2.0,
+        "rank_utilization": 1.0,
+        "trainable_parameters": 512
+      }
+    }
+  ],
+  "seed": 1,
+  "sparse_memory": {
+    "assumptions": [
+      "The selected unique contexts are independently and uniformly mapped to signature buckets.",
+      "For table_count > 1, table addresses are treated as independent only in this reference model.",
+      "The implementation's shared 31-bit prehash key is not proven uniform or independent."
+    ],
+    "hash_and_signature_bounds": {
+      "explanation": "This is an upper bound on distinguishable address signatures, not on learned facts. It is bounded by the input namespace, the 31-bit key, and physical signatures.",
+      "implementation_signature_count_upper_bound": 1048576,
+      "prehash_key_bits": 31,
+      "prehash_key_classes_upper_bound": 2147483648,
+      "raw_physical_signature_count_upper_bound": 1048576
+    },
+    "ideal_uniform_occupancy": {
+      "expected_colliding_contexts": 2.24486511,
+      "expected_occupancy_fraction": 0.002068286071,
+      "expected_occupied_signatures": 2168.75513489,
+      "model_bucket_count": 1048576,
+      "per_context_isolation_probability": 0.997932665632,
+      "probability_of_zero_collision": 0.105613948871,
+      "queried_unique_contexts": 2171,
+      "recall_interpretation": "Isolation is the probability that a queried context has no other context in its idealized address signature. It is not end-to-end retrieval accuracy."
+    },
+    "input_namespace": {
+      "context_count_decimal_order": 62.44943979,
+      "context_count_symbolic": "V^w",
+      "context_count_upper_bound": 281474976710656000000000000000000000000000000000000000000000000,
+      "log2_context_count": 207.45254855
+    },
+    "limitations": [
+      "Observed implementation collision rates must be measured with carpisma_istatistigi; this model cannot certify them.",
+      "An address signature does not guarantee recall: embeddings, optimization, interference, and query distribution also matter.",
+      "V^w describes possible input strings. It does not bypass the implementation's 31-bit prehash bottleneck."
+    ],
+    "model": "independent-uniform-address-reference-v1",
+    "physical_storage": {
+      "embedding_components": 33554432,
+      "meaning": "Allocated floating-point storage, not an information-theoretic semantic capacity.",
+      "physical_rows": 1048576,
+      "storage_bits_at_declared_scalar_width": 1073741824,
+      "storage_bytes_at_declared_scalar_width": 134217728
+    }
+  }
+}

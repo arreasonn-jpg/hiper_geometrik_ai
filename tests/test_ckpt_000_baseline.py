@@ -66,7 +66,8 @@ def test_repo_apache_lisansi_ve_container_lock_sozlesmesini_tasir():
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
     assert "requirements-lock.txt" in dockerfile
     assert "--no-build-isolation --no-deps ." in dockerfile
-    assert 'ENTRYPOINT ["python", "-m", "hga"]' in dockerfile
+    assert 'ENTRYPOINT ["/opt/hga/docker-entrypoint.sh"]' in dockerfile
+    assert "docker-entrypoint.sh" in dockerfile
 
 
 def test_ckpt_000_ewt_revision_lisans_ve_kaynak_hashlerini_kaydeder():

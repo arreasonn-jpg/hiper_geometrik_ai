@@ -165,6 +165,7 @@ jobs:
           python -m hga twt-sonuc --seeds 1,2
           python -m hga english-ewt --seeds 1
           python -m hga english-scaling --seeds 1,2
+          python -m hga foundation-analysis --n-values 4 --k-values 1 --seeds 1
           python -m hga turkce-lm --seeds 1,2 --lm-steps 20
           python -m hga uzun-baglam --long-context-profile smoke_1024 --seeds 1,2
           python -m hga bellek-hiyerarsi --depth-profile smoke
@@ -181,3 +182,22 @@ jobs:
           python -m hga muhendislik
           python -m hga yeniden-uretilebilirlik
           python -m hga championship-benchmark --signature-profile smoke --seeds 1 --out /tmp/scorecard.json --markdown /tmp/scorecard.md
+
+  docs:
+    name: Documentation Site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up reference Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+      - name: Install pinned documentation environment
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install --no-deps .
+      - name: Build MkDocs strictly
+        run: mkdocs build --strict

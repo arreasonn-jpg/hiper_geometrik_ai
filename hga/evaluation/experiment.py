@@ -29,6 +29,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, TextIO, Union
 
+# These environment variables only affect interpreter/CUDA initialization when
+# present before their respective runtime begins. Capture their import-time
+# state so manifests do not overstate a late ``setdefault`` as a launch control.
+_PROCESS_PYTHONHASHSEED = os.environ.get("PYTHONHASHSEED")
+_PROCESS_CUBLAS_WORKSPACE_CONFIG = os.environ.get("CUBLAS_WORKSPACE_CONFIG")
+
 
 def canonical_hash(value: Any) -> str:
     payload = json.dumps(
@@ -85,6 +91,42 @@ def _ram_total_bytes() -> Optional[int]:
         return None
 
 
+def determinism_contract() -> Dict[str, Any]:
+    """Return the active cross-library determinism controls.
+
+    ``PYTHONHASHSEED`` and ``CUBLAS_WORKSPACE_CONFIG`` are process-start
+    settings.  They are exported by the Make/Docker entry points; setting them
+    from :func:`seed_everything` only helps child processes, not the current
+    interpreter's already-created hash secret.
+    """
+    controls: Dict[str, Any] = {
+        "python_hash_seed": os.environ.get("PYTHONHASHSEED"),
+        "python_hash_seed_present_at_module_import": _PROCESS_PYTHONHASHSEED is not None,
+        "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
+        "cublas_workspace_config_present_at_module_import": (
+            _PROCESS_CUBLAS_WORKSPACE_CONFIG is not None
+        ),
+        "python_random_seeded_per_run": True,
+        "numpy_seeded_per_run": True,
+        "torch_seeded_per_run": False,
+        "torch_deterministic_algorithms": None,
+        "cudnn_deterministic": None,
+        "cudnn_benchmark": None,
+    }
+    try:
+        import torch
+
+        controls["torch_seeded_per_run"] = True
+        controls["torch_deterministic_algorithms"] = bool(
+            torch.are_deterministic_algorithms_enabled()
+        )
+        controls["cudnn_deterministic"] = bool(torch.backends.cudnn.deterministic)
+        controls["cudnn_benchmark"] = bool(torch.backends.cudnn.benchmark)
+    except ImportError:
+        pass
+    return controls
+
+
 def _runtime_metadata() -> Dict[str, Any]:
     metadata: Dict[str, Any] = {
         "python_version": platform.python_version(),
@@ -99,6 +141,7 @@ def _runtime_metadata() -> Dict[str, Any]:
         "torch_version": None,
         "cuda_version": None,
         "cudnn_version": None,
+        "determinism": determinism_contract(),
     }
     try:
         import torch
@@ -119,23 +162,56 @@ def _runtime_metadata() -> Dict[str, Any]:
     return metadata
 
 
-def seed_everything(seed: int) -> None:
-    """Kullanılabilir RNG'leri aynı seed'e getir; eksik opsiyonel paketleri atla."""
-    random.seed(seed)
+def seed_everything(seed: int, *, deterministic_torch: bool = True) -> Dict[str, Any]:
+    """Seed Python/NumPy/PyTorch and enable strict deterministic Torch kernels.
+
+    Args:
+        seed: Non-negative integer used for each mutable random-number stream.
+        deterministic_torch: When true (the reproducibility default), reject
+            known nondeterministic Torch kernels instead of silently accepting
+            them.  This makes an unsupported CUDA operation a visible failed
+            experiment, not a misleadingly reproducible result.
+
+    Returns:
+        The active determinism control record stored in experiment manifests.
+
+    Notes:
+        Python's hash secret is selected when the interpreter starts.  Set
+        ``PYTHONHASHSEED`` before launching Python (the Makefile and Docker
+        images do this); this function cannot retroactively change it.
+    """
+    normalized_seed = int(seed)
+    if normalized_seed < 0:
+        raise ValueError("seed must be non-negative")
+    # These must ideally be set before CUDA is initialized. ``setdefault`` also
+    # propagates a deterministic contract to child processes launched later.
+    os.environ.setdefault("PYTHONHASHSEED", str(normalized_seed))
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    random.seed(normalized_seed)
     try:
         import numpy as np
 
-        np.random.seed(seed)
+        np.random.seed(normalized_seed)
     except ImportError:
         pass
     try:
         import torch
 
-        torch.manual_seed(seed)
+        torch.manual_seed(normalized_seed)
         if torch.cuda.is_available():
-            torch.cuda.manual_seed_all(seed)
+            torch.cuda.manual_seed_all(normalized_seed)
+        if deterministic_torch:
+            torch.use_deterministic_algorithms(True)
+            torch.backends.cudnn.deterministic = True
+            torch.backends.cudnn.benchmark = False
+            # TF32 changes numerical pathways across GPU families; turn it off
+            # for the reference contract when these switches are available.
+            if hasattr(torch.backends, "cuda"):
+                torch.backends.cuda.matmul.allow_tf32 = False
+            torch.backends.cudnn.allow_tf32 = False
     except ImportError:
         pass
+    return determinism_contract()
 
 
 def _atomic_json(path: Path, value: Mapping[str, Any]) -> None:
@@ -414,6 +490,7 @@ __all__ = [
     "ExperimentRun",
     "SeedSweepReport",
     "canonical_hash",
+    "determinism_contract",
     "file_sha256",
     "run_seed_sweep",
     "seed_everything",

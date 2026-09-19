@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Reproduction and review protocol
+    url: https://github.com/arreasonn-jpg/hiper_geometrik_ai/blob/main/docs/REPRODUCE_ALL.md
+    about: Check the one-command contract and artifact hashes before filing an issue.

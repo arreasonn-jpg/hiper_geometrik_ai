@@ -23,8 +23,12 @@ checkpoints/
 !docs/checkpoints/**
 # Manifestli deney koşuları; seçilmiş raporlar raporlar/ altında küratörlenir.
 experiments/EXP-*/
+# Tek-komutlu reproduce bundle'ları runtime kanıtıdır; seçilmiş sonuçlar docs/
+# altında küratörlenir, ham EXP dizinleri Git'e alınmaz.
+artifacts/
 
 # Paket derleme çıktıları (CI package job ve yerel `python -m build`)
 build/
 dist/
+site/
 *.egg-info/

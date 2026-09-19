@@ -44,14 +44,17 @@ dependencies = [
 
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0",
-    "ruff>=0.4.0",
-    "mypy>=1.9.0",
+    "pytest==8.2.2",
+    "ruff==0.16.8",
+    "mypy==2.3.1",
     # tomllib 3.11'de stdlib'e girdi; 3.10'da paketleme sözleşmesi testi için gerekir.
-    "tomli>=2.0; python_version < '3.11'",
+    "tomli==2.4.1; python_version < '3.11'",
 ]
 ui = [
     "gradio>=4.0",
+]
+docs = [
+    "mkdocs==1.6.1",
 ]
 data = [
     "requests>=2.28",
@@ -59,7 +62,7 @@ data = [
     "pandas>=2.0",
 ]
 all = [
-    "hiper-geometrik-ai[test,ui,data]",
+    "hiper-geometrik-ai[test,ui,data,docs]",
 ]
 
 [project.scripts]

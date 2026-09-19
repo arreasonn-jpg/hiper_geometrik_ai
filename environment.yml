@@ -1,0 +1,12 @@
+# CKPT-001 Conda entry point. The exact cross-platform Python dependency graph
+# is delegated to requirements-lock.txt so the Docker and Conda paths consume
+# the same pinned package versions.
+name: hga-ckpt-001
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.9
+  - pip=24.2
+  - pip:
+      - -r requirements-lock.txt
+      - -e . --no-deps

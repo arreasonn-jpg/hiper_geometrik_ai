@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible defect in code, protocol, documentation, or packaging.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include credentials, private corpora, or model weights.
+        A benchmark discrepancy needs its seed, source/config hashes, and environment.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: State the observed behavior and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include command, seed(s), profile, and exact steps.
+      placeholder: |
+        PYTHONHASHSEED=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 make reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Python/Torch/CUDA versions, device, OS, and relevant manifest path.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Hashes and logs
+      description: Include dataset/config hash and a redacted relevant log excerpt.

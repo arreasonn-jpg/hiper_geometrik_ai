@@ -10,6 +10,7 @@ __pycache__/
 # Build and runtime products
 build/
 dist/
+site/
 *.egg-info/
 checkpoints/
 logs/

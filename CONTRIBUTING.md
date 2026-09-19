@@ -2,7 +2,8 @@
 
 HGA is a research prototype. Contributions are welcome, but no contributor is
 implicitly added as an author and no benchmark result may be described as a
-publication result without the project owner's approval.
+publication result without the project owner's approval. Participation is
+subject to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Before proposing a change
 
@@ -29,6 +30,14 @@ python -m hga english-ewt --seeds 1,2,3,4,5
 
 A Docker reference environment is documented in `docs/CKPT-000.md`. Reports
 must be written outside the image to a mounted artifact directory.
+
+## Code and documentation standard
+
+New or materially changed public Python functions should use complete type hints
+and Google-style docstrings (`Args`, `Returns`, `Raises`, `Notes` where useful).
+Keep new source formatted for the configured Ruff import/order rules. Build the
+public documentation locally with `make docs`; the MkDocs configuration is a
+site/navigation contract, not a substitute for API tests.
 
 ## Research-change checklist
 

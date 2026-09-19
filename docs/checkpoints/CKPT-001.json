@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CKPT-001",
+  "release": "v0.2.0-foundation",
+  "parent_checkpoint": "CKPT-000",
+  "parent_revision": "4966fab",
+  "status": "artifact-complete-external-validation-pending",
+  "purpose": "Tek komutlu, manifestli reproduction; açık varsayımlı teori/diagnostic; CI ve contribution interfaces ile CKPT-001 foundation.",
+  "reproduction": {
+    "make_target": "make reproduce",
+    "cli": "python -m hga reproduce-all --artifact-root artifacts/reproduce-all --seeds 1,2,3,4,5 --profile smoke",
+    "protocol": "hga-reproduce-all-foundation-v1",
+    "default_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "artifact_contract": "artifacts/reproduce-all/EXP-NNNN/{manifest.json,results.json,reproduce_summary.json,REPRODUCE.md,component reports}",
+    "determinism": {
+      "python_hash_seed": "PYTHONHASHSEED=0 before interpreter startup",
+      "python_random": "seed_everything(seed)",
+      "numpy": "seed_everything(seed)",
+      "torch": "torch.manual_seed(seed)",
+      "cuda": "torch.cuda.manual_seed_all(seed) when available",
+      "torch_deterministic_algorithms": true,
+      "cudnn_deterministic": true,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8 before CUDA initialization"
+    }
+  },
+  "environment": {
+    "cpu_dockerfile": "Dockerfile",
+    "cuda_dockerfile": "Dockerfile.cuda",
+    "conda_environment": "environment.yml",
+    "python_dependency_lock": "requirements-lock.txt",
+    "mkdocs_config": "mkdocs.yml"
+  },
+  "theory_contract": {
+    "technical_draft": "paper/technical_report.tex",
+    "single_layer_function_class": "{X -> A X B | A,B in R^(n x n)}",
+    "vectorization": "vec(A X B) = (B^T kron A) vec(X)",
+    "activation_free_chain": "collapses exactly to one Kronecker layer",
+    "generic_single_layer_manifold_dimension": "2 n^2 - 1",
+    "full_chain_vc_pseudodimension": "NOT_ESTABLISHED",
+    "sparse_memory_prehash_key_bits": 31,
+    "hash_uniformity": "NOT_PROVEN; ideal-uniform formulas are reference-model only"
+  },
+  "implementation_evidence": {
+    "foundation_analysis": "hga/evaluation/foundation_analysis.py",
+    "reproduction_orchestrator": "hga/evaluation/reproduce.py",
+    "experiment_manifest": "hga/evaluation/experiment.py",
+    "community_contract": "CONTRIBUTING.md",
+    "conduct": "CODE_OF_CONDUCT.md",
+    "issue_templates": ".github/ISSUE_TEMPLATE/",
+    "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
+    "container_workflow": ".github/workflows/container.yml"
+  },
+  "external_validation_required": [
+    "Run the published Docker recipe successfully on an independently controlled machine and retain its receipt.",
+    "Observe a green GitHub Actions run for the pushed commit; a workflow file alone is not an execution result.",
+    "Publish and verify public GHCR visibility for ghcr.io/arreasonn-jpg/hiper_geometrik_ai:latest with authorized package permissions.",
+    "Obtain independent mathematical review and real author approval of paper/technical_report.tex."
+  ],
+  "prohibitions": [
+    "Do not call V^w a collision-free physical memory address space; the current implementation has a 31-bit prehash key.",
+    "Do not call a full-rank Kronecker operator an unrestricted dense operator or a low-rank operator.",
+    "Do not infer full-HGA VC/pseudo-dimension, global convergence, a scaling law, or publication status from these artifacts.",
+    "Do not claim that a configured GHCR workflow means an image has been published."
+  ],
+  "validation": {
+    "full_test_suite": "python -m pytest",
+    "lint": "ruff check .",
+    "type_check": "mypy hga mimari egitim",
+    "docs": "mkdocs build --strict",
+    "local_five_seed_reproduce_all": {
+      "date": "2026-09-19",
+      "profile": "smoke",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "status": "COMPLETED",
+      "deterministic_value_fingerprint": "db060c1f7099201ce9d215d62e8521b34a5c2c50cd0f709d340c87438313e8be",
+      "scope_note": "Local execution evidence only; no second-machine, GHCR, CI-green, or independent-review claim."
+    }
+  },
+  "release_label_note": "v0.2.0-foundation is a CKPT research label; it does not retroactively renumber the existing Python distribution version."
+}
