@@ -728,4 +728,4 @@ def paired_power_plan(effect_size_dz: float, alpha: float = 0.05, target_power: 
     return {"method": "normal-approximation-paired-dz", "effect_size_dz": magnitude,
             "alpha": alpha, "target_power": target_power, "minimum_pairs": seeds,
             "minimum_two_sided_permutation_p": minimum_two_sided_p(seeds),
-            "limitation": "Use a pilot variance and an exact/simulation sensitivity analysis before treating this as a final sample-size guarantee."}
+            "limitation": "This is not post-hoc achieved power; use a pilot variance and an exact/simulation sensitivity analysis before treating it as a final sample-size guarantee."}
