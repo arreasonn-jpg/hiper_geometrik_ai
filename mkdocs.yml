@@ -16,6 +16,7 @@ nav:
   - Experiment manifests: REPRODUCIBLE_EXPERIMENTS.md
   - CKPT-001: CKPT-001.md
   - CKPT-002 (experimental): CKPT-002.md
+  - CKPT-003 (planned scale): CKPT-003.md
   - Theory: THEORETICAL_FRAMEWORK.md
   - Foundation diagnostics: FOUNDATION_ANALYSIS.md
   - Theory scope / review map: FOUNDATION_THEORY_SCOPE.md

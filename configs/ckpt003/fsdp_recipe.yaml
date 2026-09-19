@@ -1,0 +1,35 @@
+# CKPT-003 FSDP launch template; values are intentionally not hardware claims.
+run:
+  protocol: ckpt003-scale-v1
+  topology: "REQUIRED: record actual hostnames, GPU model/count, interconnect, PyTorch/CUDA/NCCL versions"
+  seed: "REQUIRED: one explicit seed per run"
+  model_target: "REQUIRED: 100M, 300M, or 1B verified trainable parameters"
+  train_tokens: "REQUIRED: fixed per scaling series"
+precision:
+  preferred: bf16
+  fallback: fp16
+  record_effective_dtype: true
+parallelism:
+  launcher: torchrun
+  backend: nccl
+  strategy: FSDP
+  sharding_strategy: FULL_SHARD
+  mixed_precision: true
+  activation_checkpointing: true
+  cpu_offload: false
+attention:
+  implementation: "FlashAttention only after version, kernel availability, and numerical parity receipt are recorded"
+  fallback: "PyTorch SDPA"
+logging:
+  required_fields:
+    - git_sha
+    - dataset_revision
+    - dataset_sha256
+    - tokenizer_sha256
+    - parameters_trainable
+    - training_flops_estimate
+    - peak_gpu_memory_bytes
+    - loss_trace
+    - checkpoint_sha256
+    - world_size
+    - resume_receipt

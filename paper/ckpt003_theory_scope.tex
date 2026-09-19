@@ -1,0 +1,44 @@
+% CKPT-003 theory claim ledger. This is intentionally not a completed 20-page report.
+\section{CKPT-003 theory programme and claim ledger}
+\label{sec:ckpt003-theory-scope}
+
+\textbf{Status.} This document is a proof-plan and scope ledger for
+\texttt{v1.0.0-scale}; it contains no completed generalization theorem,
+optimization theorem, sparse-memory capacity theorem, or independent review.
+A statement is not promoted from ``open'' merely because a related experiment
+has run.
+
+\begin{center}
+\begin{tabular}{p{0.22\linewidth}p{0.29\linewidth}p{0.17\linewidth}p{0.22\linewidth}}
+\toprule
+Workstream & Required formal object & Status & Required boundary \\
+\midrule
+Generalization & VC/pseudodimension or Rademacher bound for a defined function class & Open & Specify activation, norm/rank constraints, data distribution and probability. \\
+Gradient flow & Dynamics for the declared low-rank parameterization & Open & Separate continuous-time surrogate from discrete optimizer. \\
+Saddles & Stationary-point classification under named loss/constraints & Open & Do not infer global convergence. \\
+Memory information & Capacity/encoding theorem for a stated memory channel & Open & Separate ideal address space from implemented hash/cache. \\
+Addressability & Map from keys to physical slots and retrieval success & Open & Include collisions, eviction and decay. \\
+Effective dimension & Generalization relation under stated data/model assumptions & Open & Do not equate parameter count with effective dimension. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Required proof structure}
+Each prospective result must state definitions, assumptions, theorem, proof,
+edge cases, comparison with the implementation, and falsifiable experimental
+consequence. Results for an idealized random hash or an activation-free
+Kronecker chain may be useful reference models, but may not be described as a
+proof about the full trained system without an explicit reduction.
+
+\subsection{Experimental interface}
+For each proposed theoretical quantity, record its estimator, confidence
+interval, finite-sample bias, architecture/configuration, data split and code
+revision. The 1M-context stability gate measures only loss drift; it is not an
+estimator of VC dimension, Rademacher complexity, information capacity or
+optimization convergence.
+
+\subsection{Review gate}
+A reviewer-ready report must be at least twenty substantive pages of complete
+claims, derivations, references and limitations---not padded prose---and must
+receive independent mathematical review. This outline does not satisfy that
+gate.
