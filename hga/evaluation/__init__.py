@@ -42,13 +42,35 @@ from .compositional_v2 import (
     compositional_v2_markdown,
     run_compositional_v2_benchmark,
 )
+from .english_ewt import (
+    ARCHITECTURE as ENGLISH_EWT_ARCHITECTURE,
+)
+from .english_ewt import (
+    EnglishEWT,
+    EnglishEWTReport,
+    EWTTaskData,
+    english_ewt_markdown,
+    english_hga_scaling_markdown,
+    prepare_english_ewt_task,
+    run_english_ewt_baselines,
+    run_english_hga_scaling_probe,
+)
 from .experiment import (
     ExperimentRun,
     SeedSweepReport,
     canonical_hash,
+    determinism_contract,
     file_sha256,
     run_seed_sweep,
     seed_everything,
+)
+from .foundation_analysis import (
+    FoundationAnalysisReport,
+    GradientDiagnostic,
+    foundation_analysis_markdown,
+    measure_gradient_flow,
+    run_foundation_analysis,
+    sparse_memory_theory,
 )
 from .golden import (
     GoldenDataset,
@@ -168,6 +190,8 @@ from .reasoning_depth import (
     reasoning_depth_markdown,
 )
 from .reporting import benchmark_raporu_kaydet, benchmark_raporu_markdown, benchmark_raporu_olustur
+from .reproduce import PROTOCOL as REPRODUCE_ALL_PROTOCOL
+from .reproduce import reproduce_all_markdown, run_reproduce_all
 from .research import (
     PROFILE_CONFIGS,
     SECTION_LABELS,
@@ -309,6 +333,12 @@ from .verifier_ensemble import (
 
 __all__ = [
     # P1 gerçek Türkçe dil modelleme (TWT held-out)
+    "ENGLISH_EWT_ARCHITECTURE", "EnglishEWT", "EnglishEWTReport", "EWTTaskData",
+    "prepare_english_ewt_task", "run_english_ewt_baselines", "english_ewt_markdown",
+    "run_english_hga_scaling_probe", "english_hga_scaling_markdown",
+    "FoundationAnalysisReport", "GradientDiagnostic", "sparse_memory_theory",
+    "measure_gradient_flow", "run_foundation_analysis", "foundation_analysis_markdown",
+    "REPRODUCE_ALL_PROTOCOL", "run_reproduce_all", "reproduce_all_markdown",
     "CORPUS_EXPANSION_ALLOWED_LICENSES", "CORPUS_EXPANSION_TARGET_WORDS",
     "CorpusCandidate", "CorpusExpansionReport",
     "run_turkish_corpus_expansion_pipeline",
@@ -406,7 +436,7 @@ __all__ = [
     "run_golden_seed_sweep",
     "LeakageAuditReport", "audit_partitions", "semantic_fingerprint",
     "LifecycleBenchmarkReport", "run_lifecycle_benchmark",
-    "ExperimentRun", "SeedSweepReport", "canonical_hash", "file_sha256",
+    "ExperimentRun", "SeedSweepReport", "canonical_hash", "determinism_contract", "file_sha256",
     "run_seed_sweep", "seed_everything", "kronecker_capacity_contract",
     "run_kronecker_dense_trial",
     "CapacityReport", "capacity_contract", "measure_experience_capacity",

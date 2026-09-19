@@ -1,0 +1,31 @@
+# syntax=docker/dockerfile:1
+# CKPT-001 CUDA reference. The base pins CUDA 12.1 + cuDNN 8 and includes
+# CPython/PyTorch 2.3.1. Run with Docker's NVIDIA runtime: `--gpus all`.
+FROM pytorch/pytorch:2.3.1-cuda12.1-cudnn8-runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONHASHSEED=0 \
+    CUBLAS_WORKSPACE_CONFIG=:4096:8
+
+WORKDIR /opt/hga
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y make \
+    && rm -rf /var/lib/apt/lists/*
+
+# requirements-lock.txt pins torch==2.3.1 and its CUDA runtime dependencies.
+# The image base pins the ABI; the lock pins the Python package graph.
+COPY requirements-lock.txt ./
+RUN python -m pip install --upgrade "pip==24.2" \
+    && python -m pip install -r requirements-lock.txt
+
+COPY . ./
+RUN chmod +x /opt/hga/docker-entrypoint.sh \
+    && python -m pip install --no-build-isolation --no-deps .
+
+# Mount the host artifact directory at /opt/hga/artifacts for `make reproduce`.
+WORKDIR /opt/hga
+ENTRYPOINT ["/opt/hga/docker-entrypoint.sh"]
+CMD ["reproduce-all"]

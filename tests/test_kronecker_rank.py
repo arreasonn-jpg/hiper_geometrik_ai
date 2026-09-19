@@ -18,6 +18,10 @@ def test_teorik_sozlesme_ust_sinirin_erisilebilir_olmadigini_soyler():
     assert s["trainable_parameters"] == 4 * 2 * 16 * 16
     assert s["upper_bound_is_reachable"] is False
     assert s["collapses_without_activation"] is True
+    assert s["single_layer_kronecker_manifold_dimension"] == 2 * 16 * 16 - 1
+    assert s["fixed_feature_affine_readout_vc_dimension_upper_bound"] == 16 * 16 + 1
+    assert s["full_chain_vc_dimension"] is None
+    assert s["full_chain_vc_dimension_status"] == "NOT_ESTABLISHED"
 
 
 def test_kronecker_rank_ozdesligi():

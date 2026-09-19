@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from .compositional import CompositionalDataset, CompositionalReport, run_compositional_benchmark
+from .english_ewt import prepare_english_ewt_task, run_english_ewt_baselines
 from .experiment import SeedSweepReport, canonical_hash, run_seed_sweep
 from .golden import GoldenDataset, run_golden_benchmark
 from .real_turkish import TurkishWebTreebank, run_real_turkish_benchmark
@@ -32,6 +33,7 @@ SECTION_ORDER = (
     "self_learning",
     "ood",
     "turkish_nlp",
+    "english_nlp",
 )
 SECTION_LABELS = {
     "architecture": "Architecture",
@@ -43,6 +45,7 @@ SECTION_LABELS = {
     "self_learning": "Self Learning",
     "ood": "OOD",
     "turkish_nlp": "Turkish NLP",
+    "english_nlp": "English NLP Controls",
     "reproducibility": "Reproducibility",
 }
 PROFILE_CONFIGS: Dict[str, Dict[str, Any]] = {
@@ -578,6 +581,40 @@ def _turkish_section(
     }
 
 
+
+def _english_section(seed: int, profile: str) -> Dict[str, Any]:
+    """Pinned English UD EWT architecture controls for one suite seed.
+
+    The research runner supplies five independent EXP manifests.  Therefore the
+    single-run report's local ``five_or_more_seeds`` flag is intentionally
+    replaced by an explicit contribution marker; the aggregate suite's
+    reproducibility section is the authority for the five-seed gate.
+    """
+    report = run_english_ewt_baselines(seeds=(int(seed),), profile=profile)
+    raw = report.to_dict()
+    checks = {
+        name: bool(value)
+        for name, value in raw["checks"].items()
+        if name != "five_or_more_seeds"
+    }
+    checks["contributes_one_seed_to_suite_aggregate"] = True
+    f1s = {name: raw["aggregate"][name]["f1"]["mean"] for name in raw["aggregate"]}
+    return {
+        "status": "COMPLETED",
+        "score": _score_checks(checks),
+        "checks": checks,
+        "headline": "Pinned English UD EWT: dense/Transformer/BERT-style/GPT-style controls.",
+        "metrics": {
+            "english_ewt": raw,
+            "f1_by_model": f1s,
+            "training_seconds": round(sum(
+                float(model["training_seconds"])
+                for model in raw["per_seed"][0]["models"].values()
+            ), 6),
+        },
+        "limitations": list(raw["limitations"]),
+    }
+
 def _run_trial(
     seed: int,
     profile: str,
@@ -621,6 +658,7 @@ def _run_trial(
             ),
             False,
         ),
+        "english_nlp": (lambda: _english_section(seed, profile), True),
     }
     started = time.perf_counter()
     for name in SECTION_ORDER:
@@ -978,6 +1016,7 @@ def _dataset_hash() -> str:
         "golden_v1": GoldenDataset().dataset_hash(),
         "verifier_adversarial_v1": VerifierAttackDataset().dataset_hash(),
         "real_turkish_twt_v1": TurkishWebTreebank().dataset_hash(),
+        "real_english_ewt_v1": prepare_english_ewt_task().dataset_hash,
         "procedural_protocols": {
             "kronecker": "kronecker-vs-rank1-param-matched-v2",
             "memory": "sparse-memory-collision-v1",
@@ -985,6 +1024,7 @@ def _dataset_hash() -> str:
             "paradigm": "neural-symbolic-hybrid-v1",
             "twt_architectures": "twt-parameter-matched-architectures-v1",
             "twt_neural_compositional": "twt-neural-compositional-ablation-v1",
+            "english_architectures": "hga-english-ud-ewt-architecture-baselines-v1",
             "active_memory": "active-dynamic-kv-lifecycle-v1",
             "multi_environment": "multi-environment-closed-verified-self-learning-v1",
             "uncertainty_calibration": "dev-temperature-scaling-selective-risk-v1",
@@ -1059,6 +1099,10 @@ def run_research_benchmark(
             "real_turkish_human_annotated": True,
             "real_turkish_license": "Apache-2.0",
             "real_turkish_task": "basic morphosyntactic dependency-arc verification",
+            "real_english_dataset": "UD English EWT",
+            "real_english_upstream_revision": "4a4d77f599ea53cc405f85d0cec4b2f14f81d42b",
+            "real_english_license": "CC-BY-SA-4.0",
+            "real_english_task": "basic morphosyntactic dependency-arc verification",
         },
     )
     section_summary = _summarize_sections(sweep.results, selected)
@@ -1080,7 +1124,8 @@ def run_research_benchmark(
         "overall_diagnostic_score, tamamlanan heterojen bölüm skorlarının basit ortalamasıdır; zekâ veya SOTA skoru değildir.",
         "Smoke profil CI/protokol doğrulaması içindir; yayınlanabilir ölçek sonucu değildir.",
         "Sentetik bölümler, kontrollü compositional fixture ve gerçek insan-anotasyonlu TWT sonucu raporda ayrı tutulur.",
-        "TWT görevi morphosyntactic dependency arc doğrulamasıdır; semantik relation extraction veya genel dil iddiası değildir.",
+        "TWT ve EWT görevleri morphosyntactic dependency arc doğrulamasıdır; semantik relation extraction veya genel dil iddiası değildir.",
+        "English kontrolü BERT-style/GPT-style küçük sıfırdan-eğitilmiş mimarilerdir; pretrained LLM kıyası değildir.",
         "SKIPPED bölümler başarı sayılmaz ve overall_diagnostic_score hesabına girmez.",
     ]
     return ResearchBenchmarkReport(

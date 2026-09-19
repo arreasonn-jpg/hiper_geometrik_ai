@@ -33,6 +33,10 @@ Kullanım:
     python -m hga genelleme-v2           # ham metinden keşif + C_G v2 (P0-6)
     python -m hga cikarim-derinligi      # C_R / C_RD çıkarım derinliği (P0-7)
     python -m hga twt-sonuc              # TWT gerçek sonuç tablosu + FLOPs (P0-3)
+    python -m hga english-ewt            # UD English EWT + Transformer/BERT/GPT-style baseline'ları
+    python -m hga english-scaling        # HGA English EWT parameter scaling probe (scaling law değildir)
+    python -m hga foundation-analysis    # CKPT-001 rank/gradient/hash teorik tanı grid'i
+    python -m hga reproduce-all          # manifestli CKPT-001 foundation reproduction bundle
     python -m hga turkce-lm              # gerçek Türkçe LM: tr_corpus_v1 1.11M kelime (P1)
     python -m hga uzun-baglam            # uzun bağlam LM; 512/1024 için --long-context-profile smoke_1024
     python -m hga bellek-hiyerarsi       # hot/warm/cold/archive bellek (P0-8)
@@ -1806,6 +1810,57 @@ def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
+def _english_ewt(seeds=None, profile="smoke", out=None, markdown=None):
+    """Pinned UD English EWT üzerinde Transformer/BERT/GPT-style kontroller."""
+    from hga.evaluation.english_ewt import english_ewt_markdown, run_english_ewt_baselines
+
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_english_ewt_baselines(seeds=tohumlar, profile=profile)
+    md = english_ewt_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _english_scaling(seeds=None, profile="smoke", out=None, markdown=None):
+    """HGA'nın gerçek English EWT üzerinde küçük parameter-scaling probe'u."""
+    from hga.evaluation.english_ewt import (
+        english_hga_scaling_markdown,
+        run_english_hga_scaling_probe,
+    )
+
+    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
+    rapor = run_english_hga_scaling_probe(seeds=tohumlar, profile=profile)
+    md = english_hga_scaling_markdown(rapor)
+    print(md)
+    _yaz_rapor(rapor, out, markdown, md)
+
+
+def _foundation_analysis(n_values="4,8,16", k_values="1,2,4", seed=1,
+                         out=None, markdown=None):
+    """CKPT-001 teorik sözleşme, rank/gradient grid'i ve hash modeli."""
+    from hga.evaluation.foundation_analysis import (
+        foundation_analysis_markdown,
+        run_foundation_analysis,
+    )
+
+    nler = [int(value) for value in n_values.split(",") if value.strip()]
+    kler = [int(value) for value in k_values.split(",") if value.strip()]
+    rapor = run_foundation_analysis(n_values=nler, k_values=kler, seed=int(seed))
+    md = foundation_analysis_markdown(rapor.to_dict())
+    print(md)
+    _yaz_rapor(rapor.to_dict(), out, markdown, md)
+
+
+def _reproduce_all(artifact_root="artifacts/reproduce-all", seeds=None, profile="smoke"):
+    """Tek komutta manifestli CKPT-001 foundation artefaktlarını üret."""
+    from hga.evaluation.reproduce import reproduce_all_markdown, run_reproduce_all
+
+    tohumlar = [int(value) for value in (seeds or "1,2,3,4,5").split(",") if value.strip()]
+    rapor = run_reproduce_all(root=artifact_root, seeds=tohumlar, profile=profile)
+    print(reproduce_all_markdown(rapor))
+    print(f"artifact directory: {rapor['directory']}")
+
+
 def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
                markdown=None):
     """P1: Gerçek Türkçe LM (smoke: TWT; full: tr_corpus_v1 1.11M kelime)."""
@@ -2217,7 +2272,8 @@ def main(argv=None):
                                      "verifier-adversarial",
                                      "verifier-ensemble",
                                      "semantik", "genelleme-v2",
-                                     "twt-sonuc", "turkce-lm",
+                                     "twt-sonuc", "english-ewt", "english-scaling", "foundation-analysis",
+                                     "reproduce-all", "turkce-lm",
                                      "uzun-baglam",
                                      "bellek-hiyerarsi",
                                      "bellek-streaming",
@@ -2295,6 +2351,8 @@ def main(argv=None):
                    help="paradigma nöral kolu eğitim epoch sayısı")
     p.add_argument("--experiment-root", default="experiments",
                    help="EXP-NNNN çalışma dizinlerinin kökü")
+    p.add_argument("--artifact-root", default="artifacts/reproduce-all",
+                   help="reproduce-all için üst artefakt dizini")
     p.add_argument("--scales", default="1000,10000,100000",
                    help="memory-benchmark context ölçekleri")
     p.add_argument("--slots", type=int, default=65536,
@@ -2462,6 +2520,18 @@ def main(argv=None):
      "twt-sonuc": lambda: _twt_sonuc(
          seeds=args.seeds, profile=args.signature_profile, out=args.out,
          markdown=args.markdown),
+     "english-ewt": lambda: _english_ewt(
+         seeds=args.seeds, profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "english-scaling": lambda: _english_scaling(
+         seeds=args.seeds, profile=args.signature_profile, out=args.out,
+         markdown=args.markdown),
+     "foundation-analysis": lambda: _foundation_analysis(
+         n_values=args.n_values, k_values=args.k_values,
+         seed=(int(args.seeds.split(",")[0]) if args.seeds else 1),
+         out=args.out, markdown=args.markdown),
+     "reproduce-all": lambda: _reproduce_all(
+         artifact_root=args.artifact_root, seeds=args.seeds, profile=args.profile),
      "turkce-lm": lambda: _turkce_lm(
          seeds=args.seeds, profile=args.signature_profile,
          steps=args.lm_steps, out=args.out, markdown=args.markdown),

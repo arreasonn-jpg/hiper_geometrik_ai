@@ -1,0 +1,31 @@
+name: Research claim or protocol change
+description: Propose a measurable claim, theory change, or benchmark extension.
+title: "research: "
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not promote an upper bound, one seed, or a narrow probe to a general-capacity,
+        VC, scaling-law, publication, or SOTA claim without supporting evidence.
+  - type: textarea
+    id: claim
+    attributes:
+      label: Precise proposed claim
+      description: Include assumptions and the claim's scope.
+    validations:
+      required: true
+  - type: textarea
+    id: falsification
+    attributes:
+      label: Falsification / acceptance protocol
+      description: State data provenance, split, baselines, seed count, metric, and failure condition.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Existing evidence and limitations
+      description: Link manifests/reports and name what remains unmeasured.
+    validations:
+      required: true

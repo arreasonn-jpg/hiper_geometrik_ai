@@ -1,0 +1,724 @@
+{
+  "aggregate": {
+    "bert_style": {
+      "accuracy": {
+        "max": 0.96032258,
+        "mean": 0.93696774,
+        "min": 0.91935484,
+        "std": 0.01897432
+      },
+      "f1": {
+        "max": 0.96146675,
+        "mean": 0.93573724,
+        "min": 0.91337491,
+        "std": 0.02017321
+      },
+      "false_acceptance_rate": {
+        "max": 0.07806452,
+        "mean": 0.04890322,
+        "min": 0.0,
+        "std": 0.03538026
+      },
+      "false_rejection_rate": {
+        "max": 0.14967742,
+        "mean": 0.07716129,
+        "min": 0.00193548,
+        "std": 0.04673854
+      },
+      "precision": {
+        "max": 1.0,
+        "mean": 0.95182926,
+        "min": 0.92258065,
+        "std": 0.0341446
+      },
+      "recall": {
+        "max": 0.99806452,
+        "mean": 0.92283871,
+        "min": 0.85032258,
+        "std": 0.04673854
+      }
+    },
+    "dense": {
+      "accuracy": {
+        "max": 0.97516129,
+        "mean": 0.95722581,
+        "min": 0.93387097,
+        "std": 0.01442278
+      },
+      "f1": {
+        "max": 0.97521725,
+        "mean": 0.95753701,
+        "min": 0.93435799,
+        "std": 0.01432042
+      },
+      "false_acceptance_rate": {
+        "max": 0.07354839,
+        "mean": 0.05006452,
+        "min": 0.02709677,
+        "std": 0.01505094
+      },
+      "false_rejection_rate": {
+        "max": 0.05870968,
+        "mean": 0.03548387,
+        "min": 0.01677419,
+        "std": 0.01477405
+      },
+      "precision": {
+        "max": 0.97302505,
+        "mean": 0.95068481,
+        "min": 0.92752702,
+        "std": 0.01479111
+      },
+      "recall": {
+        "max": 0.98322581,
+        "mean": 0.96451613,
+        "min": 0.94129032,
+        "std": 0.01477405
+      }
+    },
+    "gpt_style": {
+      "accuracy": {
+        "max": 0.9616129,
+        "mean": 0.94477419,
+        "min": 0.92258065,
+        "std": 0.0182381
+      },
+      "f1": {
+        "max": 0.963032,
+        "mean": 0.94563076,
+        "min": 0.92258065,
+        "std": 0.01893351
+      },
+      "false_acceptance_rate": {
+        "max": 0.07741935,
+        "mean": 0.07729032,
+        "min": 0.07677419,
+        "std": 0.00025806
+      },
+      "false_rejection_rate": {
+        "max": 0.07741935,
+        "mean": 0.03316129,
+        "min": 0.0,
+        "std": 0.0363578
+      },
+      "precision": {
+        "max": 0.92869982,
+        "mean": 0.92588191,
+        "min": 0.92258065,
+        "std": 0.00272661
+      },
+      "recall": {
+        "max": 1.0,
+        "mean": 0.96683871,
+        "min": 0.92258065,
+        "std": 0.0363578
+      }
+    },
+    "transformer": {
+      "accuracy": {
+        "max": 0.92483871,
+        "mean": 0.92122581,
+        "min": 0.91322581,
+        "std": 0.0042473
+      },
+      "f1": {
+        "max": 0.92457106,
+        "mean": 0.92091054,
+        "min": 0.91229214,
+        "std": 0.00453137
+      },
+      "false_acceptance_rate": {
+        "max": 0.07741935,
+        "mean": 0.07496774,
+        "min": 0.0716129,
+        "std": 0.00209653
+      },
+      "false_rejection_rate": {
+        "max": 0.09741935,
+        "mean": 0.08258064,
+        "min": 0.07741935,
+        "std": 0.00753486
+      },
+      "precision": {
+        "max": 0.92787524,
+        "mean": 0.9244521,
+        "min": 0.9222149,
+        "std": 0.00222165
+      },
+      "recall": {
+        "max": 0.92258065,
+        "mean": 0.91741936,
+        "min": 0.90258065,
+        "std": 0.00753486
+      }
+    }
+  },
+  "candidate_hashes": {
+    "dev": "a904920d0806300390ebc9d47f81263be8cf8f9df998e0b4751e58b68ac6f286",
+    "test": "8a12c629f35bf42ef420b5c97ef6fb3351b43d41292024ecce721ffd2c5c2a53",
+    "train": "ddb49412f74deb2c2c891f422329a5e80163500265e447cfb217559b9a1e72a7"
+  },
+  "checks": {
+    "all_four_baseline_families_present": true,
+    "all_models_trained_from_scratch_and_reported": true,
+    "five_or_more_seeds": true,
+    "official_english_ud_sources_hash_verified": true,
+    "parameter_budget_within_twelve_percent": true,
+    "train_dev_test_candidate_hashes_distinct": true
+  },
+  "config_hash": "b11ef05c7711182c0e3b8fa21921972a4ff965290ef4525591b1e6cad746b969",
+  "dataset_hash": "2f852e91da70301e5a572f717b3e9d6998d14ca6bf38daa8bb77f4baa5b3ddd3",
+  "limitations": [
+    "This is English-only; together with the separate Turkish TWT protocol it is bilingual evidence, not a multilingual foundation-model evaluation.",
+    "The task is basic UD dependency-arc verification, not end-to-end parsing, language modelling, semantic relation extraction or general reasoning.",
+    "BERT-style and GPT-style arms are small random-initialized architectural baselines trained from scratch, not pretrained BERT/GPT checkpoints.",
+    "The deterministic source-verified sentence cap controls CPU cost; it is not the full EWT corpus or a SOTA evaluation."
+  ],
+  "parameter_counts": {
+    "bert_style": 97586,
+    "dense": 102116,
+    "gpt_style": 96938,
+    "transformer": 96938
+  },
+  "per_seed": [
+    {
+      "batch_schedule_hash": "1715cfad59e07405ddad21efd46c7e7fe9a5d4b8d04da4d62e6232f4aaaf228c",
+      "models": {
+        "bert_style": {
+          "architecture_note": "BERT-style bidirectional encoder; not pretrained BERT.",
+          "dev": {
+            "accuracy": 0.93143521,
+            "f1": 0.92720543,
+            "false_acceptance_rate": 0.01045904,
+            "false_rejection_rate": 0.12667054,
+            "precision": 0.98816568,
+            "recall": 0.87332946,
+            "total": 3442
+          },
+          "physical_parameters": 97586,
+          "test": {
+            "accuracy": 0.91935484,
+            "f1": 0.91337491,
+            "false_acceptance_rate": 0.0116129,
+            "false_rejection_rate": 0.14967742,
+            "precision": 0.98652695,
+            "recall": 0.85032258,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.293245
+        },
+        "dense": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.97559558,
+            "f1": 0.97601371,
+            "false_acceptance_rate": 0.04183614,
+            "false_rejection_rate": 0.00697269,
+            "precision": 0.95957327,
+            "recall": 0.99302731,
+            "total": 3442
+          },
+          "physical_parameters": 102116,
+          "test": {
+            "accuracy": 0.96935484,
+            "f1": 0.9697741,
+            "false_acceptance_rate": 0.04451613,
+            "false_rejection_rate": 0.01677419,
+            "precision": 0.9566855,
+            "recall": 0.98322581,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.056704
+        },
+        "gpt_style": {
+          "architecture_note": "GPT-style causal decoder; not pretrained GPT.",
+          "dev": {
+            "accuracy": 0.92911098,
+            "f1": 0.92911098,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.07088902,
+            "precision": 0.92911098,
+            "recall": 0.92911098,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92258065,
+            "f1": 0.92258065,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.07741935,
+            "precision": 0.92258065,
+            "recall": 0.92258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.237631
+        },
+        "transformer": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.92940151,
+            "f1": 0.92938099,
+            "false_acceptance_rate": 0.07030796,
+            "false_rejection_rate": 0.07088902,
+            "precision": 0.92965116,
+            "recall": 0.92911098,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92322581,
+            "f1": 0.92317624,
+            "false_acceptance_rate": 0.07612903,
+            "false_rejection_rate": 0.07741935,
+            "precision": 0.92377261,
+            "recall": 0.92258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.255083
+        }
+      },
+      "parameter_max_to_min_ratio": 1.05341559,
+      "seed": 1,
+      "vocabulary_hash": "64f03560b1a88d61316eca06725c392842e2ad46758013767c411b3ae1b056a3"
+    },
+    {
+      "batch_schedule_hash": "9414994d72b0bb4798bd698fa628b0cce73da028fb49edaf064c0f0e71bd87e1",
+      "models": {
+        "bert_style": {
+          "architecture_note": "BERT-style bidirectional encoder; not pretrained BERT.",
+          "dev": {
+            "accuracy": 0.9636839,
+            "f1": 0.9648975,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.00174317,
+            "precision": 0.93369565,
+            "recall": 0.99825683,
+            "total": 3442
+          },
+          "physical_parameters": 97586,
+          "test": {
+            "accuracy": 0.96,
+            "f1": 0.96146675,
+            "false_acceptance_rate": 0.07806452,
+            "false_rejection_rate": 0.00193548,
+            "precision": 0.92745803,
+            "recall": 0.99806452,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.274868
+        },
+        "dense": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.96048809,
+            "f1": 0.96087457,
+            "false_acceptance_rate": 0.04938989,
+            "false_rejection_rate": 0.02963393,
+            "precision": 0.95156695,
+            "recall": 0.97036607,
+            "total": 3442
+          },
+          "physical_parameters": 102116,
+          "test": {
+            "accuracy": 0.95516129,
+            "f1": 0.95540584,
+            "false_acceptance_rate": 0.05032258,
+            "false_rejection_rate": 0.03935484,
+            "precision": 0.95022336,
+            "recall": 0.96064516,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.052516
+        },
+        "gpt_style": {
+          "architecture_note": "GPT-style causal decoder; not pretrained GPT.",
+          "dev": {
+            "accuracy": 0.96455549,
+            "f1": 0.9657688,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.0,
+            "precision": 0.93380358,
+            "recall": 1.0,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.9616129,
+            "f1": 0.963032,
+            "false_acceptance_rate": 0.07677419,
+            "false_rejection_rate": 0.0,
+            "precision": 0.92869982,
+            "recall": 1.0,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.23069
+        },
+        "transformer": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.93201627,
+            "f1": 0.93177843,
+            "false_acceptance_rate": 0.06449739,
+            "false_rejection_rate": 0.07147008,
+            "precision": 0.93504974,
+            "recall": 0.92852992,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92419355,
+            "f1": 0.92402199,
+            "false_acceptance_rate": 0.07354839,
+            "false_rejection_rate": 0.07806452,
+            "precision": 0.92611795,
+            "recall": 0.92193548,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.240061
+        }
+      },
+      "parameter_max_to_min_ratio": 1.05341559,
+      "seed": 2,
+      "vocabulary_hash": "64f03560b1a88d61316eca06725c392842e2ad46758013767c411b3ae1b056a3"
+    },
+    {
+      "batch_schedule_hash": "e22e43901b86b7d72d822fb8ea5f8ac66697c452aa6a9192915d7a35d1f60ba7",
+      "models": {
+        "bert_style": {
+          "architecture_note": "BERT-style bidirectional encoder; not pretrained BERT.",
+          "dev": {
+            "accuracy": 0.96339338,
+            "f1": 0.96200241,
+            "false_acceptance_rate": 0.0,
+            "false_rejection_rate": 0.07321325,
+            "precision": 1.0,
+            "recall": 0.92678675,
+            "total": 3442
+          },
+          "physical_parameters": 97586,
+          "test": {
+            "accuracy": 0.96032258,
+            "f1": 0.95868324,
+            "false_acceptance_rate": 0.0,
+            "false_rejection_rate": 0.07935484,
+            "precision": 1.0,
+            "recall": 0.92064516,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.277369
+        },
+        "dense": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.94131319,
+            "f1": 0.94188723,
+            "false_acceptance_rate": 0.06856479,
+            "false_rejection_rate": 0.04880883,
+            "precision": 0.93276353,
+            "recall": 0.95119117,
+            "total": 3442
+          },
+          "physical_parameters": 102116,
+          "test": {
+            "accuracy": 0.93387097,
+            "f1": 0.93435799,
+            "false_acceptance_rate": 0.07354839,
+            "false_rejection_rate": 0.05870968,
+            "precision": 0.92752702,
+            "recall": 0.94129032,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.051844
+        },
+        "gpt_style": {
+          "architecture_note": "GPT-style causal decoder; not pretrained GPT.",
+          "dev": {
+            "accuracy": 0.96455549,
+            "f1": 0.9657688,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.0,
+            "precision": 0.93380358,
+            "recall": 1.0,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.96129032,
+            "f1": 0.96273292,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.0,
+            "precision": 0.92814371,
+            "recall": 1.0,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.233598
+        },
+        "transformer": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.92911098,
+            "f1": 0.9290285,
+            "false_acceptance_rate": 0.0697269,
+            "false_rejection_rate": 0.07205113,
+            "precision": 0.93011066,
+            "recall": 0.92794887,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92483871,
+            "f1": 0.92457106,
+            "false_acceptance_rate": 0.0716129,
+            "false_rejection_rate": 0.07870968,
+            "precision": 0.92787524,
+            "recall": 0.92129032,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.238336
+        }
+      },
+      "parameter_max_to_min_ratio": 1.05341559,
+      "seed": 3,
+      "vocabulary_hash": "64f03560b1a88d61316eca06725c392842e2ad46758013767c411b3ae1b056a3"
+    },
+    {
+      "batch_schedule_hash": "3899a90715137d56a1f148186751b3115b91d0a6b482ebbedee3e1eb7444ced4",
+      "models": {
+        "bert_style": {
+          "architecture_note": "BERT-style bidirectional encoder; not pretrained BERT.",
+          "dev": {
+            "accuracy": 0.92911098,
+            "f1": 0.92911098,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.07088902,
+            "precision": 0.92911098,
+            "recall": 0.92911098,
+            "total": 3442
+          },
+          "physical_parameters": 97586,
+          "test": {
+            "accuracy": 0.92258065,
+            "f1": 0.92258065,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.07741935,
+            "precision": 0.92258065,
+            "recall": 0.92258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.271122
+        },
+        "dense": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.96106915,
+            "f1": 0.96144994,
+            "false_acceptance_rate": 0.04880883,
+            "false_rejection_rate": 0.02905288,
+            "precision": 0.95213675,
+            "recall": 0.97094712,
+            "total": 3442
+          },
+          "physical_parameters": 102116,
+          "test": {
+            "accuracy": 0.95258065,
+            "f1": 0.95292988,
+            "false_acceptance_rate": 0.05483871,
+            "false_rejection_rate": 0.04,
+            "precision": 0.94596313,
+            "recall": 0.96,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.052307
+        },
+        "gpt_style": {
+          "architecture_note": "GPT-style causal decoder; not pretrained GPT.",
+          "dev": {
+            "accuracy": 0.92911098,
+            "f1": 0.92911098,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.07088902,
+            "precision": 0.92911098,
+            "recall": 0.92911098,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92258065,
+            "f1": 0.92258065,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.07741935,
+            "precision": 0.92258065,
+            "recall": 0.92258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.22829
+        },
+        "transformer": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.9282394,
+            "f1": 0.9281768,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.07263219,
+            "precision": 0.92898719,
+            "recall": 0.92736781,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.92064516,
+            "f1": 0.92049127,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.08129032,
+            "precision": 0.92227979,
+            "recall": 0.91870968,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.239478
+        }
+      },
+      "parameter_max_to_min_ratio": 1.05341559,
+      "seed": 4,
+      "vocabulary_hash": "64f03560b1a88d61316eca06725c392842e2ad46758013767c411b3ae1b056a3"
+    },
+    {
+      "batch_schedule_hash": "14b99728313cee7f4b018dcbe10994f9dda785967d9896d7c33856b8352ee755",
+      "models": {
+        "bert_style": {
+          "architecture_note": "BERT-style bidirectional encoder; not pretrained BERT.",
+          "dev": {
+            "accuracy": 0.92882045,
+            "f1": 0.92879977,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.07147008,
+            "precision": 0.92906977,
+            "recall": 0.92852992,
+            "total": 3442
+          },
+          "physical_parameters": 97586,
+          "test": {
+            "accuracy": 0.92258065,
+            "f1": 0.92258065,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.07741935,
+            "precision": 0.92258065,
+            "recall": 0.92258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.278133
+        },
+        "dense": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.97850087,
+            "f1": 0.97855072,
+            "false_acceptance_rate": 0.02382336,
+            "false_rejection_rate": 0.0191749,
+            "precision": 0.97628687,
+            "recall": 0.9808251,
+            "total": 3442
+          },
+          "physical_parameters": 102116,
+          "test": {
+            "accuracy": 0.97516129,
+            "f1": 0.97521725,
+            "false_acceptance_rate": 0.02709677,
+            "false_rejection_rate": 0.02258065,
+            "precision": 0.97302505,
+            "recall": 0.97741935,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.051927
+        },
+        "gpt_style": {
+          "architecture_note": "GPT-style causal decoder; not pretrained GPT.",
+          "dev": {
+            "accuracy": 0.9596165,
+            "f1": 0.96081195,
+            "false_acceptance_rate": 0.07088902,
+            "false_rejection_rate": 0.00987798,
+            "precision": 0.93318729,
+            "recall": 0.99012202,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.95580645,
+            "f1": 0.9572276,
+            "false_acceptance_rate": 0.07741935,
+            "false_rejection_rate": 0.01096774,
+            "precision": 0.92740472,
+            "recall": 0.98903226,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.231795
+        },
+        "transformer": {
+          "architecture_note": "parameter-matched architectural baseline.",
+          "dev": {
+            "accuracy": 0.92446252,
+            "f1": 0.923843,
+            "false_acceptance_rate": 0.06740267,
+            "false_rejection_rate": 0.08367228,
+            "precision": 0.93148258,
+            "recall": 0.91632772,
+            "total": 3442
+          },
+          "physical_parameters": 96938,
+          "test": {
+            "accuracy": 0.91322581,
+            "f1": 0.91229214,
+            "false_acceptance_rate": 0.07612903,
+            "false_rejection_rate": 0.09741935,
+            "precision": 0.9222149,
+            "recall": 0.90258065,
+            "total": 3100
+          },
+          "trained_from_scratch": true,
+          "training_seconds": 0.240751
+        }
+      },
+      "parameter_max_to_min_ratio": 1.05341559,
+      "seed": 5,
+      "vocabulary_hash": "64f03560b1a88d61316eca06725c392842e2ad46758013767c411b3ae1b056a3"
+    }
+  ],
+  "profile": "smoke",
+  "protocol": "hga-english-ud-ewt-architecture-baselines-v1",
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "sentence_counts": {
+    "dev": 128,
+    "test": 128,
+    "train": 512
+  },
+  "source_hashes": {
+    "dev.conllu": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8",
+    "test.conllu": "fa024f43dc5da3c5ac02563bc9bd0e974f46cbb1560823976a8f342a37dc494a",
+    "train.conllu": "d68e06122a702464c613076523d56740f047e5bbe89dd90ec32737e04d952143"
+  }
+}

@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,booktabs,hyperref}
+\title{Hiper-Geometrik AI: Structured Bilinear Chains, Hash-Addressed Memory, and Reproducible Bilingual Controls}
+\author{Author metadata intentionally pending project-owner approval}
+\date{CKPT-000 artifact draft --- not submitted, not peer reviewed}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe an experimental research platform built around residual bilinear
+matrix sandwiches $A X B$ and a fixed-size hash-addressed memory. The work is
+presented with a strict distinction between physical trainable parameters,
+interaction upper bounds, and conceptual memory-address upper bounds. We
+provide source-hash-verified Turkish and English dependency-arc verification
+protocols, parameter-controlled architecture baselines, and experiment
+manifests. This is an artifact draft, not a claim of general language ability,
+scaling-law identification, or a peer-reviewed result.
+\end{abstract}
+
+\section{Scope and accounting}
+The default configuration contains 6,970,433 dense parameters and 33,554,432
+physically allocated sparse-table parameters. These quantities are physical
+parameters. They must not be conflated with the interaction upper bound
+$C_I^{UB}$ or conceptual memory address upper bound $C_M^{UB}$.
+
+\section{Bilinear chain theory}
+For one layer, vectorization gives
+\[
+ \operatorname{vec}(A X B) = (B^\top \otimes A)\operatorname{vec}(X).
+\]
+Therefore $\operatorname{rank}(B^\top\otimes A)=\operatorname{rank}(A)
+\operatorname{rank}(B)$. A generic full-rank factor pair can yield rank $n^2$,
+but the Kronecker-structured family does not equal the unrestricted
+$n^2\times n^2$ matrix family. Its generic single-layer manifold dimension is
+at most $2n^2-1$, accounting for the reciprocal scaling symmetry of the two
+factors.
+
+Without nonlinearity, depth collapses exactly:
+\[
+ A_2(A_1 X B_1)B_2=(A_2A_1)X(B_1B_2).
+\]
+Thus a claim that $n^{2K}$ is realized linear capacity is invalid. In the
+implemented model, SiLU, LayerNorm, and residual connections prevent this
+linear collapse; that fact alone is not a universality or generalization proof.
+A closed-form VC or pseudo-dimension for the full trainable SiLU/LayerNorm HGA
+chain is not established here. The only stated VC result concerns a fixed
+$n^2$-dimensional representation with an affine binary readout, whose VC
+upper bound is $n^2+1$.
+
+\section{Reproducible benchmarks}
+The Turkish protocol uses a pinned Turkish Web Treebank revision
+\texttt{40838e5cbe3f2882d4e768a3d782e6219e50b52a}; vendored CoNLL-U source
+files are SHA-256 verified. The English protocol uses pinned UD English EWT
+revision \texttt{4a4d77f599ea53cc405f85d0cec4b2f14f81d42b}; all official
+source split files and their CC-BY-SA-4.0 provenance are vendored and
+verified. Both protocols formulate the narrow task of distinguishing an
+annotated basic dependency arc from a deterministic same-sentence corrupted
+head.
+
+On a deterministic English EWT subset, five seeds compare dense, vanilla
+Transformer, BERT-style bidirectional, and GPT-style causal controls. The
+BERT-style and GPT-style models are small random-initialized models trained
+from scratch; they are not pretrained BERT/GPT checkpoints. All reported
+artifacts include source hashes, candidate hashes, seed-level values, means,
+and population standard deviations.
+
+\section{Scaling}
+A three-size HGA English EWT parameter probe is included as a diagnostic. Its
+parameter range is only 3.28$\times$ and it holds the task and short training
+schedule fixed. It is explicitly insufficient to identify a scaling law or to
+extrapolate to foundation-model behavior.
+
+\section{Limitations}
+The evidence is bilingual rather than broad multilingual coverage, is not an
+end-to-end language-model evaluation, and contains no pretrained LLM baseline.
+External submission, authorship confirmation, independent review, and
+peer-review outcomes are outside the capabilities of this source repository.
+
+\section*{Artifact availability}
+The repository provides \texttt{python -m hga research-benchmark},
+\texttt{python -m hga english-ewt}, and
+\texttt{python -m hga english-scaling}. Detailed protocol, provenance, and
+limitation statements are in the documentation tree.
+
+\end{document}

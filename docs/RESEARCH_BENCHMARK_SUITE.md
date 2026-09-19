@@ -12,6 +12,8 @@ Varsayılan davranış:
 
 - `smoke` profilini çalıştırır,
 - `1,2,3,4,5` seed'lerini kullanır,
+- Türkçe TWT bölümü yanında, hash-doğrulamalı İngilizce UD EWT mimari
+  kontrollerini (`dense`, `transformer`, `bert_style`, `gpt_style`) içerir,
 - her seed için ayrı `experiments/EXP-NNNN/` manifesti üretir,
 - çalışma dizinine `research_report.json`, `research_report.md` ve
   `research_report.html` yazar.

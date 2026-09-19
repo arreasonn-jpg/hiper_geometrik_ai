@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CKPT-003",
+  "step": 3,
+  "target_release": "v1.0.0-scale",
+  "status": "planning-infrastructure-only",
+  "generated_at": "2026-09-19",
+  "predecessor": {"checkpoint": "CKPT-002", "status": "exit-criteria-incomplete"},
+  "no_completed_scale_claim": true,
+  "scaling": {
+    "parameter_targets": [100000000, 300000000, 1000000000],
+    "architecture_targets": {"n": [512, 1024], "K": [8, 16]},
+    "distributed_options": ["PyTorch DDP", "FSDP", "DeepSpeed ZeRO-3"],
+    "required_optimizations": ["gradient checkpointing", "bf16 or fp16 overflow telemetry", "FlashAttention parity receipt"],
+    "hardware_targets": ["4x A100 80GB", "8x V100"],
+    "fit": {"formula": "loss = coefficient * axis ** exponent", "axes": ["parameters", "training_flops"], "r_squared_space": "log_loss_ols", "target": 0.95},
+    "required_per_run": ["dataset revision/hash", "tokenizer hash", "code SHA", "seed", "effective config", "topology", "parameter count", "FLOP method", "loss trace", "checkpoint SHA-256"]
+  },
+  "long_context": {
+    "targets": [4096, 16384, 65536, 1000000],
+    "mechanisms": ["dynamic KV cache", "LRU eviction", "quantization", "low-rank compression", "memory decay"],
+    "stability_gate": {"minimum_target_tokens": 1000000, "minimum_loss_observations": 3, "maximum_relative_loss_span": 0.05},
+    "rag_fairness_fields": ["corpus revision", "chunking", "embedding/retriever/index version", "retrieval budget", "generator", "latency policy", "metric direction"],
+    "current_implementation_limit": "1024-token pilot only"
+  },
+  "theory": {
+    "workstreams": ["VC/Rademacher generalization", "low-rank gradient flow", "saddle points", "sparse-memory information capacity", "addressability vs accessibility", "effective dimension vs generalization"],
+    "current_status": "no completed theorem or independent mathematical review",
+    "scope_ledger": "paper/ckpt003_theory_scope.tex"
+  },
+  "artifacts": {
+    "distributed_recipes": ["configs/ckpt003/deepspeed_zero3_bf16.json", "configs/ckpt003/fsdp_recipe.yaml"],
+    "scale_protocol": "hga/evaluation/scale_protocol.py",
+    "scale_tests": "tests/test_ckpt_003_scale_protocol.py",
+    "theory_scope": "paper/ckpt003_theory_scope.tex",
+    "models": "external GPU execution required; no checkpoints committed"
+  },
+  "external_requirements": ["approved/licensed data", "GPU cluster or cloud credits", "durable checkpoint storage", "independent reproduction team", "mathematical reviewer"],
+  "exit_criteria": ["completed 1B parameter training", "honestly reported scaling law series", "1M-token stability receipt", "reviewer-ready theory report"]
+}

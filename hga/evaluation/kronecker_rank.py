@@ -75,6 +75,21 @@ def theoretical_contract(n: int, k: int) -> Dict[str, Any]:
         "interaction_space_upper_bound": n ** (2 * k),
         "trainable_parameters": k * 2 * n * n,
         "max_operator_rank": n * n,
+        # Tek katmanlı çekirdek için Kronecker-variety'nin jenerik serbestlik
+        # derecesi 2n²−1'dir: (cA, B/c) aynı operatörü verir. Bu, LayerNorm,
+        # residual, decoder veya encoder parametrelerini içermez.
+        "single_layer_kronecker_manifold_dimension": 2 * n * n - 1,
+        "fixed_feature_affine_readout_vc_dimension_upper_bound": n * n + 1,
+        # SiLU + LayerNorm + parametre paylaşımı bulunan tam zincir için bu
+        # depoda doğrulanmış kapalı-form VC/pseudo-dimension teoremi YOKTUR.
+        # Parametre sayısını VC boyutu diye raporlamak bilimsel olarak yanlıştır.
+        "full_chain_vc_dimension": None,
+        "full_chain_vc_dimension_status": "NOT_ESTABLISHED",
+        "vc_note": (
+            "n²+1 yalnız sabit n²-boyutlu özellikler üzerindeki affine binary "
+            "readout için geçerlidir; tam trainable SiLU/LayerNorm zincirinin VC "
+            "boyutu değildir."
+        ),
         # Sözleşme: aşağıdakiler ÜST SINIRDIR, erişilen kapasite değildir.
         "upper_bound_is_reachable": False,
         "collapses_without_activation": True,

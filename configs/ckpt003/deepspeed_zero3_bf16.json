@@ -1,0 +1,20 @@
+{
+  "train_micro_batch_size_per_gpu": "auto",
+  "gradient_accumulation_steps": "auto",
+  "gradient_clipping": 1.0,
+  "bf16": {"enabled": true},
+  "fp16": {"enabled": false},
+  "zero_optimization": {
+    "stage": 3,
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "reduce_scatter": true,
+    "allgather_partitions": true
+  },
+  "activation_checkpointing": {
+    "partition_activations": true,
+    "contiguous_memory_optimization": true
+  },
+  "wall_clock_breakdown": true,
+  "ckpt003_note": "Template only. Pin DeepSpeed/PyTorch/CUDA versions and record effective config in every run manifest; do not use this file as evidence of a distributed run."
+}

@@ -50,6 +50,20 @@ paralel süreç aynı kimliği alamaz. Eğitim/inference süresi uygulanmayan sa
 protokollerde ilgili alan silinmez, `null` kalır; `total_seconds` her koşuda
 ölçülür.
 
+## CKPT-001 tek-komut foundation paketi
+
+```bash
+make reproduce
+# eşdeğeri: python -m hga reproduce-all
+```
+
+Bu çağrı Research Suite, English EWT architecture kontrolleri, HGA scaling
+probe'u ve foundation theory/diagnostic grid'ini bir üst `EXP-NNNN` receipt
+altında birleştirir. Kapsam, Docker/Conda kullanım ve fingerprint karşılaştırma
+kuralı: [`REPRODUCE_ALL.md`](REPRODUCE_ALL.md). Bu fingerprint zaman/hardware
+alanlarını dışlar; farklı makine byte-eş sonuç veya harici doğrulama iddiası
+oluşturmaz.
+
 ## Birleşik research protokolü
 
 ```bash

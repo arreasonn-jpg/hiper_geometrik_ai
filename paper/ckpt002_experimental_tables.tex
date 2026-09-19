@@ -1,0 +1,31 @@
+% CKPT-002 v0.3.0-experimental: fill only from immutable result cards.
+% Empty cells are intentional; this is not a results claim.
+\begin{table*}[t]
+\centering
+\caption{Comparative results template. Report both matching regimes separately;
+all p-values are raw / adjusted and every result includes a 95\% CI.}
+\label{tab:ckpt002-comparison-template}
+\begin{tabular}{llllllllllll}
+\toprule
+Dataset & Task & Regime & HGA & Baseline & Params & FLOPs & $d_z$ & Cliff's $\delta$ & 95\% CI & $p/p_{adj}$ & Outcome \\
+\midrule
+% Insert immutable result-card rows here.  Do not delete losses.
+\multicolumn{12}{c}{No CKPT-002 measurements recorded at publication of this template.} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{CKPT-002 ablation matrix status. Every configuration must be visible,
+including unrun cells.}
+\label{tab:ckpt002-ablation-template}
+\begin{tabular}{lllllll}
+\toprule
+$K$ & $n$ & Sparse memory & Activation & Normalization & Regime & Status \\
+\midrule
+% Rows are generated from docs/checkpoints/CKPT-002.json; no cells are run yet.
+\multicolumn{7}{c}{Planned matrix only; no cells have been measured.} \\
+\bottomrule
+\end{tabular}
+\end{table*}

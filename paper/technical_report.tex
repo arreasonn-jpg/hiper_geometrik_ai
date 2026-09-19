@@ -1,0 +1,207 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\usepackage{enumitem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\title{Technical Note on Bilinear Kronecker Chains and Hash-Addressed Memory}
+\author{Author metadata intentionally pending project-owner approval}
+\date{CKPT-001 draft --- not submitted, not peer reviewed}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This technical note separates exact algebraic facts about the map
+$X\mapsto AXB$ from finite numerical diagnostics and idealized hash models.
+For square matrices, vectorization identifies a bilinear layer with a
+Kronecker-structured linear operator. We characterize this linear function
+class, prove exact collapse of an activation-free chain, derive local gradient
+identities, and state carefully what rank and spectral effective dimension do
+not establish. We then give a reference occupancy model for a fixed physical
+hash table and distinguish the token-context input namespace from the
+implementation's 31-bit prehash key space. The note does not prove a VC or
+pseudo-dimension formula for the full SiLU/LayerNorm/residual HGA model, global
+optimization convergence, uniform hashing, scaling laws, or general language
+capability.
+\end{abstract}
+
+\section{Scope, notation, and claim boundary}
+Let $\mathbb F$ be $\mathbb R$ or $\mathbb C$, and let $M_n(\mathbb F)$ denote
+$n\times n$ matrices. A linear bilinear-core layer has factors $A,B\in
+M_n(\mathbb F)$ and maps
+\begin{equation}\label{eq:layer}
+  T_{A,B}:X\longmapsto AXB.
+\end{equation}
+The use of the word ``bilinear'' here concerns its parameterization in the two
+factors; for fixed $A,B$, $T_{A,B}$ is a linear map in $X$. The implemented HGA
+network also contains nonlinearities, normalization, residual paths, encoders,
+decoders and attention. Results for \eqref{eq:layer} apply to that core only
+where their hypotheses are met.
+
+We distinguish four notions throughout: (i) the number of physically stored
+trainable scalars; (ii) the dimension or rank of a linear operator; (iii) a
+numerical spectral statistic of one finite realization; and (iv) a statistical
+capacity such as VC dimension. None implies the others without a theorem.
+
+\section{Exact function class of one Kronecker layer}
+Fix column-major vectorization. The standard identity is
+\begin{equation}\label{eq:vec}
+  \operatorname{vec}(AXB)=(B^\top\otimes A)\operatorname{vec}(X).
+\end{equation}
+Thus the represented linear-operator family is
+\[
+  \mathcal K_n=\{B^\top\otimes A:A,B\in M_n(\mathbb F)\}
+  \subsetneq M_{n^2}(\mathbb F),\qquad n>1.
+\]
+It contains $2n^2$ factor coordinates, while an unrestricted $n^2\times n^2$
+operator contains $n^4$ coordinates. Factor coordinates are not globally
+identifiable: $(cA,c^{-1}B)$ gives the same nonzero operator for every
+$c\ne0$.
+
+\begin{proposition}[Rank identity]
+For all $A,B\in M_n(\mathbb F)$,
+\[
+ \operatorname{rank}(B^\top\otimes A)=\operatorname{rank}(A)\operatorname{rank}(B).
+\]
+In particular, full-rank factors produce a rank-$n^2$ operator.
+\end{proposition}
+\begin{proof}
+Choose rank normal forms $A=P\,\mathrm{diag}(I_r,0)\,Q$ and
+$B=R\,\mathrm{diag}(I_s,0)\,S$ with invertible outer factors. The Kronecker
+product of the outer factors is invertible. The middle Kronecker product is
+diagonal up to permutation and contains exactly $rs$ ones. Transposition does
+not change rank.
+\end{proof}
+
+Full operator rank does not remove the structural restriction: a generic dense
+operator is not a single Kronecker product. On the nonzero generic stratum,
+the reciprocal-scaling orbit has dimension one, hence the corresponding
+Kronecker-one manifold has dimension $2n^2-1$. This is a dimension statement,
+not a claim that all singular points have the same local dimension.
+
+\begin{remark}[A precise fixed-feature classifier statement]
+If a representation $z\in\mathbb R^{n^2}$ is fixed and only an affine binary
+readout is trained, its VC dimension is at most $n^2+1$. The representation is
+not fixed in a trainable HGA chain, so this fact cannot be promoted to a VC
+bound for the entire architecture.
+\end{remark}
+
+\section{Depth and activation-free collapse}
+\begin{proposition}[Exact collapse]
+For factors $(A_i,B_i)_{i=1}^K$ and no intervening operation,
+\[
+ T_{A_K,B_K}\circ\cdots\circ T_{A_1,B_1}(X)
+ =\left(A_K\cdots A_1\right)X\left(B_1\cdots B_K\right).
+\]
+\end{proposition}
+\begin{proof}
+For two layers,
+$A_2(A_1XB_1)B_2=(A_2A_1)X(B_1B_2)$. Induction proves the general case.
+\end{proof}
+
+Consequently, in this linear setting $K$ does not create a family of arbitrary
+$n^2\times n^2$ operators, and $n^{2K}$ is not a realized linear dimension or
+parameter count. A pointwise nonlinearity makes the composite generally
+nonlinear and invalidates the equality, but this alone proves neither
+universal approximation nor a benchmark advantage. The repository's numerical
+least-squares residual for a SiLU chain is solely a test that a sampled map is
+not represented by one linear operator.
+
+\section{Spectrum and effective dimension}
+For a matrix $W$ with singular values $\sigma_i$, the numerical rank depends on
+a tolerance. Two continuous descriptive quantities used in the diagnostic are
+\[
+ d_{\mathrm{PR}}=\frac{(\sum_i\sigma_i)^2}{\sum_i\sigma_i^2},\qquad
+ d_{\mathrm{entropy}}=\exp\left(-\sum_i p_i\log p_i\right),\quad
+ p_i=\frac{\sigma_i^2}{\sum_j\sigma_j^2}.
+\]
+They are functions of a particular initialization, learned state, precision and
+measurement convention. A seeded $n=16$ single-layer diagnostic reports
+$d_{\mathrm{entropy}}\approx98.379852$ while the exact rank is 256. This is
+useful evidence of a nonuniform spectrum in that run; it is not a theorem that
+all $n=16$ models have effective dimension 98.38, nor a low-rank proof.
+
+The executable $n\times K$ grid records both activation-free collapse and a
+SiLU linear-proxy residual. It must be reported with its seed and code version.
+
+\section{Differentials, gradients, and optimization geometry}
+The Fr\'echet derivative of \eqref{eq:layer} in an input perturbation $H$ is
+\[
+ D T_{A,B}[H]=AHB.
+\]
+For the Frobenius norm its induced norm is
+$\|T_{A,B}\|=\|A\|_2\|B\|_2$. Therefore an activation-free chain has exact
+operator-norm product $\prod_i\|A_i\|_2\|B_i\|_2$. This offers a transparent
+mechanism for vanishing or exploding local sensitivities, but is only an upper
+bound once nonlinearities or residual paths intervene.
+
+Let $G=\nabla_Y L$ for $Y=AXB$. Matrix calculus gives
+\[
+ \nabla_A L=G B^\top X^\top,\qquad
+ \nabla_B L=X^\top A^\top G.
+\]
+The factorization is non-convex and has the scale symmetry
+$(A,B)\mapsto(cA,c^{-1}B)$. Along the smooth orbit
+$(e^tA,e^{-t}B)$, the represented single-layer operator is invariant. At a
+stationary point this provides a flat tangent direction in the functional
+objective. It does not characterize all Hessian eigenvalues, prove absence of
+bad local minima, or extend unchanged through normalization and residual
+blocks. The repository therefore measures finite gradient norms and finiteness
+on a named grid rather than claiming a global optimization-landscape theorem.
+
+\section{Hash-addressed sparse memory}
+Let $V$ be a vocabulary size and $w$ a context width. There are $V^w$ possible
+input strings, whose log-two count is $w\log_2 V$. This is an input namespace,
+not a collision-free physical address space. The current implementation first
+maps a context to a 31-bit key; therefore at most $2^{31}$ prehash classes can
+be distinguished before table addressing. For $t$ physical address tables of
+$m$ rows, a conservative signature-count upper bound is
+\[
+ \min(V^w,2^{31},m^t).
+\]
+The actual tables share the prehash key, so this is an upper bound rather than
+a proof that every signature is attained or independent.
+
+For comparison only, suppose $q$ distinct contexts are independently and
+uniformly assigned to $M$ signature buckets. Then
+\[
+ \mathbb E[\mathrm{occupied}]=M\left(1-\left(1-\frac1M\right)^q\right),
+ \quad
+ \Pr(\mathrm{no\ collision})=\prod_{i=0}^{q-1}\left(1-\frac iM\right),
+\]
+and a chosen context has idealized isolation probability
+$(1-1/M)^{q-1}$. These are occupancy reference formulas, not an end-to-end
+recall guarantee. Retrieval also depends on trained embedding values,
+optimization, repeated-query frequencies and the real hash distribution.
+Observed collisions must be measured on actual contexts with the implementation
+instrumentation.
+
+A physical table with $tm$ rows, embedding width $d$, and $b$ storage bits per
+scalar allocates $tmdb$ bits. This is a storage accounting quantity, not a
+semantic information-theory capacity: floating-point encoding, learned data
+distribution and accessible/retrievable facts have different meanings.
+
+\section{Reproducibility and falsifiability}
+The companion executable bundle seeds Python, NumPy, PyTorch and CUDA, disables
+cuDNN benchmarking, requests deterministic PyTorch kernels, records runtime
+metadata, and writes per-run manifests. Process-start controls
+\texttt{PYTHONHASHSEED} and \texttt{CUBLAS\_WORKSPACE\_CONFIG} are exported by
+the Make and Docker entry points. An unavailable deterministic CUDA operation
+is intended to fail visibly. Hardware timings, timestamps, identifiers, and
+some cross-device floating-point details are not part of the deterministic
+value fingerprint.
+
+\section{Open obligations}
+This is a mathematical and engineering draft awaiting independent review. A
+formal full-network complexity theorem would require explicit assumptions on
+SiLU, LayerNorm, residual/attention paths, parameter sharing and the relevant
+input domain. A collision theorem would require analysis or testing of the
+actual hash distribution. A second-machine container reproduction, GHCR
+publication, author approval and peer review are external actions, not source
+code facts.
+
+\end{document}

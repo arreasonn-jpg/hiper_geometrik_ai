@@ -1,0 +1,82 @@
+{
+  "capacity_contract": {
+    "interaction_upper_bound": "C_I^UB",
+    "memory_address_upper_bound": "C_M^UB",
+    "physical_trainable_parameters": "P",
+    "prohibition": "P, C_I^UB ve C_M^UB birbirinin yerine kullanılamaz; üst sınırlar parametre sayısı değildir."
+  },
+  "change_rule": "Bu checkpointin ölçüm ve iddia alanları yeni deneyle genişletilebilir; hiçbir üst sınır gerçek parametre, VC boyutu veya genel dil yeteneği olarak yeniden etiketlenemez.",
+  "checkpoint": "CKPT-000",
+  "completion_evidence": {
+    "bilingual_benchmarks": "docs/BILINGUAL_BENCHMARK.md",
+    "effective_rank_and_collapse": "docs/KRONECKER_RANK_VE_NK_TARAMASI.md",
+    "english_transformer_bert_gpt_style_baselines": "docs/ENGLISH_EWT_BASELINES.md",
+    "hga_parameter_scaling_probe": "docs/HGA_ENGLISH_SCALING_PROBE.md",
+    "manuscript_draft": "paper/README.md",
+    "theory_framework": "docs/THEORETICAL_FRAMEWORK.md",
+    "english_section_in_research_suite": "docs/RESEARCH_BENCHMARK_SUITE.md",
+    "external_review_and_submission_gate": "docs/PUBLICATION_CHECKLIST.md",
+    "independent_reproduction_guide": "CONTRIBUTING.md"
+  },
+  "implementation_evidence": {
+    "bilinear_kronecker_chain": "mimari/kuresel_bag.py",
+    "hashed_sparse_empty_set_memory": "mimari/seyrek_tablo.py",
+    "research_benchmark_single_command": "python -m hga research-benchmark",
+    "research_suite_protocol": "docs/RESEARCH_BENCHMARK_SUITE.md",
+    "seed_manifest_protocol": "hga/evaluation/experiment.py",
+    "english_ewt_protocol": "hga/evaluation/english_ewt.py",
+    "ewt_provenance_and_license": "hga/evaluation/datasets/ewt_v1/PROVENANCE.json"
+  },
+  "known_limitations": [
+    "Tam HGA zinciri için kapalı-form VC/pseudo-dimension teoremi kurulmuş değildir; docs/THEORETICAL_FRAMEWORK.md bunu açıkça NOT_ESTABLISHED olarak işaretler.",
+    "Bilingual coverage Türkçe TWT ve İngilizce UD EWT ile sınırlıdır; geniş çok dilli pretraining, cross-lingual transfer ve üretim ölçülmemiştir.",
+    "BERT-style/GPT-style kontroller küçük, sıfırdan eğitilen mimarilerdir; pretrained BERT/GPT checkpoint kıyası değildir.",
+    "HGA parameter-scaling probe yalnız 3.28× boyut aralığındadır; scaling law iddiası özellikle engellenmiştir.",
+    "ArXiv yükleme ve hakem değerlendirmesi harici yazar/kurum süreçleridir; depoda yazar metadatası bekleyen dürüst preprint taslağı bulunur ama yayınlanmış eser iddiası yoktur.",
+    "Tek kişi geliştirme riski kodla ortadan kalkmaz; CI, manifest ve contribution sözleşmesi yalnız azaltıcı kontrollerdir."
+  ],
+  "metrics": {
+    "dense_params": 6970433,
+    "license": "Apache-2.0",
+    "research_suite_default_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "sparse_physical_params": 33554432,
+    "statistical_reporting": "mean ± population standard deviation",
+    "total_trainable_params": 40524865
+  },
+  "parent_revision": "8d91f75bbadff1372b9604c70ab9896c8889a8d0",
+  "purpose": "Sonraki tüm değişimlerin karşılaştırılacağı, iddia sınırları açıkça belirtilmiş prototip referansı.",
+  "release": "v0.1.0-prototype",
+  "release_label_note": "v0.1.0-prototype bir araştırma checkpoint etiketidir; mevcut Python dağıtım sürümünü yeniden numaralandırmaz.",
+  "release_tag": "v0.1.0-prototype",
+  "schema_version": 1,
+  "status": "artifact-complete-external-review-pending",
+  "twt_v1": {
+    "provenance_manifest": "hga/evaluation/datasets/twt_v1/PROVENANCE.json",
+    "upstream_repository": "https://github.com/google-research-datasets/turkish-treebanks",
+    "upstream_revision": "40838e5cbe3f2882d4e768a3d782e6219e50b52a",
+    "web_conllu_sha256": "d6f92b12b74f367a36e30dd3d644d7a0bb01a991584602e6e69f1191664f86bf",
+    "wiki_conllu_sha256": "58f049fae8d0653ba0940a58168c17c7cebbc50f88cad2985d12d34ac1b9acde"
+  },
+  "validation": {
+    "architecture": "python test_mimari.py",
+    "container": "docker build -t hga:v0.1.0-prototype .",
+    "integrity_tests": "pytest -q tests/test_ckpt_000_baseline.py tests/scientific/test_real_turkish_benchmark.py tests/test_experiment_manifest.py",
+    "suite": "docker run --rm -v \"$PWD/artifacts:/artifacts\" hga:v0.1.0-prototype research-benchmark --experiment-root /artifacts/experiments --out /artifacts/research_report.json --markdown /artifacts/research_report.md --html /artifacts/research_report.html",
+    "full_test_suite": "python -m pytest",
+    "wheel_ewt_data": "python -m build && install wheel from a clean directory; prepare_english_ewt_task() must return the pinned dataset hash",
+    "latest_suite_evidence": "2026-09-19: smoke profile, seeds 1..5, all 10 benchmark sections including English NLP Controls completed (local execution; results intentionally not promoted to a publication claim)."
+  },
+  "ewt_v1": {
+    "provenance_manifest": "hga/evaluation/datasets/ewt_v1/PROVENANCE.json",
+    "upstream_repository": "https://github.com/UniversalDependencies/UD_English-EWT",
+    "upstream_revision": "4a4d77f599ea53cc405f85d0cec4b2f14f81d42b",
+    "license": "CC-BY-SA-4.0",
+    "dataset_hash": "2f852e91da70301e5a572f717b3e9d6998d14ca6bf38daa8bb77f4baa5b3ddd3"
+  }
+}
