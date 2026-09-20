@@ -187,7 +187,7 @@ def compare_models(n_base: int = 4, depth: int = 3, expansion: int = 2,
     flat = FlatKroneckerNet(n_base, depth, num_classes)
 
     # Dense MLP: flatten(n_base²) → gizli boyut hierarchical ile eşit
-    dense = DenseMLP(n=n_base, hidden=final_size ** 2,
+    dense = DenseMLP(n=n_base, hidden=128,
                      depth=2, num_classes=num_classes)
 
     results: List[TrainResult] = []
@@ -214,9 +214,9 @@ if __name__ == "__main__":
     print("=" * 80)
     print()
 
-    for n_base in (4, 8):
-        print(f"\n### n_base={n_base}, depth=3, expansion=2\n")
-        report = compare_models(n_base=n_base, depth=3, expansion=2,
+    for n_base, expansion in [(4, 2), (4, 3), (4, 4)]:
+        print(f"\n### n_base={n_base}, depth=3, expansion={expansion}\n")
+        report = compare_models(n_base=n_base, depth=3, expansion=expansion,
                                 num_classes=8, n_train=2000,
                                 n_test=500, epochs=200)
         print()
