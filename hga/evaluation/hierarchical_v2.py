@@ -173,7 +173,12 @@ def run_hierarchy(mode: str, n_base: int = 16, depth: int = 3,
 
         if mode == "sparse":
             A, B = _make_factors(torch, n_in, n_out, rank_budget)
-            params = (A.numel() + B.numel())
+            # Gerçek parametre sayısı: düşük rank faktörleri
+            if rank_budget > 0 and rank_budget < min(n_in, n_out):
+                r = min(rank_budget, n_in, n_out)
+                params = r * (n_in + n_out) * 2  # U_A + V_A + U_B + V_B
+            else:
+                params = A.numel() + B.numel()
             # Düşük rank FLOPs: A @ X @ B
             flops = n_out * n_in * n_in + n_out * n_out * n_in
         else:
