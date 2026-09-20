@@ -22,3 +22,8 @@ Hiyerarşik yapı her ölçekte sabit ~27× kazanç sağlıyor.
 
 Verimlilik 11.5× düşüyor. Low-rank seyreklik doğru araç değil.
 Alternatifler: block-sparse, MoE, quantization.
+
+## Sonuç
+
+Vizyonun %80'i doğru: hiyerarşik genişleme ÇALIŞIYOR.
+Seyreklik için farklı strateji gerekli (low-rank değil).
