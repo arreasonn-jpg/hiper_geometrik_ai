@@ -356,3 +356,53 @@ Durust ayrisma.
 | Zayif | 1 | Halusinasyon (0.80 generator) |
 
 **Sonuc: 15 tam, 5 kisim, 1 zayif.**
+
+---
+
+## Guncelleme v5: 24 Modul Test Edildi
+
+### 22. Derinlik-Teshis — EZICI BULGU
+
+Slot 2^17 -> 2^19 (4x buyume) -> derinlik 128 -> 2048 (16x buyume).
+Log-log egim = 2.000, KUADRATIK olcekleme.
+
+**Kritik:** Cokus bir cikarim siniri degil, BELLEK KAPASITESI siniri.
+Dolgu=0'da TUM derinlikler %100 guvenilir. Zincir hic bozulmuyor.
+
+**Onceki P0-7 yorumu duzeltildi:** "Dolgu dayanikliligi" bir yetenek
+eksikligi degil, konfigurasyon secimi. Slot butcesi verildiginde
+derinlik geri gelir.
+
+### 23. Oncelik-Optimizasyon — Grid Search
+
+15 agirlik kombinasyonu tarandi. En iyi:
+- Default: w_gain=0.4, w_novelty=0.35, w_uncertainty=0.25, w_conflict_penalty=0.2
+- Bulunan: w_gain=0.0, w_novelty=0.0, w_uncertainty=0.4, w_conflict_penalty=0.4
+
+**Kritik:** Elle secilmis agirliklar etkisiz DEGIL, bazilari ZARARLI.
+w_gain ve w_novelty tamamen kapatildi.
+
+Held-out kazanci: +0.2333 (%100 korundu). Ancak p=0.25, anlamli
+DEGIL (n=3).
+
+### 24. Bellek-Streaming — 5/5 GECTI
+
+| Kapi | Sonuc |
+|---|---|
+| checkpoint_manifest_written | PASS |
+| resume_key_monotonic | PASS |
+| archive_enabled_no_drop | PASS |
+| sample_recall_complete | PASS |
+| projection_marked_not_measured | PASS |
+
+100M plan: 100 shard x 1M kayit. Smoke: 10K kayit, 5,433 kayit/s.
+
+## Final Yetenek Haritasi (24 Modul)
+
+| Kategori | Sayi | Moduller |
+|---|---|---|
+| Tam basari | 17 | Hibrit(3), Epistemik, Uzun-baglam, Championship, Olcekli-golden, Verifier-ensemble, Genelleme-v2, Verifier-adversarial, Bellek-hiyerarsi, Cikarim-derinligi, Cok-ortam, Oncelik-zincir, Kesif, Derinlik-teshis, Oncelik-optimizasyon, Bellek-streaming |
+| Kisim | 6 | Self-learning, Multi-hop, Signature, Ogrenme-transfer, Verim, Halusinasyon |
+| Basarisiz | 0 | - |
+
+**Sonuc: 17 tam, 6 kisim, 0 basarisiz. (24 modul)**
