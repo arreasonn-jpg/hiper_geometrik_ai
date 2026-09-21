@@ -37,14 +37,28 @@ class ExperienceGenerator:
         self._sayac = 0
 
     # ── Özne/nesne havuzu ────────────────────────────────────────────────
-    def _havuz(self, entities: List[Entity], izinli_tipler: List[str]
+    def _havuz(self, entities: List[Entity], izinli_tipler: List[str],
+               gerekli_ozellikler: Optional[dict] = None, store=None
                ) -> List[Entity]:
-        """İzinli tipler boşsa herkes; doluysa yalnız o tipler."""
-        if not izinli_tipler:
-            return entities
-        izinli = set(izinli_tipler)
-        return [e for e in entities if e.entity_type in izinli]
-
+        """İzinli tipler + zorunlu özellikler (property) filtresi."""
+        if izinli_tipler:
+            izinli = set(izinli_tipler)
+            adaylar = [e for e in entities if e.entity_type in izinli]
+        else:
+            adaylar = list(entities)
+        if gerekli_ozellikler and store is not None:
+            filtreli = []
+            for e in adaylar:
+                uygun = True
+                for ad, hedef in gerekli_ozellikler.items():
+                    pv = store.properties.al(e.entity_id, ad)
+                    if pv is None or abs(pv.deger - hedef) > 1e-6:
+                        uygun = False
+                        break
+                if uygun:
+                    filtreli.append(e)
+            adaylar = filtreli
+        return adaylar
     def _aday(self, subject: Entity, relation_id: str, object_: Entity
               ) -> ExperienceCandidate:
         self._sayac += 1
@@ -75,9 +89,9 @@ class ExperienceGenerator:
         adaylar: List[ExperienceCandidate] = []
 
         for r in iliskiler:
-            o_havuzu = self._havuz(varliklar, r.object_types) if self.tip_filtresi \
+            o_havuzu = self._havuz(varliklar, r.object_types, r.requires_object_props, store) if self.tip_filtresi \
                 else varliklar
-            s_havuzu = self._havuz(varliklar, r.subject_types) if self.tip_filtresi \
+            s_havuzu = self._havuz(varliklar, r.subject_types, r.requires_subject_props, store) if self.tip_filtresi \
                 else varliklar
             for s in s_havuzu:
                 for o in o_havuzu:
