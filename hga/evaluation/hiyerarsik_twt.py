@@ -171,6 +171,11 @@ def run_hiyerarsik_twt(
     steps: int = 32,
     batch: int = 512,
     lr: float = 3e-3,
+    hga_n: int = 26,
+    layers: int = 2,
+    expansion: int = 2,
+    hiy_eq_n: int = 18,
+    min_distance: int = 0,
     out: str = "artifacts/hiyerarsik_twt_sonuclari.json",
     markdown: str = "artifacts/hiyerarsik_twt_sonuclari.md",
 ) -> Dict[str, Any]:
@@ -186,7 +191,24 @@ def run_hiyerarsik_twt(
 
     print("[1/4] TWT verisi yükleniyor...")
     task_data = prepare_real_turkish_task()
-    print(f"    train={len(task_data.train)}, dev={len(task_data.dev)}, test={len(task_data.test)}")
+    print(f"    (filtresiz) train={len(task_data.train)}, dev={len(task_data.dev)}, test={len(task_data.test)}")
+
+    # Uzun mesafe filtresi (frozen dataclass güvenli)
+    if min_distance > 0:
+        from dataclasses import replace
+        def _dist_ok(c):
+            return abs(c.dependent_id - c.head_id) >= min_distance
+        task_data = replace(
+            task_data,
+            train=[c for c in task_data.train if _dist_ok(c)],
+            dev=[c for c in task_data.dev if _dist_ok(c)],
+            test=[c for c in task_data.test if _dist_ok(c)],
+        )
+        print(f"    (min_dist>={min_distance}) train={len(task_data.train)}, "
+              f"dev={len(task_data.dev)}, test={len(task_data.test)}")
+
+        if len(task_data.train) < 100:
+            print("    ⚠️ Filtre çok agresif, train seti küçük!")
 
     print("[2/4] Vocabulary kuruluyor...")
     vocab = ArcFeatureVocabulary.fit(task_data.train)
@@ -202,16 +224,14 @@ def run_hiyerarsik_twt(
     # Config (twt_baselines ile aynı)
     EMB_DIM = 16
     SEQ_LEN = 6
-    LAYERS = 2
 
     # Senaryo A: Zengin hiyerarşik (n_base=26, 2x param)
-    flat_cls = _make_flat_hga(vocab_size, n=26, layers=LAYERS,
+    flat_cls = _make_flat_hga(vocab_size, n=hga_n, layers=layers,
                                embedding_dim=EMB_DIM, seq_len=SEQ_LEN)
-    hiy_rich_cls = _make_hiyerarsik_hga(vocab_size, n=26, layers=LAYERS,
-                                         expansion=2, embedding_dim=EMB_DIM, seq_len=SEQ_LEN)
-    # Senaryo B: Eşit parametre (n_base=18, param ≈ flat)
-    hiy_eq_cls = _make_hiyerarsik_hga(vocab_size, n=18, layers=LAYERS,
-                                       expansion=2, embedding_dim=EMB_DIM, seq_len=SEQ_LEN)
+    hiy_rich_cls = _make_hiyerarsik_hga(vocab_size, n=hga_n, layers=layers,
+                                         expansion=expansion, embedding_dim=EMB_DIM, seq_len=SEQ_LEN)
+    hiy_eq_cls = _make_hiyerarsik_hga(vocab_size, n=hiy_eq_n, layers=layers,
+                                       expansion=expansion, embedding_dim=EMB_DIM, seq_len=SEQ_LEN)
 
     models = {
         "flat_hga": flat_cls,
@@ -265,6 +285,7 @@ def run_hiyerarsik_twt(
         "protocol": "hiyerarsik_twt_v1",
         "seeds": seeds,
         "profile": profile,
+        "min_distance": min_distance,
         "vocab_size": vocab_size,
         "train_size": len(task_data.train),
         "test_size": len(task_data.test),
@@ -282,6 +303,7 @@ def run_hiyerarsik_twt(
         "",
         f"- Seeds: {seeds}",
         f"- Profile: {profile}",
+        f"- Min distance: {min_distance}",
         f"- Train/Test: {len(task_data.train)}/{len(task_data.test)}",
         f"- Vocab: {vocab_size}",
         "",
@@ -327,6 +349,15 @@ if __name__ == "__main__":
     parser.add_argument("--seeds", default="1,2,3")
     parser.add_argument("--steps", type=int, default=32)
     parser.add_argument("--profile", default="smoke")
+    parser.add_argument("--hga-n", type=int, default=26)
+    parser.add_argument("--layers", type=int, default=2)
+    parser.add_argument("--expansion", type=int, default=2)
+    parser.add_argument("--min-distance", type=int, default=0)
+    parser.add_argument("--out", default="artifacts/hiyerarsik_twt_sonuclari.json")
+    parser.add_argument("--markdown", default="artifacts/hiyerarsik_twt_sonuclari.md")
     args = parser.parse_args()
     seeds = [int(s) for s in args.seeds.split(",")]
-    run_hiyerarsik_twt(seeds=seeds, steps=args.steps, profile=args.profile)
+    run_hiyerarsik_twt(seeds=seeds, steps=args.steps, profile=args.profile,
+                       hga_n=args.hga_n, layers=args.layers, expansion=args.expansion,
+                       min_distance=args.min_distance,
+                       out=args.out, markdown=args.markdown)
