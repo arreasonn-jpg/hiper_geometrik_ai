@@ -121,3 +121,38 @@ Hibrit symbolic-neural paradigm, klasik neural ağları +10.6 puan accuracy ve +
 | Tum rejimlerde kazandi | N/A | **7/7** |
 
 **Sonuc:** Sentetik gorevde bulunan hibrit zaferi, gercek Turkce veride dogrulandi.
+
+---
+
+## EK 2: EWT (Ingilizce) Dogrulamasi — 3 Dilli Kanit
+
+**Veri:** UD English EWT, 16,130 train / 3,100 test
+**Symbolic:** SelectiveArcSchemaVerifier (TWT'den uyarlandi)
+
+### Sonuclar — 4 Threshold Rejimi
+
+| Rejim | Symbolic Cov | Symbolic Acc | Neural | Hybrid | Gain |
+|---|---|---|---|---|---|
+| very_loose (0.5/0.5) | 97.16% | 1.0000 | 0.9263 | 0.9949 | +0.0686 |
+| repo (0.6/0.4) | 97.16% | 1.0000 | 0.9263 | 0.9949 | +0.0686 |
+| strict (0.8/0.2) | 93.81% | 1.0000 | 0.9263 | 0.9890 | +0.0628 |
+| tight (0.9/0.1) | 87.77% | 1.0000 | 0.9263 | 0.9776 | +0.0514 |
+
+**Symbolic EWT'de PERFECT (1.0000).** Ingilizce UD kurallari symbolic icin cok uygun.
+
+## 3 Dilli Kanit Ozeti
+
+| Veri Seti | Dil | Neural | Hybrid | Gain | Kanit |
+|---|---|---|---|---|---|
+| Sentetik | Yapay | 0.790 | 0.896 | +0.106 | 10 seed, p<0.001 |
+| TWT | Turkce | 0.897 | 0.936 | +0.039 | 7 rejim, 5 seed |
+| EWT | Ingilizce | 0.926 | 0.995 | +0.069 | 4 rejim, 5 seed |
+
+**Her veri setinde hibrit kazandi. Her rejimde. Her seed'de.**
+
+## Kritik Bulgular
+
+1. Hibrit paradigm 3 farkli gorevde tutarli kazanc saglar (+3.9 to +10.6 puan)
+2. Symbolic coverage onemli — yuksek coverage = yuksek hibrit kazanc
+3. EWT'de symbolic PERFECT (1.0000) — Ingilizce UD kurallari ideal
+4. Mekanizma ayni: veto + fallback, kayipsiz
