@@ -642,3 +642,26 @@ gecti:
 - Positive: config-matched -> ok=True
 
 Bu, araci %100 dogruluyor.
+
+---
+
+## Guncelleme v11: Generator Property Filter Fix
+
+### Kritik Duzeltme: Generator Property-Aware
+
+**Sorun:** Generator yalnizca `entity_type` filtreliyordu. Iliskilerin
+`requires_object_props` ve `requires_subject_props` alanlari yok sayiliyordu.
+
+**Fix:** `_havuz` genisletildi, `uret` cagrisi guncellendi.
+
+**Test Sonuclari (kontrolu domain, 40 entity):**
+
+| Mod | Aday | Yanlis | Halusinasyon |
+|---|---|---|---|
+| Filtresiz | 1,560 | 1,460 | **93.6%** |
+| **Filtreli** | **100** | **0** | **0.0%** |
+
+**Etki:** 15.6x daha az aday, sifir halusinasyon.
+
+**Sinir:** Aritmetik domainde property yok, etki sifir. Dogal dil ve
+property-zengin domainlerde maksimum fayda.
