@@ -676,3 +676,23 @@ ariyordu. Repo'da `requirements-lock.txt` (cizgili + .txt) vardi.
 **Fix:** Standart isim `requirements.lock` ile kopya olusturuldu.
 
 **Sonuc:** `lockfile_present` kapi artik PASS. Reproducibility tam.
+
+---
+
+## Guncelleme v13: Self-Learning Yield Fix
+
+**Degisiklik:** `negatives_per_fact` default **7 -> 3**:
+- `hga/experience/self_learning.py:260`
+- `hga/__main__.py` CLI
+
+**NOT:** `run_self_training_collapse_test` (satir 546) **degistirilmedi** —
+kasitli stress testi, yuksek negatif orani gerekli.
+
+**Sonuc (3 seed, 50 cycle):**
+| Metrik | Once | Sonra |
+|---|---|---|
+| Yield | 0.131 | **0.249** |
+| K0->K50 | 100->518 | 100->903 |
+| FAR | 0.000 | 0.000 |
+
+**Kazanc:** +92% yield, sifir FAR kaybi.
