@@ -1,0 +1,467 @@
+{
+  "abstention_cases": [
+    {
+      "abstained": true,
+      "axis": "unseen_relation",
+      "predicted_relations": [],
+      "sentence": "Öğretmen öğrencilere kitabı okuttu.",
+      "skipped_reasons": [
+        "cati_eki_uye_yapisi_belirsiz:okut<-oku"
+      ]
+    },
+    {
+      "abstained": true,
+      "axis": "unseen_relation",
+      "predicted_relations": [],
+      "sentence": "Ali kitabı sattırdı.",
+      "skipped_reasons": [
+        "cati_eki_uye_yapisi_belirsiz:sattir<-sat"
+      ]
+    }
+  ],
+  "axes": {
+    "seen": {
+      "axis": "seen",
+      "c_g_v2": 1.0,
+      "composition_accuracy": 1.0,
+      "composition_correct": 3,
+      "entity_discovery_accuracy": 1.0,
+      "property_accuracy": 1.0,
+      "relation_induction_accuracy": 1.0,
+      "temporal_accuracy": 1.0,
+      "total": 3,
+      "type_accuracy": 1.0
+    },
+    "unseen_both": {
+      "axis": "unseen_both",
+      "c_g_v2": 1.0,
+      "composition_accuracy": 1.0,
+      "composition_correct": 1,
+      "entity_discovery_accuracy": 1.0,
+      "property_accuracy": 1.0,
+      "relation_induction_accuracy": 1.0,
+      "temporal_accuracy": 1.0,
+      "total": 1,
+      "type_accuracy": 1.0
+    },
+    "unseen_entity": {
+      "axis": "unseen_entity",
+      "c_g_v2": 1.0,
+      "composition_accuracy": 1.0,
+      "composition_correct": 4,
+      "entity_discovery_accuracy": 1.0,
+      "property_accuracy": 1.0,
+      "relation_induction_accuracy": 1.0,
+      "temporal_accuracy": 1.0,
+      "total": 4,
+      "type_accuracy": 0.5
+    },
+    "unseen_relation": {
+      "axis": "unseen_relation",
+      "c_g_v2": 1.0,
+      "composition_accuracy": 1.0,
+      "composition_correct": 4,
+      "entity_discovery_accuracy": 1.0,
+      "property_accuracy": 1.0,
+      "relation_induction_accuracy": 1.0,
+      "temporal_accuracy": 1.0,
+      "total": 4,
+      "type_accuracy": 1.0
+    },
+    "unseen_wording": {
+      "axis": "unseen_wording",
+      "c_g_v2": 1.0,
+      "composition_accuracy": 1.0,
+      "composition_correct": 2,
+      "entity_discovery_accuracy": 1.0,
+      "property_accuracy": 1.0,
+      "relation_induction_accuracy": 1.0,
+      "temporal_accuracy": 1.0,
+      "total": 2,
+      "type_accuracy": 1.0
+    }
+  },
+  "checks": {
+    "hard_subset_included": true,
+    "induction_abstains_on_ambiguous_voice": true,
+    "no_schema_leakage": true,
+    "unseen_both_composition_works": true,
+    "unseen_entity_composition_works": true,
+    "unseen_relation_induction_works": true,
+    "unseen_wording_property_and_time": true
+  },
+  "dataset_hash": "cddb95cb8513",
+  "discovered_train_entities": [
+    "ali",
+    "araba",
+    "at",
+    "ayse",
+    "can",
+    "ev",
+    "fatma",
+    "mehmet",
+    "okul",
+    "otobus",
+    "tren",
+    "veli"
+  ],
+  "discovered_train_relations": [
+    "binmek",
+    "gitmek"
+  ],
+  "findings": [
+    "Eğitim korpusundan keşfedilen 12 varlık, 2 ilişki: hiçbiri elle verilmedi.",
+    "Eksen bazında C_G v2: seen=1.0000, unseen_entity=1.0000, unseen_relation=1.0000, unseen_both=1.0000, unseen_wording=1.0000.",
+    "Genel C_G v2 = 1.0000 (kompozisyon × keşif).",
+    "Sözlük-dışı ZOR alt kümede (4 cümle) kompozisyon 1.0000, tip doğruluğu 0.5000. Kural tabanlı keşfin sınırı buradadır ve gizlenmemiştir.",
+    "Çekimserlik vakaları (ettirgen çatı vb.): 2/2 doğru çekimser. İlişki üretmek bu cümlelerde YANLIŞ olurdu; indüksiyonun 'her fiile mastar tak' dejenerasyonuna kaymadığının kanıtıdır."
+  ],
+  "limitations": [
+    "Çıkarım hattı kural tabanlıdır; 'keşif' istatistiksel öğrenme değil, morfolojik analiz + sözlük araması sonucudur.",
+    "Sözlükte olmayan kök UNKNOWN tiple keşfedilir; type_accuracy bunu ayrı ölçer ve kompozisyon doğruluğuyla karıştırılmamalıdır.",
+    "Test seti küçüktür (elle küratörlü); güven aralıkları geniştir.",
+    "'Görülmemiş ilişki' hattın fiil sözlüğünde OLABİLİR; görülmemişlik EĞİTİM KORPUSUNA göredir, hattın kapsamına göre değil. Bu ayrım schema_leakage bölümünde açıkça raporlanır.",
+    "Mastar indüksiyonu kanıt-tabanlıdır (kök ≥4 harf + yalın özne + durum ekli nesne) ve DÜŞÜK güvenle (0.55) işaretlenir; ünlü uyumu ascii üzerinde yaklaşıktır (ı→i eşlemesi kimi art ünlülü köklerde -mek seçtirir). Çatı ekli fiillerde (ettirgen/edilgen) hat KASITLI çekimserdir: üye yapısı yüzey durumlardan çıkarılamaz."
+  ],
+  "overall_c_g_v2": 1.0,
+  "per_case": [
+    {
+      "axis": "seen",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ali",
+        "binmek",
+        "araba"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "araba"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ali arabaya bindi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "seen",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "mehmet",
+        "gitmek",
+        "ev"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ev"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Mehmet eve gitti.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "seen",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ayse",
+        "binmek",
+        "tren"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "binmek",
+          "tren"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ayşe trene bindi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_entity",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "zeynep",
+        "binmek",
+        "bisiklet"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "binmek",
+          "bisiklet"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Zeynep bisiklete bindi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_entity",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "deniz",
+        "gitmek",
+        "park"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "park"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Deniz parka gitti.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_relation",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ali",
+        "okumak",
+        "kitap"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "okumak",
+          "kitap"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ali kitabı okudu.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_relation",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ayse",
+        "görmek",
+        "masa"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "görmek",
+          "masa"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ayşe masayı gördü.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_both",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "zeynep",
+        "almak",
+        "kalem"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "almak",
+          "kalem"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Zeynep kalemi aldı.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_wording",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ali",
+        "binmek",
+        "arac"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "arac"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ali kırmızı araca dün bindi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_wording",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ayse",
+        "binmek",
+        "tasit"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "binmek",
+          "tasit"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ayşe mavi taşıta yarın binecek.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_entity",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ali",
+        "binmek",
+        "helikopter"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "helikopter"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ali helikoptere bindi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": false
+    },
+    {
+      "axis": "unseen_entity",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "zeynep",
+        "gitmek",
+        "laboratuvar"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "laboratuvar"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Zeynep laboratuvara gitti.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": false
+    },
+    {
+      "axis": "unseen_relation",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ali",
+        "incelemek",
+        "kitap"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "incelemek",
+          "kitap"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ali kitabı inceledi.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    },
+    {
+      "axis": "unseen_relation",
+      "composition_correct": true,
+      "entity_discovered": true,
+      "expected_relation": [
+        "ayse",
+        "tamir etmek",
+        "araba"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "tamir etmek",
+          "araba"
+        ]
+      ],
+      "property_correct": true,
+      "relation_induced": true,
+      "sentence": "Ayşe arabayı tamir etti.",
+      "skipped_reasons": [],
+      "temporal_correct": true,
+      "type_correct": true
+    }
+  ],
+  "protocol": "compositional_generalization_v2_raw_text",
+  "schema_leakage": {
+    "clean": true,
+    "leaked_entities": [],
+    "leaked_relations": [],
+    "ontology_provided_in_advance": false,
+    "schema_provided_in_advance": false
+  },
+  "train_sentences": [
+    "Ali ata bindi.",
+    "Ayşe arabaya bindi.",
+    "Mehmet otobüse bindi.",
+    "Veli trene bindi.",
+    "Fatma okula gitti.",
+    "Can eve gitti."
+  ]
+}
