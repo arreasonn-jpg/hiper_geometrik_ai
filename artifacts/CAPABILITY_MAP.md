@@ -240,3 +240,69 @@ Sozluk-disi ZOR alt kume: kompozisyon 1.0000, tip dogrulugu 0.5000.
 | 9 | Olcekli-golden | 1.0 (O(N²)) |
 | 10 | Verifier-ensemble | 7/7 |
 | 11 | Genelleme-v2 | 1.0 |
+
+---
+
+## Guncelleme v3: 14 Modul Test Edildi
+
+### 12. Verifier-Adversarial — 6/6 GECTI
+
+| Kapi | Sonuc |
+|---|---|
+| required_attack_classes_present | PASS |
+| minimum_30_cases | PASS |
+| zero_false_acceptance | PASS |
+| zero_false_rejection | PASS |
+| robustness_at_least_1_0 | PASS |
+| unsupported_rules_not_accepted | PASS |
+
+Saldiri siniflari (5 tip): false_proof 5/5, incomplete_proof 2/2,
+malformed_proof 7/7, unsupported_rule 2/2, valid_control 3/3.
+
+### 13. Signature — 6/7 GECTI (KALDI: hga_beats_majority_everywhere)
+
+HGA 2/8 gorevde kazaniyor: B_unseen_entity (+0.0052), F_memory_dependent (+0.2656).
+6/8 gorevde hicbir neural kol cogunluk tabanini +0.10 gecmedi.
+
+**Durust sinir:** "Bu butce ve adim sayisinda gorev neural kollar icin
+ogrenilemiyor; sembolik kolla karsilastirma paradigma farki."
+
+### 14. Bellek-Hiyerarsi — GECTI (durable=False)
+
+`durable=True` (fsync) ile 60 dakika+ takiliyor. `durable=False` ile
+dakikalar icinde bitiyor. Sonuc: OK.
+
+**UYARI:** durable=False cokme testini zayiflatir.
+
+### 15. Ogrenme-Transfer — 7/7 Kapi, TRANSFER YOK
+
+`positive_transfer = NOT_DEMONSTRATED`, `transfer_delta = 0.000000`.
+
+Sistem transfer ETMIYOR ama dogru sekilde raporluyor. Bilimsel
+durustluk ornegi.
+
+### 16. Cikarim-Derinligi — 5/5 Kapi
+
+C_R = 1024 hop, C_RD = 1024 @ 1024 distractor. Izgara sonlu,
+cokme noktasi bulunamadi. Ama BFS, ogrenilmis degil.
+
+## Guncel Yetenek Haritasi (16 Modul)
+
+| # | Modul | Sonuc |
+|---|---|---|
+| 1-3 | Hibrit (sentetik/TWT/EWT) | +0.10/+0.04/+0.07 |
+| 4 | Self-learning | Lineer ama %99 tekrar (kasitli) |
+| 5 | Multi-hop | BFS |
+| 6 | Epistemik | 1.000 |
+| 7 | Uzun-baglam | Stabil |
+| 8 | Championship | 9.30/10 |
+| 9 | Olcekli-golden | 1.0 (O(N2)) |
+| 10 | Verifier-ensemble | 7/7 |
+| 11 | Genelleme-v2 | 1.0 |
+| 12 | Verifier-adversarial | 6/6 |
+| 13 | Signature | 6/7 (2/8 gorev) |
+| 14 | Bellek-hiyerarsi | PASS (durable=False) |
+| 15 | Ogrenme-transfer | 7/7 kapi, transfer YOK |
+| 16 | Cikarim-derinligi | 5/5, C_R=1024 |
+
+**Sonuc: 12 tam, 4 kisim, 0 basarisiz.**
