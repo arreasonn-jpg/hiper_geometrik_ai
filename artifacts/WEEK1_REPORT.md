@@ -80,3 +80,44 @@ Hibrit symbolic-neural paradigm, klasik neural ağları +10.6 puan accuracy ve +
 2. Negatif sonuçlar derlemesi (Gün 3-4)
 3. Preprint outline (Gün 5)
 4. Git hazırlık (Gün 6-7)
+
+---
+
+## EK: TWT (Gerçek Türkçe) Doğrulaması
+
+**Tarih:** 2026-09-21
+**Veri:** Turkish Web Treebank (TWT), 127,602 train / 16,036 test
+**Neural:** HGA (mevcut mimari)
+**Symbolic:** SelectiveArcSchemaVerifier (TWT dahili)
+
+### Sonuçlar — 7 Threshold Rejimi
+
+| Rejim | Symbolic Cov | Neural | Hybrid | Gain |
+|---|---|---|---|---|
+| very_loose (0.5/0.5) | 97.98% | 0.8969 | **0.9361** | **+0.0393** |
+| loose (0.55/0.45) | 97.55% | 0.8969 | **0.9362** | **+0.0393** |
+| repo (0.6/0.4) | 96.51% | 0.8969 | 0.9355 | +0.0386 |
+| mid (0.7/0.3) | 93.20% | 0.8969 | 0.9324 | +0.0355 |
+| strict (0.8/0.2) | 86.03% | 0.8969 | 0.9252 | +0.0283 |
+| tight (0.9/0.1) | 75.19% | 0.8969 | 0.9167 | +0.0198 |
+| very_tight (0.95/0.05) | 65.37% | 0.8969 | 0.9096 | +0.0127 |
+
+**5 seed ortalaması, hybrid std 0.002-0.011 arasi (cok dusuk).**
+
+### Kritik Bulgular
+
+1. **Hibrit 7/7 rejimde kazandi** — sentetik zaferi gercek veriye tasindi
+2. **Monoton azalma** — threshold arttikca kazanc azaliyor
+3. **Optimum threshold 0.5/0.5** — repo'nun 0.6/0.4'u optimize degil
+4. **Hibrit std cok dusuk** — sonuclar cok stabil
+
+### Sentetik vs TWT Karsilastirmasi
+
+| Metrik | Sentetik | TWT (gercek) |
+|---|---|---|
+| Hibrit > Neural | +0.106 | +0.039 |
+| Seed sayisi | 10 | 5 |
+| Rejim sayisi | 1 | 7 |
+| Tum rejimlerde kazandi | N/A | **7/7** |
+
+**Sonuc:** Sentetik gorevde bulunan hibrit zaferi, gercek Turkce veride dogrulandi.
