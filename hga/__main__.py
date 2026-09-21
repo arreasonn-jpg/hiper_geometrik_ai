@@ -2380,7 +2380,7 @@ def main(argv=None):
                    help="self-learning başlangıç doğrulanmış bilgi sayısı")
     p.add_argument("--operands-max", type=int, default=31,
                    help="self-learning aritmetik domain üst operandı")
-    p.add_argument("--negatives-per-fact", type=int, default=7,
+    p.add_argument("--negatives-per-fact", type=int, default=3,
                    help="her doğru frontier olgusu başına yanlış aday")
     p.add_argument("--memory-slots", type=int, default=4096,
                    help="self-learning/milestone deney belleği slot sayısı")

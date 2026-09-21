@@ -257,7 +257,7 @@ def run_self_learning_experiment(
     batch_size: int = 64,
     initial_facts: int = 100,
     operands_max: int = 31,
-    negatives_per_fact: int = 7,
+    negatives_per_fact: int = 3,
     seed: int = 42,
     memory_slots: int = 4096,
 ) -> SelfLearningReport:
