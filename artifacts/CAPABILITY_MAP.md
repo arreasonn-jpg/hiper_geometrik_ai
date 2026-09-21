@@ -471,3 +471,75 @@ kontroludur; istatistiksel model kalitesi kaniti degildir."
 | Basarisiz | 0 |
 
 **Sonuc: 20 tam, 7 kisim, 0 basarisiz.**
+
+---
+
+## Guncelleme v8: 38 Modul Test Edildi
+
+### 29. Bilgi — Demo calisiyor
+
+Durum makinesi: VALID/INVALID dogru. Metin uretimi calisiyor.
+
+### 30. Kapasite — Framework published
+
+| Kapasite | Sembol | Deger |
+|---|---|---|
+| Fiziksel parametre | P | 40,524,865 |
+| Etkilesim ust siniri | C_I^UB | 1.845e+19 |
+| Bellek adres ust siniri | C_M^UB | 2.815e+62 |
+| Deneyim kapasitesi | C_E | 64,512 |
+| Dogrulanabilir kapasite | C_V | 64,512 |
+| **C_V/C_E** | - | **1.0** |
+
+Siralama gecerli: C_V <= C_E <= C_M^UB.
+
+### 31. Bilgi-Surum — Versioning + Rollback
+
+K0 -> K1 -> K2 (hatali) -> K3 (rollback to K1).
+Zincir gecerli. Rollback gecmisi SILMEZ.
+
+### 32. Defter — Immutable Ledger
+
+4 kayit, durumlar: VERIFIED=1, INVALID=1, UNCERTAIN=1, CONFLICT=1.
+Chain valid, head_hash uretiliyor. Reddedilen deneyim silinmiyor.
+
+### 33. Memory-Interference — Policy Analysis
+
+- FIRST_WINS: saldirgan kaybolur (yasama=0.0)
+- LAST_WINS: kurban bozulur (bozulma=1.0)
+- DYNAMIC_KV: her ikisi de korunur (both=1.0), ama maliyet N ile buyur
+
+Crossover: ~1000 context (sabit tablo recall 1.0 altina ilk kez).
+
+### 34. Turkce-LM — 9/10 GECTI
+
+9 kapı PASS. 1 FAIL: `corpus_at_least_1m_words` (kasitli, TWT 66K kelime).
+
+### 35. Muhendislik — 6/6 GECTI
+
+CI matrisi: 4 Python surumu. 56 CLI smoke. 115 test dosyasi (36 bilimsel).
+
+### 36. Yeniden-Uretilebilirlik — 5/5 GECTI
+
+Determinizm: 2 protokol bayt-es. Manifest altyapisi calisiyor.
+**Eksik:** Lockfile YOK (belgelenmiş).
+
+### 37. Signature-Gate — BLOCKED (dogru)
+
+Release gate BLOCKED: standard profil ve 20 seed gerekli.
+Sistem eksik kaniti DOGRU sekilde tespit ediyor.
+
+### 38. Koken (Provenance) — Calisiyor
+
+3 dis kaynak, 2 tam koken, 1 yetim. Hash dogrulamasi calisiyor.
+Yetim olgular tespit ediliyor ("nereden biliyorum" cevaplanamaz).
+
+## Final Yetenek Haritasi (38 Modul)
+
+| Kategori | Sayi | % |
+|---|---|---|
+| Tam basari | 27 | 71% |
+| Kisim/belgelenmis sinir | 11 | 29% |
+| Basarisiz | 0 | 0% |
+
+**Sonuc: 27 tam, 11 kisim, 0 basarisiz.**
