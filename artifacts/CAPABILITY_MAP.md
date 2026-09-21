@@ -406,3 +406,46 @@ DEGIL (n=3).
 | Basarisiz | 0 | - |
 
 **Sonuc: 17 tam, 6 kisim, 0 basarisiz. (24 modul)**
+
+---
+
+## Guncelleme v6: 27 Modul Test Edildi
+
+### 25. Operator-Baseline — 5/6 GECTI
+
+Kronecker, kronecker_teacher'da esit-parametrede EN IYI.
+Full_dense tavani gecemiyor (beklenen, tavandir).
+
+**Not:** `official_20_seed_rule_met` KALDI — cekirdek iddia icin 20
+tohum gerekli, 3 tohumla kalindi.
+
+### 26. Semantik — 3/3 GECTI, F1 = 1.0000
+
+136 etiketli cumle, tum katmanlar F1=1.0000:
+- entity=1.0, relation=1.0, property=1.0, temporal=1.0, negation=1.0
+- Asiri cikarim: 0.0
+- Kapsam disi: 8/8 dogru reddedildi
+
+**Durust sinir:** Kural tabanlidir, ogrenme degil. Sozluk buyudukce
+recall artar.
+
+### 27. Milestone — C_V/C_E = 0.9965
+
+- K0=100 -> K102=909 fact (lineer)
+- FAR=0, FRR=0 her seviyede
+- Memory recall: 1.0 (K10) -> 0.90 (K100)
+- **knowledge_chain_valid = True**
+- **ledger_chain_valid = True**
+- **Rollback calisiyor:** K100 -> K101 (yanlis=1) -> K102 (yanlis=0)
+
+**Kritik:** C_V/C_E = 0.9965 — dogrulanmis/deneyim orani %99.65.
+
+## Final Yetenek Haritasi (27 Modul)
+
+| Kategori | Sayi | Moduller |
+|---|---|---|
+| Tam basari | 19 | Hibrit(3), Epistemik, Uzun-baglam, Championship, Olcekli-golden, Verifier-ensemble, Genelleme-v2, Verifier-adversarial, Bellek-hiyerarsi, Cikarim-derinligi, Cok-ortam, Oncelik-zincir, Kesif, Derinlik-teshis, Oncelik-optimizasyon, Bellek-streaming, Semantik, Milestone |
+| Kisim | 7 | Self-learning, Multi-hop, Signature, Ogrenme-transfer, Verim, Halusinasyon, Operator-baseline |
+| Basarisiz | 0 | - |
+
+**Sonuc: 19 tam, 7 kisim, 0 basarisiz. (27 modul)**
