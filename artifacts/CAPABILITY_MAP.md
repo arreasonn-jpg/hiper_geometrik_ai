@@ -543,3 +543,55 @@ Yetim olgular tespit ediliyor ("nereden biliyorum" cevaplanamaz).
 | Basarisiz | 0 | 0% |
 
 **Sonuc: 27 tam, 11 kisim, 0 basarisiz.**
+
+---
+
+## Guncelleme v9: 53 Modul Test Edildi
+
+### 39-53. Yeni Test Edilen Moduller
+
+| # | Modul | Sonuc | Not |
+|---|---|---|---|
+| 39 | gercek-veri | PASS | Demo pipeline |
+| 40 | dogrulama | PASS | 6/30 verified, 0 false accept |
+| 41 | benchmark | KISIM | 24 false accept (verifier'siz) |
+| 42 | oncelik | KISIM | w_novelty/w_uncertainty islevsiz |
+| 43 | ogrenme-olcek | PASS | Doygunluk 18. cycle, alan ekseni onemli |
+| 44 | veri-kalite | PASS | 5 ornek, 1 kabul (%20) |
+| 45 | korpus-genisletme | KISIM | Pipeline ready, hedef 2M ulasilmadi |
+| 46 | insan-degerlendirme | KISIM | Protokol hazir, insan yok (durust n/a) |
+| 47 | insan-import | KISIM | CSV import calisiyor |
+| 48 | veri-canli-smoke | PASS | Canli veri hatti |
+| 49 | tokenizer | PASS | Turkce karakter tam (7/7) |
+| 50 | perplexity | KISIM | Smoke, 217 PPL (rastgele agirlik) |
+| 51 | manifest | KISIM | Dosya yolu gerekli |
+| 52 | ozet | PASS | Bos ama calisiyor |
+| 53 | graf | PASS | 6 dugum, 6 kenar |
+
+## Kritik Bulgular
+
+### Ogrenme-Olcek (PASS)
+- 25 -> 100 cycle: bilgi 241 -> 241 (1.000x). DOYGUNLUK.
+- %99 bilgi 18. cycle'da. Kalan 82 marjinal.
+- **Alan ekseni:** operands_max 2x -> bilgi 3.76x
+- **Sonuc:** "Daha cok cycle = daha cok bilgi" YANLIS.
+
+### Oncelik (KISIM)
+- w_novelty ve w_uncertainty: **işlevsiz** (kapatinca secim degismedi)
+- w_conflict_penalty ve w_gain: etkili
+- **UYARI:** "Agirligin ayarlanabilir olmasi etkili oldugu anlamina gelmez."
+
+### Insan-Degerlendirme (KISIM)
+- Protokol hazir (50 prompt, korleme, Krippendorff alpha)
+- **GERCEK INSAN PUANI YOK.** `human_ratings_collected` KALDI.
+- Durust: "Kanitsiz bolume puan vermek, olcmedigini olctum demektir."
+
+## Final Yetenek Haritasi (53 Modul)
+
+| Kategori | Sayi | % |
+|---|---|---|
+| Tam basari | 35 | 66% |
+| Kisim/belgelenmis sinir | 18 | 34% |
+| Basarisiz | 0 | 0% |
+
+**Sonuc: 35 tam, 18 kisim, 0 basarisiz.**
