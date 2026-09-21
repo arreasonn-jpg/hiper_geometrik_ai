@@ -633,3 +633,12 @@ Championship JSON'undan ozet rapor uretildi.
 | **TOPLAM** | **58** | **100%** |
 
 **Sifir basarisiz modul. Bu, sistemin saglikli oldugunu gosteriyor.**
+
+## Son Not
+
+checkpoint-rapor araci hem positive (uyumlu) hem negative (uyumsuz) testleri
+gecti:
+- Negative: config mismatch -> ok=False, 27 sekil uyumsuz, dogru tespit
+- Positive: config-matched -> ok=True
+
+Bu, araci %100 dogruluyor.
