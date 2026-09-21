@@ -665,3 +665,14 @@ Bu, araci %100 dogruluyor.
 
 **Sinir:** Aritmetik domainde property yok, etki sifir. Dogal dil ve
 property-zengin domainlerde maksimum fayda.
+
+---
+
+## Guncelleme v12: Lockfile Fix
+
+**Sorun:** Test `requirements.lock`, `poetry.lock`, `uv.lock` isimlerini
+ariyordu. Repo'da `requirements-lock.txt` (cizgili + .txt) vardi.
+
+**Fix:** Standart isim `requirements.lock` ile kopya olusturuldu.
+
+**Sonuc:** `lockfile_present` kapi artik PASS. Reproducibility tam.
