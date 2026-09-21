@@ -1,0 +1,149 @@
+{
+  "accuracy_at_max_context": 1.0,
+  "accuracy_at_min_context": 1.0,
+  "cells": [
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 0,
+      "hop": 1,
+      "mean_steps_followed": 1.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    },
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 16,
+      "hop": 1,
+      "mean_steps_followed": 1.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    },
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 0,
+      "hop": 2,
+      "mean_steps_followed": 2.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    },
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 16,
+      "hop": 2,
+      "mean_steps_followed": 2.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    },
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 0,
+      "hop": 3,
+      "mean_steps_followed": 3.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    },
+    {
+      "accuracy": 1.0,
+      "correct": 2,
+      "distractors": 16,
+      "hop": 3,
+      "mean_steps_followed": 3.0,
+      "memory_recall_rate": 1.0,
+      "negative_accuracy": 1.0,
+      "negative_correct": 1,
+      "negative_total": 1,
+      "positive_accuracy": 1.0,
+      "positive_correct": 1,
+      "positive_total": 1,
+      "total": 2
+    }
+  ],
+  "checks": {
+    "beats_degenerate": true,
+    "memory_preserved_chain": true,
+    "multi_hop_inference_works": true,
+    "rejects_broken_chains": true,
+    "robust_to_long_context": true
+  },
+  "context_degradation": 0.0,
+  "dataset_hash": "3b37ba83e010",
+  "deepest_reliable_hop": 3,
+  "degenerate_arms": [
+    {
+      "accuracy": 0.5,
+      "arm": "always_yes",
+      "negative_accuracy": 0.0,
+      "positive_accuracy": 1.0
+    },
+    {
+      "accuracy": 0.5,
+      "arm": "always_no",
+      "negative_accuracy": 1.0,
+      "positive_accuracy": 0.0
+    }
+  ],
+  "distractor_levels": [
+    0,
+    16
+  ],
+  "findings": [
+    "Çok adımlı çıkarım (hop>=2) doğruluğu 1.0000; tek adımlı geri çağırma 1.0000.",
+    "Bağlam yükü 0 → 16 dolgu olguya çıkarıldığında doğruluk 1.0000 → 1.0000 (+0.0000).",
+    "Tüm bağlam seviyelerinde tam doğru kalan en derin zincir: 3 adım.",
+    "En iyi dejenere kol 0.5000; motor 1.0000 (ayrışıyor)."
+  ],
+  "hops": [
+    1,
+    2,
+    3
+  ],
+  "inference_accuracy": 1.0,
+  "limitations": [
+    "Bu bir dil modeli 'context window' testi DEĞİLDİR; token penceresi, attention span veya doğal metin anlama ölçülmez. Sembolik depo + seyrek bellek üzerinde zincir takibi ölçülür.",
+    "Zincir tek bir geçişli ilişki (öncesi) üzerinden kurulur. Bu gerçek ama DAR bir çıkarımdır; çok ilişkili karma akıl yürütme kapsam dışıdır.",
+    "hop=1 sütunu çıkarım değil geri çağırmadır ve negatif kontrol olarak okunmalıdır; çıkarım iddiası yalnız hop>=2 için geçerlidir.",
+    "Dolgu olgular sentetiktir ve zincirle aynı ilişkiyi kullanır; doğal metindeki anlamsal karışıklığı temsil etmez.",
+    "Zincir takibi genişlik-öncelikli aramadır; maliyeti kenar sayısıyla büyür. Bu bir öğrenilmiş yetenek değil, deterministik bir çıkarımdır."
+  ],
+  "overall_accuracy": 1.0,
+  "protocol": "multi_hop_long_context_v1",
+  "recall_accuracy": 1.0,
+  "seeds": [
+    1
+  ]
+}
