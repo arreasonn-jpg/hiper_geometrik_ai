@@ -1,0 +1,39 @@
+{
+  "thresholds": {
+    "repo": {
+      "positive_threshold": 0.6,
+      "negative_threshold": 0.4,
+      "symbolic_coverage": 0.9651,
+      "symbolic_acc_answered": 0.9446,
+      "symbolic_acc_full": 0.9117,
+      "neural_mean": 0.8969,
+      "neural_std": 0.0112,
+      "hybrid_mean": 0.9355,
+      "hybrid_std": 0.0016,
+      "gain": 0.0386
+    },
+    "tight": {
+      "positive_threshold": 0.9,
+      "negative_threshold": 0.1,
+      "symbolic_coverage": 0.7519,
+      "symbolic_acc_answered": 0.9821,
+      "symbolic_acc_full": 0.7385,
+      "neural_mean": 0.8969,
+      "neural_std": 0.0112,
+      "hybrid_mean": 0.9167,
+      "hybrid_std": 0.0087,
+      "gain": 0.0198
+    }
+  },
+  "config": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "train_size": 127602,
+    "test_size": 16036
+  }
+}
