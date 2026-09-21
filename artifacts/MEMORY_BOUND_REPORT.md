@@ -84,3 +84,30 @@ HGA seyrek bellegi, sabit boyutlu hash tablosu kullanir. 1M slotluk tablo,
 Bellek kapasitesi uc yolla artirilabilir: (1) tablo boyutunu 16Mye cikarmak,
 (2) hash sonlandiriciyi duzeltmek, (3) iki farkli asal ile Bloom hash.
 Kombinasyon 100Kda carpismayi %48.8den <%1e dusurebilir.
+
+
+## DUZELTME — Onemli
+
+Onceki raporda hash sonlandirici duzeltmesi onerildi. Ancak test edildi:
+ek karistirma adimi sadece %0.15 fark yaratti. Yani hash fonksiyonu zaten iyi.
+
+Gercek darbogaz:
+1. first-writer-wins politikasi — cakisan yazma KAYBOLUYOR
+2. 1M slot 100K baglam icin yetersiz
+3. Iki tablo ayni hash -> gercek Bloom degil
+
+## Dogru Cozumler
+
+### 1. Tablo Boyutunu Buyut
+tablo_boyutu = 16_777_216  # 16M slot
+Beklenen: carpisma %48.8 -> ~10%
+
+### 2. Gercek Bloom Filter
+Iki FARKLI hash (iki farkli asal):
+- Tuz 1: 0x243F6A88 (mevcut)
+- Tuz 2: 0x9E3779B9 (golden ratio)
+Beklenen: kayip olasiligi karesel azalir
+
+### 3. LRU Eviction
+Mevcut kod LRU temizleme iceriyor ama benchmarkta kullanilmiyor.
+50K baglam sinirinda eski slotlar temizlenebilir.
