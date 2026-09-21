@@ -1,0 +1,1074 @@
+{
+  "findings": [
+    "Sembolik kol cevapladığı örneklerde çok güçlü (accuracy_on_answered=1.000) ama coverage=0.490: gizli özellikli örneklerde çekimser kalır. Tek başına 'yüksek doğruluk' iddiası bu yüzden kapsam belirtilmeden anlamsızdır.",
+    "Nöral kol tam kapsam verir (coverage=1.000) ama doğruluğu düşüktür (accuracy=0.790) ve görülmemiş varlıklarda 0.530'e çöker (görülen: 0.855).",
+    "Hibrit kol her iki zaafı da kapatır: accuracy=0.896 ± 0.020, coverage=1.000.",
+    "Hibritin sembolik üzerine net kazancı +0.406, nöral üzerine +0.106 accuracy puanıdır.",
+    "FAR tek başına raporlanmaz: hibrit FAR=0.097, FRR=0.112, F1=0.895.",
+    "Nöral kol eğitim doğruluğu 1.000, test doğruluğu 0.790 → genelleme açığı +0.210. Görülmemiş varlıkta 0.530 ≈ şans (0.5): kural öğrenmiyor, varlık kimliği ezberliyor."
+  ],
+  "neural_train_accuracy": {
+    "max": 1.0,
+    "mean": 1.0,
+    "min": 1.0,
+    "std": 0.0
+  },
+  "reports": [
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.8975,
+          "accuracy_on_answered": 0.8975,
+          "accuracy_seen": 0.9125,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.79602,
+          "accuracy_unseen": 0.8375,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 359,
+          "coverage": 1.0,
+          "f1": 0.897243,
+          "far": 0.1,
+          "frr": 0.105,
+          "precision": 0.899497,
+          "recall": 0.895,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.7725,
+          "accuracy_on_answered": 0.7725,
+          "accuracy_seen": 0.828125,
+          "accuracy_symbolic_decidable": 0.748744,
+          "accuracy_symbolic_undecidable": 0.79602,
+          "accuracy_unseen": 0.55,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 309,
+          "coverage": 1.0,
+          "f1": 0.768448,
+          "far": 0.21,
+          "frr": 0.245,
+          "precision": 0.782383,
+          "recall": 0.755,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 201,
+          "accuracy": 0.4975,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.48125,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5625,
+          "answered": 199,
+          "arm": "symbolic",
+          "correct": 199,
+          "coverage": 0.4975,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 4.6e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 1,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 199,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.8875,
+          "accuracy_on_answered": 0.8875,
+          "accuracy_seen": 0.91875,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.783654,
+          "accuracy_unseen": 0.7625,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 355,
+          "coverage": 1.0,
+          "f1": 0.886076,
+          "far": 0.1,
+          "frr": 0.125,
+          "precision": 0.897436,
+          "recall": 0.875,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.765,
+          "accuracy_on_answered": 0.765,
+          "accuracy_seen": 0.81875,
+          "accuracy_symbolic_decidable": 0.744792,
+          "accuracy_symbolic_undecidable": 0.783654,
+          "accuracy_unseen": 0.55,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 306,
+          "coverage": 1.0,
+          "f1": 0.760204,
+          "far": 0.215,
+          "frr": 0.255,
+          "precision": 0.776042,
+          "recall": 0.745,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 208,
+          "accuracy": 0.48,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.509375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.3625,
+          "answered": 192,
+          "arm": "symbolic",
+          "correct": 192,
+          "coverage": 0.48,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 3.9e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 2,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 192,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.87,
+          "accuracy_on_answered": 0.87,
+          "accuracy_seen": 0.890625,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.742574,
+          "accuracy_unseen": 0.7875,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 348,
+          "coverage": 1.0,
+          "f1": 0.87,
+          "far": 0.13,
+          "frr": 0.13,
+          "precision": 0.87,
+          "recall": 0.87,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.7475,
+          "accuracy_on_answered": 0.7475,
+          "accuracy_seen": 0.796875,
+          "accuracy_symbolic_decidable": 0.752525,
+          "accuracy_symbolic_undecidable": 0.742574,
+          "accuracy_unseen": 0.55,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 299,
+          "coverage": 1.0,
+          "f1": 0.741688,
+          "far": 0.23,
+          "frr": 0.275,
+          "precision": 0.759162,
+          "recall": 0.725,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 202,
+          "accuracy": 0.495,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.5125,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.425,
+          "answered": 198,
+          "arm": "symbolic",
+          "correct": 198,
+          "coverage": 0.495,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 3.4e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 3,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 198,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.905,
+          "accuracy_on_answered": 0.905,
+          "accuracy_seen": 0.94375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.786517,
+          "accuracy_unseen": 0.75,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 362,
+          "coverage": 1.0,
+          "f1": 0.903553,
+          "far": 0.08,
+          "frr": 0.11,
+          "precision": 0.917526,
+          "recall": 0.89,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.7725,
+          "accuracy_on_answered": 0.7725,
+          "accuracy_seen": 0.84375,
+          "accuracy_symbolic_decidable": 0.761261,
+          "accuracy_symbolic_undecidable": 0.786517,
+          "accuracy_unseen": 0.4875,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 309,
+          "coverage": 1.0,
+          "f1": 0.764858,
+          "far": 0.195,
+          "frr": 0.26,
+          "precision": 0.791444,
+          "recall": 0.74,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 178,
+          "accuracy": 0.555,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.559375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5375,
+          "answered": 222,
+          "arm": "symbolic",
+          "correct": 222,
+          "coverage": 0.555,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 2.3e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 4,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 222,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.905,
+          "accuracy_on_answered": 0.905,
+          "accuracy_seen": 0.934375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.807107,
+          "accuracy_unseen": 0.7875,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 362,
+          "coverage": 1.0,
+          "f1": 0.905941,
+          "far": 0.105,
+          "frr": 0.085,
+          "precision": 0.897059,
+          "recall": 0.915,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.83,
+          "accuracy_on_answered": 0.83,
+          "accuracy_seen": 0.890625,
+          "accuracy_symbolic_decidable": 0.852217,
+          "accuracy_symbolic_undecidable": 0.807107,
+          "accuracy_unseen": 0.5875,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 332,
+          "coverage": 1.0,
+          "f1": 0.830846,
+          "far": 0.175,
+          "frr": 0.165,
+          "precision": 0.826733,
+          "recall": 0.835,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 197,
+          "accuracy": 0.5075,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.4875,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5875,
+          "answered": 203,
+          "arm": "symbolic",
+          "correct": 203,
+          "coverage": 0.5075,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 2.3e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 5,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 203,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.8525,
+          "accuracy_on_answered": 0.8525,
+          "accuracy_seen": 0.871875,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.747863,
+          "accuracy_unseen": 0.775,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 341,
+          "coverage": 1.0,
+          "f1": 0.85213,
+          "far": 0.145,
+          "frr": 0.15,
+          "precision": 0.854271,
+          "recall": 0.85,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.76,
+          "accuracy_on_answered": 0.76,
+          "accuracy_seen": 0.821875,
+          "accuracy_symbolic_decidable": 0.777108,
+          "accuracy_symbolic_undecidable": 0.747863,
+          "accuracy_unseen": 0.5125,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 304,
+          "coverage": 1.0,
+          "f1": 0.755102,
+          "far": 0.22,
+          "frr": 0.26,
+          "precision": 0.770833,
+          "recall": 0.74,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 234,
+          "accuracy": 0.415,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.384375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5375,
+          "answered": 166,
+          "arm": "symbolic",
+          "correct": 166,
+          "coverage": 0.415,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 1.6e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 6,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 166,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.895,
+          "accuracy_on_answered": 0.895,
+          "accuracy_seen": 0.9375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.79,
+          "accuracy_unseen": 0.725,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 358,
+          "coverage": 1.0,
+          "f1": 0.895,
+          "far": 0.105,
+          "frr": 0.105,
+          "precision": 0.895,
+          "recall": 0.895,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.795,
+          "accuracy_on_answered": 0.795,
+          "accuracy_seen": 0.88125,
+          "accuracy_symbolic_decidable": 0.8,
+          "accuracy_symbolic_undecidable": 0.79,
+          "accuracy_unseen": 0.45,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 318,
+          "coverage": 1.0,
+          "f1": 0.790816,
+          "far": 0.185,
+          "frr": 0.225,
+          "precision": 0.807292,
+          "recall": 0.775,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 200,
+          "accuracy": 0.5,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.5125,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.45,
+          "answered": 200,
+          "arm": "symbolic",
+          "correct": 200,
+          "coverage": 0.5,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 3.2e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 7,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 200,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.915,
+          "accuracy_on_answered": 0.915,
+          "accuracy_seen": 0.959375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.83,
+          "accuracy_unseen": 0.7375,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 366,
+          "coverage": 1.0,
+          "f1": 0.912371,
+          "far": 0.055,
+          "frr": 0.115,
+          "precision": 0.941489,
+          "recall": 0.885,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.805,
+          "accuracy_on_answered": 0.805,
+          "accuracy_seen": 0.878125,
+          "accuracy_symbolic_decidable": 0.78,
+          "accuracy_symbolic_undecidable": 0.83,
+          "accuracy_unseen": 0.5125,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 322,
+          "coverage": 1.0,
+          "f1": 0.797927,
+          "far": 0.16,
+          "frr": 0.23,
+          "precision": 0.827957,
+          "recall": 0.77,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 200,
+          "accuracy": 0.5,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.509375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.4625,
+          "answered": 200,
+          "arm": "symbolic",
+          "correct": 200,
+          "coverage": 0.5,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 3.5e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 8,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 200,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.9075,
+          "accuracy_on_answered": 0.9075,
+          "accuracy_seen": 0.934375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.828704,
+          "accuracy_unseen": 0.8,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 363,
+          "coverage": 1.0,
+          "f1": 0.908642,
+          "far": 0.105,
+          "frr": 0.08,
+          "precision": 0.897561,
+          "recall": 0.92,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.8,
+          "accuracy_on_answered": 0.8,
+          "accuracy_seen": 0.875,
+          "accuracy_symbolic_decidable": 0.766304,
+          "accuracy_symbolic_undecidable": 0.828704,
+          "accuracy_unseen": 0.5,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 320,
+          "coverage": 1.0,
+          "f1": 0.798995,
+          "far": 0.195,
+          "frr": 0.205,
+          "precision": 0.80303,
+          "recall": 0.795,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 216,
+          "accuracy": 0.46,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.428125,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5875,
+          "answered": 184,
+          "arm": "symbolic",
+          "correct": 184,
+          "coverage": 0.46,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 3.3e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 9,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 184,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    },
+    {
+      "arms": {
+        "hybrid": {
+          "abstained": 0,
+          "accuracy": 0.9225,
+          "accuracy_on_answered": 0.9225,
+          "accuracy_seen": 0.9625,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.84878,
+          "accuracy_unseen": 0.7625,
+          "answered": 400,
+          "arm": "hybrid",
+          "correct": 369,
+          "coverage": 1.0,
+          "f1": 0.919897,
+          "far": 0.045,
+          "frr": 0.11,
+          "precision": 0.951872,
+          "recall": 0.89,
+          "total": 400
+        },
+        "neural": {
+          "abstained": 0,
+          "accuracy": 0.85,
+          "accuracy_on_answered": 0.85,
+          "accuracy_seen": 0.9125,
+          "accuracy_symbolic_decidable": 0.851282,
+          "accuracy_symbolic_undecidable": 0.84878,
+          "accuracy_unseen": 0.6,
+          "answered": 400,
+          "arm": "neural",
+          "correct": 340,
+          "coverage": 1.0,
+          "f1": 0.842932,
+          "far": 0.105,
+          "frr": 0.195,
+          "precision": 0.884615,
+          "recall": 0.805,
+          "total": 400
+        },
+        "symbolic": {
+          "abstained": 205,
+          "accuracy": 0.4875,
+          "accuracy_on_answered": 1.0,
+          "accuracy_seen": 0.484375,
+          "accuracy_symbolic_decidable": 1.0,
+          "accuracy_symbolic_undecidable": 0.0,
+          "accuracy_unseen": 0.5,
+          "answered": 195,
+          "arm": "symbolic",
+          "correct": 195,
+          "coverage": 0.4875,
+          "f1": 1.0,
+          "far": 0.0,
+          "frr": 0.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "total": 400
+        }
+      },
+      "neural_diagnostics": {
+        "final_loss": 4.6e-05,
+        "train_accuracy": 1.0
+      },
+      "seed": 10,
+      "task": {
+        "entities": 120,
+        "relations": 8,
+        "test": 400,
+        "test_symbolic_decidable": 195,
+        "test_unseen": 80,
+        "train": 1200
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "summary": {
+    "hybrid": {
+      "abstained": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "std": 0.0
+      },
+      "accuracy": {
+        "max": 0.9225,
+        "mean": 0.89575,
+        "min": 0.8525,
+        "std": 0.020002
+      },
+      "accuracy_on_answered": {
+        "max": 0.9225,
+        "mean": 0.89575,
+        "min": 0.8525,
+        "std": 0.020002
+      },
+      "accuracy_seen": {
+        "max": 0.9625,
+        "mean": 0.926562,
+        "min": 0.871875,
+        "std": 0.027288
+      },
+      "accuracy_symbolic_decidable": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "accuracy_symbolic_undecidable": {
+        "max": 0.84878,
+        "mean": 0.796122,
+        "min": 0.742574,
+        "std": 0.032534
+      },
+      "accuracy_unseen": {
+        "max": 0.8375,
+        "mean": 0.7725,
+        "min": 0.725,
+        "std": 0.031024
+      },
+      "answered": {
+        "max": 400.0,
+        "mean": 400.0,
+        "min": 400.0,
+        "std": 0.0
+      },
+      "correct": {
+        "max": 369.0,
+        "mean": 358.3,
+        "min": 341.0,
+        "std": 8.000625
+      },
+      "coverage": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "f1": {
+        "max": 0.919897,
+        "mean": 0.895085,
+        "min": 0.85213,
+        "std": 0.019616
+      },
+      "far": {
+        "max": 0.145,
+        "mean": 0.097,
+        "min": 0.045,
+        "std": 0.028914
+      },
+      "frr": {
+        "max": 0.15,
+        "mean": 0.1115,
+        "min": 0.08,
+        "std": 0.0195
+      },
+      "precision": {
+        "max": 0.951872,
+        "mean": 0.902171,
+        "min": 0.854271,
+        "std": 0.027766
+      },
+      "recall": {
+        "max": 0.92,
+        "mean": 0.8885,
+        "min": 0.85,
+        "std": 0.0195
+      },
+      "total": {
+        "max": 400.0,
+        "mean": 400.0,
+        "min": 400.0,
+        "std": 0.0
+      }
+    },
+    "neural": {
+      "abstained": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "std": 0.0
+      },
+      "accuracy": {
+        "max": 0.85,
+        "mean": 0.78975,
+        "min": 0.7475,
+        "std": 0.030811
+      },
+      "accuracy_on_answered": {
+        "max": 0.85,
+        "mean": 0.78975,
+        "min": 0.7475,
+        "std": 0.030811
+      },
+      "accuracy_seen": {
+        "max": 0.9125,
+        "mean": 0.854688,
+        "min": 0.796875,
+        "std": 0.035829
+      },
+      "accuracy_symbolic_decidable": {
+        "max": 0.852217,
+        "mean": 0.783423,
+        "min": 0.744792,
+        "std": 0.037547
+      },
+      "accuracy_symbolic_undecidable": {
+        "max": 0.84878,
+        "mean": 0.796122,
+        "min": 0.742574,
+        "std": 0.032534
+      },
+      "accuracy_unseen": {
+        "max": 0.6,
+        "mean": 0.53,
+        "min": 0.45,
+        "std": 0.043732
+      },
+      "answered": {
+        "max": 400.0,
+        "mean": 400.0,
+        "min": 400.0,
+        "std": 0.0
+      },
+      "correct": {
+        "max": 340.0,
+        "mean": 315.9,
+        "min": 299.0,
+        "std": 12.324366
+      },
+      "coverage": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "f1": {
+        "max": 0.842932,
+        "mean": 0.785182,
+        "min": 0.741688,
+        "std": 0.031494
+      },
+      "far": {
+        "max": 0.23,
+        "mean": 0.189,
+        "min": 0.105,
+        "std": 0.034554
+      },
+      "frr": {
+        "max": 0.275,
+        "mean": 0.2315,
+        "min": 0.165,
+        "std": 0.032791
+      },
+      "precision": {
+        "max": 0.884615,
+        "mean": 0.802949,
+        "min": 0.759162,
+        "std": 0.034796
+      },
+      "recall": {
+        "max": 0.835,
+        "mean": 0.7685,
+        "min": 0.725,
+        "std": 0.032791
+      },
+      "total": {
+        "max": 400.0,
+        "mean": 400.0,
+        "min": 400.0,
+        "std": 0.0
+      }
+    },
+    "symbolic": {
+      "abstained": {
+        "max": 234.0,
+        "mean": 204.1,
+        "min": 178.0,
+        "std": 13.531075
+      },
+      "accuracy": {
+        "max": 0.555,
+        "mean": 0.48975,
+        "min": 0.415,
+        "std": 0.033828
+      },
+      "accuracy_on_answered": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "accuracy_seen": {
+        "max": 0.559375,
+        "mean": 0.486875,
+        "min": 0.384375,
+        "std": 0.046452
+      },
+      "accuracy_symbolic_decidable": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "accuracy_symbolic_undecidable": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "std": 0.0
+      },
+      "accuracy_unseen": {
+        "max": 0.5875,
+        "mean": 0.50125,
+        "min": 0.3625,
+        "std": 0.07103
+      },
+      "answered": {
+        "max": 222.0,
+        "mean": 195.9,
+        "min": 166.0,
+        "std": 13.531075
+      },
+      "correct": {
+        "max": 222.0,
+        "mean": 195.9,
+        "min": 166.0,
+        "std": 13.531075
+      },
+      "coverage": {
+        "max": 0.555,
+        "mean": 0.48975,
+        "min": 0.415,
+        "std": 0.033828
+      },
+      "f1": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "far": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "std": 0.0
+      },
+      "frr": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "std": 0.0
+      },
+      "precision": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "recall": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "std": 0.0
+      },
+      "total": {
+        "max": 400.0,
+        "mean": 400.0,
+        "min": 400.0,
+        "std": 0.0
+      }
+    }
+  },
+  "task": {
+    "entities": 120,
+    "relations": 8,
+    "test": 400,
+    "test_symbolic_decidable": 199,
+    "test_unseen": 80,
+    "train": 1200
+  }
+}
