@@ -125,7 +125,7 @@ def run_self_learning_scaling(
     seeds: Sequence[int] = (1,),
     batch_size: int = 64,
     initial_facts: int = 100,
-    negatives_per_fact: int = 7,
+    negatives_per_fact: int = 3,
     grid: Optional[Sequence[Tuple[int, int]]] = None,
 ) -> SelfLearningScalingReport:
     """Self-learning'i cycle ve alan eksenlerinde ölçekle.
