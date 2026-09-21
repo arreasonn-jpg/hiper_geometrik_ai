@@ -1,0 +1,506 @@
+{
+  "budget_by_context": {
+    "1024": {
+      "dense_hidden_dim": 17,
+      "max_to_min_ratio": 1.000341,
+      "parameters": {
+        "dense": 152593,
+        "hga": 152641,
+        "transformer": 152645
+      },
+      "target_parameters": 152641,
+      "transformer_ffn_dim": 7965
+    },
+    "512": {
+      "dense_hidden_dim": 17,
+      "max_to_min_ratio": 1.000639,
+      "parameters": {
+        "dense": 82961,
+        "hga": 83009,
+        "transformer": 83014
+      },
+      "target_parameters": 83009,
+      "transformer_ffn_dim": 4110
+    }
+  },
+  "checks": {
+    "all_cells_completed": true,
+    "context_effect_direction_reported": true,
+    "finite_metrics_all_cells": true,
+    "long_context_targets_configured": true,
+    "max_context_at_least_1024_when_configured": true,
+    "multi_seed_reported": true,
+    "ngram_floor_reported_every_context": true,
+    "parameter_budget_leq_1_05_every_context": true,
+    "positions_shared_across_contexts_and_arms": true
+  },
+  "config": {
+    "batch_size": 8,
+    "contexts": [
+      512,
+      1024
+    ],
+    "corpus": "twt",
+    "emb_dim": 8,
+    "eval_batch_size": 64,
+    "eval_windows": 128,
+    "gradient_clip_norm": 5.0,
+    "heads": 2,
+    "hga_layers": 1,
+    "hga_n": 8,
+    "learning_rate": 0.003,
+    "max_docs": 80,
+    "max_vocab": 512,
+    "steps": 3,
+    "train_windows": 256
+  },
+  "config_hash": "43b48626ab603a58ef53eca96e9e9cb70a26fee2b31cf510fef9b3999e6f59d0",
+  "context_effect": {
+    "max_context": 1024,
+    "per_arm": {
+      "dense": {
+        "direction": "improves",
+        "ppl_at_max": 483.99775193,
+        "ppl_at_reference": 519.62431302,
+        "relative_change": -0.068562
+      },
+      "hga": {
+        "direction": "improves",
+        "ppl_at_max": 505.27645302,
+        "ppl_at_reference": 535.01660479,
+        "relative_change": -0.055587
+      },
+      "transformer": {
+        "direction": "improves",
+        "ppl_at_max": 494.00491467,
+        "ppl_at_reference": 539.7138661,
+        "relative_change": -0.084691
+      }
+    },
+    "reference_context": 512
+  },
+  "corpus": {
+    "dataset_hash": "259e999941974c262b184cab921a50437bc5df0b10408dc50a7d7df4fae87784",
+    "tokens": {
+      "dev": 5761,
+      "test": 6780,
+      "train": 30472
+    },
+    "vocabulary_size": 512
+  },
+  "dataset_hash": "5481ac004b2b6980f0ce25831f1fc01bba058ccea4ca48218bcd614b10299d65",
+  "findings": [
+    "`dense`: bağlam 512→1024 tokenda test PPL 519.6→484.0 (-6.9%, improves).",
+    "`transformer`: bağlam 512→1024 tokenda test PPL 539.7→494.0 (-8.5%, improves).",
+    "`hga`: bağlam 512→1024 tokenda test PPL 535.0→505.3 (-5.6%, improves).",
+    "Zemin @ bağlam 1024: unigram PPL 34.0, bigram 26.6; en iyi neural 484.0.",
+    "512/1024 token uzun bağlam kod yolu bu profilde koşuldu; bu bir kalite iddiası değil şekil/bütçe/pozisyon eşleşmesi kapısıdır.",
+    "AÇIK SINIR: bu kısa eşit-bütçe taramasında (3 adım) hiçbir neural kol bigram zeminini geçmedi. Mutlak LM kalitesi iddiası bu protokolün konusu değildir ve `turkish_lm` full (4000 adım) protokolünde ölçülür; oradaki n-gram kapıları gerçek veriyle PASS. Buradaki sayılar yalnız bağlam ETKİSİNİN yönünü taşır."
+  ],
+  "limitations": [
+    "PPL, deterministik örneklenmiş pencereler üzerinde hesaplanır; korpus CE'sinin yansız tahminidir, tam sayımı değildir.",
+    "Adım sayısı sabittir ve yakınsama iddiası yoktur; bağlamlar arası karşılaştırma eşit-eğitim-bütçesi karşılaştırmasıdır.",
+    "Girdi düzleştirmeli mimarilerde (dense, HGA encoder) bağlam uzadıkça parametre bütçesi aynı kalsın diye genişlikler düşer; bu, mimari ailelerin uzun bağlamdaki YAPISAL maliyet farkıdır ve gizlenmez.",
+    "Tek korpus (tr_corpus_v1) ve tek dil (Türkçe); genelleme iddiası taşımaz.",
+    "`smoke_1024` profili yalnız 512/1024 kod yolunu duman testinden geçirir; tam kalite raporu için `full` profili 24→1024 taramasını çalıştırmalıdır."
+  ],
+  "ngram_by_context": {
+    "1024": {
+      "bigram_test_ppl": 26.56659878,
+      "unigram_test_ppl": 33.97236024
+    },
+    "512": {
+      "bigram_test_ppl": 26.56659878,
+      "unigram_test_ppl": 33.97236024
+    }
+  },
+  "positions": {
+    "dev": 128,
+    "sampling_seed": 424243,
+    "signature": "c4e3349cfb3647293b5e1530b87f3600b00acd9e3f1164e5434022226ac0e3cc",
+    "test": 128,
+    "train": 256
+  },
+  "profile": "smoke_1024",
+  "protocol": "long_context_lm_v1",
+  "results": {
+    "dense": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24509668,
+              "perplexity": 515.47906084,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.2429781,
+              "perplexity": 514.38812937,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.015625
+            },
+            "training_seconds": 0.0098
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.20640707,
+              "perplexity": 495.91625421,
+              "tokens": 128,
+              "top1_accuracy": 0.0234375,
+              "top5_accuracy": 0.03125
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.24273694,
+              "perplexity": 514.26409429,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.03125
+            },
+            "training_seconds": 0.0449
+          },
+          {
+            "dev": {
+              "cross_entropy": 5.96590912,
+              "perplexity": 389.90734088,
+              "tokens": 128,
+              "top1_accuracy": 0.0390625,
+              "top5_accuracy": 0.125
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.04817808,
+              "perplexity": 423.34103213,
+              "tokens": 128,
+              "top1_accuracy": 0.015625,
+              "top5_accuracy": 0.078125
+            },
+            "training_seconds": 0.018
+          }
+        ],
+        "test_ppl_mean": 483.99775193,
+        "test_ppl_std": 52.53029687,
+        "test_top1_mean": 0.01041667
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24092793,
+              "perplexity": 513.33463099,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.23849797,
+              "perplexity": 512.08876159,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 1.1341
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.16468108,
+              "perplexity": 475.6494232,
+              "tokens": 128,
+              "top1_accuracy": 0.046875,
+              "top5_accuracy": 0.0625
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.19071066,
+              "perplexity": 488.192924,
+              "tokens": 128,
+              "top1_accuracy": 0.0546875,
+              "top5_accuracy": 0.0625
+            },
+            "training_seconds": 0.006
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.32347786,
+              "perplexity": 557.50856378,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.015625
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.325418,
+              "perplexity": 558.59125348,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.03125
+            },
+            "training_seconds": 0.0138
+          }
+        ],
+        "test_ppl_mean": 519.62431302,
+        "test_ppl_std": 35.79901675,
+        "test_top1_mean": 0.02083333
+      }
+    },
+    "hga": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.24319041,
+              "perplexity": 514.49735161,
+              "tokens": 128,
+              "top1_accuracy": 0.03125,
+              "top5_accuracy": 0.0390625
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.18166995,
+              "perplexity": 483.79920285,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.046875
+            },
+            "training_seconds": 0.5222
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.25056612,
+              "perplexity": 518.30616766,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.015625
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.23145199,
+              "perplexity": 508.49327398,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0234375
+            },
+            "training_seconds": 0.154
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.25208855,
+              "perplexity": 519.09584925,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.26060748,
+              "perplexity": 523.53688224,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 0.1365
+          }
+        ],
+        "test_ppl_mean": 505.27645302,
+        "test_ppl_std": 20.06319375,
+        "test_top1_mean": 0.00260417
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.23254621,
+              "perplexity": 509.04998307,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.23906004,
+              "perplexity": 512.37667314,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.015625
+            },
+            "training_seconds": 0.0493
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.26160014,
+              "perplexity": 524.05683216,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.0234375
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.28568697,
+              "perplexity": 536.832952,
+              "tokens": 128,
+              "top1_accuracy": 0.015625,
+              "top5_accuracy": 0.03125
+            },
+            "training_seconds": 0.071
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.26289392,
+              "perplexity": 524.73528437,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.32048082,
+              "perplexity": 555.84018924,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 0.0605
+          }
+        ],
+        "test_ppl_mean": 535.01660479,
+        "test_ppl_std": 21.78861276,
+        "test_top1_mean": 0.00520833
+      }
+    },
+    "transformer": {
+      "1024": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.13924062,
+              "perplexity": 463.70131279,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.20387042,
+              "perplexity": 494.6598802,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "training_seconds": 2.4371
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.00938225,
+              "perplexity": 407.23167434,
+              "tokens": 128,
+              "top1_accuracy": 0.0078125,
+              "top5_accuracy": 0.125
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 5.98936343,
+              "perplexity": 399.16043625,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.125
+            },
+            "training_seconds": 3.8093
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.23515451,
+              "perplexity": 510.37947086,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.37705755,
+              "perplexity": 588.19442755,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "training_seconds": 2.27
+          }
+        ],
+        "test_ppl_mean": 494.00491467,
+        "test_ppl_std": 94.51869763,
+        "test_top1_mean": 0.0
+      },
+      "512": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 6.4970758,
+              "perplexity": 663.19946434,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 6.52753735,
+              "perplexity": 683.71238942,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0078125
+            },
+            "training_seconds": 0.6281
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.2965281,
+              "perplexity": 542.6844898,
+              "tokens": 128,
+              "top1_accuracy": 0.015625,
+              "top5_accuracy": 0.0546875
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 6.26359999,
+              "perplexity": 525.10591852,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.0390625
+            },
+            "training_seconds": 0.5086
+          },
+          {
+            "dev": {
+              "cross_entropy": 6.00159192,
+              "perplexity": 404.07153166,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.09375
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 6.01694536,
+              "perplexity": 410.32329037,
+              "tokens": 128,
+              "top1_accuracy": 0.0,
+              "top5_accuracy": 0.1171875
+            },
+            "training_seconds": 0.7399
+          }
+        ],
+        "test_ppl_mean": 539.7138661,
+        "test_ppl_std": 137.27870909,
+        "test_top1_mean": 0.0
+      }
+    }
+  },
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2,
+    3
+  ]
+}

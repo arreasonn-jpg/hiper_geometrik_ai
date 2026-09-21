@@ -1,0 +1,505 @@
+{
+  "budget_by_context": {
+    "16": {
+      "dense_hidden_dim": 33,
+      "max_to_min_ratio": 1.001466,
+      "parameters": {
+        "dense": 108481,
+        "hga": 108625,
+        "transformer": 108640
+      },
+      "target_parameters": 108625,
+      "transformer_ffn_dim": 1248
+    },
+    "64": {
+      "dense_hidden_dim": 33,
+      "max_to_min_ratio": 1.001076,
+      "parameters": {
+        "dense": 133825,
+        "hga": 133969,
+        "transformer": 133960
+      },
+      "target_parameters": 133969,
+      "transformer_ffn_dim": 1992
+    }
+  },
+  "checks": {
+    "all_cells_completed": true,
+    "context_effect_direction_reported": true,
+    "finite_metrics_all_cells": true,
+    "long_context_targets_configured": true,
+    "max_context_at_least_1024_when_configured": true,
+    "multi_seed_reported": true,
+    "ngram_floor_reported_every_context": true,
+    "parameter_budget_leq_1_05_every_context": true,
+    "positions_shared_across_contexts_and_arms": true
+  },
+  "config": {
+    "batch_size": 64,
+    "contexts": [
+      16,
+      64
+    ],
+    "corpus": "twt",
+    "emb_dim": 16,
+    "eval_batch_size": 512,
+    "eval_windows": 2000,
+    "gradient_clip_norm": 5.0,
+    "heads": 2,
+    "hga_layers": 1,
+    "hga_n": 16,
+    "learning_rate": 0.003,
+    "max_docs": 400,
+    "max_vocab": 2000,
+    "steps": 120,
+    "train_windows": 8000
+  },
+  "config_hash": "205ca8e8e3e6c01132a2d6910fff955609c92934b68ce4520f696ee7d175fa7f",
+  "context_effect": {
+    "max_context": 64,
+    "per_arm": {
+      "dense": {
+        "direction": "degrades",
+        "ppl_at_max": 178.93667445,
+        "ppl_at_reference": 137.8757935,
+        "relative_change": 0.297811
+      },
+      "hga": {
+        "direction": "degrades",
+        "ppl_at_max": 131.42639046,
+        "ppl_at_reference": 131.39122846,
+        "relative_change": 0.000268
+      },
+      "transformer": {
+        "direction": "degrades",
+        "ppl_at_max": 127.44415173,
+        "ppl_at_reference": 126.67719867,
+        "relative_change": 0.006054
+      }
+    },
+    "reference_context": 16
+  },
+  "corpus": {
+    "dataset_hash": "1ba95dbbf3f1305e4fff55461688f77c588308329cc30ef53756eb7a1cf9cd38",
+    "tokens": {
+      "dev": 15401,
+      "test": 14833,
+      "train": 96540
+    },
+    "vocabulary_size": 2000
+  },
+  "dataset_hash": "a41d932169c7d27212035b4b05c68036faf3aad3092530340b6e839e1e86cfa7",
+  "findings": [
+    "`dense`: bağlam 16→64 tokenda test PPL 137.9→178.9 (+29.8%, degrades).",
+    "`transformer`: bağlam 16→64 tokenda test PPL 126.7→127.4 (+0.6%, degrades).",
+    "`hga`: bağlam 16→64 tokenda test PPL 131.4→131.4 (+0.0%, degrades).",
+    "Zemin @ bağlam 64: unigram PPL 113.5, bigram 88.4; en iyi neural 127.4.",
+    "AÇIK SINIR: bu kısa eşit-bütçe taramasında (120 adım) hiçbir neural kol bigram zeminini geçmedi. Mutlak LM kalitesi iddiası bu protokolün konusu değildir ve `turkish_lm` full (4000 adım) protokolünde ölçülür; oradaki n-gram kapıları gerçek veriyle PASS. Buradaki sayılar yalnız bağlam ETKİSİNİN yönünü taşır."
+  ],
+  "limitations": [
+    "PPL, deterministik örneklenmiş pencereler üzerinde hesaplanır; korpus CE'sinin yansız tahminidir, tam sayımı değildir.",
+    "Adım sayısı sabittir ve yakınsama iddiası yoktur; bağlamlar arası karşılaştırma eşit-eğitim-bütçesi karşılaştırmasıdır.",
+    "Girdi düzleştirmeli mimarilerde (dense, HGA encoder) bağlam uzadıkça parametre bütçesi aynı kalsın diye genişlikler düşer; bu, mimari ailelerin uzun bağlamdaki YAPISAL maliyet farkıdır ve gizlenmez.",
+    "Tek korpus (tr_corpus_v1) ve tek dil (Türkçe); genelleme iddiası taşımaz.",
+    "`smoke_1024` profili yalnız 512/1024 kod yolunu duman testinden geçirir; tam kalite raporu için `full` profili 24→1024 taramasını çalıştırmalıdır."
+  ],
+  "ngram_by_context": {
+    "16": {
+      "bigram_test_ppl": 88.3768122,
+      "unigram_test_ppl": 113.45099447
+    },
+    "64": {
+      "bigram_test_ppl": 88.3768122,
+      "unigram_test_ppl": 113.45099447
+    }
+  },
+  "positions": {
+    "dev": 2000,
+    "sampling_seed": 424243,
+    "signature": "779f7b2f13660b2a175db229aa1f44484d82feca0eda42bf6d69a995a0152410",
+    "test": 2000,
+    "train": 8000
+  },
+  "profile": "smoke",
+  "protocol": "long_context_lm_v1",
+  "results": {
+    "dense": {
+      "16": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 4.76336926,
+              "perplexity": 117.13993698,
+              "tokens": 2000,
+              "top1_accuracy": 0.099,
+              "top5_accuracy": 0.299
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 4.89954565,
+              "perplexity": 134.22877956,
+              "tokens": 2000,
+              "top1_accuracy": 0.094,
+              "top5_accuracy": 0.295
+            },
+            "training_seconds": 1.6387
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.82078406,
+              "perplexity": 124.06232467,
+              "tokens": 2000,
+              "top1_accuracy": 0.107,
+              "top5_accuracy": 0.313
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 4.93911438,
+              "perplexity": 139.64652101,
+              "tokens": 2000,
+              "top1_accuracy": 0.0995,
+              "top5_accuracy": 0.308
+            },
+            "training_seconds": 0.6031
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.79598267,
+              "perplexity": 121.0232488,
+              "tokens": 2000,
+              "top1_accuracy": 0.1075,
+              "top5_accuracy": 0.3245
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 4.93987,
+              "perplexity": 139.75207993,
+              "tokens": 2000,
+              "top1_accuracy": 0.0975,
+              "top5_accuracy": 0.3045
+            },
+            "training_seconds": 0.6039
+          }
+        ],
+        "test_ppl_mean": 137.8757935,
+        "test_ppl_std": 3.15884768,
+        "test_top1_mean": 0.097
+      },
+      "64": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 5.04637396,
+              "perplexity": 155.45774563,
+              "tokens": 2000,
+              "top1_accuracy": 0.083,
+              "top5_accuracy": 0.2555
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 5.1404108,
+              "perplexity": 170.78591227,
+              "tokens": 2000,
+              "top1_accuracy": 0.0695,
+              "top5_accuracy": 0.243
+            },
+            "training_seconds": 0.6833
+          },
+          {
+            "dev": {
+              "cross_entropy": 5.08299585,
+              "perplexity": 161.25643303,
+              "tokens": 2000,
+              "top1_accuracy": 0.0795,
+              "top5_accuracy": 0.266
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 5.17561569,
+              "perplexity": 176.90550008,
+              "tokens": 2000,
+              "top1_accuracy": 0.07,
+              "top5_accuracy": 0.257
+            },
+            "training_seconds": 0.6985
+          },
+          {
+            "dev": {
+              "cross_entropy": 5.0810705,
+              "perplexity": 160.946256,
+              "tokens": 2000,
+              "top1_accuracy": 0.0825,
+              "top5_accuracy": 0.27
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 5.24237439,
+              "perplexity": 189.118611,
+              "tokens": 2000,
+              "top1_accuracy": 0.0765,
+              "top5_accuracy": 0.2525
+            },
+            "training_seconds": 0.7091
+          }
+        ],
+        "test_ppl_mean": 178.93667445,
+        "test_ppl_std": 9.33360663,
+        "test_top1_mean": 0.072
+      }
+    },
+    "hga": {
+      "16": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 4.7385769,
+              "perplexity": 114.27146668,
+              "tokens": 2000,
+              "top1_accuracy": 0.072,
+              "top5_accuracy": 0.294
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 4.87526782,
+              "perplexity": 131.0092357,
+              "tokens": 2000,
+              "top1_accuracy": 0.0685,
+              "top5_accuracy": 0.273
+            },
+            "training_seconds": 1.4016
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.78536609,
+              "perplexity": 119.74519244,
+              "tokens": 2000,
+              "top1_accuracy": 0.0775,
+              "top5_accuracy": 0.2725
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 4.88838171,
+              "perplexity": 132.73859112,
+              "tokens": 2000,
+              "top1_accuracy": 0.0675,
+              "top5_accuracy": 0.268
+            },
+            "training_seconds": 1.3871
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.74561682,
+              "perplexity": 115.07876665,
+              "tokens": 2000,
+              "top1_accuracy": 0.075,
+              "top5_accuracy": 0.284
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 4.87080493,
+              "perplexity": 130.42585856,
+              "tokens": 2000,
+              "top1_accuracy": 0.067,
+              "top5_accuracy": 0.2675
+            },
+            "training_seconds": 1.4558
+          }
+        ],
+        "test_ppl_mean": 131.39122846,
+        "test_ppl_std": 1.20275593,
+        "test_top1_mean": 0.06766667
+      },
+      "64": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 4.73937567,
+              "perplexity": 114.36277943,
+              "tokens": 2000,
+              "top1_accuracy": 0.072,
+              "top5_accuracy": 0.286
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 4.86981769,
+              "perplexity": 130.29715999,
+              "tokens": 2000,
+              "top1_accuracy": 0.064,
+              "top5_accuracy": 0.27
+            },
+            "training_seconds": 2.1986
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.76711237,
+              "perplexity": 117.57922547,
+              "tokens": 2000,
+              "top1_accuracy": 0.073,
+              "top5_accuracy": 0.2895
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 4.89287582,
+              "perplexity": 133.33647544,
+              "tokens": 2000,
+              "top1_accuracy": 0.0685,
+              "top5_accuracy": 0.27
+            },
+            "training_seconds": 2.3582
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.74316882,
+              "perplexity": 114.79739859,
+              "tokens": 2000,
+              "top1_accuracy": 0.0675,
+              "top5_accuracy": 0.282
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 4.87248782,
+              "perplexity": 130.64553596,
+              "tokens": 2000,
+              "top1_accuracy": 0.0685,
+              "top5_accuracy": 0.2615
+            },
+            "training_seconds": 1.8956
+          }
+        ],
+        "test_ppl_mean": 131.42639046,
+        "test_ppl_std": 1.66332796,
+        "test_top1_mean": 0.067
+      }
+    },
+    "transformer": {
+      "16": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 4.71044653,
+              "perplexity": 111.10175946,
+              "tokens": 2000,
+              "top1_accuracy": 0.074,
+              "top5_accuracy": 0.288
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 4.84172876,
+              "perplexity": 126.68817595,
+              "tokens": 2000,
+              "top1_accuracy": 0.0695,
+              "top5_accuracy": 0.2785
+            },
+            "training_seconds": 2.5375
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.74606653,
+              "perplexity": 115.13053002,
+              "tokens": 2000,
+              "top1_accuracy": 0.0825,
+              "top5_accuracy": 0.286
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 4.84064795,
+              "perplexity": 126.551324,
+              "tokens": 2000,
+              "top1_accuracy": 0.071,
+              "top5_accuracy": 0.269
+            },
+            "training_seconds": 3.2639
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.71348999,
+              "perplexity": 111.44040796,
+              "tokens": 2000,
+              "top1_accuracy": 0.0715,
+              "top5_accuracy": 0.2855
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 4.84254871,
+              "perplexity": 126.79209605,
+              "tokens": 2000,
+              "top1_accuracy": 0.068,
+              "top5_accuracy": 0.2685
+            },
+            "training_seconds": 2.923
+          }
+        ],
+        "test_ppl_mean": 126.67719867,
+        "test_ppl_std": 0.1207608,
+        "test_top1_mean": 0.0695
+      },
+      "64": {
+        "per_seed": [
+          {
+            "dev": {
+              "cross_entropy": 4.7368916,
+              "perplexity": 114.07904685,
+              "tokens": 2000,
+              "top1_accuracy": 0.073,
+              "top5_accuracy": 0.284
+            },
+            "seed": 1,
+            "test": {
+              "cross_entropy": 4.84628897,
+              "perplexity": 127.26722006,
+              "tokens": 2000,
+              "top1_accuracy": 0.068,
+              "top5_accuracy": 0.2815
+            },
+            "training_seconds": 14.0993
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.75054309,
+              "perplexity": 115.64707434,
+              "tokens": 2000,
+              "top1_accuracy": 0.073,
+              "top5_accuracy": 0.289
+            },
+            "seed": 2,
+            "test": {
+              "cross_entropy": 4.8490621,
+              "perplexity": 127.62063872,
+              "tokens": 2000,
+              "top1_accuracy": 0.068,
+              "top5_accuracy": 0.2765
+            },
+            "training_seconds": 13.6362
+          },
+          {
+            "dev": {
+              "cross_entropy": 4.72807867,
+              "perplexity": 113.07809366,
+              "tokens": 2000,
+              "top1_accuracy": 0.066,
+              "top5_accuracy": 0.284
+            },
+            "seed": 3,
+            "test": {
+              "cross_entropy": 4.84768173,
+              "perplexity": 127.44459641,
+              "tokens": 2000,
+              "top1_accuracy": 0.0595,
+              "top5_accuracy": 0.2635
+            },
+            "training_seconds": 13.368
+          }
+        ],
+        "test_ppl_mean": 127.44415173,
+        "test_ppl_std": 0.17670975,
+        "test_top1_mean": 0.06516667
+      }
+    }
+  },
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2,
+    3
+  ]
+}
