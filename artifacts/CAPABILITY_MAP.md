@@ -306,3 +306,53 @@ cokme noktasi bulunamadi. Ama BFS, ogrenilmis degil.
 | 16 | Cikarim-derinligi | 5/5, C_R=1024 |
 
 **Sonuc: 12 tam, 4 kisim, 0 basarisiz.**
+
+---
+
+## Guncelleme v4: 21 Modul Test Edildi
+
+### 17. Kesif (Exploration) — Calisiyor
+
+Kucuk uzay (2 oge), InfoGain skorlamasi calisiyor. Aktif ogrenme
+en bilgilendirici deneyimi seciyor.
+
+### 18. Halusinasyon — Generator Zayif
+
+30 model-generated aday: 6 dogru, 24 yanlis. Halusinasyon orani 0.80.
+ANCAK: `verified=0` -> Verifier dogru sekilde hicbirini kabul etmedi.
+
+**Yorum:** Sistem DOGRU calisiyor (verification reddediyor), generator
+zayif (0.80 halusinasyon). Bu bir generator kalite sorunu.
+
+### 19. Verim (Efficiency) — Detayli Metrikler
+
+- EY (Experience Yield): 0.1302
+- NY (Novel Yield): 0.0950
+- UEY (Useful Experience Yield): 0.0578
+- GY (Generalization Yield): 0.5778
+- VID (Value of Information Density): 0.5678 bit/deneyim
+
+**Kritik:** EY yeniligi abartiyor, NY kullanilabilirligi abartiyor.
+Durust ayrisma.
+
+### 20. Cok-Ortam (Multi-Environment) — 8/8 GECTI
+
+5 ortam × 3 tohum × 200 iddia = 12,000 alan-disi test:
+- Her dogrulayici kendi alaninda 1.0000
+- Capraz-kontaminasyon YOK (12,000/12,000 cekimser)
+- Cekismeli sondalar: 60/60 cekimser
+
+### 21. Oncelik-Zincir (Priority Chain) — 6/6 GECTI
+
+3 tohum × 120 aday, ilk-10 secimi. Tum terimler zinciri tasiyor
+(skor -> siralama -> secim -> downstream). Baseline 0.90, yeni bilgi 0.63.
+
+## Final Yetenek Haritasi (21 Modul)
+
+| Kategori | Sayi | Moduller |
+|---|---|---|
+| Tam basari | 15 | Hibrit(3), Epistemik, Uzun-baglam, Championship, Olcekli-golden, Verifier-ensemble, Genelleme-v2, Verifier-adversarial, Bellek-hiyerarsi, Cikarim-derinligi, Cok-ortam, Oncelik-zincir, Kesif |
+| Kisim | 5 | Self-learning, Multi-hop, Signature, Ogrenme-transfer, Verim |
+| Zayif | 1 | Halusinasyon (0.80 generator) |
+
+**Sonuc: 15 tam, 5 kisim, 1 zayif.**
