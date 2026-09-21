@@ -1,0 +1,940 @@
+{
+  "aggregate": {
+    "leakage.test_count": {
+      "max": 5.0,
+      "mean": 5.0,
+      "min": 5.0,
+      "std": 0.0
+    },
+    "leakage.train_count": {
+      "max": 3.0,
+      "mean": 3.0,
+      "min": 3.0,
+      "std": 0.0
+    },
+    "metrics.accuracy": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.conflict_total": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.confusion.CONFLICT.CONFLICT": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.confusion.CONFLICT.INVALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.CONFLICT.UNCERTAIN": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.CONFLICT.VALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.INVALID.CONFLICT": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.INVALID.INVALID": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.confusion.INVALID.UNCERTAIN": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.INVALID.VALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.CONFLICT": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.INVALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.UNCERTAIN": {
+      "max": 2.0,
+      "mean": 2.0,
+      "min": 2.0,
+      "std": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.VALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.VALID.CONFLICT": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.VALID.INVALID": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.VALID.UNCERTAIN": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.confusion.VALID.VALID": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.correct": {
+      "max": 5.0,
+      "mean": 5.0,
+      "min": 5.0,
+      "std": 0.0
+    },
+    "metrics.f1": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.far": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.frr": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "std": 0.0
+    },
+    "metrics.invalid_total": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.precision": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.recall": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    },
+    "metrics.total": {
+      "max": 5.0,
+      "mean": 5.0,
+      "min": 5.0,
+      "std": 0.0
+    },
+    "metrics.uncertain_total": {
+      "max": 2.0,
+      "mean": 2.0,
+      "min": 2.0,
+      "std": 0.0
+    },
+    "metrics.valid_total": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "std": 0.0
+    }
+  },
+  "config_hash": "7c9190b6508b9eab83084b25dd03b763bff996341ce97c7fc64f85930bca0855",
+  "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+  "deterministic_results": true,
+  "experiment_ids": [
+    "EXP-0014",
+    "EXP-0015",
+    "EXP-0016"
+  ],
+  "manifests": [
+    {
+      "completed_at_utc": "2026-09-21T21:15:32.059270+00:00",
+      "config_hash": "7c9190b6508b9eab83084b25dd03b763bff996341ce97c7fc64f85930bca0855",
+      "cpu": "x86_64",
+      "cpu_count": 8,
+      "created_at_utc": "2026-09-21T21:15:32.048601+00:00",
+      "cuda_device_name": null,
+      "cuda_version": null,
+      "cudnn_version": null,
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "determinism": {
+        "cublas_workspace_config": ":4096:8",
+        "cublas_workspace_config_present_at_module_import": false,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "numpy_seeded_per_run": true,
+        "python_hash_seed": "1",
+        "python_hash_seed_present_at_module_import": false,
+        "python_random_seeded_per_run": true,
+        "torch_deterministic_algorithms": true,
+        "torch_seeded_per_run": true
+      },
+      "device": "cpu",
+      "experiment_id": "EXP-0014",
+      "git_commit": "a8465891ccd287c1b3eaa4bbe257e97b5ae86c76",
+      "git_dirty": false,
+      "gpu": null,
+      "model_hash": "NONE",
+      "parameter_count": null,
+      "parameters": {
+        "deterministic": true,
+        "test_count": 5
+      },
+      "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python_implementation": "CPython",
+      "python_version": "3.12.3",
+      "ram_total_bytes": 5156499456,
+      "result": "COMPLETED",
+      "seed": 1,
+      "timings": {
+        "inference_seconds": null,
+        "total_seconds": 0.001747,
+        "training_seconds": null
+      },
+      "torch_version": "2.14.0+cpu"
+    },
+    {
+      "completed_at_utc": "2026-09-21T21:15:32.071567+00:00",
+      "config_hash": "7c9190b6508b9eab83084b25dd03b763bff996341ce97c7fc64f85930bca0855",
+      "cpu": "x86_64",
+      "cpu_count": 8,
+      "created_at_utc": "2026-09-21T21:15:32.061192+00:00",
+      "cuda_device_name": null,
+      "cuda_version": null,
+      "cudnn_version": null,
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "determinism": {
+        "cublas_workspace_config": ":4096:8",
+        "cublas_workspace_config_present_at_module_import": false,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "numpy_seeded_per_run": true,
+        "python_hash_seed": "1",
+        "python_hash_seed_present_at_module_import": false,
+        "python_random_seeded_per_run": true,
+        "torch_deterministic_algorithms": true,
+        "torch_seeded_per_run": true
+      },
+      "device": "cpu",
+      "experiment_id": "EXP-0015",
+      "git_commit": "a8465891ccd287c1b3eaa4bbe257e97b5ae86c76",
+      "git_dirty": false,
+      "gpu": null,
+      "model_hash": "NONE",
+      "parameter_count": null,
+      "parameters": {
+        "deterministic": true,
+        "test_count": 5
+      },
+      "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python_implementation": "CPython",
+      "python_version": "3.12.3",
+      "ram_total_bytes": 5156499456,
+      "result": "COMPLETED",
+      "seed": 2,
+      "timings": {
+        "inference_seconds": null,
+        "total_seconds": 0.001766,
+        "training_seconds": null
+      },
+      "torch_version": "2.14.0+cpu"
+    },
+    {
+      "completed_at_utc": "2026-09-21T21:15:32.080852+00:00",
+      "config_hash": "7c9190b6508b9eab83084b25dd03b763bff996341ce97c7fc64f85930bca0855",
+      "cpu": "x86_64",
+      "cpu_count": 8,
+      "created_at_utc": "2026-09-21T21:15:32.072970+00:00",
+      "cuda_device_name": null,
+      "cuda_version": null,
+      "cudnn_version": null,
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "determinism": {
+        "cublas_workspace_config": ":4096:8",
+        "cublas_workspace_config_present_at_module_import": false,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "numpy_seeded_per_run": true,
+        "python_hash_seed": "1",
+        "python_hash_seed_present_at_module_import": false,
+        "python_random_seeded_per_run": true,
+        "torch_deterministic_algorithms": true,
+        "torch_seeded_per_run": true
+      },
+      "device": "cpu",
+      "experiment_id": "EXP-0016",
+      "git_commit": "a8465891ccd287c1b3eaa4bbe257e97b5ae86c76",
+      "git_dirty": false,
+      "gpu": null,
+      "model_hash": "NONE",
+      "parameter_count": null,
+      "parameters": {
+        "deterministic": true,
+        "test_count": 5
+      },
+      "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python_implementation": "CPython",
+      "python_version": "3.12.3",
+      "ram_total_bytes": 5156499456,
+      "result": "COMPLETED",
+      "seed": 3,
+      "timings": {
+        "inference_seconds": null,
+        "total_seconds": 0.001539,
+        "training_seconds": null
+      },
+      "torch_version": "2.14.0+cpu"
+    }
+  ],
+  "note": "Seedler arası özdeşlik yalnız tekrarlanabilirlik kontrolüdür; istatistiksel model kalitesi kanıtı değildir.",
+  "parameters": {
+    "deterministic": true,
+    "test_count": 5
+  },
+  "results": [
+    {
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "leakage": {
+        "clean": true,
+        "findings": [],
+        "test_count": 5,
+        "train_count": 3
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "conflict_total": 1,
+        "confusion": {
+          "CONFLICT": {
+            "CONFLICT": 1,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "INVALID": {
+            "CONFLICT": 0,
+            "INVALID": 1,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "UNCERTAIN": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 2,
+            "VALID": 0
+          },
+          "VALID": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 1
+          }
+        },
+        "correct": 5,
+        "f1": 1.0,
+        "far": 0.0,
+        "frr": 0.0,
+        "invalid_total": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "total": 5,
+        "uncertain_total": 2,
+        "valid_total": 1
+      },
+      "predictions": [
+        {
+          "expected": "VALID",
+          "experience_id": "TEST_VALID_001",
+          "predicted": "VALID"
+        },
+        {
+          "expected": "INVALID",
+          "experience_id": "TEST_INVALID_001",
+          "predicted": "INVALID"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_001",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_002",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "CONFLICT",
+          "experience_id": "TEST_CONFLICT_001",
+          "predicted": "CONFLICT"
+        }
+      ]
+    },
+    {
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "leakage": {
+        "clean": true,
+        "findings": [],
+        "test_count": 5,
+        "train_count": 3
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "conflict_total": 1,
+        "confusion": {
+          "CONFLICT": {
+            "CONFLICT": 1,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "INVALID": {
+            "CONFLICT": 0,
+            "INVALID": 1,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "UNCERTAIN": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 2,
+            "VALID": 0
+          },
+          "VALID": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 1
+          }
+        },
+        "correct": 5,
+        "f1": 1.0,
+        "far": 0.0,
+        "frr": 0.0,
+        "invalid_total": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "total": 5,
+        "uncertain_total": 2,
+        "valid_total": 1
+      },
+      "predictions": [
+        {
+          "expected": "VALID",
+          "experience_id": "TEST_VALID_001",
+          "predicted": "VALID"
+        },
+        {
+          "expected": "INVALID",
+          "experience_id": "TEST_INVALID_001",
+          "predicted": "INVALID"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_001",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_002",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "CONFLICT",
+          "experience_id": "TEST_CONFLICT_001",
+          "predicted": "CONFLICT"
+        }
+      ]
+    },
+    {
+      "dataset_hash": "77fdfbc40a01f5142a1dcb5dda49f434eea61781fda7525263d7cd04e8ac3b0c",
+      "leakage": {
+        "clean": true,
+        "findings": [],
+        "test_count": 5,
+        "train_count": 3
+      },
+      "metrics": {
+        "accuracy": 1.0,
+        "conflict_total": 1,
+        "confusion": {
+          "CONFLICT": {
+            "CONFLICT": 1,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "INVALID": {
+            "CONFLICT": 0,
+            "INVALID": 1,
+            "UNCERTAIN": 0,
+            "VALID": 0
+          },
+          "UNCERTAIN": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 2,
+            "VALID": 0
+          },
+          "VALID": {
+            "CONFLICT": 0,
+            "INVALID": 0,
+            "UNCERTAIN": 0,
+            "VALID": 1
+          }
+        },
+        "correct": 5,
+        "f1": 1.0,
+        "far": 0.0,
+        "frr": 0.0,
+        "invalid_total": 1,
+        "precision": 1.0,
+        "recall": 1.0,
+        "total": 5,
+        "uncertain_total": 2,
+        "valid_total": 1
+      },
+      "predictions": [
+        {
+          "expected": "VALID",
+          "experience_id": "TEST_VALID_001",
+          "predicted": "VALID"
+        },
+        {
+          "expected": "INVALID",
+          "experience_id": "TEST_INVALID_001",
+          "predicted": "INVALID"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_001",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "UNCERTAIN",
+          "experience_id": "TEST_UNCERTAIN_002",
+          "predicted": "UNCERTAIN"
+        },
+        {
+          "expected": "CONFLICT",
+          "experience_id": "TEST_CONFLICT_001",
+          "predicted": "CONFLICT"
+        }
+      ]
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "statistical_power": {
+    "can_reach_p_below_0_05": false,
+    "minimum_achievable_two_sided_p": 0.25,
+    "note": "Eşleşmiş sign-flip permütasyon testinde ulaşılabilecek en küçük iki yönlü p değeri 2/2^n'dir. n=5 için bu 0.0625 olduğundan, 5 seed ile p<0.05 MATEMATİKSEL OLARAK imkânsızdır; sonuçlar betimleyici olarak okunmalıdır.",
+    "seed_count": 3
+  },
+  "statistics": {
+    "leakage.test_count": {
+      "ci_lower": 5.0,
+      "ci_upper": 5.0,
+      "confidence_level": 0.95,
+      "max": 5.0,
+      "mean": 5.0,
+      "method": "degenerate-constant",
+      "min": 5.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "leakage.train_count": {
+      "ci_lower": 3.0,
+      "ci_upper": 3.0,
+      "confidence_level": 0.95,
+      "max": 3.0,
+      "mean": 3.0,
+      "method": "degenerate-constant",
+      "min": 3.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.accuracy": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.conflict_total": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.CONFLICT.CONFLICT": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.CONFLICT.INVALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.CONFLICT.UNCERTAIN": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.CONFLICT.VALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.INVALID.CONFLICT": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.INVALID.INVALID": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.INVALID.UNCERTAIN": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.INVALID.VALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.CONFLICT": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.INVALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.UNCERTAIN": {
+      "ci_lower": 2.0,
+      "ci_upper": 2.0,
+      "confidence_level": 0.95,
+      "max": 2.0,
+      "mean": 2.0,
+      "method": "degenerate-constant",
+      "min": 2.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.UNCERTAIN.VALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.VALID.CONFLICT": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.VALID.INVALID": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.VALID.UNCERTAIN": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.confusion.VALID.VALID": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.correct": {
+      "ci_lower": 5.0,
+      "ci_upper": 5.0,
+      "confidence_level": 0.95,
+      "max": 5.0,
+      "mean": 5.0,
+      "method": "degenerate-constant",
+      "min": 5.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.f1": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.far": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.frr": {
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "confidence_level": 0.95,
+      "max": 0.0,
+      "mean": 0.0,
+      "method": "degenerate-constant",
+      "min": 0.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.invalid_total": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.precision": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.recall": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.total": {
+      "ci_lower": 5.0,
+      "ci_upper": 5.0,
+      "confidence_level": 0.95,
+      "max": 5.0,
+      "mean": 5.0,
+      "method": "degenerate-constant",
+      "min": 5.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.uncertain_total": {
+      "ci_lower": 2.0,
+      "ci_upper": 2.0,
+      "confidence_level": 0.95,
+      "max": 2.0,
+      "mean": 2.0,
+      "method": "degenerate-constant",
+      "min": 2.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    },
+    "metrics.valid_total": {
+      "ci_lower": 1.0,
+      "ci_upper": 1.0,
+      "confidence_level": 0.95,
+      "max": 1.0,
+      "mean": 1.0,
+      "method": "degenerate-constant",
+      "min": 1.0,
+      "n": 3,
+      "seed": 12345,
+      "std_sample": 0.0
+    }
+  }
+}
