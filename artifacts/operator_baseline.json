@@ -1,0 +1,674 @@
+{
+  "arms": [
+    "kronecker",
+    "rank1",
+    "low_rank_param_matched",
+    "low_rank_flop_matched",
+    "kron_sum_2",
+    "full_dense"
+  ],
+  "batch_size": 16,
+  "budget": {
+    "full_dense": {
+      "flop_matched": false,
+      "flop_ratio_to_kronecker": 4.0,
+      "flops": 4096,
+      "parameter_matched": false,
+      "parameter_ratio_to_kronecker": 32.0,
+      "parameters": 4096
+    },
+    "kron_sum_2": {
+      "flop_matched": false,
+      "flop_ratio_to_kronecker": 2.0,
+      "flops": 2048,
+      "parameter_matched": false,
+      "parameter_ratio_to_kronecker": 2.0,
+      "parameters": 256
+    },
+    "kronecker": {
+      "flop_matched": true,
+      "flop_ratio_to_kronecker": 1.0,
+      "flops": 1024,
+      "parameter_matched": true,
+      "parameter_ratio_to_kronecker": 1.0,
+      "parameters": 128
+    },
+    "low_rank_flop_matched": {
+      "flop_matched": true,
+      "flop_ratio_to_kronecker": 1.0,
+      "flops": 1024,
+      "parameter_matched": false,
+      "parameter_ratio_to_kronecker": 8.0,
+      "parameters": 1024
+    },
+    "low_rank_param_matched": {
+      "flop_matched": false,
+      "flop_ratio_to_kronecker": 0.25,
+      "flops": 256,
+      "parameter_matched": false,
+      "parameter_ratio_to_kronecker": 2.0,
+      "parameters": 256
+    },
+    "rank1": {
+      "flop_matched": false,
+      "flop_ratio_to_kronecker": 0.125,
+      "flops": 128,
+      "parameter_matched": true,
+      "parameter_ratio_to_kronecker": 1.0,
+      "parameters": 128
+    }
+  },
+  "ceiling_gap": {
+    "full_dense_teacher": 0.9738413344,
+    "kronecker_teacher": 0.2132491288,
+    "low_rank_teacher": 0.9727818994,
+    "rank1_teacher": 0.9546525903
+  },
+  "checks": {
+    "all_arms_optimization_stable": true,
+    "all_baseline_arms_present": true,
+    "all_teacher_families_present": true,
+    "full_dense_is_over_budget": true,
+    "kronecker_beats_flop_matched_dense_on_structured": true,
+    "kronecker_beats_rank1_on_structured": true,
+    "kronecker_loses_to_dense_on_unstructured": true,
+    "official_20_seed_rule_met": false,
+    "parameter_accounting_exact": true
+  },
+  "dataset_hash": "4e53cb547d00",
+  "findings": [
+    "n=8, d=n²=64; 3 tohum × 4 öğretmen × 6 kol, her kol 100 adım.",
+    "`kronecker_teacher`: en iyi kol `full_dense` (nMSE 0.004566); eşit-parametre kolları arasında en iyi `kronecker`.",
+    "`rank1_teacher`: en iyi kol `low_rank_flop_matched` (nMSE 0.001619); eşit-parametre kolları arasında en iyi `rank1`.",
+    "`low_rank_teacher`: en iyi kol `full_dense` (nMSE 0.000725); eşit-parametre kolları arasında en iyi `rank1`.",
+    "`full_dense_teacher`: en iyi kol `full_dense` (nMSE 0.000456); eşit-parametre kolları arasında en iyi `rank1`.",
+    "Kronecker'ın kısıtsız dense tavanına göre nMSE farkı: kronecker_teacher: +0.213249, rank1_teacher: +0.954653, low_rank_teacher: +0.972782, full_dense_teacher: +0.973841. Pozitif değer Kronecker'ın tavanın gerisinde olduğunu gösterir."
+  ],
+  "limitations": [
+    "Görev tek katmanlı operatör regresyonudur; derin ağ, dil modeli veya sınıflandırma sonucu DEĞİLDİR.",
+    "full_dense kolu parametre bütçesini kasıtlı aşar; rakip değil tavandır. Onu yenmek beklenmez, ona olan mesafe raporlanır.",
+    "FLOP sayıları analitik çarpma-toplama sayımıdır; gerçek donanım verimi (BLAS, cache, paralellik) ölçülmez — wall-clock ayrıca verilir.",
+    "Öğretmenler sentetiktir; 'HGA şu problem sınıfında iyidir' sonucu yalnız bu sentetik sınıflar için geçerlidir.",
+    "Tohum sayısı 3; çekirdek bilimsel iddia için 20 tohum hedefi ayrıca koşulmalıdır."
+  ],
+  "n": 8,
+  "parameter_matched_rankings": {
+    "full_dense_teacher": [
+      "rank1",
+      "kronecker"
+    ],
+    "kronecker_teacher": [
+      "kronecker",
+      "rank1"
+    ],
+    "low_rank_teacher": [
+      "rank1",
+      "kronecker"
+    ],
+    "rank1_teacher": [
+      "rank1",
+      "kronecker"
+    ]
+  },
+  "protocol": "operator_baseline_family_v1",
+  "rankings": {
+    "full_dense_teacher": [
+      "full_dense",
+      "low_rank_flop_matched",
+      "low_rank_param_matched",
+      "kron_sum_2",
+      "rank1",
+      "kronecker"
+    ],
+    "kronecker_teacher": [
+      "full_dense",
+      "kron_sum_2",
+      "kronecker",
+      "low_rank_flop_matched",
+      "low_rank_param_matched",
+      "rank1"
+    ],
+    "low_rank_teacher": [
+      "full_dense",
+      "low_rank_flop_matched",
+      "low_rank_param_matched",
+      "rank1",
+      "kron_sum_2",
+      "kronecker"
+    ],
+    "rank1_teacher": [
+      "low_rank_flop_matched",
+      "low_rank_param_matched",
+      "full_dense",
+      "rank1",
+      "kron_sum_2",
+      "kronecker"
+    ]
+  },
+  "results": {
+    "full_dense_teacher": {
+      "full_dense": {
+        "analytic_flops": 4096,
+        "analytic_parameters": 4096,
+        "optimization_stable": true,
+        "parameters": 4096,
+        "per_seed_test_normalized_mse": [
+          0.0004679666,
+          0.0004141507,
+          0.0004866119
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0004136649,
+          0.0004988212
+        ],
+        "test_normalized_mse_mean": 0.0004562431,
+        "test_normalized_mse_std": 3.76263e-05,
+        "test_r2_mean": 0.9995437541,
+        "train_normalized_mse_mean": 0.0004206744,
+        "training_seconds_mean": 0.0493393333
+      },
+      "kron_sum_2": {
+        "analytic_flops": 2048,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.9565832031,
+          0.9507619656,
+          0.9573501129
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9508215371,
+          0.9589753173
+        ],
+        "test_normalized_mse_mean": 0.9548984272,
+        "test_normalized_mse_std": 0.0036027453,
+        "test_r2_mean": 0.0450952908,
+        "train_normalized_mse_mean": 0.9510562582,
+        "training_seconds_mean": 0.0636273333
+      },
+      "kronecker": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.9786269149,
+          0.9697612616,
+          0.9745045561
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9692772626,
+          0.9793178925
+        ],
+        "test_normalized_mse_mean": 0.9742975775,
+        "test_normalized_mse_std": 0.0044364493,
+        "test_r2_mean": 0.0256960153,
+        "train_normalized_mse_mean": 0.976122266,
+        "training_seconds_mean": 0.0495256667
+      },
+      "low_rank_flop_matched": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 1024,
+        "optimization_stable": true,
+        "parameters": 1024,
+        "per_seed_test_normalized_mse": [
+          0.6671970978,
+          0.6633377238,
+          0.6838989553
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.6591110051,
+          0.6838448462
+        ],
+        "test_normalized_mse_mean": 0.6714779256,
+        "test_normalized_mse_std": 0.0109286401,
+        "test_r2_mean": 0.3285176854,
+        "train_normalized_mse_mean": 0.6949415118,
+        "training_seconds_mean": 0.0462763333
+      },
+      "low_rank_param_matched": {
+        "analytic_flops": 256,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.9169957487,
+          0.9227408636,
+          0.9327273378
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.915146478,
+          0.9331628221
+        ],
+        "test_normalized_mse_mean": 0.92415465,
+        "test_normalized_mse_std": 0.0079605162,
+        "test_r2_mean": 0.0758392531,
+        "train_normalized_mse_mean": 0.9042057577,
+        "training_seconds_mean": 0.0463633333
+      },
+      "rank1": {
+        "analytic_flops": 128,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.9660711995,
+          0.9650953209,
+          0.9658784976
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9650967954,
+          0.9662665499
+        ],
+        "test_normalized_mse_mean": 0.9656816727,
+        "test_normalized_mse_std": 0.0005168557,
+        "test_r2_mean": 0.0343119535,
+        "train_normalized_mse_mean": 0.967541331,
+        "training_seconds_mean": 0.0432293333
+      }
+    },
+    "kronecker_teacher": {
+      "full_dense": {
+        "analytic_flops": 4096,
+        "analytic_parameters": 4096,
+        "optimization_stable": true,
+        "parameters": 4096,
+        "per_seed_test_normalized_mse": [
+          0.0026074288,
+          0.0029199687,
+          0.0081718114
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0010286803,
+          0.0081041256
+        ],
+        "test_normalized_mse_mean": 0.004566403,
+        "test_normalized_mse_std": 0.0031262834,
+        "test_r2_mean": 0.995433258,
+        "train_normalized_mse_mean": 0.0048229996,
+        "training_seconds_mean": 0.043533
+      },
+      "kron_sum_2": {
+        "analytic_flops": 2048,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.1266469003,
+          0.0985161512,
+          0.1974291061
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0831905324,
+          0.1985375726
+        ],
+        "test_normalized_mse_mean": 0.1408640525,
+        "test_normalized_mse_std": 0.0509660546,
+        "test_r2_mean": 0.8591229025,
+        "train_normalized_mse_mean": 0.1342801453,
+        "training_seconds_mean": 0.0688416667
+      },
+      "kronecker": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.1135952325,
+          0.1434610616,
+          0.3963903012
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0419983127,
+          0.3936327509
+        ],
+        "test_normalized_mse_mean": 0.2178155318,
+        "test_normalized_mse_std": 0.1553695696,
+        "test_r2_mean": 0.7821686235,
+        "train_normalized_mse_mean": 0.2127913584,
+        "training_seconds_mean": 0.1051616667
+      },
+      "low_rank_flop_matched": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 1024,
+        "optimization_stable": true,
+        "parameters": 1024,
+        "per_seed_test_normalized_mse": [
+          0.4284866601,
+          0.4282732202,
+          0.4366408955
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.4257350835,
+          0.4365321004
+        ],
+        "test_normalized_mse_mean": 0.4311335919,
+        "test_normalized_mse_std": 0.0047706586,
+        "test_r2_mean": 0.5688188694,
+        "train_normalized_mse_mean": 0.3926935297,
+        "training_seconds_mean": 0.047627
+      },
+      "low_rank_param_matched": {
+        "analytic_flops": 256,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.8289686294,
+          0.782748838,
+          0.877008837
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.7762395045,
+          0.8829113651
+        ],
+        "test_normalized_mse_mean": 0.8295754348,
+        "test_normalized_mse_std": 0.0471329292,
+        "test_r2_mean": 0.1703347233,
+        "train_normalized_mse_mean": 0.8440746526,
+        "training_seconds_mean": 0.0472553333
+      },
+      "rank1": {
+        "analytic_flops": 128,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.8802281662,
+          0.8999267447,
+          0.9336465383
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.8740311115,
+          0.9351698546
+        ],
+        "test_normalized_mse_mean": 0.9046004831,
+        "test_normalized_mse_std": 0.027014135,
+        "test_r2_mean": 0.0953006118,
+        "train_normalized_mse_mean": 0.8681345982,
+        "training_seconds_mean": 0.055902
+      }
+    },
+    "low_rank_teacher": {
+      "full_dense": {
+        "analytic_flops": 4096,
+        "analytic_parameters": 4096,
+        "optimization_stable": true,
+        "parameters": 4096,
+        "per_seed_test_normalized_mse": [
+          0.0005288177,
+          0.0009867736,
+          0.0006587811
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0004577248,
+          0.0009918568
+        ],
+        "test_normalized_mse_mean": 0.0007247908,
+        "test_normalized_mse_std": 0.0002360061,
+        "test_r2_mean": 0.9992752067,
+        "train_normalized_mse_mean": 0.0007406155,
+        "training_seconds_mean": 0.0413246667
+      },
+      "kron_sum_2": {
+        "analytic_flops": 2048,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.9545785085,
+          0.9624610319,
+          0.9596139857
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9543676199,
+          0.9634013975
+        ],
+        "test_normalized_mse_mean": 0.9588845087,
+        "test_normalized_mse_std": 0.0039915719,
+        "test_r2_mean": 0.0411123093,
+        "train_normalized_mse_mean": 0.962777462,
+        "training_seconds_mean": 0.0640553333
+      },
+      "kronecker": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.9746128092,
+          0.9705809864,
+          0.9753262751
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9706112221,
+          0.9764021584
+        ],
+        "test_normalized_mse_mean": 0.9735066902,
+        "test_normalized_mse_std": 0.0025587234,
+        "test_r2_mean": 0.0264900795,
+        "train_normalized_mse_mean": 0.9709750289,
+        "training_seconds_mean": 0.0511076667
+      },
+      "low_rank_flop_matched": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 1024,
+        "optimization_stable": true,
+        "parameters": 1024,
+        "per_seed_test_normalized_mse": [
+          0.0009650079,
+          0.0013730941,
+          0.0010787893
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0009006556,
+          0.0013772719
+        ],
+        "test_normalized_mse_mean": 0.0011389638,
+        "test_normalized_mse_std": 0.0002105928,
+        "test_r2_mean": 0.9988610325,
+        "train_normalized_mse_mean": 0.0010075956,
+        "training_seconds_mean": 0.0447623333
+      },
+      "low_rank_param_matched": {
+        "analytic_flops": 256,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.3261809071,
+          0.3436175339,
+          0.34256592
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.3263903744,
+          0.3485191996
+        ],
+        "test_normalized_mse_mean": 0.337454787,
+        "test_normalized_mse_std": 0.0097776147,
+        "test_r2_mean": 0.6625440941,
+        "train_normalized_mse_mean": 0.3581296469,
+        "training_seconds_mean": 0.0433083333
+      },
+      "rank1": {
+        "analytic_flops": 128,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.7238329696,
+          0.6125401455,
+          0.7367112417
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.6137655425,
+          0.7682906954
+        ],
+        "test_normalized_mse_mean": 0.6910281189,
+        "test_normalized_mse_std": 0.0682768918,
+        "test_r2_mean": 0.3089695959,
+        "train_normalized_mse_mean": 0.6729267477,
+        "training_seconds_mean": 0.042957
+      }
+    },
+    "rank1_teacher": {
+      "full_dense": {
+        "analytic_flops": 4096,
+        "analytic_parameters": 4096,
+        "optimization_stable": true,
+        "parameters": 4096,
+        "per_seed_test_normalized_mse": [
+          0.0072475784,
+          0.0071564796,
+          0.0148192915
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0047642381,
+          0.0147179949
+        ],
+        "test_normalized_mse_mean": 0.0097411165,
+        "test_normalized_mse_std": 0.0043980644,
+        "test_r2_mean": 0.9902588631,
+        "train_normalized_mse_mean": 0.0109866734,
+        "training_seconds_mean": 0.0428573333
+      },
+      "kron_sum_2": {
+        "analytic_flops": 2048,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.934919162,
+          0.9373637345,
+          0.9495921558
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9317290382,
+          0.9495209967
+        ],
+        "test_normalized_mse_mean": 0.9406250174,
+        "test_normalized_mse_std": 0.0078613715,
+        "test_r2_mean": 0.0593734194,
+        "train_normalized_mse_mean": 0.9374880623,
+        "training_seconds_mean": 0.0605036667
+      },
+      "kronecker": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.9496971275,
+          0.9629496834,
+          0.9805343094
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.9468886334,
+          0.9818987801
+        ],
+        "test_normalized_mse_mean": 0.9643937068,
+        "test_normalized_mse_std": 0.0154692227,
+        "test_r2_mean": 0.0356046854,
+        "train_normalized_mse_mean": 0.9696366654,
+        "training_seconds_mean": 0.0499043333
+      },
+      "low_rank_flop_matched": {
+        "analytic_flops": 1024,
+        "analytic_parameters": 1024,
+        "optimization_stable": true,
+        "parameters": 1024,
+        "per_seed_test_normalized_mse": [
+          0.0014887908,
+          0.0019544016,
+          0.0014136188
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0012874419,
+          0.0019504322
+        ],
+        "test_normalized_mse_mean": 0.0016189371,
+        "test_normalized_mse_std": 0.0002929421,
+        "test_r2_mean": 0.9983810605,
+        "train_normalized_mse_mean": 0.0013208125,
+        "training_seconds_mean": 0.0449656667
+      },
+      "low_rank_param_matched": {
+        "analytic_flops": 256,
+        "analytic_parameters": 256,
+        "optimization_stable": true,
+        "parameters": 256,
+        "per_seed_test_normalized_mse": [
+          0.0069341423,
+          0.0060576479,
+          0.0122459047
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0046232997,
+          0.0122018303
+        ],
+        "test_normalized_mse_mean": 0.008412565,
+        "test_normalized_mse_std": 0.0033485714,
+        "test_r2_mean": 0.9915874179,
+        "train_normalized_mse_mean": 0.0084455121,
+        "training_seconds_mean": 0.0434953333
+      },
+      "rank1": {
+        "analytic_flops": 128,
+        "analytic_parameters": 128,
+        "optimization_stable": true,
+        "parameters": 128,
+        "per_seed_test_normalized_mse": [
+          0.0580007915,
+          0.1224372971,
+          0.0411356299
+        ],
+        "seed_count": 3,
+        "test_normalized_mse_ci95": [
+          0.0253031987,
+          0.1224126136
+        ],
+        "test_normalized_mse_mean": 0.0738579062,
+        "test_normalized_mse_std": 0.0429077655,
+        "test_r2_mean": 0.926142003,
+        "train_normalized_mse_mean": 0.0737983402,
+        "training_seconds_mean": 0.0436796667
+      }
+    }
+  },
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "steps": 100,
+  "teachers": [
+    "kronecker_teacher",
+    "rank1_teacher",
+    "low_rank_teacher",
+    "full_dense_teacher"
+  ]
+}

@@ -1,0 +1,5933 @@
+{
+  "abstention_rate": 0.058824,
+  "annotation_hash": "1c971ea4ff01",
+  "checks": {
+    "entity_f1_at_least_0_90": true,
+    "extraction_yield_at_least_threshold": true,
+    "negation_recall_perfect": true,
+    "no_out_of_scope_hallucination": true,
+    "property_precision_at_least_0_80": true,
+    "relation_f1_at_least_0_80": true,
+    "temporal_recall_perfect": true,
+    "v2_extraction_yield_at_least_0_85": true,
+    "v2_gold_size_at_least_100": true,
+    "v2_out_of_scope_negatives_present": true,
+    "v2_split_metadata_present": true,
+    "v2_unique_sentences": true
+  },
+  "dataset_hash": "564e616de621",
+  "dataset_summary": {
+    "construct": "curated_gold_protocol_not_general_turkish_ner_re_score",
+    "phenomena": {
+      "case:ayrilma": 18,
+      "case:belirtme": 18,
+      "case:bulunma": 12,
+      "case:yonelme": 80,
+      "causative_voice": 3,
+      "embedded_clause": 1,
+      "instrument": 88,
+      "location": 12,
+      "movement": 98,
+      "negation": 29,
+      "nominalized_clause": 1,
+      "object_relation": 30,
+      "out_of_scope": 8,
+      "passive_or_causative_voice": 1,
+      "passive_subordinate_clause": 1,
+      "polarity:positive": 88,
+      "property": 20,
+      "subordinate_clause": 1,
+      "temporal": 48
+    },
+    "polarity_coverage": {
+      "NEGATIVE": 28,
+      "POSITIVE": 112
+    },
+    "predicate_coverage": {
+      "almak": 4,
+      "binmek": 10,
+      "gelmek": 28,
+      "gitmek": 60,
+      "görmek": 5,
+      "okumak": 29,
+      "sevmek": 4
+    },
+    "role_coverage": {
+      "hedef": 80,
+      "kaynak": 18,
+      "konum": 12,
+      "nesne": 30
+    },
+    "splits": {
+      "calibration": 45,
+      "heldout": 46,
+      "stress": 45
+    },
+    "unique_sentence_count": 136
+  },
+  "extraction_yield": 1.0,
+  "findings": [
+    "136 etiketli cümle (128 kapsam içi, 8 kapsam dışı).",
+    "Katman F1: entity=1.0000, relation=1.0000, property=1.0000, temporal=1.0000, negation=1.0000.",
+    "İlişki tam eşleşme / extraction_yield: 1.0000.",
+    "Aşırı çıkarım oranı 0.0000; kapsam dışı cümlelerde yanlış ilişki 0/8.",
+    "Kapsam özeti: almak=4, binmek=10, gelmek=28, gitmek=60, görmek=5, okumak=29, sevmek=4."
+  ],
+  "in_scope_count": 128,
+  "layers": {
+    "entity": {
+      "f1": 1.0,
+      "gold": 356,
+      "precision": 1.0,
+      "predicted": 356,
+      "recall": 1.0,
+      "true_positive": 356
+    },
+    "negation": {
+      "f1": 1.0,
+      "gold": 28,
+      "precision": 1.0,
+      "predicted": 28,
+      "recall": 1.0,
+      "true_positive": 28
+    },
+    "property": {
+      "f1": 1.0,
+      "gold": 108,
+      "precision": 1.0,
+      "predicted": 108,
+      "recall": 1.0,
+      "true_positive": 108
+    },
+    "relation": {
+      "f1": 1.0,
+      "gold": 140,
+      "precision": 1.0,
+      "predicted": 140,
+      "recall": 1.0,
+      "true_positive": 140
+    },
+    "temporal": {
+      "f1": 1.0,
+      "gold": 94,
+      "precision": 1.0,
+      "predicted": 94,
+      "recall": 1.0,
+      "true_positive": 94
+    }
+  },
+  "limitations": [
+    "Bu protokol istatistiksel bir Türkçe NER/RE değerlendirmesi DEĞİLDİR. Sonuçlar sınırlı, kural-tabanlı hattın kapsamını gösterir; genel Türkçe performansı veya dış geçerlilik iddiası değildir.",
+    "v2 genişletmesi gerçek dış korpus veya bağımsız insan anotasyonu değil, kaynakta denetlenebilir şablon/altın etiket sözleşmesidir.",
+    "Ontolojiden türetilen özellikler (canlı, binilebilir) altın sette yer almaz ve precision hesabına katılmaz; onlar metinden değil tip varsayımından gelir ve düşük güvenle yazılır.",
+    "Hat kural tabanlıdır: sözlük büyüdükçe recall artar, bu bir öğrenme sonucu değildir.",
+    "Kapsam dışı örnekler precision güvenliği için eklidir ama fuzzing veya geniş haber/sosyal medya dağılımı yerine geçmez."
+  ],
+  "mean_relation_confidence": 0.9,
+  "out_of_scope_count": 8,
+  "out_of_scope_false_positive_rate": 0.0,
+  "over_extraction_rate": 0.0,
+  "per_sentence": [
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün Ankara'ya arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0001"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün Bursa'ya gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0002"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet yarın eve uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0003"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli kütüphaneye bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0004"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün İzmir'e trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0005"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün okula otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0006"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın parka arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0007"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz Ankara'ya gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0008"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün Bursa'ya uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0009"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün eve bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0010"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet yarın kütüphaneye trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0011"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli İzmir'e otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0012"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün okula arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0013"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün parka gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0014"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın Ankara'ya uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0015"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz Bursa'ya bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0016"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün eve trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0017"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün kütüphaneye otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0018"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet yarın İzmir'e arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0019"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli okula gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0020"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün parka uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0021"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün Ankara'ya bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0022"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın Bursa'ya trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0023"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz eve otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0024"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün kütüphaneye arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0025"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün İzmir'e gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0026"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet yarın okula uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0027"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli parka bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0028"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün Ankara'ya trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0029"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün Bursa'ya otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0030"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın eve arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0031"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz kütüphaneye gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0032"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün İzmir'e uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0033"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün okula bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0034"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet yarın parka trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0035"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli Ankara'ya otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0036"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün Bursa'ya arabayla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0037"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "ev",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün eve gemiyle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0038"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın kütüphaneye uçakla gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0039"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz İzmir'e bisikletle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0040"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "okul",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün okula trenle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0041"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "park",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün parka otobüsle gitti.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0042"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli bugün İstanbul'dan otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0043"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep yarın Bursa'dan bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0044"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma parktan gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0045"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can dün İzmir'den otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0046"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ev",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ev",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz bugün evden bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0047"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gelmek",
+          "ankara",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gelmek",
+          "ankara",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali yarın Ankara'dan gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0048"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "okul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "okul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe okuldan otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0049"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet dün İstanbul'dan bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0050"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli bugün Bursa'dan gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0051"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep yarın parktan otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0052"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma İzmir'den bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0053"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gelmek",
+          "ev",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gelmek",
+          "ev",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can dün evden gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0054"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ankara",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ankara",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz bugün Ankara'dan otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0055"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gelmek",
+          "okul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gelmek",
+          "okul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali yarın okuldan bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0056"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "istanbul",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe İstanbul'dan gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0057"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "bursa",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet dün Bursa'dan otobüsle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0058"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gelmek",
+          "park",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli bugün parktan bisikletle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0059"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:ayrilma",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "izmir",
+          "kaynak",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep yarın İzmir'den gemiyle geldi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0060"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Fatma yarın İzmir'e trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0061"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Can bugün parka gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0062"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Deniz yarın Bursa'ya trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0063"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ali bugün kütüphaneye gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0064"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ayşe yarın okula trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0065"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Mehmet bugün Ankara'ya gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0066"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Veli yarın eve trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0067"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Zeynep bugün İzmir'e gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0068"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Fatma yarın parka trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0069"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Can bugün Bursa'ya gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0070"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Deniz yarın kütüphaneye trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0071"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gitmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gitmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ali bugün okula gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0072"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gitmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ayşe yarın Ankara'ya trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0073"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gitmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Mehmet bugün eve gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0074"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gitmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Veli yarın İzmir'e trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0075"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gitmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Zeynep bugün parka gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0076"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gitmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Fatma yarın Bursa'ya trenle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0077"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gitmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Can bugün kütüphaneye gemiyle gitmeyecek.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0078"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ayşe dün Bursa'ya uçakla gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0079"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Mehmet bugün Ankara'ya gemiyle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0080"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "gelmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "gelmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Veli dün parka arabayla gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0081"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "gelmek",
+          "okul",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Zeynep bugün okula otobüsle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0082"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "gelmek",
+          "izmir",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Fatma dün İzmir'e trenle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0083"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "gelmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "gelmek",
+          "kutuphane",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Can bugün kütüphaneye bisikletle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0084"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "gelmek",
+          "ev",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Deniz dün eve uçakla gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0085"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "gelmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "gelmek",
+          "bursa",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ali bugün Bursa'ya gemiyle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0086"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "gelmek",
+          "ankara",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Ayşe dün Ankara'ya arabayla gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0087"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "movement",
+        "instrument",
+        "case:yonelme",
+        "negation",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "gelmek",
+          "park",
+          "hedef",
+          "NEGATIVE"
+        ]
+      ],
+      "sentence": "Mehmet bugün parka otobüsle gelmedi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0088"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet kitabı okudu.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0089"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "görmek",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "görmek",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli telefonu gördü.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0090"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "almak",
+          "masa",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "almak",
+          "masa",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep masayı aldı.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0091"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma kalemi sevdi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0092"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can kitabı okudu.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0093"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "görmek",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "görmek",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz telefonu gördü.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0094"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "almak",
+          "masa",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "almak",
+          "masa",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali masayı aldı.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0095"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe kalemi sevdi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0096"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "okumak",
+          "ankara",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "zeynep",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "okumak",
+          "ankara",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "zeynep",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep Ankara'da kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0097"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "fatma",
+          "okumak",
+          "kutuphane",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "fatma",
+          "okumak",
+          "kutuphane",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma kütüphanede kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0098"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "can",
+          "okumak",
+          "park",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "can",
+          "okumak",
+          "park",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can parkta kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0099"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "okumak",
+          "ev",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "deniz",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "okumak",
+          "ev",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "deniz",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz evde kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0100"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "ali",
+          "okumak",
+          "okul",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "ali",
+          "okumak",
+          "okul",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali okulda kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0101"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "okumak",
+          "bursa",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "ayse",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "okumak",
+          "bursa",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "ayse",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe Bursa'da kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0102"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "okumak",
+          "ankara",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "mehmet",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "okumak",
+          "ankara",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "mehmet",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet Ankara'da kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0103"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "veli",
+          "okumak",
+          "kutuphane",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "veli",
+          "okumak",
+          "kutuphane",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli kütüphanede kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0104"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "zeynep",
+          "okumak",
+          "park",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "zeynep",
+          "okumak",
+          "park",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep parkta kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0105"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "okumak",
+          "ev",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "fatma",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "okumak",
+          "ev",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "fatma",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma evde kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0106"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "can",
+          "okumak",
+          "okul",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "okumak",
+          "kitap",
+          "nesne",
+          "POSITIVE"
+        ],
+        [
+          "can",
+          "okumak",
+          "okul",
+          "konum",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can okulda kitap okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0107"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "okumak",
+          "bursa",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "deniz",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "object_relation",
+        "location",
+        "case:bulunma"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "okumak",
+          "bursa",
+          "konum",
+          "POSITIVE"
+        ],
+        [
+          "deniz",
+          "okumak",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz Bursa'da kalem okuyor.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0108"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can dün kırmızı arabaya bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0109"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz dün büyük telefonu okudu.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0110"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali dün eski uçağa bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0111"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe dün mavi kalemi gördü.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0112"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet dün küçük trene bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0113"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "almak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "almak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli dün hızlı telefonu aldı.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0114"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep dün yeşil arabaya bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0115"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma dün yeni kalemi sevdi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0116"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can bugün kırmızı uçağa bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0117"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz bugün büyük telefonu okudu.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0118"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali bugün eski trene bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0119"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe bugün mavi kalemi gördü.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0120"
+    },
+    {
+      "gold_relations": [
+        [
+          "mehmet",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "mehmet",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Mehmet bugün küçük arabaya bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0121"
+    },
+    {
+      "gold_relations": [
+        [
+          "veli",
+          "almak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "veli",
+          "almak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Veli bugün hızlı telefonu aldı.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0122"
+    },
+    {
+      "gold_relations": [
+        [
+          "zeynep",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "zeynep",
+          "binmek",
+          "ucak",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Zeynep bugün yeşil uçağa bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0123"
+    },
+    {
+      "gold_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "fatma",
+          "sevmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Fatma bugün yeni kalemi sevdi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0124"
+    },
+    {
+      "gold_relations": [
+        [
+          "can",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "can",
+          "binmek",
+          "tren",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Can yarın kırmızı trene bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0125"
+    },
+    {
+      "gold_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "deniz",
+          "okumak",
+          "telefon",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Deniz yarın büyük telefonu okudu.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0126"
+    },
+    {
+      "gold_relations": [
+        [
+          "ali",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "movement",
+        "case:yonelme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ali",
+          "binmek",
+          "araba",
+          "hedef",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ali yarın eski arabaya bindi.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0127"
+    },
+    {
+      "gold_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "in_scope": true,
+      "missed": [],
+      "phenomena": [
+        "property",
+        "object_relation",
+        "case:belirtme",
+        "polarity:positive",
+        "temporal"
+      ],
+      "predicted_relations": [
+        [
+          "ayse",
+          "görmek",
+          "kalem",
+          "nesne",
+          "POSITIVE"
+        ]
+      ],
+      "sentence": "Ayşe yarın mavi kalemi gördü.",
+      "skipped_reasons": [],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0128"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "subordinate_clause"
+      ],
+      "predicted_relations": [],
+      "sentence": "Ali'nin dün aldığı kitabı Ayşe'ye verdiği söylendi.",
+      "skipped_reasons": [
+        "muhtemel_cati_eki_uyeleri_belirsiz:soylen+n"
+      ],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0129"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "causative_voice"
+      ],
+      "predicted_relations": [],
+      "sentence": "Öğretmen öğrencilere kitabı okuttu.",
+      "skipped_reasons": [
+        "cati_eki_uye_yapisi_belirsiz:okut<-oku"
+      ],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0130"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "passive_or_causative_voice"
+      ],
+      "predicted_relations": [],
+      "sentence": "Kedi masaya çıkartıldı.",
+      "skipped_reasons": [
+        "muhtemel_cati_eki_uyeleri_belirsiz:cikartil+il"
+      ],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0131"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "embedded_clause"
+      ],
+      "predicted_relations": [],
+      "sentence": "Deniz, Ali'nin evden geldiğini düşündü.",
+      "skipped_reasons": [
+        "muhtemel_cati_eki_uyeleri_belirsiz:dusun+un"
+      ],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0132"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "passive_subordinate_clause"
+      ],
+      "predicted_relations": [],
+      "sentence": "Mehmet kitabın okunduğunu duydu.",
+      "skipped_reasons": [
+        "bilinmeyen_fiil:duy"
+      ],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0133"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "nominalized_clause"
+      ],
+      "predicted_relations": [],
+      "sentence": "Veli'nin parka gitmesi istendi.",
+      "skipped_reasons": [
+        "muhtemel_cati_eki_uyeleri_belirsiz:isten+n"
+      ],
+      "source": "curated_template_v2",
+      "split": "stress",
+      "spurious": [],
+      "uid": "sem-v2-0134"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "causative_voice",
+        "negation"
+      ],
+      "predicted_relations": [],
+      "sentence": "Ayşe kalemi okutmadı.",
+      "skipped_reasons": [
+        "cati_eki_uye_yapisi_belirsiz:okut<-oku"
+      ],
+      "source": "curated_template_v2",
+      "split": "calibration",
+      "spurious": [],
+      "uid": "sem-v2-0135"
+    },
+    {
+      "gold_relations": [],
+      "in_scope": false,
+      "missed": [],
+      "phenomena": [
+        "out_of_scope",
+        "causative_voice"
+      ],
+      "predicted_relations": [],
+      "sentence": "Fatma kapıyı açtırdı.",
+      "skipped_reasons": [
+        "muhtemel_cati_eki_uyeleri_belirsiz:actir+tir"
+      ],
+      "source": "curated_template_v2",
+      "split": "heldout",
+      "spurious": [],
+      "uid": "sem-v2-0136"
+    }
+  ],
+  "phenomenon_metrics": {
+    "case:ayrilma": {
+      "in_scope_count": 18,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 54,
+          "precision": 1.0,
+          "predicted": 54,
+          "recall": 1.0,
+          "true_positive": 54
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 18,
+          "precision": 1.0,
+          "predicted": 18,
+          "recall": 1.0,
+          "true_positive": 18
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 18,
+          "precision": 1.0,
+          "predicted": 18,
+          "recall": 1.0,
+          "true_positive": 18
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 14,
+          "precision": 1.0,
+          "predicted": 14,
+          "recall": 1.0,
+          "true_positive": 14
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 18
+    },
+    "case:belirtme": {
+      "in_scope_count": 18,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 36,
+          "precision": 1.0,
+          "predicted": 36,
+          "recall": 1.0,
+          "true_positive": 36
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 10,
+          "precision": 1.0,
+          "predicted": 10,
+          "recall": 1.0,
+          "true_positive": 10
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 18,
+          "precision": 1.0,
+          "predicted": 18,
+          "recall": 1.0,
+          "true_positive": 18
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 10,
+          "precision": 1.0,
+          "predicted": 10,
+          "recall": 1.0,
+          "true_positive": 10
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 18
+    },
+    "case:bulunma": {
+      "in_scope_count": 12,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 36,
+          "precision": 1.0,
+          "predicted": 36,
+          "recall": 1.0,
+          "true_positive": 36
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 24,
+          "precision": 1.0,
+          "predicted": 24,
+          "recall": 1.0,
+          "true_positive": 24
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 12
+    },
+    "case:yonelme": {
+      "in_scope_count": 80,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 230,
+          "precision": 1.0,
+          "predicted": 230,
+          "recall": 1.0,
+          "true_positive": 230
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 80,
+          "precision": 1.0,
+          "predicted": 80,
+          "recall": 1.0,
+          "true_positive": 80
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 80,
+          "precision": 1.0,
+          "predicted": 80,
+          "recall": 1.0,
+          "true_positive": 80
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 70,
+          "precision": 1.0,
+          "predicted": 70,
+          "recall": 1.0,
+          "true_positive": 70
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 80
+    },
+    "causative_voice": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 3,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 3
+    },
+    "embedded_clause": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 1
+    },
+    "instrument": {
+      "in_scope_count": 88,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 264,
+          "precision": 1.0,
+          "predicted": 264,
+          "recall": 1.0,
+          "true_positive": 264
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 88,
+          "precision": 1.0,
+          "predicted": 88,
+          "recall": 1.0,
+          "true_positive": 88
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 88,
+          "precision": 1.0,
+          "predicted": 88,
+          "recall": 1.0,
+          "true_positive": 88
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 74,
+          "precision": 1.0,
+          "predicted": 74,
+          "recall": 1.0,
+          "true_positive": 74
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 88
+    },
+    "location": {
+      "in_scope_count": 12,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 36,
+          "precision": 1.0,
+          "predicted": 36,
+          "recall": 1.0,
+          "true_positive": 36
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 24,
+          "precision": 1.0,
+          "predicted": 24,
+          "recall": 1.0,
+          "true_positive": 24
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 12
+    },
+    "movement": {
+      "in_scope_count": 98,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 284,
+          "precision": 1.0,
+          "predicted": 284,
+          "recall": 1.0,
+          "true_positive": 284
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 98,
+          "precision": 1.0,
+          "predicted": 98,
+          "recall": 1.0,
+          "true_positive": 98
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 98,
+          "precision": 1.0,
+          "predicted": 98,
+          "recall": 1.0,
+          "true_positive": 98
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 84,
+          "precision": 1.0,
+          "predicted": 84,
+          "recall": 1.0,
+          "true_positive": 84
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 98
+    },
+    "negation": {
+      "in_scope_count": 28,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 84,
+          "precision": 1.0,
+          "predicted": 84,
+          "recall": 1.0,
+          "true_positive": 84
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 29
+    },
+    "nominalized_clause": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 1
+    },
+    "object_relation": {
+      "in_scope_count": 30,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 72,
+          "precision": 1.0,
+          "predicted": 72,
+          "recall": 1.0,
+          "true_positive": 72
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 10,
+          "precision": 1.0,
+          "predicted": 10,
+          "recall": 1.0,
+          "true_positive": 10
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 42,
+          "precision": 1.0,
+          "predicted": 42,
+          "recall": 1.0,
+          "true_positive": 42
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 10,
+          "precision": 1.0,
+          "predicted": 10,
+          "recall": 1.0,
+          "true_positive": 10
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 30
+    },
+    "out_of_scope": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 8,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 8
+    },
+    "passive_or_causative_voice": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 1
+    },
+    "passive_subordinate_clause": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 1
+    },
+    "polarity:positive": {
+      "in_scope_count": 88,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 236,
+          "precision": 1.0,
+          "predicted": 236,
+          "recall": 1.0,
+          "true_positive": 236
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 80,
+          "precision": 1.0,
+          "predicted": 80,
+          "recall": 1.0,
+          "true_positive": 80
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 88,
+          "precision": 1.0,
+          "predicted": 88,
+          "recall": 1.0,
+          "true_positive": 88
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 66,
+          "precision": 1.0,
+          "predicted": 66,
+          "recall": 1.0,
+          "true_positive": 66
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 88
+    },
+    "property": {
+      "in_scope_count": 20,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 40,
+          "precision": 1.0,
+          "predicted": 40,
+          "recall": 1.0,
+          "true_positive": 40
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 20,
+          "precision": 1.0,
+          "predicted": 20,
+          "recall": 1.0,
+          "true_positive": 20
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 20,
+          "precision": 1.0,
+          "predicted": 20,
+          "recall": 1.0,
+          "true_positive": 20
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 20,
+          "precision": 1.0,
+          "predicted": 20,
+          "recall": 1.0,
+          "true_positive": 20
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 20
+    },
+    "subordinate_clause": {
+      "in_scope_count": 0,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 0,
+          "precision": 1.0,
+          "predicted": 0,
+          "recall": 1.0,
+          "true_positive": 0
+        }
+      },
+      "out_of_scope_count": 1,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 0.0,
+      "relation_exact_match": 0.0,
+      "sentence_count": 1
+    },
+    "temporal": {
+      "in_scope_count": 48,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 124,
+          "precision": 1.0,
+          "predicted": 124,
+          "recall": 1.0,
+          "true_positive": 124
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 28,
+          "precision": 1.0,
+          "predicted": 28,
+          "recall": 1.0,
+          "true_positive": 28
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 48,
+          "precision": 1.0,
+          "predicted": 48,
+          "recall": 1.0,
+          "true_positive": 48
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 48,
+          "precision": 1.0,
+          "predicted": 48,
+          "recall": 1.0,
+          "true_positive": 48
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 48,
+          "precision": 1.0,
+          "predicted": 48,
+          "recall": 1.0,
+          "true_positive": 48
+        }
+      },
+      "out_of_scope_count": 0,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 48
+    }
+  },
+  "protocol": "turkish_semantic_extraction_v2_curated_gold",
+  "relation_coverage": 1.0,
+  "relation_exact_match": 1.0,
+  "sentence_count": 136,
+  "split_metrics": {
+    "calibration": {
+      "in_scope_count": 42,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 117,
+          "precision": 1.0,
+          "predicted": 117,
+          "recall": 1.0,
+          "true_positive": 117
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 9,
+          "precision": 1.0,
+          "predicted": 9,
+          "recall": 1.0,
+          "true_positive": 9
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 35,
+          "precision": 1.0,
+          "predicted": 35,
+          "recall": 1.0,
+          "true_positive": 35
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 46,
+          "precision": 1.0,
+          "predicted": 46,
+          "recall": 1.0,
+          "true_positive": 46
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 30,
+          "precision": 1.0,
+          "predicted": 30,
+          "recall": 1.0,
+          "true_positive": 30
+        }
+      },
+      "out_of_scope_count": 3,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 45
+    },
+    "heldout": {
+      "in_scope_count": 43,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 120,
+          "precision": 1.0,
+          "predicted": 120,
+          "recall": 1.0,
+          "true_positive": 120
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 10,
+          "precision": 1.0,
+          "predicted": 10,
+          "recall": 1.0,
+          "true_positive": 10
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 37,
+          "precision": 1.0,
+          "predicted": 37,
+          "recall": 1.0,
+          "true_positive": 37
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 47,
+          "precision": 1.0,
+          "predicted": 47,
+          "recall": 1.0,
+          "true_positive": 47
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 32,
+          "precision": 1.0,
+          "predicted": 32,
+          "recall": 1.0,
+          "true_positive": 32
+        }
+      },
+      "out_of_scope_count": 3,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 46
+    },
+    "stress": {
+      "in_scope_count": 43,
+      "layers": {
+        "entity": {
+          "f1": 1.0,
+          "gold": 119,
+          "precision": 1.0,
+          "predicted": 119,
+          "recall": 1.0,
+          "true_positive": 119
+        },
+        "negation": {
+          "f1": 1.0,
+          "gold": 9,
+          "precision": 1.0,
+          "predicted": 9,
+          "recall": 1.0,
+          "true_positive": 9
+        },
+        "property": {
+          "f1": 1.0,
+          "gold": 36,
+          "precision": 1.0,
+          "predicted": 36,
+          "recall": 1.0,
+          "true_positive": 36
+        },
+        "relation": {
+          "f1": 1.0,
+          "gold": 47,
+          "precision": 1.0,
+          "predicted": 47,
+          "recall": 1.0,
+          "true_positive": 47
+        },
+        "temporal": {
+          "f1": 1.0,
+          "gold": 32,
+          "precision": 1.0,
+          "predicted": 32,
+          "recall": 1.0,
+          "true_positive": 32
+        }
+      },
+      "out_of_scope_count": 2,
+      "out_of_scope_false_positive_rate": 0.0,
+      "relation_coverage": 1.0,
+      "relation_exact_match": 1.0,
+      "sentence_count": 45
+    }
+  }
+}
