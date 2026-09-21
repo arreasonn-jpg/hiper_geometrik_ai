@@ -134,3 +134,60 @@ Hibrit symbolic-neural paradigm, klasik neural aglari +10.6 puan accuracy
 ve +24.2 puan cold-start genellemede geciyor. Basit bir veto+fallback
 mekanizmasi ile, kayipsiz. Kazanc gorev buyukluguyle artar. Bes negatif
 sonuc gelecek arastirmacilara yol gosterir.
+
+---
+
+## 4.5 Three-Dataset Validation (Guncel)
+
+Hibrit paradigm 3 farkli veri setinde dogrulandi:
+
+### 4.5.1 Sentetik Gorev
+
+| Model | Accuracy | Unseen |
+|---|---|---|
+| Symbolic | 0.490 +/- 0.036 | 0.501 |
+| Neural | 0.790 +/- 0.033 | 0.530 |
+| Hybrid | 0.896 +/- 0.021 | 0.772 |
+
+10 seed, paired t: d=5.07, p<0.001. Gain: +0.106.
+
+### 4.5.2 TWT (Turkce)
+
+| Threshold | Symbolic Cov | Neural | Hybrid | Gain |
+|---|---|---|---|---|
+| 0.5/0.5 | 97.98% | 0.8969 | 0.9361 | +0.0393 |
+| 0.6/0.4 | 96.51% | 0.8969 | 0.9355 | +0.0386 |
+| 0.8/0.2 | 86.03% | 0.8969 | 0.9252 | +0.0283 |
+| 0.9/0.1 | 75.19% | 0.8969 | 0.9167 | +0.0198 |
+
+5 seed, 7 rejim. Hibrit 7/7 kazandi.
+
+### 4.5.3 EWT (Ingilizce)
+
+| Threshold | Symbolic Cov | Symbolic Acc | Neural | Hybrid | Gain |
+|---|---|---|---|---|---|
+| 0.5/0.5 | 97.16% | 1.0000 | 0.9263 | 0.9949 | +0.0686 |
+| 0.8/0.2 | 93.81% | 1.0000 | 0.9263 | 0.9890 | +0.0628 |
+| 0.9/0.1 | 87.77% | 1.0000 | 0.9263 | 0.9776 | +0.0514 |
+
+5 seed, 4 rejim. Symbolic PERFECT (1.0000).
+
+### 4.5.4 Toplu Karsilastirma
+
+| Veri | Dil | Neural | Hybrid | Gain |
+|---|---|---|---|---|
+| Sentetik | Yapay | 0.790 | 0.896 | +0.106 |
+| TWT | Turkce | 0.897 | 0.936 | +0.039 |
+| EWT | Ingilizce | 0.926 | 0.995 | +0.069 |
+
+**Her veri setinde, her rejimde, her seed'de hibrit kazandi.**
+
+## 4.6 Figure Plan
+
+- Fig 1: Hidden ratio ablation (monotonic gain)
+- Fig 2: Robustness 3-panel (entity/relation/unseen scaling)
+- Fig 3: Three-dataset proof (bar chart + gain)
+- Tab 1: Main results (synthetic 10 seed)
+- Tab 2: TWT threshold grid
+- Tab 3: EWT threshold grid
+- Tab 4: Negative results summary
