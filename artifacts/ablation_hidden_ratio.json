@@ -1,0 +1,47 @@
+[
+  {
+    "hidden_ratio": 0.0,
+    "symbolic_acc": 1.0,
+    "symbolic_cov": 1.0,
+    "neural_acc": 0.7424999999999999,
+    "neural_unseen": 0.5375,
+    "hybrid_acc": 1.0,
+    "hybrid_unseen": 1.0
+  },
+  {
+    "hidden_ratio": 0.15,
+    "symbolic_acc": 0.7433333333333334,
+    "symbolic_cov": 0.7433333333333334,
+    "neural_acc": 0.785,
+    "neural_unseen": 0.5875,
+    "hybrid_acc": 0.9433333333333334,
+    "hybrid_unseen": 0.8583333333333334
+  },
+  {
+    "hidden_ratio": 0.3,
+    "symbolic_acc": 0.49083333333333334,
+    "symbolic_cov": 0.49083333333333334,
+    "neural_acc": 0.7616666666666667,
+    "neural_unseen": 0.55,
+    "hybrid_acc": 0.885,
+    "hybrid_unseen": 0.7958333333333333
+  },
+  {
+    "hidden_ratio": 0.5,
+    "symbolic_acc": 0.26,
+    "symbolic_cov": 0.26,
+    "neural_acc": 0.7883333333333333,
+    "neural_unseen": 0.5708333333333333,
+    "hybrid_acc": 0.8491666666666666,
+    "hybrid_unseen": 0.7208333333333333
+  },
+  {
+    "hidden_ratio": 0.7,
+    "symbolic_acc": 0.09166666666666667,
+    "symbolic_cov": 0.09166666666666667,
+    "neural_acc": 0.7575,
+    "neural_unseen": 0.55,
+    "hybrid_acc": 0.7733333333333333,
+    "hybrid_unseen": 0.5750000000000001
+  }
+]
