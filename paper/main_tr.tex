@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[turkish,shorthands=off]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
@@ -7,28 +8,28 @@
 \usepackage{booktabs}
 \usepackage[margin=1in]{geometry}
 
-\title{Hybrid Symbolic-Neural Paradigm:\\ A Universal Formula for Predicting Gain over Neural Baselines}
-\author{Erdem Esa\\ \small Independent Researcher}
+\title{Hibrit Sembolik-Sinirsel Paradigma:\\ Sinirsel Temellere Karşı Kazancı Öngören Evrensel Bir Formül}
+\author{Erdem Esa\\ \small Bağımsız Araştırmacı}
 \date{\today}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We present a hybrid symbolic-neural paradigm whose gain over neural
-baselines can be predicted by a simple formula:
-$\text{gain} = \text{cov}_{\text{sym}} \times
-(\text{acc}_{\text{sym}} - \text{acc}_{\text{neu}})$.
-The formula was validated on 8 independent datasets across 6 language
-families, 3 task types (binary, multiclass, multi-label), and 2 metrics
-(accuracy, bit-accuracy). Mean prediction error is 0.008. We derive the
+Sinirsel temellere karşı kazancı basit bir formülle öngörülebilen bir
+hibrit sembolik-sinirsel paradigma sunuyoruz:
+$\text{kazanç} = \text{kapsam}_{\text{sem}} \times
+(\text{doğruluk}_{\text{sem}} - \text{doğruluk}_{\text{sin}})$.
+Formül, 6 dil ailesine yayılmış 8 bağımsız veri kümesinde, 3 görev
+tipinde (ikili, çok-sınıflı, çok-etiketli) ve 2 metrikte (doğruluk,
+bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.008'dir. We derive the
 formula exactly and show that its error is bounded by
 $(1-\text{cov}) \times |\text{acc}_{\text{neu}}^{\text{abst}} -
-\text{acc}_{\text{neu}}^{\text{all}}|$. On a 20-seed championship
-evaluation our system scores 9.69/10.
+\text{acc}_{\text{neu}}^{\text{all}}|$. 20 tohumlu bir şampiyona değerlendirmesinde sistemimiz 10 üzerinden
+9.69 puan almaktadır.
 \end{abstract}
 
-\section{Introduction}
+\section{Giriş}
 \label{sec:intro}
 Symbolic AI systems offer verifiable reasoning~\cite{garcez2023neurosymbolic,
 manhaeve2018deepproblog} but abstain when their knowledge base is
@@ -66,11 +67,11 @@ baseline.
 results to guide future work.
 \end{enumerate}
 
-\section{Related Work}
+\section{İlgili Çalışmalar}
 \label{sec:related}
 % TODO
 
-\section{Method}
+\section{Yöntem}
 \label{sec:method}
 We consider a hybrid decision rule. Let $x$ be an input, and let
 $s(x) \in \{0,1,\bot\}$ be the symbolic arm's output, where $\bot$
@@ -84,7 +85,7 @@ n(x) & \text{otherwise.}
 \end{cases}
 \end{equation}
 
-\subsection{Exact Derivation}
+\subsection{Kesin Türetim}
 
 Let $\text{cov} = \Pr[s(x) \neq \bot]$ be the coverage,
 $\text{acc}_s = \Pr[h(x) = y \mid s(x) \neq \bot]$ be the symbolic
@@ -118,7 +119,7 @@ obtain the simple predictive formula
 \label{eq:simple}
 \end{equation}
 
-\subsection{Error Bound}
+\subsection{Hata Sınırı}
 
 The residual error of Equation~\ref{eq:simple} is
 \begin{equation}
@@ -134,9 +135,9 @@ behaviour on the abstention subset becomes critical. Equation
 \eqref{eq:error} is verified exactly in our multiclass experiments
 (Section~\ref{sec:experiments}).
 
-\section{Experiments}
+\section{Deneyler}
 \label{sec:experiments}
-\subsection{Setup}
+\subsection{Kurulum}
 
 We test the hybrid paradigm on three families of tasks. Each task is
 a classification problem: given a pair of entities
@@ -164,7 +165,7 @@ verifier; the neural arm is a small model trained from scratch.
 Each input is assigned $K$ independent binary bits. The hybrid
 decision is applied bitwise; accuracy is measured at the bit level.
 
-\subsection{Cross-Lingual Validation}
+\subsection{Diller Arası Doğrulama}
 \label{sec:xling}
 
 Table~\ref{tab:8lang} reports the observed and predicted gains on all
@@ -196,7 +197,7 @@ Alpino & Dutch & 0.973 & 1.000 & 0.945 & +0.053 & +0.054 & 0.001 \\
 \end{tabular}
 \end{table}
 
-\subsection{Task Generality}
+\subsection{Görev Genelliği}
 
 Table~\ref{tab:tasks} extends the validation to three task types.
 For multiclass ($K=4$) and multi-label (bit-accuracy) we report
@@ -223,7 +224,7 @@ Multi-label (bit accuracy) & 0.005 & 5/5 \\
 \end{tabular}
 \end{table}
 
-\subsection{Exact Error Verification}
+\subsection{Kesin Hata Doğrulaması}
 
 Equation~\ref{eq:error} predicts that the residual error equals
 $(1-\text{cov}) \cdot |\text{acc}_n^{\bot} - \text{acc}_n|$. We verify
@@ -252,7 +253,7 @@ Seed & $1-\text{cov}$ & $|\text{acc}_n^{\bot} - \text{acc}_n|$ & $\varepsilon_\t
 \end{tabular}
 \end{table}
 
-\section{Discussion}
+\section{Tartışma}
 \label{sec:discussion}
 \paragraph{Why does the hybrid win?}
 Equation~\ref{eq:decomp} gives a mechanistic answer. The symbolic arm
@@ -283,7 +284,7 @@ formula at $0.024$; the exact formula
 (Equation~\ref{eq:decomp}) explains this via the neural arm's
 subset-dependent accuracy.
 
-\section{Conclusion}
+\section{Sonuç}
 \label{sec:conclusion}
 We have shown that the gain of a hybrid symbolic-neural paradigm over
 a neural-only baseline is governed by an exact decomposition whose
