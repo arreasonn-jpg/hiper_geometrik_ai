@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Dutch-Alpino",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "c7d4477091d747086eeb824937a24a2bd2c060c2e1b45adb153d291a70eda64f"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "8423894d7ab004f4d2839b54a49e826799471723f3751d4d5917e4117cae4c51"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "20d0f718cdc73b51dbb2744386c9d4ecb1a9df6a076efa81b4c008ace3801fc0"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "6e6c16db3a09d96762fd87d9a4711e79e11f75f235b3110108859e14fbeb0895"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}

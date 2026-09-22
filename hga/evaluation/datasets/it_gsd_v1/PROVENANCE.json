@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Italian-ISDT",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "8597c0d0413d822a43d476bb1d39b02106c6d996de57a05fe35218d2b7af146f"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "4684f420128cfe93f03cb52bb7ed8730eb0c6232d8696c10952e6160a2d8a221"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "cea8ca0e8d1ddf7ce509f10afff426d00e058982f49473e0744cd0ee477129e3"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "559968c070306aef99168d4c1fa794f59e26dd5f6f67593ad6005db1b0a4c351"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}

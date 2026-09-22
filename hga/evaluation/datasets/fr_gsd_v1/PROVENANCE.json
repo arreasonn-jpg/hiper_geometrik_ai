@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_French-GSD",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "82c8e4f9760e4cffc3cbc062909b6cf835ab57e70b9aef81bf69b19686ab0962"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "f747d107e3cf236b22e3c974a64f1013ba5dff176a2b4a640636d31da49afdd2"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "eee5a599b429658b6ee8582fae9993eb07161247fc64bad57d16b2050ed4eb1a"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "81c8dce688f0f08479211ce47a59975959f9e7a840c1c23657fff937aba48328"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}
