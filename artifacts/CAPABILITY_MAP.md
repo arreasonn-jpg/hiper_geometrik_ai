@@ -696,3 +696,38 @@ kasitli stress testi, yuksek negatif orani gerekli.
 | FAR | 0.000 | 0.000 |
 
 **Kazanc:** +92% yield, sifir FAR kaybi.
+
+---
+
+## Guncelleme v14: 8-Dil Formul + Yeni Moduller
+
+### Hybrid Formula — EVRENSEL
+
+    gain = cov_sym × (sym_acc_answered − neu_acc)
+
+| # | Veri Seti | Dil | Aile | observed | error |
+|---|---|---|---|---|---|
+| 1 | Sentetik | Yapay | - | +0.1060 | 0.0030 |
+| 2 | TWT | Turkce | Ural-Altay | +0.0386 | 0.0074 |
+| 3 | EWT | Ingilizce | Germen | +0.0686 | 0.0030 |
+| 4 | German-GSD | Almanca | Germen | +0.0459 | 0.0044 |
+| 5 | French-GSD | Fransizca | Roman | +0.0408 | 0.0020 |
+| 6 | Spanish-GSD | Ispanyolca | Roman | +0.0358 | 0.0017 |
+| 7 | Italian-ISDT | Italyanca | Roman | +0.0475 | 0.0016 |
+| 8 | Dutch-Alpino | Hollandaca | Germen | +0.0526 | 0.0013 |
+
+**8/8 veri seti, 6 dil ailesi, hata < 0.01.**
+
+### Yeni Moduller
+
+- `multilingual_ud.py`: 4 yeni UD dil reader (FR/ES/IT/NL)
+- `german_gsd.py`: Almanca UD reader
+- `ewt_hybrid.py`: parametrik hale getirildi (task_preparer)
+
+### Guncel Yetenek Haritasi: 62 Modul
+
+| Kategori | Sayi |
+|---|---|
+| Tam basari | 42 |
+| Kisim/belgelenmis | 20 |
+| Basarisiz | 0 |
