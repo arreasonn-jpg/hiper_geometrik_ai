@@ -1,7 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[turkish,shorthands=off]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -22,227 +22,217 @@ $\text{kazanç} = \text{kapsam}_{\text{sem}} \times
 (\text{doğruluk}_{\text{sem}} - \text{doğruluk}_{\text{sin}})$.
 Formül, 6 dil ailesine yayılmış 8 bağımsız veri kümesinde, 3 görev
 tipinde (ikili, çok-sınıflı, çok-etiketli) ve 2 metrikte (doğruluk,
-bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.008'dir. We derive the
-formula exactly and show that its error is bounded by
-$(1-\text{cov}) \times |\text{acc}_{\text{neu}}^{\text{abst}} -
-\text{acc}_{\text{neu}}^{\text{all}}|$. 20 tohumlu bir şampiyona değerlendirmesinde sistemimiz 10 üzerinden
-9.69 puan almaktadır.
+bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.008'dir.
+Formülü kesin olarak türetiyor ve hatasının
+$(1-\text{kapsam}) \times |\text{doğruluk}_{\text{sin}}^{\perp} -
+\text{doğruluk}_{\text{sin}}^{\text{tüm}}|$ ile sınırlı olduğunu
+gösteriyoruz. 20 tohumlu bir şampiyona değerlendirmesinde sistemimiz
+10 üzerinden 9.69 puan almaktadır.
 \end{abstract}
 
 \section{Giriş}
-\label{sec:intro}
-Symbolic AI systems offer verifiable reasoning~\cite{garcez2023neurosymbolic,
-manhaeve2018deepproblog} but abstain when their knowledge base is
-incomplete. Neural networks provide full coverage~\cite{vaswani2017attention}
-but degrade on out-of-distribution inputs and cannot report their own
-uncertainty~\cite{marcus2020next,bengio2021hybrid}. Combining the two is a natural remedy, yet no simple
-predictive theory exists for when the combination helps.
+\label{sec:giris}
+Sembolik yapay zeka sistemleri doğrulanabilir akıl yürütme sunar
+\cite{garcez2023neurosymbolic,manhaeve2018deepproblog} ancak bilgi
+tabanları eksik olduğunda çekimser kalır. Sinir ağları tam kapsama
+sağlar \cite{vaswani2017attention} fakat dağılım dışı girdilerde
+bozulur ve kendi belirsizliklerini bildiremezler
+\cite{marcus2020next,bengio2021hybrid}. İkisini birleştirmek doğal bir
+çözümdür; ancak birleşimin ne zaman yardımcı olacağına dair basit bir
+öngörü teorisi yoktur.
 
-We present a hybrid symbolic-neural paradigm whose gain over a
-neural-only baseline is governed by an exact formula:
+Sinirsel-temel bir referansa karşı kazancı kesin bir formülle yönetilen
+bir hibrit sembolik-sinirsel paradigma sunuyoruz:
 \begin{equation}
 \label{eq:main}
-\text{gain} = \text{cov}_{\text{sym}} \cdot
-(\text{acc}_{\text{sym}} - \text{acc}_{\text{neu}}),
+\text{kazanç} = \text{kapsam}_{\text{sem}} \cdot
+(\text{doğruluk}_{\text{sem}} - \text{doğruluk}_{\text{sin}}),
 \end{equation}
-where $\text{cov}_{\text{sym}}$ is the fraction of inputs on which the
-symbolic arm produces a non-abstaining answer,
-$\text{acc}_{\text{sym}}$ is the accuracy of those answers, and
-$\text{acc}_{\text{neu}}$ is the neural baseline's overall accuracy.
+burada $\text{kapsam}_{\text{sem}}$ sembolik kolun çekimser kalmadığı
+girdilerin oranı, $\text{doğruluk}_{\text{sem}}$ bu cevapların
+doğruluğu ve $\text{doğruluk}_{\text{sin}}$ sinirsel temelin genel
+doğruluğudur.
 
-\paragraph{Contributions.}
+\paragraph{Katkılar.}
 \begin{enumerate}
-\item We derive Equation~\ref{eq:main} analytically from the hybrid
-decision rule and show that its residual error is bounded exactly by
-$(1-\text{cov}_{\text{sym}}) \cdot
-|\text{acc}_{\text{neu}}^{\text{abst}} -
-\text{acc}_{\text{neu}}^{\text{all}}|$.
-\item We validate the formula on \textbf{8 independent datasets},
-\textbf{6 language families}, \textbf{3 task types}, and
-\textbf{2 metrics}. Mean prediction error is $0.008$.
-\item We show the mechanism is \emph{loss-free}: on every dataset and
-configuration, the hybrid arm is at least as accurate as the neural
-baseline.
-\item We report a comprehensive capability map and five negative
-results to guide future work.
+\item Denklem~\ref{eq:main}'yı hibrit karar kuralından analitik olarak
+türetiyor ve artık hatasının tam olarak
+$(1-\text{kapsam}_{\text{sem}}) \cdot
+|\text{doğruluk}_{\text{sin}}^{\perp} -
+\text{doğruluk}_{\text{sin}}^{\text{tüm}}|$ ile sınırlı olduğunu
+gösteriyoruz.
+\item Formülü \textbf{8 bağımsız veri kümesi}, \textbf{6 dil ailesi},
+\textbf{3 görev tipi} ve \textbf{2 metrik} üzerinde doğruluyoruz.
+Ortalama öngörü hatası $0.008$'dir.
+\item Mekanizmanın \emph{kayıpsız} olduğunu gösteriyoruz: her veri
+kümesi ve konfigürasyonda hibrit kol, sinirsel temelden en az onun
+kadar doğrudur.
+\item Gelecek çalışmalara yol göstermek için kapsamlı bir yetenek
+haritası ve beş negatif sonuç raporluyoruz.
 \end{enumerate}
 
 \section{İlgili Çalışmalar}
-\label{sec:related}
-% TODO
+\label{sec:ilgili}
 
 \section{Yöntem}
-\label{sec:method}
-We consider a hybrid decision rule. Let $x$ be an input, and let
-$s(x) \in \{0,1,\bot\}$ be the symbolic arm's output, where $\bot$
-denotes abstention. Define the neural arm's output $n(x) \in \{0,1\}$
-with full coverage. The hybrid rule is
+\label{sec:yontem}
+Hibrit bir karar kuralı ele alıyoruz. $x$ girdi,
+$s(x) \in \{0,1,\perp\}$ sembolik kolun çıktısı olsun; burada $\perp$
+çekimserliği belirtir. Sinirsel kolun çıktısı tam kapsama ile
+$n(x) \in \{0,1\}$ olsun. Hibrit kural şu şekildedir:
 \begin{equation}
 h(x) =
 \begin{cases}
-s(x) & \text{if } s(x) \neq \bot, \\
-n(x) & \text{otherwise.}
+s(x) & s(x) \neq \perp \text{ ise}, \\
+n(x) & \text{aksi halde}
 \end{cases}
 \end{equation}
 
 \subsection{Kesin Türetim}
+$\text{kapsam} = \Pr[s(x) \neq \perp]$ kapsam,
+$\text{doğruluk}_s = \Pr[h(x) = y \mid s(x) \neq \perp]$ sembolik
+kolun koşullu doğruluğu, $\text{doğruluk}_n = \Pr[n(x) = y]$ sinirsel
+temelin genel doğruluğu ve
+$\text{doğruluk}_n^{\perp} = \Pr[n(x) = y \mid s(x) = \perp]$
+sinirsel kolun çekimserlik alt kümesindeki doğruluğu olsun.
 
-Let $\text{cov} = \Pr[s(x) \neq \bot]$ be the coverage,
-$\text{acc}_s = \Pr[h(x) = y \mid s(x) \neq \bot]$ be the symbolic
-arm's conditional accuracy, $\text{acc}_n = \Pr[n(x) = y]$ be the
-neural baseline's overall accuracy, and
-$\text{acc}_n^{\bot} = \Pr[n(x) = y \mid s(x) = \bot]$ be the neural
-arm's accuracy on the abstention subset.
-
-The hybrid accuracy decomposes as
+Hibrit doğruluk şöyle ayrışır:
 \begin{equation}
-\text{acc}_h = \text{cov} \cdot \text{acc}_s
-+ (1 - \text{cov}) \cdot \text{acc}_n^{\bot}.
+\text{doğruluk}_h = \text{kapsam} \cdot \text{doğruluk}_s
++ (1 - \text{kapsam}) \cdot \text{doğruluk}_n^{\perp}.
 \end{equation}
 
-Subtracting $\text{acc}_n = \text{cov} \cdot \text{acc}_n
-+ (1 - \text{cov}) \cdot \text{acc}_n$ (a telescoping identity) gives
+$\text{doğruluk}_n = \text{kapsam} \cdot \text{doğruluk}_n
++ (1 - \text{kapsam}) \cdot \text{doğruluk}_n$ (teleskopik özdeşlik)
+çıkarıldığında
 \begin{align}
-\text{gain} &\equiv \text{acc}_h - \text{acc}_n \nonumber \\
-&= \text{cov} \cdot (\text{acc}_s - \text{acc}_n) \nonumber \\
-&\quad + (1 - \text{cov}) \cdot
-(\text{acc}_n^{\bot} - \text{acc}_n).
+\text{kazanç} &\equiv \text{doğruluk}_h - \text{doğruluk}_n \nonumber \\
+&= \text{kapsam} \cdot (\text{doğruluk}_s - \text{doğruluk}_n) \nonumber \\
+&\quad + (1 - \text{kapsam}) \cdot
+(\text{doğruluk}_n^{\perp} - \text{doğruluk}_n).
 \label{eq:decomp}
 \end{align}
 
-Equation~\ref{eq:decomp} is exact. When $\text{acc}_n^{\bot} \approx
-\text{acc}_n$ (the neural arm's accuracy does not depend on which
-inputs the symbolic arm abstains on), the second term vanishes and we
-obtain the simple predictive formula
+Denklem~\ref{eq:decomp} kesindir. $\text{doğruluk}_n^{\perp} \approx
+\text{doğruluk}_n$ olduğunda (sinirsel kolun doğruluğu sembolik kolun
+çekimser kaldığı girdilere bağlı olmadığında), ikinci terim kaybolur
+ve basit öngörü formülünü elde ederiz:
 \begin{equation}
-\text{gain} \approx \text{cov} \cdot (\text{acc}_s - \text{acc}_n).
+\text{kazanç} \approx \text{kapsam} \cdot
+(\text{doğruluk}_s - \text{doğruluk}_n).
 \label{eq:simple}
 \end{equation}
 
 \subsection{Hata Sınırı}
-
-The residual error of Equation~\ref{eq:simple} is
+Denklem~\ref{eq:simple}'in artık hatası
 \begin{equation}
-\varepsilon = (1 - \text{cov}) \cdot
-|\text{acc}_n^{\bot} - \text{acc}_n|.
+\varepsilon = (1 - \text{kapsam}) \cdot
+|\text{doğruluk}_n^{\perp} - \text{doğruluk}_n|.
 \label{eq:error}
 \end{equation}
 
-This bound has two consequences. First, in high-coverage regimes
-($\text{cov} \to 1$) the error vanishes: the simple formula becomes
-essentially exact. Second, in low-coverage regimes the neural arm's
-behaviour on the abstention subset becomes critical. Equation
-\eqref{eq:error} is verified exactly in our multiclass experiments
-(Section~\ref{sec:experiments}).
+Bu sınırın iki sonucu vardır. Birincisi, yüksek kapsam rejimlerinde
+($\text{kapsam} \to 1$) hata kaybolur: basit formül temel olarak
+kesinleşir. İkincisi, düşük kapsam rejimlerinde sinirsel kolun
+çekimserlik alt kümesindeki davranışı kritik hale gelir.
+Denklem~\ref{eq:error} çok-sınıflı deneylerimizde
+(Bölüm~\ref{sec:deneyler}) tam olarak doğrulanmıştır.
 
 \section{Deneyler}
-\label{sec:experiments}
+\label{sec:deneyler}
+
 \subsection{Kurulum}
+Hibrit paradigmayı üç görev ailesi üzerinde test ediyoruz. Her görev
+bir sınıflandırma problemidir: bir $r$ ilişkisiyle bağlanan
+$(s, o)$ varlık çifti verildiğinde hedef etiketi tahmin et.
+Sembolik kol, her iki varlığın da bilinen özellikleri olduğunda kesin
+bir kural uygular; aksi halde çekimser kalır. Sinirsel kol, sıfırdan
+eğitilen küçük bir MLP veya Transformer'dır.
 
-We test the hybrid paradigm on three families of tasks. Each task is
-a classification problem: given a pair of entities
-$(s, o)$ connected by a relation $r$, predict the target label.
-The symbolic arm applies an exact rule when both entities have
-known features; otherwise it abstains. The neural arm is a small
-MLP or Transformer trained from scratch.
+\paragraph{Sentetik çok-sınıflı.}
+$N$ varlık, her biri $K$ özellik biti olacak şekilde üretiyoruz.
+Hedef $(\text{özellik}(s) + \text{özellik}(o)) \bmod K$'dır.
+Sembolik kolun erişemeyeceği özelliklere sahip varlıkların oranını
+\texttt{gizli\_oran} ile kontrol ediyoruz.
 
-\paragraph{Synthetic multiclass.}
-We generate $N$ entities, each with $K$ feature bits. The target is
-$(\text{feat}(s) + \text{feat}(o)) \bmod K$. We inject a
-\texttt{hidden\_ratio} fraction of entities whose features are
-unavailable to the symbolic arm.
+\paragraph{Diller arası bağımlılık doğrulaması.}
+Sekiz dil için Universal Dependencies \cite{nivre2020ud} treebank'ları
+kullanıyoruz: Türkçe (TWT), İngilizce (EWT) \cite{silveira2014gold},
+Almanca (GSD), Fransızca (GSD), İspanyolca (GSD), İtalyanca (ISDT),
+Hollandaca (Alpino) ve bir sentetik temel. Görev, bir
+$(\text{bağımlı}, \text{baş})$ bağımlılık yayının ikili
+doğrulamasıdır. Sembolik kol kural tabanlı bir şema doğrulayıcısıdır;
+sinirsel kol sıfırdan eğitilen küçük bir modeldir.
 
-\paragraph{Cross-lingual dependency verification.}
-We use Universal Dependencies~\cite{nivre2020ud} treebanks for eight
-languages:
-Turkish (TWT), English (EWT)~\cite{silveira2014gold}, German (GSD), French (GSD),
-Spanish (GSD), Italian (ISDT), Dutch (Alpino), and a synthetic
-baseline. The task is binary verification of a dependency arc
-$(dependent, head)$. The symbolic arm is a rule-based schema
-verifier; the neural arm is a small model trained from scratch.
-
-\paragraph{Multi-label.}
-Each input is assigned $K$ independent binary bits. The hybrid
-decision is applied bitwise; accuracy is measured at the bit level.
+\paragraph{Çok-etiketli.}
+Her girdiye $K$ bağımsız ikili bit atanır. Hibrit karar bit düzeyinde
+uygulanır; doğruluk bit düzeyinde ölçülür.
 
 \subsection{Diller Arası Doğrulama}
-\label{sec:xling}
+\label{sec:diller_arasi}
+Tablo~\ref{tab:8dil}, sekiz veri kümesindeki gözlenen ve öngörülen
+kazançları raporlar. Ortalama öngörü hatası $0.008$'dir; her veri
+kümesi $\varepsilon < 0.01$ koşulunu sağlar.
 
-Table~\ref{tab:8lang} reports the observed and predicted gains on all
-eight datasets. Mean prediction error is $0.008$; every dataset
-satisfies $\varepsilon < 0.01$.
-
-\begin{table}[h]
+\begin{table}[ht]
 \centering
-\caption{Hybrid gain on 8 datasets across 6 language families.
-$\text{cov}$: symbolic coverage. $\text{acc}_s$: symbolic accuracy on
-answered items. $\text{acc}_n$: neural baseline accuracy.
-Gain$_\text{obs}$: measured. Gain$_\text{pred}$: from
-Equation~\ref{eq:simple}. $\varepsilon$: absolute error.}
-\label{tab:8lang}
+\caption{8 veri kümesi, 6 dil ailesinde hibrit kazanç.}
+\label{tab:8dil}
 \small
 \begin{tabular}{llcccccc}
 \toprule
-Dataset & Language & cov & acc$_s$ & acc$_n$ & Gain$_\text{obs}$ & Gain$_\text{pred}$ & $\varepsilon$ \\
+Veri Kümesi & Dil & kapsam & doğ$_s$ & doğ$_n$ & Kazanç$_\text{göz}$ & Kazanç$_\text{ön}$ & $\varepsilon$ \\
 \midrule
-Synthetic & --- & 0.490 & 1.000 & 0.790 & +0.106 & +0.103 & 0.003 \\
-TWT & Turkish & 0.965 & 0.945 & 0.897 & +0.039 & +0.046 & 0.007 \\
-EWT & English & 0.972 & 1.000 & 0.926 & +0.069 & +0.072 & 0.003 \\
-GSD & German & 0.971 & 1.000 & 0.948 & +0.046 & +0.050 & 0.004 \\
-GSD & French & 0.979 & 1.000 & 0.956 & +0.041 & +0.043 & 0.002 \\
-GSD & Spanish & 0.987 & 1.000 & 0.962 & +0.036 & +0.038 & 0.002 \\
-ISDT & Italian & 0.989 & 1.000 & 0.950 & +0.048 & +0.049 & 0.002 \\
-Alpino & Dutch & 0.973 & 1.000 & 0.945 & +0.053 & +0.054 & 0.001 \\
+Sentetik & --- & 0.490 & 1.000 & 0.790 & +0.106 & +0.103 & 0.003 \\
+TWT & Türkçe & 0.965 & 0.945 & 0.897 & +0.039 & +0.046 & 0.007 \\
+EWT & İngilizce & 0.972 & 1.000 & 0.926 & +0.069 & +0.072 & 0.003 \\
+GSD & Almanca & 0.971 & 1.000 & 0.948 & +0.046 & +0.050 & 0.004 \\
+GSD & Fransızca & 0.979 & 1.000 & 0.956 & +0.041 & +0.043 & 0.002 \\
+GSD & İspanyolca & 0.987 & 1.000 & 0.962 & +0.036 & +0.038 & 0.002 \\
+ISDT & İtalyanca & 0.989 & 1.000 & 0.950 & +0.048 & +0.049 & 0.002 \\
+Alpino & Hollandaca & 0.973 & 1.000 & 0.945 & +0.053 & +0.054 & 0.001 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Görev Genelliği}
+Tablo~\ref{tab:gorevler}, doğrulamayı üç görev tipine genişletir.
+Çok-sınıflı ($K=4$) ve çok-etiketli (bit-doğruluğu) için beş tohumun
+ortalamasını raporluyoruz. Denklem~\ref{eq:simple}, bir çok-sınıflı
+tohum hariç her konfigürasyonu $0.01$ içinde öngörür; bu tohumun
+hatası $(0.024)$, sinirsel kolun çekimserlik alt kümesindeki farklı
+doğruluğuyla açıklanır.
 
-Table~\ref{tab:tasks} extends the validation to three task types.
-For multiclass ($K=4$) and multi-label (bit-accuracy) we report
-the mean over five seeds. Equation~\ref{eq:simple} predicts every
-configuration within $0.01$ except one multiclass seed, whose error
-$(0.024)$ is explained by the neural arm's differing accuracy on
-the abstention subset (Equation~\ref{eq:error}).
-
-\begin{table}[h]
+\begin{table}[ht]
 \centering
-\caption{Task generality. Multiclass and multi-label results are
-5-seed means. The last column reports the fraction of seeds whose
-error is below $0.01$.}
-\label{tab:tasks}
+\caption{Görev genelliği. 5 tohum ortalaması.}
+\label{tab:gorevler}
 \small
 \begin{tabular}{lcc}
 \toprule
-Task & Mean $\varepsilon$ & Seeds with $\varepsilon < 0.01$ \\
+Görev & Ortalama $\varepsilon$ & $\varepsilon < 0.01$ tohumlar \\
 \midrule
-Binary (8 datasets) & 0.003 & 8/8 \\
-Multiclass ($K=4$) & 0.008 & 4/5 \\
-Multi-label (bit accuracy) & 0.005 & 5/5 \\
+İkili (8 veri kümesi) & 0.003 & 8/8 \\
+Çok-sınıflı ($K=4$) & 0.008 & 4/5 \\
+Çok-etiketli (bit doğruluğu) & 0.005 & 5/5 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Kesin Hata Doğrulaması}
+Denklem~\ref{eq:error}, artık hatanın
+$(1-\text{kapsam}) \cdot |\text{doğruluk}_n^{\perp} - \text{doğruluk}_n|$
+değerine eşit olduğunu öngörür. Bunu beş çok-sınıflı tohumda
+doğruluyoruz (Tablo~\ref{tab:hata}).
 
-Equation~\ref{eq:error} predicts that the residual error equals
-$(1-\text{cov}) \cdot |\text{acc}_n^{\bot} - \text{acc}_n|$. We verify
-this on five multiclass seeds (Table~\ref{tab:error}). The identity
-holds to machine precision in every case, confirming that the only
-source of discrepancy is the neural arm's behaviour on the abstention
-subset.
-
-\begin{table}[h]
+\begin{table}[ht]
 \centering
-\caption{Exact error identity verification. $\varepsilon_\text{obs}$
-from measurement; $\varepsilon_\text{pred} = (1-\text{cov}) \cdot
-|\text{acc}_n^{\bot} - \text{acc}_n|$.}
-\label{tab:error}
+\caption{Kesin hata özdeşliği doğrulaması.}
+\label{tab:hata}
 \small
 \begin{tabular}{ccccc}
 \toprule
-Seed & $1-\text{cov}$ & $|\text{acc}_n^{\bot} - \text{acc}_n|$ & $\varepsilon_\text{pred}$ & $\varepsilon_\text{obs}$ \\
+Tohum & $1-\text{kapsam}$ & $|\text{doğ}_n^{\perp} - \text{doğ}_n|$ & $\varepsilon_\text{ön}$ & $\varepsilon_\text{göz}$ \\
 \midrule
 1 & 0.555 & 0.0013 & 0.00072 & 0.0007 \\
 2 & 0.468 & 0.0050 & 0.00234 & 0.0023 \\
@@ -254,48 +244,51 @@ Seed & $1-\text{cov}$ & $|\text{acc}_n^{\bot} - \text{acc}_n|$ & $\varepsilon_\t
 \end{table}
 
 \section{Tartışma}
-\label{sec:discussion}
-\paragraph{Why does the hybrid win?}
-Equation~\ref{eq:decomp} gives a mechanistic answer. The symbolic arm
-contributes accuracy at the inputs where it is confident; the neural
-arm fills in elsewhere. The gain is largest when the symbolic arm
-covers most inputs and is more accurate than the neural baseline on
-those inputs. In our 8-dataset study this regime holds because
-rule-based UD dependency verification is both high-coverage
-($\text{cov} > 0.96$) and high-accuracy
-($\text{acc}_s > 0.94$) on this task family.
+\label{sec:tartisma}
 
-\paragraph{Why does the gain scale with task size?}
-On synthetic entity- and relation-scaling experiments
-(Section~\ref{sec:experiments}), the neural arm's accuracy drops as
-the task grows, while the symbolic arm's accuracy is essentially
-constant. The gap $\text{acc}_s - \text{acc}_n$ widens, so the gain
-grows. This is consistent with the formula: the symbolic arm is a
-capacity-free oracle.
+\paragraph{Hibrit neden kazanıyor?}
+Denklem~\ref{eq:decomp} mekanik bir cevap verir. Sembolik kol, kendine
+güvendiği girdilerde doğruluk katkısı sağlar; sinirsel kol başka
+yerlerde doldurur. Kazanç, sembolik kol girdilerin çoğunu kapsadığında
+ve bu girdilerde sinirsel temelden daha doğru olduğunda en büyüktür.
+8 veri kümesi çalışmamızda bu rejim geçerlidir çünkü kural tabanlı UD
+bağımlılık doğrulaması bu görev ailesinde hem yüksek kapsamlıdır
+($\text{kapsam} > 0.96$) hem de yüksek doğrulukludur
+($\text{doğruluk}_s > 0.94$).
 
-\paragraph{Limitations.}
-The symbolic arm requires an explicit knowledge base; we do not
-address how to build one for arbitrary domains. Our neural baselines
-are small models trained from scratch; we do not compare against
-large pretrained language models. The cross-lingual evidence is
-restricted to UD dependency verification; generalisation to other
-NLP tasks is not claimed. One multiclass seed violates the simple
-formula at $0.024$; the exact formula
-(Equation~\ref{eq:decomp}) explains this via the neural arm's
-subset-dependent accuracy.
+\paragraph{Kazanç neden görev büyüklüğüyle artıyor?}
+Sentetik varlık ve ilişki ölçekleme deneylerinde
+(Bölüm~\ref{sec:deneyler}), sinirsel kolun doğruluğu görev büyüdükçe
+düşerken sembolik kolun doğruluğu temel olarak sabit kalır. Fark
+$\text{doğruluk}_s - \text{doğruluk}_n$ genişler, dolayısıyla kazanç
+büyür. Bu, formülle tutarlıdır: sembolik kol kapasite gerektirmeyen
+bir oracle'dır.
+
+\paragraph{Sınırlar.}
+Sembolik kol açık bir bilgi tabanı gerektirir; keyfi alanlar için nasıl
+inşa edileceğini ele almıyoruz. Sinirsel temellerimiz sıfırdan
+eğitilen küçük modellerdir; büyük ön-eğitimli dil modelleriyle
+karşılaştırma yapmıyoruz. Diller arası kanıt UD bağımlılık
+doğrulamasıyla sınırlıdır; diğer NLP görevlerine genelleme iddia
+edilmez. Bir çok-sınıflı tohum basit formülü $0.024$'te ihlal eder;
+kesin formül (Denklem~\ref{eq:decomp}) bunu sinirsel kolun alt küme
+bağımlı doğruluğuyla açıklar.
 
 \section{Sonuç}
-\label{sec:conclusion}
-We have shown that the gain of a hybrid symbolic-neural paradigm over
-a neural-only baseline is governed by an exact decomposition whose
-leading term is $\text{cov} \cdot (\text{acc}_s - \text{acc}_n)$. The
-formula was validated on 8 datasets across 6 language families, 3 task
-types, and 2 metrics, with mean prediction error $0.008$. The exact
-error term is verified empirically to machine precision. For the human evaluation protocol underlying the 9.69/10 championship
-score, we use Krippendorff's $\alpha$~\cite{krippendorff2011computing}.
-We hope the formula serves as a design guideline for hybrid systems: raise
-symbolic coverage to raise the gain, and beware of low-coverage
-regimes where the neural arm's subset-specific behaviour dominates.
+\label{sec:sonuc}
+Bir hibrit sembolik-sinirsel paradigmanın sinirsel-temel referansa
+karşı kazancının, önde gelen terimi
+$\text{kapsam} \cdot (\text{doğruluk}_s - \text{doğruluk}_n)$ olan
+kesin bir ayrışımla yönetildiğini gösterdik. Formül, 6 dil ailesinde 8
+veri kümesi, 3 görev tipi ve 2 metrikte doğrulandı; ortalama öngörü
+hatası $0.008$'dir. Kesin hata terimi deneysel olarak makine
+hassasiyetinde doğrulanmıştır. 9.69/10 şampiyona puanının altında
+yatan insan değerlendirme protokolü için Krippendorff'un $\alpha$'sını
+kullanıyoruz~\cite{krippendorff2011computing}. Formülün hibrit
+sistemler için bir tasarım kılavuzu olarak hizmet etmesini umuyoruz:
+kazancı artırmak için sembolik kapsamayı yükseltin ve sinirsel kolun
+alt kümeye özgü davranışının baskın olduğu düşük kapsam
+rejimlerinden kaçının.
 
 \bibliographystyle{plain}
 \bibliography{references}
