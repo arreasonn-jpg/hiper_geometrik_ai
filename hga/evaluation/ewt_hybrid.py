@@ -29,6 +29,8 @@ def run_ewt_hybrid(
         (0.80, 0.20, "strict"),
         (0.90, 0.10, "tight"),
     ],
+    task_preparer=None,
+    lang_name: str = "EWT",
 ) -> Dict[str, Any]:
     import sys
     sys.path.insert(0, ".")
@@ -37,8 +39,10 @@ def run_ewt_hybrid(
     import torch
     import torch.nn as nn
 
-    task = prepare_english_ewt_task()
-    print(f"EWT: train={len(task.train)}, test={len(task.test)}")
+    if task_preparer is None:
+        task_preparer = prepare_english_ewt_task
+    task = task_preparer()
+    print(f"{lang_name}: train={len(task.train)}, test={len(task.test)}")
     pos = sum(c.expected_valid for c in task.test)
     print(f"Test positive: {pos}/{len(task.test)} ({100*pos/len(task.test):.1f}%)")
 
