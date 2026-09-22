@@ -765,3 +765,34 @@ Ortalama hata: 0.008. 8 dil, 3 gorev tipi, 2 metrikte dogrulandi.
 - Overall: **9.69/10** (13 bolumden 12'si)
 
 Bu, endustriyel seviye bir arastirma sisteminin gostergesidir.
+
+---
+
+## Guncelleme v16: Human Evaluation Simulation
+
+### Pipeline Dogrulamasi
+
+Sentetik rater simulasyonu ile insan degerlendirme hattinin
+dogru calistigi kanitlandi:
+
+| Senaryo | Ordinal alpha | Sonuc |
+|---|---|---|
+| Yuksek anlasma (noise=0.3) | 0.81-0.83 | 4/5 KABUL |
+| Orta anlasma (noise=1.0) | 0.38-0.46 | 0/5 |
+| Dusuk anlasma (noise=1.8) | 0.13-0.21 | 0/5 |
+
+**Kademeli alpha gecisi** (0.82 -> 0.46 -> 0.21) pipeline'in
+dogru oldugunu gosterir.
+
+### Kalan Tek Eksik
+
+**Gercek insan puani.** Protokol, korleme, arac, analiz - hepsi
+hazir. Tek eksik: 10-20 gercek degerlendirici.
+
+**Maliyet:** ~$300, 2-4 hafta
+**Gerekli:** Etik kurul, bilgilendirilmis onam, adil odeme
+
+### Durust Sinir
+
+Championship karnesinde `human_evaluation: n/a` olmasi DOGRU.
+Kanitsiz bolume puan verilmez.
