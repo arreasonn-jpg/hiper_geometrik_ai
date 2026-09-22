@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_German-GSD",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "6cb1b600029292fb7bf60531a1d6d7824544791d732c0f7abae8102a2ac337bf"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "01e8e674973592747ffe9a8c77fcf9d2f5936a8484e731ad4f76254318a8952c"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "595070aa50b706a91dc66f17c296f7a9a25cbc75269f177c27680fb1c21528ab"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "88268f1f20d535fd56387c4ca6bdd81fa21942df1ffde534a0ec3bf5b007713c"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}
