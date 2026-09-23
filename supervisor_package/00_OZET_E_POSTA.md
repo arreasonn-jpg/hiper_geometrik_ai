@@ -1,6 +1,6 @@
 # Hoca Onayı — Özet Paket
 
-**Konu:** arXiv yayını için onay talebi — Hibrit Sembolik-Sinirsel Paradigma
+**Konu:** arXiv yayını onayı + Preprint 2 ön görüşü — Hiper-Geometrik AI
 
 ---
 
@@ -41,7 +41,7 @@ Bir süredir üzerinde çalıştığım **Hiper-Geometrik AI** projesinde anlaml
 
 **12/12 veri seti, hata < 0.01. Ortalama hata: 0.002.**
 
-### 2. Görev Genelliği (3 Tip)
+### 2. Görev Genelliği (4 Tip)
 
 | Görev | Ortalama Hata | Kabul Oranı |
 |---|---|---|
@@ -169,8 +169,14 @@ Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 ## Talebim
 
-1. Sonuçları **gözden geçirmeniz**
-2. **arXiv submission** için onayınız
+1. **Preprint 1'i gözden geçirmeniz** (Hibrit Formül — 12 dil, 4 görev)
+2. **arXiv submission için onayınız** (Preprint 1)
+3. **Preprint 2 için ön görüşünüz** (F1 + Kronecker birleşik teorisi)
+4. Uygun görürseniz **ortak yazar** olarak katkınız
+
+**Zaman planı:**
+- Preprint 1: arXiv'de yayında (haftalar)
+- Preprint 2: 3-4 hafta içinde hazır (LaTeX yazımı + inceleme)
 
 ---
 
