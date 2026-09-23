@@ -1,0 +1,287 @@
+[
+  {
+    "seed": 1,
+    "n_base": 8,
+    "hier_target_params": 21764,
+    "A": [
+      {
+        "name": "A::flat_K3",
+        "params": 644,
+        "train_acc": 0.7114999890327454,
+        "test_acc": 0.5640000104904175,
+        "final_loss": 0.7228579521179199,
+        "wall_time_sec": 1.9565202039957512
+      },
+      {
+        "name": "A::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8199999928474426,
+        "final_loss": 0.0007900086930021644,
+        "wall_time_sec": 34.2052894019871
+      },
+      {
+        "name": "A::dense_K3",
+        "params": 25348,
+        "train_acc": 1.0,
+        "test_acc": 0.8999999761581421,
+        "final_loss": 0.0010485455859452486,
+        "wall_time_sec": 1.9831289089925122
+      }
+    ],
+    "B": [
+      {
+        "name": "B::flat_K168",
+        "params": 21764,
+        "train_acc": 0.2680000066757202,
+        "test_acc": 0.23399999737739563,
+        "final_loss": 1.385368824005127,
+        "wall_time_sec": 210.29842076200293
+      },
+      {
+        "name": "B::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.7979999780654907,
+        "final_loss": 0.0007932366570457816,
+        "wall_time_sec": 33.84345820400631
+      },
+      {
+        "name": "B::dense_matched",
+        "params": 13179,
+        "train_acc": 1.0,
+        "test_acc": 0.8799999952316284,
+        "final_loss": 0.001962068723514676,
+        "wall_time_sec": 1.234576142989681
+      }
+    ]
+  },
+  {
+    "seed": 2,
+    "n_base": 8,
+    "hier_target_params": 21764,
+    "A": [
+      {
+        "name": "A::flat_K3",
+        "params": 644,
+        "train_acc": 0.6815000176429749,
+        "test_acc": 0.5860000252723694,
+        "final_loss": 0.7874716520309448,
+        "wall_time_sec": 2.061801596006262
+      },
+      {
+        "name": "A::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8360000252723694,
+        "final_loss": 0.000772342027630657,
+        "wall_time_sec": 33.033401740001864
+      },
+      {
+        "name": "A::dense_K3",
+        "params": 25348,
+        "train_acc": 1.0,
+        "test_acc": 0.9020000100135803,
+        "final_loss": 0.0010619481327012181,
+        "wall_time_sec": 1.7524925089965109
+      }
+    ],
+    "B": [
+      {
+        "name": "B::flat_K168",
+        "params": 21764,
+        "train_acc": 0.27900001406669617,
+        "test_acc": 0.2840000092983246,
+        "final_loss": 1.3811978101730347,
+        "wall_time_sec": 284.49805013800506
+      },
+      {
+        "name": "B::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.828000009059906,
+        "final_loss": 0.0007758796564303339,
+        "wall_time_sec": 32.14129170199158
+      },
+      {
+        "name": "B::dense_matched",
+        "params": 13179,
+        "train_acc": 1.0,
+        "test_acc": 0.8999999761581421,
+        "final_loss": 0.001806735061109066,
+        "wall_time_sec": 1.258772005996434
+      }
+    ]
+  },
+  {
+    "seed": 3,
+    "n_base": 8,
+    "hier_target_params": 21764,
+    "A": [
+      {
+        "name": "A::flat_K3",
+        "params": 644,
+        "train_acc": 0.6740000247955322,
+        "test_acc": 0.5339999794960022,
+        "final_loss": 0.7509288191795349,
+        "wall_time_sec": 2.0972174810012802
+      },
+      {
+        "name": "A::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8339999914169312,
+        "final_loss": 0.0007984880940057337,
+        "wall_time_sec": 32.43315571799758
+      },
+      {
+        "name": "A::dense_K3",
+        "params": 25348,
+        "train_acc": 1.0,
+        "test_acc": 0.9139999747276306,
+        "final_loss": 0.0010678675025701523,
+        "wall_time_sec": 1.8169139890087536
+      }
+    ],
+    "B": [
+      {
+        "name": "B::flat_K168",
+        "params": 21764,
+        "train_acc": 0.257999986410141,
+        "test_acc": 0.2939999997615814,
+        "final_loss": 1.3856241703033447,
+        "wall_time_sec": 272.8200080700044
+      },
+      {
+        "name": "B::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8379999995231628,
+        "final_loss": 0.0007539691287092865,
+        "wall_time_sec": 45.000488514997414
+      },
+      {
+        "name": "B::dense_matched",
+        "params": 13179,
+        "train_acc": 1.0,
+        "test_acc": 0.9160000085830688,
+        "final_loss": 0.0019027545349672437,
+        "wall_time_sec": 1.7907328529981896
+      }
+    ]
+  },
+  {
+    "seed": 4,
+    "n_base": 8,
+    "hier_target_params": 21764,
+    "A": [
+      {
+        "name": "A::flat_K3",
+        "params": 644,
+        "train_acc": 0.6464999914169312,
+        "test_acc": 0.5519999861717224,
+        "final_loss": 0.8585149645805359,
+        "wall_time_sec": 2.8170181549940025
+      },
+      {
+        "name": "A::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8379999995231628,
+        "final_loss": 0.0007826227229088545,
+        "wall_time_sec": 38.973247740010265
+      },
+      {
+        "name": "A::dense_K3",
+        "params": 25348,
+        "train_acc": 1.0,
+        "test_acc": 0.9200000166893005,
+        "final_loss": 0.0010534788016229868,
+        "wall_time_sec": 1.907326094005839
+      }
+    ],
+    "B": [
+      {
+        "name": "B::flat_K168",
+        "params": 21764,
+        "train_acc": 0.2605000138282776,
+        "test_acc": 0.2460000067949295,
+        "final_loss": 1.3855831623077393,
+        "wall_time_sec": 271.3661976560106
+      },
+      {
+        "name": "B::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8019999861717224,
+        "final_loss": 0.0007265408639796078,
+        "wall_time_sec": 42.667690827001934
+      },
+      {
+        "name": "B::dense_matched",
+        "params": 13179,
+        "train_acc": 1.0,
+        "test_acc": 0.9120000004768372,
+        "final_loss": 0.0018966776551678777,
+        "wall_time_sec": 1.6908576880086912
+      }
+    ]
+  },
+  {
+    "seed": 5,
+    "n_base": 8,
+    "hier_target_params": 21764,
+    "A": [
+      {
+        "name": "A::flat_K3",
+        "params": 644,
+        "train_acc": 0.659500002861023,
+        "test_acc": 0.5519999861717224,
+        "final_loss": 0.8052405118942261,
+        "wall_time_sec": 2.6652653820056003
+      },
+      {
+        "name": "A::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8259999752044678,
+        "final_loss": 0.0007942109368741512,
+        "wall_time_sec": 43.83547486200405
+      },
+      {
+        "name": "A::dense_K3",
+        "params": 25348,
+        "train_acc": 1.0,
+        "test_acc": 0.9020000100135803,
+        "final_loss": 0.0010740243596956134,
+        "wall_time_sec": 2.408377472005668
+      }
+    ],
+    "B": [
+      {
+        "name": "B::flat_K168",
+        "params": 21764,
+        "train_acc": 0.27149999141693115,
+        "test_acc": 0.22599999606609344,
+        "final_loss": 1.3831629753112793,
+        "wall_time_sec": 299.68099992700445
+      },
+      {
+        "name": "B::hier_K3_exp2",
+        "params": 21764,
+        "train_acc": 1.0,
+        "test_acc": 0.8140000104904175,
+        "final_loss": 0.0007434138096868992,
+        "wall_time_sec": 42.36041754100006
+      },
+      {
+        "name": "B::dense_matched",
+        "params": 13179,
+        "train_acc": 1.0,
+        "test_acc": 0.8920000195503235,
+        "final_loss": 0.0020033621694892645,
+        "wall_time_sec": 1.687462449001032
+      }
+    ]
+  }
+]
