@@ -87,3 +87,62 @@ Bu **pozitif bir sonuç** — ama **nüanslı**:
 - Süre 2x daha uzun
 - Sadece tek bir compositional görev test edildi
 - 5 seed — daha fazla gerekli
+
+## 20 Seed İstatistiksel Güçlendirme
+
+**Kurulum:** 20 bağımsız seed, paired t-test, Cohen's d, bootstrap %95 CI.
+
+### Sonuçlar
+
+| Model | Param | Test Acc |
+|---|---|---|
+| dense_mlp | 20,868 | 0.7982 ± 0.0190 |
+| **flat_kronecker** | **2,564** | **0.8007 ± 0.0202** |
+| hierarchical_kronecker | 87,044 | 0.7872 ± 0.0255 |
+
+### İstatistiksel Testler
+
+**Flat vs Dense:**
+- mean_diff = +0.0025
+- paired t = +0.649 (p ≈ 0.517)
+- Cohen's d = +0.145
+- %95 CI = [−0.0050, +0.0095]
+
+**Sonuç:** İstatistiksel olarak **eşit** (p > 0.05, CI sıfırı içeriyor).
+
+**Flat vs Hierarchical:**
+- mean_diff = +0.0135
+- paired t = +3.364 (p ≈ 0.0008)
+- Cohen's d = +0.752
+- %95 CI = [+0.0060, +0.0216]
+
+**Sonuç:** Flat **anlamlı olarak** kazanıyor (p < 0.001, büyük etki).
+
+**Dense vs Hierarchical:**
+- mean_diff = +0.0110
+- paired t = +2.600 (p ≈ 0.0093)
+- Cohen's d = +0.581
+- %95 CI = [+0.0027, +0.0192]
+
+**Sonuç:** Dense **anlamlı olarak** kazanıyor (p < 0.01, orta etki).
+
+## Kritik Bulgu
+
+**Hiyerarşik yapı ZARARLI:**
+- 34x daha fazla parametre (87,044 vs 2,564)
+- Anlamlı olarak **daha kötü** sonuç (flat vs hier: p=0.0008)
+- 5.5x daha yavaş eğitim (67s vs 12s)
+
+**Flat Kronecker VERİMLİ:**
+- 8x daha az parametre (2,564 vs 20,868)
+- Dense ile **istatistiksel eşit** (p=0.517)
+- 2x daha yavaş ama kabul edilebilir
+
+**Sonuç:** Görev-uygunluk hipotezi güçlü istatistiksel kanıtla desteklendi.
+
+## İstatistiksel Notlar
+
+- p-değerleri normal yaklaşımla hesaplandı (n=20 için geçerli)
+- Bootstrap 5000 iterasyon ile CI
+- Paired t-test seed-eşleşmesi sayesinde düşük varyans
+- Daha güçlü test için n ≥ 50 önerilir (gelecek çalışma)
