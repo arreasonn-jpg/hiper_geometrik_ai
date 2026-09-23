@@ -105,6 +105,37 @@ $ gibi harmonik-ortalama metrikleri için **geçerli değildir**:
 Bu sınır matematikseldir: hibritin F1 değeri, kolların F1 değerlerinin
 konveks bileşimi değildir. Bu, preprint'te **açık bir kapsam ifadesi**
 olarak yer alıyor.
+
+### 7. F1 Per-Class Formülü (YENİ — Çözüm)
+
+F1 için **doğru formül** per-class ağırlıklıdır:
+
+    F1_h = (1/K) · Σ_c [ w_c · F1_s^c + (1−w_c) · F1_n^c ]
+
+    w_c = D_s^c / (D_s^c + D_n^c),  D_k^c = 2·TP_k^c + FP_k^c + FN_k^c
+
+**20 NER konfigürasyonunda ε = 0.000000** (makine hassasiyetinde).
+
+| Formül | Ortalama ε | Maksimum ε |
+|---|---|---|
+| Lineer | 0.019 | 0.052 |
+| **Per-class** | **0.000000** | **0.000000** |
+
+### 8. Kronecker Görev-Uygunluk (YENİ — Mimari)
+
+Kronecker yapı **yapısal görevlerde** 8x verimli, **rastgele görevlerde** dezavantajlı:
+
+| Görev | Kazanan | Not |
+|---|---|---|
+| Sentetik lineer | Dense MLP | Kronecker kısıtı kayıp |
+| **Compositional (grid)** | **Flat Kronecker** | **8x az param, eşit doğruluk** |
+
+**20 seed istatistik:**
+- flat vs dense: p = 0.52 (eşit)
+- flat vs hierarchical: p = 0.0008 (flat kazanıyor)
+- dense vs hierarchical: p = 0.0093 (dense kazanıyor)
+
+**Sonuç:** Hiyerarşik yapı kanıtlanmış fayda sağlamıyor; flat Kronecker yapısal görevlerde verimli.
 Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 
@@ -148,6 +179,18 @@ Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 - `reports/` — 9 ana rapor (05 artık 12-dil)
 - `pdfs/` — 2 preprint PDF
 - `artifacts/` — 12 kaynak JSON + 2 yeni rapor
+
+---
+
+## Sıradaki Bilimsel Adım (Preprint 2)
+
+Üç bağımsız hattı birleştiren **Preprint 2** outline hazır:
+
+1. **Hibrit formül** (12 dil, 4 görev, robustness)
+2. **F1 per-class** formülü (yeni, ε = 0)
+3. **Kronecker görev-uygunluk** (8x verimli, yapısal görevlerde)
+
+**Dosya:** `reports/10_PREPRINT2_OUTLINE.md`
 
 ---
 
