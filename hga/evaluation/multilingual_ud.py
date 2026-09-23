@@ -27,6 +27,10 @@ LANGUAGES: Dict[str, Tuple[str, str]] = {
     "es_gsd_v1": ("SpanishGSD", "Ispanyolca"),
     "it_gsd_v1": ("ItalianISDT", "Italyanca"),
     "nl_gsd_v1": ("DutchAlpino", "Hollandaca"),
+    "zh_gsd_v1": ("ChineseGSD", "Cince"),
+    "ja_gsd_v1": ("JapaneseGSD", "Japonca"),
+    "ru_gsd_v1": ("RussianGSD", "Rusca"),
+    "ar_padt_v1": ("ArabicPADT", "Arapca"),
 }
 
 

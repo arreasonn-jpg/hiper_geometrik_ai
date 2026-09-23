@@ -1,0 +1,63 @@
+{
+  "thresholds": {
+    "very_loose": {
+      "positive_threshold": 0.5,
+      "negative_threshold": 0.5,
+      "symbolic_coverage": 0.9941,
+      "symbolic_acc_answered": 1.0,
+      "symbolic_acc_full": 0.9941,
+      "neural_mean": 0.9509,
+      "neural_std": 0.0111,
+      "hybrid_mean": 0.9984,
+      "hybrid_std": 0.0004,
+      "gain": 0.0475
+    },
+    "repo": {
+      "positive_threshold": 0.6,
+      "negative_threshold": 0.4,
+      "symbolic_coverage": 0.9941,
+      "symbolic_acc_answered": 1.0,
+      "symbolic_acc_full": 0.9941,
+      "neural_mean": 0.9509,
+      "neural_std": 0.0111,
+      "hybrid_mean": 0.9984,
+      "hybrid_std": 0.0004,
+      "gain": 0.0475
+    },
+    "strict": {
+      "positive_threshold": 0.8,
+      "negative_threshold": 0.2,
+      "symbolic_coverage": 0.9835,
+      "symbolic_acc_answered": 1.0,
+      "symbolic_acc_full": 0.9835,
+      "neural_mean": 0.9509,
+      "neural_std": 0.0111,
+      "hybrid_mean": 0.9963,
+      "hybrid_std": 0.0011,
+      "gain": 0.0455
+    },
+    "tight": {
+      "positive_threshold": 0.9,
+      "negative_threshold": 0.1,
+      "symbolic_coverage": 0.9635,
+      "symbolic_acc_answered": 1.0,
+      "symbolic_acc_full": 0.9635,
+      "neural_mean": 0.9509,
+      "neural_std": 0.0111,
+      "hybrid_mean": 0.992,
+      "hybrid_std": 0.0029,
+      "gain": 0.0412
+    }
+  },
+  "config": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "train_size": 25262,
+    "test_size": 5950
+  }
+}
