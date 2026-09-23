@@ -19,9 +19,9 @@ We present a hybrid symbolic-neural paradigm whose gain over neural
 baselines can be predicted by a simple formula:
 $\text{gain} = \text{cov}_{\text{sym}} \times
 (\text{acc}_{\text{sym}} - \text{acc}_{\text{neu}})$.
-The formula was validated on 12 independent datasets across 8 language
+The formula was validated on 8 independent datasets across 6 language
 families, 3 task types (binary, multiclass, multi-label), and 2 metrics
-(accuracy, bit-accuracy). Mean prediction error is 0.002. We derive the
+(accuracy, bit-accuracy). Mean prediction error is 0.008. We derive the
 formula exactly and show that its error is bounded by
 $(1-\text{cov}) \times |\text{acc}_{\text{neu}}^{\text{abst}} -
 \text{acc}_{\text{neu}}^{\text{all}}|$. On a 20-seed championship
@@ -173,7 +173,7 @@ satisfies $\varepsilon < 0.01$.
 
 \begin{table}[h]
 \centering
-\caption{Hybrid gain on 12 datasets across 8 language families (4 scripts: Latin, Han, Cyrillic, Arabic).
+\caption{Hybrid gain on 8 datasets across 6 language families.
 $\text{cov}$: symbolic coverage. $\text{acc}_s$: symbolic accuracy on
 answered items. $\text{acc}_n$: neural baseline accuracy.
 Gain$_\text{obs}$: measured. Gain$_\text{pred}$: from
@@ -192,10 +192,6 @@ GSD & French & 0.979 & 1.000 & 0.956 & +0.041 & +0.043 & 0.002 \\
 GSD & Spanish & 0.987 & 1.000 & 0.962 & +0.036 & +0.038 & 0.002 \\
 ISDT & Italian & 0.989 & 1.000 & 0.950 & +0.048 & +0.049 & 0.002 \\
 Alpino & Dutch & 0.973 & 1.000 & 0.945 & +0.053 & +0.054 & 0.001 \\
-GSD & Chinese  & 0.989 & 1.000 & 0.954 & +0.044 & +0.045 & 0.001 \\
-GSD & Japanese & 0.994 & 1.000 & 0.951 & +0.048 & +0.049 & 0.001 \\
-GSD & Russian  & 0.984 & 1.000 & 0.943 & +0.055 & +0.056 & 0.001 \\
-PADT & Arabic  & 0.990 & 1.000 & 0.967 & +0.032 & +0.033 & 0.001 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -255,37 +251,6 @@ Seed & $1-\text{cov}$ & $|\text{acc}_n^{\bot} - \text{acc}_n|$ & $\varepsilon_\t
 \bottomrule
 \end{tabular}
 \end{table}
-
-
-\subsection{Robustness to Symbolic Noise}
-\label{sec:robustness}
-
-The formula predicts gain from the symbolic arm's coverage and
-accuracy. If the symbolic arm is corrupted, does the formula still
-hold? We inject symbol-level noise at rates $0\%, 25\%, 50\%$ and
-measure formula error.
-
-\begin{table}[h]
-\centering
-\caption{Symbolic noise robustness. The formula's prediction error
-is \emph{invariant} at $\varepsilon = 0.0066$ even when symbolic
-accuracy drops to chance level.}
-\label{tab:noise}
-\small
-\begin{tabular}{ccc}
-\toprule
-Noise & sym\_acc & $\varepsilon$ \\
-\midrule
-0\%  & 1.0000 & 0.0066 \\
-25\% & 0.7480 & 0.0066 \\
-50\% & 0.5102 & 0.0066 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The error is constant across noise levels. This suggests the formula
-captures a structural property of the hybrid ensemble, not an
-artifact of the symbolic arm's clean-input accuracy.
 
 \section{Discussion}
 \label{sec:discussion}

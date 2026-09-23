@@ -21,9 +21,9 @@ Sinirsel temellere karşı kazancı basit bir formülle öngörülebilen bir
 hibrit sembolik-sinirsel paradigma sunuyoruz:
 $\text{kazanç} = \text{kapsam}_{\text{sem}} \times
 (\text{doğruluk}_{\text{sem}} - \text{doğruluk}_{\text{sin}})$.
-Formül, 8 dil ailesine yayılmış 12 bağımsız veri kümesinde, 3 görev
+Formül, 6 dil ailesine yayılmış 8 bağımsız veri kümesinde, 3 görev
 tipinde (ikili, çok-sınıflı, çok-etiketli) ve 2 metrikte (doğruluk,
-bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.002'dir.
+bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.008'dir.
 Formülü kesin olarak türetiyor ve hatasının
 $(1-\text{kapsam}) \times |\text{doğruluk}_{\text{sin}}^{\perp} -
 \text{doğruluk}_{\text{sin}}^{\text{tüm}}|$ ile sınırlı olduğunu
@@ -62,9 +62,9 @@ $(1-\text{kapsam}_{\text{sem}}) \cdot
 |\text{doğruluk}_{\text{sin}}^{\perp} -
 \text{doğruluk}_{\text{sin}}^{\text{tüm}}|$ ile sınırlı olduğunu
 gösteriyoruz.
-\item Formülü \textbf{12 bağımsız veri kümesi}, \textbf{8 dil ailesi},
+\item Formülü \textbf{8 bağımsız veri kümesi}, \textbf{6 dil ailesi},
 \textbf{3 görev tipi} ve \textbf{2 metrik} üzerinde doğruluyoruz.
-Ortalama öngörü hatası $0.002$'dir.
+Ortalama öngörü hatası $0.008$'dir.
 \item Mekanizmanın \emph{kayıpsız} olduğunu gösteriyoruz: her veri
 kümesi ve konfigürasyonda hibrit kol, sinirsel temelden en az onun
 kadar doğrudur.
@@ -173,12 +173,12 @@ uygulanır; doğruluk bit düzeyinde ölçülür.
 \subsection{Diller Arası Doğrulama}
 \label{sec:diller_arasi}
 Tablo~\ref{tab:8dil}, sekiz veri kümesindeki gözlenen ve öngörülen
-kazançları raporlar. Ortalama öngörü hatası $0.002$'dir; her veri
+kazançları raporlar. Ortalama öngörü hatası $0.008$'dir; her veri
 kümesi $\varepsilon < 0.01$ koşulunu sağlar.
 
 \begin{table}[ht]
 \centering
-\caption{12 veri kümesi, 8 dil ailesinde hibrit kazanç (4 yazı sistemi: Latin, Han, Kiril, Arap).}
+\caption{8 veri kümesi, 6 dil ailesinde hibrit kazanç.}
 \label{tab:8dil}
 \small
 \begin{tabular}{llcccccc}
@@ -193,10 +193,6 @@ GSD & Fransızca & 0.979 & 1.000 & 0.956 & +0.041 & +0.043 & 0.002 \\
 GSD & İspanyolca & 0.987 & 1.000 & 0.962 & +0.036 & +0.038 & 0.002 \\
 ISDT & İtalyanca & 0.989 & 1.000 & 0.950 & +0.048 & +0.049 & 0.002 \\
 Alpino & Hollandaca & 0.973 & 1.000 & 0.945 & +0.053 & +0.054 & 0.001 \\
-GSD & Çince    & 0.989 & 1.000 & 0.954 & +0.044 & +0.045 & 0.001 \\
-GSD & Japonca  & 0.994 & 1.000 & 0.951 & +0.048 & +0.049 & 0.001 \\
-GSD & Rusça    & 0.984 & 1.000 & 0.943 & +0.055 & +0.056 & 0.001 \\
-PADT & Arapça  & 0.990 & 1.000 & 0.967 & +0.032 & +0.033 & 0.001 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -249,37 +245,6 @@ Tohum & $1-\text{kapsam}$ & $|\text{doğ}_n^{\perp} - \text{doğ}_n|$ & $\vareps
 \end{tabular}
 \end{table}
 
-
-\subsection{Sembolik Gürültüye Dayanıklılık}
-\label{sec:robustness}
-
-Formül, kazancı sembolik kolun kapsamı ve doğruluğundan öngörür.
-Peki sembolik kol bozulursa formül hâlâ geçerli mi? Sembol düzeyinde
-$\%0, \%25, \%50$ oranlarında gürültü enjekte edip formül hatasını
-ölçüyoruz.
-
-\begin{table}[ht]
-\centering
-\caption{Sembolik gürültü dayanıklılığı. Formülün öngörü hatası,
-sembolik doğruluk şans düzeyine düşse bile $\varepsilon = 0.0066$
-değerinde \emph{sabittir}.}
-\label{tab:noise}
-\small
-\begin{tabular}{ccc}
-\toprule
-Gürültü & sym\_acc & $\varepsilon$ \\
-\midrule
-\%0  & 1.0000 & 0.0066 \\
-\%25 & 0.7480 & 0.0066 \\
-\%50 & 0.5102 & 0.0066 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Hata, gürültü seviyeleri boyunca sabittir. Bu, formülün sembolik kolun
-temiz-girdi doğruluğunun bir artefaktı değil, hibrit topluluğun
-yapısal bir özelliğini yakaladığını gösterir.
-
 \section{Tartışma}
 \label{sec:tartisma}
 
@@ -316,9 +281,9 @@ bağımlı doğruluğuyla açıklar.
 Bir hibrit sembolik-sinirsel paradigmanın sinirsel-temel referansa
 karşı kazancının, önde gelen terimi
 $\text{kapsam} \cdot (\text{doğruluk}_s - \text{doğruluk}_n)$ olan
-kesin bir ayrışımla yönetildiğini gösterdik. Formül, 8 dil ailesinde 12
+kesin bir ayrışımla yönetildiğini gösterdik. Formül, 6 dil ailesinde 8
 veri kümesi, 3 görev tipi ve 2 metrikte doğrulandı; ortalama öngörü
-hatası $0.002$'dir. Kesin hata terimi deneysel olarak makine
+hatası $0.008$'dir. Kesin hata terimi deneysel olarak makine
 hassasiyetinde doğrulanmıştır. 9.69/10 şampiyona puanının altında
 yatan insan değerlendirme protokolü için Krippendorff'un $\alpha$'sını
 kullanıyoruz~\cite{krippendorff2011computing}. Formülün hibrit
