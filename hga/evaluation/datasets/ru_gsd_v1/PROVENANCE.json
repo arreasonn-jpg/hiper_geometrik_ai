@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Russian-GSD",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "ec931b90e358a77dd3af288acae87b62b98a116df6435cb97fb9f638b0fe86c3"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "1c8862adec6dbf2453a3ded13258050237975b8e3576e8300edec77664a5d992"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "f26e022329162a1c6306f76644d06f770f1572501755421165387137fe63138d"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "899aad88c49896408f16373ebe0930df787fd5fd2895a0bbefdd57c336bd3c4d"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}

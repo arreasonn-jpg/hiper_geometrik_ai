@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Arabic-PADT",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "5bf1a717914c1b9e0a5f05f37a526b55b469c1c276d85834ecc93f4270fc6409"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "0023e4109a4eb423e304e069d80962ee13573c185838d458e3c8aad73e73c36a"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "793c87bf173d491af2092ef7f87b04a2cf6c596490e7347a2065058a053a6389"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "c1e9fb48970ad93168ffb7af3bcd43e6ead0ee06579d1802006502b532e6e328"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}

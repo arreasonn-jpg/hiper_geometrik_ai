@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Chinese-GSD",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "96bc7b56f93ab4eeda7a72b73d0a4bf00595d3739c03ac83fbfa4764f715ee8d"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "6f6d2568cad26c95c0449a1d7b33ed60fb2ec743f394291571a35011aba29f95"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "ff01a3d01d62b623756396085e78bdaeefb7c2b7935a890dde5b18e92712d54f"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "7a15505a0b6f2a099ffcf01dbe1e74eeac1e5f82e6e31768f8a3f8aa6fe66b73"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repo": "https://github.com/UniversalDependencies/UD_Japanese-GSD",
+    "revision": "master",
+    "source_files": [
+      {
+        "vendored_path": "train.conllu",
+        "sha256": "188503ab8844e45552f70d913ab83fed2490d4d485a55ca039948bd17f2a45a6"
+      },
+      {
+        "vendored_path": "dev.conllu",
+        "sha256": "298e6f74427ade5de668022e50d249c93a919edf96a93dad7bb8e91cc5d8b437"
+      },
+      {
+        "vendored_path": "test.conllu",
+        "sha256": "5f50ee6ed45c7ebda3787e593eaf5e9a225f25e53f6b4b32df778031862c843f"
+      }
+    ]
+  },
+  "license": {
+    "vendored_license_path": "LICENSE.txt",
+    "license_sha256": "d4ee0b54b83d0e352d756801d0a6fa2884f516ffcfc003f411fca670a4c7f605"
+  },
+  "benchmark_config": {
+    "sentence_cap": {
+      "train": 512,
+      "dev": 128,
+      "test": 128
+    }
+  }
+}
