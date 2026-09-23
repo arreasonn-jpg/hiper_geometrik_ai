@@ -1,0 +1,167 @@
+[
+  {
+    "n_base": 16,
+    "num_classes": 4,
+    "n_train": 2000,
+    "n_test": 500,
+    "epochs": 100,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 1.0,
+        "test_acc": 0.814,
+        "final_loss": 0.0001,
+        "wall_time_sec": 4.06
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 1.0,
+        "test_acc": 0.818,
+        "final_loss": 0.0008,
+        "wall_time_sec": 12.27
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 1.0,
+        "test_acc": 0.824,
+        "final_loss": 0.0002,
+        "wall_time_sec": 73.04
+      }
+    ]
+  },
+  {
+    "n_base": 16,
+    "num_classes": 4,
+    "n_train": 2000,
+    "n_test": 500,
+    "epochs": 100,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 1.0,
+        "test_acc": 0.774,
+        "final_loss": 0.0002,
+        "wall_time_sec": 5.84
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 1.0,
+        "test_acc": 0.786,
+        "final_loss": 0.0012,
+        "wall_time_sec": 11.26
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 1.0,
+        "test_acc": 0.736,
+        "final_loss": 0.0,
+        "wall_time_sec": 65.13
+      }
+    ]
+  },
+  {
+    "n_base": 16,
+    "num_classes": 4,
+    "n_train": 2000,
+    "n_test": 500,
+    "epochs": 100,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 1.0,
+        "test_acc": 0.806,
+        "final_loss": 0.0001,
+        "wall_time_sec": 5.94
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 1.0,
+        "test_acc": 0.778,
+        "final_loss": 0.0009,
+        "wall_time_sec": 11.54
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 1.0,
+        "test_acc": 0.776,
+        "final_loss": 0.0001,
+        "wall_time_sec": 64.74
+      }
+    ]
+  },
+  {
+    "n_base": 16,
+    "num_classes": 4,
+    "n_train": 2000,
+    "n_test": 500,
+    "epochs": 100,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 1.0,
+        "test_acc": 0.808,
+        "final_loss": 0.0002,
+        "wall_time_sec": 6.61
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 1.0,
+        "test_acc": 0.84,
+        "final_loss": 0.0014,
+        "wall_time_sec": 13.18
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 1.0,
+        "test_acc": 0.82,
+        "final_loss": 0.0002,
+        "wall_time_sec": 65.8
+      }
+    ]
+  },
+  {
+    "n_base": 16,
+    "num_classes": 4,
+    "n_train": 2000,
+    "n_test": 500,
+    "epochs": 100,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 1.0,
+        "test_acc": 0.822,
+        "final_loss": 0.0,
+        "wall_time_sec": 5.39
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 1.0,
+        "test_acc": 0.816,
+        "final_loss": 0.0006,
+        "wall_time_sec": 11.8
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 1.0,
+        "test_acc": 0.822,
+        "final_loss": 0.0,
+        "wall_time_sec": 68.01
+      }
+    ]
+  }
+]
