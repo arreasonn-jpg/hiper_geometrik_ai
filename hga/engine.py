@@ -48,7 +48,8 @@ class ExperienceEngine:
                  replay_n: int = 2, slot_sayisi: int = 64,
                  memory_policy: Optional[str] = None,
                  eviction_policy: Optional[str] = None,
-                 max_idle_ticks: Optional[int] = None):
+                 max_idle_ticks: Optional[int] = None,
+                 ozellik_filtresi: bool = True):
         self.cfg = cfg or yukle()
         self.store = store or KnowledgeStore()
         self.replay_n = int(replay_n)
@@ -60,7 +61,9 @@ class ExperienceEngine:
 
         self.scoring = Scoring(agirliklar)
         self.evaluator = ExperienceEvaluator(scoring=self.scoring, esikler=esikler)
-        self.generator = ExperienceGenerator(**gen_cfg)
+        gen_kwargs = dict(gen_cfg)
+        gen_kwargs.setdefault("ozellik_filtresi", ozellik_filtresi)
+        self.generator = ExperienceGenerator(**gen_kwargs)
         self.consolidator = Consolidator()
         self.text_gen = TextGenerator()
         configured_idle_ticks = memory_cfg.get("max_idle_ticks")

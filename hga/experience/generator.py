@@ -31,9 +31,11 @@ class ExperienceGenerator:
     """Mevcut bilgiden kontrollü deneyim adayları üretir."""
 
     def __init__(self, source_confidence: float = 0.5,
-                 tip_filtresi: bool = True):
+                 tip_filtresi: bool = True,
+                 ozellik_filtresi: bool = True):
         self.source_confidence = float(source_confidence)
         self.tip_filtresi = bool(tip_filtresi)
+        self.ozellik_filtresi = bool(ozellik_filtresi)
         self._sayac = 0
 
     # ── Özne/nesne havuzu ────────────────────────────────────────────────
@@ -89,9 +91,11 @@ class ExperienceGenerator:
         adaylar: List[ExperienceCandidate] = []
 
         for r in iliskiler:
-            o_havuzu = self._havuz(varliklar, r.object_types, r.requires_object_props, store) if self.tip_filtresi \
+            gerekli_o = r.requires_object_props if self.ozellik_filtresi else None
+            gerekli_s = r.requires_subject_props if self.ozellik_filtresi else None
+            o_havuzu = self._havuz(varliklar, r.object_types, gerekli_o, store) if self.tip_filtresi \
                 else varliklar
-            s_havuzu = self._havuz(varliklar, r.subject_types, r.requires_subject_props, store) if self.tip_filtresi \
+            s_havuzu = self._havuz(varliklar, r.subject_types, gerekli_s, store) if self.tip_filtresi \
                 else varliklar
             for s in s_havuzu:
                 for o in o_havuzu:

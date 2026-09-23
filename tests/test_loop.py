@@ -37,7 +37,7 @@ def test_dongu_bilgi_temelli():
 
     dongu = DeneyimDongusu(
         store=k,
-        generator=ExperienceGenerator(),
+        generator=ExperienceGenerator(ozellik_filtresi=False),
         evaluator=ExperienceEvaluator(),
         consolidator=Consolidator(),
         bellek=BellekEntegrasyonu(slot_sayisi=64, replay_kapasitesi=16),
@@ -91,7 +91,7 @@ def test_dongu_coklu_adim_replay():
                      requires_object_props={"binilebilir": 1.0})
     dongu = DeneyimDongusu(
         store=k,
-        generator=ExperienceGenerator(),
+        generator=ExperienceGenerator(ozellik_filtresi=False),
         evaluator=ExperienceEvaluator(),
         consolidator=Consolidator(),
         bellek=BellekEntegrasyonu(slot_sayisi=64, replay_kapasitesi=16),

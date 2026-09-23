@@ -18,7 +18,7 @@ from hga.experience import AritmetikOrtam  # noqa: E402
 
 
 def _bilgi_engine():
-    e = ExperienceEngine()
+    e = ExperienceEngine(ozellik_filtresi=False)
     e.store.varlik_ekle("Ali", entity_type="insan", properties={"canli": 1},
                         entity_id="E_001", ozel_isim=True)
     e.store.varlik_ekle("Ata", entity_type="hayvan", properties={"binilebilir": 1},

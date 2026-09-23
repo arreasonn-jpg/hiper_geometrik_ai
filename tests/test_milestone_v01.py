@@ -53,7 +53,7 @@ def _kur() -> KnowledgeStore:
 def test_milestone_uygulanir():
     k = _kur()
     ev = ExperienceEvaluator()
-    gen = ExperienceGenerator()  # kontrollü kombinasyon (§7)
+    gen = ExperienceGenerator(ozellik_filtresi=False)  # kontrollü kombinasyon (§7)
 
     # §14 madde 5-7: aday üret + değerlendir + durum makinesi
     adaylar = gen.uret(k, relation_ids=["R_001"])
@@ -83,7 +83,7 @@ def test_milestone_konsolidasyon_ve_kopru():
     deneyimler seyrek slotlara yazılır (§22 commit 6)."""
     k = _kur()
     ev = ExperienceEvaluator()
-    gen = ExperienceGenerator()
+    gen = ExperienceGenerator(ozellik_filtresi=False)
     adaylar = gen.uret(k, relation_ids=["R_001"])
     for a in adaylar:
         ev.degerlendir(a, k)

@@ -384,7 +384,7 @@ def run_compositional_benchmark(
     evaluator = ExperienceEvaluator()
     text_generator = TextGenerator()
     parser = dataset.build_parser()
-    candidates = ExperienceGenerator(tip_filtresi=True).uret(store)
+    candidates = ExperienceGenerator(tip_filtresi=True, ozellik_filtresi=False).uret(store)
     by_triple = {candidate.uclusu: candidate for candidate in candidates}
     token_to_entity = {row["token"]: row["entity_id"] for row in dataset.entities}
     token_to_relation = {row["token"]: row["relation_id"] for row in dataset.relations}
