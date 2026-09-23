@@ -7,18 +7,16 @@ decoder, seyrek bellek) AYNEN kalır.
 """
 from __future__ import annotations
 
-import torch
-import torch.nn as nn
-
 # Mevcut model
 import sys
 from pathlib import Path
+
 _MIMARI_DIR = Path(__file__).resolve().parent
 if str(_MIMARI_DIR) not in sys.path:
     sys.path.insert(0, str(_MIMARI_DIR))
 
-from kuresel_model import HiperGeometrikAI
-from hiyerarsik_bag import HiyerarsikZincir
+from hiyerarsik_bag import HiyerarsikZincir  # noqa: E402
+from kuresel_model import HiperGeometrikAI  # noqa: E402
 
 
 class HiperGeometrikAIHiyerarsik(HiperGeometrikAI):

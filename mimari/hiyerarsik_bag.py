@@ -86,10 +86,14 @@ class HiyerarsikZincir(nn.Module):
     @staticmethod
     def _akt(x, ad):
         ad = (ad or "silu").lower()
-        if ad == "silu": return F.silu(x)
-        if ad == "gelu": return F.gelu(x)
-        if ad == "tanh": return torch.tanh(x)
-        if ad in ("identity", "none", "yok"): return x
+        if ad == "silu":
+            return F.silu(x)
+        if ad == "gelu":
+            return F.gelu(x)
+        if ad == "tanh":
+            return torch.tanh(x)
+        if ad in ("identity", "none", "yok"):
+            return x
         raise ValueError(f"bilinmeyen aktivasyon: {ad}")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -124,7 +128,7 @@ class HiyerarsikZincir(nn.Module):
             "expansion": self.expansion,
             "gercek_parametre": sum(p.numel() for p in self.parameters()),
             "sanal_operator_girdisi": sum(
-                l.kapasite()["sanal_operator_girdisi"]
-                for l in list(self.up_layers) + list(self.down_layers)
+                layer.kapasite()["sanal_operator_girdisi"]
+                for layer in list(self.up_layers) + list(self.down_layers)
             ),
         }
