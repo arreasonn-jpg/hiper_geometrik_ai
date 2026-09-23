@@ -7,6 +7,7 @@ TWT'de bulunan hibrit zaferi EWT'de de dogrula.
 - hybrid:   veto + fallback
 """
 from __future__ import annotations
+
 from typing import Any, Dict, List, Tuple
 
 
@@ -34,10 +35,11 @@ def run_ewt_hybrid(
 ) -> Dict[str, Any]:
     import sys
     sys.path.insert(0, ".")
-    from hga.evaluation.english_ewt import prepare_english_ewt_task
-    from hga.evaluation.real_turkish import SelectiveArcSchemaVerifier
     import torch
     import torch.nn as nn
+
+    from hga.evaluation.english_ewt import prepare_english_ewt_task
+    from hga.evaluation.real_turkish import SelectiveArcSchemaVerifier
 
     if task_preparer is None:
         task_preparer = prepare_english_ewt_task
@@ -63,7 +65,6 @@ def run_ewt_hybrid(
     train_dep, train_rel, train_head = _feats(task.train)
     test_dep, test_rel, test_head = _feats(task.test)
     train_y = torch.tensor([int(c.expected_valid) for c in task.train], dtype=torch.long)
-    test_y = torch.tensor([int(c.expected_valid) for c in task.test], dtype=torch.long)
 
     n_dep = len(dep_vocab)
     n_rel = len(rel_vocab)

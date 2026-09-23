@@ -9,7 +9,7 @@ Bu modül, hiyerarşik genişlemenin ifade gücünü artırıp artırmadığın�
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, List
 
 
@@ -24,7 +24,6 @@ def _torch():
 def _spectrum(torch, matrix):
     """Tekil değer spektrumundan rank ve etkin boyut."""
     singular = torch.linalg.svdvals(matrix.detach().double())
-    total = float(singular.sum().item())
     sq_total = float((singular ** 2).sum().item())
     largest = float(singular[0].item()) if singular.numel() else 0.0
     threshold = largest * max(matrix.shape) * 2.22e-16

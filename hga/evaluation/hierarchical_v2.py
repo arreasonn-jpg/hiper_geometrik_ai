@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import math
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, List
 
 
@@ -32,7 +32,6 @@ def _spectrum_from_svd(torch, A, B):
     # Azalan sırala
     kron_sigma = torch.sort(kron_sigma, descending=True).values
 
-    total = float(kron_sigma.sum().item())
     sq_total = float((kron_sigma ** 2).sum().item())
     largest = float(kron_sigma[0].item()) if kron_sigma.numel() else 0.0
     # Sayısal rank için eşik: büyük değerin çok altındakiler sıfır sayılır
@@ -134,10 +133,14 @@ def _make_factors(torch, n_in: int, n_out: int, rank_budget: int):
         return A, B
 
     r = min(rank_budget, n_in, n_out)
-    U_A = torch.empty(n_out, r); V_A = torch.empty(n_in, r)
-    U_B = torch.empty(n_in, r); V_B = torch.empty(n_out, r)
-    torch.nn.init.xavier_uniform_(U_A); torch.nn.init.xavier_uniform_(V_A)
-    torch.nn.init.xavier_uniform_(U_B); torch.nn.init.xavier_uniform_(V_B)
+    U_A = torch.empty(n_out, r)
+    V_A = torch.empty(n_in, r)
+    U_B = torch.empty(n_in, r)
+    V_B = torch.empty(n_out, r)
+    torch.nn.init.xavier_uniform_(U_A)
+    torch.nn.init.xavier_uniform_(V_A)
+    torch.nn.init.xavier_uniform_(U_B)
+    torch.nn.init.xavier_uniform_(V_B)
     A = U_A @ V_A.T
     B = U_B @ V_B.T
     return A, B
@@ -182,8 +185,10 @@ def run_hierarchy(mode: str, n_base: int = 16, depth: int = 3,
             # Düşük rank FLOPs: A @ X @ B
             flops = n_out * n_in * n_in + n_out * n_out * n_in
         else:
-            A = torch.empty(n_out, n_in); B = torch.empty(n_in, n_out)
-            torch.nn.init.xavier_uniform_(A); torch.nn.init.xavier_uniform_(B)
+            A = torch.empty(n_out, n_in)
+            B = torch.empty(n_in, n_out)
+            torch.nn.init.xavier_uniform_(A)
+            torch.nn.init.xavier_uniform_(B)
             params = A.numel() + B.numel()
             flops = n_out * n_in * n_in + n_out * n_out * n_in
 

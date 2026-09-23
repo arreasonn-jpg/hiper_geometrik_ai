@@ -10,9 +10,9 @@ import json
 from pathlib import Path
 
 from .english_ewt import (
+    SPLITS,
     EnglishEWT,
     EWTTaskData,
-    SPLITS,
     _candidates,
     _hash_records,
 )

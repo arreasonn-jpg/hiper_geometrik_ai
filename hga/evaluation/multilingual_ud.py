@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 from .english_ewt import (
+    SPLITS,
     EnglishEWT,
     EWTTaskData,
-    SPLITS,
     _candidates,
     _hash_records,
 )

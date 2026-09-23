@@ -122,13 +122,13 @@ def _eval(model, x, y, batch_size=2048, device="cpu"):
             all_labels.extend(yb.cpu().tolist())
     acc = correct / max(total, 1)
     # F1
-    tp = sum(1 for p, l in zip(all_preds, all_labels) if p == 1 and l == 1)
-    fp = sum(1 for p, l in zip(all_preds, all_labels) if p == 1 and l == 0)
-    fn = sum(1 for p, l in zip(all_preds, all_labels) if p == 0 and l == 1)
+    tp = sum(1 for p, lbl in zip(all_preds, all_labels) if p == 1 and lbl == 1)
+    fp = sum(1 for p, lbl in zip(all_preds, all_labels) if p == 1 and lbl == 0)
+    fn = sum(1 for p, lbl in zip(all_preds, all_labels) if p == 0 and lbl == 1)
     precision = tp / max(tp + fp, 1)
     recall = tp / max(tp + fn, 1)
     f1 = 2 * precision * recall / max(precision + recall, 1e-9)
-    far = fp / max(fp + (sum(1 for l in all_labels if l == 0)), 1)
+    far = fp / max(fp + (sum(1 for lbl in all_labels if lbl == 0)), 1)
     frr = fn / max(fn + tp, 1)
     return {"accuracy": acc, "f1": f1, "precision": precision,
             "recall": recall, "far": far, "frr": frr}

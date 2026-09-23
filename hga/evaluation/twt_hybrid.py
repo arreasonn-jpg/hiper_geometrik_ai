@@ -11,6 +11,7 @@ Iki esik rejimi test edilir:
 - tight: positive=0.9, negative=0.1  (cekingen)
 """
 from __future__ import annotations
+
 from typing import Any, Dict, List, Tuple
 
 
@@ -35,18 +36,18 @@ def run_twt_hybrid(
 ) -> Dict[str, Any]:
     import sys
     sys.path.insert(0, ".")
-    from hga.evaluation.real_turkish import (
-        prepare_real_turkish_task,
-        SelectiveArcSchemaVerifier,
-    )
-    from hga.evaluation.twt_baselines import (
-        ArcFeatureVocabulary,
-        build_twt_models,
-        BASELINE_PROFILES,
-        ARCHITECTURE_CONFIG,
-    )
     import torch
     import torch.nn as nn
+
+    from hga.evaluation.real_turkish import (
+        SelectiveArcSchemaVerifier,
+        prepare_real_turkish_task,
+    )
+    from hga.evaluation.twt_baselines import (
+        ARCHITECTURE_CONFIG,
+        ArcFeatureVocabulary,
+        build_twt_models,
+    )
 
     task = prepare_real_turkish_task()
     print(f"TWT: train={len(task.train)}, test={len(task.test)}")
@@ -96,7 +97,6 @@ def run_twt_hybrid(
         train_x = torch.tensor(train_rows, dtype=torch.long)
         test_x = torch.tensor(test_rows, dtype=torch.long)
         train_y = torch.tensor([int(c.expected_valid) for c in task.train], dtype=torch.long)
-        test_y = torch.tensor([int(c.expected_valid) for c in task.test], dtype=torch.long)
 
         neural_accs = []
         hybrid_accs = []
