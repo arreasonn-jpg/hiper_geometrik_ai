@@ -120,13 +120,14 @@ def make_hierarchical_task(n: int = 16, n_train: int = 4000, n_test: int = 1000,
 
     train = [gen_sample() for _ in range(n_train)]
     test = [gen_sample() for _ in range(n_test)]
-    return {
+    result: Dict[str, Any] = {
         "x_train": torch.stack([t[0] for t in train]),
         "y_train": torch.stack([t[1] for t in train]),
         "x_test": torch.stack([t[0] for t in test]),
         "y_test": torch.stack([t[1] for t in test]),
         "num_classes": 4,
     }
+    return result
 
 
 # ─── Eğitim ─────────────────────────────────────────────────────────

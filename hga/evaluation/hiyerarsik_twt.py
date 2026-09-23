@@ -200,9 +200,9 @@ def run_hiyerarsik_twt(
             return abs(c.dependent_id - c.head_id) >= min_distance
         task_data = replace(
             task_data,
-            train=[c for c in task_data.train if _dist_ok(c)],
-            dev=[c for c in task_data.dev if _dist_ok(c)],
-            test=[c for c in task_data.test if _dist_ok(c)],
+            train=tuple(c for c in task_data.train if _dist_ok(c)),
+            dev=tuple(c for c in task_data.dev if _dist_ok(c)),
+            test=tuple(c for c in task_data.test if _dist_ok(c)),
         )
         print(f"    (min_dist>={min_distance}) train={len(task_data.train)}, "
               f"dev={len(task_data.dev)}, test={len(task_data.test)}")
@@ -240,7 +240,7 @@ def run_hiyerarsik_twt(
     }
 
     print(f"[3/4] Eğitim başlıyor ({len(seeds)} seed × {len(models)} model)...")
-    results = {name: [] for name in models}
+    results: Dict[str, List[Any]] = {name: [] for name in models}
     for seed in seeds:
         print(f"\n  --- seed={seed} ---")
         for name, cls in models.items():

@@ -128,7 +128,7 @@ class HiyerarsikZincir(nn.Module):
             "expansion": self.expansion,
             "gercek_parametre": sum(p.numel() for p in self.parameters()),
             "sanal_operator_girdisi": sum(
-                layer.kapasite()["sanal_operator_girdisi"]
+                layer.kapasite()["sanal_operator_girdisi"]  # type: ignore[operator]
                 for layer in list(self.up_layers) + list(self.down_layers)
             ),
         }
