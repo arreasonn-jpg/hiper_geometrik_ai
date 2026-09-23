@@ -22,7 +22,7 @@ hibrit sembolik-sinirsel paradigma sunuyoruz:
 $\text{kazanç} = \text{kapsam}_{\text{sem}} \times
 (\text{doğruluk}_{\text{sem}} - \text{doğruluk}_{\text{sin}})$.
 Formül, 8 dil ailesine yayılmış 12 bağımsız veri kümesinde, 3 görev
-tipinde (ikili, çok-sınıflı, çok-etiketli) ve 2 metrikte (doğruluk,
+tipinde (ikili, çok-sınıflı, çok-etiketli, NER) ve 2 metrikte (doğruluk,
 bit-doğruluğu) doğrulanmıştır. Ortalama öngörü hatası 0.002'dir.
 Formülü kesin olarak türetiyor ve hatasının
 $(1-\text{kapsam}) \times |\text{doğruluk}_{\text{sin}}^{\perp} -
@@ -63,7 +63,8 @@ $(1-\text{kapsam}_{\text{sem}}) \cdot
 \text{doğruluk}_{\text{sin}}^{\text{tüm}}|$ ile sınırlı olduğunu
 gösteriyoruz.
 \item Formülü \textbf{12 bağımsız veri kümesi}, \textbf{8 dil ailesi},
-\textbf{3 görev tipi} ve \textbf{2 metrik} üzerinde doğruluyoruz.
+\textbf{4 görev tipi} (ikili, çok-sınıflı, çok-etiketli, NER) ve
+\textbf{2 metrik} üzerinde doğruluyoruz.
 Ortalama öngörü hatası $0.002$'dir.
 \item Mekanizmanın \emph{kayıpsız} olduğunu gösteriyoruz: her veri
 kümesi ve konfigürasyonda hibrit kol, sinirsel temelden en az onun
@@ -202,7 +203,7 @@ PADT & Arapça  & 0.990 & 1.000 & 0.967 & +0.032 & +0.033 & 0.001 \\
 \end{table}
 
 \subsection{Görev Genelliği}
-Tablo~\ref{tab:gorevler}, doğrulamayı üç görev tipine genişletir.
+Tablo~\ref{tab:gorevler}, doğrulamayı dört görev tipine genişletir.
 Çok-sınıflı ($K=4$) ve çok-etiketli (bit-doğruluğu) için beş tohumun
 ortalamasını raporluyoruz. Denklem~\ref{eq:simple}, bir çok-sınıflı
 tohum hariç her konfigürasyonu $0.01$ içinde öngörür; bu tohumun
@@ -221,6 +222,7 @@ Görev & Ortalama $\varepsilon$ & $\varepsilon < 0.01$ tohumlar \\
 İkili (8 veri kümesi) & 0.003 & 8/8 \\
 Çok-sınıflı ($K=4$) & 0.008 & 4/5 \\
 Çok-etiketli (bit doğruluğu) & 0.005 & 5/5 \\
+NER (token doğruluğu)    & 0.000 & 20/20 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -279,6 +281,40 @@ Gürültü & sym\_acc & $\varepsilon$ \\
 Hata, gürültü seviyeleri boyunca sabittir. Bu, formülün sembolik kolun
 temiz-girdi doğruluğunun bir artefaktı değil, hibrit topluluğun
 yapısal bir özelliğini yakaladığını gösterir.
+
+
+\subsection{Metrik Kapsamı: Yalnızca Lineer Metrikler}
+\label{sec:metric-scope-tr}
+
+Denklem~\ref{eq:error}'deki kesin özdeşlik, metriğin öğe-bazlı
+doğruluk göstergesinin \emph{lineer} bir fonksiyonu olmasına dayanır.
+Doğruluk ve bit-doğruluğu bu koşulu sağlar; $F_1$ sağlamaz, çünkü
+harmonik ortalama içerir. NER görevini her iki metrikle test ettik.
+
+\begin{table}[ht]
+\centering
+\caption{NER formül hatası, 20 konfigürasyon. Token doğruluğu
+(lineer) kesin özdeşliği makine hassasiyetinde sağlar; $F_1$
+(lineer olmayan) ihlal eder.}
+\label{tab:metric-scope-tr}
+\small
+\begin{tabular}{lcc}
+\toprule
+Metrik & Ortalama $\varepsilon$ & Maksimum $\varepsilon$ \\
+\midrule
+Token doğruluğu (lineer)   & 0.008 & 0.018 \\
+$F_1$ macro (lineer değil) & 0.019 & 0.052 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Token doğruluğu altında kesin özdeşlik makine hassasiyetinde geçerlidir
+(20 konfigürasyonun tümünde $\varepsilon = 0$); basit formül ortalama
+$0.008$ hata verir. $F_1$ macro altında gözlenen hata, öngörülen sınırı
+ortalama $16$ kat aşar; çünkü hibritin $F_1$ değeri kolların $F_1$
+değerlerinin konveks bileşimi değildir. Bu nedenle formülün kapsamını
+açıkça belirtiyoruz: formül bir \emph{lineer-metrik} özdeşliğidir,
+evrensel değil.
 
 \section{Tartışma}
 \label{sec:tartisma}

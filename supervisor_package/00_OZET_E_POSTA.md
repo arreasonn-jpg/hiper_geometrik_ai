@@ -16,7 +16,7 @@ Bir süredir üzerinde çalıştığım **Hiper-Geometrik AI** projesinde anlaml
 
     kazanç = kapsam_sem × (doğruluk_sem - doğruluk_sin)
 
-**Bu formül 12 bağımsız veri kümesinde, 8 dil ailesinde, 4 yazı sisteminde, 3 görev tipinde ve 2 metrikte doğrulandı. Ortalama öngörü hatası: 0.002.**
+**Bu formül 12 bağımsız veri kümesinde, 8 dil ailesinde, 4 yazı sisteminde, **4 görev tipinde** (ikili, çok-sınıflı, çok-etiketli, NER) ve 2 metrikte doğrulandı. Ortalama öngörü hatası: 0.002.**
 
 ---
 
@@ -48,6 +48,7 @@ Bir süredir üzerinde çalıştığım **Hiper-Geometrik AI** projesinde anlaml
 | İkili (8 veri seti) | 0.003 | 8/8 |
 | Çok-sınıflı (K=4) | 0.008 | 4/5 seed |
 | Çok-etiketli (bit-doğruluk) | 0.005 | 5/5 seed |
+| **NER (token doğruluk)** | **0.000** | **20/20** |
 
 ### 3. Kesin Türetim (Matematiksel Özdeşlik)
 
@@ -90,6 +91,20 @@ Bir süredir üzerinde çalıştığım **Hiper-Geometrik AI** projesinde anlaml
 | %50 | 0.5102 | 0.0066 |
 
 **Hata SABİT.** Sembolik kol şans düzeyine düşse bile formül çalışıyor.
+
+### 6. Metrik Kapsamı (YENİ — Dürüst Bilim)
+
+Formül **lineer metrikler** için geçerlidir (accuracy, bit-accuracy, token-accuracy).
+$ gibi harmonik-ortalama metrikleri için **geçerli değildir**:
+
+| Metrik | Ortalama ε | Maksimum ε |
+|---|---|---|
+| Token accuracy (lineer) | 0.008 | 0.018 |
+| F1 macro (lineer değil) | 0.019 | 0.052 |
+
+Bu sınır matematikseldir: hibritin F1 değeri, kolların F1 değerlerinin
+konveks bileşimi değildir. Bu, preprint'te **açık bir kapsam ifadesi**
+olarak yer alıyor.
 Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 

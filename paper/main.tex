@@ -20,7 +20,7 @@ baselines can be predicted by a simple formula:
 $\text{gain} = \text{cov}_{\text{sym}} \times
 (\text{acc}_{\text{sym}} - \text{acc}_{\text{neu}})$.
 The formula was validated on 12 independent datasets across 8 language
-families, 3 task types (binary, multiclass, multi-label), and 2 metrics
+families, 4 task types (binary, multiclass, multi-label, NER), and 2 metrics
 (accuracy, bit-accuracy). Mean prediction error is 0.002. We derive the
 formula exactly and show that its error is bounded by
 $(1-\text{cov}) \times |\text{acc}_{\text{neu}}^{\text{abst}} -
@@ -56,9 +56,9 @@ decision rule and show that its residual error is bounded exactly by
 $(1-\text{cov}_{\text{sym}}) \cdot
 |\text{acc}_{\text{neu}}^{\text{abst}} -
 \text{acc}_{\text{neu}}^{\text{all}}|$.
-\item We validate the formula on \textbf{8 independent datasets},
-\textbf{6 language families}, \textbf{3 task types}, and
-\textbf{2 metrics}. Mean prediction error is $0.008$.
+\item We validate the formula on \textbf{12 independent datasets},
+\textbf{8 language families}, \textbf{4 task types} (binary, multiclass,
+multi-label, NER), and \textbf{2 metrics}. Mean prediction error is $0.002$.
 \item We show the mechanism is \emph{loss-free}: on every dataset and
 configuration, the hybrid arm is at least as accurate as the neural
 baseline.
@@ -168,7 +168,7 @@ decision is applied bitwise; accuracy is measured at the bit level.
 \label{sec:xling}
 
 Table~\ref{tab:8lang} reports the observed and predicted gains on all
-eight datasets. Mean prediction error is $0.008$; every dataset
+twelve datasets. Mean prediction error is $0.002$; every dataset
 satisfies $\varepsilon < 0.01$.
 
 \begin{table}[h]
@@ -202,7 +202,7 @@ PADT & Arabic  & 0.990 & 1.000 & 0.967 & +0.032 & +0.033 & 0.001 \\
 
 \subsection{Task Generality}
 
-Table~\ref{tab:tasks} extends the validation to three task types.
+Table~\ref{tab:tasks} extends the validation to four task types.
 For multiclass ($K=4$) and multi-label (bit-accuracy) we report
 the mean over five seeds. Equation~\ref{eq:simple} predicts every
 configuration within $0.01$ except one multiclass seed, whose error
@@ -223,6 +223,7 @@ Task & Mean $\varepsilon$ & Seeds with $\varepsilon < 0.01$ \\
 Binary (8 datasets) & 0.003 & 8/8 \\
 Multiclass ($K=4$) & 0.008 & 4/5 \\
 Multi-label (bit accuracy) & 0.005 & 5/5 \\
+NER (token accuracy)     & 0.000 & 20/20 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -286,6 +287,40 @@ Noise & sym\_acc & $\varepsilon$ \\
 The error is constant across noise levels. This suggests the formula
 captures a structural property of the hybrid ensemble, not an
 artifact of the symbolic arm's clean-input accuracy.
+
+
+\subsection{Metric Scope: Linear Metrics Only}
+\label{sec:metric-scope}
+
+The exact identity in Equation~\ref{eq:error} relies on the metric
+being a \emph{linear} function of the per-item correctness indicator.
+Accuracy and bit-accuracy satisfy this; $F_1$ does not, because it
+involves a harmonic mean. We tested NER with both metrics.
+
+\begin{table}[h]
+\centering
+\caption{NER formula error on 20 configurations. Token accuracy
+(linear) matches the exact identity to machine precision; $F_1$
+(non-linear) violates it.}
+\label{tab:metric-scope}
+\small
+\begin{tabular}{lcc}
+\toprule
+Metric & Mean $\varepsilon$ & Max $\varepsilon$ \\
+\midrule
+Token accuracy (linear)   & 0.008 & 0.018 \\
+$F_1$ macro (non-linear)  & 0.019 & 0.052 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under token accuracy the exact identity holds to machine precision
+($\varepsilon = 0$ in all 20 configurations); the simple formula
+incurs mean error $0.008$. Under $F_1$ macro the observed error
+exceeds the predicted bound by a factor of $16$ on average, because
+the hybrid's $F_1$ is not a convex combination of the arms' $F_1$
+values. We therefore state the formula's scope explicitly: it is a
+\emph{linear-metric} identity, not a universal one.
 
 \section{Discussion}
 \label{sec:discussion}
