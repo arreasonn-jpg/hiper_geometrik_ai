@@ -842,3 +842,46 @@ Non-Latin yazı sistemlerinde hata daha da düşük (0.001).
 
 - `multilingual_ud.py`: 8 dil reader (FR/ES/IT/NL/ZH/JA/RU/AR)
 - 4 Non-Latin dataset eklendi (Han, Karışık, Kiril, Arap)
+
+---
+
+## Guncelleme v18: Sembolik Gurultu Dayanikliligi
+
+### Formul Gurultuya Dayanikli
+
+| Gurultu | sym_acc | Formul Hatasi |
+|---|---|---|
+| 0% | 1.0000 | 0.0066 |
+| 5% | 0.9449 | 0.0066 |
+| 10% | 0.8829 | 0.0066 |
+| 20% | 0.7855 | 0.0066 |
+| 30% | 0.6818 | 0.0066 |
+| 50% | 0.5102 | 0.0066 |
+
+**Hata sabit.** Formul sembolik kusurlara dayanikli.
+
+### Matematiksel Neden
+
+Hata = (1-cov) × |neu_abst - neu_all|
+
+Bu terim, sembolik gurultuden etkilenmez.
+Sembolik gurultu sadece sym_acc'yi etkiler.
+
+### Kanit Matrisi Guncel
+
+| Boyut | Kapsam |
+|---|---|
+| Dil | 12 (8 aile) |
+| Yazı sistemi | 4 |
+| Görev tipi | 3 |
+| Metrik | 2 |
+| Gurultu seviyesi | 6 |
+| **Ortalama hata** | **0.002-0.007** |
+
+### Yetenek Haritasi Guncel: 68 Modul
+
+| Kategori | Sayi |
+|---|---|
+| Tam basari | 46 |
+| Kisim/belgelenmis | 22 |
+| Basarisiz | 0 |
