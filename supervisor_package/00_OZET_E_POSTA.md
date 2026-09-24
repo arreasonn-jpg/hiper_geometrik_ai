@@ -311,7 +311,16 @@ When Structural Constraints Help*
 
 **Dosya:** `reports/12_PREPRINT3_OUTLINE.md`
 
-**LaTeX yazımı:** Devam ediyor (bu oturumda)
+**LaTeX yazımı:** ✅ Tamamlandı (EN + TR)
+- `pdfs/preprint3_EN.pdf` (369 satır)
+- `pdfs/preprint3_TR.pdf` (404 satır)
+- `latex/main3_EN.tex`, `latex/main3_TR.tex`
+
+**50-seed doğrulama:**
+- W5: r = +0.956, p = 0.011 (güçlendi)
+- W6: Aynı pattern, daha güçlü istatistik
+
+**Sıradaki:** arXiv submission paketi hazırlanıyor.
 
 ---
 
