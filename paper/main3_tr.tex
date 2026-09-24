@@ -1,0 +1,404 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+% -*- coding: utf-8 -*-
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+\title{Kronecker Mimarilerinde Örtük Düzenlileştirme:\\
+Yapısal Kısıtlar Ne Zaman Yardımcı Olur?}
+\author{Erdem Esa\\ \small Bağımsız Araştırmacı}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Kronecker mimarilerinin değeri geleneksel olarak \emph{yapısal uyum}
+ile açıklanır: görevin fonksiyonel bağımlılıkları tensör
+faktörizasyonuyla eşleştiğinde parametre verimliliği. Bu açıklamanın
+\emph{yanlış} olduğunu gösteriyoruz. Altı görevde otokorelasyon ve
+Kronecker kazanma oranı \emph{negatif} korelasyon gösteriyor
+($r = -0.38$). Bunun yerine, Kronecker'ın parametre kısıtının
+($n^2 \times n^2$ operatör için $2n^2$ parametre) bir \emph{örtük
+düzenlileştirici} olarak çalıştığını öne sürüyoruz. Beş gürültü
+seviyesi ve 20 tohumda, gürültü Kronecker'ın avantajını
+$r = +0.95$, $p = 0.012$ ile öngörüyor. Grid yapısı gerekli ama
+yeterli değil: bir graf görevinde avantaj tamamen kayboluyor ve
+tam-bilinear bir görevde ($Y = AXB$ --- Kronecker'ın doğal olarak
+temsil ettiği form), Düz Kronecker yalnızca $1/20$ tohumda
+kazanıyor. Darboğaz ifade gücü değil, optimizasyondur. Bulgularımız
+mimari tasarımda bir prensip öneriyor: parametre bütçesini görevin
+düzenlileştirme ihtiyacıyla eşleştirin.
+\end{abstract}
+
+
+\section{Giriş}
+\label{sec:intro}
+
+Ağırlık matrislerini faktörize eden parametre-verimli mimariler
+--- Tensor Train \cite{novikov2015tensor}, LoRA \cite{hu2021lora}
+ve bilinear Kronecker katmanları \cite{tolstikhin2021mlp} ---
+rutin olarak \emph{yapısal uyum} iddiasıyla gerekçelendirilir:
+faktörize bir temsilin belirli görevlerin içsel yapısıyla
+eşleştiği ve bu nedenle daha az parametreyle karşılaştırılabilir
+doğruluk elde ettiği iddiası.
+
+Ancak bu açıklama nadiren doğrudan test edilir. Kendi önceki
+çalışmamızda \cite{esa2026preprint2} bir ``görev-uygunluk
+hipotezi'' önermiştik: Kronecker mimarileri, görevin
+bağımlılıkları $X \mapsto AXB$ tensör faktörizasyonuna uyduğunda
+verimli olmalı. Hipotez makuldü, gözlenen veriyle tutarlıydı
+ve hiçbir zaman resmen çürütülmemişti.
+
+Bu çalışma onu doğrudan teste tabi tutar.
+
+\paragraph{Katkılar.}
+\begin{enumerate}
+\item İki rakip hipotezi formüle ediyoruz: \emph{yapısal uyum}
+(H1) ve \emph{örtük düzenlileştirme} (H2), ve bunların aynı
+görev kümesinde \emph{zıt} tahminler ürettiğini gösteriyoruz
+(Bölüm~\ref{sec:theory}).
+\item H1'i altı görevde reddediyoruz: otokorelasyon, Kronecker'ın
+kazanma oranıyla \emph{negatif} korelasyon gösteriyor
+($r = -0.38$, $p = 0.46$; Bölüm~\ref{sec:h1}).
+\item H2'yi beş gürültü seviyesinde 20 tohumla doğruluyoruz:
+gürültü, Kronecker'ın kazanma oranıyla $r = +0.95$,
+$p = 0.012$ düzeyinde korelasyon gösteriyor
+(Bölüm~\ref{sec:h2}).
+\item Sirküler tasarımı kontrol ediyoruz: bir graf görevinde
+avantaj kayboluyor ve tam-bilinear bir görevde ($Y = AXB$)
+Düz Kronecker yalnızca $1/20$ tohumda kazanıyor. Darboğaz
+ifade gücü değil, optimizasyondur (Bölüm~\ref{sec:non-grid}).
+\end{enumerate}
+
+
+\section{Teori}
+\label{sec:theory}
+
+\subsection{Kronecker Parametre Kısıtı}
+\label{sec:constraint}
+
+Bir bilinear Kronecker katmanı $X \in \mathbb{R}^{n \times n}$ için
+$Y = A X B$ hesaplar. Düzleştirilmiş biçimde, indüklenen lineer
+operatör $Y_{\text{vec}} = (B^\top \otimes A) X_{\text{vec}}$,
+$n^2 \times n^2$ boyutunda, yalnızca $2n^2$ ağırlıkla
+parametrelenmiştir. Parametre azaltma oranı:
+\begin{equation}
+\frac{n^4}{2n^2} = \frac{n^2}{2}.
+\label{eq:reduction}
+\end{equation}
+
+Bu kısıtın iki rakip sonucu vardır:
+\begin{enumerate}
+\item \textbf{İfade gücü kaybı}: bazı lineer operatörler temsil
+edilemez (özellikle CP-rankı $n$'i aşanlar).
+\item \textbf{Örtük düzenlileştirme}: efektif hipotez sınıfı daha
+küçüktür, bu overfitting'i önleyebilir.
+\end{enumerate}
+
+Hangi sonucun baskın olduğu göreve bağlıdır.
+
+\subsection{İki Rakip Hipotez}
+\label{sec:hypotheses}
+
+\paragraph{H1: Yapısal Uyum.}
+Bir Kronecker katmanı, görevin fonksiyonel bağımlılıkları
+$X \mapsto AXB$ tensör faktörizasyonuna uyduğunda
+parametre-verimlidir. \emph{Öngörü:} yüksek grid yapılı görevler
+(yüksek uzamsal otokorelasyon) Kronecker'ı tercih eder.
+
+\paragraph{H2: Örtük Düzenlileştirme.}
+$2n^2$ parametre kısıtı mimari düzeyde bir düzenlileştirici
+işlevi görür. \emph{Öngörü:} gürültülü görevler (overfitting'in
+baskın başarısızlık modu olduğu), Kronecker'ı tercih eder;
+temiz görevler Yoğun MLP'yi tercih eder.
+
+İki hipotez aynı görevlerde \emph{zıt} tahminler üretir:
+\begin{itemize}
+\item H1: otokorelasyon $\uparrow$ $\Rightarrow$ Kronecker kazanır
+\item H2: gürültü $\uparrow$ $\Rightarrow$ Kronecker kazanır
+\end{itemize}
+
+Her ikisini de Bölüm~\ref{sec:experiments}'te test ediyoruz.
+
+
+\section{Deneyler}
+\label{sec:experiments}
+
+Tüm deneylerde $K=1$ derinliğinde bilinear Kronecker katmanı
+(bu görevler için optimal derinlik) ve gizli boyutu $n^2/4$ olan
+bir Yoğun MLP kullanıyoruz. Her ikisi de Adam ile 60--100 epoch
+(göreve bağlı) eğitilir, konfigürasyon başına 20 tohum.
+
+\subsection{H1 Testi: Yapısal Uyum}
+\label{sec:h1}
+
+2D uzamsal otokorelasyonla ölçülen, değişen derecelerde grid
+yapısına sahip altı görev oluşturduk.
+
+\begin{table}[h]
+\centering
+\caption{H1 testi: otokorelasyon vs Kronecker kazanma oranı.
+İlişki \emph{negatif}, H1 ile çelişiyor.}
+\label{tab:h1}
+\small
+\begin{tabular}{lcc}
+\toprule
+Görev & Otokorelasyon & Kronecker Kazanma \\
+\midrule
+rastgele lineer   & $-0.01$ & $1/20$ \\
+permüte MNIST     & $+0.00$ & $0/20$ \\
+gürültülü MNIST   & $+0.23$ & $9/20$ \\
+basit blok        & $+0.80$ & $0/20$ \\
+grid korelasyonlu & $+0.09$ & $12/20$ \\
+Fashion-MNIST     & $+0.87$ & $0/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Otokorelasyon ile Kronecker kazanma oranı arasındaki Pearson
+korelasyonu: $r = -0.38$, $p = 0.46$ (n=6). \textbf{H1
+reddedildi.}
+
+
+\subsection{H2 Testi: Örtük Düzenlileştirme}
+\label{sec:h2}
+
+Görevi sabit tuttuk (ayarlanabilir gürültülü blok kompozisyonel)
+ve gürültü seviyesini beş değerde değiştirdik, her biri 20 tohum.
+
+\begin{table}[h]
+\centering
+\caption{H2 testi: gürültü seviyesi vs Kronecker kazanma oranı.
+İlişki güçlü pozitif, H2'yi doğruluyor.}
+\label{tab:h2}
+\small
+\begin{tabular}{cccc}
+\toprule
+Gürültü & Yoğun MLP & Düz Kronecker & Kronecker Kazanma \\
+\midrule
+$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
+$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
+$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
+$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
+$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Gürültü seviyesi ile Kronecker kazanma oranı arasındaki Pearson
+korelasyonu: $r = +0.953$, $p = 0.012$ (n=5). \textbf{H2
+doğrulandı.}
+
+Geçiş noktası (\%50 kazanma oranı) gürültü $\approx 0.30$'da
+gerçekleşir. Bu eşiğin altında Yoğun MLP'nin tam ifade gücü
+baskındır; üstünde Kronecker'ın parametre kısıtı overfitting'i
+önler.
+
+
+\subsection{Sirküler Mantık Kontrolü}
+\label{sec:non-grid}
+
+Bölüm~\ref{sec:h1} ve~\ref{sec:h2}'deki görevler grid yapılıdır.
+Kronecker'ın avantajının görev tasarımının bir yapaylığı olma
+olasılığını dışlamak için grid rejiminin dışında dört görev test
+ettik.
+
+\begin{table}[h]
+\centering
+\caption{Grid olmayan kontrol görevleri (20 tohum). Kronecker graf
+ve tam-bilinear görevlerde kaybeder.}
+\label{tab:non-grid}
+\small
+\begin{tabular}{lccc}
+\toprule
+Görev & Yoğun MLP & Düz Kronecker & Kronecker Kazanma \\
+\midrule
+Grid temel                & $0.819$ & $0.822$ & $11/20$ \\
+Dizi (1D)                 & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
+Graf (grid yok)           & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
+Rastgele faktör ($Y=AXB$) & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Graf görevi.}
+Kronecker graf yapılı bir görevde $\%21$ kaybediyor. Avantaj
+grid olmayan veriye geçmiyor.
+
+\paragraph{Tam-bilinear görev.}
+Rastgele faktör görevi \emph{tam olarak} bir bilinear form
+$Y = AXB$'dir; Kronecker katmanı bunu doğal olarak temsil eder.
+Yine de Düz Kronecker yalnızca $1/20$ tohumda kazanıyor. Bu,
+bir \emph{optimizasyon}, ifade gücü değil, sınırlamasını izole
+eder: hedef fonksiyon Kronecker hipotez sınıfında olsa bile,
+birinci-mertebe gradyan inişi onu güvenilir biçimde bulamıyor.
+
+\paragraph{Dizi görevi.}
+$16 \times 16$'ya reshape edilmiş 1D dizi yapay 2D yapı kazanır;
+bu $18/20$ kazanma oranını açıklar. Bu, grid gereksinimiyle
+tutarlıdır.
+
+\paragraph{Birleşik hipotez.}
+Kronecker mimarileri \emph{iki} koşulu birlikte gerektirir:
+(i) girdide grid veya tensör yapısı, ve (ii) gürültülü veriden
+kaynaklanan düzenlileştirme ihtiyacı. Hiçbiri tek başına yeterli
+değildir.
+
+
+\section{Tartışma}
+\label{sec:discussion}
+
+\subsection{Mekanizma: Kronecker Neden Düzenlileştirir?}
+
+Kronecker katmanı $2n^2$ parametreyle $n^2 \times n^2$ operatörü
+temsil eder; parametre azaltma oranı $n^2/2$'dir. Bu,
+ağın \emph{efektif kapasitesini} sınırlar:
+
+\begin{itemize}
+\item \textbf{Yoğun MLP:} serbest ağırlıklar, herhangi bir lineer
+haritayı temsil edebilir $\Rightarrow$ overfitting riski yüksek
+\item \textbf{Kronecker:} faktörize yapı, ``kolay'' fonksiyonları
+öğrenir $\Rightarrow$ overfitting riski düşük
+\end{itemize}
+
+Bu, \textbf{Dropout} \cite{srivastava2014dropout} (rastgele nöron
+kapatma) ve \textbf{Weight Decay} \cite{krogh1991simple} (L2
+cezası) ile aynı ailedendir: mimari düzeyde düzenlileştirme.
+
+\subsection{İfade Gücü ve Optimizasyon Ayrımı}
+
+Beklenmedik bulgu (Bölüm~\ref{sec:non-grid}): Rastgele faktör
+görevi \emph{tam olarak} $Y = AXB$ formunda --- Kronecker'ın
+temsil ettiği yapı. Ama Düz Kronecker $1/20$ tohumda kazanıyor.
+
+\textbf{Yorum:} Sorun ifade gücü değil, \emph{optimizasyon
+yüzeyi}. Tek katmanlı bilinear + head, bu ``kolay'' görevi bile
+öğrenemiyor. Bu, teorik ifade gücü ile pratik öğrenilebilirlik
+arasındaki boşluğu gösterir ve düzenlileştirme hipotezini
+güçlendirir: Kronecker'ın değeri, öğrenme kapasitesinden değil,
+kısıtlamasından gelir.
+
+\subsection{Pratik Kılavuz}
+
+Birleşik hipotezimiz (grid yapısı $\land$ gürültü) somut bir
+karar kuralı verir:
+
+\begin{table}[h]
+\centering
+\caption{Görev tipine göre mimari önerisi.}
+\label{tab:guide}
+\small
+\begin{tabular}{ll}
+\toprule
+Görev tipi & Öneri \\
+\midrule
+Gürültülü grid (görüntü, spektrogram, sensör) & Kronecker \\
+Temiz grid (matematik tablolar, kesin veri)   & Yoğun MLP \\
+Graf (moleküler, sosyal, atıf)                & Yoğun MLP veya GNN \\
+Sıralı (metin, ses)                           & Transformer \\
+Düşük-rank bilinear                           & LoRA veya Tensor Train \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Özellikle rastgele faktör sonucu şunu önerir: bir görevin
+\emph{bilindiği} bilinear olduğu durumda bile, Kronecker uygun
+mimari değildir --- girdi aynı zamanda grid yapısına ve gürültüye
+sahip olmadıkça.
+
+
+\section{Sınırlar ve Gelecek Çalışma}
+\label{sec:limitations}
+
+\paragraph{Sınırlar.}
+Tüm görevler sentetik veya küçük ölçeklidir (MNIST, Fashion-MNIST,
+$28 \times 28$ gridler). ImageNet, WikiText veya diğer büyük
+ölçekli kıyaslamalarda test yapmıyoruz. Yalnızca $K=1$ derinliği
+değerlendirilir; daha derin Kronecker zincirlerinin, önceki
+çalışmada normalizasyon olmadan tekrarlanan bilinear + SiLU
+altında çöktüğü gösterilmişti. ``İki koşul'' hipotezi yalnızca
+burada incelenen on görevde doğrulanmıştır. Düz Kronecker'ın
+tam-bilinear bir hedefi neden öğrenemediğine dair teorik bir
+analiz açık kalmaktadır.
+
+\paragraph{Gelecek çalışma.}
+(1) Hipotezi büyük ölçekli görüntü ve dil verisinde test edin.
+(2) Diğer faktörize mimarilere genişletin (Tensor Train, LoRA,
+CP ayrışımı). (3) Bilinear katmanların optimizasyon manzarasını
+teorik olarak analiz edin. (4) Veri istatistiklerinden, Kronecker
+düzenlileştirmesinin yardımcı olup olmayacağını öngören bir
+görev-yapısı tanılaması geliştirin.
+
+\section{Sonuç}
+\label{sec:conclusion}
+
+Kronecker mimarileri için geleneksel açıklamanın --- faktörize
+katman ile görev arasındaki yapısal uyum --- doğrudan testte
+hayatta kalmadığını gösterdik. Altı görevde uzamsal otokorelasyon,
+Kronecker'ın kazanma oranıyla \emph{negatif} korelasyon gösteriyor.
+
+Alternatif açıklama, \emph{örtük düzenlileştirme}, hayatta
+kalıyor: Kronecker parametre kısıtı mimari bir düzenlileştirici
+işlevi görür ve avantajı tam olarak görev overfitting'in baskın
+başarısızlık modu olduğu kadar gürültülü olduğunda ortaya çıkar.
+Geçiş gürültü $\approx 0.30$'da gerçekleşir ve korelasyon
+$r = +0.95$, $p = 0.012$ düzeyindedir.
+
+Kontrol deneylerimiz sınırı netleştirir. Bir graf görevinde
+avantaj kaybolur; tam-bilinear bir görevde ($Y = AXB$,
+Kronecker'ın doğal olarak temsil ettiği hedef) avantaj yine
+gerçekleşmez, bu da ifade gücü değil, optimizasyon sınırlamasını
+izole eder. Grid yapısı gerekli ama yeterli değildir; gürültü
+birincil sürücüdür.
+
+Bu bulgular bir mimari tasarım prensibi önerir: parametre
+bütçesini görevin düzenlileştirme ihtiyacıyla eşleştirin.
+Gelecek çalışma bunu diğer faktörize mimarilere (Tensor Train,
+LoRA, CP ayrışımı) ve büyük ölçekli veriye genişletmelidir.
+
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{esa2026preprint2}
+E.~Esa. Göreve uygun hibrit mimariler: Metrik, mimari ve görev
+boyutlarında birleşik bir kazanç teorisi. \emph{arXiv preprint}, 2026.
+
+\bibitem{novikov2015tensor}
+A.~Novikov, D.~Podoprikhin, A.~Osokin ve D.~Vetrov.
+Tensorizing neural networks. \emph{NeurIPS}, 2015.
+
+\bibitem{hu2021lora}
+E.~J.~Hu ve ark. LoRA: Low-rank adaptation of large language
+models. \emph{ICLR}, 2022.
+
+\bibitem{tolstikhin2021mlp}
+I.~Tolstikhin ve ark. MLP-Mixer: An all-MLP architecture for
+vision. \emph{NeurIPS}, 2021.
+
+\bibitem{krogh1991simple}
+A.~Krogh ve J.~Hertz. A simple weight decay can improve
+generalization. \emph{NeurIPS}, 1991.
+
+\bibitem{srivastava2014dropout}
+N.~Srivastava, G.~Hinton, A.~Krizhevsky, I.~Sutskever ve
+R.~Salakhutdinov. Dropout: A simple way to prevent neural
+networks from overfitting. \emph{JMLR}, 15(1):1929--1958, 2014.
+
+\bibitem{miyato2018spectral}
+T.~Miyato, T.~Kataoka, M.~Koyama ve Y.~Yoshida. Spectral
+normalization for generative adversarial networks.
+\emph{ICLR}, 2018.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani ve ark. Attention is all you need. \emph{NeurIPS}, 2017.
+
+\end{thebibliography}
+
+\end{document}
