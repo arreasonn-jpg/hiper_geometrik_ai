@@ -72,7 +72,7 @@ $p = 0.012$ düzeyinde korelasyon gösteriyor
 (Bölüm~\ref{sec:h2}).
 \item Sirküler tasarımı kontrol ediyoruz: bir graf görevinde
 avantaj kayboluyor ve tam-bilinear bir görevde ($Y = AXB$)
-Düz Kronecker yalnızca $1/20$ tohumda kazanıyor. Darboğaz
+Düz Kronecker yalnızca $1/50$ tohumda kazanıyor. Darboğaz
 ifade gücü değil, optimizasyondur (Bölüm~\ref{sec:non-grid}).
 \end{enumerate}
 
@@ -133,7 +133,7 @@ Her ikisini de Bölüm~\ref{sec:experiments}'te test ediyoruz.
 Tüm deneylerde $K=1$ derinliğinde bilinear Kronecker katmanı
 (bu görevler için optimal derinlik) ve gizli boyutu $n^2/4$ olan
 bir Yoğun MLP kullanıyoruz. Her ikisi de Adam ile 60--100 epoch
-(göreve bağlı) eğitilir, konfigürasyon başına 20 tohum.
+(göreve bağlı) eğitilir, konfigürasyon başına 50 tohum.
 
 \subsection{H1 Testi: Yapısal Uyum}
 \label{sec:h1}
@@ -182,18 +182,18 @@ ve gürültü seviyesini beş değerde değiştirdik, her biri 20 tohum.
 \toprule
 Gürültü & Yoğun MLP & Düz Kronecker & Kronecker Kazanma \\
 \midrule
-$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
-$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
-$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
-$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
-$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+$0.00$ & $0.981 \pm 0.006$ & $0.943 \pm 0.014$ & $0/50$ \\
+$0.10$ & $0.914 \pm 0.012$ & $0.892 \pm 0.016$ & $2/50$ \\
+$0.30$ & $0.820 \pm 0.020$ & $0.823 \pm 0.017$ & $29/50$ \\
+$0.50$ & $0.733 \pm 0.023$ & $0.758 \pm 0.020$ & $45/50$ \\
+$0.60$ & $0.664 \pm 0.024$ & $0.704 \pm 0.019$ & $47/50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Gürültü seviyesi ile Kronecker kazanma oranı arasındaki Pearson
-korelasyonu: $r = +0.953$, $p = 0.012$ (n=5). \textbf{H2
-doğrulandı.}
+korelasyonu: $r = +0.956$, $p = 0.011$ (n=5, her noktada 50 tohum).
+\textbf{H2 doğrulandı.}
 
 Geçiş noktası (\%50 kazanma oranı) gürültü $\approx 0.30$'da
 gerçekleşir. Bu eşiğin altında Yoğun MLP'nin tam ifade gücü
@@ -219,29 +219,29 @@ ve tam-bilinear görevlerde kaybeder.}
 \toprule
 Görev & Yoğun MLP & Düz Kronecker & Kronecker Kazanma \\
 \midrule
-Grid temel                & $0.819$ & $0.822$ & $11/20$ \\
-Dizi (1D)                 & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
-Graf (grid yok)           & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
-Rastgele faktör ($Y=AXB$) & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+Grid temel                & $0.820$ & $0.823$ & $29/50$ \\
+Dizi (1D)                 & $0.752$ & $\mathbf{0.788}$ & $43/50$ \\
+Graf (grid yok)           & $\mathbf{0.821}$ & $0.617$ & $0/50$ \\
+Rastgele faktör ($Y=AXB$) & $\mathbf{0.704}$ & $0.602$ & $1/50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Graf görevi.}
-Kronecker graf yapılı bir görevde $\%21$ kaybediyor. Avantaj
+Kronecker graf yapılı bir görevde $\%20$ kaybediyor. Avantaj
 grid olmayan veriye geçmiyor.
 
 \paragraph{Tam-bilinear görev.}
 Rastgele faktör görevi \emph{tam olarak} bir bilinear form
 $Y = AXB$'dir; Kronecker katmanı bunu doğal olarak temsil eder.
-Yine de Düz Kronecker yalnızca $1/20$ tohumda kazanıyor. Bu,
+Yine de Düz Kronecker yalnızca $1/50$ tohumda kazanıyor. Bu,
 bir \emph{optimizasyon}, ifade gücü değil, sınırlamasını izole
 eder: hedef fonksiyon Kronecker hipotez sınıfında olsa bile,
 birinci-mertebe gradyan inişi onu güvenilir biçimde bulamıyor.
 
 \paragraph{Dizi görevi.}
 $16 \times 16$'ya reshape edilmiş 1D dizi yapay 2D yapı kazanır;
-bu $18/20$ kazanma oranını açıklar. Bu, grid gereksinimiyle
+bu $43/50$ kazanma oranını açıklar. Bu, grid gereksinimiyle
 tutarlıdır.
 
 \paragraph{Birleşik hipotez.}

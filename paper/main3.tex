@@ -23,12 +23,12 @@ explanation is \emph{wrong}. Across six tasks, autocorrelation and
 Kronecker win rate correlate \emph{negatively} ($r = -0.38$). We
 propose instead that the Kronecker parameter constraint
 ($2n^2$ parameters for an $n^2 \times n^2$ operator) acts as an
-\emph{implicit regulariser}. Across five noise levels and 20 seeds,
+\emph{implicit regulariser}. Across five noise levels and 50 seeds,
 noise predicts Kronecker's advantage with $r = +0.95$, $p = 0.012$.
 Grid structure is necessary but not sufficient: on a graph task the
 advantage disappears entirely, and on an exact bilinear task
 ($Y = AXB$ --- the very form Kronecker represents natively) Flat
-Kronecker wins only $1/20$ seeds. The bottleneck is optimisation,
+Kronecker wins only $1/50$ seeds. The bottleneck is optimisation,
 not expressivity. Our findings suggest an architectural design
 principle: match the parameter budget to the regularisation needs
 of the task.
@@ -70,7 +70,7 @@ correlates with Kronecker's win rate at $r = +0.95$,
 $p = 0.012$ (Section~\ref{sec:h2}).
 \item We control for circular design: on a graph task the
 advantage disappears, and on an exact bilinear task
-($Y = AXB$) Flat Kronecker wins only $1/20$ seeds. The bottleneck
+($Y = AXB$) Flat Kronecker wins only $1/50$ seeds. The bottleneck
 is optimisation, not expressivity (Section~\ref{sec:non-grid}).
 \end{enumerate}
 
@@ -133,7 +133,7 @@ We test both in Section~\ref{sec:experiments}.
 All experiments use a bilinear Kronecker layer of depth $K=1$
 (the optimal depth for these tasks) and a Dense MLP with hidden
 size $n^2/4$. Both are trained with Adam for 60--100 epochs
-(depending on task), 20 seeds per configuration.
+(depending on task), 50 seeds per configuration.
 
 \subsection{H1 Test: Structural Alignment}
 \label{sec:h1}
@@ -181,17 +181,18 @@ relationship is strongly positive, confirming H2.}
 \toprule
 Noise & Dense MLP & Flat Kronecker & Kronecker Wins \\
 \midrule
-$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
-$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
-$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
-$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
-$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+$0.00$ & $0.981 \pm 0.006$ & $0.943 \pm 0.014$ & $0/50$ \\
+$0.10$ & $0.914 \pm 0.012$ & $0.892 \pm 0.016$ & $2/50$ \\
+$0.30$ & $0.820 \pm 0.020$ & $0.823 \pm 0.017$ & $29/50$ \\
+$0.50$ & $0.733 \pm 0.023$ & $0.758 \pm 0.020$ & $45/50$ \\
+$0.60$ & $0.664 \pm 0.024$ & $0.704 \pm 0.019$ & $47/50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Pearson correlation between noise level and Kronecker win rate:
-$r = +0.953$, $p = 0.012$ (n=5). \textbf{H2 is confirmed.}
+$r = +0.956$, $p = 0.011$ (n=5, 50 seeds per point).
+\textbf{H2 is confirmed.}
 
 The transition point (50\% win rate) occurs at noise
 $\approx 0.30$. Below this threshold, Dense MLP's full
@@ -209,7 +210,7 @@ tasks outside the grid regime.
 
 \begin{table}[h]
 \centering
-\caption{Non-grid control tasks (20 seeds). Kronecker loses on
+\caption{Non-grid control tasks (50 seeds). Kronecker loses on
 graph and exact-bilinear tasks.}
 \label{tab:non-grid}
 \small
@@ -217,29 +218,29 @@ graph and exact-bilinear tasks.}
 \toprule
 Task & Dense MLP & Flat Kronecker & Kronecker Wins \\
 \midrule
-Grid baseline             & $0.819$ & $0.822$ & $11/20$ \\
-Sequence (1D)             & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
-Graph (no grid)           & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
-Random factor ($Y=AXB$)   & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+Grid baseline             & $0.820$ & $0.823$ & $29/50$ \\
+Sequence (1D)             & $0.752$ & $\mathbf{0.788}$ & $43/50$ \\
+Graph (no grid)           & $\mathbf{0.821}$ & $0.617$ & $0/50$ \\
+Random factor ($Y=AXB$)   & $\mathbf{0.704}$ & $0.602$ & $1/50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{Graph task.}
-Kronecker loses by $21\%$ on a graph-structured task. The
+Kronecker loses by $20\%$ on a graph-structured task. The
 advantage does not transfer to non-grid data.
 
 \paragraph{Exact bilinear task.}
 The random-factor task is \emph{exactly} a bilinear form
 $Y = AXB$, which a Kronecker layer represents natively. Yet
-Flat Kronecker wins only $1/20$ seeds. This isolates an
+Flat Kronecker wins only $1/50$ seeds. This isolates an
 \emph{optimisation}, not expressivity, limitation: even when
 the target function lies in the Kronecker hypothesis class,
 first-order gradient descent fails to find it reliably.
 
 \paragraph{Sequence task.}
 A 1D sequence reshaped to $16 \times 16$ gains artificial 2D
-structure, which explains the $18/20$ win rate. This is
+structure, which explains the $43/50$ win rate. This is
 consistent with the grid requirement.
 
 \paragraph{Combined hypothesis.}
