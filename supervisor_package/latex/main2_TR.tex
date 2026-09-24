@@ -1,0 +1,380 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+% -*- coding: utf-8 -*-
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+\title{Göreve Uygun Hibrit Mimariler:\\
+Metrik, Mimari ve Görev Boyutlarında Birleşik Bir Kazanç Teorisi}
+\author{Erdem Esa\\ \small Bağımsız Araştırmacı}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Hibrit sistemlerin kazancı için üç bağımsız boyutta birleşik bir teori
+sunuyoruz: (1) metrik tipi---lineer (doğruluk, bit-doğruluğu,
+token-doğruluğu) ve lineer olmayan ($F_1$); (2) mimari tipi---bilinear
+Kronecker ve yoğun çok-katmanlı algılayıcı; (3) görev yapısı---rastgele
+lineer ve kompozisyonel (grid uyumlu). Her boyut için \emph{hangi}
+yapının \emph{ne zaman} kazandığını 20--50 bağımsız tohumdan
+istatistiksel kanıtla belirliyoruz. Önceki çalışmamızdaki lineer metrik
+formülünü, makro $F_1$ için kesin olan sınıf-başına ağırlıklı bir
+özdeşliğe genişletiyoruz (20 NER konfigürasyonunda makine hassasiyetinde
+hata), ve Kronecker mimarisinin basit kompozisyonel görevlerde $8\times$
+daha parametre-verimli, görüntü-benzeri kompozisyonel görevlerde ise
+istatistiksel olarak üstün olduğunu gösteriyoruz (50 tohum,
+$p<0.0001$, Cohen $d=-1.37$). Hibrit sistem tasarımının ilkeli
+olabileceği sonucuna varıyoruz: metrikler için formül-güdümlü,
+görevler için yapı-güdümlü.
+\end{abstract}
+
+
+\section{Giriş}
+\label{sec:intro}
+
+Sembolik akıl yürütme ile sinirsel öğrenmeyi birleştiren hibrit
+sistemler modern yapay zeka araştırmalarının merkezinde yer alıyor.
+Ancak bir hibrit sistemin \emph{ne zaman} sinirsel temelini geçtiği
+sorusu büyük ölçüde sezgisel kalmıştır. Önceki çalışmalar deneysel
+kılavuzlar önermiş, ama birleşik bir öngörü çerçevesi sunmamıştır.
+
+Önceki çalışmamız \cite{esa2026preprint1}, bir hibrit sembolik-sinirsel
+sistemin sinirsel temele karşı kazancı için, lineer metriklerde geçerli
+kapalı-form bir formül ortaya koydu:
+\begin{equation}
+\text{kazanç} = \text{kapsam}_{\text{sem}} \cdot
+(\text{doğruluk}_s - \text{doğruluk}_n),
+\label{eq:linear}
+\end{equation}
+burada $\text{kapsam}_{\text{sem}}$ sembolik kolun kapsamı,
+$\text{doğruluk}_s$ ve $\text{doğruluk}_n$ ise sembolik ve sinirsel
+doğruluklardır. Bu formül 12 dil, 4 görev tipi ve 2 metrik üzerinde
+ortalama $0.002$ öngörü hatasıyla doğrulanmıştır.
+
+Bu çalışma, lineer formülün kapsamadığı üç açık soruyu ele alır:
+
+\begin{enumerate}
+\item \textbf{Metrik kapsamı.} Formül, $F_1$ gibi lineer olmayan
+metriklere genellenebilir mi?
+\item \textbf{Mimari seçimi.} Bilinear Kronecker mimarisi ne zaman
+standart yoğun MLP'ye tercih edilir?
+\item \textbf{Görev yapısı.} Kazanç, görevin rastgele-lineer mi yoksa
+kompozisyonel mi olmasına nasıl bağlıdır?
+\end{enumerate}
+
+\paragraph{Katkılar.}
+\begin{enumerate}
+\item Lineer formülü, makro $F_1$ için \emph{kesin} olan
+sınıf-başına bir özdeşliğe genişletiyoruz (Bölüm~\ref{sec:f1}).
+\item Kronecker mimarisinin kompozisyonel görevlerde $8\times$ daha
+parametre-verimli olduğunu ve hiyerarşik Kronecker'ın görüntü-benzeri
+kompozisyonel görevlerde yoğun MLP'yi istatistiksel olarak yendiğini
+gösteriyoruz (Bölüm~\ref{sec:kronecker}).
+\item Görev tipini mimari seçimine eşleyen bir karar ağacı sunuyoruz,
+20--50 tohumlu eşleşmiş $t$-testleriyle desteklenmiş.
+\item Negatif sonuçları dürüstçe belgeliyoruz
+(Bölümler~\ref{sec:negatives} ve~\ref{sec:discussion}).
+\end{enumerate}
+
+
+\section{Teori}
+\label{sec:theory}
+
+\subsection{Lineer Metrik Formülü}
+\label{sec:linear}
+
+$s(x) \in \{0, 1, \bot\}$ sembolik kolun çıktısı olsun; $\bot$ çekimserliği
+belirtir. $n(x) \in \{0, 1\}$ ise sinirsel kolun çıktısıdır. Hibrit kural:
+$h(x) = s(x)$ eğer $s(x) \neq \bot$, aksi halde $n(x)$.
+
+Kapsam $\text{kapsam} = \Pr[s(x) \neq \bot]$ ve
+$\text{doğ}_n^\bot = \Pr[n(x) = y \mid s(x) = \bot]$ tanımlanır.
+Öğe-bazlı doğruluk göstergesinde \emph{lineer} olan herhangi bir $M$
+metriği için, hibritin değeri tam olarak ayrışır:
+\begin{equation}
+M_h = \text{kapsam} \cdot M_s + (1 - \text{kapsam}) \cdot M_n^\bot.
+\label{eq:linear-exact}
+\end{equation}
+$M_n = \text{kapsam} \cdot M_n + (1 - \text{kapsam}) \cdot M_n$
+teleskopik özdeşliğini çıkararak kazanç formülünü elde ederiz:
+\begin{equation}
+\text{kazanç} = \text{kapsam} \cdot (M_s - M_n) + (1-\text{kapsam}) \cdot (M_n^\bot - M_n).
+\label{eq:linear-gain}
+\end{equation}
+$M_n^\bot \approx M_n$ olduğunda ikinci terim ihmal edilir; artık hata
+$\varepsilon = (1-\text{kapsam}) \cdot |M_n^\bot - M_n|$ ile sınırlıdır.
+
+\subsection{$F_1$ Sınıf-Başına Formülü}
+\label{sec:f1}
+
+$F_1$ harmonik ortalama içerdiği için lineer değildir; lineer formül
+$F_1$'de bozulur. Tek-etiketli sınıflandırmada \emph{kesin} ayrışım:
+\begin{equation}
+F_1^h = \frac{1}{K} \sum_{c=1}^{K}
+\left[ w_c \cdot F_1^c_s + (1-w_c) \cdot F_1^c_n \right],
+\label{eq:f1}
+\end{equation}
+burada sınıf-başına ağırlık
+\begin{equation}
+w_c = \frac{D_s^c}{D_s^c + D_n^c}, \qquad
+D_k^c = 2 \cdot \text{TP}_k^c + \text{FP}_k^c + \text{FN}_k^c.
+\label{eq:f1-weight}
+\end{equation}
+Kritik gözlem: $w_c \neq \text{kapsam}$; sınıf-başına ağırlıklar
+sınıf dağılımına bağlıdır. Bu, lineer formülün $F_1$'de neden
+bozulduğunu kesin olarak açıklar.
+
+\subsection{Kronecker Görev-Uygunluk}
+\label{sec:kronecker}
+
+Bilinear Kronecker katmanı $Y = A X B$ hesaplar, $X \in \mathbb{R}^{n \times n}$
+için. Düzleştirilmiş biçimde $Y_{\text{vec}} = (B^\top \otimes A) X_{\text{vec}}$,
+$n^2 \times n^2$ boyutlu bir lineer operatördür ve yalnızca $2n^2$
+eğitilebilir parametreyle temsil edilir. Operatörün rankı
+$\text{rank}(A) \cdot \text{rank}(B) = n^2$ (tam rank), ama serbestlik
+derecesi $2n^2$ olarak kalır.
+
+Bu yapısal kısıt, görevin kendi yapısı tensör ayrışımıyla uyumlu
+olduğunda bir \emph{özellik} haline gelir:
+
+\paragraph{Görev-Uygunluk Hipotezi.}
+Kronecker mimarileri, görevin fonksiyonel bağımlılıkları $X \mapsto A X B$
+tensör faktörizasyonuna uyduğunda parametre-verimlidir. Tersine, hedefi
+genel (faktörize edilemez) bir lineer dönüşüm olan görevlerde aynı kısıt
+bir darboğaza dönüşür.
+
+Bu hipotezi Bölüm~\ref{sec:experiments}'te üç görev tipinde test ediyoruz.
+
+
+\section{Deneyler}
+\label{sec:experiments}
+
+\subsection{Lineer Metrik Doğrulaması}
+\label{sec:exp-linear}
+
+Denklem~\ref{eq:linear}, 8 dil ailesine yayılmış 12 veri kümesinde,
+4 yazı sisteminde (Latin, Han, Kiril, Arap) ve 4 görev tipinde (ikili
+bağımlılık doğrulaması, çok-sınıflı, çok-etiketli, NER) doğrulandı.
+Tablo~\ref{tab:linear} toplu hatayı özetler.
+
+\begin{table}[h]
+\centering
+\caption{Lineer metrik formülü doğrulaması. Tüm konfigürasyonlarda
+ortalama öngörü hatası.}
+\label{tab:linear}
+\small
+\begin{tabular}{lc}
+\toprule
+Boyut & Kapsam \\
+\midrule
+Diller           & 12 (8 aile) \\
+Yazı sistemleri  & 4 (Latin, Han, Kiril, Arap) \\
+Görev tipleri    & 4 (ikili, çok-sınıflı, çok-etiketli, NER) \\
+Metrikler        & 2 (doğruluk, bit-doğruluğu) \\
+\midrule
+Ortalama hata    & $0.002$ \\
+Maksimum hata    & $0.008$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Sembolik gürültü altında (\%0--\%50), formülün öngörü hatası
+$\varepsilon = 0.0066$ değerinde değişmeden kalır; bu, lineer özdeşliğin
+hibrit topluluğun yapısal bir özelliğini yakaladığını gösterir.
+
+\subsection{$F_1$ Sınıf-Başına Doğrulaması}
+\label{sec:exp-f1}
+
+Lineer formül $F_1$'de başarısız olur; çünkü $F_1$ harmonik ortalama
+içerir ve öğe-bazlı doğruluk göstergesinde lineer değildir. Bunu 20 NER
+konfigürasyonunda (5 tohum $\times$ 4 gizli oran) test ettik.
+
+\begin{table}[h]
+\centering
+\caption{20 NER konfigürasyonunda $F_1$ formül karşılaştırması.
+Lineer formül ağırlık olarak $\text{kapsam}$ kullanır; sınıf-başına
+formül $w_c = D_s^c / (D_s^c + D_n^c)$ kullanır.}
+\label{tab:f1}
+\small
+\begin{tabular}{lcc}
+\toprule
+Formül & Ortalama $\varepsilon$ & Maksimum $\varepsilon$ \\
+\midrule
+Lineer ($\text{kapsam}$-ağırlıklı)     & $0.0188$ & $0.0515$ \\
+Sınıf-başına ($w_c$-ağırlıklı) & $0.000000$ & $0.000000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Sınıf-başına formül 20 konfigürasyonun tümünde makine hassasiyetinde
+hata verir; bu, genişletmenin makro $F_1$ için kesin olduğunu doğrular.
+
+
+\subsection{Kronecker Görev-Uygunluk Sonuçları}
+\label{sec:exp-kronecker}
+
+Görev-uygunluk hipotezini üç görev tipinde test ettik: rastgele lineer
+öğretmen (sentetik), basit kompozisyonel görev (blok güçleri) ve
+görüntü-benzeri kompozisyonel görev (uzamsal korelasyonlu 2D grid).
+Tablo~\ref{tab:kronecker} her durumda kazananı özetler.
+
+\begin{table}[h]
+\centering
+\caption{Görev tipine göre kazanan. Parametre sayıları parantez
+içindedir. İstatistiksel testler: eşleşmiş tohumlarda $t$-testi.}
+\label{tab:kronecker}
+\small
+\begin{tabular}{lccc}
+\toprule
+Görev tipi & Kazanan & Test Doğ. & Verimlilik \\
+\midrule
+Rastgele lineer          & Yoğun MLP          & ---      & temel \\
+Basit kompozisyonel      & Düz Kronecker      & $0.8007$ & $8\times$ az \\
+Görüntü kompozisyonel    & Hiy.\ Kronecker    & $0.8360$ & $34\times$ fazla \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Basit kompozisyonel.}
+20 tohum. Düz Kronecker ($2{,}564$ parametre) $0.8007 \pm 0.0202$
+sonucuna ulaşırken, Yoğun MLP ($20{,}868$ parametre) $0.7982 \pm 0.0190$
+elde ediyor; fark anlamlı değil ($p = 0.52$). Hiyerarşik Kronecker
+($87{,}044$ parametre) $0.7872$'ye ulaşır ve düzden
+\emph{anlamlı olarak daha kötüdür} ($p = 0.0008$, Cohen $d = -0.75$).
+
+\paragraph{Görüntü kompozisyonel.}
+50 tohum. Hiyerarşik Kronecker $0.8360 \pm 0.0217$ sonucuna ulaşırken,
+Yoğun MLP $0.8190 \pm 0.0198$ (eşleşmiş $t$-testi:
+$p < 0.0001$, Cohen $d = -1.37$). Düz Kronecker ($2{,}564$ parametre)
+$0.8267$'ye ulaşır ve Yoğun MLP'den anlamlı olarak iyidir
+($p = 0.0003$, $d = +0.51$); bu, $8\times$ parametre verimliliğini
+küçük bir mutlak doğruluk avantajıyla gösterir.
+
+İki kompozisyonel görev arasındaki karşıtlık---basit bloklar ve uzamsal
+korelasyonlu görüntü-benzeri gridler---Kronecker'ın avantajının görev ile
+tensör faktörizasyonu arasındaki \emph{yapısal uyumun derecesine} bağlı
+olduğunu gösterir.
+
+\subsection{Negatif Sonuçlar}
+\label{sec:negatives}
+
+Kronecker iddiasını sınırlayan iki negatif sonucu belgeliyoruz.
+
+\paragraph{Parametre-eşleşmeli karşılaştırma.}
+Rastgele lineer görevde, her iki mimariye aynı parametre bütçesi
+($\sim 21{,}764$) verildiğinde, Yoğun MLP $0.900$'a ulaşırken, Düz
+Kronecker $K=168$ derinliğinde $0.257$'de kalır. Derin düz zincirler
+çöker: normalizasyon olmadan tekrarlanan bilinear + SiLU bilgiyi yok eder.
+Hiyerarşik Kronecker kısmen çöküşten kaçınır ($0.816$) ama yine de
+Yoğun MLP'ye kaybeder.
+
+\paragraph{LayerNorm + residual.}
+Düz Kronecker'a LayerNorm ve artık bağlantılar eklemek $0.402$'den
+$0.584$'e iyileştirir, ama hiyerarşik ($0.817$) veya yoğun ($0.916$)
+seviyesine ulaşmaz. Düz zincirin sınırlamasının yalnızca normalizasyon
+sorunu olmadığı sonucuna varıyoruz.
+
+Bu sonuçlar, Kronecker avantajının \emph{görev-koşullu} olduğunu,
+evrensel olmadığını ortaya koyar.
+
+
+\section{Tartışma}
+\label{sec:discussion}
+
+\subsection{Ne Zaman Hangisi?}
+\label{sec:decision}
+
+Deneylerimiz basit bir karar kuralı verir:
+
+\begin{enumerate}
+\item \textbf{Metrik seçimi.} Mümkünse lineer metrikler (doğruluk,
+bit-doğruluğu) kullanın; kazanç formülü kapalı-formdur
+(Denklem~\ref{eq:linear}). Makro $F_1$ için sınıf-başına ağırlıklı
+özdeşliği kullanın.
+\item \textbf{Mimari seçimi.} Mimariyi görev yapısına uydurun. Rastgele
+lineer görevler Yoğun MLP'yi tercih eder; blok-yapılı görevler Düz
+Kronecker'ı tercih eder; uzamsal korelasyonlu görüntü-benzeri görevler
+Hiyerarşik Kronecker'ı tercih eder.
+\item \textbf{Hiyerarşi.} Uzamsal yapısı olmayan görevlerde hiyerarşik
+Kronecker'ı kullanmayın: $34\times$ daha fazla parametreye mal olur ve
+düşük performans verir.
+\end{enumerate}
+
+\subsection{$F_1$ Formülü Neden Sınıf-Başına Ağırlık Gerektirir?}
+
+Lineer metrikler için ağırlık kapsama indirgenir:
+$\sum_c D_c = 2N$ özdeş olarak, yani $w = \text{kapsam}$.
+Makro $F_1$ için sınıf-başına ağırlıklar
+$w_c = D_s^c / (D_s^c + D_n^c)$ sınıflar arasında ve
+$\text{kapsam}$'dan farklıdır; doğru toplama kaçınılmaz olarak
+sınıf-başınadır.
+
+\subsection{Yapısal Uyum İlkesi}
+
+Kronecker sonuçları daha geniş bir ilke önerir: \emph{bir parametre
+bütçesi, örtük kısıtları görevin bağımlılıklarıyla uyumlu olduğunda en
+verimli şekilde harcanır}. Bir bilinear katman operatörü
+$B^\top \otimes A$ formuna kısıtlar. Görevin hedefi bu forma uyduğunda
+kısıt bedavadır; uymadığında kısıt darboğaza dönüşür.
+
+\section{Sınırlar ve Gelecek Çalışma}
+\label{sec:limitations}
+
+\paragraph{Sınırlar.}
+Kronecker görev-uygunluk çalışması üç sentetik görev tipini kapsıyor;
+gerçek dünya görüntü veya dil verisine genelleme açık bir sorudur.
+Sınıf-başına $F_1$ özdeşliği makro $F_1$ için ispatlanmıştır; ağırlıklı
+ve mikro varyantlar ele alınmamıştır. Sinirsel temellerimiz sıfırdan
+eğitilen küçük modellerdir; ön-eğitimli dil modelleriyle karşılaştırma
+yapmıyoruz. İstatistiksel güç yeterlidir ($n = 20$--$50$) ama kapsamlı
+değildir.
+
+\paragraph{Gelecek çalışma.}
+(1) Kronecker hipotezini doğal görüntü ve metin üzerinde test edin.
+(2) Ağırlıklı $F_1$, kesinlik ve duyarlılık için sınıf-başına özdeşlikler
+türetin. (3) Hibrit formülü ön-eğitimli büyük modellere genişletin.
+(4) Görev-uygunluğun yalnızca veri istatistiklerinden öngörülüp
+öngörülemeyeceğini araştırın.
+
+\section{Sonuç}
+\label{sec:conclusion}
+
+Hibrit sistemler koşulsuz kazanmaz. Kazançları üç bağımsız boyuta
+bağlıdır: metrik tipi (lineer ve lineer olmayan), mimari tipi (Kronecker
+ve yoğun) ve görev yapısı (rastgele ve kompozisyonel). Her boyut için
+bir formül, mimari seçimi için istatistiksel kanıt ve geometrik
+mimarinin ne zaman kaybettiğine dair dürüst bir açıklama sunuyoruz.
+Birlikte, bu sonuçlar hibrit sistem tasarımının sezgisel değil ilkeli
+yapılabileceğini öne sürer.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{esa2026preprint1}
+E.~Esa. Hibrit sembolik-sinirsel paradigma: Sinirsel temellere karşı
+kazancı öngören evrensel bir formül. \emph{arXiv preprint}, 2026.
+
+\bibitem{garcez2023neurosymbolic}
+A.~d'Avila Garcez ve L.~C.~Lamb. Neurosymbolic AI: The 3rd wave.
+\emph{Artificial Intelligence Review}, 2023.
+
+\bibitem{manhaeve2018deepproblog}
+R.~Manhaeve ve ark. DeepProbLog: Neural probabilistic logic programming.
+\emph{NeurIPS}, 2018.
+
+\bibitem{nivre2020ud}
+J.~Nivre ve ark. Universal Dependencies v2. \emph{LREC}, 2020.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani ve ark. Attention is all you need. \emph{NeurIPS}, 2017.
+
+\end{thebibliography}
+
+\end{document}

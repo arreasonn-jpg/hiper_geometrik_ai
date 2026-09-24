@@ -167,8 +167,20 @@ Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 ## Üretilen Yayınlar
 
+### Preprint 1 — Hibrit Formül (yayına hazır)
+
 1. **İngilizce preprint:** `preprint_EN.pdf` (6 sayfa, 4 tablo, 8 atıf)
 2. **Türkçe preprint:** `preprint_TR.pdf` (6 sayfa, 4 tablo, 8 atıf)
+
+### Preprint 2 — Birleşik Teori (YENİ, taslak)
+
+3. **İngilizce preprint 2:** `preprint2_EN.pdf` (415 satır, 6 bölüm, 5 atıf)
+4. **Türkçe preprint 2:** `preprint2_TR.pdf` (380 satır, 6 bölüm, 5 atıf)
+
+**LaTeX kaynakları:** `latex/main2_EN.tex`, `latex/main2_TR.tex`
+
+**Kapsam:** Metrik tipi (lineer vs $F_1$), mimari (Kronecker vs yoğun),
+görev yapısı (rastgele vs kompozisyonel).
 
 ---
 
