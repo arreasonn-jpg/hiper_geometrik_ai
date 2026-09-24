@@ -86,6 +86,64 @@ e.g., Equation~\ref{eq:linear}), and
 Section~\ref{sec:kronecker}).
 
 
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Neurosymbolic AI.}
+Combining symbolic reasoning with neural learning is a long-standing
+goal. Garcez and Lamb~\cite{garcez2023neurosymbolic} survey the
+third wave of neurosymbolic AI, and DeepProbLog
+\cite{manhaeve2018deepproblog} integrates probabilistic logic
+programming with neural networks. Besold et al.~\cite{besold2017neural}
+provide an earlier overview. Our work differs in \emph{when} the
+combination wins: we provide a closed-form gain formula rather than
+a new integration architecture.
+
+\paragraph{Hybrid systems with compositional structure.}
+Neural Module Networks \cite{andreas2016neural} and the CLEVR
+benchmark \cite{johnson2017clevr} demonstrated that compositional
+tasks can be decomposed into reusable modules. Mao et
+al.~\cite{mao2019neuro} extended this to concept learning. Our
+compositional tasks are inspired by these but focus on a different
+question: given a hybrid system, when does its symbolic arm help?
+
+\paragraph{Tensorized and structured architectures.}
+MLP-Mixer \cite{tolstikhin2021mlp} and gMLP \cite{liu2021gmlp}
+replace attention with token-mixing MLPs, while ConvMixer
+\cite{trockman2023patches} shows that patch-based convolutions achieve
+comparable performance. Tensor Train decomposition
+\cite{novikov2015tensor} and LoRA \cite{hu2021lora} exploit low-rank
+structure for efficiency. Our Kronecker layer is closely related to
+these approaches, but we study \emph{task-appropriateness} rather
+than proposing a new layer.
+
+\paragraph{Attention and vision transformers.}
+The Transformer \cite{vaswani2017attention} and its vision variant ViT
+\cite{dosovitskiy2020vit} established attention as a general-purpose
+operator. Our work does not compete with attention; instead, we
+characterise when a \emph{structured} alternative (Kronecker) is
+preferable to a \emph{unstructured} baseline (dense MLP).
+
+\paragraph{Cross-lingual NLP.}
+Universal Dependencies \cite{nivre2020ud} provides the multilingual
+treebanks used in our validation. The ITU Turkish NLP Pipeline
+\cite{eryigit2015itu} is a canonical example of a rule-based symbolic
+system for a morphologically rich language, and motivated our choice
+of Turkish as one of the twelve validation languages.
+
+\paragraph{Metrics and their decomposition.}
+Sokolova and Lapalme~\cite{sokolova2009systematic} provide a
+systematic analysis of performance measures, and Opitz and
+Burst~\cite{opitz2019macro} address macro $F_1$ specifically.
+Grandini et al.~\cite{grandini2020metrics} compare multi-class metrics
+in depth. Our per-class identity is, to our knowledge, the first
+exact decomposition of hybrid $F_1$ in terms of per-class weights.
+
+\paragraph{Statistical methodology.}
+We follow standard practice for multiple-comparison correction
+\cite{benjamini1995controlling} and effect-size reporting
+\cite{cohen1988statistical}.
+
 \section{Theory}
 \label{sec:theory}
 
@@ -481,6 +539,69 @@ J.~Nivre et al. Universal Dependencies v2. \emph{LREC}, 2020.
 
 \bibitem{vaswani2017attention}
 A.~Vaswani et al. Attention is all you need. \emph{NeurIPS}, 2017.
+
+\bibitem{besold2017neural}
+T.~R.~Besold et al. Neural-symbolic learning and reasoning: A survey
+and interpretation. \emph{arXiv preprint arXiv:1711.03902}, 2017.
+
+\bibitem{andreas2016neural}
+J.~Andreas, M.~Rohrbach, T.~Darrell, and D.~Klein. Neural module
+networks. \emph{CVPR}, 2016.
+
+\bibitem{johnson2017clevr}
+J.~Johnson et al. CLEVR: A diagnostic dataset for compositional
+language and elementary visual reasoning. \emph{CVPR}, 2017.
+
+\bibitem{mao2019neuro}
+J.~Mao et al. The neuro-symbolic concept learner: Interpreting
+scenes, words, and sentences from natural supervision. \emph{ICLR}, 2019.
+
+\bibitem{tolstikhin2021mlp}
+I.~Tolstikhin et al. MLP-Mixer: An all-MLP architecture for vision.
+\emph{NeurIPS}, 2021.
+
+\bibitem{liu2021gmlp}
+H.~Liu et al. Pay attention to MLPs. \emph{NeurIPS}, 2021.
+
+\bibitem{trockman2023patches}
+A.~Trockman and J.~Z.~Kolter. Patches are all you need?
+\emph{TMLR}, 2023.
+
+\bibitem{novikov2015tensor}
+A.~Novikov, D.~Podoprikhin, A.~Osokin, and D.~Vetrov. Tensorizing
+neural networks. \emph{NeurIPS}, 2015.
+
+\bibitem{hu2021lora}
+E.~J.~Hu et al. LoRA: Low-rank adaptation of large language models.
+\emph{ICLR}, 2022.
+
+\bibitem{dosovitskiy2020vit}
+A.~Dosovitskiy et al. An image is worth 16x16 words: Transformers
+for image recognition at scale. \emph{ICLR}, 2021.
+
+\bibitem{eryigit2015itu}
+G.~Eryi\u{g}it. ITU Turkish NLP web service. \emph{EACL}, 2014.
+
+\bibitem{sokolova2009systematic}
+M.~Sokolova and G.~Lapalme. A systematic analysis of performance
+measures for classification tasks. \emph{Information Processing
+\& Management}, 45(4):427--437, 2009.
+
+\bibitem{opitz2019macro}
+J.~Opitz and S.~Burst. Macro F1 and macro F1. \emph{arXiv preprint
+arXiv:1911.03347}, 2019.
+
+\bibitem{grandini2020metrics}
+M.~Grandini, E.~Bagli, and G.~Visani. Metrics for multi-class
+classification: An overview. \emph{arXiv preprint arXiv:2008.05756}, 2020.
+
+\bibitem{benjamini1995controlling}
+Y.~Benjamini and Y.~Hochberg. Controlling the false discovery rate.
+\emph{JRSS-B}, 57(1):289--300, 1995.
+
+\bibitem{cohen1988statistical}
+J.~Cohen. \emph{Statistical Power Analysis for the Behavioral Sciences}.
+Lawrence Erlbaum Associates, 2nd edition, 1988.
 
 \end{thebibliography}
 
