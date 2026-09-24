@@ -130,12 +130,36 @@ Kronecker yapı **yapısal görevlerde** 8x verimli, **rastgele görevlerde** de
 | Sentetik lineer | Dense MLP | Kronecker kısıtı kayıp |
 | **Compositional (grid)** | **Flat Kronecker** | **8x az param, eşit doğruluk** |
 
-**20 seed istatistik:**
+**20 seed istatistik (basit compositional):**
 - flat vs dense: p = 0.52 (eşit)
 - flat vs hierarchical: p = 0.0008 (flat kazanıyor)
 - dense vs hierarchical: p = 0.0093 (dense kazanıyor)
 
-**Sonuç:** Hiyerarşik yapı kanıtlanmış fayda sağlamıyor; flat Kronecker yapısal görevlerde verimli.
+**Sonuç:** Flat Kronecker, basit blok yapılı görevlerde 8x verimli.
+
+### 8b. Görüntü Compositional'da Hierarchical Zaferi (YENİ)
+
+Görüntü benzeri görevde (2D grid + uzamsal korelasyon) **hiyerarşik yapı kazanıyor**:
+
+| Model | Param | Test Acc |
+|---|---|---|
+| dense_mlp | 20,868 | 0.8190 ± 0.0198 |
+| flat_kronecker | 2,564 | 0.8267 ± 0.0177 |
+| **hierarchical_kronecker** | **87,044** | **0.8360 ± 0.0217** |
+
+**50 seed istatistik:**
+- flat vs dense: p = 0.0003 (flat kazanıyor, 8x verimli)
+- flat vs hier: p < 0.0001 (hier kazanıyor)
+- **dense vs hier: p < 0.0001, d = −1.368** (hier büyük etkiyle kazanıyor)
+
+**Görev tipi → mimari seçimi:**
+| Görev Tipi | Kazanan |
+|---|---|
+| Rastgele lineer | Dense MLP |
+| Basit compositional | Flat Kronecker (8x verimli) |
+| Görüntü compositional | Hierarchical Kronecker |
+
+**Sonuç:** Görev-uygunluk teoremi — mimari seçimi görev yapısına bağlı.
 Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 
