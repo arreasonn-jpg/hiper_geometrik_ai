@@ -292,6 +292,29 @@ görev yapısı (rastgele vs kompozisyonel).
 
 ---
 
+## Üçüncü Bilimsel Hat: Preprint 3 (YENİ)
+
+**Başlık:** *Implicit Regularization in Kronecker Architectures:
+When Structural Constraints Help*
+
+**Ana tez:** Kronecker'ın avantajı "yapısal uyum" değil,
+"**örtük düzenlileştirme**"den gelir.
+
+| Hipotez | Sonuç |
+|---|---|
+| H1 (yapısal uyum) | r = −0.38, p = 0.46 → **REDDEDİLDİ** |
+| H2 (düzenlileştirme) | r = +0.95, p = 0.012 → **KANITLANDI** |
+
+**İki koşul gerekli:**
+1. Grid/tensör yapısı
+2. Gürültülü veri (düzenlileştirme ihtiyacı)
+
+**Dosya:** `reports/12_PREPRINT3_OUTLINE.md`
+
+**LaTeX yazımı:** Devam ediyor (bu oturumda)
+
+---
+
 **Saygılarımla,**
 **Erdem Esa**
 **Bağımsız Araştırmacı**
