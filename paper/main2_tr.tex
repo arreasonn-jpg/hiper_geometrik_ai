@@ -23,10 +23,11 @@ tipine ve görev yapısına bağlıdır. Lineer metrikler için kesin bir
 özdeşlik ve makro $F_1$ için sınıf-başına bir genişletme sunuyoruz;
 lineer ağırlık lineer olmayan metriklerde çökmediği için bu genişletmenin
 zorunlu olduğunu gösteriyoruz. Ayrıca Kronecker mimarilerinin
-kompozisyonel ve gerçek görüntü görevlerinde $8\times$--$12.6\times$
-daha parametre-verimli olduğunu, hiyerarşik varyantın ise görüntü-benzeri
-girdilerde istatistiksel olarak üstün olduğunu gösteriyoruz
-($50$ tohum, $p<0.0001$). Bu
+grid yapılı ve gürültülü görevlerde $8\times$--$12.6\times$ daha
+parametre-verimli olduğunu; avantajın graf görevlerinde ve tam-bilinear
+görevlerde (optimizasyon sınırlı) kaybolduğunu, temiz veride ise tersine
+döndüğünü gösteriyoruz. Kronecker'ın faydası bu nedenle hem yapısal
+uyuma hem de düzenlileştirme ihtiyacına bağlıdır. Bu
 sonuçlar hibrit sistem tasarımının ilkeli olabileceğini öne sürüyor:
 metrikler için formül-güdümlü, görevler için yapı-güdümlü.
 \end{abstract}
@@ -435,6 +436,48 @@ rastgeleden ($1/4 = 0.25$) daha kötü. Çöküş yapısaldır: normalizasyon
 olmadan tekrarlanan bilinear + SiLU bilgiyi yok eder. $8\times$
 verimlilik iddiası bu nedenle \emph{kullanışlı rejim} ($K \leq 3$)
 hakkında bir ifadedir, evrensel bir özellik değil.
+
+\subsection{Grid Olmayan Görevler (Sirküler Mantık Kontrolü)}
+\label{sec:non-grid}
+
+Önceki bölümlerin olası bir zayıflığı sirküler tasarımdır: eğer görevler
+grid yapılıysa ve Kronecker gridlerde iyiyse, avantaj görev tasarımının
+bir yapaylığı olabilir. Bu nedenle grid rejiminin dışında dört görev
+test ettik.
+
+\begin{table}[h]
+\centering
+\caption{Grid olmayan kontrol görevleri (20 tohum). Kronecker graf ve
+tam-bilinear görevlerde kaybeder.}
+\label{tab:non-grid}
+\small
+\begin{tabular}{lccc}
+\toprule
+Görev & Yoğun MLP & Düz Kronecker & Düz Kazanma \\
+\midrule
+Grid temel           & $0.819$ & $0.822$ & $11/20$ \\
+Dizi (1D)            & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
+Graf (grid yok)      & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
+Rastgele faktör ($Y = AXB$) & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Bulgular.}
+(1)~\emph{Grid gerekli:} Graf görevinde Kronecker $\%21$ kaybeder;
+avantaj grid olmayan yapıya geçmiyor.
+(2)~\emph{Optimizasyon, ifade gücü değil:} Rastgele faktör görevi
+\emph{tam olarak} bir bilinear form $Y = AXB$'dir; Kronecker katmanı
+bunu doğal olarak temsil eder. Yine de Düz Kronecker yalnızca
+$1/20$ tohumda kazanır. Sınırlama ifade gücü değil, optimizasyondur.
+(3)~\emph{Dizi reshape ile çalışıyor:} 1D dizi $16 \times 16$'ya
+reshape edilince yapay 2D yapı kazanır; bu $18/20$ kazanma oranını
+açıklar.
+
+\paragraph{Birleşik hipotez.}
+Kronecker mimarileri \emph{iki} koşulu birlikte gerektirir:
+(i) girdide grid/tensör yapısı, ve (ii) gürültülü veriden kaynaklanan
+düzenlileştirme ihtiyacı. Hiçbiri tek başına yeterli değildir.
 
 \subsection{Örtük Düzenlileştirme Hipotezi}
 \label{sec:regularization}
