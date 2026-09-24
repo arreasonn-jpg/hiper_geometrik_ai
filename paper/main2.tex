@@ -247,13 +247,12 @@ trainable parameters. The operator's rank is $\text{rank}(A) \cdot \text{rank}(B
 This structural constraint is a \emph{feature} when the task's own structure
 aligns with the tensor decomposition. We formalise this intuition as:
 
-\paragraph{Task-Appropriateness Hypothesis.}
-Kronecker architectures are parameter-efficient when the task's functional
-dependencies respect the tensor factorisation $X \mapsto A X B$. Conversely,
-on tasks whose target is a generic (non-factorisable) linear map, the same
-constraint becomes a bottleneck.
-
-We test this hypothesis across three task types in Section~\ref{sec:experiments}.
+\paragraph{Working Hypothesis (later revised).}
+We initially proposed that Kronecker architectures are parameter-efficient
+when the task's functional dependencies respect the tensor factorisation
+$X \mapsto A X B$. Section~\ref{sec:regularization} shows that this
+\emph{structural alignment} hypothesis is rejected, and that the actual
+mechanism is implicit regularisation via the parameter constraint.
 
 
 \section{Experiments}
@@ -466,6 +465,50 @@ than random ($1/4 = 0.25$). The collapse is structural: repeated
 bilinear + SiLU without normalisation destroys information. The
 $8\times$ efficiency claim is therefore a statement about the
 \emph{useful regime} ($K \leq 3$), not a universal property.
+
+\subsection{Implicit Regularization Hypothesis}
+\label{sec:regularization}
+
+The task-appropriateness hypothesis (Section~\ref{sec:kronecker}) was
+formalised as ``Kronecker architectures are efficient when the task's
+structure aligns with tensor factorisation.'' We tested this on six
+tasks (random linear, permuted MNIST, noise MNIST, block compositional,
+grid correlated, Fashion-MNIST) and found the prediction
+\emph{reversed}: autocorrelation correlates \emph{negatively} with
+Kronecker's win rate ($r = -0.38$, $p = 0.46$).
+
+A subsequent ablation revealed a different mechanism: \emph{noise
+level} predicts Kronecker's advantage ($r = +0.95$, $p = 0.012$).
+Table~\ref{tab:noise-ablation} summarises.
+
+\begin{table}[h]
+\centering
+\caption{Noise ablation on block compositional task (20 seeds).
+Kronecker's parameter constraint acts as implicit regularization.}
+\label{tab:noise-ablation}
+\small
+\begin{tabular}{cccc}
+\toprule
+Noise & Dense MLP & Flat Kronecker & Flat Wins \\
+\midrule
+$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
+$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
+$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
+$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
+$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Revised hypothesis.}
+Kronecker's $2n^2$-parameter constraint functions as an architectural
+regulariser. On clean data it limits expressivity and loses to Dense
+MLP; on noisy data it prevents overfitting and wins. The transition
+occurs at noise $\approx 0.30$.
+
+This reformulation subsumes the earlier observation and provides a
+\emph{mechanistic} explanation: the gain is not structural alignment
+but implicit regularisation.
 
 \subsection{Negative Results}
 \label{sec:negatives}

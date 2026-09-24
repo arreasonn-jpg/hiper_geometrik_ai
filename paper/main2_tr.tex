@@ -219,13 +219,12 @@ derecesi $2n^2$ olarak kalır.
 Bu yapısal kısıt, görevin kendi yapısı tensör ayrışımıyla uyumlu
 olduğunda bir \emph{özellik} haline gelir:
 
-\paragraph{Görev-Uygunluk Hipotezi.}
-Kronecker mimarileri, görevin fonksiyonel bağımlılıkları $X \mapsto A X B$
-tensör faktörizasyonuna uyduğunda parametre-verimlidir. Tersine, hedefi
-genel (faktörize edilemez) bir lineer dönüşüm olan görevlerde aynı kısıt
-bir darboğaza dönüşür.
-
-Bu hipotezi Bölüm~\ref{sec:experiments}'te üç görev tipinde test ediyoruz.
+\paragraph{Çalışma Hipotezi (sonradan gözden geçirildi).}
+Başlangıçta Kronecker mimarilerinin, görevin fonksiyonel bağımlılıkları
+$X \mapsto A X B$ tensör faktörizasyonuna uyduğunda parametre-verimli
+olduğunu öne sürdük. Bölüm~\ref{sec:regularization}, bu
+\emph{yapısal uyum} hipotezinin reddedildiğini ve gerçek mekanizmanın
+parametre kısıtı yoluyla örtük düzenlileştirme olduğunu gösterir.
 
 
 \section{Deneyler}
@@ -436,6 +435,50 @@ rastgeleden ($1/4 = 0.25$) daha kötü. Çöküş yapısaldır: normalizasyon
 olmadan tekrarlanan bilinear + SiLU bilgiyi yok eder. $8\times$
 verimlilik iddiası bu nedenle \emph{kullanışlı rejim} ($K \leq 3$)
 hakkında bir ifadedir, evrensel bir özellik değil.
+
+\subsection{Örtük Düzenlileştirme Hipotezi}
+\label{sec:regularization}
+
+Görev-uygunluk hipotezi (Bölüm~\ref{sec:kronecker}), ``Kronecker
+mimarileri görevin yapısı tensör faktörizasyonuyla uyumlu olduğunda
+verimlidir'' şeklinde formüle edilmişti. Bunu altı görevde test ettik
+(rastgele lineer, permüte MNIST, gürültülü MNIST, blok kompozisyonel,
+grid korelasyonlu, Fashion-MNIST) ve tahminin \emph{ters yönde}
+çıktığını gördük: otokorelasyon, Kronecker'ın kazanma oranıyla
+\emph{negatif} korelasyon gösteriyor ($r = -0.38$, $p = 0.46$).
+
+Sonraki bir ablasyon farklı bir mekanizmayı ortaya çıkardı:
+\emph{gürültü seviyesi} Kronecker'ın avantajını öngörüyor
+($r = +0.95$, $p = 0.012$). Tablo~\ref{tab:noise-ablation} özetler.
+
+\begin{table}[h]
+\centering
+\caption{Blok kompozisyonel görevde gürültü ablasyonu (20 tohum).
+Kronecker'ın parametre kısıtı örtük düzenlileştirici olarak çalışır.}
+\label{tab:noise-ablation}
+\small
+\begin{tabular}{cccc}
+\toprule
+Gürültü & Yoğun MLP & Düz Kronecker & Düz Kazanma \\
+\midrule
+$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
+$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
+$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
+$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
+$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Gözden geçirilmiş hipotez.}
+Kronecker'ın $2n^2$ parametre kısıtı, mimari düzeyde bir
+düzenlileştirici işlevi görür. Temiz veride ifade gücünü sınırlar
+ve Yoğun MLP'ye kaybeder; gürültülü veride overfitting'i önler ve
+kazanır. Geçiş noktası gürültü $\approx 0.30$'dur.
+
+Bu yeniden formülasyon önceki gözlemi kapsar ve \emph{mekanistik}
+bir açıklama sunar: kazanç yapısal uyumdan değil, örtük
+düzenlileştirmeden gelir.
 
 \subsection{Negatif Sonuçlar}
 \label{sec:negatives}
