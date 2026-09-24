@@ -160,6 +160,31 @@ Görüntü benzeri görevde (2D grid + uzamsal korelasyon) **hiyerarşik yapı k
 | Görüntü compositional | Hierarchical Kronecker |
 
 **Sonuç:** Görev-uygunluk teoremi — mimari seçimi görev yapısına bağlı.
+
+### 8c. Gerçek Görüntü Verisi — MNIST (YENİ)
+
+Sentetik grid'in ötesine geçildi: **MNIST** üzerinde Kronecker testi.
+
+| Model | Param | Test Acc |
+|---|---|---|
+| Dense MLP (h=128) | 118,282 | 0.808 |
+| **Flat Kronecker (K=1)** | **9,418** | **0.770** |
+
+**12.6x az parametre, %3.8 doğruluk farkı.** Derinlik çöküşü (K=1 > K=2 > K=3) gerçek görüntüde de doğrulandı.
+
+### 9. F1 Tüm Metrik Formülleri (YENİ)
+
+F1 per-class formülü genişletildi:
+
+| Metrik | Ağırlık | Predictor |
+|---|---|---|
+| Macro F1 | $w_c$ | cov + per-class D |
+| **Weighted F1** | $a_c \cdot w_c$ | cov + class freq |
+| Micro F1 | $w = cov$ | cov (lineer) |
+| Precision | $u_c$ | cov + per-class prediction mass |
+| Recall | $v_c$ | cov + per-class ground truth mass |
+
+**20 NER konfigürasyonunda weighted F1: ε = 0.000000.**
 Bu, formülün yapısal bir özelliği yakaladığını gösterir.
 
 

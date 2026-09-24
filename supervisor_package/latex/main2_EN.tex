@@ -16,20 +16,16 @@ A Unified Theory of Gain Across Metrics, Architectures, and Tasks}
 \maketitle
 
 \begin{abstract}
-We present a unified theory of gain for hybrid systems across three
-independent dimensions: (1) metric type---linear (accuracy,
-bit-accuracy, token-accuracy) versus non-linear ($F_1$); (2) architecture
-type---bilinear Kronecker versus dense multi-layer perceptron; and
-(3) task structure---random linear versus compositional (grid-aligned).
-For each dimension we determine \emph{when} which structure wins, with
-statistical evidence from 20--50 independent seeds. We extend the linear
-metric formula of our earlier work to a per-class identity that is exact
-for macro $F_1$ (machine-precision error on 20 NER configurations), and
-we show that the Kronecker architecture is $8\times$ more parameter-efficient
-on simple compositional tasks and statistically superior on image-like
-compositional tasks (50 seeds, $p<0.0001$, Cohen's $d=-1.37$). We conclude
-that hybrid system design can be made principled: formula-driven for
-metrics, structure-driven for tasks.
+Hybrid systems do not win unconditionally: their gain is a function of
+metric type, architecture type, and task structure. We provide an exact
+identity for linear metrics and a per-class extension for macro $F_1$,
+which we show is necessary because the linear weight does not collapse
+for non-linear metrics. We further show that Kronecker architectures are
+$8\times$--$12.6\times$ more parameter-efficient on compositional and
+real-image tasks, with the hierarchical variant statistically superior
+on image-like inputs ($50$ seeds, $p<0.0001$). These results suggest that hybrid system
+design can be made principled: formula-driven for metrics,
+structure-driven for tasks.
 \end{abstract}
 
 
@@ -80,6 +76,73 @@ choice, backed by 20--50-seed paired $t$-tests.
 and~\ref{sec:discussion}).
 \end{enumerate}
 
+\paragraph{Terminology.}
+Throughout the paper we distinguish three levels of claim:
+\emph{exact identity} (mathematically proven, e.g.,
+Equations~\ref{eq:linear-exact}, \ref{eq:f1-macro}),
+\emph{predictive formula} (empirically validated approximation,
+e.g., Equation~\ref{eq:linear}), and
+\emph{hypothesis} (tested but not proven, e.g.,
+Section~\ref{sec:kronecker}).
+
+
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Neurosymbolic AI.}
+Combining symbolic reasoning with neural learning is a long-standing
+goal. Garcez and Lamb~\cite{garcez2023neurosymbolic} survey the
+third wave of neurosymbolic AI, and DeepProbLog
+\cite{manhaeve2018deepproblog} integrates probabilistic logic
+programming with neural networks. Besold et al.~\cite{besold2017neural}
+provide an earlier overview. Our work differs in \emph{when} the
+combination wins: we provide a closed-form gain formula rather than
+a new integration architecture.
+
+\paragraph{Hybrid systems with compositional structure.}
+Neural Module Networks \cite{andreas2016neural} and the CLEVR
+benchmark \cite{johnson2017clevr} demonstrated that compositional
+tasks can be decomposed into reusable modules. Mao et
+al.~\cite{mao2019neuro} extended this to concept learning. Our
+compositional tasks are inspired by these but focus on a different
+question: given a hybrid system, when does its symbolic arm help?
+
+\paragraph{Tensorized and structured architectures.}
+MLP-Mixer \cite{tolstikhin2021mlp} and gMLP \cite{liu2021gmlp}
+replace attention with token-mixing MLPs, while ConvMixer
+\cite{trockman2023patches} shows that patch-based convolutions achieve
+comparable performance. Tensor Train decomposition
+\cite{novikov2015tensor} and LoRA \cite{hu2021lora} exploit low-rank
+structure for efficiency. Our Kronecker layer is closely related to
+these approaches, but we study \emph{task-appropriateness} rather
+than proposing a new layer.
+
+\paragraph{Attention and vision transformers.}
+The Transformer \cite{vaswani2017attention} and its vision variant ViT
+\cite{dosovitskiy2020vit} established attention as a general-purpose
+operator. Our work does not compete with attention; instead, we
+characterise when a \emph{structured} alternative (Kronecker) is
+preferable to a \emph{unstructured} baseline (dense MLP).
+
+\paragraph{Cross-lingual NLP.}
+Universal Dependencies \cite{nivre2020ud} provides the multilingual
+treebanks used in our validation. The ITU Turkish NLP Pipeline
+\cite{eryigit2015itu} is a canonical example of a rule-based symbolic
+system for a morphologically rich language, and motivated our choice
+of Turkish as one of the twelve validation languages.
+
+\paragraph{Metrics and their decomposition.}
+Sokolova and Lapalme~\cite{sokolova2009systematic} provide a
+systematic analysis of performance measures, and Opitz and
+Burst~\cite{opitz2019macro} address macro $F_1$ specifically.
+Grandini et al.~\cite{grandini2020metrics} compare multi-class metrics
+in depth. Our per-class identity is, to our knowledge, the first
+exact decomposition of hybrid $F_1$ in terms of per-class weights.
+
+\paragraph{Statistical methodology.}
+We follow standard practice for multiple-comparison correction
+\cite{benjamini1995controlling} and effect-size reporting
+\cite{cohen1988statistical}.
 
 \section{Theory}
 \label{sec:theory}
@@ -114,8 +177,9 @@ $\varepsilon = (1-\text{cov}) \cdot |M_n^\bot - M_n|$.
 \label{sec:f1}
 
 Macro $F_1$ is not linear in the per-item indicator, so the identity
-of Equation~\ref{eq:linear-exact} fails. We derive an exact per-class
-decomposition instead.
+of Equation~\ref{eq:linear-exact} fails. We derive an \emph{exact
+algebraic identity} instead (not a new theorem: it follows directly
+from the $F_1$ definition and the hybrid decomposition).
 
 Let $K$ be the number of classes. For class $c$, define the
 \emph{positive mass} of a predictor as
@@ -160,6 +224,15 @@ however, the weights $w^c$ are per-class and do \emph{not} collapse:
 class imbalance on the abstained subset breaks the identity.
 This is precisely why the linear formula fails for $F_1$ and the
 per-class formula succeeds.
+
+\paragraph{Why this matters.}
+Although Equation~\ref{eq:f1-macro} is an algebraic consequence of the
+$F_1$ definition, its \emph{predictive} content is non-trivial: the
+per-class weights $w^c$ vary across classes (empirically $0.37$--$0.66$
+in our NER experiments), whereas the linear formula assumes a single
+weight $\text{cov}$. The identity therefore explains \emph{why} the
+linear formula's error is large ($\varepsilon \approx 0.019$) and
+provides a constructive fix.
 
 
 \subsection{Kronecker Task-Appropriateness}
@@ -296,6 +369,49 @@ Kronecker's advantage depends on the \emph{degree} of structural alignment
 between the task and the tensor factorisation.
 
 
+\subsection{Real Image Validation (MNIST)}
+\label{sec:mnist}
+
+To test whether the task-appropriateness hypothesis extends beyond
+synthetic grids, we evaluated on MNIST (28$\times$28 grayscale digits).
+We trained on 2000 examples with 500 test examples for 30 epochs.
+
+\begin{table}[h]
+\centering
+\caption{MNIST results (5 seeds). Flat Kronecker achieves competitive
+accuracy with $12.6\times$ fewer parameters than the largest Dense MLP.}
+\label{tab:mnist}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parameters & Test Accuracy \\
+\midrule
+Dense MLP ($h=32$)         & $26{,}506$  & $0.594 \pm 0.056$ \\
+Dense MLP ($h=128$)        & $118{,}282$ & $0.808 \pm 0.017$ \\
+Flat Kronecker ($K=1$)     & $9{,}418$   & $0.770 \pm 0.013$ \\
+Flat Kronecker ($K=2$)     & $10{,}986$  & $0.717 \pm 0.041$ \\
+Flat Kronecker ($K=3$)     & $12{,}554$  & $0.662 \pm 0.048$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Findings.}
+(1)~\emph{Parameter efficiency extends to real images:} Flat
+Kronecker ($9{,}418$ params) reaches $0.770$, versus Dense MLP
+($118{,}282$ params) at $0.808$ --- a $12.6\times$ reduction with a
+$3.8\%$ accuracy gap.
+(2)~\emph{Depth collapse is universal:} on both synthetic and real
+data, $K=1$ outperforms $K>1$, confirming that the collapse is
+structural, not dataset-specific.
+(3)~\emph{Structural constraint is regularising:} Dense MLP with
+$h=32$ ($26{,}506$ params) underperforms Flat Kronecker with
+$9{,}418$ params, suggesting that the Kronecker constraint acts as
+an implicit regulariser.
+
+\paragraph{Honest limitation.}
+The absolute accuracy gap ($3.8\%$) remains. Kronecker is efficient,
+not dominant.
+
 \subsection{Negative Results}
 \label{sec:negatives}
 
@@ -321,6 +437,20 @@ These results establish that the Kronecker advantage is
 
 \section{Discussion}
 \label{sec:discussion}
+
+\subsection{Statistical Methodology}
+\label{sec:stats}
+
+All $p$-values reported in this paper are from paired $t$-tests on
+matched seeds. Where multiple hypotheses are tested on the same task
+(three pairwise comparisons per task), Bonferroni correction at
+$\alpha = 0.05$ requires $p < 0.017$ for significance. Under this
+criterion: flat vs.\ dense on image compositional
+($p = 0.0003$), flat vs.\ hierarchical ($p < 0.0001$), and dense
+vs.\ hierarchical ($p < 0.0001$) all remain significant. The
+simple compositional task has one non-significant comparison
+($p = 0.52$) and one significant (flat vs.\ hierarchical,
+$p = 0.0008$).
 
 \subsection{When to Use Which}
 \label{sec:decision}
@@ -409,6 +539,69 @@ J.~Nivre et al. Universal Dependencies v2. \emph{LREC}, 2020.
 
 \bibitem{vaswani2017attention}
 A.~Vaswani et al. Attention is all you need. \emph{NeurIPS}, 2017.
+
+\bibitem{besold2017neural}
+T.~R.~Besold et al. Neural-symbolic learning and reasoning: A survey
+and interpretation. \emph{arXiv preprint arXiv:1711.03902}, 2017.
+
+\bibitem{andreas2016neural}
+J.~Andreas, M.~Rohrbach, T.~Darrell, and D.~Klein. Neural module
+networks. \emph{CVPR}, 2016.
+
+\bibitem{johnson2017clevr}
+J.~Johnson et al. CLEVR: A diagnostic dataset for compositional
+language and elementary visual reasoning. \emph{CVPR}, 2017.
+
+\bibitem{mao2019neuro}
+J.~Mao et al. The neuro-symbolic concept learner: Interpreting
+scenes, words, and sentences from natural supervision. \emph{ICLR}, 2019.
+
+\bibitem{tolstikhin2021mlp}
+I.~Tolstikhin et al. MLP-Mixer: An all-MLP architecture for vision.
+\emph{NeurIPS}, 2021.
+
+\bibitem{liu2021gmlp}
+H.~Liu et al. Pay attention to MLPs. \emph{NeurIPS}, 2021.
+
+\bibitem{trockman2023patches}
+A.~Trockman and J.~Z.~Kolter. Patches are all you need?
+\emph{TMLR}, 2023.
+
+\bibitem{novikov2015tensor}
+A.~Novikov, D.~Podoprikhin, A.~Osokin, and D.~Vetrov. Tensorizing
+neural networks. \emph{NeurIPS}, 2015.
+
+\bibitem{hu2021lora}
+E.~J.~Hu et al. LoRA: Low-rank adaptation of large language models.
+\emph{ICLR}, 2022.
+
+\bibitem{dosovitskiy2020vit}
+A.~Dosovitskiy et al. An image is worth 16x16 words: Transformers
+for image recognition at scale. \emph{ICLR}, 2021.
+
+\bibitem{eryigit2015itu}
+G.~Eryi\u{g}it. ITU Turkish NLP web service. \emph{EACL}, 2014.
+
+\bibitem{sokolova2009systematic}
+M.~Sokolova and G.~Lapalme. A systematic analysis of performance
+measures for classification tasks. \emph{Information Processing
+\& Management}, 45(4):427--437, 2009.
+
+\bibitem{opitz2019macro}
+J.~Opitz and S.~Burst. Macro F1 and macro F1. \emph{arXiv preprint
+arXiv:1911.03347}, 2019.
+
+\bibitem{grandini2020metrics}
+M.~Grandini, E.~Bagli, and G.~Visani. Metrics for multi-class
+classification: An overview. \emph{arXiv preprint arXiv:2008.05756}, 2020.
+
+\bibitem{benjamini1995controlling}
+Y.~Benjamini and Y.~Hochberg. Controlling the false discovery rate.
+\emph{JRSS-B}, 57(1):289--300, 1995.
+
+\bibitem{cohen1988statistical}
+J.~Cohen. \emph{Statistical Power Analysis for the Behavioral Sciences}.
+Lawrence Erlbaum Associates, 2nd edition, 1988.
 
 \end{thebibliography}
 

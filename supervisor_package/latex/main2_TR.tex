@@ -18,21 +18,17 @@ Metrik, Mimari ve Görev Boyutlarında Birleşik Bir Kazanç Teorisi}
 \maketitle
 
 \begin{abstract}
-Hibrit sistemlerin kazancı için üç bağımsız boyutta birleşik bir teori
-sunuyoruz: (1) metrik tipi---lineer (doğruluk, bit-doğruluğu,
-token-doğruluğu) ve lineer olmayan ($F_1$); (2) mimari tipi---bilinear
-Kronecker ve yoğun çok-katmanlı algılayıcı; (3) görev yapısı---rastgele
-lineer ve kompozisyonel (grid uyumlu). Her boyut için \emph{hangi}
-yapının \emph{ne zaman} kazandığını 20--50 bağımsız tohumdan
-istatistiksel kanıtla belirliyoruz. Önceki çalışmamızdaki lineer metrik
-formülünü, makro $F_1$ için kesin olan sınıf-başına ağırlıklı bir
-özdeşliğe genişletiyoruz (20 NER konfigürasyonunda makine hassasiyetinde
-hata), ve Kronecker mimarisinin basit kompozisyonel görevlerde $8\times$
-daha parametre-verimli, görüntü-benzeri kompozisyonel görevlerde ise
-istatistiksel olarak üstün olduğunu gösteriyoruz (50 tohum,
-$p<0.0001$, Cohen $d=-1.37$). Hibrit sistem tasarımının ilkeli
-olabileceği sonucuna varıyoruz: metrikler için formül-güdümlü,
-görevler için yapı-güdümlü.
+Hibrit sistemler koşulsuz kazanmaz: kazançları metrik tipine, mimari
+tipine ve görev yapısına bağlıdır. Lineer metrikler için kesin bir
+özdeşlik ve makro $F_1$ için sınıf-başına bir genişletme sunuyoruz;
+lineer ağırlık lineer olmayan metriklerde çökmediği için bu genişletmenin
+zorunlu olduğunu gösteriyoruz. Ayrıca Kronecker mimarilerinin
+kompozisyonel ve gerçek görüntü görevlerinde $8\times$--$12.6\times$
+daha parametre-verimli olduğunu, hiyerarşik varyantın ise görüntü-benzeri
+girdilerde istatistiksel olarak üstün olduğunu gösteriyoruz
+($50$ tohum, $p<0.0001$). Bu
+sonuçlar hibrit sistem tasarımının ilkeli olabileceğini öne sürüyor:
+metrikler için formül-güdümlü, görevler için yapı-güdümlü.
 \end{abstract}
 
 
@@ -83,6 +79,76 @@ gösteriyoruz (Bölüm~\ref{sec:kronecker}).
 (Bölümler~\ref{sec:negatives} ve~\ref{sec:discussion}).
 \end{enumerate}
 
+\paragraph{Terminoloji.}
+Metin boyunca üç iddia düzeyi ayırt edilir:
+\emph{kesin özdeşlik} (matematiksel olarak ispatlı, örn.
+Denklemler~\ref{eq:linear-exact}, \ref{eq:f1-macro}),
+\emph{öngörü formülü} (deneysel olarak doğrulanmış yaklaşıklık,
+örn. Denklem~\ref{eq:linear}) ve
+\emph{hipotez} (test edilmiş ama ispatlanmamış, örn.
+Bölüm~\ref{sec:kronecker}).
+
+
+\section{İlgili Çalışmalar}
+\label{sec:related}
+
+\paragraph{Nörosembolik YZ.}
+Sembolik akıl yürütmeyi sinirsel öğrenmeyle birleştirmek uzun süredir
+hedeflenen bir amaçtır. Garcez ve Lamb~\cite{garcez2023neurosymbolic}
+nörosembolik YZ'nin üçüncü dalgasını incelemekte, DeepProbLog
+\cite{manhaeve2018deepproblog} olasılıksal mantık programlamayı
+sinir ağlarıyla bütünleştirmektedir. Besold ve
+ark.~\cite{besold2017neural} daha erken bir derleme sunar. Bizim
+çalışmamız, kombinasyonun \emph{ne zaman} kazandığı sorusuna
+odaklanır: yeni bir bütünleşme mimarisi değil, kapalı-form bir
+kazanç formülü sunuyoruz.
+
+\paragraph{Kompozisyonel yapılı hibrit sistemler.}
+Neural Module Networks \cite{andreas2016neural} ve CLEVR
+\cite{johnson2017clevr}, kompozisyonel görevlerin yeniden
+kullanılabilir modüllere ayrılabileceğini göstermiştir. Mao ve
+ark.~\cite{mao2019neuro} bunu kavram öğrenmeye genişletmiştir.
+Bizim kompozisyonel görevlerimiz bunlardan esinlenmiştir; ama farklı
+bir soruya odaklanırız: bir hibrit sistem verildiğinde, sembolik
+kolu ne zaman yardımcı olur?
+
+\paragraph{Tensörleştirilmiş ve yapısal mimariler.}
+MLP-Mixer \cite{tolstikhin2021mlp} ve gMLP \cite{liu2021gmlp}
+dikkati token-karıştırıcı MLP'lerle değiştirirken, ConvMixer
+\cite{trockman2023patches} yama tabanlı evrişimlerin benzer performans
+verdiğini göstermektedir. Tensor Train ayrışımı
+\cite{novikov2015tensor} ve LoRA \cite{hu2021lora} verimlilik için
+düşük-rank yapıyı kullanır. Bizim Kronecker katmanımız bu
+yaklaşımlarla yakından ilişkilidir; ancak yeni bir katman önermek
+yerine \emph{görev-uygunluğu} inceliyoruz.
+
+\paragraph{Dikkat ve görüntü transformatörleri.}
+Transformer \cite{vaswani2017attention} ve görüntü varyantı ViT
+\cite{dosovitskiy2020vit} dikkati genel amaçlı bir operatör olarak
+konumlandırmıştır. Bizim çalışmamız dikkatle rekabet etmez; bunun
+yerine \emph{yapısal} bir alternatifin (Kronecker) \emph{yapısız}
+bir temele (yoğun MLP) ne zaman tercih edileceğini karakterize eder.
+
+\paragraph{Diller arası NLP.}
+Universal Dependencies \cite{nivre2020ud} doğrulamamızda kullanılan
+çok dilli ağaç bankalarını sağlar. İTÜ Türkçe NLP Pipeline
+\cite{eryigit2015itu}, morfolojik olarak zengin bir dil için kural
+tabanlı sembolik bir sistemin kanonik bir örneğidir ve Türkçe'yi
+on iki doğrulama dilinden biri olarak seçmemize ilham kaynağı olmuştur.
+
+\paragraph{Metrikler ve ayrışımları.}
+Sokolova ve Lapalme~\cite{sokolova2009systematic} performans
+ölçütlerinin sistematik bir analizini sunar, Opitz ve
+Burst~\cite{opitz2019macro} özellikle makro $F_1$'i ele alır.
+Grandini ve ark.~\cite{grandini2020metrics} çok-sınıflı metrikleri
+derinlemesine karşılaştırır. Bizim sınıf-başına özdeşliğimiz,
+bildiğimiz kadarıyla, hibrit $F_1$'in sınıf-başına ağırlıklar
+cinsinden ilk kesin ayrışımıdır.
+
+\paragraph{İstatistiksel metodoloji.}
+Çoklu karşılaştırma düzeltmesi \cite{benjamini1995controlling} ve
+etki büyüklüğü raporlaması \cite{cohen1988statistical} için standart
+uygulamayı izliyoruz.
 
 \section{Teori}
 \label{sec:theory}
@@ -130,6 +196,15 @@ D_k^c = 2 \cdot \text{TP}_k^c + \text{FP}_k^c + \text{FN}_k^c.
 Kritik gözlem: $w_c \neq \text{kapsam}$; sınıf-başına ağırlıklar
 sınıf dağılımına bağlıdır. Bu, lineer formülün $F_1$'de neden
 bozulduğunu kesin olarak açıklar.
+
+\paragraph{Neden önemli.}
+Denklem~\ref{eq:f1-macro} $F_1$ tanımının cebirsel bir sonucu olsa da,
+\emph{öngörü} içeriği önemsiz değildir: sınıf-başına ağırlıklar $w^c$
+sınıflar arasında değişir (NER deneylerimizde deneysel olarak
+$0.37$--$0.66$ aralığında), lineer formül ise tek bir ağırlık
+$\text{kapsam}$ varsayar. Bu nedenle özdeşlik, lineer formülün
+hatasının neden büyük olduğunu ($\varepsilon \approx 0.019$)
+açıklar ve yapıcı bir çözüm sunar.
 
 \subsection{Kronecker Görev-Uygunluk}
 \label{sec:kronecker}
@@ -262,6 +337,50 @@ korelasyonlu görüntü-benzeri gridler---Kronecker'ın avantajının görev ile
 tensör faktörizasyonu arasındaki \emph{yapısal uyumun derecesine} bağlı
 olduğunu gösterir.
 
+\subsection{Gerçek Görüntü Doğrulaması (MNIST)}
+\label{sec:mnist}
+
+Görev-uygunluk hipotezinin sentetik gridlerin ötesine geçip
+geçmediğini test etmek için MNIST (28$\times$28 gri-ton rakamlar)
+üzerinde değerlendirdik. 2000 örnekle eğitip 500 örnekle 30 epoch
+boyunca test ettik.
+
+\begin{table}[h]
+\centering
+\caption{MNIST sonuçları (5 tohum). Düz Kronecker, en büyük Yoğun
+MLP'den $12.6\times$ daha az parametreyle rekabetçi doğruluğa ulaşır.}
+\label{tab:mnist}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parametre & Test Doğruluğu \\
+\midrule
+Yoğun MLP ($h=32$)         & $26{,}506$  & $0.594 \pm 0.056$ \\
+Yoğun MLP ($h=128$)        & $118{,}282$ & $0.808 \pm 0.017$ \\
+Düz Kronecker ($K=1$)      & $9{,}418$   & $0.770 \pm 0.013$ \\
+Düz Kronecker ($K=2$)      & $10{,}986$  & $0.717 \pm 0.041$ \\
+Düz Kronecker ($K=3$)      & $12{,}554$  & $0.662 \pm 0.048$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Bulgular.}
+(1)~\emph{Parametre verimliliği gerçek görüntülere de uzanır:}
+Düz Kronecker ($9{,}418$ param) $0.770$'a ulaşırken, Yoğun MLP
+($118{,}282$ param) $0.808$'de kalır --- $12.6\times$ azaltma,
+$\%3.8$ doğruluk farkıyla.
+(2)~\emph{Derinlik çöküşü evrenseldir:} hem sentetik hem gerçek
+veride $K=1$ en iyidir, $K>1$ daha kötüdür. Bu, çöküşün yapısal
+olduğunu doğrular.
+(3)~\emph{Yapısal kısıt düzenlileştiricidir:} Yoğun MLP $h=32$
+($26{,}506$ param) Düz Kronecker'ın $9{,}418$ parametreli sürümünden
+daha kötü performans verir; bu Kronecker kısıtının örtük bir
+düzenlileştirici olduğunu öne sürer.
+
+\paragraph{Dürüst sınır.}
+Mutlak doğruluk farkı ($\%3.8$) devam ediyor. Kronecker verimlidir,
+baskın değil.
+
 \subsection{Negatif Sonuçlar}
 \label{sec:negatives}
 
@@ -287,6 +406,19 @@ evrensel olmadığını ortaya koyar.
 
 \section{Tartışma}
 \label{sec:discussion}
+
+\subsection{İstatistiksel Metodoloji}
+\label{sec:stats}
+
+Bu çalışmada bildirilen tüm $p$-değerleri eşleşmiş tohumlarda
+eşleşmiş $t$-testlerinden elde edilmiştir. Aynı görev üzerinde birden
+fazla hipotez test edildiğinde (görev başına üç ikili karşılaştırma),
+$\alpha = 0.05$ düzeyinde Bonferroni düzeltmesi anlamlılık için
+$p < 0.017$ gerektirir. Bu ölçüt altında: görüntü kompozisyonel
+görevinde düz vs.\ yoğun ($p = 0.0003$), düz vs.\ hiyerarşik
+($p < 0.0001$) ve yoğun vs.\ hiyerarşik ($p < 0.0001$) hepsi anlamlı
+kalır. Basit kompozisyonel görevde bir anlamsız karşılaştırma
+($p = 0.52$) ve bir anlamlı (düz vs.\ hiyerarşik, $p = 0.0008$) vardır.
 
 \subsection{Ne Zaman Hangisi?}
 \label{sec:decision}
@@ -374,6 +506,69 @@ J.~Nivre ve ark. Universal Dependencies v2. \emph{LREC}, 2020.
 
 \bibitem{vaswani2017attention}
 A.~Vaswani ve ark. Attention is all you need. \emph{NeurIPS}, 2017.
+
+\bibitem{besold2017neural}
+T.~R.~Besold ve ark. Neural-symbolic learning and reasoning: A survey
+and interpretation. \emph{arXiv preprint arXiv:1711.03902}, 2017.
+
+\bibitem{andreas2016neural}
+J.~Andreas, M.~Rohrbach, T.~Darrell ve D.~Klein. Neural module
+networks. \emph{CVPR}, 2016.
+
+\bibitem{johnson2017clevr}
+J.~Johnson ve ark. CLEVR: A diagnostic dataset for compositional
+language and elementary visual reasoning. \emph{CVPR}, 2017.
+
+\bibitem{mao2019neuro}
+J.~Mao ve ark. The neuro-symbolic concept learner: Interpreting
+scenes, words, and sentences from natural supervision. \emph{ICLR}, 2019.
+
+\bibitem{tolstikhin2021mlp}
+I.~Tolstikhin ve ark. MLP-Mixer: An all-MLP architecture for vision.
+\emph{NeurIPS}, 2021.
+
+\bibitem{liu2021gmlp}
+H.~Liu ve ark. Pay attention to MLPs. \emph{NeurIPS}, 2021.
+
+\bibitem{trockman2023patches}
+A.~Trockman ve J.~Z.~Kolter. Patches are all you need?
+\emph{TMLR}, 2023.
+
+\bibitem{novikov2015tensor}
+A.~Novikov, D.~Podoprikhin, A.~Osokin ve D.~Vetrov. Tensorizing
+neural networks. \emph{NeurIPS}, 2015.
+
+\bibitem{hu2021lora}
+E.~J.~Hu ve ark. LoRA: Low-rank adaptation of large language models.
+\emph{ICLR}, 2022.
+
+\bibitem{dosovitskiy2020vit}
+A.~Dosovitskiy ve ark. An image is worth 16x16 words: Transformers
+for image recognition at scale. \emph{ICLR}, 2021.
+
+\bibitem{eryigit2015itu}
+G.~Eryi\u{g}it. ITU Turkish NLP web service. \emph{EACL}, 2014.
+
+\bibitem{sokolova2009systematic}
+M.~Sokolova ve G.~Lapalme. A systematic analysis of performance
+measures for classification tasks. \emph{Information Processing
+\& Management}, 45(4):427--437, 2009.
+
+\bibitem{opitz2019macro}
+J.~Opitz ve S.~Burst. Macro F1 and macro F1. \emph{arXiv preprint
+arXiv:1911.03347}, 2019.
+
+\bibitem{grandini2020metrics}
+M.~Grandini, E.~Bagli ve G.~Visani. Metrics for multi-class
+classification: An overview. \emph{arXiv preprint arXiv:2008.05756}, 2020.
+
+\bibitem{benjamini1995controlling}
+Y.~Benjamini ve Y.~Hochberg. Controlling the false discovery rate.
+\emph{JRSS-B}, 57(1):289--300, 1995.
+
+\bibitem{cohen1988statistical}
+J.~Cohen. \emph{Statistical Power Analysis for the Behavioral Sciences}.
+Lawrence Erlbaum Associates, 2. baskı, 1988.
 
 \end{thebibliography}
 
