@@ -264,6 +264,11 @@ Sembolik gürültü altında (\%0--\%50), formülün öngörü hatası
 $\varepsilon = 0.0066$ değerinde değişmeden kalır; bu, lineer özdeşliğin
 hibrit topluluğun yapısal bir özelliğini yakaladığını gösterir.
 
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/TWELVE\_LANGUAGE\_FORMULA.md},
+\texttt{artifacts/SYMBOLIC\_NOISE\_ROBUSTNESS.md}.
+Betik: \texttt{artifacts/symbolic\_noise\_robustness.py}.
+
 \subsection{$F_1$ Sınıf-Başına Doğrulaması}
 \label{sec:exp-f1}
 
@@ -290,6 +295,11 @@ Sınıf-başına ($w_c$-ağırlıklı) & $0.000000$ & $0.000000$ \\
 
 Sınıf-başına formül 20 konfigürasyonun tümünde makine hassasiyetinde
 hata verir; bu, genişletmenin makro $F_1$ için kesin olduğunu doğrular.
+
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/F1\_HARMONIC\_FORMULA\_FINAL.md}.
+Betik: \texttt{artifacts/f1\_perclass\_test.py} (tohum 1--5, gizli oranlar
+$\{0.10, 0.30, 0.50, 0.70\}$).
 
 
 \subsection{Kronecker Görev-Uygunluk Sonuçları}
@@ -337,6 +347,12 @@ korelasyonlu görüntü-benzeri gridler---Kronecker'ın avantajının görev ile
 tensör faktörizasyonu arasındaki \emph{yapısal uyumun derecesine} bağlı
 olduğunu gösterir.
 
+\paragraph{Yeniden üretilebilirlik.}
+Kaynaklar: \texttt{artifacts/COMPOSITIONAL\_KRONECKER\_WIN.md},
+\texttt{artifacts/IMAGE\_COMPOSITIONAL\_WIN.md}.
+Betikler: \texttt{artifacts/compositional\_20seed.py} (tohum 1--20),
+\texttt{artifacts/image\_compositional.py} (tohum 1--50).
+
 \subsection{Gerçek Görüntü Doğrulaması (MNIST)}
 \label{sec:mnist}
 
@@ -380,6 +396,46 @@ düzenlileştirici olduğunu öne sürer.
 \paragraph{Dürüst sınır.}
 Mutlak doğruluk farkı ($\%3.8$) devam ediyor. Kronecker verimlidir,
 baskın değil.
+
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/MNIST\_KRONECKER.md}.
+Betik: \texttt{artifacts/mnist\_kronecker.py} (tohum 1--5,
+MNIST \texttt{data/mnist/} dizininden yüklenir).
+
+\subsection{Parametre-Eşleşmeli Karşılaştırma}
+\label{sec:param-matched}
+
+$8\times$ verimlilik iddiası, Kronecker ve Yoğun MLP'yi
+\emph{doğal parametre sayılarında} karşılaştırır. Verimliliğin
+parametre-eşleşmeli koşulda da sağlam olup olmadığını test etmek
+için Düz Kronecker'ı Yoğun MLP'nin parametre sayısını aşana kadar
+derinleştirdik.
+
+\begin{table}[h]
+\centering
+\caption{Basit kompozisyonel görevde parametre-eşleşmeli karşılaştırma.
+Derin Düz Kronecker, daha fazla parametreyle bile çöker.}
+\label{tab:param-matched}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parametre & Test Doğruluğu \\
+\midrule
+Yoğun MLP ($h=128$)         & $20{,}868$ & $0.798$ \\
+Düz Kronecker ($K=3$)       & $2{,}564$  & $0.801$ \\
+Düz Kronecker ($K=16$)      & $4{,}356$  & $0.402$ \\
+Düz Kronecker ($K=168$)     & $21{,}764$ & $0.257$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Bulgu.}
+Yoğun MLP'nin parametre sayısını eşleştirmek için $K=168$ katman
+gerekir; bu noktada Düz Kronecker'ın doğruluğu $0.257$'ye düşer ---
+rastgeleden ($1/4 = 0.25$) daha kötü. Çöküş yapısaldır: normalizasyon
+olmadan tekrarlanan bilinear + SiLU bilgiyi yok eder. $8\times$
+verimlilik iddiası bu nedenle \emph{kullanışlı rejim} ($K \leq 3$)
+hakkında bir ifadedir, evrensel bir özellik değil.
 
 \subsection{Negatif Sonuçlar}
 \label{sec:negatives}
@@ -485,6 +541,13 @@ bir formül, mimari seçimi için istatistiksel kanıt ve geometrik
 mimarinin ne zaman kaybettiğine dair dürüst bir açıklama sunuyoruz.
 Birlikte, bu sonuçlar hibrit sistem tasarımının sezgisel değil ilkeli
 yapılabileceğini öne sürer.
+
+\section*{Yeniden Üretilebilirlik Beyanı}
+Tüm deneyler halka açık depodan
+\texttt{github.com/arreasonn-jpg/hiper\_geometrik\_ai} yeniden
+üretilebilir. Tohumlar ve hiperparametreler yukarıda listelenen
+betiklerde sabittir. MNIST veri kümesi standart Google Cloud
+yansısından otomatik indirilir. Ön-eğitimli model kullanılmamıştır.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{9}

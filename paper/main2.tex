@@ -292,6 +292,11 @@ Under symbolic noise (0--50\%), the formula's prediction error remains
 invariant at $\varepsilon = 0.0066$, indicating that the linear identity
 captures a structural property of the hybrid ensemble.
 
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/TWELVE\_LANGUAGE\_FORMULA.md},
+\texttt{artifacts/SYMBOLIC\_NOISE\_ROBUSTNESS.md}.
+Script: \texttt{artifacts/symbolic\_noise\_robustness.py}.
+
 
 \subsection{F1 Per-Class Validation}
 \label{sec:exp-f1}
@@ -319,6 +324,11 @@ Per-class ($w_c$-weighted) & $0.000000$ & $0.000000$ \\
 
 The per-class formula achieves machine-precision error on all 20
 configurations, confirming that the extension is exact for macro $F_1$.
+
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/F1\_HARMONIC\_FORMULA\_FINAL.md}.
+Script: \texttt{artifacts/f1\_perclass\_test.py} (seed 1--5, hidden ratios
+$\{0.10, 0.30, 0.50, 0.70\}$).
 
 
 \subsection{Kronecker Task-Appropriateness Results}
@@ -368,6 +378,12 @@ image-like grids with spatial correlation---demonstrates that
 Kronecker's advantage depends on the \emph{degree} of structural alignment
 between the task and the tensor factorisation.
 
+\paragraph{Reproducibility.}
+Sources: \texttt{artifacts/COMPOSITIONAL\_KRONECKER\_WIN.md},
+\texttt{artifacts/IMAGE\_COMPOSITIONAL\_WIN.md}.
+Scripts: \texttt{artifacts/compositional\_20seed.py} (seeds 1--20),
+\texttt{artifacts/image\_compositional.py} (seeds 1--50).
+
 
 \subsection{Real Image Validation (MNIST)}
 \label{sec:mnist}
@@ -411,6 +427,45 @@ an implicit regulariser.
 \paragraph{Honest limitation.}
 The absolute accuracy gap ($3.8\%$) remains. Kronecker is efficient,
 not dominant.
+
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/MNIST\_KRONECKER.md}.
+Script: \texttt{artifacts/mnist\_kronecker.py} (seeds 1--5,
+MNIST loaded from \texttt{data/mnist/}).
+
+\subsection{Parameter-Matched Comparison}
+\label{sec:param-matched}
+
+The $8\times$ efficiency claim compares Kronecker and Dense MLP
+\emph{at their natural parameter counts}. To test whether the
+efficiency is robust under matching, we deepened Flat Kronecker
+until its parameter count exceeded that of Dense MLP.
+
+\begin{table}[h]
+\centering
+\caption{Parameter-matched comparison on simple compositional task.
+Deep Flat Kronecker collapses even with more parameters.}
+\label{tab:param-matched}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parameters & Test Accuracy \\
+\midrule
+Dense MLP ($h=128$)          & $20{,}868$ & $0.798$ \\
+Flat Kronecker ($K=3$)       & $2{,}564$  & $0.801$ \\
+Flat Kronecker ($K=16$)      & $4{,}356$  & $0.402$ \\
+Flat Kronecker ($K=168$)     & $21{,}764$ & $0.257$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Finding.}
+Matching Dense MLP's parameter count requires $K=168$ layers, at
+which point Flat Kronecker's accuracy drops to $0.257$ --- worse
+than random ($1/4 = 0.25$). The collapse is structural: repeated
+bilinear + SiLU without normalisation destroys information. The
+$8\times$ efficiency claim is therefore a statement about the
+\emph{useful regime} ($K \leq 3$), not a universal property.
 
 \subsection{Negative Results}
 \label{sec:negatives}
@@ -518,6 +573,13 @@ We provide a formula for each dimension, statistical evidence for the
 architecture choice, and an honest account of when the geometric
 architecture loses. Together, these results suggest that hybrid system
 design can be made principled rather than heuristic.
+
+\section*{Reproducibility Statement}
+All experiments are reproducible from the public repository
+\texttt{github.com/arreasonn-jpg/hiper\_geometrik\_ai}. Seeds and
+hyperparameters are fixed in the scripts listed above. The MNIST
+dataset is automatically downloaded from the standard Google Cloud
+mirror. No pretrained models are used.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{9}
