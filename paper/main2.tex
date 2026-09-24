@@ -16,20 +16,16 @@ A Unified Theory of Gain Across Metrics, Architectures, and Tasks}
 \maketitle
 
 \begin{abstract}
-We present a unified theory of gain for hybrid systems across three
-independent dimensions: (1) metric type---linear (accuracy,
-bit-accuracy, token-accuracy) versus non-linear ($F_1$); (2) architecture
-type---bilinear Kronecker versus dense multi-layer perceptron; and
-(3) task structure---random linear versus compositional (grid-aligned).
-For each dimension we determine \emph{when} which structure wins, with
-statistical evidence from 20--50 independent seeds. We extend the linear
-metric formula of our earlier work to a per-class identity that is exact
-for macro $F_1$ (machine-precision error on 20 NER configurations), and
-we show that the Kronecker architecture is $8\times$ more parameter-efficient
-on simple compositional tasks and statistically superior on image-like
-compositional tasks (50 seeds, $p<0.0001$, Cohen's $d=-1.37$). We conclude
-that hybrid system design can be made principled: formula-driven for
-metrics, structure-driven for tasks.
+Hybrid systems do not win unconditionally: their gain is a function of
+metric type, architecture type, and task structure. We provide an exact
+identity for linear metrics and a per-class extension for macro $F_1$,
+which we show is necessary because the linear weight does not collapse
+for non-linear metrics. We further show that Kronecker architectures are
+$8\times$ more parameter-efficient on compositional tasks, with the
+hierarchical variant statistically superior on image-like inputs
+($50$ seeds, $p<0.0001$). These results suggest that hybrid system
+design can be made principled: formula-driven for metrics,
+structure-driven for tasks.
 \end{abstract}
 
 
@@ -80,6 +76,15 @@ choice, backed by 20--50-seed paired $t$-tests.
 and~\ref{sec:discussion}).
 \end{enumerate}
 
+\paragraph{Terminology.}
+Throughout the paper we distinguish three levels of claim:
+\emph{exact identity} (mathematically proven, e.g.,
+Equations~\ref{eq:linear-exact}, \ref{eq:f1-macro}),
+\emph{predictive formula} (empirically validated approximation,
+e.g., Equation~\ref{eq:linear}), and
+\emph{hypothesis} (tested but not proven, e.g.,
+Section~\ref{sec:kronecker}).
+
 
 \section{Theory}
 \label{sec:theory}
@@ -114,8 +119,9 @@ $\varepsilon = (1-\text{cov}) \cdot |M_n^\bot - M_n|$.
 \label{sec:f1}
 
 Macro $F_1$ is not linear in the per-item indicator, so the identity
-of Equation~\ref{eq:linear-exact} fails. We derive an exact per-class
-decomposition instead.
+of Equation~\ref{eq:linear-exact} fails. We derive an \emph{exact
+algebraic identity} instead (not a new theorem: it follows directly
+from the $F_1$ definition and the hybrid decomposition).
 
 Let $K$ be the number of classes. For class $c$, define the
 \emph{positive mass} of a predictor as
@@ -160,6 +166,15 @@ however, the weights $w^c$ are per-class and do \emph{not} collapse:
 class imbalance on the abstained subset breaks the identity.
 This is precisely why the linear formula fails for $F_1$ and the
 per-class formula succeeds.
+
+\paragraph{Why this matters.}
+Although Equation~\ref{eq:f1-macro} is an algebraic consequence of the
+$F_1$ definition, its \emph{predictive} content is non-trivial: the
+per-class weights $w^c$ vary across classes (empirically $0.37$--$0.66$
+in our NER experiments), whereas the linear formula assumes a single
+weight $\text{cov}$. The identity therefore explains \emph{why} the
+linear formula's error is large ($\varepsilon \approx 0.019$) and
+provides a constructive fix.
 
 
 \subsection{Kronecker Task-Appropriateness}
@@ -321,6 +336,20 @@ These results establish that the Kronecker advantage is
 
 \section{Discussion}
 \label{sec:discussion}
+
+\subsection{Statistical Methodology}
+\label{sec:stats}
+
+All $p$-values reported in this paper are from paired $t$-tests on
+matched seeds. Where multiple hypotheses are tested on the same task
+(three pairwise comparisons per task), Bonferroni correction at
+$\alpha = 0.05$ requires $p < 0.017$ for significance. Under this
+criterion: flat vs.\ dense on image compositional
+($p = 0.0003$), flat vs.\ hierarchical ($p < 0.0001$), and dense
+vs.\ hierarchical ($p < 0.0001$) all remain significant. The
+simple compositional task has one non-significant comparison
+($p = 0.52$) and one significant (flat vs.\ hierarchical,
+$p = 0.0008$).
 
 \subsection{When to Use Which}
 \label{sec:decision}

@@ -18,21 +18,16 @@ Metrik, Mimari ve Görev Boyutlarında Birleşik Bir Kazanç Teorisi}
 \maketitle
 
 \begin{abstract}
-Hibrit sistemlerin kazancı için üç bağımsız boyutta birleşik bir teori
-sunuyoruz: (1) metrik tipi---lineer (doğruluk, bit-doğruluğu,
-token-doğruluğu) ve lineer olmayan ($F_1$); (2) mimari tipi---bilinear
-Kronecker ve yoğun çok-katmanlı algılayıcı; (3) görev yapısı---rastgele
-lineer ve kompozisyonel (grid uyumlu). Her boyut için \emph{hangi}
-yapının \emph{ne zaman} kazandığını 20--50 bağımsız tohumdan
-istatistiksel kanıtla belirliyoruz. Önceki çalışmamızdaki lineer metrik
-formülünü, makro $F_1$ için kesin olan sınıf-başına ağırlıklı bir
-özdeşliğe genişletiyoruz (20 NER konfigürasyonunda makine hassasiyetinde
-hata), ve Kronecker mimarisinin basit kompozisyonel görevlerde $8\times$
-daha parametre-verimli, görüntü-benzeri kompozisyonel görevlerde ise
-istatistiksel olarak üstün olduğunu gösteriyoruz (50 tohum,
-$p<0.0001$, Cohen $d=-1.37$). Hibrit sistem tasarımının ilkeli
-olabileceği sonucuna varıyoruz: metrikler için formül-güdümlü,
-görevler için yapı-güdümlü.
+Hibrit sistemler koşulsuz kazanmaz: kazançları metrik tipine, mimari
+tipine ve görev yapısına bağlıdır. Lineer metrikler için kesin bir
+özdeşlik ve makro $F_1$ için sınıf-başına bir genişletme sunuyoruz;
+lineer ağırlık lineer olmayan metriklerde çökmediği için bu genişletmenin
+zorunlu olduğunu gösteriyoruz. Ayrıca Kronecker mimarilerinin
+kompozisyonel görevlerde $8\times$ daha parametre-verimli olduğunu,
+hiyerarşik varyantın ise görüntü-benzeri girdilerde istatistiksel
+olarak üstün olduğunu gösteriyoruz ($50$ tohum, $p<0.0001$). Bu
+sonuçlar hibrit sistem tasarımının ilkeli olabileceğini öne sürüyor:
+metrikler için formül-güdümlü, görevler için yapı-güdümlü.
 \end{abstract}
 
 
@@ -83,6 +78,15 @@ gösteriyoruz (Bölüm~\ref{sec:kronecker}).
 (Bölümler~\ref{sec:negatives} ve~\ref{sec:discussion}).
 \end{enumerate}
 
+\paragraph{Terminoloji.}
+Metin boyunca üç iddia düzeyi ayırt edilir:
+\emph{kesin özdeşlik} (matematiksel olarak ispatlı, örn.
+Denklemler~\ref{eq:linear-exact}, \ref{eq:f1-macro}),
+\emph{öngörü formülü} (deneysel olarak doğrulanmış yaklaşıklık,
+örn. Denklem~\ref{eq:linear}) ve
+\emph{hipotez} (test edilmiş ama ispatlanmamış, örn.
+Bölüm~\ref{sec:kronecker}).
+
 
 \section{Teori}
 \label{sec:theory}
@@ -130,6 +134,15 @@ D_k^c = 2 \cdot \text{TP}_k^c + \text{FP}_k^c + \text{FN}_k^c.
 Kritik gözlem: $w_c \neq \text{kapsam}$; sınıf-başına ağırlıklar
 sınıf dağılımına bağlıdır. Bu, lineer formülün $F_1$'de neden
 bozulduğunu kesin olarak açıklar.
+
+\paragraph{Neden önemli.}
+Denklem~\ref{eq:f1-macro} $F_1$ tanımının cebirsel bir sonucu olsa da,
+\emph{öngörü} içeriği önemsiz değildir: sınıf-başına ağırlıklar $w^c$
+sınıflar arasında değişir (NER deneylerimizde deneysel olarak
+$0.37$--$0.66$ aralığında), lineer formül ise tek bir ağırlık
+$\text{kapsam}$ varsayar. Bu nedenle özdeşlik, lineer formülün
+hatasının neden büyük olduğunu ($\varepsilon \approx 0.019$)
+açıklar ve yapıcı bir çözüm sunar.
 
 \subsection{Kronecker Görev-Uygunluk}
 \label{sec:kronecker}
@@ -287,6 +300,19 @@ evrensel olmadığını ortaya koyar.
 
 \section{Tartışma}
 \label{sec:discussion}
+
+\subsection{İstatistiksel Metodoloji}
+\label{sec:stats}
+
+Bu çalışmada bildirilen tüm $p$-değerleri eşleşmiş tohumlarda
+eşleşmiş $t$-testlerinden elde edilmiştir. Aynı görev üzerinde birden
+fazla hipotez test edildiğinde (görev başına üç ikili karşılaştırma),
+$\alpha = 0.05$ düzeyinde Bonferroni düzeltmesi anlamlılık için
+$p < 0.017$ gerektirir. Bu ölçüt altında: görüntü kompozisyonel
+görevinde düz vs.\ yoğun ($p = 0.0003$), düz vs.\ hiyerarşik
+($p < 0.0001$) ve yoğun vs.\ hiyerarşik ($p < 0.0001$) hepsi anlamlı
+kalır. Basit kompozisyonel görevde bir anlamsız karşılaştırma
+($p = 0.52$) ve bir anlamlı (düz vs.\ hiyerarşik, $p = 0.0008$) vardır.
 
 \subsection{Ne Zaman Hangisi?}
 \label{sec:decision}
