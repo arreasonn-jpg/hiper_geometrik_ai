@@ -21,9 +21,11 @@ metric type, architecture type, and task structure. We provide an exact
 identity for linear metrics and a per-class extension for macro $F_1$,
 which we show is necessary because the linear weight does not collapse
 for non-linear metrics. We further show that Kronecker architectures are
-$8\times$--$12.6\times$ more parameter-efficient on compositional and
-real-image tasks, with the hierarchical variant statistically superior
-on image-like inputs ($50$ seeds, $p<0.0001$). These results suggest that hybrid system
+$8\times$--$12.6\times$ more parameter-efficient on grid-structured,
+noisy tasks; the advantage disappears on graph tasks and on exact
+bilinear tasks (optimisation-limited), and reverses under clean data.
+Kronecker's benefit is therefore conditional on both structural
+alignment and regularisation need. These results suggest that hybrid system
 design can be made principled: formula-driven for metrics,
 structure-driven for tasks.
 \end{abstract}
@@ -247,13 +249,12 @@ trainable parameters. The operator's rank is $\text{rank}(A) \cdot \text{rank}(B
 This structural constraint is a \emph{feature} when the task's own structure
 aligns with the tensor decomposition. We formalise this intuition as:
 
-\paragraph{Task-Appropriateness Hypothesis.}
-Kronecker architectures are parameter-efficient when the task's functional
-dependencies respect the tensor factorisation $X \mapsto A X B$. Conversely,
-on tasks whose target is a generic (non-factorisable) linear map, the same
-constraint becomes a bottleneck.
-
-We test this hypothesis across three task types in Section~\ref{sec:experiments}.
+\paragraph{Working Hypothesis (later revised).}
+We initially proposed that Kronecker architectures are parameter-efficient
+when the task's functional dependencies respect the tensor factorisation
+$X \mapsto A X B$. Section~\ref{sec:regularization} shows that this
+\emph{structural alignment} hypothesis is rejected, and that the actual
+mechanism is implicit regularisation via the parameter constraint.
 
 
 \section{Experiments}
@@ -292,6 +293,11 @@ Under symbolic noise (0--50\%), the formula's prediction error remains
 invariant at $\varepsilon = 0.0066$, indicating that the linear identity
 captures a structural property of the hybrid ensemble.
 
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/TWELVE\_LANGUAGE\_FORMULA.md},
+\texttt{artifacts/SYMBOLIC\_NOISE\_ROBUSTNESS.md}.
+Script: \texttt{artifacts/symbolic\_noise\_robustness.py}.
+
 
 \subsection{F1 Per-Class Validation}
 \label{sec:exp-f1}
@@ -319,6 +325,11 @@ Per-class ($w_c$-weighted) & $0.000000$ & $0.000000$ \\
 
 The per-class formula achieves machine-precision error on all 20
 configurations, confirming that the extension is exact for macro $F_1$.
+
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/F1\_HARMONIC\_FORMULA\_FINAL.md}.
+Script: \texttt{artifacts/f1\_perclass\_test.py} (seed 1--5, hidden ratios
+$\{0.10, 0.30, 0.50, 0.70\}$).
 
 
 \subsection{Kronecker Task-Appropriateness Results}
@@ -368,6 +379,12 @@ image-like grids with spatial correlation---demonstrates that
 Kronecker's advantage depends on the \emph{degree} of structural alignment
 between the task and the tensor factorisation.
 
+\paragraph{Reproducibility.}
+Sources: \texttt{artifacts/COMPOSITIONAL\_KRONECKER\_WIN.md},
+\texttt{artifacts/IMAGE\_COMPOSITIONAL\_WIN.md}.
+Scripts: \texttt{artifacts/compositional\_20seed.py} (seeds 1--20),
+\texttt{artifacts/image\_compositional.py} (seeds 1--50).
+
 
 \subsection{Real Image Validation (MNIST)}
 \label{sec:mnist}
@@ -411,6 +428,131 @@ an implicit regulariser.
 \paragraph{Honest limitation.}
 The absolute accuracy gap ($3.8\%$) remains. Kronecker is efficient,
 not dominant.
+
+\paragraph{Reproducibility.}
+Source: \texttt{artifacts/MNIST\_KRONECKER.md}.
+Script: \texttt{artifacts/mnist\_kronecker.py} (seeds 1--5,
+MNIST loaded from \texttt{data/mnist/}).
+
+\subsection{Parameter-Matched Comparison}
+\label{sec:param-matched}
+
+The $8\times$ efficiency claim compares Kronecker and Dense MLP
+\emph{at their natural parameter counts}. To test whether the
+efficiency is robust under matching, we deepened Flat Kronecker
+until its parameter count exceeded that of Dense MLP.
+
+\begin{table}[h]
+\centering
+\caption{Parameter-matched comparison on simple compositional task.
+Deep Flat Kronecker collapses even with more parameters.}
+\label{tab:param-matched}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parameters & Test Accuracy \\
+\midrule
+Dense MLP ($h=128$)          & $20{,}868$ & $0.798$ \\
+Flat Kronecker ($K=3$)       & $2{,}564$  & $0.801$ \\
+Flat Kronecker ($K=16$)      & $4{,}356$  & $0.402$ \\
+Flat Kronecker ($K=168$)     & $21{,}764$ & $0.257$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Finding.}
+Matching Dense MLP's parameter count requires $K=168$ layers, at
+which point Flat Kronecker's accuracy drops to $0.257$ --- worse
+than random ($1/4 = 0.25$). The collapse is structural: repeated
+bilinear + SiLU without normalisation destroys information. The
+$8\times$ efficiency claim is therefore a statement about the
+\emph{useful regime} ($K \leq 3$), not a universal property.
+
+\subsection{Non-Grid Tasks (Circular Logic Control)}
+\label{sec:non-grid}
+
+A potential weakness of the previous sections is circular design: if
+the tasks are grid-structured, and Kronecker excels on grids, the
+advantage may be an artifact of task construction. We therefore tested
+four tasks outside the grid regime.
+
+\begin{table}[h]
+\centering
+\caption{Non-grid control tasks (20 seeds). Kronecker loses on graph
+and exact-bilinear tasks.}
+\label{tab:non-grid}
+\small
+\begin{tabular}{lccc}
+\toprule
+Task & Dense MLP & Flat Kronecker & Flat Wins \\
+\midrule
+Grid baseline        & $0.819$ & $0.822$ & $11/20$ \\
+Sequence (1D)        & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
+Graph (no grid)      & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
+Random factor ($Y = AXB$) & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Findings.}
+(1)~\emph{Grid required:} On the graph task, Kronecker loses by
+$21\%$; the advantage does not transfer to non-grid structure.
+(2)~\emph{Optimisation, not expressivity:} The random-factor task is
+\emph{exactly} a bilinear form $Y = AXB$, which a Kronecker layer
+represents natively. Yet Flat Kronecker wins only $1/20$ seeds.
+The limitation is optimisation, not representational capacity.
+(3)~\emph{Sequence works via reshape:} A 1D sequence reshaped to
+$16 \times 16$ gains artificial 2D structure, which explains the
+$18/20$ win rate.
+
+\paragraph{Combined hypothesis.}
+Kronecker architectures require \emph{both} conditions:
+(i) grid/tensor structure in the input, and (ii) a regularisation
+need from noisy data. Neither alone suffices.
+
+\subsection{Implicit Regularization Hypothesis}
+\label{sec:regularization}
+
+The task-appropriateness hypothesis (Section~\ref{sec:kronecker}) was
+formalised as ``Kronecker architectures are efficient when the task's
+structure aligns with tensor factorisation.'' We tested this on six
+tasks (random linear, permuted MNIST, noise MNIST, block compositional,
+grid correlated, Fashion-MNIST) and found the prediction
+\emph{reversed}: autocorrelation correlates \emph{negatively} with
+Kronecker's win rate ($r = -0.38$, $p = 0.46$).
+
+A subsequent ablation revealed a different mechanism: \emph{noise
+level} predicts Kronecker's advantage ($r = +0.95$, $p = 0.012$).
+Table~\ref{tab:noise-ablation} summarises.
+
+\begin{table}[h]
+\centering
+\caption{Noise ablation on block compositional task (20 seeds).
+Kronecker's parameter constraint acts as implicit regularization.}
+\label{tab:noise-ablation}
+\small
+\begin{tabular}{cccc}
+\toprule
+Noise & Dense MLP & Flat Kronecker & Flat Wins \\
+\midrule
+$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
+$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
+$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
+$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
+$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Revised hypothesis.}
+Kronecker's $2n^2$-parameter constraint functions as an architectural
+regulariser. On clean data it limits expressivity and loses to Dense
+MLP; on noisy data it prevents overfitting and wins. The transition
+occurs at noise $\approx 0.30$.
+
+This reformulation subsumes the earlier observation and provides a
+\emph{mechanistic} explanation: the gain is not structural alignment
+but implicit regularisation.
 
 \subsection{Negative Results}
 \label{sec:negatives}
@@ -518,6 +660,13 @@ We provide a formula for each dimension, statistical evidence for the
 architecture choice, and an honest account of when the geometric
 architecture loses. Together, these results suggest that hybrid system
 design can be made principled rather than heuristic.
+
+\section*{Reproducibility Statement}
+All experiments are reproducible from the public repository
+\texttt{github.com/arreasonn-jpg/hiper\_geometrik\_ai}. Seeds and
+hyperparameters are fixed in the scripts listed above. The MNIST
+dataset is automatically downloaded from the standard Google Cloud
+mirror. No pretrained models are used.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{9}

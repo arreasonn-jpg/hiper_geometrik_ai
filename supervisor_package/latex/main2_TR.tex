@@ -23,10 +23,11 @@ tipine ve görev yapısına bağlıdır. Lineer metrikler için kesin bir
 özdeşlik ve makro $F_1$ için sınıf-başına bir genişletme sunuyoruz;
 lineer ağırlık lineer olmayan metriklerde çökmediği için bu genişletmenin
 zorunlu olduğunu gösteriyoruz. Ayrıca Kronecker mimarilerinin
-kompozisyonel ve gerçek görüntü görevlerinde $8\times$--$12.6\times$
-daha parametre-verimli olduğunu, hiyerarşik varyantın ise görüntü-benzeri
-girdilerde istatistiksel olarak üstün olduğunu gösteriyoruz
-($50$ tohum, $p<0.0001$). Bu
+grid yapılı ve gürültülü görevlerde $8\times$--$12.6\times$ daha
+parametre-verimli olduğunu; avantajın graf görevlerinde ve tam-bilinear
+görevlerde (optimizasyon sınırlı) kaybolduğunu, temiz veride ise tersine
+döndüğünü gösteriyoruz. Kronecker'ın faydası bu nedenle hem yapısal
+uyuma hem de düzenlileştirme ihtiyacına bağlıdır. Bu
 sonuçlar hibrit sistem tasarımının ilkeli olabileceğini öne sürüyor:
 metrikler için formül-güdümlü, görevler için yapı-güdümlü.
 \end{abstract}
@@ -219,13 +220,12 @@ derecesi $2n^2$ olarak kalır.
 Bu yapısal kısıt, görevin kendi yapısı tensör ayrışımıyla uyumlu
 olduğunda bir \emph{özellik} haline gelir:
 
-\paragraph{Görev-Uygunluk Hipotezi.}
-Kronecker mimarileri, görevin fonksiyonel bağımlılıkları $X \mapsto A X B$
-tensör faktörizasyonuna uyduğunda parametre-verimlidir. Tersine, hedefi
-genel (faktörize edilemez) bir lineer dönüşüm olan görevlerde aynı kısıt
-bir darboğaza dönüşür.
-
-Bu hipotezi Bölüm~\ref{sec:experiments}'te üç görev tipinde test ediyoruz.
+\paragraph{Çalışma Hipotezi (sonradan gözden geçirildi).}
+Başlangıçta Kronecker mimarilerinin, görevin fonksiyonel bağımlılıkları
+$X \mapsto A X B$ tensör faktörizasyonuna uyduğunda parametre-verimli
+olduğunu öne sürdük. Bölüm~\ref{sec:regularization}, bu
+\emph{yapısal uyum} hipotezinin reddedildiğini ve gerçek mekanizmanın
+parametre kısıtı yoluyla örtük düzenlileştirme olduğunu gösterir.
 
 
 \section{Deneyler}
@@ -264,6 +264,11 @@ Sembolik gürültü altında (\%0--\%50), formülün öngörü hatası
 $\varepsilon = 0.0066$ değerinde değişmeden kalır; bu, lineer özdeşliğin
 hibrit topluluğun yapısal bir özelliğini yakaladığını gösterir.
 
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/TWELVE\_LANGUAGE\_FORMULA.md},
+\texttt{artifacts/SYMBOLIC\_NOISE\_ROBUSTNESS.md}.
+Betik: \texttt{artifacts/symbolic\_noise\_robustness.py}.
+
 \subsection{$F_1$ Sınıf-Başına Doğrulaması}
 \label{sec:exp-f1}
 
@@ -290,6 +295,11 @@ Sınıf-başına ($w_c$-ağırlıklı) & $0.000000$ & $0.000000$ \\
 
 Sınıf-başına formül 20 konfigürasyonun tümünde makine hassasiyetinde
 hata verir; bu, genişletmenin makro $F_1$ için kesin olduğunu doğrular.
+
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/F1\_HARMONIC\_FORMULA\_FINAL.md}.
+Betik: \texttt{artifacts/f1\_perclass\_test.py} (tohum 1--5, gizli oranlar
+$\{0.10, 0.30, 0.50, 0.70\}$).
 
 
 \subsection{Kronecker Görev-Uygunluk Sonuçları}
@@ -337,6 +347,12 @@ korelasyonlu görüntü-benzeri gridler---Kronecker'ın avantajının görev ile
 tensör faktörizasyonu arasındaki \emph{yapısal uyumun derecesine} bağlı
 olduğunu gösterir.
 
+\paragraph{Yeniden üretilebilirlik.}
+Kaynaklar: \texttt{artifacts/COMPOSITIONAL\_KRONECKER\_WIN.md},
+\texttt{artifacts/IMAGE\_COMPOSITIONAL\_WIN.md}.
+Betikler: \texttt{artifacts/compositional\_20seed.py} (tohum 1--20),
+\texttt{artifacts/image\_compositional.py} (tohum 1--50).
+
 \subsection{Gerçek Görüntü Doğrulaması (MNIST)}
 \label{sec:mnist}
 
@@ -380,6 +396,132 @@ düzenlileştirici olduğunu öne sürer.
 \paragraph{Dürüst sınır.}
 Mutlak doğruluk farkı ($\%3.8$) devam ediyor. Kronecker verimlidir,
 baskın değil.
+
+\paragraph{Yeniden üretilebilirlik.}
+Kaynak: \texttt{artifacts/MNIST\_KRONECKER.md}.
+Betik: \texttt{artifacts/mnist\_kronecker.py} (tohum 1--5,
+MNIST \texttt{data/mnist/} dizininden yüklenir).
+
+\subsection{Parametre-Eşleşmeli Karşılaştırma}
+\label{sec:param-matched}
+
+$8\times$ verimlilik iddiası, Kronecker ve Yoğun MLP'yi
+\emph{doğal parametre sayılarında} karşılaştırır. Verimliliğin
+parametre-eşleşmeli koşulda da sağlam olup olmadığını test etmek
+için Düz Kronecker'ı Yoğun MLP'nin parametre sayısını aşana kadar
+derinleştirdik.
+
+\begin{table}[h]
+\centering
+\caption{Basit kompozisyonel görevde parametre-eşleşmeli karşılaştırma.
+Derin Düz Kronecker, daha fazla parametreyle bile çöker.}
+\label{tab:param-matched}
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & Parametre & Test Doğruluğu \\
+\midrule
+Yoğun MLP ($h=128$)         & $20{,}868$ & $0.798$ \\
+Düz Kronecker ($K=3$)       & $2{,}564$  & $0.801$ \\
+Düz Kronecker ($K=16$)      & $4{,}356$  & $0.402$ \\
+Düz Kronecker ($K=168$)     & $21{,}764$ & $0.257$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Bulgu.}
+Yoğun MLP'nin parametre sayısını eşleştirmek için $K=168$ katman
+gerekir; bu noktada Düz Kronecker'ın doğruluğu $0.257$'ye düşer ---
+rastgeleden ($1/4 = 0.25$) daha kötü. Çöküş yapısaldır: normalizasyon
+olmadan tekrarlanan bilinear + SiLU bilgiyi yok eder. $8\times$
+verimlilik iddiası bu nedenle \emph{kullanışlı rejim} ($K \leq 3$)
+hakkında bir ifadedir, evrensel bir özellik değil.
+
+\subsection{Grid Olmayan Görevler (Sirküler Mantık Kontrolü)}
+\label{sec:non-grid}
+
+Önceki bölümlerin olası bir zayıflığı sirküler tasarımdır: eğer görevler
+grid yapılıysa ve Kronecker gridlerde iyiyse, avantaj görev tasarımının
+bir yapaylığı olabilir. Bu nedenle grid rejiminin dışında dört görev
+test ettik.
+
+\begin{table}[h]
+\centering
+\caption{Grid olmayan kontrol görevleri (20 tohum). Kronecker graf ve
+tam-bilinear görevlerde kaybeder.}
+\label{tab:non-grid}
+\small
+\begin{tabular}{lccc}
+\toprule
+Görev & Yoğun MLP & Düz Kronecker & Düz Kazanma \\
+\midrule
+Grid temel           & $0.819$ & $0.822$ & $11/20$ \\
+Dizi (1D)            & $0.745$ & $\mathbf{0.780}$ & $18/20$ \\
+Graf (grid yok)      & $\mathbf{0.821}$ & $0.609$ & $0/20$ \\
+Rastgele faktör ($Y = AXB$) & $\mathbf{0.706}$ & $0.599$ & $1/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Bulgular.}
+(1)~\emph{Grid gerekli:} Graf görevinde Kronecker $\%21$ kaybeder;
+avantaj grid olmayan yapıya geçmiyor.
+(2)~\emph{Optimizasyon, ifade gücü değil:} Rastgele faktör görevi
+\emph{tam olarak} bir bilinear form $Y = AXB$'dir; Kronecker katmanı
+bunu doğal olarak temsil eder. Yine de Düz Kronecker yalnızca
+$1/20$ tohumda kazanır. Sınırlama ifade gücü değil, optimizasyondur.
+(3)~\emph{Dizi reshape ile çalışıyor:} 1D dizi $16 \times 16$'ya
+reshape edilince yapay 2D yapı kazanır; bu $18/20$ kazanma oranını
+açıklar.
+
+\paragraph{Birleşik hipotez.}
+Kronecker mimarileri \emph{iki} koşulu birlikte gerektirir:
+(i) girdide grid/tensör yapısı, ve (ii) gürültülü veriden kaynaklanan
+düzenlileştirme ihtiyacı. Hiçbiri tek başına yeterli değildir.
+
+\subsection{Örtük Düzenlileştirme Hipotezi}
+\label{sec:regularization}
+
+Görev-uygunluk hipotezi (Bölüm~\ref{sec:kronecker}), ``Kronecker
+mimarileri görevin yapısı tensör faktörizasyonuyla uyumlu olduğunda
+verimlidir'' şeklinde formüle edilmişti. Bunu altı görevde test ettik
+(rastgele lineer, permüte MNIST, gürültülü MNIST, blok kompozisyonel,
+grid korelasyonlu, Fashion-MNIST) ve tahminin \emph{ters yönde}
+çıktığını gördük: otokorelasyon, Kronecker'ın kazanma oranıyla
+\emph{negatif} korelasyon gösteriyor ($r = -0.38$, $p = 0.46$).
+
+Sonraki bir ablasyon farklı bir mekanizmayı ortaya çıkardı:
+\emph{gürültü seviyesi} Kronecker'ın avantajını öngörüyor
+($r = +0.95$, $p = 0.012$). Tablo~\ref{tab:noise-ablation} özetler.
+
+\begin{table}[h]
+\centering
+\caption{Blok kompozisyonel görevde gürültü ablasyonu (20 tohum).
+Kronecker'ın parametre kısıtı örtük düzenlileştirici olarak çalışır.}
+\label{tab:noise-ablation}
+\small
+\begin{tabular}{cccc}
+\toprule
+Gürültü & Yoğun MLP & Düz Kronecker & Düz Kazanma \\
+\midrule
+$0.00$ & $0.980 \pm 0.006$ & $0.945 \pm 0.014$ & $0/20$ \\
+$0.10$ & $0.913 \pm 0.011$ & $0.893 \pm 0.011$ & $1/20$ \\
+$0.30$ & $0.819 \pm 0.020$ & $0.822 \pm 0.012$ & $11/20$ \\
+$0.50$ & $0.734 \pm 0.023$ & $0.759 \pm 0.017$ & $18/20$ \\
+$0.60$ & $0.667 \pm 0.026$ & $0.705 \pm 0.018$ & $18/20$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Gözden geçirilmiş hipotez.}
+Kronecker'ın $2n^2$ parametre kısıtı, mimari düzeyde bir
+düzenlileştirici işlevi görür. Temiz veride ifade gücünü sınırlar
+ve Yoğun MLP'ye kaybeder; gürültülü veride overfitting'i önler ve
+kazanır. Geçiş noktası gürültü $\approx 0.30$'dur.
+
+Bu yeniden formülasyon önceki gözlemi kapsar ve \emph{mekanistik}
+bir açıklama sunar: kazanç yapısal uyumdan değil, örtük
+düzenlileştirmeden gelir.
 
 \subsection{Negatif Sonuçlar}
 \label{sec:negatives}
@@ -485,6 +627,13 @@ bir formül, mimari seçimi için istatistiksel kanıt ve geometrik
 mimarinin ne zaman kaybettiğine dair dürüst bir açıklama sunuyoruz.
 Birlikte, bu sonuçlar hibrit sistem tasarımının sezgisel değil ilkeli
 yapılabileceğini öne sürer.
+
+\section*{Yeniden Üretilebilirlik Beyanı}
+Tüm deneyler halka açık depodan
+\texttt{github.com/arreasonn-jpg/hiper\_geometrik\_ai} yeniden
+üretilebilir. Tohumlar ve hiperparametreler yukarıda listelenen
+betiklerde sabittir. MNIST veri kümesi standart Google Cloud
+yansısından otomatik indirilir. Ön-eğitimli model kullanılmamıştır.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{9}

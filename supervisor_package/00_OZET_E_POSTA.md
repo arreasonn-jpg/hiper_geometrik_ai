@@ -161,6 +161,37 @@ Görüntü benzeri görevde (2D grid + uzamsal korelasyon) **hiyerarşik yapı k
 
 **Sonuç:** Görev-uygunluk teoremi — mimari seçimi görev yapısına bağlı.
 
+### 8d. Kronecker: Düzenlileştirme Hipotezi (YENİ — W5)
+
+İlk "yapısal uyum" hipotezi **reddedildi**. Yerine **örtük düzenlileştirme** hipotezi:
+
+| Gürültü | Dense | Flat Kronecker | Flat Kazanma |
+|---|---|---|---|
+| 0.00 | 0.980 | 0.945 | 0/20 |
+| 0.30 | 0.819 | 0.822 | 11/20 |
+| 0.60 | 0.667 | **0.705** | **18/20** |
+
+**r = +0.953, p = 0.0121** — anlamlı trend.
+
+**Mekanizma:** Kronecker'ın $2n^2$ parametre kısıtı mimari düzeyde bir düzenlileştiricidir. Gürültülü veride overfitting'i önler.
+
+### 8e. Grid Olmayan Görevler (YENİ — W6)
+
+Sirküler mantık riski test edildi:
+
+| Görev | Dense | Flat | Flat Kazanma |
+|---|---|---|---|
+| Grid baseline | 0.819 | 0.822 | 11/20 |
+| Sequence | 0.745 | **0.780** | 18/20 |
+| **Graph (grid yok)** | **0.821** | 0.609 | **0/20** |
+| **Random factor ($Y=AXB$)** | **0.706** | 0.599 | **1/20** |
+
+**Kritik bulgu:** Random factor görevi **tam olarak bilinear form** olduğu halde Flat Kronecker öğrenemiyor → **ifade gücü değil, optimizasyon** sınırı.
+
+**Birleşik hipotez:** Kronecker avantajı **iki koşul** gerektirir:
+1. Grid/tensör yapısı (input)
+2. Düzenlileştirme ihtiyacı (noisy data)
+
 ### 8c. Gerçek Görüntü Verisi — MNIST (YENİ)
 
 Sentetik grid'in ötesine geçildi: **MNIST** üzerinde Kronecker testi.

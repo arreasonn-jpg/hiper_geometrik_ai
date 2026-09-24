@@ -1,0 +1,90 @@
+{
+  "summary": {
+    "random_linear": {
+      "autocorr": -0.007179164690245618,
+      "block_score": 0.30078616738319397,
+      "dense_mean": 0.3793999969959259,
+      "dense_std": 0.038998515257328274,
+      "flat_mean": 0.31959999799728395,
+      "flat_std": 0.024266936728311456,
+      "dense_params": 1482,
+      "flat_params": 778,
+      "flat_wins": 1,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    },
+    "permuted_mnist": {
+      "autocorr": 0.0014194906297172161,
+      "block_score": 0.015992507338523865,
+      "dense_mean": 0.895600003004074,
+      "dense_std": 0.015472900046793516,
+      "flat_mean": 0.8431999981403351,
+      "flat_std": 0.01839221587205822,
+      "dense_params": 194442,
+      "flat_params": 9418,
+      "flat_wins": 0,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    },
+    "noise_mnist": {
+      "autocorr": 0.23364497318213537,
+      "block_score": 0.11769058555364609,
+      "dense_mean": 0.7544999986886978,
+      "dense_std": 0.023805123440407104,
+      "flat_mean": 0.745699992775917,
+      "flat_std": 0.023053941933868352,
+      "dense_params": 194442,
+      "flat_params": 9418,
+      "flat_wins": 9,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    },
+    "simple_block": {
+      "autocorr": 0.8007213223729701,
+      "block_score": 7787455.0,
+      "dense_mean": 0.9798000067472458,
+      "dense_std": 0.005578158103614089,
+      "flat_mean": 0.9450999975204468,
+      "flat_std": 0.0136493638194414,
+      "dense_params": 20868,
+      "flat_params": 1540,
+      "flat_wins": 0,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    },
+    "grid_correlated": {
+      "autocorr": 0.09040640597327762,
+      "block_score": 0.1087048202753067,
+      "dense_mean": 0.5615000069141388,
+      "dense_std": 0.01610328851363678,
+      "flat_mean": 0.5603000015020371,
+      "flat_std": 0.026606495066673036,
+      "dense_params": 20868,
+      "flat_params": 1540,
+      "flat_wins": 12,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    },
+    "fashion_mnist": {
+      "autocorr": 0.8694705244510018,
+      "block_score": 0.9469572305679321,
+      "dense_mean": 0.808200004696846,
+      "dense_std": 0.017816605527243925,
+      "flat_mean": 0.7573999971151352,
+      "flat_std": 0.0189080904856923,
+      "dense_params": 194442,
+      "flat_params": 9418,
+      "flat_wins": 0,
+      "n_seeds": 20,
+      "winner_mean": "dense"
+    }
+  },
+  "correlation": {
+    "autocorr_vs_binary_r": 0.0,
+    "autocorr_vs_binary_p": 1.0,
+    "autocorr_vs_rate_r": -0.3809984421165207,
+    "autocorr_vs_rate_p": 0.4561551681107204,
+    "block_vs_rate_r": -0.3331804384633756,
+    "block_vs_rate_p": 0.5187223900317623
+  }
+}
