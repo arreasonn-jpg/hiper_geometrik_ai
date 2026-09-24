@@ -14,6 +14,58 @@ tarihsel karşılaştırma olarak tutulur.
 
 ---
 
+## 📄 Yayınlar (Preprints) — arXiv'de Yayına Hazır
+
+Bu depo üç preprint içerir. Üçü birlikte **hibrit sembolik-sinirsel
+sistemlerin kazancını** üç bağımsız boyutta inceler.
+
+### 1. Hibrit Formül — 12 Dil, 4 Görev
+
+**Başlık:** *Hybrid Symbolic-Neural Paradigm: A Universal Formula for Predicting Gain over Neural Baselines*
+
+**Ana iddia:** Hibrit bir sembolik-sinirsel sistemin sinirsel temele karşı kazancı,
+kapalı-form bir formülle öngörülebilir:
+`kazanç = kapsam_sem × (doğruluk_sem − doğruluk_sin)`
+
+**Doğrulama:** 12 dil, 8 dil ailesi, 4 yazı sistemi, 4 görev tipi, 2 metrik.
+**Ortalama hata:** 0.002.
+
+**Dosyalar:** `paper/main.pdf`, `paper/arxiv_submission_p1/`
+
+### 2. Birleşik Teori — Metrik + Mimari + Görev
+
+**Başlık:** *Task-Appropriate Hybrid Architectures: A Unified Theory of Gain Across Metrics, Architectures, and Tasks*
+
+**Ana iddialar:**
+- Lineer metrikler: `kazanç = kapsam × Δ`
+- **F1 için sınıf-başına formül:** ε = 0.000000 (20/20)
+- **Weighted F1, micro F1, precision/recall:** tam genel çerçeve
+- MNIST'te Kronecker **12.6x daha verimli**
+
+**Dosyalar:** `paper/main2.pdf`, `paper/arxiv_submission/`
+
+### 3. Örtük Düzenlileştirme — Kronecker'ın Gerçek Değeri
+
+**Başlık:** *Implicit Regularization in Kronecker Architectures: When Structural Constraints Help*
+
+**Ana iddia:** Kronecker'ın avantajı "yapısal uyum" **değil**, "**örtük düzenlileştirme**"den gelir.
+
+| Hipotez | Sonuç |
+|---|---|
+| H1 (yapısal uyum) | r = −0.38, p = 0.46 → **REDDEDİLDİ** |
+| **H2 (düzenlileştirme)** | **r = +0.956, p = 0.011 → KANITLANDI** |
+
+**İki koşul:** Grid yapısı + gürültü (her ikisi gerekli)
+
+**Dosyalar:** `paper/main3.pdf`, `paper/arxiv_submission_p3/`
+
+### Hoca Paketi
+
+Tüm preprintler + destekleyici artefaktlar tek ZIP'te:
+`hiper_geometrik_ai_supervisor_v10.zip` (2.0 MB)
+
+---
+
 ## ⚠️ Dürüst Kapasite Bildirimi (önce bunu okuyun)
 
 Bu projenin eski README'si "1 Katrilyon sinaps" diyordu. Bu ifade **teknik
