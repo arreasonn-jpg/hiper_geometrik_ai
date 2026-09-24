@@ -191,7 +191,7 @@ def run_one_seed(seed: int, n_base: int = 16, epochs: int = 100):
 
 if __name__ == "__main__":
     all_runs = []
-    for seed in range(1, 21):
+    for seed in range(1, 51):
         print(f"\n═══ Seed {seed} ═══")
         r = run_one_seed(seed)
         all_runs.append({"seed": seed, "results": r})

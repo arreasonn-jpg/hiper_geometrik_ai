@@ -77,3 +77,40 @@
 - Görev tipi → mimari seçimi karar ağacı
 - İstatistiksel olarak doğrulanmış
 - Üç farklı görev tipi, üç farklı kazanan
+
+## 50 Seed Güçlendirme
+
+**Kurulum:** 50 bağımsız seed (20 → 50 güçlendirme).
+
+### Sonuçlar
+
+| Model | Param | Test Acc (n=50) |
+|---|---|---|
+| dense_mlp | 20,868 | 0.8190 ± 0.0198 |
+| flat_kronecker | 2,564 | 0.8267 ± 0.0177 |
+| **hierarchical_kronecker** | **87,044** | **0.8360 ± 0.0217** |
+
+### İstatistiksel Testler (50 seed)
+
+| Karşılaştırma | mean_diff | t | p | Cohen's d |
+|---|---|---|---|---|
+| flat vs dense | +0.0077 | +3.590 | **0.0003** | +0.508 |
+| flat vs hier | −0.0093 | −4.299 | **<0.0001** | −0.608 |
+| dense vs hier | −0.0170 | −9.671 | **<0.0001** | −1.368 |
+
+**Yorum:** 50 seed ile tüm karşılaştırmalar **istatistiksel olarak çok anlamlı** hale geldi.
+
+### Kritik Bulgular
+
+1. **Flat Kronecker** dense MLP'yi **anlamlı olarak** geçiyor (p=0.0003) — 8x az parametreyle!
+2. **Hierarchical Kronecker** hem flat'i (p<0.0001) hem dense'i (p<0.0001, d=−1.368) geçiyor
+3. Hierarchical'ın dense'e karşı etki büyüklüğü **çok büyük** (|d|>1)
+4. **Görev-uygunluk teoremi güçlü istatistiksel destek kazandı**
+
+### Sağlamlık
+
+- 20 → 50 seed: tüm p-değerleri düştü
+- Etki büyüklükleri arttı
+- Sonuçlar **kararlı** ve **tekrarlanabilir**
+
+**Bu, preprint 2'nin en güçlü deneysel sonucudur.**

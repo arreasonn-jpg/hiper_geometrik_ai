@@ -5,23 +5,23 @@
       {
         "name": "dense_mlp",
         "params": 20868,
-        "train_acc": 0.9555000066757202,
-        "test_acc": 0.8360000252723694,
-        "wall_time_sec": 1.120677920000162
+        "train_acc": 0.953499972820282,
+        "test_acc": 0.8379999995231628,
+        "wall_time_sec": 0.9253771950025111
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
-        "train_acc": 0.8554999828338623,
-        "test_acc": 0.8519999980926514,
-        "wall_time_sec": 2.6784244529990247
+        "train_acc": 0.8460000157356262,
+        "test_acc": 0.8399999737739563,
+        "wall_time_sec": 1.668694249005057
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
-        "train_acc": 0.9114999771118164,
-        "test_acc": 0.8479999899864197,
-        "wall_time_sec": 67.88733967699227
+        "train_acc": 0.9049999713897705,
+        "test_acc": 0.8579999804496765,
+        "wall_time_sec": 45.16956643998856
       }
     ]
   },
@@ -33,21 +33,21 @@
         "params": 20868,
         "train_acc": 0.9549999833106995,
         "test_acc": 0.8159999847412109,
-        "wall_time_sec": 0.4607140449952567
+        "wall_time_sec": 0.3134074269910343
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8565000295639038,
         "test_acc": 0.8379999995231628,
-        "wall_time_sec": 2.763701793999644
+        "wall_time_sec": 1.725818781007547
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9014999866485596,
         "test_acc": 0.8240000009536743,
-        "wall_time_sec": 66.95631554299325
+        "wall_time_sec": 49.91484992999176
       }
     ]
   },
@@ -59,21 +59,21 @@
         "params": 20868,
         "train_acc": 0.9509999752044678,
         "test_acc": 0.8180000185966492,
-        "wall_time_sec": 0.43787364300806075
+        "wall_time_sec": 0.30954954399203416
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8374999761581421,
         "test_acc": 0.8339999914169312,
-        "wall_time_sec": 3.0586247949977405
+        "wall_time_sec": 2.19631448299333
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8895000219345093,
         "test_acc": 0.8339999914169312,
-        "wall_time_sec": 70.71030311699724
+        "wall_time_sec": 53.35949891799828
       }
     ]
   },
@@ -85,21 +85,21 @@
         "params": 20868,
         "train_acc": 0.9514999985694885,
         "test_acc": 0.8220000267028809,
-        "wall_time_sec": 0.47607782400154974
+        "wall_time_sec": 0.3453921300097136
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8399999737739563,
         "test_acc": 0.8700000047683716,
-        "wall_time_sec": 2.860860502012656
+        "wall_time_sec": 2.0525187169987475
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8970000147819519,
         "test_acc": 0.8619999885559082,
-        "wall_time_sec": 64.81987816598848
+        "wall_time_sec": 51.610838569002226
       }
     ]
   },
@@ -111,21 +111,21 @@
         "params": 20868,
         "train_acc": 0.9595000147819519,
         "test_acc": 0.843999981880188,
-        "wall_time_sec": 0.47211583600437734
+        "wall_time_sec": 0.2948614880006062
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8504999876022339,
         "test_acc": 0.828000009059906,
-        "wall_time_sec": 2.740323534992058
+        "wall_time_sec": 2.0903007040033117
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9020000100135803,
         "test_acc": 0.8560000061988831,
-        "wall_time_sec": 68.55053288399358
+        "wall_time_sec": 52.60891397400701
       }
     ]
   },
@@ -137,21 +137,21 @@
         "params": 20868,
         "train_acc": 0.9645000100135803,
         "test_acc": 0.8399999737739563,
-        "wall_time_sec": 0.4541853929986246
+        "wall_time_sec": 0.3855693059886107
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8504999876022339,
         "test_acc": 0.8360000252723694,
-        "wall_time_sec": 2.9127439690055326
+        "wall_time_sec": 2.418982094997773
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9020000100135803,
         "test_acc": 0.8560000061988831,
-        "wall_time_sec": 67.67307045600319
+        "wall_time_sec": 51.75307646500005
       }
     ]
   },
@@ -163,21 +163,21 @@
         "params": 20868,
         "train_acc": 0.9564999938011169,
         "test_acc": 0.8519999980926514,
-        "wall_time_sec": 0.29887582099763677
+        "wall_time_sec": 0.3464794679894112
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8475000262260437,
         "test_acc": 0.8579999804496765,
-        "wall_time_sec": 1.8300438199948985
+        "wall_time_sec": 2.168689666999853
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8985000252723694,
         "test_acc": 0.8579999804496765,
-        "wall_time_sec": 56.896940766993794
+        "wall_time_sec": 52.49949715900584
       }
     ]
   },
@@ -189,21 +189,21 @@
         "params": 20868,
         "train_acc": 0.9539999961853027,
         "test_acc": 0.8259999752044678,
-        "wall_time_sec": 0.3262710499984678
+        "wall_time_sec": 0.35608610400231555
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8424999713897705,
         "test_acc": 0.8240000009536743,
-        "wall_time_sec": 1.9780925959930755
+        "wall_time_sec": 2.270722326997202
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8949999809265137,
         "test_acc": 0.828000009059906,
-        "wall_time_sec": 49.35830176099262
+        "wall_time_sec": 53.6508968059934
       }
     ]
   },
@@ -215,21 +215,21 @@
         "params": 20868,
         "train_acc": 0.9424999952316284,
         "test_acc": 0.8100000023841858,
-        "wall_time_sec": 0.33015763900766615
+        "wall_time_sec": 0.6102571020019241
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8330000042915344,
         "test_acc": 0.8080000281333923,
-        "wall_time_sec": 1.8624089469958562
+        "wall_time_sec": 2.256526146986289
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8934999704360962,
         "test_acc": 0.8140000104904175,
-        "wall_time_sec": 47.3043169540033
+        "wall_time_sec": 54.10709007400146
       }
     ]
   },
@@ -241,21 +241,21 @@
         "params": 20868,
         "train_acc": 0.9350000023841858,
         "test_acc": 0.7960000038146973,
-        "wall_time_sec": 0.31951819799724035
+        "wall_time_sec": 0.32147252700815443
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8424999713897705,
         "test_acc": 0.8159999847412109,
-        "wall_time_sec": 1.8605117020051694
+        "wall_time_sec": 1.961105612994288
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.887499988079071,
         "test_acc": 0.8420000076293945,
-        "wall_time_sec": 47.25353796199488
+        "wall_time_sec": 51.14212735800538
       }
     ]
   },
@@ -267,21 +267,21 @@
         "params": 20868,
         "train_acc": 0.9440000057220459,
         "test_acc": 0.8240000009536743,
-        "wall_time_sec": 0.30796480999561027
+        "wall_time_sec": 0.34601753499009646
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8514999747276306,
         "test_acc": 0.8320000171661377,
-        "wall_time_sec": 1.828101292005158
+        "wall_time_sec": 2.104034899006365
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8790000081062317,
         "test_acc": 0.8399999737739563,
-        "wall_time_sec": 46.94402517400158
+        "wall_time_sec": 51.83979956599069
       }
     ]
   },
@@ -293,21 +293,21 @@
         "params": 20868,
         "train_acc": 0.9509999752044678,
         "test_acc": 0.8220000267028809,
-        "wall_time_sec": 0.28968188900034875
+        "wall_time_sec": 0.32132468500640243
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8535000085830688,
         "test_acc": 0.8379999995231628,
-        "wall_time_sec": 1.7858098930009874
+        "wall_time_sec": 2.0255479459883645
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8964999914169312,
         "test_acc": 0.8539999723434448,
-        "wall_time_sec": 46.863858962009544
+        "wall_time_sec": 51.669829029997345
       }
     ]
   },
@@ -319,21 +319,21 @@
         "params": 20868,
         "train_acc": 0.9605000019073486,
         "test_acc": 0.7639999985694885,
-        "wall_time_sec": 0.3307720529992366
+        "wall_time_sec": 0.31965354998828843
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.847000002861023,
         "test_acc": 0.777999997138977,
-        "wall_time_sec": 1.8209979840030428
+        "wall_time_sec": 1.9376462559885113
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8939999938011169,
         "test_acc": 0.7879999876022339,
-        "wall_time_sec": 47.01339535298757
+        "wall_time_sec": 52.316913240007125
       }
     ]
   },
@@ -345,21 +345,21 @@
         "params": 20868,
         "train_acc": 0.9595000147819519,
         "test_acc": 0.8159999847412109,
-        "wall_time_sec": 0.33436818899645004
+        "wall_time_sec": 0.31924732800689526
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8510000109672546,
         "test_acc": 0.8220000267028809,
-        "wall_time_sec": 1.8987875530001475
+        "wall_time_sec": 2.034573452998302
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9024999737739563,
         "test_acc": 0.8140000104904175,
-        "wall_time_sec": 47.5501009360014
+        "wall_time_sec": 51.94273534799868
       }
     ]
   },
@@ -371,21 +371,21 @@
         "params": 20868,
         "train_acc": 0.9664999842643738,
         "test_acc": 0.8100000023841858,
-        "wall_time_sec": 0.29883530900406186
+        "wall_time_sec": 0.3964401909906883
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8539999723434448,
         "test_acc": 0.8240000009536743,
-        "wall_time_sec": 1.8389979889907409
+        "wall_time_sec": 2.171282562005217
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.8939999938011169,
         "test_acc": 0.8479999899864197,
-        "wall_time_sec": 47.30117540000356
+        "wall_time_sec": 52.816082525998354
       }
     ]
   },
@@ -397,21 +397,21 @@
         "params": 20868,
         "train_acc": 0.9679999947547913,
         "test_acc": 0.8140000104904175,
-        "wall_time_sec": 0.3330318799999077
+        "wall_time_sec": 0.3659320029983064
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8495000004768372,
         "test_acc": 0.8180000185966492,
-        "wall_time_sec": 1.8489932869997574
+        "wall_time_sec": 2.055687553991447
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9085000157356262,
         "test_acc": 0.8339999914169312,
-        "wall_time_sec": 47.14286152400018
+        "wall_time_sec": 54.6949062240019
       }
     ]
   },
@@ -423,21 +423,21 @@
         "params": 20868,
         "train_acc": 0.9524999856948853,
         "test_acc": 0.8519999980926514,
-        "wall_time_sec": 0.2795350640080869
+        "wall_time_sec": 0.3364377560064895
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8479999899864197,
         "test_acc": 0.828000009059906,
-        "wall_time_sec": 1.8617542459978722
+        "wall_time_sec": 2.0206299220008077
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.902999997138977,
         "test_acc": 0.8640000224113464,
-        "wall_time_sec": 47.24439309599984
+        "wall_time_sec": 51.672932355999365
       }
     ]
   },
@@ -449,21 +449,21 @@
         "params": 20868,
         "train_acc": 0.9520000219345093,
         "test_acc": 0.8059999942779541,
-        "wall_time_sec": 0.3134577759919921
+        "wall_time_sec": 0.37346577100106515
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8569999933242798,
         "test_acc": 0.8259999752044678,
-        "wall_time_sec": 1.8579388969956199
+        "wall_time_sec": 2.0615104000025894
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9035000205039978,
         "test_acc": 0.8059999942779541,
-        "wall_time_sec": 47.01246065100713
+        "wall_time_sec": 63.299361147001036
       }
     ]
   },
@@ -475,21 +475,21 @@
         "params": 20868,
         "train_acc": 0.9559999704360962,
         "test_acc": 0.8199999928474426,
-        "wall_time_sec": 0.3224337120045675
+        "wall_time_sec": 0.6155819550040178
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8529999852180481,
         "test_acc": 0.7979999780654907,
-        "wall_time_sec": 1.8244987599900924
+        "wall_time_sec": 2.6053597520076437
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9104999899864197,
         "test_acc": 0.8339999914169312,
-        "wall_time_sec": 48.875658413002384
+        "wall_time_sec": 62.763442561001284
       }
     ]
   },
@@ -501,21 +501,801 @@
         "params": 20868,
         "train_acc": 0.9505000114440918,
         "test_acc": 0.7940000295639038,
-        "wall_time_sec": 0.31346727699565236
+        "wall_time_sec": 0.3142655630072113
       },
       {
         "name": "flat_kronecker",
         "params": 2564,
         "train_acc": 0.8654999732971191,
         "test_acc": 0.8059999942779541,
-        "wall_time_sec": 1.8522725900111254
+        "wall_time_sec": 2.106577477999963
       },
       {
         "name": "hierarchical_kronecker",
         "params": 87044,
         "train_acc": 0.9089999794960022,
         "test_acc": 0.8019999861717224,
-        "wall_time_sec": 47.30991251699743
+        "wall_time_sec": 55.3564976130001
+      }
+    ]
+  },
+  {
+    "seed": 21,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.953499972820282,
+        "test_acc": 0.8059999942779541,
+        "wall_time_sec": 0.29177050999714993
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8529999852180481,
+        "test_acc": 0.8199999928474426,
+        "wall_time_sec": 1.8142310159892077
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8880000114440918,
+        "test_acc": 0.8140000104904175,
+        "wall_time_sec": 49.94319028999598
+      }
+    ]
+  },
+  {
+    "seed": 22,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9710000157356262,
+        "test_acc": 0.8100000023841858,
+        "wall_time_sec": 0.415604217996588
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8525000214576721,
+        "test_acc": 0.8059999942779541,
+        "wall_time_sec": 2.2892645459942287
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9175000190734863,
+        "test_acc": 0.8119999766349792,
+        "wall_time_sec": 63.724369413001114
+      }
+    ]
+  },
+  {
+    "seed": 23,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9589999914169312,
+        "test_acc": 0.7860000133514404,
+        "wall_time_sec": 0.3655138820031425
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8554999828338623,
+        "test_acc": 0.8119999766349792,
+        "wall_time_sec": 2.1297381309996126
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8974999785423279,
+        "test_acc": 0.8040000200271606,
+        "wall_time_sec": 53.63257836799312
+      }
+    ]
+  },
+  {
+    "seed": 24,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9564999938011169,
+        "test_acc": 0.8040000200271606,
+        "wall_time_sec": 0.3772851210087538
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8535000085830688,
+        "test_acc": 0.800000011920929,
+        "wall_time_sec": 2.131266835000133
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9104999899864197,
+        "test_acc": 0.7960000038146973,
+        "wall_time_sec": 52.85147008099011
+      }
+    ]
+  },
+  {
+    "seed": 25,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9589999914169312,
+        "test_acc": 0.8539999723434448,
+        "wall_time_sec": 0.3471392429928528
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8364999890327454,
+        "test_acc": 0.871999979019165,
+        "wall_time_sec": 2.0806332159991143
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8920000195503235,
+        "test_acc": 0.8820000290870667,
+        "wall_time_sec": 52.5697263910115
+      }
+    ]
+  },
+  {
+    "seed": 26,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9375,
+        "test_acc": 0.843999981880188,
+        "wall_time_sec": 0.366124469001079
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8475000262260437,
+        "test_acc": 0.8500000238418579,
+        "wall_time_sec": 2.0703555140062235
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8889999985694885,
+        "test_acc": 0.8700000047683716,
+        "wall_time_sec": 52.9864454310009
+      }
+    ]
+  },
+  {
+    "seed": 27,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9614999890327454,
+        "test_acc": 0.8360000252723694,
+        "wall_time_sec": 0.3718127540050773
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8665000200271606,
+        "test_acc": 0.8479999899864197,
+        "wall_time_sec": 2.0751202719984576
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9045000076293945,
+        "test_acc": 0.8479999899864197,
+        "wall_time_sec": 59.3682240400085
+      }
+    ]
+  },
+  {
+    "seed": 28,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.953000009059906,
+        "test_acc": 0.8199999928474426,
+        "wall_time_sec": 0.3358040489983978
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8475000262260437,
+        "test_acc": 0.8259999752044678,
+        "wall_time_sec": 2.332544474003953
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8995000123977661,
+        "test_acc": 0.8259999752044678,
+        "wall_time_sec": 63.758033396006795
+      }
+    ]
+  },
+  {
+    "seed": 29,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9614999890327454,
+        "test_acc": 0.8259999752044678,
+        "wall_time_sec": 0.4439542499894742
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8650000095367432,
+        "test_acc": 0.8240000009536743,
+        "wall_time_sec": 2.610346784000285
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9024999737739563,
+        "test_acc": 0.8519999980926514,
+        "wall_time_sec": 64.67769081400183
+      }
+    ]
+  },
+  {
+    "seed": 30,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9520000219345093,
+        "test_acc": 0.8100000023841858,
+        "wall_time_sec": 0.4319914280058583
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8529999852180481,
+        "test_acc": 0.8320000171661377,
+        "wall_time_sec": 2.548324429008062
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8949999809265137,
+        "test_acc": 0.828000009059906,
+        "wall_time_sec": 65.25483509099286
+      }
+    ]
+  },
+  {
+    "seed": 31,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9574999809265137,
+        "test_acc": 0.8259999752044678,
+        "wall_time_sec": 0.4507576390024042
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8519999980926514,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 2.856706735008629
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.906499981880188,
+        "test_acc": 0.8420000076293945,
+        "wall_time_sec": 67.59161426201172
+      }
+    ]
+  },
+  {
+    "seed": 32,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.953499972820282,
+        "test_acc": 0.8360000252723694,
+        "wall_time_sec": 0.503943652001908
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8454999923706055,
+        "test_acc": 0.8420000076293945,
+        "wall_time_sec": 2.6486909660015954
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8999999761581421,
+        "test_acc": 0.8560000061988831,
+        "wall_time_sec": 66.05403456099157
+      }
+    ]
+  },
+  {
+    "seed": 33,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9490000009536743,
+        "test_acc": 0.8339999914169312,
+        "wall_time_sec": 0.4827110369951697
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.843999981880188,
+        "test_acc": 0.8199999928474426,
+        "wall_time_sec": 3.431359595997492
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8849999904632568,
+        "test_acc": 0.8619999885559082,
+        "wall_time_sec": 63.66045757300162
+      }
+    ]
+  },
+  {
+    "seed": 34,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9564999938011169,
+        "test_acc": 0.7919999957084656,
+        "wall_time_sec": 0.4424135810113512
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8569999933242798,
+        "test_acc": 0.8339999914169312,
+        "wall_time_sec": 3.0529951179923955
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.890999972820282,
+        "test_acc": 0.828000009059906,
+        "wall_time_sec": 64.0799120409938
+      }
+    ]
+  },
+  {
+    "seed": 35,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9564999938011169,
+        "test_acc": 0.8500000238418579,
+        "wall_time_sec": 0.44705847100703977
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.843500018119812,
+        "test_acc": 0.8299999833106995,
+        "wall_time_sec": 2.5860261130001163
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8980000019073486,
+        "test_acc": 0.8659999966621399,
+        "wall_time_sec": 64.338262758989
+      }
+    ]
+  },
+  {
+    "seed": 36,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9559999704360962,
+        "test_acc": 0.7979999780654907,
+        "wall_time_sec": 0.4340205700136721
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8510000109672546,
+        "test_acc": 0.8240000009536743,
+        "wall_time_sec": 2.6422642929974245
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.906499981880188,
+        "test_acc": 0.8199999928474426,
+        "wall_time_sec": 63.76452669600258
+      }
+    ]
+  },
+  {
+    "seed": 37,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9484999775886536,
+        "test_acc": 0.7739999890327454,
+        "wall_time_sec": 0.5832119510014309
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8259999752044678,
+        "test_acc": 0.7960000038146973,
+        "wall_time_sec": 2.732145103000221
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8899999856948853,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 68.31276356399758
+      }
+    ]
+  },
+  {
+    "seed": 38,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9555000066757202,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 0.4588979819964152
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8445000052452087,
+        "test_acc": 0.8299999833106995,
+        "wall_time_sec": 2.6077647790079936
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9010000228881836,
+        "test_acc": 0.8379999995231628,
+        "wall_time_sec": 69.8437410829938
+      }
+    ]
+  },
+  {
+    "seed": 39,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9555000066757202,
+        "test_acc": 0.800000011920929,
+        "wall_time_sec": 0.4645111319987336
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8569999933242798,
+        "test_acc": 0.8159999847412109,
+        "wall_time_sec": 2.572819046996301
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9045000076293945,
+        "test_acc": 0.8119999766349792,
+        "wall_time_sec": 63.874320545000955
+      }
+    ]
+  },
+  {
+    "seed": 40,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9490000009536743,
+        "test_acc": 0.843999981880188,
+        "wall_time_sec": 0.4471845860098256
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8399999737739563,
+        "test_acc": 0.8339999914169312,
+        "wall_time_sec": 2.548001471994212
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8865000009536743,
+        "test_acc": 0.8600000143051147,
+        "wall_time_sec": 63.549817870007246
+      }
+    ]
+  },
+  {
+    "seed": 41,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9695000052452087,
+        "test_acc": 0.8339999914169312,
+        "wall_time_sec": 0.4337900760001503
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8619999885559082,
+        "test_acc": 0.8500000238418579,
+        "wall_time_sec": 2.573326455996721
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9014999866485596,
+        "test_acc": 0.8460000157356262,
+        "wall_time_sec": 63.26876745700429
+      }
+    ]
+  },
+  {
+    "seed": 42,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9610000252723694,
+        "test_acc": 0.8159999847412109,
+        "wall_time_sec": 0.45771656700526364
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8424999713897705,
+        "test_acc": 0.8240000009536743,
+        "wall_time_sec": 2.4960837280086707
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8939999938011169,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 66.44830599600391
+      }
+    ]
+  },
+  {
+    "seed": 43,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9614999890327454,
+        "test_acc": 0.8180000185966492,
+        "wall_time_sec": 0.4426197279972257
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8525000214576721,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 2.4594094719941495
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8980000019073486,
+        "test_acc": 0.8379999995231628,
+        "wall_time_sec": 63.1088277210074
+      }
+    ]
+  },
+  {
+    "seed": 44,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9495000243186951,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 0.566351563000353
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8360000252723694,
+        "test_acc": 0.8299999833106995,
+        "wall_time_sec": 2.6453540499933297
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8899999856948853,
+        "test_acc": 0.843999981880188,
+        "wall_time_sec": 69.38750565399823
+      }
+    ]
+  },
+  {
+    "seed": 45,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9605000019073486,
+        "test_acc": 0.8159999847412109,
+        "wall_time_sec": 0.46154465900326613
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8539999723434448,
+        "test_acc": 0.8360000252723694,
+        "wall_time_sec": 2.334045295996475
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8989999890327454,
+        "test_acc": 0.828000009059906,
+        "wall_time_sec": 60.65211869300401
+      }
+    ]
+  },
+  {
+    "seed": 46,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.953000009059906,
+        "test_acc": 0.8119999766349792,
+        "wall_time_sec": 0.3760952559969155
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8504999876022339,
+        "test_acc": 0.8379999995231628,
+        "wall_time_sec": 2.254702003003331
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8980000019073486,
+        "test_acc": 0.8320000171661377,
+        "wall_time_sec": 58.64009785500821
+      }
+    ]
+  },
+  {
+    "seed": 47,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9490000009536743,
+        "test_acc": 0.8240000009536743,
+        "wall_time_sec": 0.46460447598656174
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8420000076293945,
+        "test_acc": 0.8299999833106995,
+        "wall_time_sec": 2.7472169539978495
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8960000276565552,
+        "test_acc": 0.8360000252723694,
+        "wall_time_sec": 64.1368359499902
+      }
+    ]
+  },
+  {
+    "seed": 48,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9574999809265137,
+        "test_acc": 0.8019999861717224,
+        "wall_time_sec": 0.45126783300656825
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8690000176429749,
+        "test_acc": 0.7979999780654907,
+        "wall_time_sec": 2.7045589949993882
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.8960000276565552,
+        "test_acc": 0.7960000038146973,
+        "wall_time_sec": 64.18585494501167
+      }
+    ]
+  },
+  {
+    "seed": 49,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9660000205039978,
+        "test_acc": 0.843999981880188,
+        "wall_time_sec": 0.4391927680117078
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.847000002861023,
+        "test_acc": 0.8240000009536743,
+        "wall_time_sec": 2.5775621950015193
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9100000262260437,
+        "test_acc": 0.8600000143051147,
+        "wall_time_sec": 65.38739654399978
+      }
+    ]
+  },
+  {
+    "seed": 50,
+    "results": [
+      {
+        "name": "dense_mlp",
+        "params": 20868,
+        "train_acc": 0.9639999866485596,
+        "test_acc": 0.8040000200271606,
+        "wall_time_sec": 0.6445130969950696
+      },
+      {
+        "name": "flat_kronecker",
+        "params": 2564,
+        "train_acc": 0.8554999828338623,
+        "test_acc": 0.8220000267028809,
+        "wall_time_sec": 3.685145380994072
+      },
+      {
+        "name": "hierarchical_kronecker",
+        "params": 87044,
+        "train_acc": 0.9049999713897705,
+        "test_acc": 0.8420000076293945,
+        "wall_time_sec": 70.03015219999361
       }
     ]
   }
