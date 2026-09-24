@@ -104,6 +104,27 @@ Bilinear Kronecker katmanı: `Y = A @ X @ B` → `Y_vec = (Bᵀ ⊗ A) · X_vec`
 
 **Kaynak:** `COMPOSITIONAL_KRONECKER_WIN.md`, `compositional_20seed.py`.
 
+#### 3.3b Görüntü Compositional (Yeni — 50 Seed)
+
+**Görev:** 2D grid görüntü (16×16), 4×4 blok ızgarası, uzamsal korelasyon, %30 gürültü, çeyrek argmax.
+
+**Kurulum:** 50 seed, paired t-test.
+
+| Model | Param | Test Acc |
+|---|---|---|
+| dense_mlp | 20,868 | 0.8190 ± 0.0198 |
+| flat_kronecker | 2,564 | 0.8267 ± 0.0177 |
+| **hierarchical_kronecker** | **87,044** | **0.8360 ± 0.0217** |
+
+**İstatistiksel testler (50 seed):**
+- flat vs dense: +0.0077, p=0.0003, d=+0.508 (flat kazanıyor)
+- flat vs hier: −0.0093, p<0.0001, d=−0.608 (hier kazanıyor)
+- **dense vs hier: −0.0170, p<0.0001, d=−1.368** (hier büyük etkiyle kazanıyor)
+
+**Kritik bulgu:** Görüntü yapısı hiyerarşiye doğal uyum sağlıyor.
+
+**Kaynak:** `IMAGE_COMPOSITIONAL_WIN.md`, `image_compositional.py`.
+
 #### 3.4 Negatif Sonuçlar (Dürüst Sınırlar)
 
 | Görev | Sonuç |
@@ -121,10 +142,20 @@ Bilinear Kronecker katmanı: `Y = A @ X @ B` → `Y_vec = (Bᵀ ⊗ A) · X_vec`
 **Karar Ağacı:**
 
     Görev yapısal mı (grid/tensör)?
-    ├── EVET  → Flat Kronecker (8x verimli)
-    │           Hierarchical KULLANMA (zararlı)
+    ├── EVET  → Kronecker
+    │           ├── Basit blok yapısı → Flat Kronecker (8x verimli)
+    │           └── Görüntü + uzamsal → Hierarchical Kronecker (en iyi)
     └── HAYIR → Dense MLP
                 Kronecker dezavantaj
+
+    Özet tablo:
+    ┌─────────────────────────┬──────────────────────┐
+    │ Görev tipi              │ Kazanan              │
+    ├─────────────────────────┼──────────────────────┤
+    │ Rastgele lineer         │ Dense MLP            │
+    │ Basit compositional     │ Flat Kronecker (8x)  │
+    │ Görüntü compositional   │ Hierarchical (34x)   │
+    └─────────────────────────┴──────────────────────┘
 
 **Metrik tipi:**
 - Lineer (accuracy, bit-accuracy) → basit formül `cov × Δ`
@@ -185,6 +216,8 @@ Hibrit sistemlerin kazancı üç bağımsız boyutta formülle öngörülebilir:
 | 8 | `HIERARCHICAL_LAYERNORM.md` | Negatif sonuç 2 |
 | 9 | `COMPOSITIONAL_KRONECKER_WIN.md` | **Kronecker zaferi** |
 | 10 | `compositional_20seed.py` | 20-seed istatistik |
+| 11 | `IMAGE_COMPOSITIONAL_WIN.md` | **Görüntü compositional — hierarchical zaferi** |
+| 12 | `image_compositional.py` | 50-seed istatistik |
 
 ### B. Kod Deposu
 
