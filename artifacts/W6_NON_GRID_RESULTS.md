@@ -77,3 +77,26 @@ grid yapılı tasarlanmasından kaynaklanıyor olabilir.
 > Notably, even when the task is exactly a bilinear form
 > $Y = A X B$, Flat Kronecker fails to learn it efficiently —
 > suggesting an optimisation, not expressivity, limitation.
+
+---
+
+## 50 Seed Doğrulama (24 Eylül 2026)
+
+| Görev | Dense | Flat | Flat Kazanma | Delta |
+|---|---|---|---|---|
+| grid_baseline | 0.8196 | 0.8226 | 29/50 | +0.003 |
+| sequence | 0.7524 | 0.7880 | 43/50 | +0.036 |
+| graph | 0.8209 | 0.6171 | 0/50 | −0.204 |
+| random_factor | 0.7041 | 0.6017 | 1/50 | −0.102 |
+
+**Karşılaştırma:**
+
+| Görev | 20 Seed | 50 Seed |
+|---|---|---|
+| grid_baseline | 11/20 | **29/50** |
+| sequence | 18/20 | **43/50** |
+| graph | 0/20 | **0/50** |
+| random_factor | 1/20 | **1/50** |
+
+**Sonuç:** Aynı pattern, daha güçlü istatistiksel kanıt.
+Graph'ta Kronecker %20 kaybediyor, sirküler mantık riski tamamen kırıldı.

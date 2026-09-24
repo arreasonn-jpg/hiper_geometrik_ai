@@ -186,7 +186,7 @@ def run_task(task_fn, name: str, seeds, epochs: int = 60,
 
 
 if __name__ == "__main__":
-    SEEDS = list(range(1, 21))
+    SEEDS = list(range(1, 51))
     TASKS = [
         ("sequence",           task_sequence,       100),
         ("graph",              task_graph,           60),
@@ -213,15 +213,15 @@ if __name__ == "__main__":
     grid = next(r for r in results if r["name"] == "grid_baseline")
     print(f"GRID (baseline):        Dense={grid['dense_mean']:.4f}  "
           f"Flat={grid['flat_mean']:.4f}  "
-          f"Flat wins: {grid['flat_wins']}/20")
+          f"Flat wins: {grid['flat_wins']}/{grid['n_seeds']}")
     for r in results:
         if r["name"] == "grid_baseline":
             continue
         diff = r["flat_mean"] - r["dense_mean"]
         print(f"NON-GRID ({r['name']:15s}):  Dense={r['dense_mean']:.4f}  "
               f"Flat={r['flat_mean']:.4f}  "
-              f"Flat wins: {r['flat_wins']}/20  (delta={diff:+.4f})")
+              f"Flat wins: {r['flat_wins']}/{r['n_seeds']}  (delta={diff:+.4f})")
 
-    Path("artifacts/w6_non_grid_results.json").write_text(
+    Path("artifacts/w6_non_grid_50seed_results.json").write_text(
         json.dumps(results, indent=2), encoding="utf-8")
     print("\nOK — sonuclar kaydedildi")

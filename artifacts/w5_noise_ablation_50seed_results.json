@@ -1,0 +1,57 @@
+[
+  {
+    "noise": 0.0,
+    "dense_mean": 0.9804800033569336,
+    "dense_std": 0.006148640637269249,
+    "flat_mean": 0.9427999985218048,
+    "flat_std": 0.013932782426013372,
+    "flat_wins": 0,
+    "n_seeds": 50,
+    "dense_params": 20868,
+    "flat_params": 1540
+  },
+  {
+    "noise": 0.15,
+    "dense_mean": 0.9136400043964386,
+    "dense_std": 0.011895398696453285,
+    "flat_mean": 0.8922400045394897,
+    "flat_std": 0.015699420126755247,
+    "flat_wins": 2,
+    "n_seeds": 50,
+    "dense_params": 20868,
+    "flat_params": 1540
+  },
+  {
+    "noise": 0.3,
+    "dense_mean": 0.8195999991893769,
+    "dense_std": 0.02015855369590393,
+    "flat_mean": 0.8226400029659271,
+    "flat_std": 0.016622777863500623,
+    "flat_wins": 29,
+    "n_seeds": 50,
+    "dense_params": 20868,
+    "flat_params": 1540
+  },
+  {
+    "noise": 0.45,
+    "dense_mean": 0.733280005455017,
+    "dense_std": 0.02327391714519701,
+    "flat_mean": 0.7584399974346161,
+    "flat_std": 0.019984846150041112,
+    "flat_wins": 45,
+    "n_seeds": 50,
+    "dense_params": 20868,
+    "flat_params": 1540
+  },
+  {
+    "noise": 0.6,
+    "dense_mean": 0.6641999983787537,
+    "dense_std": 0.02396340492941795,
+    "flat_mean": 0.7041200041770935,
+    "flat_std": 0.019324975807859832,
+    "flat_wins": 47,
+    "n_seeds": 50,
+    "dense_params": 20868,
+    "flat_params": 1540
+  }
+]

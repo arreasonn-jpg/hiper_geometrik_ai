@@ -85,3 +85,29 @@ Kronecker kısıtı, bu ailede **mimari düzeyde** bir düzenlileştiricidir.
 
 H1 reddedildi, H2 kanıtlandı. Kronecker'ın değeri
 "yapısal uyum" değil, "**örtük düzenlileştirme**"dir.
+
+---
+
+## 50 Seed Doğrulama (24 Eylül 2026)
+
+**Güncelleme:** 20 seed'den 50 seed'e çıkarıldı.
+
+| Gürültü | Dense | Flat Kronecker | Flat Kazanma |
+|---|---|---|---|
+| 0.00 | 0.9805 ± 0.0061 | 0.9428 ± 0.0139 | 0/50 |
+| 0.10 | 0.9136 ± 0.0119 | 0.8922 ± 0.0157 | 2/50 |
+| 0.30 | 0.8196 ± 0.0202 | 0.8226 ± 0.0166 | 29/50 |
+| 0.50 | 0.7333 ± 0.0233 | 0.7584 ± 0.0200 | 45/50 |
+| 0.60 | 0.6642 ± 0.0240 | 0.7041 ± 0.0193 | 47/50 |
+
+**Korelasyon:** r = **+0.956**, p = **0.0110**
+
+**Karşılaştırma:**
+
+| Metrik | 20 Seed | 50 Seed |
+|---|---|---|
+| r | +0.953 | +0.956 |
+| p | 0.0121 | 0.0110 |
+| noise=0.5 kazanma | 18/20 | 45/50 |
+
+**Sonuç:** Hipotez 50 seed'de **daha güçlü** doğrulandı.

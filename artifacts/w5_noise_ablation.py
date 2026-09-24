@@ -77,7 +77,7 @@ def run_condition(noise: float, seeds, epochs=100,
 
 
 if __name__ == "__main__":
-    SEEDS = list(range(1, 21))
+    SEEDS = list(range(1, 51))
     print("═══ Gurultu Ablasyonu — 3 kosul, 20 seed ═══\n")
     results = []
     for noise in (0.0, 0.15, 0.3, 0.45, 0.6):
@@ -98,6 +98,6 @@ if __name__ == "__main__":
     else:
         print("Kazanma orani sabit — trend yok")
 
-    Path("artifacts/w5_noise_ablation_results.json").write_text(
+    Path("artifacts/w5_noise_ablation_50seed_results.json").write_text(
         json.dumps(results, indent=2), encoding="utf-8")
     print("\nOK — sonuclar kaydedildi")
