@@ -83,7 +83,7 @@ def checkpoint_uyumluluk_raporu(model, checkpoint: Union[str, Mapping],
     """
     _torch_gerekli()
     if isinstance(checkpoint, str):
-        ckpt = torch.load(checkpoint, map_location=next(model.parameters()).device)
+        ckpt = torch.load(checkpoint, map_location=next(model.parameters()).device, weights_only=True)
     else:
         ckpt = checkpoint
     state = ckpt.get("model_state_dict", ckpt) if isinstance(ckpt, Mapping) else ckpt

@@ -245,7 +245,7 @@ def _csv_logla(log_dizini: Optional[str], satir: Dict):
 
 
 def _resume_yukle(yol: str, model, opt, scheduler, strict: bool = True) -> int:
-    ckpt = torch.load(yol, map_location=next(model.parameters()).device)
+    ckpt = torch.load(yol, map_location=next(model.parameters()).device, weights_only=True)
     if "model_state_dict" in ckpt:
         model.load_state_dict(ckpt["model_state_dict"], strict=strict)
         if "optimizer_state_dict" in ckpt:
