@@ -466,16 +466,50 @@ def build_scorecard(
           "CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak "
           "p-değeri kabul edilmez.")
 
-    # human_evaluation ← YALNIZ gerçek insan puanı varsa skorlanır.
-    # Protokol ve araç hazır olması bir sonuç DEĞİLDİR; araç kapılarına
-    # puan vermek "ölçmediğimi ölçtüm" demek olurdu. Bu yüzden gerçek puan
-    # toplanana kadar bölüm bilinçli olarak kanıtsız (n/a) bırakılır.
+    # human_evaluation ← YALNIZ gerçek, attestation'lı insan puanı varsa
+    # skorlanır. Üç koşul birlikte aranır:
+    #
+    #   1. human_ratings_collected = True  → bir CSV/veri var
+    #   2. rater_attestation_present = True → değerlendirici beyanı doğrulandı
+    #   3. source_kind = "real"            → veri gerçek (simülasyon değil)
+    #
+    # Önceki sürüm yalnız (1)'e bakıyordu; sentetik olarak doldurulmuş CSV
+    # "toplandı" sayılıyor ve bölüm 10/10 puan alıyordu. Bu, "ölçmediğim
+    # şeyi ölçtüm" demenin tam örneğiydi (bkz. SECURITY.md
+    # SEC-2026-10-13-02). Şimdi üçü birden aranır; aksi halde bölüm
+    # bilinçli olarak kanıtsız (n/a) kalır.
     _insan_toplandi = bool(
         _get(human_evaluation, "checks", "human_ratings_collected"))
+    _attestation_var = bool(
+        _get(human_evaluation, "checks", "rater_attestation_present"))
+    _kaynak = _get(human_evaluation, "source_kind") or "yok"
+    _gercek_insan = _insan_toplandi and _attestation_var and _kaynak == "real"
+
+    if _gercek_insan:
+        _insan_gerekce = (
+            "Gerçek insan puanları toplandı, değerlendirici beyanı doğrulandı "
+            "(source_kind=real, rater_attestation_present=true)."
+        )
+    else:
+        _eksikler = []
+        if not _insan_toplandi:
+            _eksikler.append("human_ratings_collected=false")
+        if not _attestation_var:
+            _eksikler.append("rater_attestation_present=false")
+        if _kaynak != "real":
+            _eksikler.append(f"source_kind={_kaynak}")
+        _insan_gerekce = (
+            "Protokol ve araç hazır olsa bile gerçek, beyanlı insan puanı "
+            "olmadan skor üretilmez. Eksikler: " + ", ".join(_eksikler)
+        )
+
     bolum("human_evaluation",
-          _get(human_evaluation, "checks") if _insan_toplandi else None,
+          _get(human_evaluation, "checks") if _gercek_insan else None,
           {"protocol_ready": bool(human_evaluation),
            "ratings_collected": _insan_toplandi,
+           "rater_attestation_present": _attestation_var,
+           "source_kind": _kaynak,
+           "real_human_ratings": _gercek_insan,
            "prompts": _get(human_evaluation, "design", "prompts"),
            "raters": _get(human_evaluation, "design", "raters"),
            "alpha_tool_validated": _get(
@@ -486,13 +520,7 @@ def build_scorecard(
            "arm_results": _get(human_evaluation, "arm_results")},
           kanit(human_evaluation),
           "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff "
-          "α ile kodlayıcılar arası güvenilirlik. "
-          + (
-              "Gerçek puanlar toplandı; skor ölçülen kabul kapılarından üretildi."
-              if _insan_toplandi
-              else "Protokol ve araç hazır olsa bile gerçek insan puanı yoksa "
-              "skor üretilmez."
-          ))
+          "α ile kodlayıcılar arası güvenilirlik. " + _insan_gerekce)
 
     # turkish_nlp ← semantik çıkarım (küratörlü altın protokol)
     #             + TWT sonuç tablosu (GERÇEK Türkçe treebank)

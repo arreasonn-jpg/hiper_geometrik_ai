@@ -55,25 +55,25 @@
       "value": 1.0
     },
     {
-      "evidence": "reliable_reasoning_depth_v1@41010671d80e",
+      "evidence": "reliable_reasoning_depth_v1@b2f20fb07631",
       "kind": "measured",
       "name": "Measured Reliable Reasoning Depth",
       "note": "Dolgu yokken güvenilir kalınan en derin zincir.",
       "symbol": "C_R",
       "unit": "hop",
-      "value": 16384.0
+      "value": 256.0
     },
     {
-      "evidence": "reliable_reasoning_depth_v1@41010671d80e",
+      "evidence": "reliable_reasoning_depth_v1@b2f20fb07631",
       "kind": "measured",
       "name": "Distractor-Resistant Reasoning Depth",
-      "note": "16384 dolgu olgu altında güvenilir derinlik.",
+      "note": "64 dolgu olgu altında güvenilir derinlik.",
       "symbol": "C_RD",
-      "unit": "hop @ 16384 dolgu",
-      "value": 8192.0
+      "unit": "hop @ 64 dolgu",
+      "value": 256.0
     },
     {
-      "evidence": "hierarchical_memory_v1@379a04bf0bb4",
+      "evidence": "hierarchical_memory_v1@72b18bd90ab7",
       "kind": "measured",
       "name": "Measured Memory Recall",
       "note": "Hiyerarşik bellek benchmarkında yazılan kayıtların geri okunma oranı (tüm katmanlar dahil).",
@@ -82,13 +82,13 @@
       "value": 1.0
     },
     {
-      "evidence": "hga_signature_benchmark_v1@d699088469e4",
+      "evidence": "hga_signature_benchmark_v1@291da16d8787",
       "kind": "measured",
       "name": "Hallucination Resistance",
       "note": "1 − (çıkarılamayan iddiayı kesin doğrulama oranı).",
       "symbol": "C_H",
       "unit": "oran",
-      "value": 0.783691
+      "value": 0.772461
     },
     {
       "evidence": null,
@@ -100,8 +100,8 @@
       "value": null
     }
   ],
-  "generated_at_utc": "2026-09-16T11:19:01+00:00",
-  "overall": 9.97,
+  "generated_at_utc": "2026-10-13T20:57:47+00:00",
+  "overall": 9.3,
   "provenance": {
     "reports_supplied": [
       "capacity",
@@ -125,18 +125,18 @@
     ],
     "rule": "Skorlar benchmark kabul kapılarından otomatik hesaplanır; elle yazılamaz."
   },
-  "scored_sections": 13,
+  "scored_sections": 12,
   "sections": {
     "architecture": {
       "evidence": [
-        "operator_baseline_family_v1@f633b9ecb28b"
+        "operator_baseline_family_v1@b63889616446"
       ],
       "inputs": {
         "ceiling_gap": {
-          "full_dense_teacher": 0.9516777015,
-          "kronecker_teacher": -2.15e-08,
-          "low_rank_teacher": 0.9280024589,
-          "rank1_teacher": 0.8687041109
+          "full_dense_teacher": 0.9588728568,
+          "kronecker_teacher": -0.0001224169,
+          "low_rank_teacher": 0.9484847654,
+          "rank1_teacher": 0.9155027047
         },
         "rankings": {
           "full_dense_teacher": [
@@ -144,8 +144,8 @@
             "low_rank_flop_matched",
             "low_rank_param_matched",
             "kron_sum_2",
-            "rank1",
-            "kronecker"
+            "kronecker",
+            "rank1"
           ],
           "kronecker_teacher": [
             "kronecker",
@@ -165,16 +165,16 @@
           ],
           "rank1_teacher": [
             "low_rank_param_matched",
-            "rank1",
-            "full_dense",
             "low_rank_flop_matched",
+            "full_dense",
+            "rank1",
             "kron_sum_2",
             "kronecker"
           ]
         }
       },
       "rationale": "Kronecker/rank-1/low-rank/full-dense kolları eşit parametre ve eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.",
-      "score": 10.0,
+      "score": 8.89,
       "section": "architecture"
     },
     "engineering": {
@@ -182,14 +182,14 @@
         "engineering_contract_audit_v1"
       ],
       "inputs": {
-        "cli_commands_smoke_tested": 45,
+        "cli_commands_smoke_tested": 56,
         "python_matrix": [
           "3.10",
           "3.11",
           "3.12",
           "3.13"
         ],
-        "scientific_test_files": 29
+        "scientific_test_files": 36
       },
       "rationale": "CI matrisi, lint/type kapıları, paketleme sözleşmesi.",
       "score": 10.0,
@@ -211,92 +211,53 @@
         "human_evaluation_protocol_v1"
       ],
       "inputs": {
-        "all_alpha_acceptable": true,
+        "all_alpha_acceptable": null,
         "alpha_tool_validated": true,
-        "arm_results": {
-          "dense": {
-            "hallucination_rate": 0.998,
-            "means": {
-              "belirsizlik_durustlugu": 1.0,
-              "dil_kalitesi": 1.0,
-              "dogruluk": 1.0,
-              "tutarlilik": 1.0
-            },
-            "ratings_per_dimension": 500
-          },
-          "hga": {
-            "hallucination_rate": 0.998,
-            "means": {
-              "belirsizlik_durustlugu": 1.0,
-              "dil_kalitesi": 1.0,
-              "dogruluk": 1.0,
-              "tutarlilik": 1.0
-            },
-            "ratings_per_dimension": 500
-          },
-          "symbolic": {
-            "hallucination_rate": 0.034,
-            "means": {
-              "belirsizlik_durustlugu": 4.952,
-              "dil_kalitesi": 4.952,
-              "dogruluk": 4.952,
-              "tutarlilik": 4.952
-            },
-            "ratings_per_dimension": 500
-          },
-          "transformer": {
-            "hallucination_rate": 0.996,
-            "means": {
-              "belirsizlik_durustlugu": 1.0,
-              "dil_kalitesi": 1.0,
-              "dogruluk": 1.0,
-              "tutarlilik": 1.0
-            },
-            "ratings_per_dimension": 500
-          }
-        },
+        "arm_results": null,
         "prompts": 50,
         "protocol_ready": true,
+        "rater_attestation_present": false,
         "raters": 10,
-        "ratings_collected": true
+        "ratings_collected": false,
+        "real_human_ratings": false,
+        "source_kind": "yok"
       },
-      "rationale": "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Gerçek puanlar toplandı; skor ölçülen kabul kapılarından üretildi.",
-      "score": 10.0,
+      "rationale": "50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır olsa bile gerçek, beyanlı insan puanı olmadan skor üretilmez. Eksikler: human_ratings_collected=false, rater_attestation_present=false, source_kind=yok",
+      "score": null,
       "section": "human_evaluation"
     },
     "language_modeling": {
       "evidence": [
-        "turkish_lm_v1@d278278dd310",
-        "long_context_lm_v1@c414db2ee70b"
+        "turkish_lm_v1@1ba95dbbf3f1"
       ],
       "inputs": {
-        "best_arm": "transformer",
-        "best_neural_test_ppl_mean": 209.85201557,
-        "bigram_test_ppl": 397.9645941,
-        "hga_test_ppl_mean": 632.276006255,
-        "max_context_measured": 256,
-        "train_tokens": 1891700,
-        "unigram_test_ppl": 1307.56956767
+        "best_arm": "dense",
+        "best_neural_test_ppl_mean": 72.28005788,
+        "bigram_test_ppl": 84.20742172,
+        "hga_test_ppl_mean": 97.952126205,
+        "max_context_measured": null,
+        "train_tokens": 96540,
+        "unigram_test_ppl": 108.6866376
       },
       "rationale": "Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması (24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.",
-      "score": 10.0,
+      "score": 9.0,
       "section": "language_modeling"
     },
     "memory": {
       "evidence": [
-        "reliable_reasoning_depth_v1@41010671d80e",
-        "hierarchical_memory_v1@379a04bf0bb4"
+        "reliable_reasoning_depth_v1@b2f20fb07631",
+        "hierarchical_memory_v1@72b18bd90ab7"
       ],
       "inputs": {
         "crash_recovery_recall": 1.0,
         "hierarchical_recall": 1.0,
         "min_recall": 0.0,
         "tier_distribution": {
-          "archive": 9000,
+          "archive": 500,
           "archive_segments": 1,
-          "cold": 30000,
-          "hot": 1000,
-          "warm": 10000
+          "cold": 1000,
+          "hot": 100,
+          "warm": 400
         }
       },
       "rationale": "Hiyerarşik bellek (hot/warm/cold/archive) recall, gecikme, tahliye ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği ızgarasındaki en düşük geri çağırma oranına düşülür.",
@@ -305,20 +266,17 @@
     },
     "reasoning": {
       "evidence": [
-        "reliable_reasoning_depth_v1@41010671d80e",
+        "reliable_reasoning_depth_v1@b2f20fb07631",
         "reasoning_depth_root_cause_v1"
       ],
       "inputs": {
-        "c_r": 16384,
+        "c_r": 256,
         "c_rd": {
-          "1024": 16384,
-          "16384": 8192,
-          "256": 16384,
-          "4096": 16384,
-          "64": 16384
+          "16": 256,
+          "64": 256
         },
         "collapse_root_cause": "memory_capacity",
-        "depth_per_slot_log_log_slope": 1.3333,
+        "depth_per_slot_log_log_slope": 1.0,
         "grid_limited": false
       },
       "rationale": "Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.",
@@ -331,9 +289,9 @@
       ],
       "inputs": {
         "determinism_measured": true,
-        "git_commit": "5ca8a3139addfacea11581623f4e35d0a65294ae",
-        "protocols_examined": 19,
-        "protocols_meeting_20_seeds": 3
+        "git_commit": "cdaeb727c333d4dbb77bc1edfac818facdf88ab7",
+        "protocols_examined": 18,
+        "protocols_meeting_20_seeds": 1
       },
       "rationale": "Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.",
       "score": 10.0,
@@ -341,24 +299,24 @@
     },
     "scientific_evidence": {
       "evidence": [
-        "priority_causal_chain_ablation_v1@9bb0550d98d7",
-        "operator_baseline_family_v1@f633b9ecb28b",
-        "reliable_reasoning_depth_v1@41010671d80e",
-        "hga_signature_benchmark_v1@d699088469e4",
-        "turkish_semantic_extraction_v1@525654cb978c",
+        "priority_causal_chain_ablation_v1@31f3eba27658",
+        "operator_baseline_family_v1@b63889616446",
+        "reliable_reasoning_depth_v1@b2f20fb07631",
+        "hga_signature_benchmark_v1@291da16d8787",
+        "turkish_semantic_extraction_v2_curated_gold@564e616de621",
         "compositional_generalization_v2_raw_text@cddb95cb8513",
         "self_learning_scaling_v1",
         "core_seed_statistics_v1",
         "reasoning_depth_root_cause_v1",
         "priority_weight_optimization_v1",
-        "turkish_lm_v1@d278278dd310"
+        "turkish_lm_v1@1ba95dbbf3f1"
       ],
       "inputs": {
-        "sections_with_evidence": 12,
-        "total_gates": 56
+        "sections_with_evidence": 11,
+        "total_gates": 65
       },
       "rationale": "Tüm protokollerin kabul kapılarının birleşik geçme oranı. Bu skor yalnızca ölçüm iyileşerek yükselir.",
-      "score": 9.65,
+      "score": 9.09,
       "section": "scientific_evidence"
     },
     "self_learning": {
@@ -366,12 +324,12 @@
         "self_learning_scaling_v1"
       ],
       "inputs": {
-        "max_cycles": 3000,
+        "max_cycles": 100,
         "saturation_detected": true,
         "total_incorrect_knowledge": 0
       },
       "rationale": "Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi birikmemesi (self-training çöküşüne direnç).",
-      "score": 10.0,
+      "score": 7.78,
       "section": "self_learning"
     },
     "statistical_rigor": {
@@ -379,56 +337,61 @@
         "core_seed_statistics_v1"
       ],
       "inputs": {
-        "comparisons_excluding_zero": 41,
-        "minimum_attainable_p": 1.9073486328125e-06,
+        "comparisons_excluding_zero": 38,
+        "minimum_attainable_p": 0.25,
         "paired_comparisons": 76,
-        "seeds": 20
+        "seeds": 3
       },
       "rationale": "Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak p-değeri kabul edilmez.",
-      "score": 10.0,
+      "score": 7.5,
       "section": "statistical_rigor"
     },
     "turkish_nlp": {
       "evidence": [
-        "turkish_semantic_extraction_v1@525654cb978c",
+        "turkish_semantic_extraction_v2_curated_gold@564e616de621",
         "twt_real_results_v1@66b13a898efa"
       ],
       "inputs": {
         "entity_f1": 1.0,
         "relation_f1": 1.0,
-        "twt_best_f1_all": 0.898618005,
-        "twt_seeds": 20
+        "twt_best_f1_all": 0.89422836,
+        "twt_seeds": 1
       },
       "rationale": "Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.",
-      "score": 10.0,
+      "score": 9.6,
       "section": "turkish_nlp"
     },
     "verification": {
       "evidence": [
-        "priority_causal_chain_ablation_v1@9bb0550d98d7",
+        "priority_causal_chain_ablation_v1@31f3eba27658",
         "multi_environment_verifier_isolation_v1",
         "priority_weight_optimization_v1",
-        "hga-verifier-adversarial-v1@77cf912ee0dd"
+        "multi_verifier_ensemble_v1@ebf5bb4c5f09"
       ],
       "inputs": {
         "adversarial_abstain_rate": 1.0,
         "baseline_downstream": {
           "decidability": 1.0,
-          "false_selection_rate": 0.12,
-          "novel_knowledge_yield": 0.64,
-          "subject_diversity": 0.98,
-          "subject_entropy": 3.28192809,
-          "verification_yield": 0.88
+          "false_selection_rate": 0.0,
+          "novel_knowledge_yield": 0.7,
+          "subject_diversity": 1.0,
+          "subject_entropy": 3.32192809,
+          "verification_yield": 1.0
         },
-        "holdout_gain": 0.09,
+        "holdout_gain": 0.233333333,
         "verifier_isolation_rate": 1.0,
         "weights_validated_on_holdout": true
       },
-      "rationale": "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.",
-      "score": 10.0,
+      "rationale": "Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı, doğrulayıcıların alan dışında çekimser kalıp kalmadığı ve adversarial proof suite üzerinde çoklu verifier ensemble'ının false accept üretip üretmediği ölçülür.",
+      "score": 9.7,
       "section": "verification"
     }
   },
-  "unscored_sections": [],
-  "warnings": []
+  "unscored_sections": [
+    "human_evaluation"
+  ],
+  "warnings": [
+    "`human_evaluation` bölümü için kanıt yok; skor üretilmedi.",
+    "Genel skor yalnız 12/13 bölüm üzerinden hesaplandı; ['human_evaluation'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler."
+  ]
 }

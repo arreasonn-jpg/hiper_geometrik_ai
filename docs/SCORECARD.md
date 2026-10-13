@@ -1,25 +1,27 @@
+<!-- KANONIK SKOR KARTI — elle duzenlenmez. Eski kartlar artifacts/historical/scorecards/ altinda. -->
+
 # HGA RESEARCH SCORECARD
 
-Üretim zamanı (UTC): `2026-09-16T11:19:01+00:00`
+Üretim zamanı (UTC): `2026-10-13T20:57:47+00:00`
 
 > Bu skorlar benchmark kabul kapılarından **otomatik** hesaplanır. Elle yazılmış bir puan bu tabloya giremez; kanıtı olmayan bölüm `n/a` döner.
 
 | Bölüm | Skor | Kanıt |
 |---|---:|---|
-| architecture | 10.0 | operator_baseline_family_v1@f633b9ecb28b |
-| memory | 10.0 | reliable_reasoning_depth_v1@41010671d80e, hierarchical_memory_v1@379a04bf0bb4 |
-| verification | 10.0 | priority_causal_chain_ablation_v1@9bb0550d98d7, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1, hga-verifier-adversarial-v1@77cf912ee0dd |
+| architecture | 8.9 | operator_baseline_family_v1@b63889616446 |
+| memory | 10.0 | reliable_reasoning_depth_v1@b2f20fb07631, hierarchical_memory_v1@72b18bd90ab7 |
+| verification | 9.7 | priority_causal_chain_ablation_v1@31f3eba27658, multi_environment_verifier_isolation_v1, priority_weight_optimization_v1, multi_verifier_ensemble_v1@ebf5bb4c5f09 |
 | generalization | 10.0 | compositional_generalization_v2_raw_text@cddb95cb8513 |
-| reasoning | 10.0 | reliable_reasoning_depth_v1@41010671d80e, reasoning_depth_root_cause_v1 |
-| self_learning | 10.0 | self_learning_scaling_v1 |
-| statistical_rigor | 10.0 | core_seed_statistics_v1 |
-| human_evaluation | 10.0 | human_evaluation_protocol_v1 |
-| turkish_nlp | 10.0 | turkish_semantic_extraction_v1@525654cb978c, twt_real_results_v1@66b13a898efa |
-| language_modeling | 10.0 | turkish_lm_v1@d278278dd310, long_context_lm_v1@c414db2ee70b |
+| reasoning | 10.0 | reliable_reasoning_depth_v1@b2f20fb07631, reasoning_depth_root_cause_v1 |
+| self_learning | 7.8 | self_learning_scaling_v1 |
+| statistical_rigor | 7.5 | core_seed_statistics_v1 |
+| human_evaluation | n/a | human_evaluation_protocol_v1 |
+| turkish_nlp | 9.6 | turkish_semantic_extraction_v2_curated_gold@564e616de621, twt_real_results_v1@66b13a898efa |
+| language_modeling | 9.0 | turkish_lm_v1@1ba95dbbf3f1 |
 | reproducibility | 10.0 | reproducibility_audit_v1 |
-| scientific_evidence | 9.7 | priority_causal_chain_ablation_v1@9bb0550d98d7, operator_baseline_family_v1@f633b9ecb28b, reliable_reasoning_depth_v1@41010671d80e, hga_signature_benchmark_v1@d699088469e4, turkish_semantic_extraction_v1@525654cb978c, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@d278278dd310 |
+| scientific_evidence | 9.1 | priority_causal_chain_ablation_v1@31f3eba27658, operator_baseline_family_v1@b63889616446, reliable_reasoning_depth_v1@b2f20fb07631, hga_signature_benchmark_v1@291da16d8787, turkish_semantic_extraction_v2_curated_gold@564e616de621, compositional_generalization_v2_raw_text@cddb95cb8513, self_learning_scaling_v1, core_seed_statistics_v1, reasoning_depth_root_cause_v1, priority_weight_optimization_v1, turkish_lm_v1@1ba95dbbf3f1 |
 | engineering | 10.0 | engineering_contract_audit_v1 |
-| **Overall Research Readiness** | **9.97** | 13/13 bölüm |
+| **Overall Research Readiness** | **9.30** | 12/13 bölüm |
 
 ## HGA Capability Vector
 
@@ -31,22 +33,27 @@
 | `C_E` | Measured Experience Capacity | ölçülen | 960 | deneyim | capacity_framework |
 | `C_V` | Measured Verified Capacity | ölçülen | 960 | deneyim | capacity_framework |
 | `C_G` | Measured Generalization Capacity | ölçülen | 1 | oran | compositional_generalization_v2_raw_text@cddb95cb8513 |
-| `C_R` | Measured Reliable Reasoning Depth | ölçülen | 16384 | hop | reliable_reasoning_depth_v1@41010671d80e |
-| `C_RD` | Distractor-Resistant Reasoning Depth | ölçülen | 8192 | hop @ 16384 dolgu | reliable_reasoning_depth_v1@41010671d80e |
-| `C_MR` | Measured Memory Recall | ölçülen | 1 | oran | hierarchical_memory_v1@379a04bf0bb4 |
-| `C_H` | Hallucination Resistance | ölçülen | 0.783691 | oran | hga_signature_benchmark_v1@d699088469e4 |
+| `C_R` | Measured Reliable Reasoning Depth | ölçülen | 256 | hop | reliable_reasoning_depth_v1@b2f20fb07631 |
+| `C_RD` | Distractor-Resistant Reasoning Depth | ölçülen | 256 | hop @ 64 dolgu | reliable_reasoning_depth_v1@b2f20fb07631 |
+| `C_MR` | Measured Memory Recall | ölçülen | 1 | oran | hierarchical_memory_v1@72b18bd90ab7 |
+| `C_H` | Hallucination Resistance | ölçülen | 0.772461 | oran | hga_signature_benchmark_v1@291da16d8787 |
 | `C_U` | Uncertainty Calibration | ölçülen | n/a | 1−ECE | — |
+
+## Uyarılar
+
+- `human_evaluation` bölümü için kanıt yok; skor üretilmedi.
+- Genel skor yalnız 12/13 bölüm üzerinden hesaplandı; ['human_evaluation'] kanıtsız. Bu ortalama eksik kanıtı gizlemez, onu işaretler.
 
 ## Bölüm gerekçeleri
 
 - **architecture**: Kronecker/rank-1/low-rank/full-dense kolları eşit parametre ve eşit FLOP rejimlerinde; skor kabul kapılarının geçme oranıdır.
 - **memory**: Hiyerarşik bellek (hot/warm/cold/archive) recall, gecikme, tahliye ve çökme kurtarma kapıları; kanıt yoksa çıkarım derinliği ızgarasındaki en düşük geri çağırma oranına düşülür.
-- **verification**: Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı ve doğrulayıcıların alan dışında çekimser kalıp kalmadığı (cross-domain kontaminasyon) ölçülür.
+- **verification**: Priority(E) ağırlıklarının skor→sıralama→seçim→downstream zincirini taşıyıp taşımadığı, doğrulayıcıların alan dışında çekimser kalıp kalmadığı ve adversarial proof suite üzerinde çoklu verifier ensemble'ının false accept üretip üretmediği ölçülür.
 - **generalization**: Şema ve ontoloji önceden verilmeden, ham metinden keşif + kompozisyon başarısı.
 - **reasoning**: Güvenilir çıkarım derinliği ve dolgu baskısı altındaki dayanıklılık.
 - **self_learning**: Uzun kapalı döngüde bilgi ölçeklemesi ve yanlış bilgi birikmemesi (self-training çöküşüne direnç).
 - **statistical_rigor**: Çekirdek protokollerde 20 tohum, eşleşmiş tasarım, %95 bootstrap CI, etki büyüklüğü ve iki bağımsız anlamlılık testi. Çıplak p-değeri kabul edilmez.
-- **human_evaluation**: 50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Gerçek puanlar toplandı; skor ölçülen kabul kapılarından üretildi.
+- **human_evaluation**: 50–100 Türkçe prompt, 10–20 kör değerlendirici ve Krippendorff α ile kodlayıcılar arası güvenilirlik. Protokol ve araç hazır olsa bile gerçek, beyanlı insan puanı olmadan skor üretilmez. Eksikler: human_ratings_collected=false, rater_attestation_present=false, source_kind=yok
 - **turkish_nlp**: Elle etiketli altın sette varlık/ilişki/özellik/zaman/olumsuzluk çıkarımı ve gerçek Türkçe treebank (TWT) üzerinde arc doğrulama.
 - **language_modeling**: Gerçek Türkçe korpusta (full: tr_corpus_v1 1.11M kelime; smoke: TWT) belge-ayrık held-out perplexity ve next-token doğruluğu; n-gram kontrolleri zorunlu zemindir. Uzun bağlam taraması (24→256 token) eşleşmiş hedeflerle bağlam etkisini ölçer. Kanıt yoksa skor üretilmez — 'tiny smoke' bir dil modeli iddiası değildir.
 - **reproducibility**: Manifest üretimi, veri/konfig hash'i, ÖLÇÜLEN determinizm (aynı tohum → bayt-eş çıktı) ve 20 tohum kuralına uyum.
