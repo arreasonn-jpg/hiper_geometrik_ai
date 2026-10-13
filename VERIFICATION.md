@@ -1,6 +1,6 @@
 # HGA Verification Record — CKPT-001 & CKPT-002
 
-**Tarih:** 2026-09-19/20
+**Tarih:** 2026-09-19/20 (ilk) · **Son güncelleme:** 2026-10-13
 **Makine:** HP 14-cf2006nt, WSL2, CPU-only, 4.8 GB RAM, 8 CPU
 **Python:** 3.12.3 · torch 2.14.0+cpu · numpy 1.26.4 (locked)
 
@@ -36,7 +36,17 @@
 - CPU-only doğrulama; GPU'da numerik farklılık beklenebilir
 - Tek fiziksel makine; bağımsız çoğaltma henüz yok
 - GHCR Docker imajı yayınlanmadı
-- 3 legacy test failure (`test_gorev_ablasyonu.py`) izole edildi, CKPT-001 kapsamı dışında
+
+## Test Durumu (2026-10-13 güncellemesi)
+
+- `tests/test_gorev_ablasyonu.py`: **8/8 PASS** (40 sn)
+  - Not: 2026-09 tarihli ilk doğrulamada 3 test başarısızdı; bu testler
+    sonrasında düzeltildi. Eski not artık geçersizdir.
+- `tests/security/test_checkpoint_guvenligi.py`: **3/3 PASS**
+  - `torch.load` çağrılarında `weights_only=True` regresyon kapısı
+- `tests/test_kronecker_rank_guvenlik.py`: **11/11 PASS**
+  - n^(2K) taşma koruması (bkz. KRONECKER_RANK_BUG.md, P0-8)
+- Diğer testler için bkz. `.github/workflows/ci.yml`
 
 ## Onaylanan Save Tag'ler
 
