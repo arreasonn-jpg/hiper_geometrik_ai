@@ -1112,13 +1112,13 @@ def _epistemik(seeds=None, out=None, markdown=None):
         print(f"  markdown: {markdown}")
 
 
-def _kronecker_rank(n_values, k_values, seed=1, out=None, markdown=None):
+def _kronecker_rank(n_values, k_values, seed=1, out=None, markdown=None, force=False):
     """Faz 19/20: effective rank + n×K taraması ve zincir çöküş testi."""
     from hga.evaluation.kronecker_rank import run_nk_rank_sweep
 
     n_list = [int(v.strip()) for v in n_values.split(",") if v.strip()]
     k_list = [int(v.strip()) for v in k_values.split(",") if v.strip()]
-    rapor = run_nk_rank_sweep(n_values=n_list, k_values=k_list, seed=int(seed))
+    rapor = run_nk_rank_sweep(n_values=n_list, k_values=k_list, seed=int(seed), force=bool(force))
     print("Kronecker effective rank ve n×K taraması (Faz 19/20):\n")
     print(rapor.markdown())
     print()
@@ -2343,6 +2343,9 @@ def main(argv=None):
                    help="kronecker-rank için n değerleri (virgüllü)")
     p.add_argument("--k-values", default="1,2,4",
                    help="kronecker-rank için K değerleri (virgüllü)")
+    p.add_argument("--force", action="store_true",
+                   help="kronecker-rank: güvensiz n/K konfigürasyonlarını "
+                        "zorla çalıştır (disk/RAM dolabilir)")
     p.add_argument("--sizes", default="100,1000,10000",
                    help="olcekli-golden test seti boyutları (virgüllü)")
     p.add_argument("--hard", action="store_true",
@@ -2484,7 +2487,7 @@ def main(argv=None):
          out=args.out, markdown=args.markdown),
      "kronecker-rank": lambda: _kronecker_rank(
          args.n_values, args.k_values, seed=1,
-         out=args.out, markdown=args.markdown),
+         out=args.out, markdown=args.markdown, force=args.force),
      "epistemik": lambda: _epistemik(args.seeds, out=args.out,
                                      markdown=args.markdown),
      "cok-adimli": lambda: _cok_adimli(args.seeds, hops=args.hops,
