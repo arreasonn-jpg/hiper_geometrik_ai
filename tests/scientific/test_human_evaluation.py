@@ -270,7 +270,14 @@ def test_karne_bolumu_na_kaliyor(rapor):
 
 
 def test_gercek_puan_verilince_skor_uretiliyor():
-    """Veri gelince bölüm skorlanabilmeli — kapı kalıcı olarak kapalı değil."""
+    """Veri gelince bölüm skorlanabilmeli — kapı kalıcı olarak kapalı değil.
+
+    Not: P0-4 sonrası guard üç koşulu birlikte arar
+    (ratings_collected + rater_attestation_present + source_kind="real").
+    Protokol çıktısı sadece ilkini sağlar; gerçek veri hattı
+    (human_eval_fill.py) diğer ikisini ekler. Bu test, hattı simüle
+    ederek bölümün skorlanabildiğini kanıtlar.
+    """
     puanlar = {
         boyut: ({i: [4, 4, 5] for i in range(1, 15)} | {0: [1, 1, 2]}
                 if DIMENSIONS[boyut]["level"] == "ordinal"
@@ -280,7 +287,13 @@ def test_gercek_puan_verilince_skor_uretiliyor():
     rapor = build_human_evaluation_protocol(collected_ratings=puanlar)
     assert rapor.results is not None
     assert rapor.checks["human_ratings_collected"] is True
-    karne = build_scorecard(human_evaluation=rapor.to_dict())
+
+    # Gerçek CSV import hattının ekleyeceği iki alanı simüle et:
+    rapor_dict = rapor.to_dict()
+    rapor_dict["checks"]["rater_attestation_present"] = True
+    rapor_dict["source_kind"] = "real"
+
+    karne = build_scorecard(human_evaluation=rapor_dict)
     assert karne.sections["human_evaluation"]["score"] is not None
 
 

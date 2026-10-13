@@ -4,6 +4,8 @@
 - Kör açma anahtarı özeti: `d29f5aeae0e20346`
 
 > **Bu rapor insan değerlendirme SONUCU içermez.** Protokol ve araç üretir. Gerçek puan toplanana kadar karnede bu bölüm `n/a` kalır.
+>
+> **Uyarı (SEC-2026-10-13-02):** Sentetik olarak doldurulmuş CSV'ler dahi skor üretemez. Skor için `rater_attestation.json` ve `source_kind="real"` zorunludur. Detay: SECURITY.md.
 
 ## Tasarım
 

@@ -55,6 +55,40 @@ PR (#13) sırasında yanlışlıkla eklenmiş.
 şeffaflık amacıyla tutulmaktadır. İleride `git filter-repo` ile
 geçmişten de temizlik yapılması planlanmaktadır.
 
+
+### SEC-2026-10-13-02 — Sentetik insan değerlendirmesi skor gibi raporlandı
+
+**Durum:** Kapatıldı
+
+**Tespit:** 13 Ekim 2026 — P0-4 audit çalışması sırasında.
+
+**Etki:** `docs/SCORECARD.md` (üretim: 2026-09-16) `human_evaluation`
+bölümünü **10.0/10** olarak gösteriyordu. Bu puan, 10.000 doldurulmuş
+hücrelik bir CSV'den üretilmişti; ancak `rater_attestation.json`
+dosyası yoktu (`rater_attestation_present: false`). Yani puanlar
+gerçek değerlendirici beyanına dayanmıyordu.
+
+**Kök neden:** `capability_vector.py` içindeki guard yalnız
+`checks.human_ratings_collected` alanına bakıyordu. Sentetik olarak
+doldurulmuş bir CSV bu kapıyı True yapıyordu. `rater_attestation_present`
+ve `source_kind` alanları hiç kontrol edilmiyordu.
+
+**Düzeltme:**
+
+1. Guard üç koşulu birlikte arar:
+   - `human_ratings_collected == True`
+   - `rater_attestation_present == True`
+   - `source_kind == "real"`
+2. `capability_vector.py` çıktısına `source_kind`,
+   `rater_attestation_present`, `real_human_ratings` alanları eklendi.
+3. Regresyon testi: `tests/security/test_human_eval_provenance.py`
+   (sentetik veri ile skor üretilemediğini kanıtlar).
+4. `docs/SCORECARD.md` ve `docs/scorecard.json` yeniden üretildi.
+
+**Not:** Bu olaydan önce üretilen scorecard'lar "pre-fix" olarak
+etiketlenmiştir. Gerçek insan değerlendirmesi yapılana kadar
+`human_evaluation` bölümü `n/a` kalır.
+
 ## Tasarım İlkeleri
 
 - **Checkpoint yükleme:** Tüm `torch.load` çağrıları `weights_only=True`

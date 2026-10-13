@@ -453,11 +453,22 @@ def build_human_evaluation_protocol(
         "alpha_tool_available": True,
         "alpha_validated_on_reference_data": True,
         "multiple_dimensions_defined": len(DIMENSIONS) >= 3,
-        # Bu kapı gerçek veri gelene kadar KASITLI olarak KALIR.
+        # Bu iki kapı gerçek veri gelene kadar KASITLI olarak KALIR.
+        # `human_ratings_collected` yalnız "bir CSV/veri var" der; gerçek
+        # insan beyanı için `rater_attestation_present` ayrıca aranır.
         "human_ratings_collected": collected_ratings is not None,
+        "rater_attestation_present": False,  # protokol çıktısında her zaman
+                                             # False; import aşamasında set
+                                             # edilir (bkz. human_eval_fill.py)
         "reliability_meets_threshold": bool(
             sonuclar and sonuclar["_summary"]["all_acceptable"]),
     }
+
+    # NOT: source_kind, protokol çıktısında YER ALMAZ. Bu alan yalnızca
+    # gerçek CSV import hattı (human_eval_fill.py) tarafından eklenir;
+    # böylece "protokol ben ürettim" ile "gerçek insan verisi var" ayırt
+    # edilir. Karne tarafında eksik source_kind "real değil" sayılır
+    # (bkz. capability_vector.py human_evaluation guard'ı).
 
     bulgular = [
         f"Protokol {len(prompt_listesi)} Türkçe prompt × {len(arms)} kol × "
