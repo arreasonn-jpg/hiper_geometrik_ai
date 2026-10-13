@@ -61,8 +61,13 @@ kapalı-form bir formülle öngörülebilir:
 
 ### Hoca Paketi
 
-Tüm preprintler + destekleyici artefaktlar tek ZIP'te:
-`hiper_geometrik_ai_supervisor_v10.zip` (2.0 MB)
+Tüm preprintler + destekleyici artefaktlar:
+[`supervisor_package/`](supervisor_package/) dizini (72 dosya: PDF, LaTeX kaynakları, raporlar, artefaktlar).
+
+Yerel bir ZIP üretmek isterseniz:
+```bash
+git archive --format=zip --prefix=supervisor_package/ HEAD:supervisor_package -o supervisor_v10.zip
+```
 
 ---
 

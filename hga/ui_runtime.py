@@ -161,10 +161,13 @@ def to_token_ids(tokenizer, metin: str) -> List[int]:
     try:
         import torch
         if isinstance(res, torch.Tensor):
-            return res.detach().cpu().flatten().tolist()
+            res = res.detach().cpu().flatten().tolist()
     except Exception:
         pass
-    return list(res)
+    # tokenizer.encode / text_to_ids / torch.Tensor.tolist() Any dönebilir;
+    # contract'a göre hepsi token id (int) olmalı — tip güvenliği için
+    # tek noktada açık dönüşüm.
+    return [int(x) for x in res]
 
 
 def _ban_idleri(tokenizer, kelimeler: Optional[Iterable[str]]) -> List[int]:

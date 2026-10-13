@@ -46,6 +46,7 @@ değildir.
 """
 from __future__ import annotations
 
+import logging
 import math
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional, Sequence
@@ -328,13 +329,63 @@ class NKTaramaRaporu:
         return "\n".join(satirlar)
 
 
+GUVENLI_N_MAX = 64
+GUVENLI_K_MAX = 8
+GUVENLI_LOG10_MAX = 30
+
+
+def guvenli_mi(n: int, k: int) -> tuple[bool, str]:
+    """(n, K) hesaplama açısından güvenli mi?
+
+    Kronecker yapısı n^(2K) sanal element üretir; n=128, K=16 için bu
+    ~10^67 mertebesindedir ve RAM/disk taşmasına yol açar. Bu fonksiyon
+    ``run_nk_rank_sweep`` çağrılmadan önce hızlı bir güvenlik kapısıdır.
+    """
+    if n < 2:
+        return False, f"n={n} < 2"
+    if k < 1:
+        return False, f"K={k} < 1"
+    if n > GUVENLI_N_MAX:
+        return False, f"n={n} > {GUVENLI_N_MAX}"
+    if k > GUVENLI_K_MAX:
+        return False, f"K={k} > {GUVENLI_K_MAX}"
+    log10_bound = 2 * k * math.log10(n)
+    if log10_bound > GUVENLI_LOG10_MAX:
+        return False, (
+            f"n^(2K) ~ 10^{log10_bound:.1f} > 10^{GUVENLI_LOG10_MAX} "
+            f"(n={n}, K={k})"
+        )
+    return True, ""
+
+
 def run_nk_rank_sweep(
     n_values: Sequence[int] = (4, 8, 16),
     k_values: Sequence[int] = (1, 2, 4),
     seed: int = 1,
     samples: int = 512,
+    force: bool = False,
 ) -> NKTaramaRaporu:
-    """Faz 19/20 ana girişi: n × K boyunca teorik sınır vs ölçülen kapasite."""
+    """Faz 19/20 ana girişi: n × K boyunca teorik sınır vs ölçülen kapasite.
+
+    force=True ise güvensiz konfigürasyonlar uyarı ile geçilir. Varsayılan
+    False; güvensiz konfigürasyon ValueError fırlatır (bkz.
+    KRONECKER_RANK_BUG.md).
+    """
+    sorunlar = []
+    for _n in n_values:
+        for _k in k_values:
+            _ok, _sebep = guvenli_mi(int(_n), int(_k))
+            if not _ok:
+                sorunlar.append(f"n={_n}, K={_k}: {_sebep}")
+    if sorunlar:
+        _mesaj = "Guvensiz konfigurasyon(lar):\n  " + "\n  ".join(sorunlar)
+        if not force:
+            raise ValueError(
+                _mesaj + "\n\nBilincli devam icin force=True / --force kullanin."
+            )
+        logging.getLogger(__name__).warning(
+            "%s\n\n--force ile devam ediliyor (disk/RAM dolabilir!)", _mesaj)
+
     satirlar: List[NKTaramaSatiri] = []
     for n in n_values:
         for k in k_values:

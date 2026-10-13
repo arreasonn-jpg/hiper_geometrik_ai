@@ -22,11 +22,11 @@ The value of Kronecker architectures is conventionally explained by
 \emph{structural alignment}: parameter efficiency when the task's
 functional dependencies match tensor factorisation. We show that this
 explanation is \emph{wrong}. Across six tasks, autocorrelation and
-Kronecker win rate correlate \emph{negatively} ($r = -0.38$). We
+Kronecker win rate do not show a significant correlation ($r = -0.38$, $p = 0.46$). We
 propose instead that the Kronecker parameter constraint
 ($2n^2$ parameters for an $n^2 \times n^2$ operator) acts as an
 \emph{implicit regulariser}. Across five noise levels and 50 seeds,
-noise predicts Kronecker's advantage with $r = +0.95$, $p = 0.012$.
+noise predicts Kronecker's advantage with $r = +0.956$, $p = 0.011$; we treat this as preliminary evidence, since the effective sample size for the correlation is the number of noise levels ($n=5$), not the 50 seeds averaged within each level.
 Grid structure is necessary but not sufficient: on a graph task the
 advantage disappears entirely, and on an exact bilinear task
 ($Y = AXB$ --- the very form Kronecker represents natively) Flat
@@ -67,7 +67,7 @@ that they make opposite predictions on the same set of tasks
 block, and image-like data: autocorrelation correlates
 \emph{negatively} with Kronecker's win rate
 ($r = -0.38$, $p = 0.46$; Section~\ref{sec:h1}).
-\item We confirm H2 on five noise levels with 20 seeds: noise
+\item We confirm H2 on five noise levels with 50 seeds: noise
 correlates with Kronecker's win rate at $r = +0.95$,
 $p = 0.012$ (Section~\ref{sec:h2}).
 \item We control for circular design: on a graph task the
@@ -164,14 +164,14 @@ Fashion-MNIST     & $+0.87$ & $0/20$ \\
 \end{table}
 
 Pearson correlation between autocorrelation and Kronecker win rate:
-$r = -0.38$, $p = 0.46$ (n=6). \textbf{H1 is rejected.}
+$r = -0.38$, $p = 0.46$ (n=6). \textbf{H1 was not supported by these six tasks.} The absence of a significant correlation in this design does not establish that H1 is false; a power analysis would be needed to distinguish ``no effect'' from ``insufficient power''.
 
 
 \subsection{H2 Test: Implicit Regularisation}
 \label{sec:h2}
 
 We held the task fixed (block compositional with adjustable noise)
-and varied the noise level across five values, 20 seeds each.
+and varied the noise level across five values, 50 seeds each.
 
 \begin{table}[h]
 \centering

@@ -298,7 +298,7 @@ class KureselEgitimMotoru:
 
     def checkpoint_yukle(self, yol: str, strict: bool = True) -> int:
         """Eğitime checkpoint'ten devam et; dönen değer kayıtlı çağ numarasıdır."""
-        ckpt = torch.load(yol, map_location=self.aygit)
+        ckpt = torch.load(yol, map_location=self.aygit, weights_only=True)
         if "model_state_dict" in ckpt:
             self.model.load_state_dict(ckpt["model_state_dict"], strict=strict)
             if "optimizer_state_dict" in ckpt:

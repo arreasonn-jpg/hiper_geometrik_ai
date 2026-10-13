@@ -33,3 +33,11 @@ dist/
 site/
 *.egg-info/
 *.bak*
+
+# Yerel veri indirmeleri (MNIST, Fashion-MNIST vb.)
+data/
+
+# Kör değerlendirme anahtarları — asla commit edilmez (bkz. SECURITY.md)
+insan_degerlendirme_paketleri/_GIZLI_*/
+kor_anahtari*.json
+blind_key*.json
