@@ -18,7 +18,6 @@ from pathlib import Path
 
 import pytest
 
-
 # --- Repo kökü: bu dosya tests/security/ altında; iki seviye yukarısı ---
 _REPO_KOK = Path(__file__).resolve().parents[2]
 _TARANACAK_DIZINLER = ("hga", "egitim", "mimari")

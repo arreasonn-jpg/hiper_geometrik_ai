@@ -125,8 +125,33 @@ ignore = ["E501"]
 "tests/test_ui_runtime.py" = ["E402"]
 "tests/test_veri_toplayici_optional_deps.py" = ["E402"]
 
+# Test dosyalarında assert ve magic-value kullanımı normaldir.
+# bkz. MYPY_RUFF_ROADMAP.md — Faz 1'de gözden geçirilecek.
+"tests/**" = ["B011"]
+
 [tool.mypy]
+# python_version, requires-python tabanıyla AYNI olmalı (bkz.
+# tests/test_packaging_contract.py). Tabandan ileri bir sürüm,
+# yalnız tabanda görünen hataları gizler.
 python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true
+# NOT: check_untyped_defs, disallow_untyped_defs gibi sıkılaştırmalar
+# kademeli olarak açılacak — bkz. MYPY_RUFF_ROADMAP.md
+
+# numpy 2.5 stub'ı PEP 695 "type" sözdizimi kullanır (Python 3.12+).
+# python_version=3.10 ile mypy bu stub'ı parse edemez. Üçüncü parti
+# stub'ları tamamen atla; tipler Any olarak kabul edilir.
+[[tool.mypy.overrides]]
+module = [
+    "numpy",
+    "numpy.*",
+    "torch",
+    "torch.*",
+    "torchvision",
+    "torchvision.*",
+]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+ignore_errors = true
