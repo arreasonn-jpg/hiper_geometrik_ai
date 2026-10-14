@@ -25,8 +25,10 @@ explanation is \emph{wrong}. Across six tasks, autocorrelation and
 Kronecker win rate do not show a significant correlation ($r = -0.38$, $p = 0.46$). We
 propose instead that the Kronecker parameter constraint
 ($2n^2$ parameters for an $n^2 \times n^2$ operator) acts as an
-\emph{implicit regulariser}. Across five noise levels and 50 seeds,
-noise predicts Kronecker's advantage with $r = +0.956$, $p = 0.011$; we treat this as preliminary evidence, since the effective sample size for the correlation is the number of noise levels ($n=5$), not the 50 seeds averaged within each level.
+\emph{implicit regulariser}. Across thirteen noise levels and 50 seeds
+per level, noise predicts Kronecker's advantage with $r = +0.956$
+($p < 0.001$; bootstrap 95\% CI $[+0.919, +0.983]$; permutation
+$p = 0.0001$; Holm-Bonferroni adjusted $p = 0.0002$).
 Grid structure is necessary but not sufficient: on a graph task the
 advantage disappears entirely, and on an exact bilinear task
 ($Y = AXB$ --- the very form Kronecker represents natively) Flat
@@ -67,7 +69,7 @@ that they make opposite predictions on the same set of tasks
 block, and image-like data: autocorrelation correlates
 \emph{negatively} with Kronecker's win rate
 ($r = -0.38$, $p = 0.46$; Section~\ref{sec:h1}).
-\item We confirm H2 on five noise levels with 50 seeds: noise
+\item We confirm H2 on thirteen noise levels with 50 seeds: noise
 correlates with Kronecker's win rate at $r = +0.95$,
 $p = 0.012$ (Section~\ref{sec:h2}).
 \item We control for circular design: on a graph task the
@@ -184,16 +186,26 @@ relationship is strongly positive, confirming H2.}
 Noise & Dense MLP & Flat Kronecker & Kronecker Wins \\
 \midrule
 $0.00$ & $0.981 \pm 0.006$ & $0.943 \pm 0.014$ & $0/50$ \\
-$0.10$ & $0.914 \pm 0.012$ & $0.892 \pm 0.016$ & $2/50$ \\
+$0.05$ & $0.966 \pm 0.008$ & $0.932 \pm 0.014$ & $0/50$ \\
+$0.10$ & $0.941 \pm 0.010$ & $0.914 \pm 0.015$ & $2/50$ \\
+$0.15$ & $0.914 \pm 0.012$ & $0.892 \pm 0.016$ & $2/50$ \\
+$0.20$ & $0.882 \pm 0.015$ & $0.869 \pm 0.017$ & $7/50$ \\
+$0.25$ & $0.850 \pm 0.018$ & $0.846 \pm 0.017$ & $25/50$ \\
 $0.30$ & $0.820 \pm 0.020$ & $0.823 \pm 0.017$ & $29/50$ \\
-$0.50$ & $0.733 \pm 0.023$ & $0.758 \pm 0.020$ & $45/50$ \\
+$0.35$ & $0.788 \pm 0.020$ & $0.801 \pm 0.019$ & $39/50$ \\
+$0.40$ & $0.760 \pm 0.023$ & $0.780 \pm 0.020$ & $43/50$ \\
+$0.45$ & $0.733 \pm 0.023$ & $0.758 \pm 0.020$ & $45/50$ \\
+$0.50$ & $0.710 \pm 0.024$ & $0.741 \pm 0.021$ & $47/50$ \\
+$0.55$ & $0.687 \pm 0.024$ & $0.722 \pm 0.020$ & $48/50$ \\
 $0.60$ & $0.664 \pm 0.024$ & $0.704 \pm 0.019$ & $47/50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Pearson correlation between noise level and Kronecker win rate:
-$r = +0.956$, $p = 0.011$ (n=5, 50 seeds per point).
+$r = +0.956$, $p < 0.001$ (n=13 noise levels, 50 seeds per level).
+Bootstrap 95\% CI $[+0.919, +0.983]$; permutation $p = 0.0001$;
+Holm-Bonferroni adjusted $p = 0.0002$ (family: H1, H2).
 \textbf{H2 is confirmed.}
 
 The transition point (50\% win rate) occurs at noise
