@@ -1,0 +1,24 @@
+nohup: ignoring input
+═══ W6 Noise Ablasyonu — 13 seviye × 50 seed ═══
+
+noise=0.00  dense=0.9805±0.0061  flat=0.9428±0.0139  flat_kazandi=0/50
+noise=0.05  dense=0.9662±0.0076  flat=0.9325±0.0143  flat_kazandi=0/50
+noise=0.10  dense=0.9412±0.0095  flat=0.9144±0.0153  flat_kazandi=2/50
+noise=0.15  dense=0.9136±0.0119  flat=0.8922±0.0157  flat_kazandi=2/50
+noise=0.20  dense=0.8824±0.0149  flat=0.8687±0.0166  flat_kazandi=7/50
+noise=0.25  dense=0.8502±0.0181  flat=0.8457±0.0165  flat_kazandi=25/50
+noise=0.30  dense=0.8196±0.0202  flat=0.8226±0.0166  flat_kazandi=29/50
+noise=0.35  dense=0.7884±0.0203  flat=0.8005±0.0191  flat_kazandi=39/50
+noise=0.40  dense=0.7603±0.0227  flat=0.7796±0.0198  flat_kazandi=43/50
+noise=0.45  dense=0.7333±0.0233  flat=0.7584±0.0200  flat_kazandi=45/50
+noise=0.50  dense=0.7097±0.0240  flat=0.7408±0.0209  flat_kazandi=47/50
+noise=0.55  dense=0.6870±0.0239  flat=0.7224±0.0197  flat_kazandi=48/50
+noise=0.60  dense=0.6642±0.0240  flat=0.7041±0.0193  flat_kazandi=47/50
+
+═══ ÖZET ═══
+Pearson r (n=13): +0.956
+Bootstrap %95 CI: [+0.919, +0.983]
+Permütasyon p: 0.0001
+Holm kararı: REDDET (p_ham=0.0001, p_düzeltilmiş=0.0002)
+
+Sonuç: artifacts/w6_runs/w6_full_50seed.json
