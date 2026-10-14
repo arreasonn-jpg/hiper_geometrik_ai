@@ -183,6 +183,12 @@ jobs:
           python -m hga yeniden-uretilebilirlik
           python -m hga championship-benchmark --signature-profile smoke --seeds 1 --out /tmp/scorecard.json --markdown /tmp/scorecard.md
 
+      - name: Verify canonical scorecard structure
+        run: |
+          # Taze uretilen scorecard'i kanonik sozlesmeye karsi denetle.
+          # Hash yerine yapisal karsilastirma (generated_at_utc farkli).
+          SCORECARD_PATH=/tmp/scorecard.json python -m pytest tests/test_scorecard_canonical.py -v
+
   docs:
     name: Documentation Site
     runs-on: ubuntu-latest
