@@ -1,0 +1,1466 @@
+{
+  "arms": {
+    "dense": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 5.72243682,
+            "perplexity": 305.64882607,
+            "tokens": 150943,
+            "top1_accuracy": 0.14161637,
+            "top5_accuracy": 0.26217844
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 5.43886872,
+            "perplexity": 230.18163613,
+            "tokens": 257896,
+            "top1_accuracy": 0.17430282,
+            "top5_accuracy": 0.30176893
+          },
+          "training_seconds": 67.8767
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7241312,
+            "perplexity": 306.16715049,
+            "tokens": 150943,
+            "top1_accuracy": 0.14294138,
+            "top5_accuracy": 0.26235069
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 5.43555453,
+            "perplexity": 229.4200328,
+            "tokens": 257896,
+            "top1_accuracy": 0.175532,
+            "top5_accuracy": 0.30314158
+          },
+          "training_seconds": 65.3439
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7664001,
+            "perplexity": 319.38590371,
+            "tokens": 150943,
+            "top1_accuracy": 0.141676,
+            "top5_accuracy": 0.2555468
+          },
+          "seed": 3,
+          "test": {
+            "cross_entropy": 5.47772426,
+            "perplexity": 239.30150017,
+            "tokens": 257896,
+            "top1_accuracy": 0.17284099,
+            "top5_accuracy": 0.29706548
+          },
+          "training_seconds": 307.1817
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72477853,
+            "perplexity": 306.36540788,
+            "tokens": 150943,
+            "top1_accuracy": 0.14304738,
+            "top5_accuracy": 0.26398044
+          },
+          "seed": 4,
+          "test": {
+            "cross_entropy": 5.44446199,
+            "perplexity": 231.47271101,
+            "tokens": 257896,
+            "top1_accuracy": 0.17559792,
+            "top5_accuracy": 0.3023428
+          },
+          "training_seconds": 59.1276
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72442167,
+            "perplexity": 306.25609642,
+            "tokens": 150943,
+            "top1_accuracy": 0.143902,
+            "top5_accuracy": 0.26281444
+          },
+          "seed": 5,
+          "test": {
+            "cross_entropy": 5.44787137,
+            "perplexity": 232.26323642,
+            "tokens": 257896,
+            "top1_accuracy": 0.17517526,
+            "top5_accuracy": 0.3024824
+          },
+          "training_seconds": 60.2736
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7109547,
+            "perplexity": 302.15940313,
+            "tokens": 150943,
+            "top1_accuracy": 0.14542576,
+            "top5_accuracy": 0.26488145
+          },
+          "seed": 6,
+          "test": {
+            "cross_entropy": 5.42268142,
+            "perplexity": 226.48561135,
+            "tokens": 257896,
+            "top1_accuracy": 0.17757158,
+            "top5_accuracy": 0.30569299
+          },
+          "training_seconds": 369.916
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.69645019,
+            "perplexity": 297.80835972,
+            "tokens": 150943,
+            "top1_accuracy": 0.14564438,
+            "top5_accuracy": 0.2660607
+          },
+          "seed": 7,
+          "test": {
+            "cross_entropy": 5.41810584,
+            "perplexity": 225.45167585,
+            "tokens": 257896,
+            "top1_accuracy": 0.17689301,
+            "top5_accuracy": 0.30454137
+          },
+          "training_seconds": 253.3457
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.75198314,
+            "perplexity": 314.81436404,
+            "tokens": 150943,
+            "top1_accuracy": 0.142471,
+            "top5_accuracy": 0.26128406
+          },
+          "seed": 8,
+          "test": {
+            "cross_entropy": 5.47276877,
+            "perplexity": 238.11857745,
+            "tokens": 257896,
+            "top1_accuracy": 0.17413609,
+            "top5_accuracy": 0.29943853
+          },
+          "training_seconds": 382.0493
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.74284416,
+            "perplexity": 311.95038713,
+            "tokens": 150943,
+            "top1_accuracy": 0.14332563,
+            "top5_accuracy": 0.26219831
+          },
+          "seed": 9,
+          "test": {
+            "cross_entropy": 5.45234357,
+            "perplexity": 233.30429095,
+            "tokens": 257896,
+            "top1_accuracy": 0.1757724,
+            "top5_accuracy": 0.30142771
+          },
+          "training_seconds": 258.7734
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.73145099,
+            "perplexity": 308.41645396,
+            "tokens": 150943,
+            "top1_accuracy": 0.14145075,
+            "top5_accuracy": 0.26046918
+          },
+          "seed": 10,
+          "test": {
+            "cross_entropy": 5.44370812,
+            "perplexity": 231.29827744,
+            "tokens": 257896,
+            "top1_accuracy": 0.17289915,
+            "top5_accuracy": 0.30041179
+          },
+          "training_seconds": 404.8327
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7275216,
+            "perplexity": 307.20694261,
+            "tokens": 150943,
+            "top1_accuracy": 0.14500176,
+            "top5_accuracy": 0.26264881
+          },
+          "seed": 11,
+          "test": {
+            "cross_entropy": 5.44693653,
+            "perplexity": 232.04620865,
+            "tokens": 257896,
+            "top1_accuracy": 0.17526833,
+            "top5_accuracy": 0.30157118
+          },
+          "training_seconds": 359.0945
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.74017861,
+            "perplexity": 311.11997385,
+            "tokens": 150943,
+            "top1_accuracy": 0.14123875,
+            "top5_accuracy": 0.26055531
+          },
+          "seed": 12,
+          "test": {
+            "cross_entropy": 5.4541069,
+            "perplexity": 233.71604642,
+            "tokens": 257896,
+            "top1_accuracy": 0.17403139,
+            "top5_accuracy": 0.30145097
+          },
+          "training_seconds": 256.481
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72330115,
+            "perplexity": 305.91312229,
+            "tokens": 150943,
+            "top1_accuracy": 0.143531,
+            "top5_accuracy": 0.26148281
+          },
+          "seed": 13,
+          "test": {
+            "cross_entropy": 5.44036062,
+            "perplexity": 230.52530027,
+            "tokens": 257896,
+            "top1_accuracy": 0.17472159,
+            "top5_accuracy": 0.30274607
+          },
+          "training_seconds": 367.9995
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72870025,
+            "perplexity": 307.56924598,
+            "tokens": 150943,
+            "top1_accuracy": 0.14274262,
+            "top5_accuracy": 0.25805105
+          },
+          "seed": 14,
+          "test": {
+            "cross_entropy": 5.45180403,
+            "perplexity": 233.17844675,
+            "tokens": 257896,
+            "top1_accuracy": 0.17416711,
+            "top5_accuracy": 0.29872507
+          },
+          "training_seconds": 258.7818
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.69284884,
+            "perplexity": 296.7377764,
+            "tokens": 150943,
+            "top1_accuracy": 0.14627376,
+            "top5_accuracy": 0.26686895
+          },
+          "seed": 15,
+          "test": {
+            "cross_entropy": 5.4072012,
+            "perplexity": 223.00656255,
+            "tokens": 257896,
+            "top1_accuracy": 0.17698995,
+            "top5_accuracy": 0.30632503
+          },
+          "training_seconds": 397.4047
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.75359883,
+            "perplexity": 315.32341525,
+            "tokens": 150943,
+            "top1_accuracy": 0.14295463,
+            "top5_accuracy": 0.26067456
+          },
+          "seed": 16,
+          "test": {
+            "cross_entropy": 5.45920155,
+            "perplexity": 234.90978506,
+            "tokens": 257896,
+            "top1_accuracy": 0.17489608,
+            "top5_accuracy": 0.30265301
+          },
+          "training_seconds": 355.0626
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.70386335,
+            "perplexity": 300.02426255,
+            "tokens": 150943,
+            "top1_accuracy": 0.14388875,
+            "top5_accuracy": 0.2656367
+          },
+          "seed": 17,
+          "test": {
+            "cross_entropy": 5.41941753,
+            "perplexity": 225.74759232,
+            "tokens": 257896,
+            "top1_accuracy": 0.17511322,
+            "top5_accuracy": 0.30532463
+          },
+          "training_seconds": 262.5763
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.72627073,
+            "perplexity": 306.82290593,
+            "tokens": 150943,
+            "top1_accuracy": 0.14271612,
+            "top5_accuracy": 0.26162194
+          },
+          "seed": 18,
+          "test": {
+            "cross_entropy": 5.43882444,
+            "perplexity": 230.17144366,
+            "tokens": 257896,
+            "top1_accuracy": 0.17498914,
+            "top5_accuracy": 0.30068322
+          },
+          "training_seconds": 364.346
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7279102,
+            "perplexity": 307.32634602,
+            "tokens": 150943,
+            "top1_accuracy": 0.14279562,
+            "top5_accuracy": 0.26254281
+          },
+          "seed": 19,
+          "test": {
+            "cross_entropy": 5.43922512,
+            "perplexity": 230.2636883,
+            "tokens": 257896,
+            "top1_accuracy": 0.175152,
+            "top5_accuracy": 0.30262586
+          },
+          "training_seconds": 267.6365
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.7016755,
+            "perplexity": 299.36857281,
+            "tokens": 150943,
+            "top1_accuracy": 0.14576363,
+            "top5_accuracy": 0.26757783
+          },
+          "seed": 20,
+          "test": {
+            "cross_entropy": 5.42051558,
+            "perplexity": 225.99561224,
+            "tokens": 257896,
+            "top1_accuracy": 0.17662158,
+            "top5_accuracy": 0.30663136
+          },
+          "training_seconds": 401.0868
+        }
+      ]
+    },
+    "hga": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 6.7980101,
+            "perplexity": 896.06244495,
+            "tokens": 150943,
+            "top1_accuracy": 0.09057724,
+            "top5_accuracy": 0.16677156
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 6.51218199,
+            "perplexity": 673.29393922,
+            "tokens": 257896,
+            "top1_accuracy": 0.11544188,
+            "top5_accuracy": 0.2030237
+          },
+          "training_seconds": 139.8353
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.73217454,
+            "perplexity": 838.96965412,
+            "tokens": 150943,
+            "top1_accuracy": 0.09269724,
+            "top5_accuracy": 0.16720881
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 6.44135992,
+            "perplexity": 627.25924501,
+            "tokens": 257896,
+            "top1_accuracy": 0.11717514,
+            "top5_accuracy": 0.20491981
+          },
+          "training_seconds": 185.4495
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.70158332,
+            "perplexity": 813.69314632,
+            "tokens": 150943,
+            "top1_accuracy": 0.09131261,
+            "top5_accuracy": 0.16924269
+          },
+          "seed": 3,
+          "test": {
+            "cross_entropy": 6.39928116,
+            "perplexity": 601.41256219,
+            "tokens": 257896,
+            "top1_accuracy": 0.11734575,
+            "top5_accuracy": 0.20791714
+          },
+          "training_seconds": 169.2236
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.78643201,
+            "perplexity": 885.74757486,
+            "tokens": 150943,
+            "top1_accuracy": 0.08926548,
+            "top5_accuracy": 0.16462506
+          },
+          "seed": 4,
+          "test": {
+            "cross_entropy": 6.4902473,
+            "perplexity": 658.68623293,
+            "tokens": 257896,
+            "top1_accuracy": 0.11337516,
+            "top5_accuracy": 0.20027065
+          },
+          "training_seconds": 127.4071
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.66871368,
+            "perplexity": 787.38212446,
+            "tokens": 150943,
+            "top1_accuracy": 0.0964735,
+            "top5_accuracy": 0.16946794
+          },
+          "seed": 5,
+          "test": {
+            "cross_entropy": 6.37923795,
+            "perplexity": 589.4783219,
+            "tokens": 257896,
+            "top1_accuracy": 0.12307287,
+            "top5_accuracy": 0.20832429
+          },
+          "training_seconds": 140.4938
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.7373443,
+            "perplexity": 843.3181608,
+            "tokens": 150943,
+            "top1_accuracy": 0.09021949,
+            "top5_accuracy": 0.16369093
+          },
+          "seed": 6,
+          "test": {
+            "cross_entropy": 6.44910339,
+            "perplexity": 632.13526201,
+            "tokens": 257896,
+            "top1_accuracy": 0.11639188,
+            "top5_accuracy": 0.20011943
+          },
+          "training_seconds": 1294.8186
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.70221394,
+            "perplexity": 814.20643838,
+            "tokens": 150943,
+            "top1_accuracy": 0.09364462,
+            "top5_accuracy": 0.1702762
+          },
+          "seed": 7,
+          "test": {
+            "cross_entropy": 6.41113053,
+            "perplexity": 608.5813089,
+            "tokens": 257896,
+            "top1_accuracy": 0.11831126,
+            "top5_accuracy": 0.20807225
+          },
+          "training_seconds": 1662.6999
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.70068504,
+            "perplexity": 812.96254611,
+            "tokens": 150943,
+            "top1_accuracy": 0.09200162,
+            "top5_accuracy": 0.16832844
+          },
+          "seed": 8,
+          "test": {
+            "cross_entropy": 6.40559973,
+            "perplexity": 605.22466326,
+            "tokens": 257896,
+            "top1_accuracy": 0.1176133,
+            "top5_accuracy": 0.20733939
+          },
+          "training_seconds": 1753.8427
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.73267651,
+            "perplexity": 839.39090118,
+            "tokens": 150943,
+            "top1_accuracy": 0.09428725,
+            "top5_accuracy": 0.16697694
+          },
+          "seed": 9,
+          "test": {
+            "cross_entropy": 6.43343618,
+            "perplexity": 622.30864272,
+            "tokens": 257896,
+            "top1_accuracy": 0.12225471,
+            "top5_accuracy": 0.20538512
+          },
+          "training_seconds": 3919.7603
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.72825761,
+            "perplexity": 835.68990031,
+            "tokens": 150943,
+            "top1_accuracy": 0.09547975,
+            "top5_accuracy": 0.16928244
+          },
+          "seed": 10,
+          "test": {
+            "cross_entropy": 6.4267171,
+            "perplexity": 618.14131627,
+            "tokens": 257896,
+            "top1_accuracy": 0.12407327,
+            "top5_accuracy": 0.20760694
+          },
+          "training_seconds": 711.131
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.74055663,
+            "perplexity": 846.03153382,
+            "tokens": 150943,
+            "top1_accuracy": 0.09135236,
+            "top5_accuracy": 0.16712931
+          },
+          "seed": 11,
+          "test": {
+            "cross_entropy": 6.44992532,
+            "perplexity": 632.65504702,
+            "tokens": 257896,
+            "top1_accuracy": 0.11556209,
+            "top5_accuracy": 0.20390778
+          },
+          "training_seconds": 1300.8909
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.66741719,
+            "perplexity": 786.36195693,
+            "tokens": 150943,
+            "top1_accuracy": 0.09273699,
+            "top5_accuracy": 0.16759969
+          },
+          "seed": 12,
+          "test": {
+            "cross_entropy": 6.37877285,
+            "perplexity": 589.20422412,
+            "tokens": 257896,
+            "top1_accuracy": 0.11897044,
+            "top5_accuracy": 0.20468328
+          },
+          "training_seconds": 1663.8989
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.77242121,
+            "perplexity": 873.42407626,
+            "tokens": 150943,
+            "top1_accuracy": 0.08742373,
+            "top5_accuracy": 0.16563868
+          },
+          "seed": 13,
+          "test": {
+            "cross_entropy": 6.48102153,
+            "perplexity": 652.63729151,
+            "tokens": 257896,
+            "top1_accuracy": 0.1107617,
+            "top5_accuracy": 0.20182942
+          },
+          "training_seconds": 1703.0517
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.74725224,
+            "perplexity": 851.71523115,
+            "tokens": 150943,
+            "top1_accuracy": 0.09206124,
+            "top5_accuracy": 0.16613556
+          },
+          "seed": 14,
+          "test": {
+            "cross_entropy": 6.46414811,
+            "perplexity": 641.71745891,
+            "tokens": 257896,
+            "top1_accuracy": 0.11743494,
+            "top5_accuracy": 0.20231799
+          },
+          "training_seconds": 4015.415
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.66280952,
+            "perplexity": 782.74699229,
+            "tokens": 150943,
+            "top1_accuracy": 0.09089524,
+            "top5_accuracy": 0.16952757
+          },
+          "seed": 15,
+          "test": {
+            "cross_entropy": 6.36642375,
+            "perplexity": 581.97282543,
+            "tokens": 257896,
+            "top1_accuracy": 0.1162678,
+            "top5_accuracy": 0.20594736
+          },
+          "training_seconds": 672.2176
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.6499496,
+            "perplexity": 772.74537473,
+            "tokens": 150943,
+            "top1_accuracy": 0.09032549,
+            "top5_accuracy": 0.1725552
+          },
+          "seed": 16,
+          "test": {
+            "cross_entropy": 6.36174581,
+            "perplexity": 579.25674517,
+            "tokens": 257896,
+            "top1_accuracy": 0.11465087,
+            "top5_accuracy": 0.20775817
+          },
+          "training_seconds": 1300.8184
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.74409821,
+            "perplexity": 849.03313122,
+            "tokens": 150943,
+            "top1_accuracy": 0.0955725,
+            "top5_accuracy": 0.16767919
+          },
+          "seed": 17,
+          "test": {
+            "cross_entropy": 6.43909891,
+            "perplexity": 625.84260762,
+            "tokens": 257896,
+            "top1_accuracy": 0.12317756,
+            "top5_accuracy": 0.2074596
+          },
+          "training_seconds": 1685.8556
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.77718661,
+            "perplexity": 877.59622976,
+            "tokens": 150943,
+            "top1_accuracy": 0.09357175,
+            "top5_accuracy": 0.16767919
+          },
+          "seed": 18,
+          "test": {
+            "cross_entropy": 6.48256123,
+            "perplexity": 653.64293498,
+            "tokens": 257896,
+            "top1_accuracy": 0.11951717,
+            "top5_accuracy": 0.20568369
+          },
+          "training_seconds": 1715.5335
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.70571191,
+            "perplexity": 817.05949542,
+            "tokens": 150943,
+            "top1_accuracy": 0.09330012,
+            "top5_accuracy": 0.17277383
+          },
+          "seed": 19,
+          "test": {
+            "cross_entropy": 6.39991772,
+            "perplexity": 601.79551863,
+            "tokens": 257896,
+            "top1_accuracy": 0.11981574,
+            "top5_accuracy": 0.21087182
+          },
+          "training_seconds": 3712.0696
+        },
+        {
+          "dev": {
+            "cross_entropy": 6.75492172,
+            "perplexity": 858.27255745,
+            "tokens": 150943,
+            "top1_accuracy": 0.09328024,
+            "top5_accuracy": 0.16637406
+          },
+          "seed": 20,
+          "test": {
+            "cross_entropy": 6.44425086,
+            "perplexity": 629.07523434,
+            "tokens": 257896,
+            "top1_accuracy": 0.12192899,
+            "top5_accuracy": 0.20605593
+          },
+          "training_seconds": 704.4136
+        }
+      ]
+    },
+    "transformer": {
+      "per_seed": [
+        {
+          "dev": {
+            "cross_entropy": 5.60595764,
+            "perplexity": 272.04232006,
+            "tokens": 150943,
+            "top1_accuracy": 0.1425505,
+            "top5_accuracy": 0.2654512
+          },
+          "seed": 1,
+          "test": {
+            "cross_entropy": 5.34132206,
+            "perplexity": 208.78855793,
+            "tokens": 257896,
+            "top1_accuracy": 0.17075488,
+            "top5_accuracy": 0.30447545
+          },
+          "training_seconds": 1395.1553
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.62723968,
+            "perplexity": 277.89398246,
+            "tokens": 150943,
+            "top1_accuracy": 0.143637,
+            "top5_accuracy": 0.26418582
+          },
+          "seed": 2,
+          "test": {
+            "cross_entropy": 5.35143882,
+            "perplexity": 210.91154348,
+            "tokens": 257896,
+            "top1_accuracy": 0.17308527,
+            "top5_accuracy": 0.30364953
+          },
+          "training_seconds": 938.7704
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.60000926,
+            "perplexity": 270.4289125,
+            "tokens": 150943,
+            "top1_accuracy": 0.14700251,
+            "top5_accuracy": 0.27195696
+          },
+          "seed": 3,
+          "test": {
+            "cross_entropy": 5.32079806,
+            "perplexity": 204.54705819,
+            "tokens": 257896,
+            "top1_accuracy": 0.17634628,
+            "top5_accuracy": 0.31077256
+          },
+          "training_seconds": 1424.9114
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.61270657,
+            "perplexity": 273.88452298,
+            "tokens": 150943,
+            "top1_accuracy": 0.14715489,
+            "top5_accuracy": 0.2667232
+          },
+          "seed": 4,
+          "test": {
+            "cross_entropy": 5.34258833,
+            "perplexity": 209.05310843,
+            "tokens": 257896,
+            "top1_accuracy": 0.17853321,
+            "top5_accuracy": 0.30563483
+          },
+          "training_seconds": 803.463
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.60417232,
+            "perplexity": 271.55707095,
+            "tokens": 150943,
+            "top1_accuracy": 0.14621413,
+            "top5_accuracy": 0.26937321
+          },
+          "seed": 5,
+          "test": {
+            "cross_entropy": 5.33540816,
+            "perplexity": 207.55744897,
+            "tokens": 257896,
+            "top1_accuracy": 0.17541179,
+            "top5_accuracy": 0.30770155
+          },
+          "training_seconds": 607.7495
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.58504739,
+            "perplexity": 266.41290674,
+            "tokens": 150943,
+            "top1_accuracy": 0.14819501,
+            "top5_accuracy": 0.27207621
+          },
+          "seed": 6,
+          "test": {
+            "cross_entropy": 5.31119141,
+            "perplexity": 202.59145388,
+            "tokens": 257896,
+            "top1_accuracy": 0.17906831,
+            "top5_accuracy": 0.31242827
+          },
+          "training_seconds": 2904.1892
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.58879699,
+            "perplexity": 267.41372496,
+            "tokens": 150943,
+            "top1_accuracy": 0.14780414,
+            "top5_accuracy": 0.26980383
+          },
+          "seed": 7,
+          "test": {
+            "cross_entropy": 5.31974015,
+            "perplexity": 204.33078,
+            "tokens": 257896,
+            "top1_accuracy": 0.17786239,
+            "top5_accuracy": 0.30786829
+          },
+          "training_seconds": 2564.4748
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.59925638,
+            "perplexity": 270.22538751,
+            "tokens": 150943,
+            "top1_accuracy": 0.14443863,
+            "top5_accuracy": 0.26860471
+          },
+          "seed": 8,
+          "test": {
+            "cross_entropy": 5.33512041,
+            "perplexity": 207.4977326,
+            "tokens": 257896,
+            "top1_accuracy": 0.17438425,
+            "top5_accuracy": 0.30630177
+          },
+          "training_seconds": 4264.3921
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.58304793,
+            "perplexity": 265.88075835,
+            "tokens": 150943,
+            "top1_accuracy": 0.14814201,
+            "top5_accuracy": 0.27313622
+          },
+          "seed": 9,
+          "test": {
+            "cross_entropy": 5.31848678,
+            "perplexity": 204.07483902,
+            "tokens": 257896,
+            "top1_accuracy": 0.17502792,
+            "top5_accuracy": 0.31077256
+          },
+          "training_seconds": 1783.7219
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.62238783,
+            "perplexity": 276.54894681,
+            "tokens": 150943,
+            "top1_accuracy": 0.14308713,
+            "top5_accuracy": 0.26242356
+          },
+          "seed": 10,
+          "test": {
+            "cross_entropy": 5.35150753,
+            "perplexity": 210.92603626,
+            "tokens": 257896,
+            "top1_accuracy": 0.17452772,
+            "top5_accuracy": 0.30090812
+          },
+          "training_seconds": 1983.3951
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.61863298,
+            "perplexity": 275.51249543,
+            "tokens": 150943,
+            "top1_accuracy": 0.14539926,
+            "top5_accuracy": 0.2661932
+          },
+          "seed": 11,
+          "test": {
+            "cross_entropy": 5.35052872,
+            "perplexity": 210.71967958,
+            "tokens": 257896,
+            "top1_accuracy": 0.17604383,
+            "top5_accuracy": 0.30292443
+          },
+          "training_seconds": 2956.4084
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.61368717,
+            "perplexity": 274.15322576,
+            "tokens": 150943,
+            "top1_accuracy": 0.14529326,
+            "top5_accuracy": 0.26732608
+          },
+          "seed": 12,
+          "test": {
+            "cross_entropy": 5.3424261,
+            "perplexity": 209.01919696,
+            "tokens": 257896,
+            "top1_accuracy": 0.17703648,
+            "top5_accuracy": 0.30808931
+          },
+          "training_seconds": 2564.3512
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.58563155,
+            "perplexity": 266.56857986,
+            "tokens": 150943,
+            "top1_accuracy": 0.14617438,
+            "top5_accuracy": 0.27357347
+          },
+          "seed": 13,
+          "test": {
+            "cross_entropy": 5.31739329,
+            "perplexity": 203.85180707,
+            "tokens": 257896,
+            "top1_accuracy": 0.1768426,
+            "top5_accuracy": 0.31235847
+          },
+          "training_seconds": 4251.7037
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.61707332,
+            "perplexity": 275.08312424,
+            "tokens": 150943,
+            "top1_accuracy": 0.14426638,
+            "top5_accuracy": 0.2661137
+          },
+          "seed": 14,
+          "test": {
+            "cross_entropy": 5.34315099,
+            "perplexity": 209.17076707,
+            "tokens": 257896,
+            "top1_accuracy": 0.17393833,
+            "top5_accuracy": 0.30537503
+          },
+          "training_seconds": 1783.0945
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.60556679,
+            "perplexity": 271.93601129,
+            "tokens": 150943,
+            "top1_accuracy": 0.14648576,
+            "top5_accuracy": 0.27011521
+          },
+          "seed": 15,
+          "test": {
+            "cross_entropy": 5.33944476,
+            "perplexity": 208.3969682,
+            "tokens": 257896,
+            "top1_accuracy": 0.17617179,
+            "top5_accuracy": 0.30752707
+          },
+          "training_seconds": 1974.9333
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.62502057,
+            "perplexity": 277.27798912,
+            "tokens": 150943,
+            "top1_accuracy": 0.144114,
+            "top5_accuracy": 0.26527895
+          },
+          "seed": 16,
+          "test": {
+            "cross_entropy": 5.35729409,
+            "perplexity": 212.15011091,
+            "tokens": 257896,
+            "top1_accuracy": 0.17432221,
+            "top5_accuracy": 0.30314545
+          },
+          "training_seconds": 2858.7695
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.62432313,
+            "perplexity": 277.08467045,
+            "tokens": 150943,
+            "top1_accuracy": 0.14493551,
+            "top5_accuracy": 0.26642507
+          },
+          "seed": 17,
+          "test": {
+            "cross_entropy": 5.35436608,
+            "perplexity": 211.52984098,
+            "tokens": 257896,
+            "top1_accuracy": 0.17510935,
+            "top5_accuracy": 0.30528585
+          },
+          "training_seconds": 2627.1274
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.60113963,
+            "perplexity": 270.73476944,
+            "tokens": 150943,
+            "top1_accuracy": 0.14706214,
+            "top5_accuracy": 0.27058559
+          },
+          "seed": 18,
+          "test": {
+            "cross_entropy": 5.33257447,
+            "perplexity": 206.97012683,
+            "tokens": 257896,
+            "top1_accuracy": 0.17522955,
+            "top5_accuracy": 0.30802339
+          },
+          "training_seconds": 4329.003
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.67589264,
+            "perplexity": 291.74864874,
+            "tokens": 150943,
+            "top1_accuracy": 0.14280887,
+            "top5_accuracy": 0.2554673
+          },
+          "seed": 19,
+          "test": {
+            "cross_entropy": 5.40531842,
+            "perplexity": 222.58708435,
+            "tokens": 257896,
+            "top1_accuracy": 0.17235242,
+            "top5_accuracy": 0.29590222
+          },
+          "training_seconds": 1915.5963
+        },
+        {
+          "dev": {
+            "cross_entropy": 5.60172575,
+            "perplexity": 270.89349901,
+            "tokens": 150943,
+            "top1_accuracy": 0.14557151,
+            "top5_accuracy": 0.26702795
+          },
+          "seed": 20,
+          "test": {
+            "cross_entropy": 5.32904364,
+            "perplexity": 206.2406399,
+            "tokens": 257896,
+            "top1_accuracy": 0.17471384,
+            "top5_accuracy": 0.30508422
+          },
+          "training_seconds": 2043.8757
+        }
+      ]
+    }
+  },
+  "budget": {
+    "dense_hidden_dim": 49,
+    "max_to_min_ratio": 1.005113,
+    "parameters": {
+      "dense": 474905,
+      "hga": 477333,
+      "transformer": 477311
+    },
+    "target_parameters": 477333,
+    "transformer_ffn_dim": 1931
+  },
+  "checks": {
+    "best_neural_beats_interpolated_bigram_ppl": true,
+    "best_neural_beats_majority_top1": true,
+    "best_neural_beats_unigram_ppl": true,
+    "corpus_at_least_1m_words": true,
+    "document_disjoint_splits": true,
+    "finite_metrics_all_arms": true,
+    "multi_seed_reported": true,
+    "parameter_budget_max_min_ratio_leq_1_05": true,
+    "real_human_corpus_hash_verified": true,
+    "tokenizer_fit_train_only": true
+  },
+  "comparisons": [
+    {
+      "baseline_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 230.135209774,
+        "method": "percentile-bootstrap",
+        "point_estimate": 232.527823306,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12346,
+        "statistic": "test_perplexity::baseline",
+        "upper": 235.917553946
+      },
+      "baseline_label": "dense",
+      "baseline_mean": 232.527823306,
+      "difference_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 367.298301442,
+        "method": "percentile-bootstrap",
+        "point_estimate": 397.498236944,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12347,
+        "statistic": "test_perplexity::difference",
+        "upper": 427.698172446
+      },
+      "effect_size": {
+        "hedges_g": 8.323300043095,
+        "interpretation": "Eşleşmiş fark ortalaması 397.498, d_z=10.4041, g=8.3233 (large).",
+        "limitations": [
+          "Cohen eşikleri (0.2/0.5/0.8) sözleşmedir; alan-bağımsız gerçek anlam taşımaz.",
+          "Etki büyüklüğü YÖN ve BÜYÜKLÜK verir; nedensellik veya genellenebilirlik vermez."
+        ],
+        "magnitude": "large",
+        "mean_difference": 397.498236944,
+        "measure": "cohens_d_z_paired",
+        "sample_size": 5,
+        "std_difference": 38.205830368813,
+        "value": 10.404125053868
+      },
+      "limitations": [
+        "Tüm çıkarım YALNIZ seed varyansı üzerinedir; dataset ve protokol sabittir.",
+        "Çoklu metrik karşılaştırılıyorsa çoklu test düzeltmesi uygulanmamıştır.",
+        "İstatistiksel ayrışma, gerçek dünya genellemesi anlamına gelmez."
+      ],
+      "metric": "test_perplexity",
+      "permutation_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "n=5 ile ulaşılabilecek en küçük p=0.06250 > 0.05. Bu tasarımda anlamlılık İDDİA EDİLEMEZ; p değeri yalnız tanımlayıcıdır. p<0.05 için en az 6 eşleşmiş seed gerekir.",
+        "limitations": [
+          "Sıfır hipotezi fark dağılımının 0 etrafında simetrik olmasıdır.",
+          "p-değeri etki BÜYÜKLÜĞÜ değildir; effect size ile birlikte okunmalıdır.",
+          "Seed varyansı dışındaki (dataset, protokol, uygulama) yanlılıkları kapsamaz.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: seed sayısı artırılmadan p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.0625,
+        "p_value": 0.0625,
+        "permutations": 32,
+        "sample_size": 5,
+        "significant_at_0_05": false,
+        "statistic": 397.498236944,
+        "test": "exact-paired-sign-flip-permutation",
+        "underpowered_by_design": true
+      },
+      "treatment_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 601.808202638,
+        "method": "percentile-bootstrap",
+        "point_estimate": 630.02606025,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12345,
+        "statistic": "test_perplexity::treatment",
+        "upper": 658.243917862
+      },
+      "treatment_label": "hga",
+      "treatment_mean": 630.02606025,
+      "verdict": "YETERSİZ GÜÇ: n=5 ile p<0.05 ulaşılamaz (en küçük p=0.06250). Fark ortalaması 397.498, %95 CI [367.298, 427.698] — sıfırı içermiyor. Anlamlılık İDDİA EDİLMEZ; sonuç betimleyicidir.",
+      "wilcoxon_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "W=0, p=0.06250 (tasarım gereği anlamlılık iddia edilemez)",
+        "limitations": [
+          "Wilcoxon sıralara dayanır; etki büyüklüğünü DEĞİL, sıralama tutarlılığını sınar.",
+          "p-değeri tek başına bilimsel kanıt değildir; CI ve effect size ile okunmalıdır.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: bu etkin örneklemle p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.0625,
+        "p_value": 0.0625,
+        "permutations": 32,
+        "sample_size": 5,
+        "significant_at_0_05": false,
+        "statistic": 0,
+        "test": "exact-wilcoxon-signed-rank",
+        "underpowered_by_design": true
+      }
+    },
+    {
+      "baseline_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 206.296568186,
+        "method": "percentile-bootstrap",
+        "point_estimate": 208.1715434,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12346,
+        "statistic": "test_perplexity::baseline",
+        "upper": 209.869037568
+      },
+      "baseline_label": "transformer",
+      "baseline_mean": 208.1715434,
+      "difference_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 394.784091078,
+        "method": "percentile-bootstrap",
+        "point_estimate": 421.85451685,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12347,
+        "statistic": "test_perplexity::difference",
+        "upper": 448.924942622
+      },
+      "effect_size": {
+        "hedges_g": 9.70175227669,
+        "interpretation": "Eşleşmiş fark ortalaması 421.855, d_z=12.1272, g=9.7018 (large).",
+        "limitations": [
+          "Cohen eşikleri (0.2/0.5/0.8) sözleşmedir; alan-bağımsız gerçek anlam taşımaz.",
+          "Etki büyüklüğü YÖN ve BÜYÜKLÜK verir; nedensellik veya genellenebilirlik vermez."
+        ],
+        "magnitude": "large",
+        "mean_difference": 421.85451685,
+        "measure": "cohens_d_z_paired",
+        "sample_size": 5,
+        "std_difference": 34.785841140352,
+        "value": 12.127190345863
+      },
+      "limitations": [
+        "Tüm çıkarım YALNIZ seed varyansı üzerinedir; dataset ve protokol sabittir.",
+        "Çoklu metrik karşılaştırılıyorsa çoklu test düzeltmesi uygulanmamıştır.",
+        "İstatistiksel ayrışma, gerçek dünya genellemesi anlamına gelmez."
+      ],
+      "metric": "test_perplexity",
+      "permutation_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "n=5 ile ulaşılabilecek en küçük p=0.06250 > 0.05. Bu tasarımda anlamlılık İDDİA EDİLEMEZ; p değeri yalnız tanımlayıcıdır. p<0.05 için en az 6 eşleşmiş seed gerekir.",
+        "limitations": [
+          "Sıfır hipotezi fark dağılımının 0 etrafında simetrik olmasıdır.",
+          "p-değeri etki BÜYÜKLÜĞÜ değildir; effect size ile birlikte okunmalıdır.",
+          "Seed varyansı dışındaki (dataset, protokol, uygulama) yanlılıkları kapsamaz.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: seed sayısı artırılmadan p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.0625,
+        "p_value": 0.0625,
+        "permutations": 32,
+        "sample_size": 5,
+        "significant_at_0_05": false,
+        "statistic": 421.85451685,
+        "test": "exact-paired-sign-flip-permutation",
+        "underpowered_by_design": true
+      },
+      "treatment_ci": {
+        "confidence_level": 0.95,
+        "limitations": [
+          "Percentile bootstrap; küçük n'de gerçek kapsama nominal seviyenin altında kalabilir.",
+          "Aralık yalnız SEED VARYANSINI tanımlar; dataset/protokol yanlılığını kapsamaz.",
+          "n=5 küçük: bootstrap yalnız gözlenen 5 değeri yeniden örnekler, aralık yanıltıcı biçimde dar olabilir."
+        ],
+        "lower": 601.808202638,
+        "method": "percentile-bootstrap",
+        "point_estimate": 630.02606025,
+        "resamples": 10000,
+        "sample_size": 5,
+        "seed": 12345,
+        "statistic": "test_perplexity::treatment",
+        "upper": 658.243917862
+      },
+      "treatment_label": "hga",
+      "treatment_mean": 630.02606025,
+      "verdict": "YETERSİZ GÜÇ: n=5 ile p<0.05 ulaşılamaz (en küçük p=0.06250). Fark ortalaması 421.855, %95 CI [394.784, 448.925] — sıfırı içermiyor. Anlamlılık İDDİA EDİLMEZ; sonuç betimleyicidir.",
+      "wilcoxon_test": {
+        "alternative": "two-sided",
+        "exact": true,
+        "interpretation": "W=0, p=0.06250 (tasarım gereği anlamlılık iddia edilemez)",
+        "limitations": [
+          "Wilcoxon sıralara dayanır; etki büyüklüğünü DEĞİL, sıralama tutarlılığını sınar.",
+          "p-değeri tek başına bilimsel kanıt değildir; CI ve effect size ile okunmalıdır.",
+          "TASARIM GEREĞİ YETERSİZ GÜÇ: bu etkin örneklemle p<0.05 imkânsızdır."
+        ],
+        "minimum_achievable_p_value": 0.0625,
+        "p_value": 0.0625,
+        "permutations": 32,
+        "sample_size": 5,
+        "significant_at_0_05": false,
+        "statistic": 0,
+        "test": "exact-wilcoxon-signed-rank",
+        "underpowered_by_design": true
+      }
+    }
+  ],
+  "config": {
+    "batch_size": 256,
+    "context": 24,
+    "corpus": "tr_corpus_v1",
+    "emb_dim": 32,
+    "eval_batch_size": 4096,
+    "gradient_clip_norm": 5.0,
+    "heads": 4,
+    "hga_layers": 2,
+    "hga_n": 24,
+    "learning_rate": 0.003,
+    "max_docs": null,
+    "max_vocab": 8000,
+    "steps": 4000
+  },
+  "config_hash": "97beb4f1f1d59afc5af43de7d0b0627467ab5f06e92b20222e675f0ea3ab7730",
+  "corpus": {
+    "document_count": 4365,
+    "splits": {
+      "dev": {
+        "documents": 399,
+        "sentences": 7608,
+        "words": 75687
+      },
+      "test": {
+        "documents": 452,
+        "sentences": 10818,
+        "words": 121983
+      },
+      "train": {
+        "documents": 3514,
+        "sentences": 85804,
+        "words": 912839
+      }
+    },
+    "tokens": {
+      "dev": 150943,
+      "test": 257896,
+      "train": 1891700
+    }
+  },
+  "dataset_hash": "d278278dd3102c163768f4a97472bc737182c93b0f1694f78985c6f532c07b48",
+  "limitations": [
+    "Korpus tr_corpus_v1'dir (UD r2.14 ×8 + Bible CC0 + TWT; ≥1.1M kelime, tamamı gerçek insan metni, hash doğrulamalı). Tür dağılımı dengeli değildir: İncil çevirisi korpusun ~%40'ıdır ve dil/biçem olarak moderndir ama tematik olarak dardır. TWT hem burada hem twt_real_results_v1 arc benchmarkındadır; görevler farklıdır ve bu çapraz kullanım bilinçlidir.",
+    "Ölçülen şey held-out perplexity ve next-token doğruluğudur; üretim kalitesi, talimat takibi ve sohbet kalitesi bu protokolün dışındadır.",
+    "Bağlam pencereleri belge içidir; belgeler arası uzun-bağlam etkisi bu sürümde ölçülmez.",
+    "5 tohum dağılım raporlar; kesin anlamlılık iddiası için 20-tohum çekirdek protokolü gerekir."
+  ],
+  "ngram": {
+    "bigram": {
+      "dev": {
+        "cross_entropy": 6.22695249,
+        "perplexity": 506.21045046,
+        "tokens": 150943.0
+      },
+      "test": {
+        "cross_entropy": 5.98636304,
+        "perplexity": 397.9645941,
+        "tokens": 257896.0
+      }
+    },
+    "unigram": {
+      "dev": {
+        "cross_entropy": 7.30599663,
+        "perplexity": 1489.20340748,
+        "tokens": 150943.0
+      },
+      "test": {
+        "cross_entropy": 7.1759254,
+        "perplexity": 1307.56956767,
+        "tokens": 257896.0
+      }
+    }
+  },
+  "perplexity": {
+    "best_arm": "transformer",
+    "best_neural_test_ppl_mean": 208.5457390305,
+    "bigram_test_ppl": 397.9645941,
+    "hga_test_ppl_mean": 621.21606911,
+    "majority_top1": 0.04700732,
+    "unigram_test_ppl": 1307.56956767,
+    "dense_test_ppl_mean": 230.84291179,
+    "transformer_test_ppl_mean": 208.54573903
+  },
+  "profile": "full",
+  "protocol": "turkish_lm_v1",
+  "schema_version": 1,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "tokenizer": {
+    "byte_fallback": true,
+    "vocab_hash": "59dfe03a5b4bfe3d21acb0989488660114abdbdc3c3c1d7de47db89cb118c128",
+    "vocab_size": 5332
+  },
+  "n_seeds": 20,
+  "kaynak_batchlar": [
+    "/tmp/tl_batches/batch_01_05.json",
+    "/tmp/tl_batches/batch_06_10.json",
+    "/tmp/tl_batches/batch_11_15.json",
+    "/tmp/tl_batches/batch_16_20.json"
+  ]
+}

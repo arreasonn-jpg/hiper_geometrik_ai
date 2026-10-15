@@ -1,5 +1,9 @@
 # Gerçek Türkçe Dil Modelleme Benchmarkı (tr_corpus_v1 — 1.11M kelime)
 
+> **Kanonik 20-seed sürümü:** [docs/TURKISH_LM_20SEED.md](TURKISH_LM_20SEED.md)
+>
+> Aşağıdaki tablo tarihsel 2-seed koşusudur.
+
 Protokol: `turkish_lm_v1` v1 · korpus `tr_corpus_v1` · profil `full` · veri imzası `d278278dd310` · tohumlar [1, 2]
 
 Görev: belge-ayrık held-out Türkçe metinde next-token tahmini. Tokenizer YALNIZ train metninde eğitildi.
