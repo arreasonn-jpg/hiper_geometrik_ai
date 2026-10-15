@@ -52,16 +52,38 @@ TERMINOLOGY: Dict[str, Dict[str, str]] = {
             "note": "Kısıtlar altında gerçekten üretilebilen deneyim sayısı."},
     "C_V": {"name": "Measured Verified Capacity", "kind": "measured",
             "note": "Bağımsız verifier'ın karara bağladığı alt küme."},
-    "C_G": {"name": "Measured Generalization Capacity", "kind": "measured",
-            "note": "Görülmemiş eksenlerde kompozisyon başarısı."},
-    "C_R": {"name": "Measured Reliable Reasoning Depth", "kind": "measured",
-            "note": "Dolgu yokken güvenilir kalınan en derin zincir."},
-    "C_RD": {"name": "Distractor-Resistant Reasoning Depth", "kind": "measured",
-             "note": "Belirtilen dolgu yükü altında güvenilir derinlik."},
-    "C_MR": {"name": "Measured Memory Recall", "kind": "measured",
-             "note": "Yazılan kaydın geri çağrılabilme oranı."},
-    "C_H": {"name": "Hallucination Resistance", "kind": "measured",
-            "note": "1 − (çıkarılamayan iddiayı kesin doğrulama oranı)."},
+    "C_G": {"name": "Compositional Fixture v2 Score", "kind": "measured",
+            "note": "Küratörlü fixture'da kompozisyon × keşif başarısı.",
+            "protocol": "compositional_generalization_v2_raw_text",
+            "scope": "Küçük, kural-tabanlı fixture (~14 cümle).",
+            "limitations": "Genel kompozisyonel genelleme DEĞİLDİR; "
+                           "dış geçerliliği yoktur."},
+    "C_R": {"name": "Verified Relational Chain Depth", "kind": "measured",
+            "note": "Dolgu yokken deterministik zincir takibinin "
+                    "güvenilir kaldığı en derin hop.",
+            "protocol": "reliable_reasoning_depth_v1",
+            "scope": "Sembolik BFS/ilişki takip motoru, tek ilişki tipi.",
+            "limitations": "Doğal metin üzerinde öğrenilmiş reasoning "
+                           "DEĞİLDİR."},
+    "C_RD": {"name": "Distractor-Resistant Chain Depth", "kind": "measured",
+             "note": "Belirtilen dolgu yükü altında güvenilir derinlik.",
+             "protocol": "reliable_reasoning_depth_v1",
+             "scope": "Aynı sembolik motor, sentetik dolgu altında.",
+             "limitations": "Genel dayanıklılık DEĞİLDİR; dolgu tipi "
+                            "protokole bağlı."},
+    "C_MR": {"name": "Exact Record Lookup Rate", "kind": "measured",
+             "note": "Yazılan kaydın anahtar eşleşmesiyle geri "
+                     "çağrılabilme oranı.",
+             "protocol": "hierarchical_memory_v1",
+             "scope": "Exact-key lookup; anahtar çakışması ve eviction "
+                      "sınırlı.",
+             "limitations": "Semantik retrieval / RAG DEĞİLDİR."},
+    "C_H": {"name": "Signature Benchmark Resistance", "kind": "measured",
+            "note": "1 − (imza benchmark'ında çıkarılamayan iddiayı "
+                    "kesin doğrulama oranı).",
+            "protocol": "hga_signature_benchmark_v1",
+            "scope": "Kontrollü imza fixture'ı.",
+            "limitations": "Açık dünya halüsinasyon oranı DEĞİLDİR."},
     "C_U": {"name": "Uncertainty Calibration", "kind": "measured",
             "note": "1 − ECE; kalibrasyon raporundan gelir."},
 }
@@ -86,6 +108,10 @@ class CapabilityEntry:
     unit: str
     evidence: Optional[str]   # protokol adı + veri imzası
     note: str = ""
+    # P1-4 (audit): kapsam ve sınırları AÇIKÇA taşı.
+    protocol: str = ""        # ölçüm protokolü (kısa kimlik)
+    scope: str = ""           # bu metriğin geçerli olduğu dar kapsam
+    limitations: str = ""     # bu metriğin DIŞINDA kalan iddialar
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -167,7 +193,10 @@ def build_capability_vector(
         girdiler.append(CapabilityEntry(
             symbol=sembol, name=meta["name"], kind=meta["kind"],
             value=None if deger is None else round(float(deger), 6),
-            unit=birim, evidence=kanit, note=not_ or meta["note"]))
+            unit=birim, evidence=kanit, note=not_ or meta["note"],
+            protocol=meta.get("protocol", ""),
+            scope=meta.get("scope", ""),
+            limitations=meta.get("limitations", "")))
 
     # P / C_I^UB / C_M^UB — kapasite raporundan.
     ekle("P", _get(capacity, "physical_parameters"), "parametre",
