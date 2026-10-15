@@ -1,0 +1,18 @@
+nohup: ignoring input
+═══ W7 Kronecker Mekanizma — 13 noise × 50 seed ═══
+
+noise=0.00  dense(acc=0.980, gap=0.012, erank=33.0)  flat(acc=0.945, gap=0.009, erank=9.6)  flat_wins=0/50
+noise=0.05  dense(acc=0.966, gap=0.023, erank=33.1)  flat(acc=0.936, gap=0.009, erank=9.6)  flat_wins=0/50
+noise=0.10  dense(acc=0.941, gap=0.055, erank=33.3)  flat(acc=0.918, gap=0.011, erank=9.6)  flat_wins=1/50
+noise=0.15  dense(acc=0.914, gap=0.110, erank=33.5)  flat(acc=0.895, gap=0.013, erank=9.6)  flat_wins=5/50
+noise=0.20  dense(acc=0.882, gap=0.185, erank=33.7)  flat(acc=0.872, gap=0.016, erank=9.6)  flat_wins=13/50
+noise=0.25  dense(acc=0.850, gap=0.274, erank=33.9)  flat(acc=0.848, gap=0.021, erank=9.6)  flat_wins=28/50
+noise=0.30  dense(acc=0.820, gap=0.368, erank=34.1)  flat(acc=0.826, gap=0.026, erank=9.7)  flat_wins=33/50
+noise=0.35  dense(acc=0.788, gap=0.461, erank=34.3)  flat(acc=0.803, gap=0.033, erank=9.7)  flat_wins=39/50
+noise=0.40  dense(acc=0.760, gap=0.549, erank=34.5)  flat(acc=0.783, gap=0.041, erank=9.7)  flat_wins=42/50
+noise=0.45  dense(acc=0.733, gap=0.623, erank=34.7)  flat(acc=0.763, gap=0.049, erank=9.7)  flat_wins=46/50
+noise=0.50  dense(acc=0.710, gap=0.684, erank=35.0)  flat(acc=0.744, gap=0.059, erank=9.7)  flat_wins=44/50
+noise=0.55  dense(acc=0.687, gap=0.733, erank=35.2)  flat(acc=0.722, gap=0.070, erank=9.7)  flat_wins=46/50
+noise=0.60  dense(acc=0.664, gap=0.776, erank=35.4)  flat(acc=0.703, gap=0.082, erank=9.8)  flat_wins=48/50
+
+Sonuç: artifacts/w7_runs/w7_full_50seed.json
