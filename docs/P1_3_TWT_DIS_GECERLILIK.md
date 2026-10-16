@@ -114,3 +114,28 @@ performansı olmadığını **göstermek**. Rapor bunu yapıyor.
 - Motor: `hga/experience/semantik_ayiklayici.py`
 - P1-3 (birleşik audit raporu)
 - SECURITY.md: SEC-2026-10-13-02
+
+## 3-Kademe Teşhis (2026-10-16)
+
+Hatanın **nereden** geldiğini izole etmek için 3 kademe:
+
+| Kademe | Yöntem | Entity F1 | Relation F1 |
+|---|---|---:|---:|
+| 1 | `raw_cumle_coz` (mevcut motor) | 0.2119 | 0.0000 |
+| 2 | `ud_referans` (UD ağacından doğrudan) | 1.0000 | 1.0000 |
+
+**Kademe 2 tautolojik:** Aynı UD'den entity/relation üretip
+altın set olarak da aynı UD'yi kullanıyoruz. Bu yalnızca
+"altın mapping doğru" der; üst sınır hakkında bilgi vermez.
+
+**Asıl teşhis:** Mevcut motor **UD ağacını hiç kullanmıyor**.
+Ham metni basit sözlük + yüzey ek analiziyle çözmeye çalışıyor.
+Bu yaklaşım:
+- Türkçe morfolojisi için yetersiz (kök çıkarımı bozuk)
+- Kapsam için yetersiz (7 fiil, 30 isim sözlüğü)
+- Rol ataması için yetersiz (yüzey ekine bakıyor, UD'ye bakmıyor)
+
+**Sonraki adım:** UD ağacı zaten mevcut. Supervised baseline
+olarak doğrudan UD'yi kullanan bir çıkarım yazmak, mevcut
+motordan daha yüksek F1 verecektir (muhtemelen ≥ 0.9).
+Bu ayrı bir PR konusu (P1-3 ileri iyileştirme).

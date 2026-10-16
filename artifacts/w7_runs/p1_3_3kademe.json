@@ -1,0 +1,42 @@
+{
+  "protokol": "p1_3_3kademe_v1",
+  "n_cumle": 2000,
+  "kademeler": {
+    "raw_cumle_coz": {
+      "entity": {
+        "precision": 0.1692,
+        "recall": 0.2833,
+        "f1": 0.2119,
+        "tp": 3405,
+        "fp": 16717,
+        "fn": 8612
+      },
+      "relation": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 7144,
+        "fn": 389
+      }
+    },
+    "ud_referans": {
+      "entity": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 12017,
+        "fp": 0,
+        "fn": 0
+      },
+      "relation": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 389,
+        "fp": 0,
+        "fn": 0
+      }
+    }
+  }
+}
