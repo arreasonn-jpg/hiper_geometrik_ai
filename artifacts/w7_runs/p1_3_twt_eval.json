@@ -1,0 +1,22 @@
+{
+  "protokol": "p1_3_twt_eval_v1",
+  "kaynak": "twt_v1 (web + wiki)",
+  "n_cumle_degerlendirilen": 2000,
+  "bos_cumle_orani": 0.001,
+  "entity": {
+    "precision": 0.1692,
+    "recall": 0.2833,
+    "f1": 0.2119,
+    "tp": 3405,
+    "fp": 16717,
+    "fn": 8612
+  },
+  "relation": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "tp": 0,
+    "fp": 7144,
+    "fn": 389
+  }
+}

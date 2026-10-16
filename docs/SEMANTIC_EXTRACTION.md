@@ -1,3 +1,9 @@
+> **Kapsam uyarısı (P1-3, 2026-10-16):** Bu belgedeki F1=1.0000
+> sonucu **küratörlü fixture** üzerindedir ve **dış geçerlilik
+> taşımaz**. Aynı motor TWT (4.851 gerçek cümle, UD anotasyonlu)
+> üzerinde Entity F1=0.21, Relation F1=0.00 veriyor. Detay:
+> [docs/P1_3_TWT_DIS_GECERLILIK.md](P1_3_TWT_DIS_GECERLILIK.md)
+
 # Türkçe Semantik Çıkarım Benchmarkı (P0-5)
 
 Protokol: `turkish_semantic_extraction_v2_curated_gold` · veri imzası: `564e616de621` · anotasyon imzası: `1c971ea4ff01` · 136 cümle (128 kapsam içi / 8 dışı)
