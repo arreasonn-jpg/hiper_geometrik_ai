@@ -32,8 +32,9 @@ $p = 0.0001$; Holm-Bonferroni adjusted $p = 0.0002$).
 Grid structure is necessary but not sufficient: on a graph task the
 advantage disappears entirely, and on an exact bilinear task
 ($Y = AXB$ --- the very form Kronecker represents natively) Flat
-Kronecker wins only $1/50$ seeds. The bottleneck is optimisation,
-not expressivity. Our findings suggest an architectural design
+Kronecker wins only $1/50$ seeds. The bottleneck is effective capacity under noise, not
+representation capacity: the Dense-vs-Kronecker effective-rank
+gap tracks noise at $r = +0.999$. Our findings suggest an architectural design
 principle: match the parameter budget to the regularisation needs
 of the task.
 \end{abstract}
@@ -212,6 +213,37 @@ The transition point (50\% win rate) occurs at noise
 $\approx 0.30$. Below this threshold, Dense MLP's full
 expressivity dominates; above it, Kronecker's parameter
 constraint prevents overfitting.
+
+\paragraph{Mechanism.}
+We measured the mechanism directly (W7 protocol; 13 noise
+levels $\times$ 50 seeds). Two structural quantities track
+the transition (Table~\ref{tab:h2}, discussion below):
+
+\begin{itemize}
+\item \textbf{Effective rank gap.}
+      Across the 13 noise levels, the difference between
+      Dense MLP and Flat Kronecker effective rank
+      ($\exp$ of spectral entropy of weight matrices)
+      correlates with noise at $r = +0.999$
+      (bootstrap 95\% CI $[+0.999, +1.000]$).
+      Dense effective rank grows from $33.0$ to $35.4$;
+      Flat remains essentially constant
+      ($9.6 \to 9.7$), reflecting its structural
+      parameter constraint ($2n^2$).
+\item \textbf{Train--test gap.}
+      Dense train--test cross-entropy gap grows
+      \emph{64$\times$} ($0.012 \to 0.776$) across the
+      same range, while Flat's grows only
+      \emph{10$\times$} ($0.008 \to 0.081$).
+      The gap difference tracks win rate at
+      $r = +0.991$ (CI $[+0.985, +0.997]$).
+\end{itemize}
+
+The bottleneck is thus not representation capacity but
+\emph{effective capacity under noise}: Kronecker's rank
+constraint acts as an implicit regulariser, while Dense
+MLP overfits as its effective rank grows. This is the
+mechanism behind the H2 correlation reported above.
 
 
 \subsection{Circular Logic Control}
