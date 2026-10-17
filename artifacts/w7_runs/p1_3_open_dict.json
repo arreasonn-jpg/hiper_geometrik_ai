@@ -1,0 +1,21 @@
+{
+  "n_test": 971,
+  "n_train_isim": 6132,
+  "n_train_fiil": 929,
+  "entity": {
+    "precision": 0.232,
+    "recall": 0.3615,
+    "f1": 0.2826,
+    "tp": 2879,
+    "fp": 9533,
+    "fn": 5086
+  },
+  "relation": {
+    "precision": 0.0003,
+    "recall": 0.0072,
+    "f1": 0.0006,
+    "tp": 2,
+    "fp": 6424,
+    "fn": 276
+  }
+}
