@@ -32,8 +32,8 @@ cs.LG (Machine Learning)
 
 ## Comments
 9 pages, 4 tables, 8 references. Third in a series.
-Preprint 1: arXiv:2026.XXXXX (hybrid gain formula).
-Preprint 2: arXiv:2026.XXXXX (unified theory).
+Preprint 1: (not yet submitted) (hybrid gain formula).
+Preprint 2: (not yet submitted) (unified theory).
 
 ## Keywords
 implicit regularization, Kronecker factorization, architectural

@@ -28,7 +28,7 @@
 
 ## Post-Submission
 
-- [ ] arXiv ID'yi not al (arXiv:2026.XXXXX)
+- [ ] arXiv ID'yi not al (not yet submitted)
 - [ ] Preprint 1'in comments'ını güncelle (companion paper)
 - [ ] GitHub README'ye arXiv linki ekle
 - [ ] Hocalara arXiv linkini gönder
