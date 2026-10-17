@@ -139,3 +139,28 @@ Bu yaklaşım:
 olarak doğrudan UD'yi kullanan bir çıkarım yazmak, mevcut
 motordan daha yüksek F1 verecektir (muhtemelen ≥ 0.9).
 Bu ayrı bir PR konusu (P1-3 ileri iyileştirme).
+
+## Deney 1: Açık Sözlük Enjeksiyonu (2026-10-17)
+
+**Hipotez:** Kapalı sözlük ana problemdir. Sözlüğü TWT train
+split'inden (6.132 isim, 929 fiil) genişletirsek F1 artar.
+
+**Sonuç:**
+
+| Konfigürasyon | Entity F1 | Relation F1 |
+|---|---:|---:|
+| Kapalı sözlük (önceki) | 0.2119 | 0.0000 |
+| Açık sözlük (train) | **0.2826** | **0.0006** |
+| **Fark** | +0.07 | +0.0006 |
+
+**Yorum:** Sözlüğü 200× büyütmek entity F1'i yalnızca %33
+artırdı. Relation hâlâ sıfır. Bu, **asıl darboğazın kök
+çıkarımı (morfoloji) ve sözdizimi (UD kullanılmıyor)**
+olduğunu kanıtlıyor.
+
+**Kanıt:** Sözlükte `açıkla` var ama motor `açıklanmayan`
+kelimesinden `aciklmek` kökünü çıkarıyor → eşleşmiyor.
+
+**Sonuç:** Kurallı motor iyileştirmesi (Zemberek vb.) veya
+supervised UD baseline gerekir. Mevcut motorla F1 artışı
+sınırlıdır.
