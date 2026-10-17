@@ -79,9 +79,12 @@ from hga.cli.epistemik import _epistemik
 from hga.cli.generalization import _genelleme_v2
 from hga.cli.human_eval import _insan_degerlendirme, _insan_degerlendirme_raporu
 from hga.cli.kronecker_rank import _kronecker_rank
+from hga.cli.operator_baseline import _operator_baseline
 from hga.cli.provenance import _provenance
 from hga.cli.seed_statistics import _tohum_istatistik
 from hga.cli.semantic import _semantik
+from hga.cli.signature import _signature, _signature_gate
+from hga.cli.verifier import _verifier_adversarial, _verifier_ensemble
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI = os.path.join(KOK, "mimari")
@@ -1509,75 +1512,16 @@ def _oncelik_zincir(k=10, seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, priority_ablation_markdown(rapor))
 
 
-def _operator_baseline(n=8, steps=300, seeds=None, device="cpu",
-                       out=None, markdown=None):
-    """P0-2: Kronecker vs gerçek Dense baseline ailesi."""
-    from hga.evaluation.operator_baselines import (
-        operator_baseline_markdown,
-        run_operator_baseline_benchmark,
-    )
-    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
-    rapor = run_operator_baseline_benchmark(
-        n=int(n), steps=int(steps), seeds=tohumlar, device=device)
-    print(operator_baseline_markdown(rapor))
-    _yaz_rapor(rapor.to_dict(), out, markdown, operator_baseline_markdown(rapor))
 
 
 
 
-def _signature(profile="smoke", seeds=None, out=None, markdown=None):
-    """P0-4: HGA Signature Benchmark."""
-    from hga.evaluation.signature import (
-        run_signature_benchmark,
-        signature_markdown,
-    )
-    tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
-    rapor = run_signature_benchmark(profile=profile, seeds=tohumlar)
-    print(signature_markdown(rapor))
-    _yaz_rapor(rapor.to_dict(), out, markdown, signature_markdown(rapor))
 
 
-def _signature_gate(yol=None, profile="standard", seeds=None,
-                    out=None, markdown=None):
-    """Signature Benchmark release gate."""
-    from hga.evaluation.signature import (
-        run_signature_benchmark,
-        run_signature_release_gate,
-        signature_release_gate_markdown,
-    )
-    if yol:
-        rapor_dict = json.loads(Path(yol).read_text(encoding="utf-8"))
-    else:
-        tohumlar = [int(v) for v in (seeds or "1").split(",") if v.strip()]
-        rapor_dict = run_signature_benchmark(
-            profile=profile, seeds=tohumlar).to_dict()
-    gate = run_signature_release_gate(rapor_dict)
-    md = signature_release_gate_markdown(gate)
-    print(md)
-    _yaz_rapor(gate.to_dict(), out, markdown, md)
 
 
-def _verifier_ensemble(out=None, markdown=None):
-    """Çoklu verifier ensemble benchmarkı."""
-    from hga.evaluation.verifier_ensemble import (
-        run_verifier_ensemble_benchmark,
-        verifier_ensemble_markdown,
-    )
-    rapor = run_verifier_ensemble_benchmark()
-    md = verifier_ensemble_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _verifier_adversarial(out=None, markdown=None):
-    """Genişletilmiş verifier adversarial suite v2."""
-    from hga.evaluation.verifier_adversarial import (
-        run_verifier_adversarial_v2_benchmark,
-    )
-    rapor = run_verifier_adversarial_v2_benchmark()
-    md = rapor.markdown()
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
 
