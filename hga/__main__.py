@@ -75,7 +75,9 @@ from typing import Optional
 
 from hga.cli.common import _yaz_rapor
 from hga.cli.depth import _cikarim_derinligi
+from hga.cli.english import _english_ewt, _english_scaling
 from hga.cli.epistemik import _epistemik
+from hga.cli.foundation import _foundation_analysis
 from hga.cli.generalization import _genelleme_v2
 from hga.cli.human_eval import _insan_degerlendirme, _insan_degerlendirme_raporu
 from hga.cli.kronecker_rank import _kronecker_rank
@@ -1538,45 +1540,10 @@ def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _english_ewt(seeds=None, profile="smoke", out=None, markdown=None):
-    """Pinned UD English EWT üzerinde Transformer/BERT/GPT-style kontroller."""
-    from hga.evaluation.english_ewt import english_ewt_markdown, run_english_ewt_baselines
-
-    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
-    rapor = run_english_ewt_baselines(seeds=tohumlar, profile=profile)
-    md = english_ewt_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _english_scaling(seeds=None, profile="smoke", out=None, markdown=None):
-    """HGA'nın gerçek English EWT üzerinde küçük parameter-scaling probe'u."""
-    from hga.evaluation.english_ewt import (
-        english_hga_scaling_markdown,
-        run_english_hga_scaling_probe,
-    )
-
-    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
-    rapor = run_english_hga_scaling_probe(seeds=tohumlar, profile=profile)
-    md = english_hga_scaling_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor, out, markdown, md)
 
 
-def _foundation_analysis(n_values="4,8,16", k_values="1,2,4", seed=1,
-                         out=None, markdown=None):
-    """CKPT-001 teorik sözleşme, rank/gradient grid'i ve hash modeli."""
-    from hga.evaluation.foundation_analysis import (
-        foundation_analysis_markdown,
-        run_foundation_analysis,
-    )
-
-    nler = [int(value) for value in n_values.split(",") if value.strip()]
-    kler = [int(value) for value in k_values.split(",") if value.strip()]
-    rapor = run_foundation_analysis(n_values=nler, k_values=kler, seed=int(seed))
-    md = foundation_analysis_markdown(rapor.to_dict())
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
 def _reproduce_all(artifact_root="artifacts/reproduce-all", seeds=None, profile="smoke"):
