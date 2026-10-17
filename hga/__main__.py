@@ -73,7 +73,11 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+from hga.cli.common import _yaz_rapor
+from hga.cli.epistemik import _epistemik
+from hga.cli.human_eval import _insan_degerlendirme, _insan_degerlendirme_raporu
 from hga.cli.kronecker_rank import _kronecker_rank
+from hga.cli.provenance import _provenance
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI = os.path.join(KOK, "mimari")
@@ -1033,160 +1037,8 @@ def _cok_adimli(seeds=None, hops=None, distractors=None, slots=4096,
         print(f"  markdown: {markdown}")
 
 
-def _epistemik(seeds=None, out=None, markdown=None):
-    """P0-007: KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik benchmarkı."""
-    from hga.evaluation.epistemic import (
-        EpistemicDataset,
-        run_epistemic_baselines,
-        run_epistemic_benchmark,
-    )
-
-    veri = EpistemicDataset()
-    rapor = run_epistemic_benchmark(veri)
-    tohumlar = [int(v.strip()) for v in (seeds or "1").split(",") if v.strip()]
-
-    print("Epistemik Benchmark — bilmediğini biliyor mu? (P0-007)\n")
-    print(f"  protokol       : {rapor.protocol}")
-    print(f"  veri kümesi    : {rapor.dataset_hash[:16]}…  ({rapor.total_cases} vaka)")
-    print(f"  tohumlar       : {tohumlar} (protokol deterministik)\n")
-
-    print("  ASIL METRİKLER")
-    print(f"    yanlış güven oranı (↓)   : {rapor.false_confidence_rate:.3f} "
-          f"({rapor.false_confidence_cases} vaka)")
-    print(f"    bilinmeyen doğruluğu (↑) : {rapor.unknown_accuracy:.3f}")
-    print(f"    sessiz kabul oranı (↓)   : {rapor.silent_failure_rate:.3f}")
-    print(f"    genel doğruluk           : {rapor.accuracy:.3f}\n")
-
-    print("  SINIF BAZINDA")
-    print(f"    {'sınıf':<12}{'n':>4}{'doğru':>7}{'isabet':>9}  gözlenen durumlar")
-    for sinif in rapor.per_class:
-        durumlar = ", ".join(f"{k}×{v}" for k, v in sinif["observed_states"].items())
-        print(f"    {sinif['epistemic_class']:<12}{sinif['total']:>4}"
-              f"{sinif['correct']:>7}{sinif['accuracy']:>9.3f}  {durumlar}")
-
-    print("\n  NEGATİF KONTROL (dejenere politikalar)")
-    print(f"    {'kol':<18}{'doğruluk':>9}{'bilinen':>9}{'bilinmeyen':>12}{'y.güven':>9}")
-    for kol in run_epistemic_baselines(veri):
-        print(f"    {kol.arm:<18}{kol.accuracy:>9.3f}{kol.known_accuracy:>9.3f}"
-              f"{kol.unknown_accuracy:>12.3f}{kol.false_confidence_rate:>9.3f}")
-    print(f"    {'EVALUATOR':<18}{rapor.accuracy:>9.3f}{rapor.known_accuracy:>9.3f}"
-          f"{rapor.unknown_accuracy:>12.3f}{rapor.false_confidence_rate:>9.3f}")
-
-    ayrim = rapor.epistemic_resolution
-    print("\n  EPİSTEMİK ÇÖZÜNÜRLÜK (dürüstlük notu)")
-    print(f"    UNKNOWN ↔ UNCERTAIN ayrılabilir mi? : "
-          f"{'EVET' if ayrim['distinguishable'] else 'HAYIR'}")
-    print(f"    {ayrim['note']}")
-
-    print("\n  KAPILAR")
-    for ad, deger in rapor.checks.items():
-        print(f"    [{'GEÇTİ' if deger else 'KALDI'}] {ad}")
-
-    print("\n  SINIRLAR")
-    for sinir in rapor.limitations:
-        print(f"    - {sinir}")
-
-    if out:
-        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
-        with open(out, "w", encoding="utf-8") as handle:
-            json.dump(rapor.to_dict(), handle, ensure_ascii=False, indent=2,
-                      sort_keys=True)
-        print(f"\n  report: {out}")
-    if markdown:
-        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
-        with open(markdown, "w", encoding="utf-8") as handle:
-            handle.write("# Epistemik Benchmark (P0-007)\n\n")
-            handle.write(f"Veri kümesi hash: `{rapor.dataset_hash}`\n\n")
-            handle.write(f"- Yanlış güven oranı (↓): **{rapor.false_confidence_rate:.3f}**\n")
-            handle.write(f"- Bilinmeyen doğruluğu (↑): **{rapor.unknown_accuracy:.3f}**\n")
-            handle.write(f"- Sessiz kabul oranı (↓): **{rapor.silent_failure_rate:.3f}**\n")
-            handle.write(f"- Genel doğruluk: **{rapor.accuracy:.3f}**\n\n")
-            handle.write("## Sınıf bazında\n\n")
-            handle.write("| Sınıf | n | Doğru | İsabet |\n|---|---:|---:|---:|\n")
-            for sinif in rapor.per_class:
-                handle.write(f"| {sinif['epistemic_class']} | {sinif['total']} | "
-                             f"{sinif['correct']} | {sinif['accuracy']:.3f} |\n")
-            handle.write("\n## Epistemik çözünürlük\n\n")
-            handle.write(f"{ayrim['note']}\n\n")
-            handle.write("## Sınırlar\n\n")
-            for sinir in rapor.limitations:
-                handle.write(f"- {sinir}\n")
-        print(f"  markdown: {markdown}")
 
 
-def _provenance(out=None, markdown=None):
-    """Faz 27/28: köken denetimi ve belge hash doğrulaması demosu."""
-    from hga.evaluation.provenance import (
-        audit_provenance,
-        build_provenance_chain,
-        ingest_with_provenance,
-        verify_document_hashes,
-    )
-    from hga.knowledge import KaynakTuru, KnowledgeStore
-
-    store = KnowledgeStore()
-    belge = ("Ali ata bindi. Ayşe kitabı okudu. Mehmet topu attı. "
-             "Kuş gökyüzünde uçtu.")
-    cumleler = [c.strip() + "." for c in belge.split(".") if c.strip()]
-    bilgi = ingest_with_provenance(store, cumleler,
-                                   source_url="ornek://turkce-mini-korpus",
-                                   content=belge)
-    print("Köken damgalı aktarım (Faz 27/28):")
-    for anahtar, deger in bilgi.items():
-        print(f"  {anahtar}: {deger}")
-
-    zincir = None
-    if store.relations.olgular():
-        zincir = build_provenance_chain(store, store.relations.olgular()[0])
-        print("\nÖrnek provenance zinciri:")
-        print("  " + " → ".join(zincir.kinds()))
-        print(f"  tam dış iz: {zincir.complete_external_trace}; eksikler: {zincir.missing}")
-
-    # Kökensiz bir olgu ekleyip denetimin bunu yakaladığını göster.
-    store.varlik_ekle("yetim_ozne", entity_id="E_YETIM_S")
-    store.varlik_ekle("yetim_nesne", entity_id="E_YETIM_O")
-    store.iliski_tanimla("yetim_iliski", relation_id="R_YETIM")
-    store.olgu_kaydet("E_YETIM_S", "R_YETIM", "E_YETIM_O", 1.0,
-                      source=KaynakTuru.REAL_DATA, confidence=1.0)
-
-    rapor = audit_provenance(store)
-    print("\nKöken denetimi:")
-    print(rapor.markdown())
-    print()
-    for bulgu in rapor.findings:
-        print(f"  - {bulgu}")
-    print(f"  temiz mi: {rapor.clean} (kökensiz olgu bilerek eklendi)")
-
-    dogrulama = verify_document_hashes(
-        store, {"ornek://turkce-mini-korpus": belge})
-    print(f"\nHash doğrulaması: kontrol={dogrulama.checked} "
-          f"eşleşen={dogrulama.matched} tutmayan={dogrulama.mismatched}")
-    bozuk = verify_document_hashes(
-        store, {"ornek://turkce-mini-korpus": belge + " Belge değişti."})
-    print(f"  belge değiştirildiğinde yakalanan: {bozuk.mismatched}")
-
-    cikti = {"ingest": bilgi, "audit": rapor.to_dict(),
-             "provenance_chain_example": zincir.to_dict() if zincir else None,
-             "hash_check": dogrulama.to_dict(),
-             "tampered_check": bozuk.to_dict()}
-    if out:
-        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
-        with open(out, "w", encoding="utf-8") as handle:
-            json.dump(cikti, handle, ensure_ascii=False, indent=2, sort_keys=True)
-        print(f"  report: {out}")
-    if markdown:
-        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
-        with open(markdown, "w", encoding="utf-8") as handle:
-            handle.write("# Faz 27/28 — Köken (Provenance) Denetimi\n\n")
-            handle.write(rapor.markdown() + "\n\n")
-            if zincir is not None:
-                handle.write("## Örnek Provenance Zinciri\n\n")
-                handle.write("`" + " → ".join(zincir.kinds()) + "`\n\n")
-                handle.write(f"- Tam dış iz: `{zincir.complete_external_trace}`\n")
-                handle.write(f"- Eksikler: `{zincir.missing}`\n\n")
-            for bulgu in rapor.findings:
-                handle.write(f"- {bulgu}\n")
-        print(f"  markdown: {markdown}")
 
 
 def _priority(k=10, out=None, markdown=None):
@@ -1641,20 +1493,6 @@ def _research_benchmark(profile, seeds, experiment_root, sections=None,
 
 
 
-def _yaz_rapor(cikti, out=None, markdown=None, md_metin=None):
-    """Ortak JSON/Markdown yazıcı — rapor komutları bunu paylaşır."""
-    if out:
-        os.makedirs(os.path.dirname(os.path.abspath(out)) or ".", exist_ok=True)
-        with open(out, "w", encoding="utf-8") as handle:
-            json.dump(cikti, handle, ensure_ascii=False, indent=2, sort_keys=True)
-        print(f"  report: {out}")
-    if markdown and md_metin is not None:
-        os.makedirs(os.path.dirname(os.path.abspath(markdown)) or ".", exist_ok=True)
-        with open(markdown, "w", encoding="utf-8") as handle:
-            handle.write(md_metin)
-        print(f"  markdown: {markdown}")
-
-
 def _oncelik_zincir(k=10, seeds=None, out=None, markdown=None):
     """P0-1: Priority(E) nedensel zincir ablasyonu."""
     from hga.evaluation.priority_ablation import (
@@ -1970,26 +1808,8 @@ def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _insan_degerlendirme_raporu(package_dir=None):
-    """Varsa tamamlanmış puanları, yoksa yalnız protokolü yükle."""
-    from hga.evaluation.human_eval_fill import build_human_evaluation_from_csv
-    from hga.evaluation.human_evaluation import build_human_evaluation_protocol
-
-    paket_dizini = Path(package_dir or "insan_degerlendirme_paketleri")
-    try:
-        return build_human_evaluation_from_csv(paket_dizini)
-    except ValueError:
-        return build_human_evaluation_protocol()
 
 
-def _insan_degerlendirme(package_dir=None, out=None, markdown=None):
-    """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
-    from hga.evaluation.human_evaluation import human_evaluation_markdown
-
-    rapor = _insan_degerlendirme_raporu(package_dir)
-    md = human_evaluation_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
 def _insan_import(package_dir=None, out=None, markdown=None):
