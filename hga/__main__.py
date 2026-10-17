@@ -74,10 +74,14 @@ from pathlib import Path
 from typing import Optional
 
 from hga.cli.common import _yaz_rapor
+from hga.cli.depth import _cikarim_derinligi
 from hga.cli.epistemik import _epistemik
+from hga.cli.generalization import _genelleme_v2
 from hga.cli.human_eval import _insan_degerlendirme, _insan_degerlendirme_raporu
 from hga.cli.kronecker_rank import _kronecker_rank
 from hga.cli.provenance import _provenance
+from hga.cli.seed_statistics import _tohum_istatistik
+from hga.cli.semantic import _semantik
 
 KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MIMARI = os.path.join(KOK, "mimari")
@@ -1519,19 +1523,6 @@ def _operator_baseline(n=8, steps=300, seeds=None, device="cpu",
     _yaz_rapor(rapor.to_dict(), out, markdown, operator_baseline_markdown(rapor))
 
 
-def _cikarim_derinligi(profile="standard", seeds=None, threshold=1.0,
-                       out=None, markdown=None):
-    """P0-7: C_R ve C_RD ölçümü."""
-    from hga.evaluation.reasoning_depth import (
-        measure_reasoning_depth,
-        reasoning_depth_markdown,
-    )
-    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
-                if seeds else None)
-    rapor = measure_reasoning_depth(profile=profile, seeds=tohumlar,
-                                    reliability_threshold=float(threshold))
-    print(reasoning_depth_markdown(rapor))
-    _yaz_rapor(rapor.to_dict(), out, markdown, reasoning_depth_markdown(rapor))
 
 
 def _signature(profile="smoke", seeds=None, out=None, markdown=None):
@@ -1589,27 +1580,8 @@ def _verifier_adversarial(out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _semantik(out=None, markdown=None):
-    """P0-5: Türkçe semantik çıkarım v2 gold benchmarkı."""
-    from hga.evaluation.semantic_extraction import (
-        run_semantic_extraction_v2_benchmark,
-        semantic_extraction_markdown,
-    )
-    rapor = run_semantic_extraction_v2_benchmark()
-    print(semantic_extraction_markdown(rapor))
-    _yaz_rapor(rapor.to_dict(), out, markdown,
-               semantic_extraction_markdown(rapor))
 
 
-def _genelleme_v2(out=None, markdown=None):
-    """P0-6: ham metinden keşif + kompozisyon (C_G v2)."""
-    from hga.evaluation.compositional_v2 import (
-        compositional_v2_markdown,
-        run_compositional_v2_benchmark,
-    )
-    rapor = run_compositional_v2_benchmark()
-    print(compositional_v2_markdown(rapor))
-    _yaz_rapor(rapor.to_dict(), out, markdown, compositional_v2_markdown(rapor))
 
 
 def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
@@ -1794,18 +1766,6 @@ def _ogrenme_olcek(profile="smoke", seeds=None, out=None, markdown=None):
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
-    """P1: Çekirdek protokollerde 20 tohum + istatistiksel çıkarım."""
-    from hga.evaluation.seed_statistics import (
-        run_core_seed_statistics,
-        seed_statistics_markdown,
-    )
-    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
-                if seeds else None)
-    rapor = run_core_seed_statistics(profile=profile, seeds=tohumlar)
-    md = seed_statistics_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
 
