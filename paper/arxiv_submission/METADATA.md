@@ -29,7 +29,7 @@ cs.LG (Machine Learning)
 - stat.ML (Machine Learning - Statistics)
 
 ## Comments
-10 pages, 7 tables, 21 references. Companion paper to arXiv:2026.XXXXX
+10 pages, 7 tables, 21 references. Companion paper to (not yet submitted)
 (Preprint 1: hybrid gain formula).
 
 ## MSC / ACM Classes

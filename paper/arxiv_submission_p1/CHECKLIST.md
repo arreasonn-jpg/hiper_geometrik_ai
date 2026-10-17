@@ -26,7 +26,7 @@
 
 ## Post-Submission
 
-- [ ] arXiv ID al (arXiv:2026.XXXXX)
+- [ ] arXiv ID al (not yet submitted)
 - [ ] Preprint 2 + 3 comments güncelle
 - [ ] GitHub README'ye arXiv linki
 - [ ] Hocalara link gönder

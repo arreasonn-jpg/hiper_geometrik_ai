@@ -68,7 +68,15 @@ results to guide future work.
 
 \section{Related Work}
 \label{sec:related}
-% TODO
+
+\paragraph{Hybrid Symbolic-Neural Systems.}
+Combining symbolic reasoning with neural networks has long been a goal in artificial intelligence \cite{garcez2023neurosymbolic, marcus2020next}. Frameworks such as DeepProbLog \cite{manhaeve2018deepproblog} and related hybrid paradigms \cite{bengio2021hybrid} integrate logical reasoning with deep learning. However, these approaches typically focus on architectural integration rather than providing a theoretical decomposition of the performance gain. The symbolic-neural hybrid rule we analyze is conceptually related to early probabilistic logic systems \cite{silveira2014gold}, but we focus explicitly on the coverage-dependent transition between the two arms.
+
+\paragraph{Few-Shot and Low-Coverage Regimes.}
+Neural models often struggle in low-resource or highly structured regimes where explicit rules might succeed \cite{wang2020fewshot}. Our framework quantifies exactly when a neural baseline is preferable to a symbolic rule and how to interpolate between them based on coverage.
+
+\paragraph{Datasets and Evaluation.}
+For our empirical validation, we rely on Universal Dependencies treebanks \cite{nivre2020ud} across multiple languages. To ensure robust evaluation of our human judgments and extraction accuracy, we utilize established reliability metrics such as Krippendorff's $\alpha$ \cite{krippendorff2011computing}. Transformer baselines \cite{vaswani2017attention} provide the neural arm in our experiments.
 
 \section{Method}
 \label{sec:method}
