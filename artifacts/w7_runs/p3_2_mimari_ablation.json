@@ -1,0 +1,32 @@
+{
+  "hga_full": {
+    "dev_ppl": 62.11,
+    "test_ppl": 70.4,
+    "params": 248145,
+    "sure": 12.6
+  },
+  "hga_no_pos": {
+    "dev_ppl": 64.55,
+    "test_ppl": 72.24,
+    "params": 247889,
+    "sure": 12.6
+  },
+  "hga_frozen_emb": {
+    "dev_ppl": 72.47,
+    "test_ppl": 81.58,
+    "params": 216145,
+    "sure": 32.7
+  },
+  "hga_linear_decoder": {
+    "dev_ppl": 64.23,
+    "test_ppl": 72.82,
+    "params": 695633,
+    "sure": 26.4
+  },
+  "hga_no_encoder": {
+    "dev_ppl": 51.96,
+    "test_ppl": 58.32,
+    "params": 305713,
+    "sure": 13.6
+  }
+}
