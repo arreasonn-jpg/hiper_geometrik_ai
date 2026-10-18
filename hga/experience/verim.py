@@ -387,7 +387,7 @@ def run_yield_seed_sweep(
     memory_slots: int = 512,
 ) -> Any:
     """Verim metriklerini çok tohumla çalıştır (manifest + istatistik ile)."""
-    from ..evaluation.experiment import run_seed_sweep
+    from ..experiments.experiment import run_seed_sweep
 
     def _callback(seed: int) -> Dict[str, Any]:
         rapor = run_yield_experiment(

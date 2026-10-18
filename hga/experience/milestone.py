@@ -354,7 +354,7 @@ def run_milestone_experiment(
         }
 
     # Faz 13–14: C_E / C_V ölçümü.
-    from ..evaluation.capacity import measure_experience_capacity
+    from ..experiments.capacity import measure_experience_capacity
 
     kapasite = measure_experience_capacity(
         domain.store, verifier=domain.environment.aday_dogrula,
