@@ -4,7 +4,7 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
-from hga.evaluation.operator_baselines import (  # noqa: E402
+from hga.experiments.operator_baselines import (  # noqa: E402
     OFFICIAL_SEED_REQUIREMENT,
     OFFICIAL_SEEDS,
     STRUCTURED_TEACHERS,

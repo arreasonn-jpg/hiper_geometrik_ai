@@ -6,7 +6,7 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
-from hga.evaluation.long_context import (  # noqa: E402
+from hga.experiments.long_context import (  # noqa: E402
     LONG_CONTEXT_TARGETS,
     PROFILES,
     _sample_positions,

@@ -2,7 +2,7 @@
 """Faz 27/28: köken (provenance) denetimi ve belge hash doğrulaması."""
 import pytest
 
-from hga.evaluation.provenance import (
+from hga.experiments.provenance import (
     PROVENANCE_CHAIN_KINDS,
     audit_provenance,
     build_provenance_chain,

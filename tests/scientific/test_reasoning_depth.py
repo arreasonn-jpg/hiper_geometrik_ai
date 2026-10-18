@@ -2,7 +2,7 @@
 """P0-7: C_R / C_RD güvenilir çıkarım derinliği testleri."""
 import pytest
 
-from hga.evaluation.reasoning_depth import (
+from hga.experiments.reasoning_depth import (
     PROFILES,
     measure_reasoning_depth,
     reasoning_depth_markdown,

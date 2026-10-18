@@ -16,7 +16,7 @@ if KOK not in sys.path:
 from experiments.experience_loop.run_kronecker_vs_dense import (  # noqa: E402
     run_kronecker_vs_dense_benchmark,
 )
-from hga.evaluation import (  # noqa: E402
+from hga.experiments import (  # noqa: E402
     kronecker_capacity_contract,
     run_kronecker_dense_trial,
 )
@@ -159,7 +159,7 @@ else:
 def test_torch_yokken_fonksiyon_acik_import_hatasi_verir():
     """run_kronecker_dense_trial torch yokken sessiz kalmaz, ImportError atar."""
     kod = _TORCH_ENGELLE + """
-from hga.evaluation import run_kronecker_dense_trial
+from hga.experiments import run_kronecker_dense_trial
 
 try:
     run_kronecker_dense_trial(n=4, steps=1)

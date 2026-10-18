@@ -45,7 +45,7 @@ katrilyon gerçek sinaps/parametre” iddiası taşımaz.
 - TWT v1: upstream revision
   `40838e5cbe3f2882d4e768a3d782e6219e50b52a` sabittir. `web.conllu` ve
   `wiki.conllu` SHA-256 değerleri,
-  [`PROVENANCE.json`](../hga/evaluation/datasets/twt_v1/PROVENANCE.json)
+  [`PROVENANCE.json`](../hga/experiments/datasets/twt_v1/PROVENANCE.json)
   içinde kayıtlı ve yükleyici tarafından doğrulanır.
 
 ## Kapsayıcı ile yeniden üretim
@@ -83,7 +83,7 @@ CKPT-000 kapsamı aşağıdaki yeni, doğrulanabilir artefaktlarla genişletildi
   Türkçe TWT v1 ile birlikte
   [`BILINGUAL_BENCHMARK.md`](BILINGUAL_BENCHMARK.md)'de tanımlıdır. EWT'nin
   CC-BY-SA-4.0 lisansı, upstream attribution'ı ve SHA-256 kaynak sözleşmesi
-  [`ewt_v1/PROVENANCE.json`](../hga/evaluation/datasets/ewt_v1/PROVENANCE.json)
+  [`ewt_v1/PROVENANCE.json`](../hga/experiments/datasets/ewt_v1/PROVENANCE.json)
   içinde pakete dahil edilir.
 - **Transformer/BERT/GPT-style kontroller:**
   [`ENGLISH_EWT_BASELINES.md`](ENGLISH_EWT_BASELINES.md) beş seed üzerinde

@@ -186,8 +186,8 @@ def run_hiyerarsik_twt(
     if str(_ROOT) not in sys.path:
         sys.path.insert(0, str(_ROOT))
 
-    from hga.evaluation.real_turkish import prepare_real_turkish_task
-    from hga.evaluation.twt_baselines import ArcFeatureVocabulary
+    from hga.experiments.real_turkish import prepare_real_turkish_task
+    from hga.experiments.twt_baselines import ArcFeatureVocabulary
 
     print("[1/4] TWT verisi yükleniyor...")
     task_data = prepare_real_turkish_task()

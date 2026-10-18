@@ -4,7 +4,7 @@ import statistics as st
 import sys
 sys.path.insert(0, '.')
 
-from hga.evaluation.paradigma import run_paradigm_ablation
+from hga.experiments.paradigma import run_paradigm_ablation
 
 SEEDS = [1, 2, 3]
 

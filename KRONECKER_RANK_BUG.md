@@ -23,7 +23,7 @@ Başarısız çalıştırma: n=16..256 × K=1..32 → 1+ saat, disk doldu
 
 ## Uygulanan Çözüm (P0-8, 2026-10-13)
 
-`hga/evaluation/kronecker_rank.py` içine `guvenli_mi(n, k)` fonksiyonu
+`hga/experiments/kronecker_rank.py` içine `guvenli_mi(n, k)` fonksiyonu
 eklendi. `run_nk_rank_sweep` hesaplamadan **önce** tüm (n, K) çiftlerini
 bu fonksiyonla doğrular.
 

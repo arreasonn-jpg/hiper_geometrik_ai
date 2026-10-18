@@ -5,7 +5,7 @@ import copy
 
 import pytest
 
-from hga.evaluation.compositional import (
+from hga.experiments.compositional import (
     DIMENSIONS,
     CompositionalDataset,
     run_compositional_benchmark,

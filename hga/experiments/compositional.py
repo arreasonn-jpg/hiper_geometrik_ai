@@ -28,7 +28,7 @@ from hga.knowledge import DeneyimDurumu, KaynakTuru, KnowledgeStore
 
 from .leakage import LeakageAuditReport, audit_partitions, semantic_fingerprint
 
-DATA_PACKAGE = "hga.evaluation.datasets"
+DATA_PACKAGE = "hga.experiments.datasets"
 DATA_FILE = "compositional_tr_v1.json"
 DIMENSIONS = (
     "seen_composition",

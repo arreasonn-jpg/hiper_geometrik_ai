@@ -1,7 +1,7 @@
 """Scientific tests for leakage-safe uncertainty calibration."""
 import pytest
 
-from hga.evaluation.calibration import (
+from hga.experiments.calibration import (
     COVERAGE_TARGETS,
     calibration_metrics,
     fit_temperature,

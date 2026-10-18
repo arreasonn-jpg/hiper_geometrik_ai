@@ -17,7 +17,7 @@ zayıftır.
 
 İkinci kritik nokta: bu modül **kararı p-değerine bırakmaz**. Farkın güven
 aralığı sıfırı içeriyorsa sonuç "anlamlı değil" diye raporlanır, p<0.05 olsa
-bile. `hga/evaluation/statistics.py` içindeki `compare_paired` zaten bu
+bile. `hga/experiments/statistics.py` içindeki `compare_paired` zaten bu
 ihtiyatlı hükmü üretir; burada onu protokol çıktılarına bağlıyoruz.
 
 Ayrıca **güç (power) sınırı** açıkça yazılır: n=20 eşleşmiş permütasyon

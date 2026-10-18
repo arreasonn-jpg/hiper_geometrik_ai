@@ -7,7 +7,7 @@ Bu paketteki modüller `docs/KOD_TABANI_VE_MIMARI_DUZENI.md` içinde `LEGACY`
 olarak sınıflandırılmıştır. Aktif mimari onları KULLANMAZ:
 
 * `legacy/bilgi_katmani.py` → yerini `hga.knowledge.KnowledgeStore` ve
-  `hga.evaluation.hallucination` aldı.
+  `hga.experiments.hallucination` aldı.
 * `legacy/calistir.py` → yerini `python -m hga` CLI'si aldı.
 * `legacy/arayuz.py` → yerini `python -m hga` ve `hga.observability`
   panelleri aldı.

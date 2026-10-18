@@ -2,7 +2,7 @@
 """P0-3: TWT gerçek sonuç tablosu, FLOP muhasebesi ve çoklu tohum testleri."""
 import pytest
 
-from hga.evaluation.twt_results import (
+from hga.experiments.twt_results import (
     CALIBRATION_METRICS,
     HEADLINE_METRICS,
     analytic_forward_flops,
@@ -11,8 +11,8 @@ from hga.evaluation.twt_results import (
 
 torch = pytest.importorskip("torch")
 
-from hga.evaluation.twt_baselines import MODEL_ORDER  # noqa: E402
-from hga.evaluation.twt_results import (  # noqa: E402
+from hga.experiments.twt_baselines import MODEL_ORDER  # noqa: E402
+from hga.experiments.twt_results import (  # noqa: E402
     measured_forward_flops,
     reconcile_flops,
     results_markdown,
@@ -58,7 +58,7 @@ def test_kronecker_flopu_n4_degil_2n3():
     """Kronecker'ın hesap avantajı iddiası tam olarak burada yatıyor."""
     import math
 
-    from hga.evaluation.twt_baselines import ARCHITECTURE_CONFIG
+    from hga.experiments.twt_baselines import ARCHITECTURE_CONFIG
     n = int(ARCHITECTURE_CONFIG["kronecker_n"])
     katman = int(ARCHITECTURE_CONFIG["kronecker_layers"])
     dokum = analytic_forward_flops("kronecker")["breakdown"]
@@ -84,7 +84,7 @@ def test_esit_parametre_esit_flop_demek_degil():
 
 def test_flop_esli_konfig_maci_esitler():
     """FLOP-eşli rejim yapılandırması dört kolu ≤1.05× MAC bandına sokmalı."""
-    from hga.evaluation.twt_baselines import FLOP_MATCHED_CONFIG
+    from hga.experiments.twt_baselines import FLOP_MATCHED_CONFIG
     sayimlar = {m: analytic_forward_flops(m, FLOP_MATCHED_CONFIG)[
         "forward_flops_per_example"] for m in MODEL_ORDER}
     oran = max(sayimlar.values()) / min(sayimlar.values())

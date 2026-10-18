@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from hga.evaluation.research import (
+from hga.experiments.research import (
     research_report_markdown,
     run_research_benchmark,
     save_research_report,

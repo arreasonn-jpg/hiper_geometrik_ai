@@ -52,7 +52,7 @@ from hga.knowledge import (
     KnowledgeStore,
 )
 
-DATA_PACKAGE = "hga.evaluation.datasets"
+DATA_PACKAGE = "hga.experiments.datasets"
 DATA_FILE = "epistemic_tr_v1.json"
 
 EPISTEMIC_CLASSES = ("KNOWN", "FALSE", "UNKNOWN", "UNCERTAIN", "CONFLICT")

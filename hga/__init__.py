@@ -11,7 +11,7 @@ saf Python ile çalışan (torch bağımlılığı OLMAYAN) modüler katmandır:
     hga/knowledge/   — EntityIndex, PropertyIndex, RelationIndex, KnowledgeStore
     hga/experience/  — Generator, Evaluator, Scoring, Conflict, Consolidation
     hga/memory/      — Seyrek deneyim slotları + Experience Replay (köprü)
-    hga/evaluation/  — Halüsinasyon/factual consistency metrikleri
+    hga/experiments/  — Halüsinasyon/factual consistency metrikleri
     hga/observability/ — Attention/geometri/bellek/deneyim akışı raporları
     hga/data/        — Veri kalite filtresi
     hga/config/      — Ağırlık/eşik/model yapılandırmaları

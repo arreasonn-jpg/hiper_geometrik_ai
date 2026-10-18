@@ -1,6 +1,6 @@
 # Priority(E) Ağırlıkları: Elle Seçim Savunulamıyor
 
-Protokol: `priority_weight_optimization_v1` · Modül: `hga/evaluation/priority_optimization.py`
+Protokol: `priority_weight_optimization_v1` · Modül: `hga/experiments/priority_optimization.py`
 CLI: `python -m hga oncelik-optimizasyon --signature-profile standard`
 
 ## Sorun

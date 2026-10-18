@@ -7,7 +7,7 @@ boyutu birbirinin yerine geçmez.
 Makine-okunur giriş noktası:
 
 ```python
-from hga.evaluation.kronecker_rank import theoretical_contract
+from hga.experiments.kronecker_rank import theoretical_contract
 print(theoretical_contract(n=16, k=4))
 ```
 

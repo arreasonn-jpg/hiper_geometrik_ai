@@ -2,7 +2,7 @@
 import sys
 sys.path.insert(0, '.')
 
-from hga.evaluation.paradigma import run_paradigm_ablation
+from hga.experiments.paradigma import run_paradigm_ablation
 import json
 
 ratios = [0.0, 0.15, 0.30, 0.50, 0.70]

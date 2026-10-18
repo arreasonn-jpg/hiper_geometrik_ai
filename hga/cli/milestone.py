@@ -9,8 +9,8 @@ def _milestone(cycles, batch, initial_facts, operands_max, negatives_per_fact,
                memory_slots, seeds, experiment_root, out=None, markdown=None,
                ledger=None, checkpoints=None):
     """K₀→Kₙ milestone tablosu: versiyonlanmış + defterli kapalı döngü."""
-    from hga.evaluation import canonical_hash, run_seed_sweep
     from hga.experience import run_milestone_experiment
+    from hga.experiments import canonical_hash, run_seed_sweep
 
     seed_values = [int(v.strip()) for v in seeds.split(",") if v.strip()]
     if checkpoints:

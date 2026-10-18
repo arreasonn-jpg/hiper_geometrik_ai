@@ -8,7 +8,7 @@ def _bellek_streaming(target_records=100_000_000, sample_records=10_000,
                       shard_records=1_000_000, checkpoint_interval=1_000,
                       seeds=None, out=None, markdown=None):
     """P0-8: 100M-ready streaming/checkpoint dry-run harness."""
-    from hga.evaluation.memory_hierarchy import (
+    from hga.experiments.memory_hierarchy import (
         memory_streaming_harness_markdown,
         run_memory_streaming_harness,
     )
@@ -26,7 +26,7 @@ def _bellek_streaming(target_records=100_000_000, sample_records=10_000,
 
 def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
     """P0-8: Hot/Warm/Cold/Archive hiyerarşik bellek benchmarkı."""
-    from hga.evaluation.memory_hierarchy import (
+    from hga.experiments.memory_hierarchy import (
         memory_hierarchy_markdown,
         run_memory_hierarchy_benchmark,
     )

@@ -2,7 +2,7 @@
 
 Neden bu modül var
 ------------------
-``hga/evaluation/kronecker.py`` Kronecker'ı yalnız ``n² → 1 → n²`` rank-1
+``hga/experiments/kronecker.py`` Kronecker'ı yalnız ``n² → 1 → n²`` rank-1
 darboğazına karşı ölçüyordu. O baseline kasıtlı olarak zayıftır; ondan
 ``Kronecker > Dense`` sonucu çıkarılamaz. Bu modül karşılaştırmayı gerçek
 dense operatörlere yükseltir ve **iki ayrı adalet rejimini** ayırır:

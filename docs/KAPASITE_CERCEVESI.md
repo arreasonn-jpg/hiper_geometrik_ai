@@ -41,7 +41,7 @@ python -m hga kapasite --operands-max 9
 ```
 
 ```python
-from hga.evaluation import measure_experience_capacity
+from hga.experiments import measure_experience_capacity
 from hga.experience.mini_env import AritmetikOrtam
 
 rapor = measure_experience_capacity(

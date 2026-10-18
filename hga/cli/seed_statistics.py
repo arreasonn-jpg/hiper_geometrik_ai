@@ -6,7 +6,7 @@ from hga.cli.common import _yaz_rapor
 
 def _tohum_istatistik(profile="smoke", seeds=None, out=None, markdown=None):
     """P1: Çekirdek protokollerde 20 tohum + istatistiksel çıkarım."""
-    from hga.evaluation.seed_statistics import (
+    from hga.experiments.seed_statistics import (
         run_core_seed_statistics,
         seed_statistics_markdown,
     )

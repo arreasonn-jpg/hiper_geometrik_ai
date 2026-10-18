@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from hga.evaluation.capability_vector import (
+from hga.experiments.capability_vector import (
     SCORECARD_SECTIONS,
     TERMINOLOGY,
     build_capability_vector,
@@ -13,7 +13,7 @@ from hga.evaluation.capability_vector import (
     save_scorecard,
     scorecard_markdown,
 )
-from hga.evaluation.compositional_v2 import (
+from hga.experiments.compositional_v2 import (
     AXES,
     HARD_CASES,
     compositional_v2_markdown,

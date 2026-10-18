@@ -65,9 +65,9 @@ Eski "eğim 1.000" bulgusunun kendisi kusurun parmak iziydi.
 
 - `hga/memory/sparse_memory.py` — `_adres` (bağımsız tuzlar), `icerir` (OR).
 - `hga/memory/benchmark.py` — policy metni + not: ANY okuma semantiği.
-- `hga/evaluation/reasoning_depth.py` — profiller yeni kırılma bölgelerine
+- `hga/experiments/reasoning_depth.py` — profiller yeni kırılma bölgelerine
   göre yeniden boyutlandırıldı; C_R artık her profilde ızgara-içi ölçümdür.
-- `hga/evaluation/depth_diagnosis.py` — teşhis ızgaraları dolgu-baskın
+- `hga/experiments/depth_diagnosis.py` — teşhis ızgaraları dolgu-baskın
   tasarıma taşındı (D >> max hop; kontrol kolu her slotta temiz kalır).
 - `tests/test_memory_benchmark.py`, `tests/scientific/test_depth_diagnosis.py`,
   `tests/scientific/test_reasoning_depth.py` — eski kusurlu semantiği

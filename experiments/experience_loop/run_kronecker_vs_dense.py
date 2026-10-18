@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Kronecker vs eşit bütçeli rank-1 baseline deney giriş noktası.
 
-Kanonik uygulama ``hga.evaluation.kronecker`` içindedir. Bu dosya eski import
+Kanonik uygulama ``hga.experiments.kronecker`` içindedir. Bu dosya eski import
 ve komut satırı yolunu koruyan ince wrapper'dır; PyTorch yokken import sırasında
 ``sys.exit`` çağırmaz.
 """
@@ -17,7 +17,7 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.evaluation.kronecker import run_kronecker_dense_trial  # noqa: E402
+from hga.experiments.kronecker import run_kronecker_dense_trial  # noqa: E402
 
 
 def run_kronecker_vs_dense_benchmark(

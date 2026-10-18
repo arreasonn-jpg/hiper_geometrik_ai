@@ -74,10 +74,10 @@ include = ["hga*", "mimari*", "egitim*", "golden_dataset*"]
 
 [tool.setuptools.package-data]
 golden_dataset = ["*.json"]
-"hga.evaluation.datasets" = ["*.json"]
-"hga.evaluation.datasets.twt_v1" = ["*.conllu", "*.json", "*.md", "*.txt"]
-"hga.evaluation.datasets.ewt_v1" = ["*.conllu", "*.json", "*.md", "*.txt"]
-"hga.evaluation.datasets.tr_corpus_v1" = ["*.json", "*.jsonl.gz", "*.md"]
+"hga.experiments.datasets" = ["*.json"]
+"hga.experiments.datasets.twt_v1" = ["*.conllu", "*.json", "*.md", "*.txt"]
+"hga.experiments.datasets.ewt_v1" = ["*.conllu", "*.json", "*.md", "*.txt"]
+"hga.experiments.datasets.tr_corpus_v1" = ["*.json", "*.jsonl.gz", "*.md"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

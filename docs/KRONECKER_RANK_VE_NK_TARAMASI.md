@@ -7,12 +7,12 @@ python -m hga kronecker-rank --n-values 4,8,16 --k-values 1,2,4 \
     --out raporlar/kronecker_rank.json
 ```
 
-Ham çıktı: `raporlar/kronecker_rank.json` · Kod: `hga/evaluation/kronecker_rank.py`
+Ham çıktı: `raporlar/kronecker_rank.json` · Kod: `hga/experiments/kronecker_rank.py`
 · Testler: `tests/test_kronecker_rank.py` (9 test)
 
 ## Neden bu deney?
 
-README ve `hga/evaluation/sweep.py` "katman başına n² çarpan, zincir boyunca
+README ve `hga/experiments/sweep.py` "katman başına n² çarpan, zincir boyunca
 `n^(2K)` etkileşim uzayı" diyor. Bu sayı **hesaplanıyordu ama hiç
 ölçülmüyordu**. Kullanıcının "en büyük 5 eksik" listesindeki Kronecker
 expressivity maddesi tam olarak buydu.

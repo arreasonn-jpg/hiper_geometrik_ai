@@ -10,7 +10,7 @@ from hga.cli.common import _yaz_rapor
 def _signature_gate(yol=None, profile="standard", seeds=None,
                     out=None, markdown=None):
     """Signature Benchmark release gate."""
-    from hga.evaluation.signature import (
+    from hga.experiments.signature import (
         run_signature_benchmark,
         run_signature_release_gate,
         signature_release_gate_markdown,
@@ -28,7 +28,7 @@ def _signature_gate(yol=None, profile="standard", seeds=None,
 
 def _signature(profile="smoke", seeds=None, out=None, markdown=None):
     """P0-4: HGA Signature Benchmark."""
-    from hga.evaluation.signature import (
+    from hga.experiments.signature import (
         run_signature_benchmark,
         signature_markdown,
     )

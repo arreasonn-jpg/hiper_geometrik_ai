@@ -1,8 +1,8 @@
 """Elle sabitlenmiş golden benchmark ve epistemik sınır testleri."""
 import pytest
 
-from hga.evaluation import GoldenDataset, audit_partitions, run_golden_benchmark
 from hga.experience import DogrulamaHatti, ExperienceEvaluator
+from hga.experiments import GoldenDataset, audit_partitions, run_golden_benchmark
 from hga.knowledge import DeneyimDurumu, ExperienceCandidate, KaynakTuru
 
 

@@ -16,7 +16,7 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 │  ├── hga.knowledge       : Entity, Property, Relation, KnowledgeStore   │
 │  ├── hga.experience      : Generator, Evaluator, StateMachine, Scoring  │
 │  ├── hga.memory          : SparseMemory, Replay, Bridge & Integration  │
-│  ├── hga.evaluation      : Benchmark, Hallucination Metrics, Reporting  │
+│  ├── hga.experiments      : Benchmark, Hallucination Metrics, Reporting  │
 │  ├── hga.observability   : Attention, Geometric, Memory & Flow Panels   │
 │  └── hga.data            : Quality Filter, Manifest & Versioning        │
 └────────────────────────────────────┬────────────────────────────────────┘
@@ -50,7 +50,7 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 | `hga/knowledge/*` | `ACTIVE` | Kanonik Varlık, Özellik ve İlişki dizinleri (`KnowledgeStore`) + `versioning.py` (K₀→Kₙ sürüm zinciri, rollback, diff). |
 | `hga/experience/*` | `ACTIVE` | Deneyim durum makinesi, puanlama, üretici, değerlendirici, döngü + `ledger.py` (immutable defter) ve `milestone.py` (K₀→Kₙ tablosu). |
 | `hga/memory/*` | `ACTIVE` | Epizodik bellek, replay buffer ve sinirsel köprü (`NeuralKopru`). |
-| `hga/evaluation/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü, raporlama + `capacity.py` (P/C_I^UB/C_M^UB/C_E/C_V çerçevesi). |
+| `hga/experiments/*` | `ACTIVE` | Standart metrikler, halüsinasyon kontrolü, raporlama + `capacity.py` (P/C_I^UB/C_M^UB/C_E/C_V çerçevesi). |
 | `hga/observability/*` | `ACTIVE` | Bellek doluluk, dikkat ve deneyim akışı paneli. |
 | `hga/data/*` | `ACTIVE` | Veri kalitesi, SHA-256 manifestosu ve versiyonlama. |
 | `hga/config/*` | `ACTIVE` | Merkezi YAML konfigürasyon yöneticisi. |
@@ -61,7 +61,7 @@ Proje 3 temel sütun üzerinde yapılandırılmıştır:
 | `mimari/bpe_tokenizer.py` | `ACTIVE` | **Tek standart tokenizer**. |
 | `egitim/*` | `ACTIVE` | Eğitim döngüleri, determinizm ve scheduler yardımcıları. |
 | `experiments/*` | `EXPERIMENTAL` | Ablasyon ve ölçekleme deney koşucuları. |
-| `legacy/bilgi_katmani.py` | `LEGACY` | Eski 3 katmanlı string eşleme prototipi. Yerini `hga.knowledge` ve `hga.evaluation.hallucination` almıştır. |
+| `legacy/bilgi_katmani.py` | `LEGACY` | Eski 3 katmanlı string eşleme prototipi. Yerini `hga.knowledge` ve `hga.experiments.hallucination` almıştır. |
 | `mimari/tokenizer.py` | `LEGACY` | Karakter tabanlı eski tokenizer. Yerini `mimari/bpe_tokenizer.py` almıştır. |
 | `legacy/calistir.py` / `legacy/arayuz.py` | `LEGACY / WRAPPER` | Eski prototip arayüzleri. CLI için standart: `python -m hga`. |
 

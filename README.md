@@ -419,7 +419,7 @@ python -m hga research-benchmark \
 Turkish NLP ana skoru, Apache-2.0 lisanslı ve insan anotasyonlu **Turkish Web
 Treebank** üzerinde hesaplanır. Upstream revision
 `40838e5cbe3f2882d4e768a3d782e6219e50b52a` ve iki CoNLL-U dosyasının SHA-256
-özetleri `hga/evaluation/datasets/twt_v1/PROVENANCE.json` içinde sabittir.
+özetleri `hga/experiments/datasets/twt_v1/PROVENANCE.json` içinde sabittir.
 4.851 ham gerçek Türkçe cümleden duplicate/near-duplicate quarantine sonrası
 3.881/484/484 train/dev/test kalır. Dependency-arc verification görevi
 Accuracy/F1/FAR/FRR/coverage ile; entity-, relation-, composition-, wording- ve
@@ -470,7 +470,7 @@ veya teorik kapasite değildir. Çıkarılan bileşenlerin parametre farkı unus
 reserve ile kapatılmaz.
 
 Türkçe compositional fixture çalışma anında üretilmez;
-`hga/evaluation/datasets/compositional_tr_v1.json` içinde elle sabitlenmiştir.
+`hga/experiments/datasets/compositional_tr_v1.json` içinde elle sabitlenmiştir.
 Train'de `Ali ata bindi`, `Ayşe arabaya bindi`, `Mehmet otobüse bindi`
 varken held-out `Ali arabaya bindi` ve `Ali otobüse bindi` aday/karar/metin
 kanallarında ayrı ölçülür. Seen composition, unseen entity, unseen relation,
@@ -573,7 +573,7 @@ C = [P, C_I^UB, C_M^UB, C_E, C_V, C_G, C_R, C_RD, C_MR, C_U, C_H]
 `C_I^UB` ve `C_M^UB` üst sınırdır; `C_E`, `C_V`, `C_G`, `C_R`, `C_RD`, `C_MR`,
 `C_U` ve `C_H` yalnız benchmark kanıtı varsa ölçülen değer olarak görünür.
 Kanıt yoksa değer `n/a` kalır; elle yazılmış 9/10 veya 10/10 puan bu vektöre
-giremez. Makine-okunur kaynak: `hga.evaluation.capability_vector.TERMINOLOGY`,
+giremez. Makine-okunur kaynak: `hga.experiments.capability_vector.TERMINOLOGY`,
 güncel rapor: `docs/SCORECARD.md`.
 
 ### Bilgi sürümleme, rollback ve değişmez defter
@@ -1311,7 +1311,7 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Uncertainty calibration | ✅ dev-only T scaling | 4 neural kol × 5 seed; ECE/adaptive ECE, Brier, NLL, AURC, disjoint slices, selective risk |
 | Knowledge lifecycle | ✅ gerçek artifact + kontrollü olaylar | ACTIVE/STALE/SUPERSEDED/RETRACTED, same-hash revalidation, dependency propagation, event chain |
 | Research Benchmark Suite | ✅ manifestli protokol | `research-benchmark`, 5 seed, JSON/MD/HTML, gerçek TWT + compositional C_G + bölüm bazlı skip/error |
-| HGA Capability Vector | ✅ standartlaştı | `hga.evaluation.capability_vector`, `docs/SCORECARD.md`: P / C_I^UB / C_M^UB üst sınırları ve ölçülen C_E/C_V/C_G/C_R/C_RD/C_MR/C_U/C_H ayrımı |
+| HGA Capability Vector | ✅ standartlaştı | `hga.experiments.capability_vector`, `docs/SCORECARD.md`: P / C_I^UB / C_M^UB üst sınırları ve ölçülen C_E/C_V/C_G/C_R/C_RD/C_MR/C_U/C_H ayrımı |
 | Observability | ✅ %100 smoke | JSON/Markdown/HTML panel, attention/geometri/bellek/deneyim metrikleri |
 | KV-cache entegrasyonu | ✅ %100 smoke | attention cache + model-level `forward_cacheli_pencere` + UI runtime yolu |
 | Knowledge/Experience/state machine | ✅ %100 smoke | `MODEL_GENERATED ≠ VERIFIED`, doğrulama ortamları, kapalı validation |
@@ -1328,13 +1328,13 @@ gerçekleşmiş kalite iddiası gibi sunmaz.
 | Cross-domain self-learning transfer | ✅ negatif-kontrol smoke | `docs/SELF_LEARNING_TRANSFER.md`: 5 ortamda kaynak→hedef self-learning hattı, source-only hedef karar 0, transfer−scratch Δcoverage 0.000; **pozitif transfer NOT_DEMONSTRATED** |
 | İnsan değerlendirme import hattı | ✅ CSV/α agregasyon, sonuç n/a | `docs/HUMAN_EVALUATION_IMPORT.md`: CSV ölçek doğrulama, Krippendorff α, kol özeti; `rater_attestation.json` yoksa ana insan sonucu açılmaz ve `docs/HUMAN_EVALUATION.md` n/a kalır |
 | Türkçe korpus genişletme hattı | ✅ pipeline + release gate | `docs/TURKISH_CORPUS_EXPANSION.md`: aday JSONL şeması, lisans allowlist, Türkçe filtre, dedup ve split; smoke adayları release değildir, 2M hedef gate'i KALDI |
-| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/evaluation/statistics.py` + `tohum-istatistik` core profili: **20 tohum**, 76 eşleşmiş karşılaştırma, min p=2e-6, 8/8 kapı (`docs/SEED_STATISTICS.md`) |
+| İstatistiksel çıkarım (P3) | ✅ bootstrap + etki büyüklüğü | `hga/experiments/statistics.py` + `tohum-istatistik` core profili: **20 tohum**, 76 eşleşmiş karşılaştırma, min p=2e-6, 8/8 kapı (`docs/SEED_STATISTICS.md`) |
 | Legacy izolasyonu | ✅ denetleniyor | `legacy/` paketi + `tests/test_legacy_isolation.py` (aktif katmanda sıfır legacy import) |
 | Tek bağımlılık kaynağı | ✅ tamam | `pyproject.toml` (+ `requirements-lock.txt`); `gereksinimler.txt` kaldırıldı |
 
 **Sonraki ölçek işleri (tamamlandı iddiası değildir):** ~~milyon-kelime Türkçe
 korpus~~ TAMAMLANDI: `tr_corpus_v1` (1.11M kelime; UD r2.14 ×8 + Bible CC0 +
-TWT, hash doğrulamalı, `hga/evaluation/datasets/tr_corpus_v1/`) `turkce-lm`
+TWT, hash doğrulamalı, `hga/experiments/datasets/tr_corpus_v1/`) `turkce-lm`
 full profilinde koşar ve `corpus_at_least_1m_words` kapısını gerçek insan
 metniyle açar; smoke profil TWT üzerinde kalır ve kapı orada bilinçli FAIL'dir.
 Kalanlar: 10M+ kelime ölçeği, gerçek instruction set büyütme, 24→1024 uzun

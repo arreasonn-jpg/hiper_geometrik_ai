@@ -2,7 +2,7 @@
 """Faz 21: neural-only vs symbolic-only vs hybrid kontrollü ablasyon testleri."""
 import pytest
 
-from hga.evaluation.paradigma import (
+from hga.experiments.paradigma import (
     KOLLAR,
     gorev_uret,
     hibrit_tahmin,

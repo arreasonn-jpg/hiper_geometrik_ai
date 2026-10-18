@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import build_scorecard
-from hga.evaluation.engineering_audit import (
+from hga.experiments.capability_vector import build_scorecard
+from hga.experiments.engineering_audit import (
     CORE_SEED_REQUIREMENT,
     PROTOCOL_ENGINEERING,
     PROTOCOL_REPRODUCIBILITY,
@@ -145,7 +145,7 @@ def test_bos_girdide_tohum_kapilari_durustce_kaliyor(yeniden_uretim):
 
 def test_gercek_raporlarla_tum_kapilar_geciyor():
     """20 tohumlu gerçek protokoller verilince tüm kapılar geçmeli."""
-    from hga.evaluation.multi_environment import (
+    from hga.experiments.multi_environment import (
         run_multi_environment_benchmark,
     )
     rapor = audit_reproducibility({

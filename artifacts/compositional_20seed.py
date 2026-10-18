@@ -18,7 +18,7 @@ import statistics
 from pathlib import Path
 from typing import Any, Dict, List
 
-from hga.evaluation.hierarchical_compositional import compare_on_hierarchical
+from hga.experiments.hierarchical_compositional import compare_on_hierarchical
 
 
 def paired_t_test(a: List[float], b: List[float]) -> Dict[str, float]:

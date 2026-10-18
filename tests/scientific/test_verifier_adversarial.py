@@ -5,7 +5,7 @@ import copy
 
 import pytest
 
-from hga.evaluation.verifier_adversarial import (
+from hga.experiments.verifier_adversarial import (
     REQUIRED_ATTACK_CLASSES,
     REQUIRED_ATTACK_CLASSES_V2,
     VerifierAttackDataset,

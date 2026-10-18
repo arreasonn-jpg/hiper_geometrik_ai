@@ -149,7 +149,7 @@ def load_twt_documents() -> List[Dict[str, str]]:
     """Repodaki vendored TWT'yi kendi doğal belge kimlikleriyle oku."""
     repo_root = Path(__file__).resolve().parents[2]
     sys.path.insert(0, str(repo_root))
-    from hga.evaluation.real_turkish import TurkishWebTreebank
+    from hga.experiments.real_turkish import TurkishWebTreebank
 
     twt = TurkishWebTreebank()
     gruplar: Dict[str, List[Tuple[str, str]]] = {}

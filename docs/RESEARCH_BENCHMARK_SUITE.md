@@ -63,7 +63,7 @@ kurulumda suite bunu başarı gibi göstermemek için açıkça `SKIPPED` raporl
 
 ## Verifier adversarial fixture
 
-`hga/evaluation/datasets/verifier_adversarial_v2.json`, çalışma anında
+`hga/experiments/datasets/verifier_adversarial_v2.json`, çalışma anında
 üretilmeyen 31 proof vakasıyla şu sınıfları içerir:
 
 - geçerli kontrol ve negatif/boundary vakaları,
@@ -152,7 +152,7 @@ pozitif olmak zorundadır. Bu epistemik yaşam döngüsü testidir; neural model
 
 Turkish NLP bölümü artık bir mini corpus sonucu yerine, sabitlenmiş **Turkish
 Web Treebank (TWT)** üzerinde ana skorunu üretir. Vendored ham dosyalar ve
-provenance paketi `hga/evaluation/datasets/twt_v1/` altındadır.
+provenance paketi `hga/experiments/datasets/twt_v1/` altındadır.
 
 - Kaynak: Turkish forum/blog/how-to/review/guide sayfaları ve Türkçe Wikipedia.
 - Upstream revision: `40838e5cbe3f2882d4e768a3d782e6219e50b52a`.
@@ -197,7 +197,7 @@ abstention coverage'ı `0.0` olur ve bu başarı sayılmaz. TWT relation'ları
 Mini tokenizer round-trip ve kontrollü compositional parser sonuçları geriye
 dönük smoke ölçümü olarak tutulur, ancak gerçek TWT F1 ana Turkish NLP skorunu
 şişirmez. Dataset kartı, citation, değişiklik bildirimi ve tüm hashler için:
-`hga/evaluation/datasets/twt_v1/DATASET_CARD.md` ve `PROVENANCE.json`.
+`hga/experiments/datasets/twt_v1/DATASET_CARD.md` ve `PROVENANCE.json`.
 
 ### Parameter-matched Dense / Transformer / Kronecker / HGA
 
@@ -283,7 +283,7 @@ genellemesidir; semantik compositional reasoning veya genel dil kanıtı değild
 
 ## Türkçe compositional fixture
 
-Veri `hga/evaluation/datasets/compositional_tr_v1.json` içindedir ve çalışma
+Veri `hga/experiments/datasets/compositional_tr_v1.json` içindedir ve çalışma
 anında üretilmez. Entity, relation, train ve test kayıtları ile beklenen
 epistemik durumlar elle sabitlenmiştir. Dataset'in kanonik SHA-256 özeti hem
 suite raporuna hem deney manifestlerine girer.

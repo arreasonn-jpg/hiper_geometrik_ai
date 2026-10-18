@@ -84,7 +84,7 @@ def test_cok_adimli_belge_izgarasi_canli_ciktiyla_uyumlu():
     1–5 hop / 0–256 dolgu ızgarası tamamen temizdir; eski 0.5000 hücresi
     kusurun eseriydi ve belgede tarihsel kayıt olarak anılır.
     """
-    from hga.evaluation.multi_hop import run_multi_hop_benchmark
+    from hga.experiments.multi_hop import run_multi_hop_benchmark
 
     rapor = run_multi_hop_benchmark(
         hops=(1, 2, 3, 4, 5), distractor_levels=(0, 16, 64, 256), seeds=(1, 2, 3)
@@ -112,7 +112,7 @@ def test_cok_adimli_belge_kalan_kapilari_gizlemiyor():
     (0.5). Test, belgenin bu tarihi VE kalan gerçek girişim maliyetini
     (yarı kayıp) dürüstçe anlattığını doğrular.
     """
-    from hga.evaluation.multi_hop import run_multi_hop_benchmark
+    from hga.experiments.multi_hop import run_multi_hop_benchmark
 
     rapor = run_multi_hop_benchmark(
         hops=(1, 2, 3, 4, 5), distractor_levels=(0, 16, 64, 256), seeds=(1, 2, 3)
@@ -176,7 +176,7 @@ def test_verim_json_toplu_istatistik_iceriyor():
 # --------------------------------------------------------------------------
 
 def test_epistemik_fixture_boyutu_belgeyle_uyumlu():
-    from hga.evaluation.epistemic import EpistemicDataset
+    from hga.experiments.epistemic import EpistemicDataset
 
     veri = EpistemicDataset()
     assert len(veri.cases) == 28, "Vaka sayısı değişti; belgeler güncellenmeli"
@@ -187,7 +187,7 @@ def test_epistemik_fixture_boyutu_belgeyle_uyumlu():
 
 def test_epistemik_negatif_kontrol_tablosu_belgeyle_uyumlu():
     """README ve belgedeki dejenere kol tablosu canlı çıktıyla aynı olmalı."""
-    from hga.evaluation.epistemic import run_epistemic_baselines
+    from hga.experiments.epistemic import run_epistemic_baselines
 
     beklenen = {
         "always_valid": (0.286, 1.0, 0.0, 1.0),
@@ -203,7 +203,7 @@ def test_epistemik_negatif_kontrol_tablosu_belgeyle_uyumlu():
 
 
 def test_epistemik_ana_metrikler_belgedeki_degerlerde():
-    from hga.evaluation.epistemic import run_epistemic_benchmark
+    from hga.experiments.epistemic import run_epistemic_benchmark
 
     rapor = run_epistemic_benchmark()
     assert rapor.false_confidence_rate == 0.0
@@ -278,8 +278,8 @@ def test_verim_ham_sayimlari_belgeyle_uyumlu():
 
 def test_verim_ayrisma_yonu_belgedeki_iddiayi_dogruluyor():
     """Belge 'EY > NY > UEY' diyor; sıralama gerçekten bu olmalı."""
-    from hga.evaluation.statistics import summarize_seed_metric
     from hga.experience.verim import run_yield_experiment
+    from hga.experiments.statistics import summarize_seed_metric
 
     raporlar = [
         run_yield_experiment(cycles=30, batch_size=32, initial_facts=40,
@@ -334,8 +334,8 @@ def _tablo_degerleri(metin: str, etiket: str) -> list:
 ])
 def test_readme_verim_tablosu_canli_degerle_ayni(etiket, alan):
     """README'deki 5 tohumlu verim tablosu eskirse bu test kırılır."""
-    from hga.evaluation.statistics import summarize_seed_metric
     from hga.experience.verim import run_yield_experiment
+    from hga.experiments.statistics import summarize_seed_metric
 
     raporlar = [
         run_yield_experiment(cycles=30, batch_size=32, initial_facts=40,
@@ -357,7 +357,7 @@ def test_readme_verim_tablosu_canli_degerle_ayni(etiket, alan):
 @pytest.mark.parametrize("kol_adi", ["always_valid", "always_abstain", "always_invalid"])
 def test_negatif_kontrol_tablolari_canli_degerle_ayni(kaynak_adi, kol_adi):
     """Hem README hem belge içindeki dejenere kol tablosu doğrulanır."""
-    from hga.evaluation.epistemic import run_epistemic_baselines
+    from hga.experiments.epistemic import run_epistemic_baselines
 
     metin = README if kaynak_adi == "README" else DOC_EPISTEMIK
     kol = next(a for a in run_epistemic_baselines() if a.arm == kol_adi)

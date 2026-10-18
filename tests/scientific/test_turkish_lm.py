@@ -8,7 +8,7 @@ import math
 
 import pytest
 
-from hga.evaluation.turkish_lm import (
+from hga.experiments.turkish_lm import (
     BIGRAM_LAMBDA,
     NGRAM_ALPHA,
     NGRAM_ARMS,
@@ -71,7 +71,7 @@ def test_tr_corpus_v1_hash_dogrulamasi_bozulmayi_yakalar(tmp_path, monkeypatch):
     import gzip
     import shutil
 
-    from hga.evaluation import turkish_lm
+    from hga.experiments import turkish_lm
 
     sahte = tmp_path / "tr_corpus_v1"
     shutil.copytree(turkish_lm.TR_CORPUS_DIR, sahte)
@@ -97,7 +97,7 @@ def test_tr_corpus_v1_kaynak_karisimi_ve_lisans_disiligi():
 def test_tr_corpus_v1_provenance_hashleri_gecerli():
     import json
 
-    from hga.evaluation.turkish_lm import TR_CORPUS_DIR
+    from hga.experiments.turkish_lm import TR_CORPUS_DIR
 
     provenance = json.loads(
         (TR_CORPUS_DIR / "PROVENANCE.json").read_text(encoding="utf-8"))
@@ -167,7 +167,7 @@ def test_profiller_cok_tohumlu():
 # ── Neural kollar (torch gerekli) ───────────────────────────────────────────
 torch = pytest.importorskip("torch")
 
-from hga.evaluation.turkish_lm import (  # noqa: E402
+from hga.experiments.turkish_lm import (  # noqa: E402
     NEURAL_ARMS,
     PARAMETER_TOLERANCE,
     build_lm_models,
@@ -251,7 +251,7 @@ def test_markdown_kapilari_ve_ngram_tabanini_gosterir(hizli_rapor):
 
 
 def test_karne_language_modeling_bolumu_skorlanir(hizli_rapor):
-    from hga.evaluation.capability_vector import build_scorecard
+    from hga.experiments.capability_vector import build_scorecard
     karne = build_scorecard(language_modeling=hizli_rapor.to_dict())
     bolum = karne.sections["language_modeling"]
     assert bolum["score"] is not None

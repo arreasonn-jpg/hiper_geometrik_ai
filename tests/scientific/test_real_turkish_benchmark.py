@@ -6,7 +6,7 @@ import shutil
 
 import pytest
 
-from hga.evaluation.real_turkish import (
+from hga.experiments.real_turkish import (
     DATA_DIR,
     DIMENSIONS,
     TurkishWebTreebank,

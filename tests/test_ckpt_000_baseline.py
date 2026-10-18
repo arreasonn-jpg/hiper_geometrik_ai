@@ -14,7 +14,7 @@ except ModuleNotFoundError:  # Python 3.10
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECKPOINT = ROOT / "docs" / "checkpoints" / "CKPT-000.json"
-TWT = ROOT / "hga" / "evaluation" / "datasets" / "twt_v1"
+TWT = ROOT / "hga" / "experiments" / "datasets" / "twt_v1"
 
 
 def _sha256(path: Path) -> str:
@@ -72,7 +72,7 @@ def test_repo_apache_lisansi_ve_container_lock_sozlesmesini_tasir():
 
 def test_ckpt_000_ewt_revision_lisans_ve_kaynak_hashlerini_kaydeder():
     checkpoint = json.loads(CHECKPOINT.read_text(encoding="utf-8"))
-    ewt_dir = ROOT / "hga" / "evaluation" / "datasets" / "ewt_v1"
+    ewt_dir = ROOT / "hga" / "experiments" / "datasets" / "ewt_v1"
     provenance = json.loads((ewt_dir / "PROVENANCE.json").read_text(encoding="utf-8"))
     ewt = checkpoint["ewt_v1"]
 

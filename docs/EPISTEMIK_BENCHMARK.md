@@ -34,7 +34,7 @@ epistemik kaynakları farklıdır.
 
 ## Veri kümesi
 
-`hga/evaluation/datasets/epistemic_tr_v1.json` — 28 vaka, 16 varlık,
+`hga/experiments/datasets/epistemic_tr_v1.json` — 28 vaka, 16 varlık,
 2 ilişki. Elle yazılmış, sürümlü ve SHA-256 ile hash'lenmiş depo fixture'ıdır
 (`curation.kind = manually_authored_repository_fixture`). Çalışma anında
 üretilmez; beklenen durumlar elle sabitlenmiştir.

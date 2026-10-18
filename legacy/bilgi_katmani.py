@@ -7,7 +7,7 @@ Bilgi Katmanı — 3 Katmanlı "Önce Ara, Yoksa Sınırlı Genelle" Mekanizmas�
 
 DİKKAT: Bu modül ilk prototip döneminden kalan 3 katmanlı string eşleme
 mekanizmasıdır. Yeni nesil sistemde tek kanonik bilgi motoru `hga.knowledge`
-ve `hga.evaluation.hallucination` paketleridir. Bu dosya yalnızca geriye dönük
+ve `hga.experiments.hallucination` paketleridir. Bu dosya yalnızca geriye dönük
 test ve eski terminal/Gradio arayüzü uyumluluğu için tutulmaktadır.
 
 (rapor Bölüm 10.5)

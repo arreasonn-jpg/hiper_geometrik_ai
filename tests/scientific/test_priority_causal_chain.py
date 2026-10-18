@@ -2,7 +2,7 @@
 """P0-1: Priority(E) nedensel zincir ablasyonu testleri."""
 import pytest
 
-from hga.evaluation.priority_ablation import (
+from hga.experiments.priority_ablation import (
     TERIMLER,
     havuz_uret,
     kendall_tau,

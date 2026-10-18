@@ -1,6 +1,6 @@
 import pytest
 
-from hga.evaluation.scale_protocol import (
+from hga.experiments.scale_protocol import (
     ONE_MILLION_TOKENS,
     LongContextObservation,
     ScalingObservation,

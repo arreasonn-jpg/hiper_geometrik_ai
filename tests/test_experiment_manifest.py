@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from hga.evaluation import (
+from hga.experiments import (
     ExperimentRun,
     GoldenDataset,
     canonical_hash,

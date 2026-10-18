@@ -7,7 +7,7 @@ from hga.cli.common import _yaz_rapor
 def _operator_baseline(n=8, steps=300, seeds=None, device="cpu",
                        out=None, markdown=None):
     """P0-2: Kronecker vs gerçek Dense baseline ailesi."""
-    from hga.evaluation.operator_baselines import (
+    from hga.experiments.operator_baselines import (
         operator_baseline_markdown,
         run_operator_baseline_benchmark,
     )

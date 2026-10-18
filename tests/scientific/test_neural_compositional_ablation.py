@@ -3,11 +3,11 @@ from __future__ import annotations
 
 import torch
 
-from hga.evaluation.neural_compositional import (
+from hga.experiments.neural_compositional import (
     ABLATION_ORDER,
     run_neural_compositional_ablation,
 )
-from hga.evaluation.twt_baselines import build_twt_models
+from hga.experiments.twt_baselines import build_twt_models
 
 
 def test_hga_ablation_bilesenleri_fiziksel_olarak_degisir():

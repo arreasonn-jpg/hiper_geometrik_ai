@@ -7,7 +7,7 @@ from hga.cli.common import _yaz_rapor
 def _foundation_analysis(n_values="4,8,16", k_values="1,2,4", seed=1,
                          out=None, markdown=None):
     """CKPT-001 teorik sözleşme, rank/gradient grid'i ve hash modeli."""
-    from hga.evaluation.foundation_analysis import (
+    from hga.experiments.foundation_analysis import (
         foundation_analysis_markdown,
         run_foundation_analysis,
     )

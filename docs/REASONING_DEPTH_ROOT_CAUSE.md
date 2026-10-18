@@ -1,6 +1,6 @@
 # Çıkarım Derinliği: Kök Neden Teşhisi ve C_R Tavanı
 
-Protokol: `reasoning_depth_root_cause_v1` · Modül: `hga/evaluation/depth_diagnosis.py`
+Protokol: `reasoning_depth_root_cause_v1` · Modül: `hga/experiments/depth_diagnosis.py`
 CLI: `python -m hga derinlik-teshis --depth-profile standard`
 
 > **GÜNCELLEME (adresleme düzeltmesi sonrası).** Bu belgenin ilk sürümündeki
