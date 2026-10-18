@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from hga.evaluation.turkish_corpus_expansion import (
+from hga.experiments.turkish_corpus_expansion import (
     ALLOWED_LICENSES,
     PROTOCOL,
     run_turkish_corpus_expansion_pipeline,

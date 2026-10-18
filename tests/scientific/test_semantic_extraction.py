@@ -2,7 +2,14 @@
 """P0-5: Türkçe semantik çıkarım hattı ve benchmarkı testleri."""
 import pytest
 
-from hga.evaluation.semantic_extraction import (
+from hga.experience.semantik_ayiklayici import (
+    cumle_coz,
+    fiil_coz,
+    kok_ve_durum,
+    korpus_coz,
+    store_a_aktar,
+)
+from hga.experiments.semantic_extraction import (
     GOLD_SET,
     GOLD_SET_V2,
     LAYERS,
@@ -10,13 +17,6 @@ from hga.evaluation.semantic_extraction import (
     run_semantic_extraction_benchmark,
     run_semantic_extraction_v2_benchmark,
     semantic_extraction_markdown,
-)
-from hga.experience.semantik_ayiklayici import (
-    cumle_coz,
-    fiil_coz,
-    kok_ve_durum,
-    korpus_coz,
-    store_a_aktar,
 )
 from hga.knowledge import KnowledgeStore
 

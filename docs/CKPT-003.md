@@ -44,7 +44,7 @@ the stated fallback before performance claims.
 
 ## Scaling-law contract
 
-`hga.evaluation.scale_protocol.fit_power_law` accepts only completed,
+`hga.experiments.scale_protocol.fit_power_law` accepts only completed,
 SHA-identified observations and fits:
 
 \[

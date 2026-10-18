@@ -7,7 +7,7 @@ import os
 
 def _provenance(out=None, markdown=None):
     """Faz 27/28: köken denetimi ve belge hash doğrulaması demosu."""
-    from hga.evaluation.provenance import (
+    from hga.experiments.provenance import (
         audit_provenance,
         build_provenance_chain,
         ingest_with_provenance,

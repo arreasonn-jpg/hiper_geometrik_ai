@@ -9,7 +9,7 @@ from hga.cli.common import _yaz_rapor
 
 def _ogrenme_olcek(profile="smoke", seeds=None, out=None, markdown=None):
     """P1: Self-learning ölçeklendirme (100 → 1000 → 3000 cycle)."""
-    from hga.evaluation.self_learning_scaling import (
+    from hga.experiments.self_learning_scaling import (
         run_self_learning_scaling,
         self_learning_scaling_markdown,
     )
@@ -24,7 +24,7 @@ def _ogrenme_transfer(seeds=None, source_examples=120,
                        target_unseen_examples=40,
                        out=None, markdown=None):
     """P1: Cross-domain self-learning transfer negatif-kontrol benchmarkı."""
-    from hga.evaluation.self_learning_transfer import (
+    from hga.experiments.self_learning_transfer import (
         run_self_learning_transfer_benchmark,
         self_learning_transfer_markdown,
     )
@@ -42,13 +42,13 @@ def _ogrenme_transfer(seeds=None, source_examples=120,
 def _self_learning_benchmark(cycles, batch, initial_facts, operands_max,
                              negatives_per_fact, memory_slots, seeds,
                              experiment_root, out=None):
-    from hga.evaluation import canonical_hash, run_seed_sweep
     from hga.experience import (
         run_multi_environment_self_learning,
         run_self_learning_experiment,
         run_self_training_collapse_test,
         run_verifier_fault_injection,
     )
+    from hga.experiments import canonical_hash, run_seed_sweep
     from hga.memory import run_memory_capacity_sweep
 
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]

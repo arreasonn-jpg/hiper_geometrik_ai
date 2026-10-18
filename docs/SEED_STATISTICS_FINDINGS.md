@@ -1,6 +1,6 @@
 # 20 Tohum + İstatistiksel Çıkarım — Bulgular (P1)
 
-Protokol: `core_seed_statistics_v1` · Modül: `hga/evaluation/seed_statistics.py`
+Protokol: `core_seed_statistics_v1` · Modül: `hga/experiments/seed_statistics.py`
 CLI: `python -m hga tohum-istatistik --seeds 1,...,20`
 Ham çıktı: `docs/SEED_STATISTICS.md`, `docs/seed_statistics.json`
 

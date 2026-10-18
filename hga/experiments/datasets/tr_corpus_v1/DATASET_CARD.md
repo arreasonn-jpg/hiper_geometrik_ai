@@ -46,6 +46,6 @@ sonrası kelime toplamları tablodakinden hafifçe düşebilir).
 python hga/data/build_tr_corpus.py   # ağ gerektirir; pinli revizyonlardan kurar
 ```
 
-Yükleyici (`hga.evaluation.turkish_lm._load_tr_corpus_raw_documents`) hem
+Yükleyici (`hga.experiments.turkish_lm._load_tr_corpus_raw_documents`) hem
 gzip dosya SHA-256'sını hem gzip'ten bağımsız canonical içerik SHA-256'sını
 doğrular; uyuşmazlıkta korpus YÜKLENMEZ.

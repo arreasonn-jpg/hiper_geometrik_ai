@@ -6,7 +6,7 @@ from hga.cli.common import _yaz_rapor
 
 def _uzun_baglam(profile="smoke", seeds=None, out=None, markdown=None):
     """P1: Uzun bağlam LM taraması (opsiyonel 512/1024 smoke)."""
-    from hga.evaluation.long_context import (
+    from hga.experiments.long_context import (
         long_context_markdown,
         run_long_context_benchmark,
     )

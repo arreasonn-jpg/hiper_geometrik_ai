@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import build_scorecard
-from hga.evaluation.priority_ablation import TERIMLER
-from hga.evaluation.priority_optimization import (
+from hga.experiments.capability_vector import build_scorecard
+from hga.experiments.priority_ablation import TERIMLER
+from hga.experiments.priority_optimization import (
     OBJECTIVE,
     PROFILES,
     PROTOCOL,
@@ -189,7 +189,7 @@ def test_verification_skoru_dusmuyor_ve_holdout_baglandi(rapor):
     matematiksel olarak imkânsız; doğru sözleşme, optimizasyonun skoru
     düşürmemesi ve kapı/kanıt kümesini genişletmesidir.
     """
-    from hga.evaluation.priority_ablation import run_priority_weight_ablation
+    from hga.experiments.priority_ablation import run_priority_weight_ablation
     ablasyon = run_priority_weight_ablation(k=10, seeds=(1, 2, 3)).to_dict()
     once = build_scorecard(
         priority_ablation=ablasyon).sections["verification"]

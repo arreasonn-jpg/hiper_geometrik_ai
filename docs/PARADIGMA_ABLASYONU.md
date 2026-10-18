@@ -6,7 +6,7 @@
 python -m hga paradigma --seeds 1,2,3,4,5 --out raporlar/paradigma_ablation.json
 ```
 
-Ham çıktı: `raporlar/paradigma_ablation.json` · Kod: `hga/evaluation/paradigma.py`
+Ham çıktı: `raporlar/paradigma_ablation.json` · Kod: `hga/experiments/paradigma.py`
 · Testler: `tests/test_paradigma_ablation.py` (9 test)
 
 ## Neden bu deney?

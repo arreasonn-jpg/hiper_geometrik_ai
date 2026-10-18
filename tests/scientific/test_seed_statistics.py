@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.seed_statistics import (
+from hga.experiments.seed_statistics import (
     CORE_SEED_REQUIREMENT,
     CORE_SEEDS,
     PROFILES,
@@ -13,7 +13,7 @@ from hga.evaluation.seed_statistics import (
     run_core_seed_statistics,
     seed_statistics_markdown,
 )
-from hga.evaluation.statistics import minimum_two_sided_p
+from hga.experiments.statistics import minimum_two_sided_p
 
 
 @pytest.fixture(scope="module")

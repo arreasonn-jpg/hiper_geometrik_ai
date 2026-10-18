@@ -2,13 +2,13 @@
 """Faz 3/6: ölçeklendirilmiş golden benchmark testleri."""
 import pytest
 
-from hga.evaluation.scaled_golden import (
+from hga.experience.evaluator import ExperienceEvaluator
+from hga.experiments.scaled_golden import (
     SINIFLAR,
     run_scaled_golden,
     run_scaled_golden_sweep,
     veri_seti_uret,
 )
-from hga.experience.evaluator import ExperienceEvaluator
 from hga.knowledge import DeneyimDurumu, ExperienceCandidate
 
 

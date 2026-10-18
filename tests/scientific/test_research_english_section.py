@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Research Suite must expose the pinned English baseline as a first-class section."""
-from hga.evaluation.research import run_research_benchmark, validate_sections
+from hga.experiments.research import run_research_benchmark, validate_sections
 
 
 def test_english_section_manifestli_seed_kosularina_girer(tmp_path):

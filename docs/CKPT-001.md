@@ -15,11 +15,11 @@ different quantities.
 | Deliverable | Evidence |
 |---|---|
 | One-command CPU reproduction bundle | [`Makefile`](../Makefile), [`REPRODUCE_ALL.md`](REPRODUCE_ALL.md), `python -m hga reproduce-all` |
-| Atomic manifests and deterministic controls | [`experiment.py`](../hga/evaluation/experiment.py) |
+| Atomic manifests and deterministic controls | [`experiment.py`](../hga/experiments/experiment.py) |
 | CUDA-ready plus CPU-fallback Docker recipes | [`Dockerfile.cuda`](../Dockerfile.cuda), [`Dockerfile`](../Dockerfile) |
 | Pinned Conda entry point | [`environment.yml`](../environment.yml), [`requirements-lock.txt`](../requirements-lock.txt) |
 | Formal/differential/hash analysis draft | [`paper/technical_report.tex`](../paper/technical_report.tex) |
-| Executable n×K rank/gradient/hash diagnostics | [`foundation_analysis.py`](../hga/evaluation/foundation_analysis.py), curated [`FOUNDATION_ANALYSIS.md`](FOUNDATION_ANALYSIS.md) |
+| Executable n×K rank/gradient/hash diagnostics | [`foundation_analysis.py`](../hga/experiments/foundation_analysis.py), curated [`FOUNDATION_ANALYSIS.md`](FOUNDATION_ANALYSIS.md) |
 | MkDocs API/protocol site | [`../mkdocs.yml`](../mkdocs.yml) |
 | Community/review interfaces | [`../CONTRIBUTING.md`](../CONTRIBUTING.md), [`../CODE_OF_CONDUCT.md`](../CODE_OF_CONDUCT.md), `.github/` templates |
 

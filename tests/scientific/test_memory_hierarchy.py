@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from hga.evaluation.memory_hierarchy import (
+from hga.experiments.memory_hierarchy import (
     PROFILES,
     STREAMING_TARGET_RECORDS,
     memory_hierarchy_markdown,

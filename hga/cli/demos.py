@@ -30,13 +30,13 @@ def _observability_demo(out=None, markdown=None, html_yol=None):
 
 def _halusinasyon():
     """Aritmetik alanda somut hallucination/factual consistency metriği."""
-    from hga.evaluation import hallucination_metrics
     from hga.experience import (
         AritmetikOrtam,
         ExperienceEvaluator,
         ExperienceGenerator,
         aritmetik_etki_alani,
     )
+    from hga.experiments import hallucination_metrics
     store = aritmetik_etki_alani()
     gen = ExperienceGenerator(tip_filtresi=False)
     ev = ExperienceEvaluator()
@@ -52,7 +52,7 @@ def _halusinasyon():
 def _sweep():
     """n/K/context hızlı kapasite taraması."""
     from hga.config import model_config_yukle
-    from hga.evaluation import nk_taramasi
+    from hga.experiments import nk_taramasi
     mcfg = model_config_yukle()["model"]
     nler = sorted({max(8, mcfg.n // 2), mcfg.n, mcfg.n * 2})
     satirlar = nk_taramasi(n_degerleri=nler, vocab=mcfg.sozluk_boyutu,

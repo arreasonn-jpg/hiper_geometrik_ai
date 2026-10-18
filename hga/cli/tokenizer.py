@@ -129,7 +129,7 @@ def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
     from kuresel_model import HiperGeometrikAI, agirlik_yukle
 
     from hga.config import model_config_yukle
-    from hga.evaluation import mini_turkce_corpus, perplexity_benchmark
+    from hga.experiments import mini_turkce_corpus, perplexity_benchmark
 
     if yol:
         with open(yol, "r", encoding="utf-8") as f:
@@ -180,7 +180,7 @@ def _tokenizer_benchmark():
     from bpe_tokenizer import BPETokenizer
 
     from hga.config import model_config_yukle
-    from hga.evaluation import mini_turkce_corpus, tokenizer_kapsami
+    from hga.experiments import mini_turkce_corpus, tokenizer_kapsami
     corpus = mini_turkce_corpus()
     sozluk_boyutu = model_config_yukle()["model"].sozluk_boyutu
     tok = BPETokenizer(max_vocab_size=sozluk_boyutu, min_freq=1)

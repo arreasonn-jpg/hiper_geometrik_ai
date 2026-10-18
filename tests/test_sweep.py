@@ -7,7 +7,7 @@ KOK = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if KOK not in sys.path:
     sys.path.insert(0, KOK)
 
-from hga.evaluation import nk_taramasi, parametre_tahmini  # noqa: E402
+from hga.experiments import nk_taramasi, parametre_tahmini  # noqa: E402
 
 
 def test_parametre_tahmini_monotonik():

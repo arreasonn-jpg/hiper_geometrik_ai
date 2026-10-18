@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.verifier_adversarial import ProofDecision
-from hga.evaluation.verifier_ensemble import (
+from hga.experiments.verifier_adversarial import ProofDecision
+from hga.experiments.verifier_ensemble import (
     ENSEMBLE_PROTOCOL,
     VerifierMember,
     run_verifier_ensemble_benchmark,

@@ -1,8 +1,8 @@
 """Aynı TWT splitindeki Dense/Transformer/Kronecker/HGA adillik testleri."""
 from __future__ import annotations
 
-from hga.evaluation.real_turkish import prepare_real_turkish_task
-from hga.evaluation.twt_baselines import (
+from hga.experiments.real_turkish import prepare_real_turkish_task
+from hga.experiments.twt_baselines import (
     MODEL_ORDER,
     run_twt_architecture_baselines,
 )

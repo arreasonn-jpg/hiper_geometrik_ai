@@ -3,7 +3,7 @@ import hashlib
 
 import pytest
 
-from hga.evaluation.lifecycle import run_lifecycle_benchmark
+from hga.experiments.lifecycle import run_lifecycle_benchmark
 from hga.knowledge.lifecycle import KnowledgeLifecycle, KnowledgeLifecycleState
 
 

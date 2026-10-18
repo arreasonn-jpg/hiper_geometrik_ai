@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import (
+from hga.experiments.capability_vector import (
     TERMINOLOGY,
     CapabilityEntry,
     build_capability_vector,

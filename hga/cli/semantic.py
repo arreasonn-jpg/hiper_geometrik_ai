@@ -6,7 +6,7 @@ from hga.cli.common import _yaz_rapor
 
 def _semantik(out=None, markdown=None):
     """P0-5: Türkçe semantik çıkarım v2 gold benchmarkı."""
-    from hga.evaluation.semantic_extraction import (
+    from hga.experiments.semantic_extraction import (
         run_semantic_extraction_v2_benchmark,
         semantic_extraction_markdown,
     )

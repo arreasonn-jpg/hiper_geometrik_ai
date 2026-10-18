@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import build_scorecard
-from hga.evaluation.depth_diagnosis import (
+from hga.experiments.capability_vector import build_scorecard
+from hga.experiments.depth_diagnosis import (
     PROFILES,
     PROTOCOL,
     depth_diagnosis_markdown,
@@ -161,7 +161,7 @@ def test_markdown_uretimi(rapor):
 
 
 def test_karne_reasoning_bolumune_baglandi(rapor):
-    from hga.evaluation.reasoning_depth import measure_reasoning_depth
+    from hga.experiments.reasoning_depth import measure_reasoning_depth
     derinlik = measure_reasoning_depth(profile="smoke").to_dict()
     karne = build_scorecard(reasoning_depth=derinlik,
                             depth_diagnosis=rapor.to_dict())
@@ -181,7 +181,7 @@ def test_teshis_reasoning_skorunu_dusurmez_ve_kanit_ekler(rapor):
     'yükseltir' öncülü anlamsızlaştı. Kalıcı sözleşme şudur: teşhis kanıtı
     skoru düşürmez ve girdi/kanıt alanlarını doldurur.
     """
-    from hga.evaluation.reasoning_depth import measure_reasoning_depth
+    from hga.experiments.reasoning_depth import measure_reasoning_depth
     derinlik = measure_reasoning_depth(profile="smoke").to_dict()
     once = build_scorecard(reasoning_depth=derinlik).sections["reasoning"]
     sonra = build_scorecard(

@@ -7,7 +7,7 @@ from __future__ import annotations
 import json
 import os
 
-from hga.evaluation.kronecker_rank import run_nk_rank_sweep
+from hga.experiments.kronecker_rank import run_nk_rank_sweep
 
 
 def _kronecker_rank(n_values: str, k_values: str, seed: int = 1,

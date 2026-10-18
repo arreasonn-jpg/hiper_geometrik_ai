@@ -2,7 +2,7 @@
 """Faz 19/20: Kronecker effective rank ve zincir çöküşü testleri."""
 import pytest
 
-from hga.evaluation.kronecker_rank import (
+from hga.experiments.kronecker_rank import (
     measure_chain_collapse,
     measure_single_layer_rank,
     run_nk_rank_sweep,

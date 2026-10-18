@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import SCORECARD_SECTIONS, build_scorecard
-from hga.evaluation.self_learning_scaling import (
+from hga.experiments.capability_vector import SCORECARD_SECTIONS, build_scorecard
+from hga.experiments.self_learning_scaling import (
     PROFILES,
     PROTOCOL,
     SATURATION_THRESHOLD,

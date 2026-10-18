@@ -15,7 +15,7 @@ import json
 
 import pytest
 
-from hga.evaluation.epistemic import (
+from hga.experiments.epistemic import (
     ABSTENTION_REQUIRED,
     EPISTEMIC_CLASSES,
     EpistemicDataset,
@@ -196,7 +196,7 @@ def test_gercek_degerlendirici_her_kolu_domine_eder(rapor, veri):
 
 def test_yanlis_guven_metrigi_gercekten_tepki_verir(veri):
     """Metrik sabit 0 döndürmüyor: UNKNOWN'a VALID diyen politika 1.0 almalı."""
-    from hga.evaluation.epistemic import _score_policy
+    from hga.experiments.epistemic import _score_policy
 
     kol = _score_policy(veri.cases, lambda case: DeneyimDurumu.VALID, "x", "y")
     assert kol.false_confidence_rate == 1.0

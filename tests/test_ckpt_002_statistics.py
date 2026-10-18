@@ -1,4 +1,4 @@
-from hga.evaluation.statistics import adjust_p_values, cliffs_delta, paired_power_plan
+from hga.experiments.statistics import adjust_p_values, cliffs_delta, paired_power_plan
 
 
 def test_correction_methods_are_monotone_and_keep_raw_p_values():

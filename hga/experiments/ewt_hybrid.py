@@ -38,8 +38,8 @@ def run_ewt_hybrid(
     import torch
     import torch.nn as nn
 
-    from hga.evaluation.english_ewt import prepare_english_ewt_task
-    from hga.evaluation.real_turkish import SelectiveArcSchemaVerifier
+    from hga.experiments.english_ewt import prepare_english_ewt_task
+    from hga.experiments.real_turkish import SelectiveArcSchemaVerifier
 
     if task_preparer is None:
         task_preparer = prepare_english_ewt_task

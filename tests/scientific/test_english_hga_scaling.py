@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from hga.evaluation.english_ewt import (
+from hga.experiments.english_ewt import (
     HGA_SCALE_CONFIGS,
     english_hga_scaling_markdown,
     run_english_hga_scaling_probe,

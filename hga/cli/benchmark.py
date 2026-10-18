@@ -7,33 +7,33 @@ from hga.cli.human_eval import _insan_degerlendirme_raporu
 def _championship(profile="smoke", seeds=None, out=None, markdown=None,
                   skip_torch=False):
     """Tüm P0 protokollerini koş ve OTOMATİK araştırma karnesi üret."""
-    from hga.evaluation.capability_vector import (
+    from hga.experiments.capability_vector import (
         build_scorecard,
         save_scorecard,
         scorecard_markdown,
     )
-    from hga.evaluation.capacity import run_capacity_benchmark
-    from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
-    from hga.evaluation.depth_diagnosis import diagnose_depth_collapse
-    from hga.evaluation.engineering_audit import (
+    from hga.experiments.capacity import run_capacity_benchmark
+    from hga.experiments.compositional_v2 import run_compositional_v2_benchmark
+    from hga.experiments.depth_diagnosis import diagnose_depth_collapse
+    from hga.experiments.engineering_audit import (
         audit_engineering,
         audit_reproducibility,
     )
-    from hga.evaluation.memory_hierarchy import (
+    from hga.experiments.memory_hierarchy import (
         run_memory_hierarchy_benchmark,
     )
-    from hga.evaluation.multi_environment import (
+    from hga.experiments.multi_environment import (
         run_multi_environment_benchmark,
     )
-    from hga.evaluation.priority_ablation import run_priority_weight_ablation
-    from hga.evaluation.priority_optimization import optimize_priority_weights
-    from hga.evaluation.reasoning_depth import measure_reasoning_depth
-    from hga.evaluation.seed_statistics import run_core_seed_statistics
-    from hga.evaluation.self_learning_scaling import run_self_learning_scaling
-    from hga.evaluation.semantic_extraction import (
+    from hga.experiments.priority_ablation import run_priority_weight_ablation
+    from hga.experiments.priority_optimization import optimize_priority_weights
+    from hga.experiments.reasoning_depth import measure_reasoning_depth
+    from hga.experiments.seed_statistics import run_core_seed_statistics
+    from hga.experiments.self_learning_scaling import run_self_learning_scaling
+    from hga.experiments.semantic_extraction import (
         run_semantic_extraction_v2_benchmark,
     )
-    from hga.evaluation.verifier_ensemble import run_verifier_ensemble_benchmark
+    from hga.experiments.verifier_ensemble import run_verifier_ensemble_benchmark
 
     tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
     derinlik_profili = "smoke" if profile == "smoke" else "standard"
@@ -81,10 +81,10 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
 
     if not skip_torch:
         try:
-            from hga.evaluation.operator_baselines import (
+            from hga.experiments.operator_baselines import (
                 run_operator_baseline_benchmark,
             )
-            from hga.evaluation.signature import run_signature_benchmark
+            from hga.experiments.signature import run_signature_benchmark
             raporlar["operator_baselines"] = run_operator_baseline_benchmark(
                 n=8, steps=200 if profile == "smoke" else 300,
                 seeds=tohumlar[:3]).to_dict()
@@ -92,11 +92,11 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
             raporlar["signature"] = run_signature_benchmark(
                 profile=profile, seeds=tohumlar[:1]).to_dict()
             print("  ✓ HGA Signature Benchmark")
-            from hga.evaluation.twt_results import run_twt_results
+            from hga.experiments.twt_results import run_twt_results
             raporlar["twt_results"] = run_twt_results(
                 seeds=tohumlar, profile="smoke").to_dict()
             print("  ✓ TWT gerçek sonuç tablosu (gerçek Türkçe veri)")
-            from hga.evaluation.turkish_lm import run_turkish_lm_benchmark
+            from hga.experiments.turkish_lm import run_turkish_lm_benchmark
             raporlar["language_modeling"] = run_turkish_lm_benchmark(
                 profile="smoke" if profile == "smoke" else "full",
                 seeds=tohumlar[:2] if len(tohumlar) >= 2 else None).to_dict()
@@ -120,7 +120,7 @@ def _championship(profile="smoke", seeds=None, out=None, markdown=None,
 def _research_benchmark(profile, seeds, experiment_root, sections=None,
                         out=None, markdown=None, html_yol=None, strict=False):
     """Manifestli, çoklu-seed birleşik araştırma benchmark karnesi."""
-    from hga.evaluation import run_research_benchmark, save_research_report
+    from hga.experiments import run_research_benchmark, save_research_report
 
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
     section_values = None

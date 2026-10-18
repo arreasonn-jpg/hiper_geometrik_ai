@@ -52,7 +52,7 @@
 **Öncelik:** 🟠 Orta
 **Eylem:**
 1. Python sürüm düzeltmesi sonrası ölç
-2. `hga/evaluation/` (çekirdek) için aç, kalanı kademeli
+2. `hga/experiments/` (çekirdek) için aç, kalanı kademeli
 3. Hedef: Faz 1 sonunda `hga/` tamamı
 
 ### mypy: disallow_untyped_defs

@@ -39,11 +39,11 @@ def run_twt_hybrid(
     import torch
     import torch.nn as nn
 
-    from hga.evaluation.real_turkish import (
+    from hga.experiments.real_turkish import (
         SelectiveArcSchemaVerifier,
         prepare_real_turkish_task,
     )
-    from hga.evaluation.twt_baselines import (
+    from hga.experiments.twt_baselines import (
         ARCHITECTURE_CONFIG,
         ArcFeatureVocabulary,
         build_twt_models,

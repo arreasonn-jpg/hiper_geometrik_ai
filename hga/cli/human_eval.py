@@ -8,7 +8,7 @@ from hga.cli.common import _yaz_rapor
 
 def _insan_degerlendirme(package_dir=None, out=None, markdown=None):
     """P1: İnsan değerlendirme protokolü + Krippendorff alfa aracı."""
-    from hga.evaluation.human_evaluation import human_evaluation_markdown
+    from hga.experiments.human_evaluation import human_evaluation_markdown
 
     rapor = _insan_degerlendirme_raporu(package_dir)
     md = human_evaluation_markdown(rapor)
@@ -17,8 +17,8 @@ def _insan_degerlendirme(package_dir=None, out=None, markdown=None):
 
 def _insan_degerlendirme_raporu(package_dir=None):
     """Varsa tamamlanmış puanları, yoksa yalnız protokolü yükle."""
-    from hga.evaluation.human_eval_fill import build_human_evaluation_from_csv
-    from hga.evaluation.human_evaluation import build_human_evaluation_protocol
+    from hga.experiments.human_eval_fill import build_human_evaluation_from_csv
+    from hga.experiments.human_evaluation import build_human_evaluation_protocol
 
     paket_dizini = Path(package_dir or "insan_degerlendirme_paketleri")
     try:

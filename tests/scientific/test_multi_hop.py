@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.multi_hop import (
+from hga.experiments.multi_hop import (
     DEFAULT_DISTRACTORS,
     DEFAULT_HOPS,
     multi_hop_markdown,

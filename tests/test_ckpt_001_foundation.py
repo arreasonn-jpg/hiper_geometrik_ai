@@ -7,15 +7,15 @@ from pathlib import Path
 
 import pytest
 
-from hga.evaluation.experiment import determinism_contract, seed_everything
-from hga.evaluation.foundation_analysis import (
+from hga.experiments.experiment import determinism_contract, seed_everything
+from hga.experiments.foundation_analysis import (
     HASH_KEY_BITS,
     foundation_analysis_markdown,
     measure_gradient_flow,
     run_foundation_analysis,
     sparse_memory_theory,
 )
-from hga.evaluation.reproduce import reproduce_all_markdown, run_reproduce_all
+from hga.experiments.reproduce import reproduce_all_markdown, run_reproduce_all
 
 ROOT = Path(__file__).resolve().parents[1]
 

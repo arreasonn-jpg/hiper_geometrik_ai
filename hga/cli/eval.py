@@ -10,18 +10,18 @@ from hga.cli.common import _toplu_sinirlar, _yaz_rapor
 
 def _yeniden_uretilebilirlik(out=None, markdown=None):
     """Yeniden üretilebilirlik denetimi (manifest / determinizm / tohum)."""
-    from hga.evaluation.compositional_v2 import run_compositional_v2_benchmark
-    from hga.evaluation.engineering_audit import (
+    from hga.experiments.compositional_v2 import run_compositional_v2_benchmark
+    from hga.experiments.engineering_audit import (
         audit_reproducibility,
         reproducibility_markdown,
     )
-    from hga.evaluation.multi_environment import (
+    from hga.experiments.multi_environment import (
         run_multi_environment_benchmark,
     )
-    from hga.evaluation.semantic_extraction import (
+    from hga.experiments.semantic_extraction import (
         run_semantic_extraction_v2_benchmark,
     )
-    from hga.evaluation.verifier_ensemble import run_verifier_ensemble_benchmark
+    from hga.experiments.verifier_ensemble import run_verifier_ensemble_benchmark
     raporlar = {
         "compositional_v2": run_compositional_v2_benchmark().to_dict(),
         "semantic_extraction": run_semantic_extraction_v2_benchmark().to_dict(),
@@ -36,7 +36,7 @@ def _yeniden_uretilebilirlik(out=None, markdown=None):
 
 def _muhendislik(out=None, markdown=None):
     """Mühendislik sözleşmesi denetimi (CI / paketleme / test)."""
-    from hga.evaluation.engineering_audit import (
+    from hga.experiments.engineering_audit import (
         audit_engineering,
         engineering_markdown,
     )
@@ -47,7 +47,7 @@ def _muhendislik(out=None, markdown=None):
 
 def _oncelik_optimizasyon(profile="smoke", out=None, markdown=None):
     """Priority(E) ağırlık araması + held-out doğrulama."""
-    from hga.evaluation.priority_optimization import (
+    from hga.experiments.priority_optimization import (
         optimize_priority_weights,
         priority_optimization_markdown,
     )
@@ -58,7 +58,7 @@ def _oncelik_optimizasyon(profile="smoke", out=None, markdown=None):
 
 def _derinlik_teshis(profile="smoke", out=None, markdown=None):
     """Çıkarım derinliği çöküşünün kök neden teşhisi (bellek mi, çıkarım mı)."""
-    from hga.evaluation.depth_diagnosis import (
+    from hga.experiments.depth_diagnosis import (
         depth_diagnosis_markdown,
         diagnose_depth_collapse,
     )
@@ -70,7 +70,7 @@ def _derinlik_teshis(profile="smoke", out=None, markdown=None):
 def _korpus_genisletme(candidate_dir=None, target_words=2_000_000,
                        use_smoke_candidates=True, out=None, markdown=None):
     """P1: Türkçe korpus genişletme pipeline/release gate."""
-    from hga.evaluation.turkish_corpus_expansion import (
+    from hga.experiments.turkish_corpus_expansion import (
         run_turkish_corpus_expansion_pipeline,
         turkish_corpus_expansion_markdown,
     )
@@ -85,7 +85,7 @@ def _korpus_genisletme(candidate_dir=None, target_words=2_000_000,
 
 def _insan_import(package_dir=None, out=None, markdown=None):
     """P1: İnsan puanı CSV import + α + kol agregasyonu."""
-    from hga.evaluation.human_eval_fill import (
+    from hga.experiments.human_eval_fill import (
         human_rating_import_markdown,
         human_rating_import_report,
     )
@@ -103,7 +103,7 @@ def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
     except ImportError:
         print("turkce-lm için torch gerekli. Örn: .venv/bin/python -m hga turkce-lm")
         return
-    from hga.evaluation.turkish_lm import (
+    from hga.experiments.turkish_lm import (
         run_turkish_lm_benchmark,
         turkish_lm_markdown,
     )
@@ -122,7 +122,7 @@ def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
 
 def _reproduce_all(artifact_root="artifacts/reproduce-all", seeds=None, profile="smoke"):
     """Tek komutta manifestli CKPT-001 foundation artefaktlarını üret."""
-    from hga.evaluation.reproduce import reproduce_all_markdown, run_reproduce_all
+    from hga.experiments.reproduce import reproduce_all_markdown, run_reproduce_all
 
     tohumlar = [int(value) for value in (seeds or "1,2,3,4,5").split(",") if value.strip()]
     rapor = run_reproduce_all(root=artifact_root, seeds=tohumlar, profile=profile)
@@ -131,7 +131,7 @@ def _reproduce_all(artifact_root="artifacts/reproduce-all", seeds=None, profile=
 
 def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
     """P0-3: TWT gerçek sonuç tablosu (çoklu tohum + FLOPs)."""
-    from hga.evaluation.twt_results import results_markdown, run_twt_results
+    from hga.experiments.twt_results import results_markdown, run_twt_results
     tohumlar = [int(v) for v in (seeds or "1,2,3").split(",") if v.strip()]
     rapor = run_twt_results(seeds=tohumlar, profile=profile)
     md = results_markdown(rapor)
@@ -140,7 +140,7 @@ def _twt_sonuc(seeds=None, profile="smoke", out=None, markdown=None):
 
 def _oncelik_zincir(k=10, seeds=None, out=None, markdown=None):
     """P0-1: Priority(E) nedensel zincir ablasyonu."""
-    from hga.evaluation.priority_ablation import (
+    from hga.experiments.priority_ablation import (
         priority_ablation_markdown,
         run_priority_weight_ablation,
     )
@@ -152,7 +152,7 @@ def _oncelik_zincir(k=10, seeds=None, out=None, markdown=None):
 def _benchmark_rapor(out=None, markdown=None, checkpoint=None, tokenizer_yol=None,
                      n=None, katman=None, baglam=None, vocab=None):
     """Tokenizer/perplexity/halüsinasyon/bellek/cihaz tek rapor."""
-    from hga.evaluation import benchmark_raporu_kaydet, benchmark_raporu_olustur
+    from hga.experiments import benchmark_raporu_kaydet, benchmark_raporu_olustur
     rapor = benchmark_raporu_olustur(checkpoint=checkpoint, tokenizer_yol=tokenizer_yol,
                                      n=int(n or 8), katman=int(katman or 1),
                                      baglam=int(baglam or 8), vocab=int(vocab or 256))
@@ -200,7 +200,7 @@ def _bilgi_surum(out=None):
 
 def _kapasite(operands_max, out=None):
     """P / C_I^UB / C_M^UB / C_E / C_V kapasite çerçevesi ölçümü."""
-    from hga.evaluation import run_capacity_benchmark
+    from hga.experiments import run_capacity_benchmark
     rapor = run_capacity_benchmark(operands_max=int(operands_max))
     print("HGA Kapasite Çerçevesi (P, C_I^UB, C_M^UB, C_E, C_V):")
     print(rapor.markdown())
@@ -292,7 +292,7 @@ def _priority(k=10, out=None, markdown=None):
 def _cok_adimli(seeds=None, hops=None, distractors=None, slots=4096,
                 out=None, markdown=None):
     """P1-004/P1-006: çok adımlı çıkarım + uzun bağlam dayanıklılığı."""
-    from hga.evaluation.multi_hop import (
+    from hga.experiments.multi_hop import (
         DEFAULT_DISTRACTORS,
         DEFAULT_HOPS,
         multi_hop_markdown,
@@ -370,8 +370,8 @@ def _cok_adimli(seeds=None, hops=None, distractors=None, slots=4096,
 def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
            negatives_per_fact=3, seeds=None, out=None, markdown=None):
     """P1-005: EY'yi NY / UEY / GY / VID eksenlerine ayır."""
-    from hga.evaluation.statistics import summarize_seed_metric
     from hga.experience.verim import run_yield_experiment
+    from hga.experiments.statistics import summarize_seed_metric
 
     tohumlar = [int(v.strip()) for v in (seeds or "1").split(",") if v.strip()]
     raporlar = [
@@ -460,7 +460,7 @@ def _verim(cycles=20, batch=32, initial_facts=40, operands_max=15,
 
 def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
     """Faz 3/6: golden benchmark'ı 100/1.000/10.000 ölçeğine çıkar."""
-    from hga.evaluation.scaled_golden import run_scaled_golden_sweep
+    from hga.experiments.scaled_golden import run_scaled_golden_sweep
 
     olcekler = [int(v.strip()) for v in sizes.split(",") if v.strip()]
     tohumlar = [int(v.strip()) for v in seeds.split(",") if v.strip()]
@@ -491,7 +491,7 @@ def _olcekli_golden(sizes, seeds, hard=False, out=None, markdown=None):
 
 def _paradigma(seeds, out=None, markdown=None, epochs=60):
     """Faz 21: neural-only vs symbolic-only vs hybrid kontrollü ablasyon."""
-    from hga.evaluation.paradigma import run_paradigm_sweep
+    from hga.experiments.paradigma import run_paradigm_sweep
 
     tohumlar = [int(v.strip()) for v in seeds.split(",") if v.strip()]
     rapor = run_paradigm_sweep(seeds=tohumlar, epochs=int(epochs))
@@ -565,7 +565,7 @@ def _memory_benchmark(
     scales, slots, tables, seeds, experiment_root, out=None, markdown=None,
     active_dynamic=False, audit_samples=256,
 ):
-    from hga.evaluation import canonical_hash, run_seed_sweep
+    from hga.experiments import canonical_hash, run_seed_sweep
     from hga.memory import run_active_memory_stress, run_memory_stress
 
     context_counts = [int(value.strip()) for value in scales.split(",") if value.strip()]
@@ -769,7 +769,7 @@ def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=No
     if importlib.util.find_spec("torch") is None:
         raise SystemExit("kronecker-benchmark için PyTorch gerekli")
 
-    from hga.evaluation import canonical_hash, run_kronecker_dense_trial, run_seed_sweep
+    from hga.experiments import canonical_hash, run_kronecker_dense_trial, run_seed_sweep
 
     seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]
     config = {
@@ -824,7 +824,7 @@ def _kronecker_benchmark(n, steps, batch, seeds, device, experiment_root, out=No
         print(f"  report: {out}")
 
 def _golden_benchmark(out=None, seeds=None, experiment_root="experiments"):
-    from hga.evaluation import run_golden_benchmark, run_golden_seed_sweep
+    from hga.experiments import run_golden_benchmark, run_golden_seed_sweep
 
     if seeds:
         seed_values = [int(value.strip()) for value in seeds.split(",") if value.strip()]

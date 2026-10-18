@@ -7,15 +7,15 @@ import json
 
 import pytest
 
-from hga.evaluation.capability_vector import SCORECARD_SECTIONS, build_scorecard
-from hga.evaluation.human_eval_fill import (
+from hga.experiments.capability_vector import SCORECARD_SECTIONS, build_scorecard
+from hga.experiments.human_eval_fill import (
     build_human_evaluation_from_csv,
     collect_ratings_from_csv,
     fill_and_export_packages,
     human_rating_import_markdown,
     human_rating_import_report,
 )
-from hga.evaluation.human_evaluation import (
+from hga.experiments.human_evaluation import (
     ALPHA_ACCEPTABLE,
     ALPHA_TENTATIVE,
     ARMS,

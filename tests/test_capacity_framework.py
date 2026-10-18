@@ -2,12 +2,12 @@
 """Faz 13–14: P / C_I^UB / C_M^UB / C_E / C_V kapasite çerçevesi testleri."""
 import pytest
 
-from hga.evaluation import (
+from hga.experience.mini_env import AritmetikOrtam
+from hga.experiments import (
     capacity_contract,
     measure_experience_capacity,
     run_capacity_benchmark,
 )
-from hga.experience.mini_env import AritmetikOrtam
 from hga.knowledge import KaynakTuru, KnowledgeStore
 
 

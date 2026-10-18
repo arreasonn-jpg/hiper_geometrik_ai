@@ -6,7 +6,7 @@ from hga.cli.common import _yaz_rapor
 
 def _cok_ortam(seeds=None, out=None, markdown=None):
     """P1: Çoklu ortam + cross-domain verifier izolasyonu."""
-    from hga.evaluation.multi_environment import (
+    from hga.experiments.multi_environment import (
         multi_environment_markdown,
         run_multi_environment_benchmark,
     )

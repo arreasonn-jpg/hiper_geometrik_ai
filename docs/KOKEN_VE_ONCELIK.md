@@ -6,7 +6,7 @@ python -m hga oncelik    # Priority(E) ağırlıkları + terim ablasyonu
 ```
 
 Ham çıktı: `raporlar/provenance.json`, `raporlar/priority_ablation.json`
-· Kod: `hga/evaluation/provenance.py`, `hga/experience/exploration.py`
+· Kod: `hga/experiments/provenance.py`, `hga/experience/exploration.py`
 · Testler: `tests/test_provenance.py` (14), `tests/test_priority_weights.py` (9)
 
 ---

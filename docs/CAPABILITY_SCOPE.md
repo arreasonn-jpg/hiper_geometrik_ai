@@ -4,7 +4,7 @@ Her capability metriği belirli bir protokolün ürünüdür. Bu belge,
 `docs/SCORECARD.md`'deki skorların hangi dar kapsamda geçerli olduğunu
 ve hangi geniş iddiaları DESTEKLEMEDİĞİNİ açıkça listeler.
 
-Kaynak: `hga/evaluation/capability_vector.py` içindeki `TERMINOLOGY`.
+Kaynak: `hga/experiments/capability_vector.py` içindeki `TERMINOLOGY`.
 
 ## Daraltılmış 5 Metrik (P1-4, 2026-10-15)
 

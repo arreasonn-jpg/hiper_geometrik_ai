@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.multi_environment import ENVIRONMENTS
-from hga.evaluation.self_learning_transfer import (
+from hga.experiments.multi_environment import ENVIRONMENTS
+from hga.experiments.self_learning_transfer import (
     PROTOCOL,
     run_self_learning_transfer_benchmark,
     self_learning_transfer_markdown,

@@ -1,6 +1,6 @@
 # Tekrarlanabilir Deney Sözleşmesi
 
-HGA deneyleri `hga.evaluation.experiment` üzerinden atomik bir koşu kimliği
+HGA deneyleri `hga.experiments.experiment` üzerinden atomik bir koşu kimliği
 alabilir. Varsayılan çalışma dizini:
 
 ```text
@@ -90,7 +90,7 @@ eğitilmiş stokastik bir modelin istatistiksel performans kanıtı değildir.
 ## Python API
 
 ```python
-from hga.evaluation import run_seed_sweep
+from hga.experiments import run_seed_sweep
 
 summary = run_seed_sweep(
     callback=lambda seed: {"metrics": train_and_evaluate(seed)},

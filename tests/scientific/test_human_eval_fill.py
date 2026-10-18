@@ -9,13 +9,13 @@ import json
 
 import pytest
 
-from hga.evaluation.human_eval_fill import (
+from hga.experiments.human_eval_fill import (
     analyze_ratings_by_arm,
     collect_ratings_from_csv,
     fill_and_export_packages,
     symbolic_answer,
 )
-from hga.evaluation.human_evaluation import (
+from hga.experiments.human_evaluation import (
     ARMS,
     DIMENSIONS,
     _default_prompts,

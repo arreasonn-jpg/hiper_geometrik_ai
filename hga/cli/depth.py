@@ -7,7 +7,7 @@ from hga.cli.common import _yaz_rapor
 def _cikarim_derinligi(profile="standard", seeds=None, threshold=1.0,
                        out=None, markdown=None):
     """P0-7: C_R ve C_RD ölçümü."""
-    from hga.evaluation.reasoning_depth import (
+    from hga.experiments.reasoning_depth import (
         measure_reasoning_depth,
         reasoning_depth_markdown,
     )

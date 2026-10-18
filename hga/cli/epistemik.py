@@ -7,7 +7,7 @@ import os
 
 def _epistemik(seeds=None, out=None, markdown=None):
     """P0-007: KNOWN/UNKNOWN/UNCERTAIN/CONFLICT/FALSE epistemik benchmarkı."""
-    from hga.evaluation.epistemic import (
+    from hga.experiments.epistemic import (
         EpistemicDataset,
         run_epistemic_baselines,
         run_epistemic_benchmark,

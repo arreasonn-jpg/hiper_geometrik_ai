@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from hga.evaluation.english_ewt import (
+from hga.experiments.english_ewt import (
     DATA_DIR,
     MODEL_ORDER,
     EnglishEWT,

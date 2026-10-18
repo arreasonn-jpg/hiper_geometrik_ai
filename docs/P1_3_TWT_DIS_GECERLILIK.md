@@ -110,7 +110,7 @@ performansı olmadığını **göstermek**. Rapor bunu yapıyor.
 ## Referans
 
 - Fixture benchmark: `docs/SEMANTIC_EXTRACTION.md`
-- TWT veri seti: `hga/evaluation/datasets/twt_v1/DATASET_CARD.md`
+- TWT veri seti: `hga/experiments/datasets/twt_v1/DATASET_CARD.md`
 - Motor: `hga/experience/semantik_ayiklayici.py`
 - P1-3 (birleşik audit raporu)
 - SECURITY.md: SEC-2026-10-13-02

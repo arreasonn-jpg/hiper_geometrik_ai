@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import build_scorecard
-from hga.evaluation.multi_environment import (
+from hga.experiments.capability_vector import build_scorecard
+from hga.experiments.multi_environment import (
     ENVIRONMENTS,
     GENERATORS,
     PROTOCOL,

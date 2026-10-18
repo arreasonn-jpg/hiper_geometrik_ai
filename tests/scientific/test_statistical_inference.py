@@ -12,7 +12,7 @@ from itertools import product
 
 import pytest
 
-from hga.evaluation.statistics import (
+from hga.experiments.statistics import (
     EXACT_PERMUTATION_LIMIT,
     bootstrap_ci,
     cohens_d_paired,

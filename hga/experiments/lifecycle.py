@@ -27,7 +27,7 @@ class LifecycleBenchmarkReport:
 
 def run_lifecycle_benchmark() -> LifecycleBenchmarkReport:
     """Exercise expiry, revalidation, revision, outage and retraction on TWT artifacts."""
-    root = resources.files("hga.evaluation.datasets.twt_v1")
+    root = resources.files("hga.experiments.datasets.twt_v1")
     provenance = json.loads(root.joinpath("PROVENANCE.json").read_text(encoding="utf-8"))
     sources = provenance["upstream"]["source_files"]
     hashes = {

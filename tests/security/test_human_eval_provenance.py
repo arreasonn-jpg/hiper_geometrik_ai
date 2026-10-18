@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pytest
 
-from hga.evaluation.capability_vector import build_scorecard
+from hga.experiments.capability_vector import build_scorecard
 
 
 def _minimal_scorecard(**kwargs):

@@ -13,7 +13,7 @@ from dataclasses import asdict, dataclass, field
 from importlib import resources
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
-DATA_PACKAGE = "hga.evaluation.datasets"
+DATA_PACKAGE = "hga.experiments.datasets"
 DATA_FILE = "verifier_adversarial_v1.json"
 DATA_FILE_V2 = "verifier_adversarial_v2.json"
 STATES = ("VERIFIED", "INVALID", "UNCERTAIN")

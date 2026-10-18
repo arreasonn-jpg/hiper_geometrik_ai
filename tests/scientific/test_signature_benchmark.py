@@ -2,7 +2,7 @@
 """P0-4: HGA Signature Benchmark testleri."""
 import pytest
 
-from hga.evaluation.signature import (
+from hga.experiments.signature import (
     MEMORY_CRITICAL_TASKS,
     NO,
     TASKS,
@@ -117,7 +117,7 @@ def test_memory_kritik_gorev_listesi_tasklarda_var():
 @pytest.mark.slow
 def test_smoke_kosusu_kapilari_uretir():
     pytest.importorskip("torch")
-    from hga.evaluation.signature import run_signature_benchmark, signature_markdown
+    from hga.experiments.signature import run_signature_benchmark, signature_markdown
     rapor = run_signature_benchmark("smoke", seeds=(1,),
                                     tasks=("F_memory_dependent", "G_epistemic"))
     assert rapor.checks["no_held_out_leak"]
@@ -133,7 +133,7 @@ def test_smoke_kosusu_kapilari_uretir():
 
 def test_signature_release_gate_eksik_kanitta_blocked():
     pytest.importorskip("torch")
-    from hga.evaluation.signature import (
+    from hga.experiments.signature import (
         run_signature_benchmark,
         run_signature_release_gate,
         signature_release_gate_markdown,
@@ -151,7 +151,7 @@ def test_signature_release_gate_eksik_kanitta_blocked():
 
 
 def test_signature_release_gate_tum_kapilar_gecerse_pass():
-    from hga.evaluation.signature import ARMS, PROTOCOL, TASKS, run_signature_release_gate
+    from hga.experiments.signature import ARMS, PROTOCOL, TASKS, run_signature_release_gate
     report = {
         "protocol": PROTOCOL,
         "profile": "standard",
@@ -179,7 +179,7 @@ def test_signature_release_gate_tum_kapilar_gecerse_pass():
 @pytest.mark.slow
 def test_bilinmeyen_kol_acik_hata():
     pytest.importorskip("torch")
-    from hga.evaluation.signature import run_signature_benchmark
+    from hga.experiments.signature import run_signature_benchmark
     with pytest.raises(ValueError):
         run_signature_benchmark("smoke", arms=["yok"])
     with pytest.raises(ValueError):

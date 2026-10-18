@@ -8,7 +8,7 @@ python -m hga olcekli-golden --sizes 100,1000,10000 --seeds 1,2,3,4,5 \
 python -m hga olcekli-golden --sizes 100,1000,10000 --seeds 1,2,3,4,5 --hard
 ```
 
-Ham çıktı: `raporlar/scaled_golden.json` · Kod: `hga/evaluation/scaled_golden.py`
+Ham çıktı: `raporlar/scaled_golden.json` · Kod: `hga/experiments/scaled_golden.py`
 · Testler: `tests/test_scaled_golden.py` (10 test)
 
 ## Neden bu deney?

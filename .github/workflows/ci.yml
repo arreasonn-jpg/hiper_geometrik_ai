@@ -74,13 +74,13 @@ jobs:
           mkdir -p /tmp/clean-import
           cd /tmp/clean-import
           python -c "import hga, mimari, egitim, golden_dataset; print('import ok', hga.__name__)"
-          python -c "from hga.evaluation import research; print('subpackage ok')"
+          python -c "from hga.experiments import research; print('subpackage ok')"
           # Paket verisi (golden dataset / TWT fixture'ları) wheel'e girmiş mi?
           python -c "from importlib import resources; import json; \
-            data = resources.files('hga.evaluation.datasets').joinpath('compositional_tr_v1.json').read_text('utf-8'); \
+            data = resources.files('hga.experiments.datasets').joinpath('compositional_tr_v1.json').read_text('utf-8'); \
             print('package data ok', len(json.loads(data)))"
           # Pinned English EWT kaynakları, provenance ve CC-BY-SA lisansı wheel'e girmiş mi?
-          python -c "from hga.evaluation.english_ewt import prepare_english_ewt_task; \
+          python -c "from hga.experiments.english_ewt import prepare_english_ewt_task; \
             task = prepare_english_ewt_task(); \
             assert task.dataset_hash == '2f852e91da70301e5a572f717b3e9d6998d14ca6bf38daa8bb77f4baa5b3ddd3'; \
             print('EWT package data ok', task.dataset_hash)"

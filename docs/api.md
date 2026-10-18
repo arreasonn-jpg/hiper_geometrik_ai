@@ -7,7 +7,7 @@ corresponding manifest/test updates.
 ## Reproduction
 
 ```python
-from hga.evaluation import run_reproduce_all
+from hga.experiments import run_reproduce_all
 
 receipt = run_reproduce_all(
     root="artifacts/reproduce-all",
@@ -27,7 +27,7 @@ python -m hga reproduce-all --artifact-root artifacts/reproduce-all
 ## Foundation theory diagnostics
 
 ```python
-from hga.evaluation import run_foundation_analysis, sparse_memory_theory
+from hga.experiments import run_foundation_analysis, sparse_memory_theory
 
 analysis = run_foundation_analysis(n_values=(4, 8, 16), k_values=(1, 2, 4))
 memory_model = sparse_memory_theory()
@@ -47,7 +47,7 @@ python -m hga foundation-analysis --n-values 4,8,16 --k-values 1,2,4
 ## Core experiment protocol
 
 ```python
-from hga.evaluation.experiment import run_seed_sweep, seed_everything
+from hga.experiments.experiment import run_seed_sweep, seed_everything
 ```
 
 `run_seed_sweep` creates one atomic manifest directory per seed. `seed_everything`
@@ -58,7 +58,7 @@ paths so process-start environment variables are present.
 ## English EWT controls
 
 ```python
-from hga.evaluation import run_english_ewt_baselines, run_english_hga_scaling_probe
+from hga.experiments import run_english_ewt_baselines, run_english_hga_scaling_probe
 ```
 
 The baseline functions use pinned UD English EWT sources and report small

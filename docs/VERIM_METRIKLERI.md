@@ -112,7 +112,7 @@ python -m hga verim --cycles 30 --batch 32 --initial-facts 40 \
   --markdown raporlar/verim_metrikleri.md
 ```
 
-Güven aralıkları P3 istatistik modülünden (`hga/evaluation/statistics.py`)
+Güven aralıkları P3 istatistik modülünden (`hga/experiments/statistics.py`)
 gelir. Çok tohumlu manifest için `run_yield_seed_sweep` kullanılır.
 
 ## Bilimsel sınırlar

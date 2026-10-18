@@ -187,7 +187,7 @@ class RelationFact:
     # "Bu olgu nereden geldi?" sorusunun cevabı. Hepsi opsiyoneldir; eski
     # kayıtlar ve sentetik/kural kaynaklı olgular None taşır. REAL_DATA
     # kaynaklı bir olgunun bu alanları BOŞ olması denetimde eksiklik sayılır
-    # (bkz. hga/evaluation/provenance.py).
+    # (bkz. hga/experiments/provenance.py).
     source_url: Optional[str] = None        # belgenin adresi
     document_hash: Optional[str] = None     # belge içeriğinin SHA-256'sı
     sentence: Optional[str] = None          # olgunun çıkarıldığı ham cümle

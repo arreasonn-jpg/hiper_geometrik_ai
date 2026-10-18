@@ -4,7 +4,7 @@ Faz 19/20 — Kronecker Effective Rank ve n × K Taraması
 ========================================================
 
 README "katman başına n² çarpan, zincir boyunca n^(2K) etkileşim uzayı" diyor.
-`hga/evaluation/sweep.py` bu sayıyı hesaplıyor ama **hiç ölçmüyor**. Bu modül
+`hga/experiments/sweep.py` bu sayıyı hesaplıyor ama **hiç ölçmüyor**. Bu modül
 o iddiayı kırmaya çalışır.
 
 ## Ölçülen üç şey
