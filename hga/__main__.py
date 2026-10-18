@@ -81,6 +81,9 @@ from hga.cli.foundation import _foundation_analysis
 from hga.cli.generalization import _genelleme_v2
 from hga.cli.human_eval import _insan_degerlendirme, _insan_degerlendirme_raporu
 from hga.cli.kronecker_rank import _kronecker_rank
+from hga.cli.long_context import _uzun_baglam
+from hga.cli.memory import _bellek_hiyerarsi, _bellek_streaming
+from hga.cli.multi_env import _cok_ortam
 from hga.cli.operator_baseline import _operator_baseline
 from hga.cli.provenance import _provenance
 from hga.cli.seed_statistics import _tohum_istatistik
@@ -1582,65 +1585,12 @@ def _turkce_lm(seeds=None, profile="smoke", steps=None, out=None,
     _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _uzun_baglam(profile="smoke", seeds=None, out=None, markdown=None):
-    """P1: Uzun bağlam LM taraması (opsiyonel 512/1024 smoke)."""
-    from hga.evaluation.long_context import (
-        long_context_markdown,
-        run_long_context_benchmark,
-    )
-    tohumlar = ([int(v) for v in seeds.split(",") if v.strip()]
-                if seeds else None)
-    rapor = run_long_context_benchmark(profile=profile, seeds=tohumlar)
-    md = long_context_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _bellek_hiyerarsi(profile="smoke", seeds=None, out=None, markdown=None):
-    """P0-8: Hot/Warm/Cold/Archive hiyerarşik bellek benchmarkı."""
-    from hga.evaluation.memory_hierarchy import (
-        memory_hierarchy_markdown,
-        run_memory_hierarchy_benchmark,
-    )
-    tohum = int((seeds or "1").split(",")[0])
-    rapor = run_memory_hierarchy_benchmark(profile=profile, seed=tohum)
-    md = memory_hierarchy_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _bellek_streaming(target_records=100_000_000, sample_records=10_000,
-                      shard_records=1_000_000, checkpoint_interval=1_000,
-                      seeds=None, out=None, markdown=None):
-    """P0-8: 100M-ready streaming/checkpoint dry-run harness."""
-    from hga.evaluation.memory_hierarchy import (
-        memory_streaming_harness_markdown,
-        run_memory_streaming_harness,
-    )
-    tohum = int((seeds or "1").split(",")[0])
-    rapor = run_memory_streaming_harness(
-        target_records=int(target_records),
-        sample_records=int(sample_records),
-        shard_records=int(shard_records),
-        checkpoint_interval=int(checkpoint_interval),
-        seed=tohum,
-    )
-    md = memory_streaming_harness_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
-def _cok_ortam(seeds=None, out=None, markdown=None):
-    """P1: Çoklu ortam + cross-domain verifier izolasyonu."""
-    from hga.evaluation.multi_environment import (
-        multi_environment_markdown,
-        run_multi_environment_benchmark,
-    )
-    tohumlar = [int(v) for v in (seeds or "1,2,3,4,5").split(",") if v.strip()]
-    rapor = run_multi_environment_benchmark(seeds=tohumlar)
-    md = multi_environment_markdown(rapor)
-    print(md)
-    _yaz_rapor(rapor.to_dict(), out, markdown, md)
 
 
 def _ogrenme_transfer(seeds=None, source_examples=120,
