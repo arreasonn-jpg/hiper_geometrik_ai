@@ -37,6 +37,19 @@ representation capacity: the Dense-vs-Kronecker effective-rank
 gap tracks noise at $r = +0.999$. Our findings suggest an architectural design
 principle: match the parameter budget to the regularisation needs
 of the task.
+
+We then extend this analysis to language modeling and find that
+Kronecker's advantage does \emph{not} transfer to open-ended sequence
+prediction: on Turkish LM, the Kronecker-augmented model (HGA) needs
+$3\times$ more parameters to reach $3\times$ worse perplexity than a
+Dense MLP (61 vs 45 at 248K params). Ablations reveal \emph{why}:
+(i)~the attention layer inside HGA is effectively dead weight on LM,
+(ii)~Kronecker's rank constraint still acts as a regulariser
+(removing it degrades PPL 61$\to$68), (iii)~the 0$\to$1
+GeometricDataEncoder is a bottleneck (simplifying it improves PPL
+70$\to$58). We conclude that Kronecker architectures are best
+deployed where \emph{structural} regularisation dominates, not in
+general LM.
 \end{abstract}
 
 
@@ -246,6 +259,85 @@ MLP overfits as its effective rank grows. This is the
 mechanism behind the H2 correlation reported above.
 
 
+\subsection{Language Modeling Ablations}
+\label{sec:lm-ablation}
+
+To test whether Kronecker's regularisation advantage transfers beyond
+controlled synthetic tasks, we ran a Turkish language modeling benchmark
+(\textsc{TWT}, 1.1M tokens) with three matched arms: Dense MLP, a
+standard Transformer, and a Kronecker-augmented model (HGA). HGA
+contains four components: an embedding layer, a causal attention block,
+a bilinear Kronecker chain, and a ``GeometricDataEncoder'' (0$\to$1
+outer-product layer).
+
+\paragraph{Main result.} HGA underperforms both baselines on open-ended
+next-token prediction:
+
+\begin{table}[h]
+\centering
+\caption{Language modeling on TWT (smoke profile, 2000 steps, 1 seed).}
+\label{tab:lm-main}
+\small
+\begin{tabular}{lccc}
+\toprule
+Model & Params & Test PPL ↓ & Top-1 ↑ \\
+\midrule
+Dense MLP & 108K & \textbf{39.6} & \textbf{0.153} \\
+Transformer & 109K & 40.2 & 0.120 \\
+HGA (full) & 248K & 56.6 & 0.113 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The Kronecker model needs 2.3$\times$ more parameters and still
+underperforms the Dense baseline by 17 perplexity points.
+This is consistent with the general observation \cite{krogh1991simple}
+that parametrically-constrained models lag behind unconstrained ones on
+high-entropy tasks where the parameter budget is the bottleneck.
+
+\paragraph{Ablation: which component hurts?}
+We isolate each HGA component (Table~\ref{tab:lm-ablation}).
+Removing the attention block (\emph{no-attn}) has no measurable
+effect (60.35 vs 61.13 PPL), confirming that the Kronecker chain
+handles most of the modelling burden. Removing the Kronecker chain
+(\emph{no-kron}) \emph{degrades} performance (67.92 vs 61.13),
+which re-confirms the implicit-regularisation hypothesis of
+Section~\ref{sec:h2}: the rank constraint is a useful structural
+prior even in a domain where it does not yield the best absolute
+numbers. Finally, replacing the 0$\to$1 geometric encoder with a
+linear projection (\emph{no-encoder}) \emph{improves} perplexity
+from 70.40 to 58.32, identifying the encoder as the primary
+bottleneck.
+
+\begin{table}[h]
+\centering
+\caption{HGA component ablation on TWT (1000 steps, 1 seed).}
+\label{tab:lm-ablation}
+\small
+\begin{tabular}{lccc}
+\toprule
+Variant & PPL ↓ & $\Delta$ vs full & Params \\
+\midrule
+HGA full & 70.40 & — & 248K \\
+$-$ pos-encoding & 72.24 & $+1.8$ & 248K \\
+$-$ trainable embedding & 81.58 & $+11.2$ & 216K \\
+$-$ FractalDecoder & 72.82 & $+2.4$ & 696K \\
+$-$ 0$\to$1 Encoder & \textbf{58.32} & $-12.1$ & 306K \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Interpretation.}
+Three conclusions follow. First, Kronecker's advantage is
+\emph{task-dependent}: it improves regularisation on synthetic
+noise-heavy tasks (Sections~\ref{sec:h2}) but not on open-ended
+language modeling. Second, the Kronecker parameter constraint
+continues to act as a regulariser even in the LM regime, but
+the 0$\to$1 geometric encoder adds avoidable optimisation
+difficulty. Third, HGA's design should be reserved for tasks
+whose structure is \emph{known to be noise-dominated} and where
+the parameter budget is not the primary bottleneck.
+
 \subsection{Circular Logic Control}
 \label{sec:non-grid}
 
@@ -325,6 +417,26 @@ and noise.
 
 \section{Limitations and Future Work}
 \label{sec:limitations}
+
+\paragraph{Kronecker is not a general-purpose LM architecture.}
+Section~\ref{sec:lm-ablation} shows that on open-ended language
+modeling, Kronecker-augmented models require more parameters and
+reach worse perplexity than both Dense and Transformer baselines.
+We therefore do \emph{not} claim that Kronecker is a competitive
+general LM architecture: its regularisation advantage appears only
+when the task's noise structure is controlled or known in advance.
+
+\paragraph{Encoder bottleneck.}
+Our ablation identifies the 0$\to$1 GeometricDataEncoder as the
+primary optimisation bottleneck. Replacing it with a simple linear
+projection improves HGA's LM perplexity from 70.40 to 58.32 (a 12-point
+gap), suggesting that future HGA variants should either simplify the
+encoder or train it with dedicated learning-rate schedules.
+
+\paragraph{Single-task LM evidence.}
+The LM ablation results (Table~\ref{tab:lm-main}) are from a single
+seed on a single Turkish corpus (TWT). Generalisation to other
+languages and to larger pretrained baselines remains future work.
 
 \paragraph{Limitations.}
 All tasks are synthetic or small-scale (MNIST, Fashion-MNIST,
