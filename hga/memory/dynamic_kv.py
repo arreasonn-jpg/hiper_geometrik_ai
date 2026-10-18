@@ -530,7 +530,7 @@ class DynamicKVMemory:
                 handle.flush()
                 os.fsync(handle.fileno())
             os.replace(temporary, target)
-        except Exception:
+        except OSError:
             try:
                 os.unlink(temporary)
             except OSError:

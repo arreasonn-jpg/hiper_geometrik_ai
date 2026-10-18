@@ -75,7 +75,7 @@ def _load_pyproject(root: Path) -> Optional[Dict[str, Any]]:
     try:
         veri: Dict[str, Any] = tomllib.loads(ham)
         return veri
-    except Exception:
+    except (ValueError, TypeError, AttributeError):
         return None
 
 

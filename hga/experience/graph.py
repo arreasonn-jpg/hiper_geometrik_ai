@@ -144,7 +144,7 @@ class ExperienceGraph:
                 s_ad = store.entities.getir(s_id).token
                 r_ad = store.relations.iliski_al(r_id).token
                 o_ad = store.entities.getir(o_id).token
-            except Exception:
+            except (KeyError, AttributeError):
                 pass
 
         aciklamalar = [

@@ -92,7 +92,7 @@ def yukle(yol: Optional[str] = None) -> Dict:
                 generator.update(veri["generator"])
             if isinstance(veri.get("bellek"), dict):
                 bellek.update(veri["bellek"])
-        except Exception:
+        except (ImportError, ValueError, TypeError):
             # PyYAML yok veya bozuksa düz ayrıştırıcı
             agirliklar.update(_ayrikla_bolum(metin, "agirliklar"))
             esikler.update(_ayrikla_bolum(metin, "esikler"))

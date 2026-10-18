@@ -48,7 +48,7 @@ class TalimatToplayici:
                 if isinstance(veri, list) and veri:
                     print(f"✅ Talimat seti diskten yüklendi: {len(veri)} örnek")
                     return veri
-            except Exception:
+            except (OSError, ValueError):
                 pass
         with open(self.dosya_yolu, "w", encoding="utf-8") as f:
             json.dump(ZENGIN, f, ensure_ascii=False, indent=2)

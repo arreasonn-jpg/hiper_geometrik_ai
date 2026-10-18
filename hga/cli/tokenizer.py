@@ -69,7 +69,7 @@ def _checkpoint_rapor(yol, config_yol=None, strict: bool = True,
         raise SystemExit("checkpoint-rapor komutu için checkpoint yolu gerekli")
     try:
         import torch  # noqa: F401
-    except Exception:
+    except ImportError:
         print("Checkpoint raporu için torch gerekli. Örn: .venv/bin/python -m hga checkpoint-rapor ckpt.pt")
         return
     if not os.path.exists(yol):
@@ -121,7 +121,7 @@ def _perplexity_benchmark(yol=None, checkpoint=None, tokenizer_yol=None,
     """Mini Türkçe perplexity smoke'u; torch yoksa güvenli bilgi ver."""
     try:
         import torch  # noqa: F401
-    except Exception:
+    except ImportError:
         print("Perplexity benchmark için torch gerekli. Örn: .venv/bin/python -m hga perplexity --tiny")
         return
 

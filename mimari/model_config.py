@@ -55,7 +55,7 @@ class ModelConfig:
                     deger = int(deger)
                 elif ad == "dropout":
                     deger = float(deger)
-            except Exception:
+            except (ValueError, TypeError):
                 pass
             temiz[ad] = deger
         return cls(**temiz)
@@ -149,7 +149,7 @@ def yukle(yol: Optional[str] = None) -> Dict[str, Any]:
         try:
             import yaml  # type: ignore
             veri = yaml.safe_load(metin) or {}
-        except Exception:
+        except (ImportError, ValueError, TypeError, AttributeError):
             veri = _basit_yaml(metin)
     return {
         "model": ModelConfig.from_dict(veri.get("model", {})),

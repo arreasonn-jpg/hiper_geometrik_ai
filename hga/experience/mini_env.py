@@ -45,7 +45,7 @@ class AritmetikOrtam:
         try:
             dugum = ast.parse(str(ifade), mode="eval").body
             return float(self._hesapla(dugum))
-        except Exception:
+        except (SyntaxError, ValueError, TypeError, ZeroDivisionError):
             return None
 
     def _hesapla(self, dugum):

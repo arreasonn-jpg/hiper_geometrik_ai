@@ -296,7 +296,7 @@ def build_provenance_chain(
     for role, entity_id in (("subject", fact.subject_id), ("object", fact.object_id)):
         try:
             entity = store.entities.getir(entity_id)
-        except Exception:
+        except KeyError:
             missing.append(f"Entity.{role}:{entity_id}")
             continue
         entity_node_id = add("Entity", entity.token, {
@@ -311,7 +311,7 @@ def build_provenance_chain(
 
     try:
         relation = store.relations.iliski_al(fact.relation_id)
-    except Exception:
+    except KeyError:
         missing.append(f"Relation:{fact.relation_id}")
     else:
         relation_node_id = add("Relation", relation.token, {

@@ -162,7 +162,7 @@ def to_token_ids(tokenizer, metin: str) -> List[int]:
         import torch
         if isinstance(res, torch.Tensor):
             res = res.detach().cpu().flatten().tolist()
-    except Exception:
+    except (ImportError, AttributeError):
         pass
     # tokenizer.encode / text_to_ids / torch.Tensor.tolist() Any dönebilir;
     # contract'a göre hepsi token id (int) olmalı — tip güvenliği için
@@ -203,7 +203,7 @@ def metin_uret(model, tokenizer, prompt: str, baglam: int,
     cache_yolu = bool(kv_cache and hasattr(model, "forward_cacheli_pencere"))
     try:
         aygit = next(model.parameters()).device
-    except Exception:
+    except (StopIteration, AttributeError):
         aygit = torch.device("cpu")
 
     with torch.inference_mode():
