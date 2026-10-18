@@ -1,6 +1,8 @@
 """HGA CLI komutu (Faz 2 refactor)."""
 from __future__ import annotations
 
+from hga.cli.human_eval import _insan_degerlendirme_raporu
+
 
 def _championship(profile="smoke", seeds=None, out=None, markdown=None,
                   skip_torch=False):
