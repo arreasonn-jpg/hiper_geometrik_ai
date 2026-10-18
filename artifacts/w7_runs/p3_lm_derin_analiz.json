@@ -1,0 +1,56 @@
+{
+  "dense_baseline": {
+    "dev_ppl": 39.55,
+    "test_ppl": 45.65,
+    "params": 108481,
+    "sure": 12.2
+  },
+  "hga_full_lr003": {
+    "dev_ppl": 53.8,
+    "test_ppl": 61.13,
+    "params": 248145,
+    "sure": 34.3
+  },
+  "hga_no_attn": {
+    "dev_ppl": 53.58,
+    "test_ppl": 60.35,
+    "params": 247088,
+    "sure": 21.6
+  },
+  "hga_no_kron": {
+    "dev_ppl": 60.1,
+    "test_ppl": 67.92,
+    "params": 247601,
+    "sure": 27.2
+  },
+  "hga_lr_high": {
+    "dev_ppl": 102.44,
+    "test_ppl": 113.53,
+    "params": 248145,
+    "sure": 30.0
+  },
+  "hga_lr_low": {
+    "dev_ppl": 100.43,
+    "test_ppl": 109.85,
+    "params": 248145,
+    "sure": 28.9
+  },
+  "hga_n_32": {
+    "dev_ppl": 51.43,
+    "test_ppl": 58.89,
+    "params": 323505,
+    "sure": 42.9
+  },
+  "hga_n_8": {
+    "dev_ppl": 72.64,
+    "test_ppl": 81.66,
+    "params": 211233,
+    "sure": 75.9
+  },
+  "hga_k_2": {
+    "dev_ppl": 57.67,
+    "test_ppl": 65.32,
+    "params": 248689,
+    "sure": 83.4
+  }
+}

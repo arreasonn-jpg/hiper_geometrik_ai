@@ -1,0 +1,137 @@
+{
+  "dense": {
+    "egri": [
+      {
+        "step": 200,
+        "dev_ppl": 82.77
+      },
+      {
+        "step": 400,
+        "dev_ppl": 63.32
+      },
+      {
+        "step": 600,
+        "dev_ppl": 54.87
+      },
+      {
+        "step": 800,
+        "dev_ppl": 49.41
+      },
+      {
+        "step": 1000,
+        "dev_ppl": 46.02
+      },
+      {
+        "step": 1200,
+        "dev_ppl": 43.97
+      },
+      {
+        "step": 1400,
+        "dev_ppl": 42.2
+      },
+      {
+        "step": 1600,
+        "dev_ppl": 40.83
+      },
+      {
+        "step": 1800,
+        "dev_ppl": 40.01
+      },
+      {
+        "step": 2000,
+        "dev_ppl": 39.55
+      }
+    ],
+    "sure": 18.0
+  },
+  "transformer": {
+    "egri": [
+      {
+        "step": 200,
+        "dev_ppl": 101.62
+      },
+      {
+        "step": 400,
+        "dev_ppl": 89.52
+      },
+      {
+        "step": 600,
+        "dev_ppl": 65.0
+      },
+      {
+        "step": 800,
+        "dev_ppl": 56.21
+      },
+      {
+        "step": 1000,
+        "dev_ppl": 52.1
+      },
+      {
+        "step": 1200,
+        "dev_ppl": 48.69
+      },
+      {
+        "step": 1400,
+        "dev_ppl": 45.52
+      },
+      {
+        "step": 1600,
+        "dev_ppl": 43.92
+      },
+      {
+        "step": 1800,
+        "dev_ppl": 41.96
+      },
+      {
+        "step": 2000,
+        "dev_ppl": 40.22
+      }
+    ],
+    "sure": 93.5
+  },
+  "hga": {
+    "egri": [
+      {
+        "step": 200,
+        "dev_ppl": 99.91
+      },
+      {
+        "step": 400,
+        "dev_ppl": 86.3
+      },
+      {
+        "step": 600,
+        "dev_ppl": 81.07
+      },
+      {
+        "step": 800,
+        "dev_ppl": 74.44
+      },
+      {
+        "step": 1000,
+        "dev_ppl": 69.89
+      },
+      {
+        "step": 1200,
+        "dev_ppl": 65.72
+      },
+      {
+        "step": 1400,
+        "dev_ppl": 62.39
+      },
+      {
+        "step": 1600,
+        "dev_ppl": 59.53
+      },
+      {
+        "step": 1800,
+        "dev_ppl": 57.57
+      },
+      {
+        "step": 2000,
+        "dev_ppl": 56.6
+      }
+    ],
+    "sure": 26.5
+  }
+}
