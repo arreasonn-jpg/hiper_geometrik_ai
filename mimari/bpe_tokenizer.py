@@ -24,7 +24,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 try:  # Tokenizer'ın sözlük/encode kısmı torch olmadan da kullanılabilsin.
     import torch  # type: ignore
-except Exception:  # pragma: no cover - torch kurulu olmayan hafif test ortamı
+except ImportError:  # pragma: no cover - torch kurulu olmayan hafif test ortamı
     torch = None  # type: ignore
 
 

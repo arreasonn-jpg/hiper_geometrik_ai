@@ -10,7 +10,7 @@ from typing import Any, Callable, Dict, Mapping, Union
 
 try:
     import torch  # type: ignore
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     torch = None  # type: ignore
 
 

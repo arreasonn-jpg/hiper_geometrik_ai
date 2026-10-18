@@ -6,13 +6,13 @@ import re
 
 try:  # opsiyonel ağ bağımlılığı — import-time kırılma olmasın
     import requests  # type: ignore
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     requests = None  # type: ignore
 
 try:  # opsiyonel parquet bağımlılığı
     import pyarrow as pa  # type: ignore
     import pyarrow.parquet as pq  # type: ignore
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     pq = None  # type: ignore
     pa = None  # type: ignore
 
@@ -51,7 +51,7 @@ class OtomatikVeriToplayici:
             try:
                 with open(self.durum_dosyasi, "r", encoding="utf-8") as f:
                     return json.load(f)
-            except Exception:
+            except ImportError:
                 pass
         return {
             "repo": "ShigeoKageyama/NLP_SUITE",
@@ -146,7 +146,7 @@ class OtomatikVeriToplayici:
                 ham = re.sub(r'#+\s*', '', ham_icerik)
                 ham = re.sub(r'[*_`~]', '', ham)
             return self._temizle_metin(ham)
-        except Exception:
+        except ImportError:
             return ""
 
     # ==========================================
@@ -194,7 +194,7 @@ class OtomatikVeriToplayici:
                             url2 += f"?cursor={cursor}"
                         try:
                             yanit = req.get(url2, headers=self.headers, timeout=45)
-                        except Exception:
+                        except ImportError:
                             break
                     if yanit.status_code != 200:
                         if sayfa == 1 and not path_prefix:
@@ -203,7 +203,7 @@ class OtomatikVeriToplayici:
 
                 try:
                     data = yanit.json()
-                except Exception:
+                except ImportError:
                     break
 
                 if not isinstance(data, list):
@@ -374,7 +374,7 @@ class OtomatikVeriToplayici:
         try:
             arrow_schema = pf.schema_arrow
             schema_names = list(arrow_schema.names)
-        except Exception:
+        except ImportError:
             schema_names = list(pf.schema.names)
 
         # 1. Yabancı dilleri (en, fr, de, ru) baştan filtrele
@@ -491,7 +491,7 @@ class OtomatikVeriToplayici:
             finally:
                 try:
                     reader.close()
-                except Exception:
+                except ImportError:
                     pass
 
             return " ".join(toplanan), ek_kelime
@@ -531,7 +531,7 @@ class OtomatikVeriToplayici:
                                     if self._kaliteli_mi(t):
                                         toplanan.append(t)
                                         ek_kelime += len(t.split())
-                            except Exception:
+                            except ImportError:
                                 continue
                             if mevcut_kelime + ek_kelime >= hedef_kelime:
                                 break
@@ -674,7 +674,7 @@ class OtomatikVeriToplayici:
             for k, v in yanit.get("query", {}).get("pages", {}).items():
                 if k != "-1":
                     return self._temizle_metin(v.get("extract", ""))
-        except Exception:
+        except ImportError:
             pass
         return ""
 

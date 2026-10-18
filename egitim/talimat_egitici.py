@@ -33,7 +33,7 @@ try:
     import torch  # type: ignore
     import torch.nn as nn  # type: ignore
     from torch.utils.data import DataLoader, TensorDataset  # type: ignore
-except Exception:  # pragma: no cover - torch'suz CI/sandbox
+except ImportError:  # pragma: no cover - torch'suz CI/sandbox
     torch = None  # type: ignore
     nn = None  # type: ignore
     DataLoader = None  # type: ignore
@@ -52,7 +52,7 @@ try:
         agirlik_yukle,
         model_olustur,
     )
-except Exception:  # torch yoksa kuresel_model import edilemez; helper'lar yine çalışsın
+except ImportError:  # torch yoksa kuresel_model import edilemez; helper'lar yine çalışsın
     model_olustur = agirlik_yukle = agirlik_kaydet = None  # type: ignore
     VARSAYILAN_N = VARSAYILAN_MODEL_CONFIG.n
     VARSAYILAN_KATMAN = VARSAYILAN_MODEL_CONFIG.katman_sayisi
@@ -63,7 +63,7 @@ from talimat_toplayici import TalimatToplayici
 
 try:
     from egitim.scheduler import warmup_cosine_scheduler
-except Exception:
+except ImportError:
     from scheduler import warmup_cosine_scheduler  # type: ignore[no-redef]
 
 

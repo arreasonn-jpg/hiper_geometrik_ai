@@ -18,10 +18,10 @@ from typing import Dict, Iterable, Optional
 
 try:
     from model_config import VARSAYILAN_MODEL_CONFIG
-except Exception:  # paket import'u
+except ImportError:  # paket import'u
     try:
         from .model_config import VARSAYILAN_MODEL_CONFIG
-    except Exception:  # çok eski ortam fallback'i
+    except ImportError:  # çok eski ortam fallback'i
         VARSAYILAN_MODEL_CONFIG = None  # type: ignore
 
 

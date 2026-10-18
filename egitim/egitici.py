@@ -47,7 +47,7 @@ from torch.utils.data import DataLoader, Dataset
 
 try:
     from egitim.scheduler import warmup_cosine_scheduler
-except Exception:  # doğrudan script çalıştırma
+except ImportError:  # doğrudan script çalıştırma
     from scheduler import warmup_cosine_scheduler  # type: ignore[no-redef]
 
 
@@ -133,7 +133,7 @@ class KureselEgitimMotoru:
             try:
                 from torch.utils.tensorboard import SummaryWriter
                 self._tb_writer = SummaryWriter(self.log_dizini)
-            except Exception:
+            except ImportError:
                 self._tb_writer = None
             self._csv_baslat()
 
@@ -435,7 +435,7 @@ class KureselEgitimMotoru:
                         carpisma = tablo.carpisma_istatistigi(torch.tensor(pencereler, dtype=torch.long))
                         if carpisma.get("uyari"):
                             seyrek_bilgi += f" | ⚠️ collision %{100 * carpisma['collision_rate']:.2f}"
-                except Exception:
+                except ImportError:
                     pass
             val_bilgi = "" if val_loss is None else f" | Val: {val_loss:.4f} | PPL: {ppl:.2f}"
             print(f"  Çağ {cag + 1:02d}/{cag_sayisi:02d} | Loss: {ortalama:.4f}{val_bilgi} | "

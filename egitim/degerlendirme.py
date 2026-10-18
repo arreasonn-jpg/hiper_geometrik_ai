@@ -15,7 +15,7 @@ try:
     import torch  # type: ignore
     import torch.nn as nn  # type: ignore
     from torch.utils.data import DataLoader  # type: ignore
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     torch = None  # type: ignore
     nn = None  # type: ignore
     DataLoader = None  # type: ignore
