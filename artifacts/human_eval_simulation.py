@@ -13,7 +13,7 @@ import random
 import statistics as st
 from typing import Dict, List
 
-from hga.evaluation.human_evaluation import (
+from hga.experiments.human_evaluation import (
     ARMS, DIMENSIONS, analyze_ratings, krippendorff_alpha,
 )
 

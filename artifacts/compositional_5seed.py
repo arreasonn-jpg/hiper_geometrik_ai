@@ -13,7 +13,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any, Dict, List
 
-from hga.evaluation.hierarchical_compositional import (
+from hga.experiments.hierarchical_compositional import (
     compare_on_hierarchical,
 )
 
